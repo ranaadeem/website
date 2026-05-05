@@ -29,9 +29,17 @@
     --white: #ffffff;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body { width: 100%; overflow-x: hidden; }
-  body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--text); }
-  /* Remove all horizontal constraints so it fills the embed width */
+  html { width: 100%; overflow-x: hidden; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    overflow-x: hidden;
+    /* Negative margins to compensate for Google Sites iframe internal padding */
+    margin-left: -24px;
+    margin-right: -24px;
+    width: calc(100% + 48px);
+  }
   .hero, .stats-strip, .section, .journey-section, .contact-strip { width: 100%; }
 
   /* HERO */
