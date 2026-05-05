@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Publications – Dr. Adeem Ghaffar Rana</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script>
+  function sendHeight() {
+    var height = document.body.scrollHeight;
+    window.parent.postMessage({ type: 'setHeight', height: height }, '*');
+  }
+  window.addEventListener('load', function() { sendHeight(); setInterval(sendHeight, 500); });
+  window.addEventListener('resize', sendHeight);
+</script>
+<style>
+  :root {
+    --navy: #0f1f3d;
+    --gold: #c9a84c;
+    --gold-light: #e8d5a3;
+    --cream: #faf8f4;
+    --white: #ffffff;
+    --text: #1a1a2e;
+    --muted: #6b7280;
+    --border: #e5e7eb;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { overflow-x: hidden; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    overflow-x: hidden;
+    margin-left: -24px;
+    margin-right: -24px;
+    width: calc(100% + 48px);
+  }
+
+  /* HEADER */
+  .page-header {
+    background: linear-gradient(135deg, var(--navy) 0%, #1a3a6b 60%, #0d2744 100%);
+    padding: 3.5rem 2rem 3rem;
+    position: relative; overflow: hidden;
+  }
+  .page-header::before {
+    content: ''; position: absolute;
+    top: -80px; right: -80px;
+    width: 400px; height: 400px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(201,168,76,0.1) 0%, transparent 70%);
+  }
+  .header-inner { max-width: 960px; margin: 0 auto; position: relative; z-index: 1; }
+  .page-tag {
+    font-size: 11px; font-weight: 500; letter-spacing: 0.15em;
+    text-transform: uppercase; color: var(--gold);
+    border: 1px solid rgba(201,168,76,0.35);
+    padding: 4px 12px; border-radius: 20px;
+    display: inline-block; margin-bottom: 1rem;
+  }
+  .page-header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    color: white; margin-bottom: 0.75rem; line-height: 1.15;
+  }
+  .page-header h1 span { color: var(--gold); }
+  .header-sub { font-size: 15px; color: rgba(255,255,255,0.6); font-weight: 300; max-width: 560px; line-height: 1.6; margin-bottom: 1.5rem; }
+
+  /* STATS ROW */
+  .pub-stats { display: flex; gap: 2rem; flex-wrap: wrap; }
+  .pub-stat { text-align: left; }
+  .pub-stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px; font-weight: 700; color: var(--gold); display: block;
+  }
+  .pub-stat-lbl { font-size: 12px; color: rgba(255,255,255,0.5); }
+
+  /* MAIN LAYOUT */
+  .main-wrap { max-width: 960px; margin: 0 auto; padding: 2.5rem 2rem; display: grid; grid-template-columns: 1fr 260px; gap: 2.5rem; align-items: start; }
+
+  /* FILTER TABS */
+  .filter-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 1.5rem; }
+  .filter-btn {
+    padding: 7px 16px; border-radius: 20px; font-size: 13px;
+    border: 1px solid var(--border); background: var(--white);
+    color: var(--muted); cursor: pointer; transition: all 0.2s; font-weight: 400;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .filter-btn.active, .filter-btn:hover {
+    background: var(--navy); color: white; border-color: var(--navy);
+  }
+  .filter-btn.active { font-weight: 500; }
+
+  /* PUBLICATION CARDS */
+  .pub-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    border-left: 4px solid var(--gold);
+    transition: box-shadow 0.2s, transform 0.2s;
+    position: relative;
+  }
+  .pub-card:hover { box-shadow: 0 6px 24px rgba(0,0,0,0.08); transform: translateY(-1px); }
+  .pub-card.hidden { display: none; }
+
+  .pub-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; margin-bottom: 8px; }
+  .pub-year-badge {
+    font-size: 11px; font-weight: 600;
+    background: rgba(201,168,76,0.12); color: #92701e;
+    padding: 3px 10px; border-radius: 10px; white-space: nowrap; flex-shrink: 0;
+  }
+  .pub-tags { display: flex; gap: 5px; flex-wrap: wrap; }
+  .pub-tag {
+    font-size: 10px; padding: 2px 8px; border-radius: 4px;
+    background: #f3f4f6; color: var(--muted);
+  }
+  .pub-tag.photo { background: #eff6ff; color: #1d4ed8; }
+  .pub-tag.hetero { background: #f0fdf4; color: #166534; }
+  .pub-tag.co2 { background: #fff7ed; color: #9a3412; }
+  .pub-tag.saf { background: #fdf4ff; color: #7e22ce; }
+  .pub-tag.review { background: #fef2f2; color: #991b1b; }
+
+  .pub-title {
+    font-size: 15px; font-weight: 500; color: var(--navy);
+    margin-bottom: 6px; line-height: 1.5;
+  }
+  .pub-title a { color: var(--navy); text-decoration: none; }
+  .pub-title a:hover { color: var(--gold); text-decoration: underline; }
+  .pub-authors { font-size: 12px; color: var(--muted); margin-bottom: 4px; line-height: 1.5; }
+  .pub-authors strong { color: var(--navy); }
+  .pub-journal { font-size: 12px; color: var(--muted); font-style: italic; }
+  .pub-journal span { font-style: normal; color: #9ca3af; }
+  .pub-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; }
+  .pub-doi { font-size: 11px; color: var(--gold); text-decoration: none; }
+  .pub-doi:hover { text-decoration: underline; }
+  .pub-cite { font-size: 11px; color: var(--muted); }
+
+  /* SECTION DIVIDER */
+  .year-divider {
+    font-family: 'Playfair Display', serif;
+    font-size: 13px; color: var(--muted);
+    margin: 1.5rem 0 0.75rem;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .year-divider::after {
+    content: ''; flex: 1; height: 1px; background: var(--border);
+  }
+
+  /* SIDEBAR */
+  .sidebar { display: flex; flex-direction: column; gap: 1.25rem; }
+  .side-card {
+    background: var(--white); border: 1px solid var(--border);
+    border-radius: 12px; padding: 1.25rem;
+  }
+  .side-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 14px; color: var(--navy);
+    margin-bottom: 0.75rem; padding-bottom: 0.6rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* METRICS */
+  .metric-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .metric-label { font-size: 12px; color: var(--muted); }
+  .metric-val { font-size: 14px; font-weight: 600; color: var(--navy); }
+
+  /* TOPIC BARS */
+  .topic-bar { margin-bottom: 10px; }
+  .topic-top { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px; }
+  .topic-name { color: var(--text); }
+  .topic-count { color: var(--muted); }
+  .bar-bg { height: 4px; background: #f3f4f6; border-radius: 2px; }
+  .bar-fill { height: 4px; background: var(--gold); border-radius: 2px; }
+
+  /* SCHOLAR LINK */
+  .scholar-btn {
+    display: block; text-align: center;
+    background: var(--navy); color: white;
+    padding: 10px 16px; border-radius: 8px;
+    font-size: 13px; font-weight: 500;
+    text-decoration: none; transition: opacity 0.2s;
+    margin-top: 0.5rem;
+  }
+  .scholar-btn:hover { opacity: 0.85; }
+
+  /* COLLAB LIST */
+  .collab-item { font-size: 12px; color: var(--muted); margin-bottom: 6px; line-height: 1.4; }
+  .collab-item strong { color: var(--text); display: block; font-size: 12px; }
+
+  /* FOOTER */
+  .pub-footer-strip {
+    background: var(--navy); padding: 1.5rem 2rem; text-align: center;
+  }
+  .pub-footer-strip p { font-size: 13px; color: rgba(255,255,255,0.4); }
+  .pub-footer-strip a { color: var(--gold); text-decoration: none; }
+
+  @media (max-width: 768px) {
+    .main-wrap { grid-template-columns: 1fr; }
+    .pub-stats { gap: 1.25rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="page-header">
+  <div class="header-inner">
+    <span class="page-tag">Research Output</span>
+    <h1>Publications & <span>Presentations</span></h1>
+    <p class="header-sub">Peer-reviewed journal articles, conference contributions, and ongoing research. All work focuses on catalysis, photocatalysis, and sustainable chemical processes.</p>
+    <div class="pub-stats">
+      <div class="pub-stat"><span class="pub-stat-num">15+</span><span class="pub-stat-lbl">Journal Articles</span></div>
+      <div class="pub-stat"><span class="pub-stat-num">230+</span><span class="pub-stat-lbl">Total Citations</span></div>
+      <div class="pub-stat"><span class="pub-stat-num">Top 2%</span><span class="pub-stat-lbl">Stanford Scientists List</span></div>
+      <div class="pub-stat"><span class="pub-stat-num">2</span><span class="pub-stat-lbl">Conference Presentations</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main-wrap">
+  <div>
+    <!-- FILTER -->
+    <div class="filter-tabs">
+      <button class="filter-btn active" onclick="filterPubs('all', this)">All Publications</button>
+      <button class="filter-btn" onclick="filterPubs('photocatalysis', this)">Photocatalysis</button>
+      <button class="filter-btn" onclick="filterPubs('heterogeneous', this)">Heterogeneous Catalysis</button>
+      <button class="filter-btn" onclick="filterPubs('co2', this)">CO₂ Conversion</button>
+      <button class="filter-btn" onclick="filterPubs('review', this)">Reviews</button>
+    </div>
+
+    <!-- 2024 -->
+    <div class="year-divider">2024 – 2025</div>
+
+    <div class="pub-card" data-topic="photocatalysis">
+      <div class="pub-top">
+        <div class="pub-tags">
+          <span class="pub-tag photo">Photocatalysis</span>
+          <span class="pub-tag">Carbon Nitride</span>
+        </div>
+        <span class="pub-year-badge">2024</span>
+      </div>
+      <div class="pub-title">
+        Controllable Acid Activation of Sulfur-Doped Carbon Nitride Enables Enhancement in Photocatalytic Indigo Carmine Degradation Performance
+      </div>
+      <div class="pub-authors"><strong>Rana, A.G.</strong> et al.</div>
+      <div class="pub-journal">ACS Sustainable Chemistry & Engineering <span>· 2024</span></div>
+      <div class="pub-footer">
+        <a href="https://pubs.acs.org/doi/10.1021/acssuschemeng.4c08021" target="_blank" class="pub-doi">DOI: 10.1021/acssuschemeng.4c08021 ↗</a>
+      </div>
+    </div>
+
+    <!-- 2022 -->
+    <div class="year-divider">2022</div>
+
+    <div class="pub-card" data-topic="photocatalysis">
+      <div class="pub-top">
+        <div class="pub-tags">
+          <span class="pub-tag photo">Photocatalysis</span>
+          <span class="pub-tag">g-C₃N₄</span>
+          <span class="pub-tag">Doping</span>
+        </div>
+        <span class="pub-year-badge">2022</span>
+      </div>
+      <div class="pub-title">
+        Synthesis of Highly Active Doped Graphitic Carbon Nitride Using Acid-Functionalized Precursors for Efficient Adsorption and Photodegradation of Endocrine-Disrupting Compounds
+      </div>
+      <div class="pub-authors"><strong>Ghaffar Rana, A.</strong>; Zahid Hussain, M.; Hammond, N.; Vlad Luca, S.; Fischer, R.A.; Minceva, M.</div>
+      <div class="pub-journal">ChemistrySelect <span>· 2022, 7(32), e202201909</span></div>
+      <div class="pub-footer">
+        <a href="https://chemistry-europe.onlinelibrary.wiley.com/doi/10.1002/slct.202201909" target="_blank" class="pub-doi">DOI: 10.1002/slct.202201909 ↗</a>
+      </div>
+    </div>
+
+    <!-- 2021 -->
+    <div class="year-divider">2021</div>
+
+    <div class="pub-card" data-topic="photocatalysis">
+      <div class="pub-top">
+        <div class="pub-tags">
+          <span class="pub-tag photo">Photocatalysis</span>
+          <span class="pub-tag">g-C₃N₄</span>
+          <span class="pub-tag">AOP</span>
+        </div>
+        <span class="pub-year-badge">2021</span>
+      </div>
+      <div class="pub-title">
+        Efficient Advanced Oxidation Process (AOP) for Photocatalytic Contaminant Degradation Using Exfoliated Metal-Free Graphitic Carbon Nitride and Visible Light-Emitting Diodes
+      </div>
+      <div class="pub-authors"><strong>Rana, A.G.</strong>; Tasbihi, M.; Schwarze, M.; Minceva, M.</div>
+      <div class="pub-journal">Catalysts <span>· 2021, 11(6), 662</span></div>
+      <div class="pub-footer">
+        <a href="https://doi.org/10.3390/catal11060662" target="_blank" class="pub-doi">DOI: 10.3390/catal11060662 ↗</a>
+        <span class="pub-cite">Open Access</span>
+      </div>
+    </div>
+
+    <div class="pub-card" data-topic="photocatalysis">
+      <div class="pub-top">
+        <div class="pub-tags">
+          <span class="pub-tag photo">Photocatalysis</span>
+          <span class="pub-tag">g-C₃N₄</span>
+          <span class="pub-tag">RSM</span>
+        </div>
+        <span class="pub-year-badge">2021</span>
+      </div>
+      <div class="pub-title">
+        Analysis of Photocatalytic Degradation of Phenol with Exfoliated Graphitic Carbon Nitride and Light-Emitting Diodes Using Response Surface Methodology
+      </div>
+      <div class="pub-authors"><strong>Rana, A.G.</strong>; Minceva, M.</div>
+      <div class="pub-journal">Catalysts <span>· 2021, 11(8), 898</span></div>
+      <div class="pub-footer">
+        <a href="https://doi.org/10.3390/catal11080898" target="_blank" class="pub-doi">DOI: 10.3390/catal11080898 ↗</a>
+        <span class="pub-cite">Open Access</span>
+      </div>
+    </div>
+
+    <!-- 2017 -->
+    <div class="year-divider">2017</div>
+
+    <div class="pub-card" data-topic="co2">
+      <div class="pub-top">
+        <div class="pub-tags">
+          <span class="pub-tag co2">CO₂ Conversion</span>
+          <span class="pub-tag photo">Photocatalysis</span>
+          <span class="pub-tag">TiO₂</span>
+        </div>
+        <span class="pub-year-badge">2017</span>
+      </div>
+      <div class="pub-title">
+        Synthesis and Characterization of Cu–Zn/TiO₂ for the Photocatalytic Conversion of CO₂ to Methane
+      </div>
+      <div class="pub-authors"><strong>Rana, A.G.</strong>; Ahmad, W.; Al-Matar, A.; Shawabkeh, R.; Aslam, Z.</div>
+      <div class="pub-journal">Environmental Technology <span>· 2017, 38(9), 1085–1092</span></div>
+      <div class="pub-footer">
+        <a href="https://pubmed.ncbi.nlm.nih.gov/27494377/" target="_blank" class="pub-doi">PubMed ↗</a>
+      </div>
+    </div>
+
+    <!-- PLACEHOLDER SECTION -->
+    <div class="year-divider">Additional Publications</div>
+
+    <div class="pub-card" data-topic="photocatalysis" style="border-left-color: #d1d5db; background: #fafafa;">
+      <div class="pub-top">
+        <div class="pub-tags"><span class="pub-tag">Photocatalysis</span><span class="pub-tag">g-C₃N₄</span></div>
+        <span class="pub-year-badge" style="background:#f3f4f6;color:#6b7280;">2019–2023</span>
+      </div>
+      <div class="pub-title" style="color:var(--muted); font-style:italic;">
+        Additional publications from PhD research at TUM — please add titles and DOIs here
+      </div>
+      <div class="pub-authors" style="color:#9ca3af;">Rana, A.G. et al. · TU Munich · 2019–2022</div>
+      <div class="pub-journal" style="color:#9ca3af;">Multiple journals including Catalysts, Applied Catalysis, ChemistrySelect</div>
+      <div class="pub-footer">
+        <a href="https://scholar.google.com/citations?user=pUQ4nFsAAAAJ" target="_blank" class="pub-doi">View all on Google Scholar ↗</a>
+      </div>
+    </div>
+
+    <!-- CONFERENCES -->
+    <div class="year-divider">Conference Presentations</div>
+
+    <div class="pub-card" data-topic="photocatalysis" style="border-left-color: #6366f1;">
+      <div class="pub-top">
+        <div class="pub-tags"><span class="pub-tag" style="background:#eff6ff;color:#1d4ed8;">Conference</span><span class="pub-tag">Oral Presentation</span></div>
+        <span class="pub-year-badge">2021</span>
+      </div>
+      <div class="pub-title">Photocatalytic Degradation of Contaminants Using g-C₃N₄</div>
+      <div class="pub-authors"><strong>Rana, A.G.</strong></div>
+      <div class="pub-journal">Biothermodynamics Colloquium <span>· Freising, Germany</span></div>
+    </div>
+
+    <div class="pub-card" data-topic="photocatalysis" style="border-left-color: #6366f1;">
+      <div class="pub-top">
+        <div class="pub-tags"><span class="pub-tag" style="background:#eff6ff;color:#1d4ed8;">Conference</span><span class="pub-tag">Presentation</span></div>
+        <span class="pub-year-badge">2021</span>
+      </div>
+      <div class="pub-title">Graphitic Carbon Nitride for Photocatalytic Applications</div>
+      <div class="pub-authors"><strong>Rana, A.G.</strong></div>
+      <div class="pub-journal">4th Indo-German Workshop <span>· Berlin, Germany</span></div>
+    </div>
+
+  </div>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+
+    <!-- METRICS -->
+    <div class="side-card">
+      <div class="side-title">Research Metrics</div>
+      <div class="metric-row"><span class="metric-label">Total Citations</span><span class="metric-val">230+</span></div>
+      <div class="metric-row"><span class="metric-label">Publications</span><span class="metric-val">15+</span></div>
+      <div class="metric-row"><span class="metric-label">h-index</span><span class="metric-val">—</span></div>
+      <div class="metric-row"><span class="metric-label">Stanford Top 2%</span><span class="metric-val">✓</span></div>
+      <a href="https://scholar.google.com/citations?user=pUQ4nFsAAAAJ" target="_blank" class="scholar-btn">🎓 Google Scholar Profile</a>
+    </div>
+
+    <!-- RESEARCH TOPICS -->
+    <div class="side-card">
+      <div class="side-title">Research Topics</div>
+      <div class="topic-bar">
+        <div class="topic-top"><span class="topic-name">Photocatalysis</span><span class="topic-count">~8 papers</span></div>
+        <div class="bar-bg"><div class="bar-fill" style="width:80%"></div></div>
+      </div>
+      <div class="topic-bar">
+        <div class="topic-top"><span class="topic-name">g-C₃N₄ Modification</span><span class="topic-count">~6 papers</span></div>
+        <div class="bar-bg"><div class="bar-fill" style="width:60%"></div></div>
+      </div>
+      <div class="topic-bar">
+        <div class="topic-top"><span class="topic-name">CO₂ Conversion</span><span class="topic-count">~3 papers</span></div>
+        <div class="bar-bg"><div class="bar-fill" style="width:30%"></div></div>
+      </div>
+      <div class="topic-bar">
+        <div class="topic-top"><span class="topic-name">Heterogeneous Catalysis</span><span class="topic-count">~2 papers</span></div>
+        <div class="bar-bg"><div class="bar-fill" style="width:20%"></div></div>
+      </div>
+    </div>
+
+    <!-- KEY COLLABORATORS -->
+    <div class="side-card">
+      <div class="side-title">Key Collaborators</div>
+      <div class="collab-item"><strong>Prof. Mirjana Minceva</strong>TU Munich, Germany</div>
+      <div class="collab-item"><strong>Prof. Sven Kureti</strong>TUBAF Freiberg, Germany</div>
+      <div class="collab-item"><strong>Dr. Michael Schwarze</strong>TU Berlin, Germany</div>
+      <div class="collab-item"><strong>Dr. Waqar Ahmad</strong>CSIRO, Australia</div>
+      <div class="collab-item"><strong>Prof. Reyad Shawabkeh</strong>University of Jordan</div>
+    </div>
+
+    <!-- JOURNALS -->
+    <div class="side-card">
+      <div class="side-title">Published In</div>
+      <div class="collab-item"><strong>Catalysts</strong>MDPI · Open Access</div>
+      <div class="collab-item"><strong>ACS Sustainable Chem. & Eng.</strong>American Chemical Society</div>
+      <div class="collab-item"><strong>ChemistrySelect</strong>Wiley · Chemistry Europe</div>
+      <div class="collab-item"><strong>Environmental Technology</strong>Taylor & Francis</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="pub-footer-strip">
+  <p>For the complete and up-to-date list, visit <a href="https://scholar.google.com/citations?user=pUQ4nFsAAAAJ" target="_blank">Google Scholar ↗</a> &nbsp;·&nbsp; <a href="mailto:ranaadeem@hotmail.com">ranaadeem@hotmail.com</a></p>
+</div>
+
+<script>
+function filterPubs(topic, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.pub-card').forEach(card => {
+    if (topic === 'all' || card.dataset.topic === topic) {
+      card.classList.remove('hidden');
+    } else {
+      card.classList.add('hidden');
+    }
+  });
+}
+</script>
+
+</body>
+</html>
