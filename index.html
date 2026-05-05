@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dr. Adeem Ghaffar Rana</title>
+<script>
+  // Auto-resize iframe height for Google Sites embedding
+  function sendHeight() {
+    var height = document.body.scrollHeight;
+    window.parent.postMessage({ type: 'setHeight', height: height }, '*');
+  }
+  window.addEventListener('load', function() {
+    sendHeight();
+    // Keep checking in case content changes
+    setInterval(sendHeight, 500);
+  });
+  window.addEventListener('resize', sendHeight);
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0f1f3d;
+    --gold: #c9a84c;
+    --gold-light: #e8d5a3;
+    --cream: #faf8f4;
+    --text: #1a1a2e;
+    --muted: #6b7280;
+    --white: #ffffff;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 100%; overflow-x: hidden; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--text); }
+  /* Remove all horizontal constraints so it fills the embed width */
+  .hero, .stats-strip, .section, .journey-section, .contact-strip { width: 100%; }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, var(--navy) 0%, #1a3a6b 60%, #0d2744 100%);
+    min-height: 92vh;
+    display: flex;
+    align-items: center;
+    padding: 4rem 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -100px; right: -100px;
+    width: 500px; height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(201,168,76,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -80px; left: -80px;
+    width: 350px; height: 350px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(201,168,76,0.07) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-inner {
+    max-width: 960px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 4rem;
+    align-items: center;
+    width: 100%;
+    position: relative;
+    z-index: 1;
+  }
+  .hero-tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    border: 1px solid rgba(201,168,76,0.4);
+    padding: 5px 14px;
+    border-radius: 20px;
+    margin-bottom: 1.5rem;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.2rem, 5vw, 3.4rem);
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1.15;
+    margin-bottom: 1.25rem;
+  }
+  .hero h1 span { color: var(--gold); }
+  .hero-desc {
+    font-size: 16px;
+    color: rgba(255,255,255,0.72);
+    line-height: 1.75;
+    margin-bottom: 2rem;
+    font-weight: 300;
+    max-width: 520px;
+  }
+  .hero-btns { display: flex; gap: 12px; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--gold);
+    color: var(--navy);
+    padding: 11px 26px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s;
+    display: inline-block;
+  }
+  .btn-primary:hover { background: var(--gold-light); transform: translateY(-1px); }
+  .btn-outline {
+    border: 1px solid rgba(255,255,255,0.3);
+    color: rgba(255,255,255,0.85);
+    padding: 11px 26px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 400;
+    text-decoration: none;
+    transition: all 0.2s;
+    display: inline-block;
+  }
+  .btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+
+  /* PHOTO CARD */
+  .hero-photo-card {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 16px;
+    padding: 2rem;
+    text-align: center;
+    backdrop-filter: blur(10px);
+  }
+  .photo-circle {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    margin: 0 auto 1.25rem;
+    background: linear-gradient(135deg, var(--gold) 0%, #8b6914 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 48px;
+    color: white;
+    font-weight: 700;
+    border: 3px solid rgba(201,168,76,0.4);
+    overflow: hidden;
+  }
+  .photo-circle img { width: 100%; height: 100%; object-fit: cover; }
+  .photo-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
+    color: var(--white);
+    margin-bottom: 4px;
+  }
+  .photo-role { font-size: 12px; color: rgba(255,255,255,0.5); margin-bottom: 1.25rem; }
+  .photo-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 1.25rem;
+  }
+  .stat-box {
+    background: rgba(255,255,255,0.07);
+    border-radius: 8px;
+    padding: 10px 8px;
+  }
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    color: var(--gold);
+    font-weight: 700;
+    display: block;
+  }
+  .stat-lbl { font-size: 10px; color: rgba(255,255,255,0.5); letter-spacing: 0.05em; }
+  .social-row { display: flex; justify-content: center; gap: 10px; }
+  .social-btn {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    display: flex; align-items: center; justify-content: center;
+    text-decoration: none;
+    transition: all 0.2s;
+    font-size: 14px;
+    color: rgba(255,255,255,0.7);
+  }
+  .social-btn:hover { background: var(--gold); color: var(--navy); border-color: var(--gold); }
+
+  /* STATS STRIP */
+  .stats-strip {
+    background: var(--white);
+    border-bottom: 1px solid #e5e7eb;
+    padding: 1.5rem 2rem;
+  }
+  .stats-inner {
+    max-width: 960px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  .strip-stat { text-align: center; }
+  .strip-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--navy);
+    display: block;
+  }
+  .strip-lbl { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .strip-divider { width: 1px; height: 40px; background: #e5e7eb; }
+
+  /* RESEARCH FOCUS */
+  .section { padding: 4rem 2rem; }
+  .section-inner { max-width: 960px; margin: 0 auto; }
+  .section-tag {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.5rem;
+    display: block;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    color: var(--navy);
+    margin-bottom: 0.75rem;
+  }
+  .section-sub { font-size: 15px; color: var(--muted); margin-bottom: 2.5rem; max-width: 560px; line-height: 1.7; }
+
+  .research-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
+  .research-card {
+    background: var(--white);
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 1.75rem;
+    transition: all 0.25s;
+    position: relative;
+    overflow: hidden;
+  }
+  .research-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--gold);
+    transform: scaleX(0);
+    transition: transform 0.25s;
+    transform-origin: left;
+  }
+  .research-card:hover { box-shadow: 0 8px 30px rgba(0,0,0,0.08); transform: translateY(-2px); }
+  .research-card:hover::before { transform: scaleX(1); }
+  .card-icon { font-size: 28px; margin-bottom: 1rem; display: block; }
+  .card-title { font-family: 'Playfair Display', serif; font-size: 16px; color: var(--navy); margin-bottom: 0.5rem; }
+  .card-text { font-size: 13px; color: var(--muted); line-height: 1.65; }
+
+  /* JOURNEY */
+  .journey-section { background: var(--navy); padding: 4rem 2rem; }
+  .journey-inner { max-width: 960px; margin: 0 auto; }
+  .journey-section .section-tag { color: var(--gold); }
+  .journey-section .section-title { color: var(--white); }
+  .timeline { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-top: 2rem; }
+  .timeline-item { text-align: center; position: relative; }
+  .timeline-item:not(:last-child)::after {
+    content: '→';
+    position: absolute;
+    right: -12px; top: 20px;
+    color: var(--gold);
+    font-size: 18px;
+  }
+  .tl-dot {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: rgba(201,168,76,0.15);
+    border: 2px solid var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 0.75rem;
+    font-size: 18px;
+  }
+  .tl-year { font-size: 11px; color: var(--gold); font-weight: 500; margin-bottom: 4px; }
+  .tl-place { font-size: 13px; color: var(--white); font-weight: 500; margin-bottom: 3px; }
+  .tl-sub { font-size: 11px; color: rgba(255,255,255,0.45); }
+
+  /* LATEST PUB */
+  .pub-card {
+    background: var(--white);
+    border: 1px solid #e5e7eb;
+    border-left: 4px solid var(--gold);
+    border-radius: 8px;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1rem;
+    transition: box-shadow 0.2s;
+  }
+  .pub-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.07); }
+  .pub-title { font-size: 14px; font-weight: 500; color: var(--navy); margin-bottom: 5px; line-height: 1.5; }
+  .pub-meta { font-size: 12px; color: var(--muted); }
+  .pub-year { display: inline-block; background: #f3f4f6; color: var(--muted); font-size: 11px; padding: 2px 8px; border-radius: 4px; margin-left: 8px; }
+  .view-all-link { font-size: 13px; color: var(--gold); text-decoration: none; font-weight: 500; }
+  .view-all-link:hover { text-decoration: underline; }
+
+  /* HOBBIES */
+  .hobbies-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+  .hobby-card {
+    background: var(--navy);
+    border-radius: 12px;
+    padding: 2rem;
+    text-align: center;
+    color: white;
+    text-decoration: none;
+    transition: all 0.25s;
+    display: block;
+  }
+  .hobby-card:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(15,31,61,0.3); }
+  .hobby-icon { font-size: 36px; margin-bottom: 1rem; display: block; }
+  .hobby-title { font-family: 'Playfair Display', serif; font-size: 18px; margin-bottom: 6px; }
+  .hobby-sub { font-size: 13px; color: rgba(255,255,255,0.55); }
+  .hobby-handle { font-size: 12px; color: var(--gold); margin-top: 8px; display: block; }
+
+  /* CONTACT STRIP */
+  .contact-strip {
+    background: var(--gold);
+    padding: 2.5rem 2rem;
+    text-align: center;
+  }
+  .contact-strip h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    color: var(--navy);
+    margin-bottom: 0.5rem;
+  }
+  .contact-strip p { font-size: 14px; color: rgba(15,31,61,0.7); margin-bottom: 1.25rem; }
+  .contact-strip a {
+    background: var(--navy);
+    color: var(--white);
+    padding: 11px 28px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    display: inline-block;
+    transition: opacity 0.2s;
+  }
+  .contact-strip a:hover { opacity: 0.85; }
+
+  @media (max-width: 768px) {
+    .hero-inner { grid-template-columns: 1fr; }
+    .hero-photo-card { display: none; }
+    .research-grid { grid-template-columns: 1fr; }
+    .timeline { grid-template-columns: 1fr 1fr; }
+    .hobbies-grid { grid-template-columns: 1fr; }
+    .strip-divider { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-content">
+      <span class="hero-tag">Postdoctoral Researcher · Freiberg, Germany</span>
+      <h1>Catalysis for a <span>Sustainable</span> Future</h1>
+      <p class="hero-desc">
+        I'm Dr. Adeem Ghaffar Rana — a chemical engineer working at the intersection of heterogeneous catalysis, sustainable aviation fuels, and clean energy processes. Currently at TU Bergakademie Freiberg, Germany.
+      </p>
+      <div class="hero-btns">
+        <a href="#research" class="btn-primary">View Research</a>
+        <a href="https://sites.google.com/view/ranaadeem/publications" class="btn-outline">Publications →</a>
+        <a href="https://sites.google.com/view/ranaadeem/about" class="btn-outline">About Me →</a>
+      </div>
+    </div>
+    <div class="hero-photo-card">
+      <div class="photo-circle">
+        <!-- Replace src below with your actual photo URL after uploading -->
+        <span>AGR</span>
+      </div>
+      <p class="photo-name">Dr. Adeem Ghaffar Rana</p>
+      <p class="photo-role">Dr.-Ing. · Chemical Engineering</p>
+      <div class="photo-stats">
+        <div class="stat-box"><span class="stat-num">15+</span><span class="stat-lbl">Publications</span></div>
+        <div class="stat-box"><span class="stat-num">230+</span><span class="stat-lbl">Citations</span></div>
+        <div class="stat-box"><span class="stat-num">3</span><span class="stat-lbl">Countries</span></div>
+        <div class="stat-box"><span class="stat-num">14+</span><span class="stat-lbl">Years Exp.</span></div>
+      </div>
+      <div class="social-row">
+        <a href="https://www.instagram.com/adeemghaffarrana" class="social-btn" target="_blank" title="Instagram">📷</a>
+        <a href="https://www.youtube.com/@AdeemGhaffarRana" class="social-btn" target="_blank" title="YouTube">▶</a>
+        <a href="https://www.facebook.com/Dr.AGRana" class="social-btn" target="_blank" title="Facebook">f</a>
+        <a href="https://x.com/ranaadeem" class="social-btn" target="_blank" title="X / Twitter">𝕏</a>
+        <a href="https://www.linkedin.com/in/ranaadeem/" class="social-btn" target="_blank" title="LinkedIn">in</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS STRIP -->
+<div class="stats-strip">
+  <div class="stats-inner">
+    <div class="strip-stat">
+      <span class="strip-num">15+</span>
+      <div class="strip-lbl">Peer-reviewed Publications</div>
+    </div>
+    <div class="strip-divider"></div>
+    <div class="strip-stat">
+      <span class="strip-num">230+</span>
+      <div class="strip-lbl">Total Citations</div>
+    </div>
+    <div class="strip-divider"></div>
+    <div class="strip-stat">
+      <span class="strip-num">3</span>
+      <div class="strip-lbl">Countries Worked In</div>
+    </div>
+    <div class="strip-divider"></div>
+    <div class="strip-stat">
+      <span class="strip-num">DAAD</span>
+      <div class="strip-lbl">Scholarship Recipient</div>
+    </div>
+    <div class="strip-divider"></div>
+    <div class="strip-stat">
+      <span class="strip-num">TUM · TUBAF</span>
+      <div class="strip-lbl">Academic Institutions</div>
+    </div>
+  </div>
+</div>
+
+<!-- RESEARCH FOCUS -->
+<section class="section" id="research">
+  <div class="section-inner">
+    <span class="section-tag">Current Work</span>
+    <h2 class="section-title">Research Focus Areas</h2>
+    <p class="section-sub">My work sits at the intersection of catalyst development, reaction engineering, and sustainable fuel production — from lab-scale execution to industrial collaboration.</p>
+    <div class="research-grid">
+      <div class="research-card">
+        <span class="card-icon">✈️</span>
+        <h3 class="card-title">Sustainable Aviation Fuels</h3>
+        <p class="card-text">Methanol-to-Olefins (MTO) using zeolite catalysts and hydrotreating/hydrocracking of Fischer–Tropsch feeds for SAF-range products within the REF4FU and OptiSAF frameworks.</p>
+      </div>
+      <div class="research-card">
+        <span class="card-icon">⚗️</span>
+        <h3 class="card-title">Heterogeneous Catalysis</h3>
+        <p class="card-text">Catalyst synthesis, screening, and kinetic evaluation. Expertise in zeolite-based systems, metal-supported catalysts, and Design of Experiments (DoE) for process optimization.</p>
+      </div>
+      <div class="research-card">
+        <span class="card-icon">☀️</span>
+        <h3 class="card-title">Photocatalysis</h3>
+        <p class="card-text">Modification of graphitic carbon nitride (g-C₃N₄) for redox applications. CO₂ conversion to hydrocarbons. Photocatalytic degradation of persistent organic pollutants.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- JOURNEY TIMELINE -->
+<section class="journey-section">
+  <div class="journey-inner">
+    <span class="section-tag">Academic Journey</span>
+    <h2 class="section-title" style="color:white">From Lahore to Freiberg</h2>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="tl-dot">🎓</div>
+        <div class="tl-year">2006 – 2010</div>
+        <div class="tl-place">University of Punjab</div>
+        <div class="tl-sub">BS Chemical Engineering · Pakistan</div>
+      </div>
+      <div class="timeline-item">
+        <div class="tl-dot">🔬</div>
+        <div class="tl-year">2013 – 2015</div>
+        <div class="tl-place">KFUPM</div>
+        <div class="tl-sub">MS Chemical Engineering · Saudi Arabia</div>
+      </div>
+      <div class="timeline-item">
+        <div class="tl-dot">🏅</div>
+        <div class="tl-year">2017 – 2022</div>
+        <div class="tl-place">TU Munich</div>
+        <div class="tl-sub">PhD (Dr.-Ing.) · DAAD Scholar · Germany</div>
+      </div>
+      <div class="timeline-item">
+        <div class="tl-dot">⚗️</div>
+        <div class="tl-year">2023 – Present</div>
+        <div class="tl-place">TUBAF Freiberg</div>
+        <div class="tl-sub">Postdoctoral Researcher · Germany</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SELECTED PUBLICATIONS -->
+<section class="section">
+  <div class="section-inner">
+    <span class="section-tag">Research Output</span>
+    <h2 class="section-title">Selected Publications</h2>
+    <p class="section-sub">A selection of peer-reviewed work. Full list available on Google Scholar.</p>
+
+    <div class="pub-card">
+      <div class="pub-title">Analysis of Photocatalytic Degradation of Phenol with Exfoliated Graphitic Carbon Nitride and Light-Emitting Diodes Using Response Surface Methodology<span class="pub-year">2021</span></div>
+      <div class="pub-meta">Rana, A.G. & Minceva, M. · <em>Catalysts</em>, 11(8), 898</div>
+    </div>
+    <div class="pub-card">
+      <div class="pub-title">Synthesis and characterization of Cu–Zn/TiO₂ for the photocatalytic conversion of CO₂ to methane<span class="pub-year">2017</span></div>
+      <div class="pub-meta">Rana, A.G. et al. · <em>Environmental Technology</em>, 38(9), 1085–1092</div>
+    </div>
+    <div class="pub-card">
+      <div class="pub-title">Heterogeneous catalysis and reaction engineering for sustainable fuel production · Ongoing Research<span class="pub-year">2023–</span></div>
+      <div class="pub-meta">TUBAF · REF4FU · OptiSAF Projects · Freiberg, Germany</div>
+    </div>
+
+    <br>
+    <a href="https://scholar.google.com/citations?user=pUQ4nFsAAAAJ" target="_blank" class="view-all-link">View all publications on Google Scholar →</a>
+  </div>
+</section>
+
+<!-- BEYOND RESEARCH -->
+<section class="section" style="background: var(--white); border-top: 1px solid #e5e7eb;">
+  <div class="section-inner">
+    <span class="section-tag">Beyond the Lab</span>
+    <h2 class="section-title">Travel · Photography · Cricket</h2>
+    <p class="section-sub">When not in the lab, I explore the world through a lens and on two wheels. Follow my journeys on Instagram and YouTube.</p>
+    <div class="hobbies-grid">
+      <a href="https://www.instagram.com/adeemghaffarrana" target="_blank" class="hobby-card">
+        <span class="hobby-icon">📸</span>
+        <div class="hobby-title">Photography & Travel</div>
+        <div class="hobby-sub">Capturing moments from Germany, Pakistan, and beyond</div>
+        <span class="hobby-handle">@adeemghaffarrana</span>
+      </a>
+      <a href="https://www.youtube.com/@AdeemGhaffarRana" target="_blank" class="hobby-card" style="background: linear-gradient(135deg, #1a1a2e, #2d1b69);">
+        <span class="hobby-icon">🎬</span>
+        <div class="hobby-title">YouTube Channel</div>
+        <div class="hobby-sub">Travel vlogs, cricket, and life between two cultures</div>
+        <span class="hobby-handle">@AdeemGhaffarRana</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT STRIP -->
+<div class="contact-strip">
+  <h3>Open to Collaborations & Opportunities</h3>
+  <p>PhD positions, research collaborations, or industry projects — let's connect.</p>
+  <a href="mailto:ranaadeem@hotmail.com">ranaadeem@hotmail.com</a>
+</div>
+
+</body>
+</html>
