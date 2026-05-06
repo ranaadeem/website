@@ -384,9 +384,9 @@
         I'm Dr. Adeem Ghaffar Rana — a chemical engineer working at the intersection of heterogeneous catalysis, sustainable aviation fuels, and clean energy processes. Currently at TU Bergakademie Freiberg, Germany.
       </p>
       <div class="hero-btns">
-        <a href="#research" class="btn-primary">View Research</a>
-        <a href="https://sites.google.com/view/ranaadeem/publications" class="btn-outline">Publications →</a>
-        <a href="https://sites.google.com/view/ranaadeem/about" class="btn-outline">About Me →</a>
+        <a href="#research" class="btn-primary" onclick="document.getElementById('research').scrollIntoView({behavior:'smooth'});return false;">View Research</a>
+        <a href="https://sites.google.com/view/ranaadeem/publications" target="_top" class="btn-outline">Publications →</a>
+        <a href="https://sites.google.com/view/ranaadeem/about" target="_top" class="btn-outline">About Me →</a>
       </div>
     </div>
     <div class="hero-photo-card">
@@ -550,7 +550,61 @@
   </div>
 </section>
 
-<!-- CONTACT STRIP -->
+<!-- LIVE FEEDS -->
+<section class="section" style="background: var(--cream); border-top: 1px solid #e5e7eb;">
+  <div class="section-inner">
+    <span class="section-tag">Stay Connected</span>
+    <h2 class="section-title">Latest from Social Media</h2>
+    <p class="section-sub">Follow my research updates, travel photography, and everyday life between two cultures.</p>
+
+    <!-- YOUTUBE -->
+    <div style="margin-bottom: 2.5rem;">
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:1rem;">
+        <span style="font-size:20px;">▶️</span>
+        <div>
+          <div style="font-size:14px; font-weight:600; color:var(--navy);">YouTube Channel</div>
+          <div style="font-size:12px; color:var(--muted);">@AdeemGhaffarRana · Travel · Cricket · Life in Germany</div>
+        </div>
+        <a href="https://www.youtube.com/@AdeemGhaffarRana" target="_blank" style="margin-left:auto; font-size:12px; color:var(--gold); text-decoration:none; font-weight:500;">Subscribe →</a>
+      </div>
+      <div style="position:relative; padding-bottom:56.25%; height:0; overflow:hidden; border-radius:12px; border:1px solid #e5e7eb;">
+        <iframe
+          src="https://www.youtube.com/embed?listType=user_uploads&list=AdeemGhaffarRana&rel=0"
+          style="position:absolute; top:0; left:0; width:100%; height:100%; border:none;"
+          allowfullscreen
+          title="Adeem Ghaffar Rana YouTube Channel">
+        </iframe>
+      </div>
+    </div>
+
+    <!-- INSTAGRAM -->
+    <div>
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:1rem;">
+        <span style="font-size:20px;">📷</span>
+        <div>
+          <div style="font-size:14px; font-weight:600; color:var(--navy);">Instagram Feed</div>
+          <div style="font-size:12px; color:var(--muted);">@adeemghaffarrana · Photography & Travel</div>
+        </div>
+        <a href="https://www.instagram.com/adeemghaffarrana" target="_blank" style="margin-left:auto; font-size:12px; color:var(--gold); text-decoration:none; font-weight:500;">Follow →</a>
+      </div>
+      <!-- BEHOLD INSTAGRAM WIDGET - Replace YOUR_BEHOLD_ID below after signing up at behold.so -->
+      <div id="behold-widget" style="background:#f8f9fa; border:1px solid #e5e7eb; border-radius:12px; padding:2rem; text-align:center;">
+        <div style="font-size:13px; color:var(--muted); margin-bottom:12px;">Instagram feed loads here via Behold.so</div>
+        <a href="https://www.instagram.com/adeemghaffarrana" target="_blank"
+          style="display:inline-block; background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+          color:white; padding:10px 24px; border-radius:8px; text-decoration:none; font-size:13px; font-weight:500;">
+          View on Instagram →
+        </a>
+      </div>
+      <!-- Once you get your Behold widget ID, replace the div above with:
+      <div id="YOUR_BEHOLD_WIDGET_ID"></div>
+      <script src="https://w.behold.so/widget.js" type="module"></script>
+      -->
+    </div>
+  </div>
+</section>
+
+
 <div class="contact-strip">
   <h3>Open to Collaborations & Opportunities</h3>
   <p>PhD positions, research collaborations, or industry projects — let's connect.</p>
