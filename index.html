@@ -587,19 +587,16 @@
         </div>
         <a href="https://www.instagram.com/adeemghaffarrana" target="_blank" style="margin-left:auto; font-size:12px; color:var(--gold); text-decoration:none; font-weight:500;">Follow →</a>
       </div>
-      <!-- BEHOLD INSTAGRAM WIDGET - Replace YOUR_BEHOLD_ID below after signing up at behold.so -->
-      <div id="behold-widget" style="background:#f8f9fa; border:1px solid #e5e7eb; border-radius:12px; padding:2rem; text-align:center;">
-        <div style="font-size:13px; color:var(--muted); margin-bottom:12px;">Instagram feed loads here via Behold.so</div>
-        <a href="https://www.instagram.com/adeemghaffarrana" target="_blank"
-          style="display:inline-block; background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
-          color:white; padding:10px 24px; border-radius:8px; text-decoration:none; font-size:13px; font-weight:500;">
-          View on Instagram →
-        </a>
+      <!-- BEHOLD INSTAGRAM WIDGET -->
+      <div id="behold-widget" style="border-radius:12px; overflow:hidden;">
+        <behold-widget feed-id="QAmxYCXfs1bJN6vSaQPa"></behold-widget>
+        <script>
+          (() => {
+            const d=document,s=d.createElement("script");s.type="module";
+            s.src="https://w.behold.so/widget.js";d.head.append(s);
+          })();
+        </script>
       </div>
-      <!-- Once you get your Behold widget ID, replace the div above with:
-      <div id="YOUR_BEHOLD_WIDGET_ID"></div>
-      <script src="https://w.behold.so/widget.js" type="module"></script>
-      -->
     </div>
   </div>
 </section>
