@@ -219,6 +219,41 @@
     .country-grid { grid-template-columns: 1fr 1fr; }
     .header-stats { gap: 1rem; }
   }
+
+  /* CUSTOM FORM STYLES */
+  .form-wrap { background: #fff; padding: 1.5rem; }
+  .form-wrap .section-label { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #999; margin-bottom: 0.75rem; margin-top: 1.5rem; padding-bottom: 6px; border-bottom: 1px solid #eee; }
+  .form-wrap .field { margin-bottom: 1rem; }
+  .form-wrap .field label { display: block; font-size: 13px; color: #555; margin-bottom: 5px; font-weight: 500; }
+  .form-wrap .req { color: #e53e3e; margin-left: 2px; }
+  .form-wrap .opt { font-size: 11px; color: #aaa; font-weight: 400; margin-left: 4px; }
+  .form-wrap select, .form-wrap input[type="text"], .form-wrap input[type="email"], .form-wrap input[type="tel"], .form-wrap input[type="url"] {
+    width: 100%; padding: 9px 12px; font-size: 14px; border: 1px solid #ddd; border-radius: 8px;
+    background: #fff; color: #1a1a1a; outline: none; transition: border 0.15s; font-family: inherit;
+  }
+  .form-wrap select:focus, .form-wrap input:focus { border-color: #4a6cf7; box-shadow: 0 0 0 3px rgba(74,108,247,0.1); }
+  .form-wrap select:disabled { background: #f8f9fa; color: #aaa; cursor: not-allowed; }
+  .name-display { background: #f8f9fa; border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px 12px; font-size: 15px; font-weight: 600; color: #1a1a1a; min-height: 40px; display: flex; align-items: center; }
+  .name-placeholder { color: #bbb; font-weight: 400; font-size: 13px; font-style: italic; }
+  .photo-upload { border: 1.5px dashed #ccc; border-radius: 10px; padding: 1.5rem; text-align: center; cursor: pointer; background: #fafafa; transition: all 0.15s; }
+  .photo-upload:hover { border-color: #4a6cf7; background: #f0f4ff; }
+  .photo-upload input { display: none; }
+  .upload-icon { width: 40px; height: 40px; margin: 0 auto 10px; background: #fff; border: 1px solid #ddd; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+  .upload-text { font-size: 13px; color: #555; font-weight: 500; }
+  .upload-hint { font-size: 12px; color: #aaa; margin-top: 4px; }
+  .preview-img { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; margin: 0 auto 10px; display: block; border: 2px solid #e2e8f0; }
+  .photo-size-warn { font-size: 11px; color: #e67e22; margin-top: 5px; display: none; }
+  .submit-btn { width: 100%; margin-top: 1.5rem; padding: 13px; font-size: 15px; font-weight: 600; background: #0f1f3d; color: #fff; border: none; border-radius: 8px; cursor: pointer; transition: background 0.15s; font-family: inherit; }
+  .submit-btn:hover { background: #1a3a6b; }
+  .submit-btn:disabled { background: #999; cursor: not-allowed; }
+  .progress-wrap { margin-top: 12px; display: none; }
+  .progress-bar-bg { background: #eee; border-radius: 20px; height: 6px; overflow: hidden; }
+  .progress-bar-fill { background: #4a6cf7; height: 6px; width: 0%; border-radius: 20px; transition: width 0.3s; }
+  .progress-label { font-size: 12px; color: #4a6cf7; margin-top: 6px; text-align: center; }
+  .success-box { background: #f0fff4; border: 1px solid #9ae6b4; border-radius: 10px; padding: 2rem; text-align: center; display: none; }
+  .success-box h2 { font-size: 18px; font-weight: 600; color: #276749; }
+  .success-box p { font-size: 14px; color: #555; margin-top: 8px; line-height: 1.6; }
+  .error-msg { font-size: 12px; color: #e53e3e; margin-top: 8px; display: none; }
 </style>
 </head>
 <body>
@@ -253,14 +288,103 @@
           <div class="dot"></div>
           <span>Chemical Engineering Session 2006–2010 · Alumni Data Collection Form</span>
         </div>
-        <div class="form-iframe-wrap">
-          <iframe
-            src="https://form.jotform.com/261217758322053"
-            width="100%"
-            height="800"
-            frameborder="0"
-            style="border:none; display:block;">
-          </iframe>
+        <div class="form-iframe-wrap" style="padding:0;">
+
+<!-- ===== CUSTOM REGISTRATION FORM START ===== -->
+<div class="form-wrap" style="max-width:100%;border-radius:0;box-shadow:none;padding:1.5rem;">
+  <div id="main-form">
+    <div class="section-label">Identity</div>
+    <div class="row">
+      <div class="field">
+        <label>Session <span class="req">*</span></label>
+        <select id="session-select" onchange="onSessionChange()">
+          <option value="">Select session</option>
+          <option value="morning">Morning</option>
+          <option value="evening">Evening</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Roll number <span class="req">*</span></label>
+        <select id="roll-select" onchange="onRollChange()" disabled>
+          <option value="">Select session first</option>
+        </select>
+      </div>
+    </div>
+    <div class="field">
+      <label>Full name</label>
+      <div class="name-display" id="name-display">
+        <span class="name-placeholder">Auto-filled when you select your roll number</span>
+      </div>
+    </div>
+    <div class="section-label">Profile photo <span style="font-size:11px;color:#aaa;font-weight:400;text-transform:none">(saved to Google Drive)</span></div>
+    <div class="photo-upload" onclick="document.getElementById('photo-input').click()">
+      <input type="file" id="photo-input" accept="image/*" onchange="onPhotoChange(event)">
+      <div class="upload-icon" id="upload-icon">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+          <path d="M9 3v9M5 7l4-4 4 4" stroke="#666" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M2 15h14" stroke="#666" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <p class="upload-text" id="photo-label">Click to upload your photo</p>
+      <p class="upload-hint">JPG, PNG supported · Max 3MB</p>
+    </div>
+    <p class="photo-size-warn" id="photo-size-warn">⚠️ Photo is too large. Please use an image under 3MB.</p>
+    <div class="section-label">Current status</div>
+    <div class="row">
+      <div class="field">
+        <label>Country of residence <span class="req">*</span></label>
+        <select id="country-select" onchange="onCountryChange()">
+          <option value="">Select country</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>City <span class="req">*</span></label>
+        <select id="city-select" disabled>
+          <option value="">Select country first</option>
+        </select>
+      </div>
+    </div>
+    <div class="row">
+      <div class="field">
+        <label>Job title / designation <span class="req">*</span></label>
+        <input type="text" id="job-input" placeholder="e.g. Senior Process Engineer">
+      </div>
+      <div class="field">
+        <label>Company / organisation <span class="req">*</span></label>
+        <input type="text" id="company-input" placeholder="e.g. Shell Pakistan">
+      </div>
+    </div>
+    <div class="section-label">Contact details</div>
+    <div class="row">
+      <div class="field">
+        <label>Email address <span class="req">*</span></label>
+        <input type="email" id="email-input" placeholder="you@example.com">
+      </div>
+      <div class="field">
+        <label>Phone number <span class="req">*</span></label>
+        <input type="tel" id="phone-input" placeholder="+92 300 0000000">
+      </div>
+    </div>
+    <div class="field">
+      <label>LinkedIn profile URL <span class="opt">(optional)</span></label>
+      <input type="url" id="linkedin-input" placeholder="https://linkedin.com/in/yourname">
+    </div>
+    <p class="error-msg" id="error-msg">⚠️ Please fill in all required fields marked with *</p>
+    <div class="progress-wrap" id="progress-wrap">
+      <div class="progress-bar-bg"><div class="progress-bar-fill" id="progress-bar"></div></div>
+      <p class="progress-label" id="progress-label">Uploading photo to Google Drive...</p>
+    </div>
+    <button class="submit-btn" id="submit-btn" onclick="submitForm()">Submit Registration</button>
+  </div>
+  <div class="success-box" id="success-box">
+    <div style="font-size:40px;margin-bottom:12px;">✅</div>
+    <h2>Registration Submitted!</h2>
+    <p id="success-msg">Your record has been saved to the alumni database.</p>
+    <p style="margin-top:12px;font-size:12px;color:#aaa;">You can close this page now.</p>
+  </div>
+</div>
+<!-- ===== CUSTOM REGISTRATION FORM END ===== -->
+
         </div>
       </div>
     </div>
@@ -507,6 +631,156 @@
   setTimeout(() => {
     document.getElementById('reg-bar').style.width = pct + '%';
   }, 500);
+</script>
+
+
+<script>
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby-vhhVUANxbgLL2r2k3S7sgCBi5G2yjx8VXiyPG-GwgfnkVXBN9qJ5dKnIz77KbiDmEA/exec";
+
+const morningStudents = {
+  "M101":"ABDUL WAHAB KHAN","M102":"ZAHID ANJUM","M103":"USMAN RAFIQ","M104":"MEESAM ALI","M105":"IRFAN IQBAL",
+  "M106":"WASEEM SAFDAR","M107":"NASEER AHMAD","M108":"RIZWAN HAIDER","M109":"UMAR FAROOQ","M110":"MUHAMMAD FIAZ",
+  "M111":"FAROOQ KHAN","M112":"SALMAN SIDIQUE","M113":"HAFIZ AAMIR","M114":"MOHSIN ALI RAZA","M115":"MUHAMMAD KASHIF",
+  "M116":"RIZWAN GHULAM NABI","M117":"AYAZ KARIM","M118":"ADEEM GHAFFAR RANA","M119":"KHIZAR HAYAT","M120":"AWAIS NADEEM",
+  "M121":"SAQIB WAHEED","M122":"RAO SHAFIQ","M123":"FAYYAZ AHMAD","M124":"KHUBAIB HASAN","M125":"TAHIR NAZIR",
+  "M126":"MANSAB ALI","M127":"ZAHID RASOOL","M128":"UMAIR ISLAM","M129":"ZOHAIB ZAIDI","M130":"ASAD ABBAS",
+  "M131":"AJMAL JAVAID","M132":"KHALIL AHMAD","M133":"WAQAS AZIZ HASHMI","M134":"AFZAL CHAUDHRY","M135":"MUJEEB UR REHMAN",
+  "M136":"ALI BUKHARI","M137":"AWAIS NAEEM","M138":"SAAD TOOR","M139":"KASHIF YOUNIS","M140":"AFFAN KHALID",
+  "M141":"JAHENZAIB KHAN","M142":"AHSAN BILAL","M143":"SAQIB RIZVI","M144":"QAISER KHAN","M145":"UMAIR RASHEED",
+  "M146":"ALI NADEEM","M147":"FAWAD FURRUKH","M148":"AFNAN HAMEED","M149":"ABDUL REHMAN","M150":"IBRAHIM SAEED",
+  "M151":"MUHAMMAD ARIF KHAN","M152":"HARIS SHAJAR","M153":"IMRAN KHAN (I)","M154":"NOUMAN AHMAD","M155":"IMRAN KHAN (II)",
+  "M156":"JAMSHAID IQBAL","M157":"FAISAL MEHMOOD","M158":"SHERAZ AFZAL","M159":"ADNAN SHOAIB","M160":"KARIM BUKSH",
+  "M161":"UMAIR DANISH","M162":"AAMIR SHAMAS","M163":"WAZIR ALI","M164":"JAMA AHMAD HERSI",
+  "M201":"TAYAB SAEED","M202":"ATIF ASHRAF","M203":"ASAD ALI","M204":"NAVEED AKHTAR","M205":"MUNZOOR AHMAD",
+  "M206":"FARAZ BUTT","M207":"SANA ULLAH","M208":"BABER ALI","M209":"AAMIR RIAZ","M210":"GHULAM ABBAS",
+  "M211":"MUHAMMAD BASIT ALI","M212":"ZEESHAN SHOAIB","M213":"MUHAMMAD KALEEM ULLAH","M214":"HAFIZ KHALIL UR REHMAN",
+  "M215":"FAISAL JOYIA","M216":"FAISAL KHALIL","M217":"MUHAMMAD ZEESHAN SALEEM","M218":"AHSAN NOOR KHAN",
+  "M219":"WAQAS SHEHRYAR","M220":"AFTAB AHMAD","M221":"TANVIR AHMAD","M222":"FAKHAR ABBAS","M223":"MUHAMMAD HASNAT ALI",
+  "M224":"YASIR ARAFAT","M225":"TAHIR WASIM","M226":"MOHSIN SAEED",
+  "M301":"SAEED AKRAM SHEIKH","M302":"IMRAN YOUSAF","M303":"MUHAMMAD ADNAN SADIQ","M304":"MUHAMMAD IRFAN",
+  "M305":"IMRAN RIAZ","M306":"NASIR MEHMOOD","M307":"SHAMSHAD-UL-HAQ","M308":"AWAIS ABDULLAH","M309":"UMAIR AZAD",
+  "M310":"ALI ZULQARNAIN","M311":"MUHAMMAD RIZWAN AZHAR","M312":"MUHAMMAD ASAD MASOOD","M313":"HAFIZ SHAFIQ",
+  "M314":"HAFIZ ZUBAIR","M315":"MUHAMMAD NAEEM","M316":"GHUFRAN AHMAD","M317":"ABDUL LATIF",
+  "M401":"AMBREEN GHALIB","M402":"MUHAMMAD SHAHZAD ALI","M403":"MUHAMMAD ILYAS","M404":"YASIR SHARIF AWAN",
+  "M405":"RAO MUNEER ALI","M406":"SAJID MAHMOOD","M407":"ALI MURAD","M408":"USMAN ALI","M409":"MUHAMMAD AWAIS",
+  "M410":"AMBREEN GULZAR","M411":"FAHIM AHMAD ZAFAR","M412":"ANWAAR AHMAD","M413":"USMAN RASHEED",
+  "M414":"KHUBAIB AHMAD","M415":"SALMAN MANSOOR","M416":"USMAN SAEED","M417":"SADIA NAUREEN"
+};
+const eveningStudents = {
+  "E102":"FAHAD MASOOD","E103":"NOMAN LIAQAT","E104":"YASEEN AKRAM","E105":"ADNAN NAWAZ","E106":"AHSEN HAFEEZ",
+  "E107":"RAZA MUDASIR ALVI","E108":"GULZEB KHAN","E109":"USMAN SADIQUE","E110":"ABDUL QAYYUM","E111":"IMRAN MALIK",
+  "E112":"SHAHID NADEEM","E113":"UMAIR FURQAN","E114":"NAUMAN ASHRAF","E115":"WAQAS BUKHARI","E116":"SANA ULLAH",
+  "E117":"NAEEM YOUNIS","E118":"MASOOD HAIDER","E119":"MUHAMMAD ASIF KHAN","E120":"MOHSIN MOBEEN","E121":"FAHEEM RIAZ",
+  "E122":"FAHAD MIR","E123":"ADNAN REHMAT","E124":"YASIR AKRAM AWAN","E125":"SHAROOZ KHAN","E126":"RANA MUHAMMAD IMRAN",
+  "E127":"RIZWAN MALIK","E128":"UMER TAHIR MIR","E129":"MUHAMMAD NAEEM IQBAL","E130":"MUHAMMAD UMAIR DANISH",
+  "E131":"ABID ALI","E132":"FARHAN CHEEMA","E133":"MUHAMMAD ARSHAD","E134":"ZUBAIR SHAHID","E135":"WAQAR AHMED",
+  "E136":"AFFAN AHMAD","E137":"UMAIR SHOAIB","E138":"ARSALAN AWAN","E139":"MUHAMMAD IMRAN","E140":"ASIF IQBAL",
+  "E141":"HAKIM ALI HAIDER","E142":"GHULAM MURTAZA","E143":"ADNAN SALEEM","E144":"ASIF ALI SHAHZAD",
+  "E201":"MUHAMMAD ZAMAN","E202":"IMRAN NIAZ","E203":"SHAHID SAEED","E204":"KHURRAM JAVED","E205":"SAQIB RAZA",
+  "E206":"AAMIR KARIM","E207":"MUHAMMAD UMAR FAROOQ","E208":"ALI AHMAD","E209":"ABDUL BASIT","E210":"FARHAN RASOOL",
+  "E211":"NASEER AHMAD","E212":"MUHAMMAD USMAN","E213":"AQEEL MANSOOR CHISHTI","E214":"RIZWAN AHMED SHAH",
+  "E215":"MUHAMMAD ZAIN","E216":"USMAN ANWAR DAR","E217":"OMER SHUJAT","E218":"IMRAN RAFIQUE",
+  "E219":"NAEEM BHATTI","E220":"ASIF SANI"
+};
+const countryCities = {
+  "Pakistan":["Karachi","Lahore","Islamabad","Rawalpindi","Faisalabad","Multan","Peshawar","Quetta","Sialkot","Gujranwala","Hyderabad","Bahawalpur","Sargodha","Sukkur","Larkana","Sheikhupura","Rahim Yar Khan","Jhang","Gujrat","Mardan","Other"],
+  "Saudi Arabia":["Riyadh","Jeddah","Mecca","Medina","Dammam","Khobar","Dhahran","Jubail","Yanbu","Tabuk","Abha","Taif","Buraidah","Najran","Other"],
+  "United Arab Emirates":["Dubai","Abu Dhabi","Sharjah","Ajman","Ras Al Khaimah","Fujairah","Umm Al Quwain","Al Ain","Other"],
+  "United Kingdom":["London","Birmingham","Manchester","Leeds","Glasgow","Liverpool","Edinburgh","Bristol","Sheffield","Cardiff","Leicester","Coventry","Bradford","Nottingham","Other"],
+  "United States":["New York","Los Angeles","Chicago","Houston","Phoenix","Philadelphia","San Antonio","San Diego","Dallas","San Jose","Austin","Jacksonville","Fort Worth","Columbus","Charlotte","Indianapolis","Seattle","Denver","Washington DC","Nashville","Other"],
+  "Canada":["Toronto","Montreal","Vancouver","Calgary","Edmonton","Ottawa","Winnipeg","Quebec City","Hamilton","Kitchener","London","Halifax","Other"],
+  "Australia":["Sydney","Melbourne","Brisbane","Perth","Adelaide","Canberra","Gold Coast","Newcastle","Hobart","Darwin","Other"],
+  "Germany":["Berlin","Hamburg","Munich","Cologne","Frankfurt","Stuttgart","Düsseldorf","Leipzig","Dortmund","Essen","Other"],
+  "Malaysia":["Kuala Lumpur","George Town","Johor Bahru","Ipoh","Shah Alam","Petaling Jaya","Subang Jaya","Kota Kinabalu","Kuching","Other"],
+  "Qatar":["Doha","Al Wakrah","Al Khor","Dukhan","Mesaieed","Lusail","Other"],
+  "Kuwait":["Kuwait City","Salmiya","Hawalli","Ahmadi","Fahaheel","Jahra","Mangaf","Other"],
+  "Oman":["Muscat","Salalah","Sohar","Nizwa","Sur","Ibra","Buraimi","Other"],
+  "Bahrain":["Manama","Riffa","Muharraq","Hamad Town","Isa Town","Sitra","Budaiya","Other"]
+};
+const allCountries = [...new Set([...Object.keys(countryCities),"Albania","Andorra","Angola","Argentina","Armenia","Belarus","Belgium","Belize","Benin","Bhutan","Bolivia","Bosnia and Herzegovina","Botswana","Brazil","Brunei","Bulgaria","Burkina Faso","Burundi","Cambodia","Cameroon","Chad","Chile","China","Colombia","Congo","Costa Rica","Croatia","Cuba","Cyprus","Czech Republic","Denmark","Djibouti","Dominican Republic","Ecuador","Egypt","El Salvador","Estonia","Ethiopia","Finland","France","Georgia","Ghana","Greece","Guatemala","Haiti","Honduras","Hungary","Iceland","India","Indonesia","Iran","Iraq","Ireland","Israel","Italy","Jamaica","Japan","Jordan","Kazakhstan","Kenya","Kyrgyzstan","Laos","Latvia","Lebanon","Libya","Lithuania","Luxembourg","Maldives","Mali","Malta","Mexico","Moldova","Mongolia","Morocco","Mozambique","Myanmar","Namibia","Nepal","Netherlands","New Zealand","Nicaragua","Niger","Nigeria","North Korea","Norway","Panama","Paraguay","Peru","Philippines","Poland","Portugal","Romania","Russia","Rwanda","Senegal","Serbia","Sierra Leone","Singapore","Slovakia","Slovenia","Somalia","South Africa","South Korea","South Sudan","Spain","Sri Lanka","Sudan","Sweden","Switzerland","Syria","Taiwan","Tajikistan","Tanzania","Thailand","Tunisia","Turkey","Turkmenistan","Uganda","Ukraine","United States","Uruguay","Uzbekistan","Venezuela","Vietnam","Yemen","Zambia","Zimbabwe"])].sort();
+
+const cs = document.getElementById('country-select');
+allCountries.forEach(c => { const o = document.createElement('option'); o.value = c; o.textContent = c; cs.appendChild(o); });
+
+function onCountryChange() {
+  const country = document.getElementById('country-select').value;
+  const citySelect = document.getElementById('city-select');
+  citySelect.innerHTML = '<option value="">Select city</option>';
+  if (!country) { citySelect.disabled = true; citySelect.innerHTML = '<option value="">Select country first</option>'; return; }
+  const cities = countryCities[country] || ["Other"];
+  cities.forEach(city => { const o = document.createElement('option'); o.value = city; o.textContent = city; citySelect.appendChild(o); });
+  citySelect.disabled = false;
+}
+function onSessionChange() {
+  const session = document.getElementById('session-select').value;
+  const rollSelect = document.getElementById('roll-select');
+  rollSelect.innerHTML = '<option value="">Select roll number</option>';
+  document.getElementById('name-display').innerHTML = '<span class="name-placeholder">Auto-filled when you select your roll number</span>';
+  if (!session) { rollSelect.disabled = true; rollSelect.innerHTML = '<option value="">Select session first</option>'; return; }
+  const db = session === 'morning' ? morningStudents : eveningStudents;
+  Object.keys(db).sort().forEach(roll => { const o = document.createElement('option'); o.value = roll; o.textContent = roll; rollSelect.appendChild(o); });
+  rollSelect.disabled = false;
+}
+function onRollChange() {
+  const session = document.getElementById('session-select').value;
+  const roll = document.getElementById('roll-select').value;
+  const db = session === 'morning' ? morningStudents : eveningStudents;
+  document.getElementById('name-display').innerHTML = (roll && db[roll]) ? db[roll] : '<span class="name-placeholder">Auto-filled when you select your roll number</span>';
+}
+let photoBase64 = '', photoMime = '';
+function onPhotoChange(e) {
+  const file = e.target.files[0]; if (!file) return;
+  const warn = document.getElementById('photo-size-warn');
+  if (file.size > 3 * 1024 * 1024) { warn.style.display = 'block'; photoBase64 = ''; return; }
+  warn.style.display = 'none'; photoMime = file.type;
+  const reader = new FileReader();
+  reader.onload = function(ev) {
+    photoBase64 = ev.target.result;
+    document.getElementById('upload-icon').innerHTML = '<img class="preview-img" src="' + ev.target.result + '" alt="Preview">';
+    document.getElementById('photo-label').textContent = '✓ ' + file.name;
+  };
+  reader.readAsDataURL(file);
+}
+function setProgress(pct, label) {
+  document.getElementById('progress-bar').style.width = pct + '%';
+  document.getElementById('progress-label').textContent = label;
+}
+function submitForm() {
+  const session = document.getElementById('session-select').value;
+  const roll = document.getElementById('roll-select').value;
+  const country = document.getElementById('country-select').value;
+  const city = document.getElementById('city-select').value;
+  const job = document.getElementById('job-input').value.trim();
+  const company = document.getElementById('company-input').value.trim();
+  const email = document.getElementById('email-input').value.trim();
+  const phone = document.getElementById('phone-input').value.trim();
+  const linkedin = document.getElementById('linkedin-input').value.trim();
+  const errMsg = document.getElementById('error-msg');
+  if (!session || !roll || !country || !city || !job || !company || !email || !phone) { errMsg.style.display = 'block'; return; }
+  errMsg.style.display = 'none';
+  const db = session === 'morning' ? morningStudents : eveningStudents;
+  const name = db[roll];
+  const btn = document.getElementById('submit-btn');
+  btn.disabled = true; btn.textContent = 'Submitting...';
+  document.getElementById('progress-wrap').style.display = 'block';
+  setProgress(20, 'Preparing your data...');
+  setTimeout(() => setProgress(50, photoBase64 ? 'Uploading photo to Google Drive...' : 'Saving your record...'), 300);
+  fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ session, roll, name, country, city, job, company, email, phone, linkedin, photoBase64, photoMime }) })
+  .then(() => {
+    setProgress(100, 'Done!');
+    setTimeout(() => {
+      document.getElementById('main-form').style.display = 'none';
+      document.getElementById('success-box').style.display = 'block';
+      document.getElementById('success-msg').textContent = roll + ' · ' + name + ' — your registration has been saved! ' + (photoBase64 ? 'Photo uploaded to Google Drive ✓' : '');
+    }, 500);
+  })
+  .catch(() => {
+    btn.disabled = false; btn.textContent = 'Submit Registration';
+    document.getElementById('progress-wrap').style.display = 'none';
+    errMsg.textContent = '⚠️ Submission failed. Please check your connection and try again.';
+    errMsg.style.display = 'block';
+  });
+}
 </script>
 
 </body>
