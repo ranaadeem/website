@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Session 2006-2010 – Chemical Engineering Alumni</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  function sendHeight() {
+    var height = document.body.scrollHeight;
+    window.parent.postMessage({ type: 'setHeight', height: height }, '*');
+  }
+  window.addEventListener('load', function() { sendHeight(); setInterval(sendHeight, 800); });
+  window.addEventListener('resize', sendHeight);
+</script>
+<style>
+  :root {
+    --navy: #0f1f3d;
+    --gold: #c9a84c;
+    --gold-light: #e8d5a3;
+    --cream: #faf8f4;
+    --white: #ffffff;
+    --text: #1a1a2e;
+    --muted: #6b7280;
+    --border: #e5e7eb;
+    --green: #059669;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { overflow-x: hidden; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    overflow-x: hidden;
+    margin-left: -24px;
+    margin-right: -24px;
+    width: calc(100% + 48px);
+  }
+
+  /* HEADER */
+  .page-header {
+    background: linear-gradient(135deg, var(--navy) 0%, #1a3a6b 60%, #0d2744 100%);
+    padding: 3.5rem 2rem 3rem;
+    position: relative; overflow: hidden;
+  }
+  .page-header::before {
+    content: ''; position: absolute;
+    top: -80px; right: -80px;
+    width: 400px; height: 400px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(201,168,76,0.1) 0%, transparent 70%);
+  }
+  .header-inner { max-width: 1100px; margin: 0 auto; position: relative; z-index: 1; }
+  .page-tag {
+    font-size: 11px; font-weight: 500; letter-spacing: 0.15em;
+    text-transform: uppercase; color: var(--gold);
+    border: 1px solid rgba(201,168,76,0.35);
+    padding: 4px 12px; border-radius: 20px;
+    display: inline-block; margin-bottom: 1rem;
+  }
+  .page-header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    color: white; margin-bottom: 0.75rem; line-height: 1.15;
+  }
+  .page-header h1 span { color: var(--gold); }
+  .header-sub { font-size: 15px; color: rgba(255,255,255,0.6); font-weight: 300; max-width: 600px; line-height: 1.7; margin-bottom: 1.5rem; }
+  .header-stats { display: flex; gap: 2rem; flex-wrap: wrap; }
+  .hstat-num { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700; color: var(--gold); display: block; }
+  .hstat-lbl { font-size: 12px; color: rgba(255,255,255,0.5); }
+
+  /* MAIN GRID */
+  .main-wrap { max-width: 1100px; margin: 0 auto; padding: 2.5rem 2rem; display: grid; grid-template-columns: 1fr 340px; gap: 2rem; align-items: start; }
+
+  /* LEFT COLUMN */
+  .section-tag { font-size: 11px; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); display: block; margin-bottom: 0.4rem; }
+  .section-title { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--navy); margin-bottom: 1.25rem; }
+
+  /* REGISTRATION FORM EMBED */
+  .form-section { margin-bottom: 2.5rem; }
+  .form-container {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .form-header-bar {
+    background: var(--navy);
+    padding: 1rem 1.5rem;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .form-header-bar span { font-size: 13px; color: rgba(255,255,255,0.8); font-weight: 500; }
+  .form-header-bar .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--gold); }
+  .form-iframe-wrap { padding: 0; }
+
+  /* WORLD MAP SECTION */
+  .map-section { margin-bottom: 2.5rem; }
+  .map-placeholder {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .country-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 1.25rem; }
+  .country-card {
+    background: #f8f9fa;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 12px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .country-name { font-size: 13px; color: var(--text); font-weight: 500; }
+  .country-count {
+    font-size: 12px; font-weight: 600;
+    background: rgba(201,168,76,0.15); color: #92701e;
+    padding: 2px 8px; border-radius: 10px;
+  }
+  .map-note { font-size: 11px; color: var(--muted); padding: 0 1.25rem 1rem; font-style: italic; }
+
+  /* SIDEBAR */
+  .sidebar { display: flex; flex-direction: column; gap: 1.5rem; }
+  .side-card { background: var(--white); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+  .side-card-header { background: var(--navy); padding: 1rem 1.25rem; }
+  .side-card-header h3 { font-family: 'Playfair Display', serif; font-size: 15px; color: white; }
+  .side-card-header p { font-size: 11px; color: rgba(255,255,255,0.5); margin-top: 2px; }
+  .side-card-body { padding: 1.25rem; }
+
+  /* BATCH INFO */
+  .info-row { display: flex; gap: 10px; margin-bottom: 10px; align-items: flex-start; }
+  .info-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+  .info-label { font-size: 11px; color: var(--muted); margin-bottom: 2px; }
+  .info-val { font-size: 13px; color: var(--text); font-weight: 500; line-height: 1.4; }
+  .info-val a { color: var(--navy); text-decoration: none; }
+  .info-val a:hover { color: var(--gold); }
+
+  /* MILESTONES */
+  .milestone { display: flex; gap: 12px; margin-bottom: 14px; position: relative; }
+  .milestone:not(:last-child)::before {
+    content: '';
+    position: absolute;
+    left: 15px; top: 28px; bottom: -14px;
+    width: 1px; background: var(--border);
+  }
+  .ms-dot { width: 30px; height: 30px; border-radius: 50%; background: rgba(201,168,76,0.1); border: 2px solid var(--gold); display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; }
+  .ms-year { font-size: 10px; color: var(--gold); font-weight: 600; margin-bottom: 2px; }
+  .ms-text { font-size: 12px; color: var(--text); line-height: 1.5; }
+
+  /* ANNOUNCEMENTS */
+  .announcement {
+    border-left: 3px solid var(--gold);
+    padding: 10px 12px;
+    background: #faf8f4;
+    border-radius: 0 8px 8px 0;
+    margin-bottom: 10px;
+  }
+  .ann-date { font-size: 10px; color: var(--muted); margin-bottom: 3px; }
+  .ann-text { font-size: 13px; color: var(--text); line-height: 1.5; }
+  .ann-badge { display: inline-block; font-size: 10px; padding: 2px 7px; border-radius: 4px; background: rgba(201,168,76,0.12); color: #92701e; margin-top: 5px; }
+
+  /* CONNECT */
+  .connect-btn {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 14px; border-radius: 8px; margin-bottom: 8px;
+    text-decoration: none; font-size: 13px; font-weight: 500;
+    transition: all 0.2s;
+    border: 1px solid var(--border);
+    color: var(--text);
+  }
+  .connect-btn:hover { border-color: var(--gold); color: var(--gold); background: rgba(201,168,76,0.04); }
+  .connect-btn .cb-icon { font-size: 18px; }
+  .connect-btn .cb-text { flex: 1; }
+  .connect-btn .cb-lbl { font-size: 10px; color: var(--muted); display: block; font-weight: 400; }
+
+  /* STATS CHART */
+  .chart-wrap { padding: 1rem; }
+
+  /* PHOTO PLACEHOLDER */
+  .photo-placeholder {
+    background: linear-gradient(135deg, #f0f4ff, #e8f0fe);
+    border: 2px dashed #c7d2fe;
+    border-radius: 10px;
+    padding: 2rem;
+    text-align: center;
+    margin-bottom: 1.25rem;
+  }
+  .photo-placeholder .ph-icon { font-size: 36px; margin-bottom: 8px; }
+  .photo-placeholder p { font-size: 13px; color: #6366f1; font-weight: 500; }
+  .photo-placeholder span { font-size: 11px; color: var(--muted); }
+
+  /* REGISTERED COUNT */
+  .reg-counter {
+    background: linear-gradient(135deg, var(--navy), #1a3a6b);
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-align: center;
+    margin-bottom: 1.25rem;
+  }
+  .reg-num { font-family: 'Playfair Display', serif; font-size: 52px; font-weight: 700; color: var(--gold); display: block; line-height: 1; }
+  .reg-label { font-size: 13px; color: rgba(255,255,255,0.6); margin-top: 6px; }
+  .reg-sub { font-size: 11px; color: rgba(255,255,255,0.35); margin-top: 4px; }
+  .reg-bar-wrap { margin-top: 12px; }
+  .reg-bar-bg { background: rgba(255,255,255,0.1); border-radius: 10px; height: 6px; }
+  .reg-bar-fill { background: var(--gold); border-radius: 10px; height: 6px; width: 0%; transition: width 1s ease; }
+  .reg-bar-label { display: flex; justify-content: space-between; font-size: 10px; color: rgba(255,255,255,0.4); margin-top: 5px; }
+
+  /* SESSION BREAKDOWN */
+  .session-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); }
+  .session-row:last-child { border-bottom: none; }
+  .session-label { font-size: 13px; color: var(--text); }
+  .session-count { font-size: 13px; font-weight: 600; color: var(--navy); }
+
+  /* FOOTER */
+  .page-footer { background: var(--navy); padding: 1.5rem 2rem; text-align: center; }
+  .page-footer p { font-size: 12px; color: rgba(255,255,255,0.35); }
+  .page-footer a { color: var(--gold); text-decoration: none; }
+
+  @media (max-width: 768px) {
+    .main-wrap { grid-template-columns: 1fr; }
+    .country-grid { grid-template-columns: 1fr 1fr; }
+    .header-stats { gap: 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="page-header">
+  <div class="header-inner">
+    <span class="page-tag">Alumni Network</span>
+    <h1>Session <span>2006 – 2010</span></h1>
+    <p class="header-sub">Chemical Engineering Alumni · Institute of Chemical Engineering & Technology · University of the Punjab, Lahore. Reconnecting batchmates across the globe — register, update your profile, and stay connected.</p>
+    <div class="header-stats">
+      <div><span class="hstat-num" id="total-registered">0</span><span class="hstat-lbl">Registered Alumni</span></div>
+      <div><span class="hstat-num" id="total-countries">0</span><span class="hstat-lbl">Countries Represented</span></div>
+      <div><span class="hstat-num">245</span><span class="hstat-lbl">Total Batch Size</span></div>
+      <div><span class="hstat-num">2010</span><span class="hstat-lbl">Graduation Year</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main-wrap">
+
+  <!-- LEFT COLUMN -->
+  <div>
+
+    <!-- WORLD MAP / COUNTRY DISTRIBUTION -->
+    <div class="map-section">
+      <span class="section-tag">Global Distribution</span>
+      <h2 class="section-title">Where Are We in the World?</h2>
+      <div class="map-placeholder">
+        <div style="background: var(--navy); padding: 1rem 1.25rem; display:flex; justify-content:space-between; align-items:center;">
+          <span style="font-size:13px; color:rgba(255,255,255,0.8); font-weight:500;">🌍 Registered Alumni by Country</span>
+          <span style="font-size:11px; color:rgba(255,255,255,0.4);">Updates as alumni register</span>
+        </div>
+        <div class="country-grid" id="country-grid">
+          <!-- Populated by JS -->
+          <div class="country-card"><span class="country-name">🇵🇰 Pakistan</span><span class="country-count">—</span></div>
+          <div class="country-card"><span class="country-name">🇸🇦 Saudi Arabia</span><span class="country-count">—</span></div>
+          <div class="country-card"><span class="country-name">🇦🇪 UAE</span><span class="country-count">—</span></div>
+          <div class="country-card"><span class="country-name">🇬🇧 United Kingdom</span><span class="country-count">—</span></div>
+          <div class="country-card"><span class="country-name">🇩🇪 Germany</span><span class="country-count">—</span></div>
+          <div class="country-card"><span class="country-name">🇺🇸 United States</span><span class="country-count">—</span></div>
+          <div class="country-card"><span class="country-name">🇨🇦 Canada</span><span class="country-count">—</span></div>
+          <div class="country-card"><span class="country-name">🇦🇺 Australia</span><span class="country-count">—</span></div>
+          <div class="country-card"><span class="country-name">🇲🇾 Malaysia</span><span class="country-count">—</span></div>
+        </div>
+        <p class="map-note">* Country counts will update as alumni submit their registration. Share the form with your batchmates!</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+
+    <!-- REGISTRATION COUNTER -->
+    <div class="reg-counter">
+      <span class="reg-num" id="counter-num">0</span>
+      <div class="reg-label">Alumni Registered</div>
+      <div class="reg-sub">out of 245 total batch members</div>
+      <div class="reg-bar-wrap">
+        <div class="reg-bar-bg"><div class="reg-bar-fill" id="reg-bar"></div></div>
+        <div class="reg-bar-label"><span>0%</span><span id="reg-pct">0% complete</span></div>
+      </div>
+    </div>
+
+    <!-- SESSION BREAKDOWN -->
+    <div class="side-card">
+      <div class="side-card-header">
+        <h3>Batch Breakdown</h3>
+        <p>Morning & Evening sessions</p>
+      </div>
+      <div class="side-card-body">
+        <div class="session-row"><span class="session-label">🌅 Morning Session</span><span class="session-count">181 students</span></div>
+        <div class="session-row"><span class="session-label">🌆 Evening Session</span><span class="session-count">64 students</span></div>
+        <div class="session-row"><span class="session-label">👥 Total Batch</span><span class="session-count">245 students</span></div>
+        <div class="session-row"><span class="session-label">🎓 Graduated</span><span class="session-count">2010</span></div>
+        <div class="session-row"><span class="session-label">📅 Session Start</span><span class="session-count">2006</span></div>
+      </div>
+    </div>
+
+    <!-- BATCH PHOTO -->
+    <div class="side-card">
+      <div class="side-card-header">
+        <h3>Batch Photo</h3>
+        <p>Session 2006–2010</p>
+      </div>
+      <div class="side-card-body">
+        <div class="photo-placeholder">
+          <div class="ph-icon">📸</div>
+          <p>Batch Photo Coming Soon</p>
+          <span>Photo will be added here</span>
+        </div>
+        <p style="font-size:12px; color:var(--muted); line-height:1.6;">Have a batch photo? Send it to <a href="mailto:ranaadeem@hotmail.com" style="color:var(--gold);">ranaadeem@hotmail.com</a> and we'll add it here.</p>
+      </div>
+    </div>
+
+    <!-- KEY MILESTONES -->
+    <div class="side-card">
+      <div class="side-card-header">
+        <h3>Key Milestones</h3>
+        <p>Our journey together</p>
+      </div>
+      <div class="side-card-body">
+        <div class="milestone">
+          <div class="ms-dot">🎒</div>
+          <div>
+            <div class="ms-year">2006</div>
+            <div class="ms-text">First day at ICET, University of the Punjab, Lahore. Session 2006–2010 begins.</div>
+          </div>
+        </div>
+        <div class="milestone">
+          <div class="ms-dot">⚗️</div>
+          <div>
+            <div class="ms-year">2007–2009</div>
+            <div class="ms-text">Core chemical engineering coursework, lab work, and industry visits across Pakistan.</div>
+          </div>
+        </div>
+        <div class="milestone">
+          <div class="ms-dot">📝</div>
+          <div>
+            <div class="ms-year">2009–2010</div>
+            <div class="ms-text">Final year projects, thesis defenses, and internships at leading Pakistani industries.</div>
+          </div>
+        </div>
+        <div class="milestone">
+          <div class="ms-dot">🎓</div>
+          <div>
+            <div class="ms-year">2010</div>
+            <div class="ms-text">Graduation — 245 Chemical Engineers step into the professional world.</div>
+          </div>
+        </div>
+        <div class="milestone">
+          <div class="ms-dot">🌍</div>
+          <div>
+            <div class="ms-year">2010–Present</div>
+            <div class="ms-text">Batchmates spread across the globe — Pakistan, Gulf, Europe, North America and beyond.</div>
+          </div>
+        </div>
+        <div class="milestone">
+          <div class="ms-dot">🔗</div>
+          <div>
+            <div class="ms-year">2025</div>
+            <div class="ms-text">Alumni network launched — reconnecting the batch after 15 years!</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DEPARTMENT INFO -->
+    <div class="side-card">
+      <div class="side-card-header">
+        <h3>Our Department</h3>
+        <p>ICET · University of the Punjab</p>
+      </div>
+      <div class="side-card-body">
+        <div class="info-row">
+          <span class="info-icon">🏛️</span>
+          <div>
+            <div class="info-label">Institute</div>
+            <div class="info-val"><a href="https://pu.edu.pk/home/department/25/Institute-of-Chemical-Engineering---Technology" target="_blank">Institute of Chemical Engineering & Technology (ICET)</a></div>
+          </div>
+        </div>
+        <div class="info-row">
+          <span class="info-icon">🎓</span>
+          <div>
+            <div class="info-label">University</div>
+            <div class="info-val"><a href="https://pu.edu.pk" target="_blank">University of the Punjab, Lahore</a></div>
+          </div>
+        </div>
+        <div class="info-row">
+          <span class="info-icon">📅</span>
+          <div>
+            <div class="info-label">Established</div>
+            <div class="info-val">1917 — over 100 years of engineering excellence</div>
+          </div>
+        </div>
+        <div class="info-row">
+          <span class="info-icon">📚</span>
+          <div>
+            <div class="info-label">Degree Awarded</div>
+            <div class="info-val">B.Sc. (Engg.) Chemical Engineering</div>
+          </div>
+        </div>
+        <div class="info-row">
+          <span class="info-icon">📍</span>
+          <div>
+            <div class="info-label">Location</div>
+            <div class="info-val">Old Campus, University of the Punjab, Lahore, Pakistan</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ANNOUNCEMENTS -->
+    <div class="side-card">
+      <div class="side-card-header">
+        <h3>Announcements</h3>
+        <p>Latest updates for the batch</p>
+      </div>
+      <div class="side-card-body">
+        <div class="announcement">
+          <div class="ann-date">May 2025</div>
+          <div class="ann-text">Alumni registration portal is now live! Fill your profile and help us reconnect the entire batch.</div>
+          <span class="ann-badge">🟢 Active</span>
+        </div>
+        <div class="announcement">
+          <div class="ann-date">Coming Soon</div>
+          <div class="ann-text">Batch reunion planning is underway. Details will be announced once enough alumni have registered.</div>
+          <span class="ann-badge">📅 Planned</span>
+        </div>
+        <div class="announcement">
+          <div class="ann-date">Ongoing</div>
+          <div class="ann-text">Share the registration link with your batchmates on WhatsApp and LinkedIn to help complete the directory.</div>
+          <span class="ann-badge">📢 Action needed</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONNECT -->
+    <div class="side-card">
+      <div class="side-card-header">
+        <h3>Stay Connected</h3>
+        <p>Join the batch network</p>
+      </div>
+      <div class="side-card-body">
+        <a href="mailto:ranaadeem@hotmail.com" class="connect-btn">
+          <span class="cb-icon">✉️</span>
+          <div class="cb-text">
+            Contact Organiser
+            <span class="cb-lbl">ranaadeem@hotmail.com</span>
+          </div>
+        </a>
+        <a href="https://www.linkedin.com/in/ranaadeem/" target="_blank" class="connect-btn">
+          <span class="cb-icon">💼</span>
+          <div class="cb-text">
+            LinkedIn
+            <span class="cb-lbl">Dr. Adeem Ghaffar Rana</span>
+          </div>
+        </a>
+        <p style="font-size:11px; color:var(--muted); margin-top:8px; line-height:1.6;">To add a WhatsApp group link, contact the organiser.</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="page-footer">
+  <p>Chemical Engineering Session 2006–2010 · ICET · University of the Punjab, Lahore &nbsp;·&nbsp; Organised by <a href="mailto:ranaadeem@hotmail.com">Dr. Adeem Ghaffar Rana</a></p>
+</div>
+
+<script>
+  // Animate registration counter (placeholder - update when real data available)
+  const totalBatch = 245;
+  const registered = 0; // Update this number as alumni register
+  const countries = 0;  // Update this number as alumni register
+
+  document.getElementById('total-registered').textContent = registered;
+  document.getElementById('total-countries').textContent = countries;
+  document.getElementById('counter-num').textContent = registered;
+
+  const pct = Math.round((registered / totalBatch) * 100);
+  document.getElementById('reg-pct').textContent = pct + '% complete';
+  setTimeout(() => {
+    document.getElementById('reg-bar').style.width = pct + '%';
+  }, 500);
+</script>
+
+</body>
+</html>
