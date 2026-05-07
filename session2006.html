@@ -262,7 +262,10 @@
 <div class="page-header">
   <div class="header-inner">
     <span class="page-tag">Alumni Network</span>
-    <h1>Session <span>2006 – 2010</span></h1>
+    <div style="display:flex; align-items:center; gap:1.25rem; flex-wrap:wrap;">
+        <img src="https://pu.edu.pk/temp1/dept/assets/img/logo.png" alt="ICET Logo" style="height:70px; width:auto; background:white; border-radius:8px; padding:6px;">
+        <h1>Session <span>2006 – 2010</span></h1>
+      </div>
     <p class="header-sub">Chemical Engineering Alumni · Institute of Chemical Engineering & Technology · University of the Punjab, Lahore. Reconnecting batchmates across the globe — register, update your profile, and stay connected.</p>
     <div class="header-stats">
       <div><span class="hstat-num" id="total-registered">0</span><span class="hstat-lbl">Registered Alumni</span></div>
@@ -396,21 +399,94 @@
       <div class="map-placeholder">
         <div style="background: var(--navy); padding: 1rem 1.25rem; display:flex; justify-content:space-between; align-items:center;">
           <span style="font-size:13px; color:rgba(255,255,255,0.8); font-weight:500;">🌍 Registered Alumni by Country</span>
-          <span style="font-size:11px; color:rgba(255,255,255,0.4);">Updates as alumni register</span>
+          <span style="font-size:11px; color:rgba(255,255,255,0.4);" id="map-update-time">Loading...</span>
         </div>
-        <div class="country-grid" id="country-grid">
-          <!-- Populated by JS -->
-          <div class="country-card"><span class="country-name">🇵🇰 Pakistan</span><span class="country-count">—</span></div>
-          <div class="country-card"><span class="country-name">🇸🇦 Saudi Arabia</span><span class="country-count">—</span></div>
-          <div class="country-card"><span class="country-name">🇦🇪 UAE</span><span class="country-count">—</span></div>
-          <div class="country-card"><span class="country-name">🇬🇧 United Kingdom</span><span class="country-count">—</span></div>
-          <div class="country-card"><span class="country-name">🇩🇪 Germany</span><span class="country-count">—</span></div>
-          <div class="country-card"><span class="country-name">🇺🇸 United States</span><span class="country-count">—</span></div>
-          <div class="country-card"><span class="country-name">🇨🇦 Canada</span><span class="country-count">—</span></div>
-          <div class="country-card"><span class="country-name">🇦🇺 Australia</span><span class="country-count">—</span></div>
-          <div class="country-card"><span class="country-name">🇲🇾 Malaysia</span><span class="country-count">—</span></div>
+        <!-- WORLD MAP SVG -->
+        <div style="position:relative; background:#e8f4f8; overflow:hidden; border-bottom: 1px solid var(--border);">
+          <div id="world-map-container" style="width:100%; height:340px; position:relative; overflow:hidden;">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m2!1m1!1s0x0:0x0!2m2!1d20!2d10!3m3!1m2!1s0x0%3A0x0!5e0!3m2!1sen!2s!4v1&z=1"
+              style="display:none">
+            </iframe>
+            <div id="map-pins-layer" style="width:100%;height:340px;position:relative;background:linear-gradient(180deg,#cce8f4 0%,#a8d8ea 100%);overflow:hidden;">
+              <!-- Simplified world map SVG -->
+              <svg viewBox="0 0 1000 500" style="width:100%;height:100%;position:absolute;top:0;left:0;" id="world-svg">
+                <defs>
+                  <style>
+                    .land { fill: #d4e6c3; stroke: #fff; stroke-width: 0.5; }
+                    .land:hover { fill: #b8d4a8; }
+                  </style>
+                </defs>
+                <!-- Simplified continent shapes -->
+                <!-- North America -->
+                <path class="land" d="M 80 80 L 230 60 L 260 90 L 280 140 L 250 200 L 220 220 L 200 260 L 170 250 L 140 230 L 110 200 L 90 160 L 70 120 Z"/>
+                <!-- Central America -->
+                <path class="land" d="M 200 260 L 220 270 L 215 300 L 200 310 L 185 290 Z"/>
+                <!-- South America -->
+                <path class="land" d="M 200 310 L 250 300 L 280 330 L 290 390 L 270 440 L 240 460 L 210 450 L 190 410 L 180 360 L 190 330 Z"/>
+                <!-- Europe -->
+                <path class="land" d="M 430 60 L 510 55 L 530 70 L 520 100 L 500 110 L 480 120 L 460 115 L 440 100 L 425 80 Z"/>
+                <!-- Scandinavia -->
+                <path class="land" d="M 460 30 L 490 25 L 505 45 L 495 65 L 470 70 L 455 55 Z"/>
+                <!-- Africa -->
+                <path class="land" d="M 440 150 L 510 140 L 540 160 L 550 220 L 545 300 L 520 360 L 490 390 L 460 380 L 430 340 L 420 270 L 415 200 L 425 170 Z"/>
+                <!-- Middle East -->
+                <path class="land" d="M 510 110 L 570 105 L 590 130 L 580 160 L 550 165 L 520 150 L 505 130 Z"/>
+                <!-- Asia (main) -->
+                <path class="land" d="M 570 50 L 720 40 L 780 60 L 800 90 L 790 140 L 760 160 L 720 155 L 680 170 L 650 160 L 610 150 L 580 130 L 560 100 Z"/>
+                <!-- South Asia -->
+                <path class="land" d="M 610 150 L 660 145 L 680 170 L 670 210 L 640 220 L 615 200 Z"/>
+                <!-- Southeast Asia -->
+                <path class="land" d="M 700 170 L 760 165 L 780 190 L 770 220 L 740 230 L 710 215 L 695 195 Z"/>
+                <!-- China/East Asia -->
+                <path class="land" d="M 720 80 L 800 70 L 840 90 L 860 120 L 840 155 L 800 160 L 760 155 L 730 135 L 715 105 Z"/>
+                <!-- Japan -->
+                <path class="land" d="M 855 100 L 875 90 L 885 110 L 875 130 L 858 125 Z"/>
+                <!-- Australia -->
+                <path class="land" d="M 760 300 L 860 285 L 900 310 L 910 360 L 880 400 L 840 415 L 790 410 L 755 380 L 745 340 Z"/>
+                <!-- UK -->
+                <path class="land" d="M 430 65 L 445 60 L 450 75 L 440 82 L 428 75 Z"/>
+                <!-- Pakistan specifically -->
+                <path class="land" id="pk-land" d="M 580 130 L 610 120 L 625 135 L 620 155 L 605 160 L 585 150 Z" style="fill:#d4e6c3;"/>
+              </svg>
+
+              <!-- PIN LAYER - populated by JS -->
+              <div id="pins-container" style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;"></div>
+
+              <!-- MAP LEGEND -->
+              <div style="position:absolute;bottom:10px;left:10px;background:rgba(255,255,255,0.92);border-radius:8px;padding:8px 12px;font-size:11px;color:#555;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+                <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;">
+                  <div style="width:12px;height:12px;border-radius:50%;background:#c9a84c;border:2px solid white;box-shadow:0 1px 3px rgba(0,0,0,0.3);"></div>
+                  <span>Alumni Location</span>
+                </div>
+                <div style="color:#aaa;">Pin size = number of alumni</div>
+              </div>
+            </div>
+          </div>
         </div>
-        <p class="map-note">* Country counts will update as alumni submit their registration. Share the form with your batchmates!</p>
+
+        <!-- COUNTRY LIST BELOW MAP -->
+        <div id="country-list" style="padding:1rem 1.25rem;">
+          <div style="font-size:12px;color:var(--muted);text-align:center;padding:1rem;">Loading alumni data...</div>
+        </div>
+        <p class="map-note">* Live data from alumni registrations. Updates automatically every 5 minutes.</p>
+      </div>
+    </div>
+
+    <!-- BATCH PHOTO - now below map, full width -->
+    <div class="map-section">
+      <span class="section-tag">Our Batch</span>
+      <h2 class="section-title">Batch Photo</h2>
+      <div class="map-placeholder" style="overflow:hidden;">
+        <div style="background: var(--navy); padding: 1rem 1.25rem;">
+          <span style="font-size:13px; color:rgba(255,255,255,0.8); font-weight:500;">📸 Session 2006–2010 · ICET · University of the Punjab</span>
+        </div>
+        <div id="batch-photo-area" style="background:linear-gradient(135deg,#f0f4ff,#e8f0fe);min-height:280px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1rem;padding:2rem;text-align:center;">
+          <div style="font-size:48px;">📸</div>
+          <div style="font-size:16px;font-weight:600;color:#4338ca;">Batch Photo Coming Soon</div>
+          <div style="font-size:13px;color:var(--muted);max-width:400px;line-height:1.6;">Have a batch photo from 2006–2010? Share it with us and we'll display it here for everyone to see.</div>
+          <a href="mailto:ranaadeem@hotmail.com?subject=Session 2006-2010 Batch Photo" style="display:inline-block;background:var(--navy);color:white;padding:10px 24px;border-radius:8px;text-decoration:none;font-size:13px;font-weight:500;margin-top:8px;">Send Photo →</a>
+        </div>
       </div>
     </div>
 
@@ -445,21 +521,7 @@
       </div>
     </div>
 
-    <!-- BATCH PHOTO -->
-    <div class="side-card">
-      <div class="side-card-header">
-        <h3>Batch Photo</h3>
-        <p>Session 2006–2010</p>
-      </div>
-      <div class="side-card-body">
-        <div class="photo-placeholder">
-          <div class="ph-icon">📸</div>
-          <p>Batch Photo Coming Soon</p>
-          <span>Photo will be added here</span>
-        </div>
-        <p style="font-size:12px; color:var(--muted); line-height:1.6;">Have a batch photo? Send it to <a href="mailto:ranaadeem@hotmail.com" style="color:var(--gold);">ranaadeem@hotmail.com</a> and we'll add it here.</p>
-      </div>
-    </div>
+
 
     <!-- KEY MILESTONES -->
     <div class="side-card">
@@ -552,7 +614,7 @@
           <span class="info-icon">📍</span>
           <div>
             <div class="info-label">Location</div>
-            <div class="info-val">Old Campus, University of the Punjab, Lahore, Pakistan</div>
+            <div class="info-val">New Campus, University of the Punjab, Lahore, Pakistan</div>
           </div>
         </div>
       </div>
@@ -617,20 +679,146 @@
 </div>
 
 <script>
-  // Animate registration counter (placeholder - update when real data available)
-  const totalBatch = 245;
-  const registered = 0; // Update this number as alumni register
-  const countries = 0;  // Update this number as alumni register
 
-  document.getElementById('total-registered').textContent = registered;
-  document.getElementById('total-countries').textContent = countries;
-  document.getElementById('counter-num').textContent = registered;
+  // Country coordinates for map pins (approximate center lat/lng mapped to SVG %)
+  const countryCoords = {
+    "Pakistan": {x: 59, y: 38}, "Saudi Arabia": {x: 54, y: 38},
+    "United Arab Emirates": {x: 57, y: 40}, "United Kingdom": {x: 43, y: 18},
+    "Germany": {x: 47, y: 18}, "United States": {x: 18, y: 38},
+    "Canada": {x: 16, y: 22}, "Australia": {x: 82, y: 72},
+    "Malaysia": {x: 73, y: 52}, "Qatar": {x: 56, y: 38},
+    "Kuwait": {x: 55, y: 36}, "Oman": {x: 58, y: 42},
+    "Bahrain": {x: 56, y: 37}, "France": {x: 45, y: 22},
+    "Netherlands": {x: 46, y: 17}, "Sweden": {x: 48, y: 12},
+    "Norway": {x: 47, y: 10}, "Denmark": {x: 47, y: 15},
+    "Switzerland": {x: 47, y: 22}, "Turkey": {x: 53, y: 28},
+    "India": {x: 63, y: 44}, "China": {x: 73, y: 30},
+    "Singapore": {x: 74, y: 55}, "Japan": {x: 84, y: 28},
+    "South Korea": {x: 82, y: 26}, "Egypt": {x: 51, y: 38},
+    "Nigeria": {x: 46, y: 52}, "South Africa": {x: 48, y: 72},
+    "Brazil": {x: 24, y: 62}, "Mexico": {x: 18, y: 44},
+    "Italy": {x: 48, y: 25}, "Spain": {x: 43, y: 26},
+    "Ireland": {x: 41, y: 18}, "Finland": {x: 50, y: 10},
+    "Belgium": {x: 46, y: 19}, "Austria": {x: 48, y: 21},
+    "Poland": {x: 49, y: 18}, "Russia": {x: 62, y: 15},
+    "Iran": {x: 58, y: 33}, "Iraq": {x: 55, y: 33},
+    "Jordan": {x: 53, y: 34}, "Bangladesh": {x: 66, y: 43},
+    "Afghanistan": {x: 60, y: 33}, "Kazakhstan": {x: 62, y: 24},
+    "New Zealand": {x: 90, y: 80}, "Indonesia": {x: 76, y: 56},
+    "Thailand": {x: 71, y: 48}, "Vietnam": {x: 73, y: 46},
+    "Philippines": {x: 78, y: 48}, "Libya": {x: 48, y: 36},
+    "Morocco": {x: 42, y: 34}, "Algeria": {x: 44, y: 36},
+    "Tunisia": {x: 46, y: 32}, "Sudan": {x: 51, y: 46},
+    "Kenya": {x: 52, y: 56}, "Ghana": {x: 43, y: 52},
+    "Ethiopia": {x: 53, y: 52}, "Uganda": {x: 51, y: 54},
+    "Tanzania": {x: 52, y: 60}
+  };
 
-  const pct = Math.round((registered / totalBatch) * 100);
-  document.getElementById('reg-pct').textContent = pct + '% complete';
-  setTimeout(() => {
-    document.getElementById('reg-bar').style.width = pct + '%';
-  }, 500);
+  const SHEETS_URL = "https://script.google.com/macros/s/AKfycby-vhhVUANxbgLL2r2k3S7sgCBi5G2yjx8VXiyPG-GwgfnkVXBN9qJ5dKnIz77KbiDmEA/exec";
+  const TOTAL_BATCH = 245;
+
+  const countryFlags = {
+    "Pakistan":"🇵🇰","Saudi Arabia":"🇸🇦","United Arab Emirates":"🇦🇪","United Kingdom":"🇬🇧",
+    "Germany":"🇩🇪","United States":"🇺🇸","Canada":"🇨🇦","Australia":"🇦🇺","Malaysia":"🇲🇾",
+    "Qatar":"🇶🇦","Kuwait":"🇰🇼","Oman":"🇴🇲","Bahrain":"🇧🇭","Turkey":"🇹🇷","France":"🇫🇷",
+    "Netherlands":"🇳🇱","Sweden":"🇸🇪","Norway":"🇳🇴","Denmark":"🇩🇰","Switzerland":"🇨🇭",
+    "India":"🇮🇳","China":"🇨🇳","Singapore":"🇸🇬","Japan":"🇯🇵","South Korea":"🇰🇷",
+    "Egypt":"🇪🇬","Nigeria":"🇳🇬","South Africa":"🇿🇦","Brazil":"🇧🇷","Mexico":"🇲🇽",
+    "Italy":"🇮🇹","Spain":"🇪🇸","Ireland":"🇮🇪","Finland":"🇫🇮","Belgium":"🇧🇪",
+    "Austria":"🇦🇹","Poland":"🇵🇱","Russia":"🇷🇺","Iran":"🇮🇷","Iraq":"🇮🇶",
+    "Jordan":"🇯🇴","Bangladesh":"🇧🇩","Afghanistan":"🇦🇫","New Zealand":"🇳🇿",
+    "Indonesia":"🇮🇩","Thailand":"🇹🇭","Vietnam":"🇻🇳","Philippines":"🇵🇭",
+    "Libya":"🇱🇾","Morocco":"🇲🇦","Algeria":"🇩🇿","Tunisia":"🇹🇳","Sudan":"🇸🇩",
+    "Kenya":"🇰🇪","Ghana":"🇬🇭","Ethiopia":"🇪🇹","Uganda":"🇺🇬","Tanzania":"🇹🇿"
+  };
+
+  function updateMapPins(countryCounts) {
+    const pinsContainer = document.getElementById('pins-container');
+    if (!pinsContainer) return;
+    pinsContainer.innerHTML = '';
+    Object.entries(countryCounts).forEach(([country, count]) => {
+      const coords = countryCoords[country];
+      if (!coords) return;
+      const size = Math.max(16, Math.min(40, 16 + count * 4));
+      const pin = document.createElement('div');
+      pin.style.cssText = `position:absolute;left:${coords.x}%;top:${coords.y}%;transform:translate(-50%,-50%);z-index:10;cursor:pointer;`;
+      pin.innerHTML = `
+        <div style="position:relative;" title="${country}: ${count} alumni">
+          <div style="width:${size}px;height:${size}px;background:#c9a84c;border:2px solid white;border-radius:50%;box-shadow:0 2px 8px rgba(0,0,0,0.3);display:flex;align-items:center;justify-content:center;font-size:${Math.max(9,size/2.5)}px;font-weight:700;color:white;animation:pulse 2s infinite;">
+            ${count}
+          </div>
+          <div style="position:absolute;bottom:${size+4}px;left:50%;transform:translateX(-50%);background:rgba(15,31,61,0.9);color:white;font-size:10px;padding:3px 7px;border-radius:4px;white-space:nowrap;display:none;" class="pin-tooltip">
+            ${countryFlags[country]||''} ${country}: ${count}
+          </div>
+        </div>`;
+      pin.addEventListener('mouseenter', () => { pin.querySelector('.pin-tooltip').style.display = 'block'; });
+      pin.addEventListener('mouseleave', () => { pin.querySelector('.pin-tooltip').style.display = 'none'; });
+      pinsContainer.appendChild(pin);
+    });
+  }
+
+  function updateCountryList(countryCounts) {
+    const list = document.getElementById('country-list');
+    if (!list) return;
+    const sorted = Object.entries(countryCounts).sort((a,b) => b[1]-a[1]);
+    if (sorted.length === 0) {
+      list.innerHTML = '<div style="font-size:12px;color:var(--muted);text-align:center;padding:1rem;">No registrations yet. Be the first to register!</div>';
+      return;
+    }
+    list.innerHTML = '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;">' +
+      sorted.map(([country, count]) =>
+        `<div style="background:#f8f9fa;border:1px solid var(--border);border-radius:8px;padding:8px 10px;display:flex;justify-content:space-between;align-items:center;">
+          <span style="font-size:12px;color:var(--text);font-weight:500;">${countryFlags[country]||''} ${country}</span>
+          <span style="font-size:11px;font-weight:600;background:rgba(201,168,76,0.15);color:#92701e;padding:2px 8px;border-radius:10px;">${count}</span>
+        </div>`
+      ).join('') + '</div>';
+  }
+
+  async function fetchAlumniData() {
+    try {
+      const res = await fetch(SHEETS_URL + '?action=getStats', { method: 'GET', mode: 'cors' });
+      const data = await res.json();
+
+      const registered = data.total || 0;
+      const countryCounts = data.countries || {};
+      const countries = Object.keys(countryCounts).length;
+
+      // Update header stats
+      document.getElementById('total-registered').textContent = registered;
+      document.getElementById('total-countries').textContent = countries;
+      document.getElementById('counter-num').textContent = registered;
+
+      // Update progress bar
+      const pct = Math.round((registered / TOTAL_BATCH) * 100);
+      document.getElementById('reg-pct').textContent = pct + '% complete';
+      document.getElementById('reg-bar').style.width = pct + '%';
+
+      // Update map
+      updateMapPins(countryCounts);
+      updateCountryList(countryCounts);
+
+      // Update timestamp
+      const now = new Date();
+      document.getElementById('map-update-time').textContent = 'Updated: ' + now.toLocaleTimeString();
+
+    } catch(e) {
+      // Fallback if API fails
+      document.getElementById('total-registered').textContent = '—';
+      document.getElementById('total-countries').textContent = '—';
+      document.getElementById('counter-num').textContent = '—';
+      document.getElementById('map-update-time').textContent = 'Connect to see live data';
+      document.getElementById('country-list').innerHTML = '<div style="font-size:12px;color:var(--muted);text-align:center;padding:1rem;">Register to see alumni locations!</div>';
+    }
+  }
+
+  // Add pulse animation
+  const style = document.createElement('style');
+  style.textContent = '@keyframes pulse { 0%,100%{transform:scale(1);box-shadow:0 2px 8px rgba(0,0,0,0.3)} 50%{transform:scale(1.1);box-shadow:0 4px 16px rgba(201,168,76,0.5)} }';
+  document.head.appendChild(style);
+
+  // Fetch on load and every 5 minutes
+  fetchAlumniData();
+  setInterval(fetchAlumniData, 5 * 60 * 1000);
 </script>
 
 
