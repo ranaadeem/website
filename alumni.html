@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ICET Alumni Portal – Chemical Engineering</title>
+<link rel="icon" type="image/png" href="/favicon.png">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #0f1f3d;
+  --gold: #c9a84c;
+  --gold-light: #e8d5a3;
+  --cream: #faf8f4;
+  --white: #ffffff;
+  --text: #1a1a2e;
+  --muted: #6b7280;
+  --border: #e5e7eb;
+  --green: #059669;
+  --red: #dc2626;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 100%; min-height: 100vh; }
+body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--text); }
+
+/* NAV */
+nav {
+  background: var(--navy);
+  border-bottom: 2px solid var(--gold);
+  position: sticky; top: 0; z-index: 100;
+  box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+}
+.nav-inner {
+  max-width: 1100px; margin: 0 auto;
+  padding: 0 1.5rem; height: 64px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+.nav-logo-agr { font-family: Georgia, serif; font-size: 20px; font-weight: 700; color: var(--gold); letter-spacing: 2px; border: 2px solid var(--gold); padding: 2px 8px; border-radius: 4px; }
+.nav-logo-name { font-size: 13px; color: rgba(255,255,255,0.7); }
+.nav-right { display: flex; align-items: center; gap: 12px; }
+.nav-user { display: flex; align-items: center; gap: 8px; }
+.nav-user img { width: 32px; height: 32px; border-radius: 50%; border: 2px solid var(--gold); }
+.nav-user span { font-size: 13px; color: rgba(255,255,255,0.8); }
+.nav-btn { font-size: 13px; font-weight: 500; padding: 7px 16px; border-radius: 6px; cursor: pointer; border: none; transition: all 0.2s; font-family: inherit; }
+.btn-gold { background: var(--gold); color: var(--navy); }
+.btn-gold:hover { background: var(--gold-light); }
+.btn-outline { background: transparent; color: rgba(255,255,255,0.7); border: 1px solid rgba(255,255,255,0.3); }
+.btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+.nav-links { display: flex; gap: 4px; }
+.nav-link { color: rgba(255,255,255,0.7); text-decoration: none; font-size: 13px; padding: 7px 12px; border-radius: 6px; transition: all 0.2s; }
+.nav-link:hover, .nav-link.active { color: var(--gold); background: rgba(201,168,76,0.1); }
+.back-link { font-size: 13px; color: rgba(255,255,255,0.6); text-decoration: none; }
+.back-link:hover { color: var(--gold); }
+
+/* PAGES */
+.page { display: none; }
+.page.active { display: block; }
+
+/* LANDING */
+.landing-hero {
+  background: linear-gradient(135deg, var(--navy) 0%, #1a3a6b 60%, #0d2744 100%);
+  padding: 5rem 2rem;
+  text-align: center;
+  position: relative; overflow: hidden;
+}
+.landing-hero::before {
+  content: ''; position: absolute;
+  top: -100px; right: -100px;
+  width: 500px; height: 500px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(201,168,76,0.1) 0%, transparent 70%);
+}
+.hero-tag { font-size: 11px; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); border: 1px solid rgba(201,168,76,0.4); padding: 5px 14px; border-radius: 20px; display: inline-block; margin-bottom: 1.5rem; }
+.landing-hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 5vw, 3.5rem); color: white; margin-bottom: 1rem; line-height: 1.2; }
+.landing-hero h1 span { color: var(--gold); }
+.landing-hero p { font-size: 16px; color: rgba(255,255,255,0.65); max-width: 560px; margin: 0 auto 2.5rem; line-height: 1.75; font-weight: 300; }
+.hero-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+.hero-btn-primary { background: var(--gold); color: var(--navy); padding: 13px 32px; border-radius: 8px; font-size: 15px; font-weight: 600; text-decoration: none; border: none; cursor: pointer; font-family: inherit; transition: all 0.2s; }
+.hero-btn-primary:hover { background: var(--gold-light); transform: translateY(-1px); }
+.hero-btn-secondary { background: transparent; color: white; padding: 13px 32px; border-radius: 8px; font-size: 15px; font-weight: 500; border: 1px solid rgba(255,255,255,0.3); cursor: pointer; font-family: inherit; transition: all 0.2s; }
+.hero-btn-secondary:hover { border-color: var(--gold); color: var(--gold); }
+
+/* STATS STRIP */
+.stats-strip { background: white; border-bottom: 1px solid var(--border); padding: 1.5rem 2rem; }
+.stats-inner { max-width: 1100px; margin: 0 auto; display: flex; justify-content: center; gap: 4rem; flex-wrap: wrap; }
+.stat-item { text-align: center; }
+.stat-num { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700; color: var(--navy); display: block; }
+.stat-lbl { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+/* SESSIONS SECTION */
+.sessions-section { max-width: 1100px; margin: 3rem auto; padding: 0 2rem; }
+.section-header { margin-bottom: 2rem; }
+.section-tag { font-size: 11px; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); display: block; margin-bottom: 4px; }
+.section-title { font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--navy); }
+.sessions-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.25rem; }
+.session-card {
+  background: white; border: 1px solid var(--border); border-radius: 12px;
+  padding: 1.75rem; cursor: pointer; transition: all 0.25s;
+  border-top: 4px solid var(--gold); position: relative; overflow: hidden;
+}
+.session-card:hover { box-shadow: 0 8px 30px rgba(0,0,0,0.1); transform: translateY(-2px); }
+.session-card.locked { opacity: 0.6; cursor: not-allowed; }
+.session-card.locked:hover { transform: none; box-shadow: none; }
+.session-year { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
+.session-dept { font-size: 13px; color: var(--muted); margin-bottom: 1rem; }
+.session-stats { display: flex; gap: 1rem; margin-bottom: 1rem; }
+.session-stat { text-align: center; }
+.session-stat-num { font-size: 20px; font-weight: 700; color: var(--gold); display: block; }
+.session-stat-lbl { font-size: 10px; color: var(--muted); }
+.session-badge { display: inline-block; font-size: 11px; padding: 3px 10px; border-radius: 10px; background: rgba(201,168,76,0.1); color: #92701e; font-weight: 500; }
+.session-badge.coming { background: #f3f4f6; color: var(--muted); }
+.session-arrow { position: absolute; right: 1.5rem; top: 50%; transform: translateY(-50%); font-size: 20px; color: var(--gold); opacity: 0.5; }
+
+/* LOGIN PAGE */
+.login-wrap { max-width: 440px; margin: 4rem auto; padding: 0 1.5rem; }
+.login-card { background: white; border: 1px solid var(--border); border-radius: 16px; padding: 2.5rem; box-shadow: 0 4px 30px rgba(0,0,0,0.06); }
+.login-logo { text-align: center; margin-bottom: 2rem; }
+.login-logo .agr { font-family: Georgia, serif; font-size: 32px; font-weight: 700; color: var(--gold); letter-spacing: 3px; border: 3px solid var(--gold); padding: 6px 16px; border-radius: 8px; display: inline-block; }
+.login-logo p { font-size: 13px; color: var(--muted); margin-top: 8px; }
+.login-title { font-family: 'Playfair Display', serif; font-size: 22px; color: var(--navy); text-align: center; margin-bottom: 0.5rem; }
+.login-sub { font-size: 13px; color: var(--muted); text-align: center; margin-bottom: 2rem; line-height: 1.6; }
+.google-btn {
+  width: 100%; padding: 13px; border: 1.5px solid var(--border); border-radius: 8px;
+  background: white; display: flex; align-items: center; justify-content: center; gap: 12px;
+  font-size: 15px; font-weight: 500; cursor: pointer; transition: all 0.2s; font-family: inherit; color: var(--text);
+}
+.google-btn:hover { border-color: var(--gold); background: #faf8f4; box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
+.google-icon { width: 20px; height: 20px; }
+.login-note { font-size: 11px; color: var(--muted); text-align: center; margin-top: 1.5rem; line-height: 1.6; }
+
+/* PROFILE SETUP */
+.setup-wrap { max-width: 680px; margin: 3rem auto; padding: 0 1.5rem 3rem; }
+.setup-card { background: white; border: 1px solid var(--border); border-radius: 16px; overflow: hidden; box-shadow: 0 4px 30px rgba(0,0,0,0.06); }
+.setup-header { background: var(--navy); padding: 2rem; }
+.setup-header h2 { font-family: 'Playfair Display', serif; font-size: 22px; color: white; margin-bottom: 4px; }
+.setup-header p { font-size: 13px; color: rgba(255,255,255,0.6); }
+.setup-body { padding: 2rem; }
+.setup-photo-upload { text-align: center; margin-bottom: 2rem; }
+.photo-circle-upload {
+  width: 100px; height: 100px; border-radius: 50%;
+  background: #f3f4f6; border: 3px dashed var(--border);
+  margin: 0 auto 0.75rem; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 32px; overflow: hidden; transition: all 0.2s;
+}
+.photo-circle-upload:hover { border-color: var(--gold); background: #faf8f4; }
+.photo-circle-upload img { width: 100%; height: 100%; object-fit: cover; }
+.setup-photo-label { font-size: 12px; color: var(--muted); }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+.form-group { margin-bottom: 1rem; }
+.form-group label { display: block; font-size: 13px; color: #555; margin-bottom: 5px; font-weight: 500; }
+.form-group label .req { color: var(--red); margin-left: 2px; }
+.form-group label .opt { font-size: 11px; color: var(--muted); font-weight: 400; margin-left: 4px; }
+.form-group input, .form-group select, .form-group textarea {
+  width: 100%; padding: 10px 12px; font-size: 14px;
+  border: 1px solid var(--border); border-radius: 8px;
+  background: white; color: var(--text); outline: none;
+  transition: border 0.15s; font-family: inherit;
+}
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+  border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201,168,76,0.1);
+}
+.form-group input:disabled { background: #f8f9fa; color: var(--muted); }
+.name-display { background: #f8f9fa; border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; font-size: 14px; font-weight: 600; color: var(--navy); min-height: 42px; display: flex; align-items: center; }
+.name-placeholder { color: var(--muted); font-weight: 400; font-style: italic; }
+.submit-btn { width: 100%; padding: 13px; background: var(--navy); color: white; border: none; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; font-family: inherit; transition: all 0.2s; margin-top: 1rem; }
+.submit-btn:hover { background: #1a3a6b; }
+.submit-btn:disabled { background: var(--muted); cursor: not-allowed; }
+.section-divider { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin: 1.5rem 0 1rem; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
+.error-box { background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; padding: 10px 14px; font-size: 13px; color: var(--red); margin-bottom: 1rem; display: none; }
+.success-box { background: #f0fff4; border: 1px solid #9ae6b4; border-radius: 8px; padding: 10px 14px; font-size: 13px; color: #276749; margin-bottom: 1rem; display: none; }
+
+/* DIRECTORY */
+.directory-wrap { max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem 3rem; }
+.directory-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem; }
+.directory-filters { display: flex; gap: 8px; flex-wrap: wrap; }
+.filter-btn { padding: 7px 16px; border-radius: 20px; font-size: 13px; border: 1px solid var(--border); background: white; color: var(--muted); cursor: pointer; transition: all 0.2s; font-family: inherit; }
+.filter-btn.active, .filter-btn:hover { background: var(--navy); color: white; border-color: var(--navy); }
+.search-box { padding: 9px 14px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; width: 240px; outline: none; font-family: inherit; }
+.search-box:focus { border-color: var(--gold); }
+.alumni-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; }
+.alumni-card {
+  background: white; border: 1px solid var(--border); border-radius: 12px;
+  padding: 1.5rem; text-align: center; cursor: pointer;
+  transition: all 0.25s; position: relative;
+}
+.alumni-card:hover { box-shadow: 0 6px 24px rgba(0,0,0,0.08); transform: translateY(-2px); border-color: var(--gold-light); }
+.alumni-photo { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; margin: 0 auto 0.75rem; border: 3px solid var(--gold-light); background: #f3f4f6; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 700; color: var(--navy); overflow: hidden; }
+.alumni-photo img { width: 100%; height: 100%; object-fit: cover; }
+.alumni-name { font-size: 14px; font-weight: 600; color: var(--navy); margin-bottom: 3px; }
+.alumni-roll { font-size: 11px; color: var(--muted); margin-bottom: 6px; }
+.alumni-job { font-size: 12px; color: var(--text); margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.alumni-country { font-size: 11px; color: var(--muted); }
+.alumni-session-badge { position: absolute; top: 10px; right: 10px; font-size: 9px; padding: 2px 7px; border-radius: 8px; background: rgba(201,168,76,0.12); color: #92701e; font-weight: 600; }
+.loading-spinner { text-align: center; padding: 4rem; color: var(--muted); font-size: 14px; }
+
+/* PROFILE VIEW */
+.profile-wrap { max-width: 800px; margin: 2rem auto; padding: 0 1.5rem 3rem; }
+.profile-card { background: white; border: 1px solid var(--border); border-radius: 16px; overflow: hidden; box-shadow: 0 4px 30px rgba(0,0,0,0.06); }
+.profile-banner { background: linear-gradient(135deg, var(--navy), #1a3a6b); height: 120px; position: relative; }
+.profile-avatar { width: 100px; height: 100px; border-radius: 50%; border: 4px solid white; position: absolute; bottom: -50px; left: 2rem; background: #f3f4f6; display: flex; align-items: center; justify-content: center; font-size: 36px; font-weight: 700; color: var(--navy); overflow: hidden; box-shadow: 0 4px 16px rgba(0,0,0,0.15); }
+.profile-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.profile-info { padding: 4rem 2rem 2rem; }
+.profile-name { font-family: 'Playfair Display', serif; font-size: 26px; color: var(--navy); margin-bottom: 4px; }
+.profile-roll { font-size: 13px; color: var(--muted); margin-bottom: 1rem; }
+.profile-details { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.5rem; }
+.profile-detail { display: flex; gap: 10px; align-items: flex-start; }
+.detail-icon { font-size: 18px; flex-shrink: 0; }
+.detail-label { font-size: 11px; color: var(--muted); margin-bottom: 2px; }
+.detail-val { font-size: 14px; color: var(--text); font-weight: 500; }
+.detail-val a { color: var(--gold); text-decoration: none; }
+.detail-val a:hover { text-decoration: underline; }
+.profile-actions { display: flex; gap: 10px; margin-top: 1.5rem; flex-wrap: wrap; }
+.profile-btn { padding: 9px 20px; border-radius: 8px; font-size: 13px; font-weight: 500; cursor: pointer; border: 1px solid var(--border); background: white; color: var(--text); font-family: inherit; transition: all 0.2s; }
+.profile-btn:hover { border-color: var(--gold); color: var(--gold); }
+.profile-btn.primary { background: var(--navy); color: white; border-color: var(--navy); }
+.profile-btn.primary:hover { background: #1a3a6b; }
+.hidden-field { font-size: 13px; color: var(--muted); font-style: italic; }
+.phone-locked { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); }
+
+/* MY PROFILE PAGE */
+.my-profile-wrap { max-width: 800px; margin: 2rem auto; padding: 0 1.5rem 3rem; }
+
+/* FOOTER */
+.portal-footer { background: var(--navy); padding: 1.5rem 2rem; text-align: center; margin-top: 3rem; }
+.portal-footer p { font-size: 12px; color: rgba(255,255,255,0.4); }
+.portal-footer a { color: var(--gold); text-decoration: none; }
+
+/* TOAST */
+.toast { position: fixed; bottom: 2rem; right: 2rem; background: var(--navy); color: white; padding: 12px 20px; border-radius: 8px; font-size: 13px; border-left: 4px solid var(--gold); box-shadow: 0 4px 20px rgba(0,0,0,0.2); z-index: 9999; transform: translateY(100px); opacity: 0; transition: all 0.3s; }
+.toast.show { transform: translateY(0); opacity: 1; }
+
+@media (max-width: 768px) {
+  .nav-logo-name { display: none; }
+  .nav-links { display: none; }
+  .form-row { grid-template-columns: 1fr; }
+  .profile-details { grid-template-columns: 1fr; }
+  .alumni-grid { grid-template-columns: repeat(2, 1fr); }
+  .stats-inner { gap: 2rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav>
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">
+      <span class="nav-logo-agr">AGR</span>
+      <span class="nav-logo-name">ranaadeem.de</span>
+    </a>
+    <div class="nav-right">
+      <div class="nav-links">
+        <a href="/" class="nav-link">← Main Site</a>
+      </div>
+      <div id="nav-user-area">
+        <button class="nav-btn btn-gold" onclick="showPage('login')">Sign In</button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- ===== PAGE: LANDING ===== -->
+<div class="page active" id="page-landing">
+  <div class="landing-hero">
+    <span class="hero-tag">ICET · University of the Punjab</span>
+    <h1>Chemical Engineering<br><span>Alumni Network</span></h1>
+    <p>Connecting graduates of the Institute of Chemical Engineering & Technology across the globe. Register your profile, find your batchmates, and stay connected.</p>
+    <div class="hero-btns">
+      <button class="hero-btn-primary" onclick="handleJoinClick()">Join the Network</button>
+      <button class="hero-btn-secondary" onclick="handleJoinClick()">Browse Alumni</button>
+    </div>
+  </div>
+
+  <div class="stats-strip">
+    <div class="stats-inner">
+      <div class="stat-item"><span class="stat-num" id="stat-total">—</span><span class="stat-lbl">Registered Alumni</span></div>
+      <div class="stat-item"><span class="stat-num" id="stat-countries">—</span><span class="stat-lbl">Countries</span></div>
+      <div class="stat-item"><span class="stat-num">245</span><span class="stat-lbl">Session 2006 Batch</span></div>
+      <div class="stat-item"><span class="stat-num">1+</span><span class="stat-lbl">Sessions</span></div>
+    </div>
+  </div>
+
+  <div class="sessions-section">
+    <div class="section-header">
+      <span class="section-tag">Browse by Session</span>
+      <h2 class="section-title">Select Your Batch</h2>
+    </div>
+    <div class="sessions-grid">
+      <div class="session-card" onclick="handleSessionClick('2006')">
+        <div class="session-year">2006 – 2010</div>
+        <div class="session-dept">Chemical Engineering · ICET</div>
+        <div class="session-stats">
+          <div class="session-stat"><span class="session-stat-num">245</span><span class="session-stat-lbl">Total</span></div>
+          <div class="session-stat"><span class="session-stat-num" id="sess-2006-reg">—</span><span class="session-stat-lbl">Registered</span></div>
+        </div>
+        <span class="session-badge">🟢 Active</span>
+        <span class="session-arrow">→</span>
+      </div>
+      <div class="session-card locked">
+        <div class="session-year">2010 – 2014</div>
+        <div class="session-dept">Chemical Engineering · ICET</div>
+        <div class="session-stats">
+          <div class="session-stat"><span class="session-stat-num">—</span><span class="session-stat-lbl">Total</span></div>
+          <div class="session-stat"><span class="session-stat-num">—</span><span class="session-stat-lbl">Registered</span></div>
+        </div>
+        <span class="session-badge coming">🔜 Coming Soon</span>
+      </div>
+      <div class="session-card locked">
+        <div class="session-year">2014 – 2018</div>
+        <div class="session-dept">Chemical Engineering · ICET</div>
+        <div class="session-stats">
+          <div class="session-stat"><span class="session-stat-num">—</span><span class="session-stat-lbl">Total</span></div>
+          <div class="session-stat"><span class="session-stat-num">—</span><span class="session-stat-lbl">Registered</span></div>
+        </div>
+        <span class="session-badge coming">🔜 Coming Soon</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="portal-footer">
+    <p>ICET Alumni Network · Chemical Engineering · University of the Punjab, Lahore · Maintained by <a href="mailto:ranaadeem@hotmail.com">Dr. Adeem Ghaffar Rana</a></p>
+  </div>
+</div>
+
+<!-- ===== PAGE: LOGIN ===== -->
+<div class="page" id="page-login">
+  <div class="login-wrap">
+    <div class="login-card">
+      <div class="login-logo">
+        <div class="agr">AGR</div>
+        <p>ICET Alumni Network</p>
+      </div>
+      <h2 class="login-title">Welcome Back</h2>
+      <p class="login-sub">Sign in with your Google account to access the ICET Chemical Engineering Alumni Network.</p>
+      <button class="google-btn" onclick="signInWithGoogle()">
+        <svg class="google-icon" viewBox="0 0 24 24">
+          <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+          <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+          <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+        </svg>
+        Continue with Google
+      </button>
+      <p class="login-note">By signing in you agree to our community guidelines. Only ICET Chemical Engineering alumni may register a profile.</p>
+      <p style="text-align:center;margin-top:1rem;"><a href="#" onclick="showPage('landing')" style="font-size:13px;color:var(--muted);text-decoration:none;">← Back to home</a></p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PAGE: PROFILE SETUP ===== -->
+<div class="page" id="page-setup">
+  <div class="setup-wrap">
+    <div class="setup-card">
+      <div class="setup-header">
+        <h2>Complete Your Profile</h2>
+        <p>Tell your batchmates where life has taken you since ICET</p>
+      </div>
+      <div class="setup-body">
+        <div class="error-box" id="setup-error"></div>
+        <div class="success-box" id="setup-success"></div>
+
+        <!-- PHOTO -->
+        <div class="setup-photo-upload">
+          <div class="photo-circle-upload" id="photo-upload-circle" onclick="document.getElementById('photo-file').click()">
+            📷
+          </div>
+          <input type="file" id="photo-file" accept="image/*" style="display:none" onchange="handlePhotoSelect(event)">
+          <div class="setup-photo-label">Click to upload profile photo (optional)</div>
+        </div>
+
+        <!-- IDENTITY -->
+        <div class="section-divider">Identity</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Session <span class="req">*</span></label>
+            <select id="setup-session" onchange="onSetupSessionChange()">
+              <option value="">Select your session</option>
+              <option value="2006-Morning">2006–2010 · Morning</option>
+              <option value="2006-Evening">2006–2010 · Evening</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Roll Number <span class="req">*</span></label>
+            <select id="setup-roll" onchange="onSetupRollChange()" disabled>
+              <option value="">Select session first</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Full Name</label>
+          <div class="name-display" id="setup-name-display"><span class="name-placeholder">Auto-filled from roll number</span></div>
+        </div>
+
+        <!-- CURRENT STATUS -->
+        <div class="section-divider">Current Status</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Country of Residence <span class="req">*</span></label>
+            <select id="setup-country" onchange="onSetupCountryChange()">
+              <option value="">Select country</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>City <span class="req">*</span></label>
+            <select id="setup-city" disabled>
+              <option value="">Select country first</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Job Title <span class="req">*</span></label>
+            <input type="text" id="setup-job" placeholder="e.g. Senior Process Engineer">
+          </div>
+          <div class="form-group">
+            <label>Company / Organisation <span class="req">*</span></label>
+            <input type="text" id="setup-company" placeholder="e.g. Shell Pakistan">
+          </div>
+        </div>
+
+        <!-- CONTACT -->
+        <div class="section-divider">Contact Details</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Email Address <span class="req">*</span></label>
+            <input type="email" id="setup-email" placeholder="you@example.com">
+          </div>
+          <div class="form-group">
+            <label>Phone Number <span style="font-size:11px;color:var(--muted);font-weight:400;">(same session only)</span></label>
+            <input type="tel" id="setup-phone" placeholder="+92 300 0000000">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>LinkedIn Profile URL <span class="opt">(optional)</span></label>
+          <input type="url" id="setup-linkedin" placeholder="https://linkedin.com/in/yourname">
+        </div>
+        <div class="form-group">
+          <label>About / Bio <span class="opt">(optional)</span></label>
+          <textarea id="setup-bio" rows="3" placeholder="A brief note about yourself, your career, or memories from ICET..." style="resize:vertical;"></textarea>
+        </div>
+
+        <button class="submit-btn" id="setup-submit-btn" onclick="submitProfile()">Save Profile & Join Network</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PAGE: DIRECTORY ===== -->
+<div class="page" id="page-directory">
+  <div class="directory-wrap">
+    <div class="directory-header">
+      <div>
+        <span class="section-tag">Session <span id="dir-session-label">2006–2010</span></span>
+        <h2 class="section-title">Alumni Directory</h2>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+        <input type="text" class="search-box" id="search-input" placeholder="Search by name or roll number..." oninput="filterDirectory()">
+        <div class="directory-filters">
+          <button class="filter-btn active" onclick="setFilter('all', this)">All</button>
+          <button class="filter-btn" onclick="setFilter('Morning', this)">Morning</button>
+          <button class="filter-btn" onclick="setFilter('Evening', this)">Evening</button>
+        </div>
+      </div>
+    </div>
+    <div class="alumni-grid" id="alumni-grid">
+      <div class="loading-spinner">Loading alumni...</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PAGE: PROFILE VIEW ===== -->
+<div class="page" id="page-profile">
+  <div class="profile-wrap">
+    <a href="#" onclick="showPage('directory')" style="font-size:13px;color:var(--muted);text-decoration:none;display:inline-block;margin-bottom:1rem;">← Back to Directory</a>
+    <div class="profile-card">
+      <div class="profile-banner"></div>
+      <div class="profile-info">
+        <div class="profile-avatar" id="view-avatar">👤</div>
+        <div style="margin-top:1rem;">
+          <h2 class="profile-name" id="view-name">—</h2>
+          <p class="profile-roll" id="view-roll">—</p>
+          <div class="profile-details">
+            <div class="profile-detail"><span class="detail-icon">🏢</span><div><div class="detail-label">Job / Company</div><div class="detail-val" id="view-job">—</div></div></div>
+            <div class="profile-detail"><span class="detail-icon">📍</span><div><div class="detail-label">Location</div><div class="detail-val" id="view-location">—</div></div></div>
+            <div class="profile-detail"><span class="detail-icon">✉️</span><div><div class="detail-label">Email</div><div class="detail-val" id="view-email">—</div></div></div>
+            <div class="profile-detail"><span class="detail-icon">📞</span><div><div class="detail-label">Phone</div><div class="detail-val" id="view-phone">—</div></div></div>
+            <div class="profile-detail"><span class="detail-icon">💼</span><div><div class="detail-label">LinkedIn</div><div class="detail-val" id="view-linkedin">—</div></div></div>
+            <div class="profile-detail"><span class="detail-icon">🎓</span><div><div class="detail-label">Session</div><div class="detail-val" id="view-session">—</div></div></div>
+          </div>
+          <div id="view-bio-section" style="margin-top:1.5rem;display:none;">
+            <div style="font-size:11px;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.1em;">About</div>
+            <p id="view-bio" style="font-size:14px;color:var(--text);line-height:1.7;"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Firebase SDKs -->
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js';
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged }
+  from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js';
+import { getFirestore, doc, setDoc, getDoc, collection, getDocs, query, where, orderBy }
+  from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAgUl22Cln6QtY3-HIvI6lE8Zu7n9OblbI",
+  authDomain: "icet-alumni.firebaseapp.com",
+  projectId: "icet-alumni",
+  storageBucket: "icet-alumni.firebasestorage.app",
+  messagingSenderId: "707390888790",
+  appId: "1:707390888790:web:57e6be62e4d11e22c214f7"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const provider = new GoogleAuthProvider();
+
+// ── Student data ──
+const morningStudents = {
+  "M101":"ABDUL WAHAB KHAN","M102":"ZAHID ANJUM","M103":"USMAN RAFIQ","M104":"MEESAM ALI","M105":"IRFAN IQBAL",
+  "M106":"WASEEM SAFDAR","M107":"NASEER AHMAD","M108":"RIZWAN HAIDER","M109":"UMAR FAROOQ","M110":"MUHAMMAD FIAZ",
+  "M111":"FAROOQ KHAN","M112":"SALMAN SIDIQUE","M113":"HAFIZ AAMIR","M114":"MOHSIN ALI RAZA","M115":"MUHAMMAD KASHIF",
+  "M116":"RIZWAN GHULAM NABI","M117":"AYAZ KARIM","M118":"ADEEM GHAFFAR RANA","M119":"KHIZAR HAYAT","M120":"AWAIS NADEEM",
+  "M121":"SAQIB WAHEED","M122":"RAO SHAFIQ","M123":"FAYYAZ AHMAD","M124":"KHUBAIB HASAN","M125":"TAHIR NAZIR",
+  "M126":"MANSAB ALI","M127":"ZAHID RASOOL","M128":"UMAIR ISLAM","M129":"ZOHAIB ZAIDI","M130":"ASAD ABBAS",
+  "M131":"AJMAL JAVAID","M132":"KHALIL AHMAD","M133":"WAQAS AZIZ HASHMI","M134":"AFZAL CHAUDHRY","M135":"MUJEEB UR REHMAN",
+  "M136":"ALI BUKHARI","M137":"AWAIS NAEEM","M138":"SAAD TOOR","M139":"KASHIF YOUNIS","M140":"AFFAN KHALID",
+  "M141":"JAHENZAIB KHAN","M142":"AHSAN BILAL","M143":"SAQIB RIZVI","M144":"QAISER KHAN","M145":"UMAIR RASHEED",
+  "M146":"ALI NADEEM","M147":"FAWAD FURRUKH","M148":"AFNAN HAMEED","M149":"ABDUL REHMAN","M150":"IBRAHIM SAEED",
+  "M151":"MUHAMMAD ARIF KHAN","M152":"HARIS SHAJAR","M153":"IMRAN KHAN (I)","M154":"NOUMAN AHMAD","M155":"IMRAN KHAN (II)",
+  "M156":"JAMSHAID IQBAL","M157":"FAISAL MEHMOOD","M158":"SHERAZ AFZAL","M159":"ADNAN SHOAIB","M160":"KARIM BUKSH",
+  "M161":"UMAIR DANISH","M162":"AAMIR SHAMAS","M163":"WAZIR ALI","M164":"JAMA AHMAD HERSI",
+  "M201":"TAYAB SAEED","M202":"ATIF ASHRAF","M203":"ASAD ALI","M204":"NAVEED AKHTAR","M205":"MUNZOOR AHMAD",
+  "M206":"FARAZ BUTT","M207":"SANA ULLAH","M208":"BABER ALI","M209":"AAMIR RIAZ","M210":"GHULAM ABBAS",
+  "M211":"MUHAMMAD BASIT ALI","M212":"ZEESHAN SHOAIB","M213":"MUHAMMAD KALEEM ULLAH","M214":"HAFIZ KHALIL UR REHMAN",
+  "M215":"FAISAL JOYIA","M216":"FAISAL KHALIL","M217":"MUHAMMAD ZEESHAN SALEEM","M218":"AHSAN NOOR KHAN",
+  "M219":"WAQAS SHEHRYAR","M220":"AFTAB AHMAD","M221":"TANVIR AHMAD","M222":"FAKHAR ABBAS","M223":"MUHAMMAD HASNAT ALI",
+  "M224":"YASIR ARAFAT","M225":"TAHIR WASIM","M226":"MOHSIN SAEED",
+  "M301":"SAEED AKRAM SHEIKH","M302":"IMRAN YOUSAF","M303":"MUHAMMAD ADNAN SADIQ","M304":"MUHAMMAD IRFAN",
+  "M305":"IMRAN RIAZ","M306":"NASIR MEHMOOD","M307":"SHAMSHAD-UL-HAQ","M308":"AWAIS ABDULLAH","M309":"UMAIR AZAD",
+  "M310":"ALI ZULQARNAIN","M311":"MUHAMMAD RIZWAN AZHAR","M312":"MUHAMMAD ASAD MASOOD","M313":"HAFIZ SHAFIQ",
+  "M314":"HAFIZ ZUBAIR","M315":"MUHAMMAD NAEEM","M316":"GHUFRAN AHMAD","M317":"ABDUL LATIF",
+  "M401":"AMBREEN GHALIB","M402":"MUHAMMAD SHAHZAD ALI","M403":"MUHAMMAD ILYAS","M404":"YASIR SHARIF AWAN",
+  "M405":"RAO MUNEER ALI","M406":"SAJID MAHMOOD","M407":"ALI MURAD","M408":"USMAN ALI","M409":"MUHAMMAD AWAIS",
+  "M410":"AMBREEN GULZAR","M411":"FAHIM AHMAD ZAFAR","M412":"ANWAAR AHMAD","M413":"USMAN RASHEED",
+  "M414":"KHUBAIB AHMAD","M415":"SALMAN MANSOOR","M416":"USMAN SAEED","M417":"SADIA NAUREEN"
+};
+const eveningStudents = {
+  "E102":"FAHAD MASOOD","E103":"NOMAN LIAQAT","E104":"YASEEN AKRAM","E105":"ADNAN NAWAZ","E106":"AHSEN HAFEEZ",
+  "E107":"RAZA MUDASIR ALVI","E108":"GULZEB KHAN","E109":"USMAN SADIQUE","E110":"ABDUL QAYYUM","E111":"IMRAN MALIK",
+  "E112":"SHAHID NADEEM","E113":"UMAIR FURQAN","E114":"NAUMAN ASHRAF","E115":"WAQAS BUKHARI","E116":"SANA ULLAH",
+  "E117":"NAEEM YOUNIS","E118":"MASOOD HAIDER","E119":"MUHAMMAD ASIF KHAN","E120":"MOHSIN MOBEEN","E121":"FAHEEM RIAZ",
+  "E122":"FAHAD MIR","E123":"ADNAN REHMAT","E124":"YASIR AKRAM AWAN","E125":"SHAROOZ KHAN","E126":"RANA MUHAMMAD IMRAN",
+  "E127":"RIZWAN MALIK","E128":"UMER TAHIR MIR","E129":"MUHAMMAD NAEEM IQBAL","E130":"MUHAMMAD UMAIR DANISH",
+  "E131":"ABID ALI","E132":"FARHAN CHEEMA","E133":"MUHAMMAD ARSHAD","E134":"ZUBAIR SHAHID","E135":"WAQAR AHMED",
+  "E136":"AFFAN AHMAD","E137":"UMAIR SHOAIB","E138":"ARSALAN AWAN","E139":"MUHAMMAD IMRAN","E140":"ASIF IQBAL",
+  "E141":"HAKIM ALI HAIDER","E142":"GHULAM MURTAZA","E143":"ADNAN SALEEM","E144":"ASIF ALI SHAHZAD",
+  "E201":"MUHAMMAD ZAMAN","E202":"IMRAN NIAZ","E203":"SHAHID SAEED","E204":"KHURRAM JAVED","E205":"SAQIB RAZA",
+  "E206":"AAMIR KARIM","E207":"MUHAMMAD UMAR FAROOQ","E208":"ALI AHMAD","E209":"ABDUL BASIT","E210":"FARHAN RASOOL",
+  "E211":"NASEER AHMAD","E212":"MUHAMMAD USMAN","E213":"AQEEL MANSOOR CHISHTI","E214":"RIZWAN AHMED SHAH",
+  "E215":"MUHAMMAD ZAIN","E216":"USMAN ANWAR DAR","E217":"OMER SHUJAT","E218":"IMRAN RAFIQUE",
+  "E219":"NAEEM BHATTI","E220":"ASIF SANI"
+};
+
+const countryCities = {
+  "Pakistan":["Karachi","Lahore","Islamabad","Rawalpindi","Faisalabad","Multan","Peshawar","Quetta","Sialkot","Gujranwala","Other"],
+  "Saudi Arabia":["Riyadh","Jeddah","Mecca","Medina","Dammam","Khobar","Jubail","Yanbu","Other"],
+  "United Arab Emirates":["Dubai","Abu Dhabi","Sharjah","Ajman","Ras Al Khaimah","Al Ain","Other"],
+  "United Kingdom":["London","Birmingham","Manchester","Leeds","Glasgow","Liverpool","Edinburgh","Bristol","Other"],
+  "United States":["New York","Los Angeles","Chicago","Houston","Dallas","Seattle","Denver","Washington DC","Other"],
+  "Canada":["Toronto","Montreal","Vancouver","Calgary","Edmonton","Ottawa","Other"],
+  "Australia":["Sydney","Melbourne","Brisbane","Perth","Adelaide","Canberra","Other"],
+  "Germany":["Berlin","Hamburg","Munich","Cologne","Frankfurt","Stuttgart","Freiberg","Other"],
+  "Malaysia":["Kuala Lumpur","George Town","Johor Bahru","Ipoh","Other"],
+  "Qatar":["Doha","Al Wakrah","Al Khor","Lusail","Other"],
+  "Kuwait":["Kuwait City","Salmiya","Hawalli","Ahmadi","Other"],
+  "Oman":["Muscat","Salalah","Sohar","Nizwa","Other"],
+  "Bahrain":["Manama","Riffa","Muharraq","Other"],
+  "Turkey":["Istanbul","Ankara","Izmir","Other"],
+  "France":["Paris","Lyon","Marseille","Other"],
+  "Netherlands":["Amsterdam","Rotterdam","The Hague","Other"],
+  "Sweden":["Stockholm","Gothenburg","Malmö","Other"],
+  "Norway":["Oslo","Bergen","Stavanger","Other"],
+  "Denmark":["Copenhagen","Aarhus","Other"],
+  "Switzerland":["Zurich","Geneva","Bern","Other"],
+  "Ireland":["Dublin","Cork","Galway","Other"],
+  "Singapore":["Singapore"],
+  "Japan":["Tokyo","Osaka","Yokohama","Other"],
+  "South Korea":["Seoul","Busan","Other"],
+  "India":["Mumbai","Delhi","Bangalore","Hyderabad","Other"],
+  "China":["Beijing","Shanghai","Guangzhou","Other"],
+  "Bangladesh":["Dhaka","Chittagong","Other"],
+  "New Zealand":["Auckland","Wellington","Christchurch","Other"]
+};
+
+const allCountries = [...new Set([...Object.keys(countryCities),"Afghanistan","Albania","Algeria","Argentina","Armenia","Austria","Azerbaijan","Belarus","Belgium","Bolivia","Bosnia and Herzegovina","Brazil","Bulgaria","Cambodia","Cameroon","Chile","Colombia","Croatia","Cuba","Czech Republic","Ecuador","Egypt","Ethiopia","Finland","Georgia","Ghana","Greece","Hungary","Indonesia","Iran","Iraq","Israel","Italy","Jamaica","Jordan","Kazakhstan","Kenya","Libya","Lithuania","Luxembourg","Mexico","Moldova","Morocco","Myanmar","Nepal","Nigeria","Pakistan","Panama","Peru","Philippines","Poland","Portugal","Romania","Russia","Serbia","Slovakia","Slovenia","South Africa","Spain","Sri Lanka","Sudan","Syria","Taiwan","Thailand","Tunisia","Ukraine","Uzbekistan","Venezuela","Vietnam","Yemen"])].sort();
+
+// Populate country dropdown
+const countrySelect = document.getElementById('setup-country');
+allCountries.forEach(c => {
+  const o = document.createElement('option');
+  o.value = c; o.textContent = c;
+  countrySelect.appendChild(o);
+});
+
+// ── State ──
+let currentUser = null;
+let currentUserProfile = null;
+let allAlumni = [];
+let activeFilter = 'all';
+let selectedPhotoBase64 = '';
+let selectedPhotoMime = '';
+
+// ── Auth state ──
+onAuthStateChanged(auth, async (user) => {
+  if (user) {
+    currentUser = user;
+    updateNavUser(user);
+    const profile = await getUserProfile(user.uid);
+    currentUserProfile = profile;
+    if (!profile) {
+      showPage('setup');
+    }
+    loadStats();
+  } else {
+    currentUser = null;
+    currentUserProfile = null;
+    updateNavUser(null);
+  }
+});
+
+function updateNavUser(user) {
+  const area = document.getElementById('nav-user-area');
+  if (user) {
+    area.innerHTML = `
+      <div class="nav-user">
+        ${user.photoURL ? `<img src="${user.photoURL}" alt="avatar">` : ''}
+        <span>${user.displayName ? user.displayName.split(' ')[0] : 'User'}</span>
+        <button class="nav-btn btn-outline" onclick="showPage('directory')">Directory</button>
+        <button class="nav-btn btn-outline" onclick="signOutUser()">Sign Out</button>
+      </div>`;
+  } else {
+    area.innerHTML = `<button class="nav-btn btn-gold" onclick="showPage('login')">Sign In</button>`;
+  }
+}
+
+// ── Auth functions ──
+window.signInWithGoogle = async () => {
+  try {
+    await signInWithPopup(auth, provider);
+    showToast('Signed in successfully!');
+  } catch (e) {
+    showToast('Sign in failed. Please try again.');
+  }
+};
+
+window.signOutUser = async () => {
+  await signOut(auth);
+  showPage('landing');
+  showToast('Signed out.');
+};
+
+// ── Firestore ──
+async function getUserProfile(uid) {
+  const ref = doc(db, 'alumni', uid);
+  const snap = await getDoc(ref);
+  return snap.exists() ? snap.data() : null;
+}
+
+async function loadStats() {
+  try {
+    const snap = await getDocs(collection(db, 'alumni'));
+    const total = snap.size;
+    const countries = new Set();
+    let sess2006 = 0;
+    snap.forEach(d => {
+      const data = d.data();
+      if (data.country) countries.add(data.country);
+      if (data.session && data.session.includes('2006')) sess2006++;
+    });
+    document.getElementById('stat-total').textContent = total;
+    document.getElementById('stat-countries').textContent = countries.size;
+    document.getElementById('sess-2006-reg').textContent = sess2006;
+  } catch(e) {}
+}
+
+// ── Page navigation ──
+window.showPage = (page) => {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+  window.scrollTo(0, 0);
+};
+
+window.handleJoinClick = () => {
+  if (currentUser) {
+    if (currentUserProfile) showPage('directory');
+    else showPage('setup');
+  } else {
+    showPage('login');
+  }
+};
+
+window.handleSessionClick = (session) => {
+  if (!currentUser) { showPage('login'); return; }
+  if (!currentUserProfile) { showPage('setup'); return; }
+  loadDirectory(session);
+};
+
+// ── Setup form ──
+window.onSetupSessionChange = () => {
+  const session = document.getElementById('setup-session').value;
+  const rollSelect = document.getElementById('setup-roll');
+  rollSelect.innerHTML = '<option value="">Select roll number</option>';
+  document.getElementById('setup-name-display').innerHTML = '<span class="name-placeholder">Auto-filled from roll number</span>';
+  if (!session) { rollSelect.disabled = true; return; }
+  const db2 = session === '2006-Morning' ? morningStudents : eveningStudents;
+  Object.keys(db2).sort().forEach(r => {
+    const o = document.createElement('option');
+    o.value = r; o.textContent = r;
+    rollSelect.appendChild(o);
+  });
+  rollSelect.disabled = false;
+};
+
+window.onSetupRollChange = () => {
+  const session = document.getElementById('setup-session').value;
+  const roll = document.getElementById('setup-roll').value;
+  const db2 = session === '2006-Morning' ? morningStudents : eveningStudents;
+  const nameDisplay = document.getElementById('setup-name-display');
+  nameDisplay.innerHTML = (roll && db2[roll]) ? db2[roll] : '<span class="name-placeholder">Auto-filled from roll number</span>';
+};
+
+window.onSetupCountryChange = () => {
+  const country = document.getElementById('setup-country').value;
+  const citySelect = document.getElementById('setup-city');
+  citySelect.innerHTML = '<option value="">Select city</option>';
+  const cities = countryCities[country] || ['Other'];
+  cities.forEach(c => { const o = document.createElement('option'); o.value = c; o.textContent = c; citySelect.appendChild(o); });
+  citySelect.disabled = false;
+};
+
+window.handlePhotoSelect = (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  if (file.size > 3 * 1024 * 1024) { showToast('Photo must be under 3MB'); return; }
+  selectedPhotoMime = file.type;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    selectedPhotoBase64 = ev.target.result;
+    const circle = document.getElementById('photo-upload-circle');
+    circle.innerHTML = `<img src="${ev.target.result}" alt="photo">`;
+  };
+  reader.readAsDataURL(file);
+};
+
+window.submitProfile = async () => {
+  const session = document.getElementById('setup-session').value;
+  const roll = document.getElementById('setup-roll').value;
+  const country = document.getElementById('setup-country').value;
+  const city = document.getElementById('setup-city').value;
+  const job = document.getElementById('setup-job').value.trim();
+  const company = document.getElementById('setup-company').value.trim();
+  const email = document.getElementById('setup-email').value.trim();
+  const phone = document.getElementById('setup-phone').value.trim();
+  const linkedin = document.getElementById('setup-linkedin').value.trim();
+  const bio = document.getElementById('setup-bio').value.trim();
+
+  const errBox = document.getElementById('setup-error');
+  const sucBox = document.getElementById('setup-success');
+
+  if (!session || !roll || !country || !city || !job || !company || !email) {
+    errBox.textContent = '⚠️ Please fill all required fields.';
+    errBox.style.display = 'block'; return;
+  }
+  errBox.style.display = 'none';
+
+  const db2 = session === '2006-Morning' ? morningStudents : eveningStudents;
+  const name = db2[roll];
+  if (!name) { errBox.textContent = '⚠️ Invalid roll number.'; errBox.style.display = 'block'; return; }
+
+  // Check roll number not already taken
+  const rollQuery = query(collection(db, 'alumni'), where('roll', '==', roll));
+  const rollSnap = await getDocs(rollQuery);
+  if (!rollSnap.empty && rollSnap.docs[0].id !== currentUser.uid) {
+    errBox.textContent = '⚠️ This roll number is already registered. Contact admin if this is an error.';
+    errBox.style.display = 'block'; return;
+  }
+
+  const btn = document.getElementById('setup-submit-btn');
+  btn.disabled = true; btn.textContent = 'Saving...';
+
+  try {
+    const profileData = {
+      uid: currentUser.uid,
+      name, roll, session, country, city, job, company, email, phone, linkedin, bio,
+      photoBase64: selectedPhotoBase64,
+      googleName: currentUser.displayName,
+      googlePhoto: currentUser.photoURL,
+      registeredAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    };
+
+    await setDoc(doc(db, 'alumni', currentUser.uid), profileData);
+    currentUserProfile = profileData;
+    sucBox.textContent = '✅ Profile saved! Welcome to the ICET Alumni Network!';
+    sucBox.style.display = 'block';
+    setTimeout(() => { loadDirectory('2006'); }, 1500);
+  } catch(e) {
+    errBox.textContent = '⚠️ Error saving profile: ' + e.message;
+    errBox.style.display = 'block';
+    btn.disabled = false; btn.textContent = 'Save Profile & Join Network';
+  }
+};
+
+// ── Directory ──
+async function loadDirectory(session) {
+  showPage('directory');
+  document.getElementById('dir-session-label').textContent = session === '2006' ? '2006–2010' : session;
+  const grid = document.getElementById('alumni-grid');
+  grid.innerHTML = '<div class="loading-spinner">Loading alumni...</div>';
+
+  try {
+    const q = query(collection(db, 'alumni'), where('session', 'in', ['2006-Morning', '2006-Evening']));
+    const snap = await getDocs(q);
+    allAlumni = [];
+    snap.forEach(d => allAlumni.push(d.data()));
+    allAlumni.sort((a, b) => a.roll.localeCompare(b.roll));
+    renderDirectory();
+  } catch(e) {
+    grid.innerHTML = '<div class="loading-spinner">Error loading data.</div>';
+  }
+}
+
+function renderDirectory() {
+  const grid = document.getElementById('alumni-grid');
+  const search = document.getElementById('search-input').value.toLowerCase();
+  let filtered = allAlumni.filter(a => {
+    const matchSearch = !search || a.name.toLowerCase().includes(search) || a.roll.toLowerCase().includes(search);
+    const matchFilter = activeFilter === 'all' || a.session.includes(activeFilter);
+    return matchSearch && matchFilter;
+  });
+
+  if (filtered.length === 0) {
+    grid.innerHTML = '<div class="loading-spinner">No alumni found.</div>'; return;
+  }
+
+  grid.innerHTML = filtered.map(a => {
+    const initials = a.name.split(' ').map(w => w[0]).slice(0, 2).join('');
+    const photoHtml = a.photoBase64
+      ? `<img src="${a.photoBase64}" alt="${a.name}">`
+      : initials;
+    const sessionType = a.session.includes('Morning') ? 'M' : 'E';
+    return `<div class="alumni-card" onclick="viewProfile('${a.uid}')">
+      <span class="alumni-session-badge">${sessionType} · ${a.roll}</span>
+      <div class="alumni-photo">${photoHtml}</div>
+      <div class="alumni-name">${a.name}</div>
+      <div class="alumni-roll">${a.roll} · ${a.session}</div>
+      <div class="alumni-job">${a.job} @ ${a.company}</div>
+      <div class="alumni-country">📍 ${a.city}, ${a.country}</div>
+    </div>`;
+  }).join('');
+}
+
+window.filterDirectory = () => renderDirectory();
+window.setFilter = (filter, btn) => {
+  activeFilter = filter;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderDirectory();
+};
+
+// ── Profile view ──
+window.viewProfile = (uid) => {
+  const profile = allAlumni.find(a => a.uid === uid);
+  if (!profile) return;
+
+  const isSameSession = currentUserProfile && currentUserProfile.session === profile.session;
+
+  const initials = profile.name.split(' ').map(w => w[0]).slice(0, 2).join('');
+  const avatarEl = document.getElementById('view-avatar');
+  if (profile.photoBase64) {
+    avatarEl.innerHTML = `<img src="${profile.photoBase64}" alt="${profile.name}">`;
+  } else {
+    avatarEl.innerHTML = initials;
+  }
+
+  document.getElementById('view-name').textContent = profile.name;
+  document.getElementById('view-roll').textContent = `${profile.roll} · ${profile.session}`;
+  document.getElementById('view-job').textContent = `${profile.job} @ ${profile.company}`;
+  document.getElementById('view-location').textContent = `${profile.city}, ${profile.country}`;
+  document.getElementById('view-email').innerHTML = `<a href="mailto:${profile.email}">${profile.email}</a>`;
+  document.getElementById('view-session').textContent = profile.session;
+
+  // Phone - only same session
+  const phoneEl = document.getElementById('view-phone');
+  if (isSameSession && profile.phone) {
+    phoneEl.innerHTML = `<a href="tel:${profile.phone}">${profile.phone}</a>`;
+  } else if (profile.phone) {
+    phoneEl.innerHTML = `<span class="phone-locked">🔒 Visible to same session members only</span>`;
+  } else {
+    phoneEl.textContent = 'Not provided';
+  }
+
+  // LinkedIn
+  const linkedinEl = document.getElementById('view-linkedin');
+  if (profile.linkedin) {
+    linkedinEl.innerHTML = `<a href="${profile.linkedin}" target="_blank">View Profile →</a>`;
+  } else {
+    linkedinEl.textContent = 'Not provided';
+  }
+
+  // Bio
+  const bioSection = document.getElementById('view-bio-section');
+  if (profile.bio) {
+    document.getElementById('view-bio').textContent = profile.bio;
+    bioSection.style.display = 'block';
+  } else {
+    bioSection.style.display = 'none';
+  }
+
+  showPage('profile');
+};
+
+// ── Toast ──
+window.showToast = (msg) => {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+};
+
+// Load stats on start
+loadStats();
+</script>
+
+</body>
+</html>
