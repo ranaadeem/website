@@ -2,528 +2,944 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ICET Alumni Portal – Chemical Engineering</title>
 <link rel="icon" type="image/png" href="/favicon.png">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-<style>
-:root {
-  --navy: #0f1f3d;
-  --gold: #c9a84c;
-  --gold-light: #e8d5a3;
-  --cream: #faf8f4;
-  --white: #ffffff;
-  --text: #1a1a2e;
-  --muted: #6b7280;
-  --border: #e5e7eb;
-  --green: #059669;
-  --red: #dc2626;
-}
-* { box-sizing: border-box; margin: 0; padding: 0; }
-html, body { width: 100%; min-height: 100vh; }
-body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--text); }
+<link rel="shortcut icon" type="image/png" href="/favicon.png">
+<link rel="apple-touch-icon" href="/favicon.png">
 
-/* NAV */
-nav {
-  background: var(--navy);
-  border-bottom: 2px solid var(--gold);
-  position: sticky; top: 0; z-index: 100;
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Session 2006-2010 – Chemical Engineering Alumni</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  function sendHeight() {
+    var height = document.body.scrollHeight;
+    window.parent.postMessage({ type: 'setHeight', height: height }, '*');
+  }
+  window.addEventListener('load', function() { sendHeight(); setInterval(sendHeight, 800); });
+  window.addEventListener('resize', sendHeight);
+</script>
+<style>
+  :root {
+    --navy: #0f1f3d;
+    --gold: #c9a84c;
+    --gold-light: #e8d5a3;
+    --cream: #faf8f4;
+    --white: #ffffff;
+    --text: #1a1a2e;
+    --muted: #6b7280;
+    --border: #e5e7eb;
+    --green: #059669;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { overflow-x: hidden; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    overflow-x: hidden;
+    margin-left: 0;
+    margin-right: 0;
+    width: 100%;
+  }
+
+  /* HEADER */
+  .page-header { padding-top: 3.5rem !important;
+    background: linear-gradient(135deg, var(--navy) 0%, #1a3a6b 60%, #0d2744 100%);
+    padding: 3.5rem 2rem 3rem;
+    position: relative; overflow: hidden;
+  }
+  .page-header::before {
+    content: ''; position: absolute;
+    top: -80px; right: -80px;
+    width: 400px; height: 400px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(201,168,76,0.1) 0%, transparent 70%);
+  }
+  .header-inner { max-width: 1100px; margin: 0 auto; position: relative; z-index: 1; }
+  .page-tag {
+    font-size: 11px; font-weight: 500; letter-spacing: 0.15em;
+    text-transform: uppercase; color: var(--gold);
+    border: 1px solid rgba(201,168,76,0.35);
+    padding: 4px 12px; border-radius: 20px;
+    display: inline-block; margin-bottom: 1rem;
+  }
+  .page-header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    color: white; margin-bottom: 0; line-height: 1.15;
+  }
+  .page-header h1 span { color: var(--gold); }
+  .header-sub { font-size: 15px; color: rgba(255,255,255,0.6); font-weight: 300; max-width: 600px; line-height: 1.7; margin-bottom: 1.5rem; margin-top: 0; }
+  .header-stats { display: flex; gap: 2rem; flex-wrap: wrap; }
+  .hstat-num { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700; color: var(--gold); display: block; }
+  .hstat-lbl { font-size: 12px; color: rgba(255,255,255,0.5); }
+
+  /* MAIN GRID */
+  .main-wrap { max-width: 1100px; margin: 0 auto; padding: 2.5rem 2rem; display: grid; grid-template-columns: 1fr 340px; gap: 2rem; align-items: start; }
+
+  /* LEFT COLUMN */
+  .section-tag { font-size: 11px; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); display: block; margin-bottom: 0.4rem; }
+  .section-title { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--navy); margin-bottom: 1.25rem; }
+
+  /* REGISTRATION FORM EMBED */
+  .form-section { margin-bottom: 2.5rem; }
+  .form-container {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .form-header-bar {
+    background: var(--navy);
+    padding: 1rem 1.5rem;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .form-header-bar span { font-size: 13px; color: rgba(255,255,255,0.8); font-weight: 500; }
+  .form-header-bar .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--gold); }
+  .form-iframe-wrap { padding: 0; }
+
+  /* WORLD MAP SECTION */
+  .map-section { margin-bottom: 2.5rem; }
+  .map-placeholder {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .country-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 1.25rem; }
+  .country-card {
+    background: #f8f9fa;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 12px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .country-name { font-size: 13px; color: var(--text); font-weight: 500; }
+  .country-count {
+    font-size: 12px; font-weight: 600;
+    background: rgba(201,168,76,0.15); color: #92701e;
+    padding: 2px 8px; border-radius: 10px;
+  }
+  .map-note { font-size: 11px; color: var(--muted); padding: 0 1.25rem 1rem; font-style: italic; }
+
+  /* SIDEBAR */
+  .sidebar { display: flex; flex-direction: column; gap: 1.5rem; }
+  .side-card { background: var(--white); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+  .side-card-header { background: var(--navy); padding: 1rem 1.25rem; }
+  .side-card-header h3 { font-family: 'Playfair Display', serif; font-size: 15px; color: white; }
+  .side-card-header p { font-size: 11px; color: rgba(255,255,255,0.5); margin-top: 2px; }
+  .side-card-body { padding: 1.25rem; }
+
+  /* BATCH INFO */
+  .info-row { display: flex; gap: 10px; margin-bottom: 10px; align-items: flex-start; }
+  .info-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+  .info-label { font-size: 11px; color: var(--muted); margin-bottom: 2px; }
+  .info-val { font-size: 13px; color: var(--text); font-weight: 500; line-height: 1.4; }
+  .info-val a { color: var(--navy); text-decoration: none; }
+  .info-val a:hover { color: var(--gold); }
+
+  /* MILESTONES */
+  .milestone { display: flex; gap: 12px; margin-bottom: 14px; position: relative; }
+  .milestone:not(:last-child)::before {
+    content: '';
+    position: absolute;
+    left: 15px; top: 28px; bottom: -14px;
+    width: 1px; background: var(--border);
+  }
+  .ms-dot { width: 30px; height: 30px; border-radius: 50%; background: rgba(201,168,76,0.1); border: 2px solid var(--gold); display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; }
+  .ms-year { font-size: 10px; color: var(--gold); font-weight: 600; margin-bottom: 2px; }
+  .ms-text { font-size: 12px; color: var(--text); line-height: 1.5; }
+
+  /* ANNOUNCEMENTS */
+  .announcement {
+    border-left: 3px solid var(--gold);
+    padding: 10px 12px;
+    background: #faf8f4;
+    border-radius: 0 8px 8px 0;
+    margin-bottom: 10px;
+  }
+  .ann-date { font-size: 10px; color: var(--muted); margin-bottom: 3px; }
+  .ann-text { font-size: 13px; color: var(--text); line-height: 1.5; }
+  .ann-badge { display: inline-block; font-size: 10px; padding: 2px 7px; border-radius: 4px; background: rgba(201,168,76,0.12); color: #92701e; margin-top: 5px; }
+
+  /* CONNECT */
+  .connect-btn {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 14px; border-radius: 8px; margin-bottom: 8px;
+    text-decoration: none; font-size: 13px; font-weight: 500;
+    transition: all 0.2s;
+    border: 1px solid var(--border);
+    color: var(--text);
+  }
+  .connect-btn:hover { border-color: var(--gold); color: var(--gold); background: rgba(201,168,76,0.04); }
+  .connect-btn .cb-icon { font-size: 18px; }
+  .connect-btn .cb-text { flex: 1; }
+  .connect-btn .cb-lbl { font-size: 10px; color: var(--muted); display: block; font-weight: 400; }
+
+  /* STATS CHART */
+  .chart-wrap { padding: 1rem; }
+
+  /* PHOTO PLACEHOLDER */
+  .photo-placeholder {
+    background: linear-gradient(135deg, #f0f4ff, #e8f0fe);
+    border: 2px dashed #c7d2fe;
+    border-radius: 10px;
+    padding: 2rem;
+    text-align: center;
+    margin-bottom: 1.25rem;
+  }
+  .photo-placeholder .ph-icon { font-size: 36px; margin-bottom: 8px; }
+  .photo-placeholder p { font-size: 13px; color: #6366f1; font-weight: 500; }
+  .photo-placeholder span { font-size: 11px; color: var(--muted); }
+
+  /* REGISTERED COUNT */
+  .reg-counter {
+    background: linear-gradient(135deg, var(--navy), #1a3a6b);
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-align: center;
+    margin-bottom: 1.25rem;
+  }
+  .reg-num { font-family: 'Playfair Display', serif; font-size: 52px; font-weight: 700; color: var(--gold); display: block; line-height: 1; }
+  .reg-label { font-size: 13px; color: rgba(255,255,255,0.6); margin-top: 6px; }
+  .reg-sub { font-size: 11px; color: rgba(255,255,255,0.35); margin-top: 4px; }
+  .reg-bar-wrap { margin-top: 12px; }
+  .reg-bar-bg { background: rgba(255,255,255,0.1); border-radius: 10px; height: 6px; }
+  .reg-bar-fill { background: var(--gold); border-radius: 10px; height: 6px; width: 0%; transition: width 1s ease; }
+  .reg-bar-label { display: flex; justify-content: space-between; font-size: 10px; color: rgba(255,255,255,0.4); margin-top: 5px; }
+
+  /* SESSION BREAKDOWN */
+  .session-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); }
+  .session-row:last-child { border-bottom: none; }
+  .session-label { font-size: 13px; color: var(--text); }
+  .session-count { font-size: 13px; font-weight: 600; color: var(--navy); }
+
+  /* FOOTER */
+  .page-footer { background: var(--navy); padding: 1.5rem 2rem; text-align: center; }
+  .page-footer p { font-size: 12px; color: rgba(255,255,255,0.35); }
+  .page-footer a { color: var(--gold); text-decoration: none; }
+
+  @media (max-width: 768px) {
+    .main-wrap { grid-template-columns: 1fr; }
+    .country-grid { grid-template-columns: 1fr 1fr; }
+    .header-stats { gap: 1rem; }
+  }
+
+  /* CUSTOM FORM STYLES */
+  .form-wrap { background: #fff; padding: 1.5rem; }
+  .form-wrap .section-label { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #999; margin-bottom: 0.75rem; margin-top: 1.5rem; padding-bottom: 6px; border-bottom: 1px solid #eee; }
+  .form-wrap .field { margin-bottom: 1rem; }
+  .form-wrap .field label { display: block; font-size: 13px; color: #555; margin-bottom: 5px; font-weight: 500; }
+  .form-wrap .req { color: #e53e3e; margin-left: 2px; }
+  .form-wrap .opt { font-size: 11px; color: #aaa; font-weight: 400; margin-left: 4px; }
+  .form-wrap select, .form-wrap input[type="text"], .form-wrap input[type="email"], .form-wrap input[type="tel"], .form-wrap input[type="url"] {
+    width: 100%; padding: 9px 12px; font-size: 14px; border: 1px solid #ddd; border-radius: 8px;
+    background: #fff; color: #1a1a1a; outline: none; transition: border 0.15s; font-family: inherit;
+  }
+  .form-wrap select:focus, .form-wrap input:focus { border-color: #4a6cf7; box-shadow: 0 0 0 3px rgba(74,108,247,0.1); }
+  .form-wrap select:disabled { background: #f8f9fa; color: #aaa; cursor: not-allowed; }
+  .name-display { background: #f8f9fa; border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px 12px; font-size: 15px; font-weight: 600; color: #1a1a1a; min-height: 40px; display: flex; align-items: center; }
+  .name-placeholder { color: #bbb; font-weight: 400; font-size: 13px; font-style: italic; }
+  .photo-upload { border: 1.5px dashed #ccc; border-radius: 10px; padding: 1.5rem; text-align: center; cursor: pointer; background: #fafafa; transition: all 0.15s; }
+  .photo-upload:hover { border-color: #4a6cf7; background: #f0f4ff; }
+  .photo-upload input { display: none; }
+  .upload-icon { width: 40px; height: 40px; margin: 0 auto 10px; background: #fff; border: 1px solid #ddd; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+  .upload-text { font-size: 13px; color: #555; font-weight: 500; }
+  .upload-hint { font-size: 12px; color: #aaa; margin-top: 4px; }
+  .preview-img { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; margin: 0 auto 10px; display: block; border: 2px solid #e2e8f0; }
+  .photo-size-warn { font-size: 11px; color: #e67e22; margin-top: 5px; display: none; }
+  .submit-btn { width: 100%; margin-top: 1.5rem; padding: 13px; font-size: 15px; font-weight: 600; background: #0f1f3d; color: #fff; border: none; border-radius: 8px; cursor: pointer; transition: background 0.15s; font-family: inherit; }
+  .submit-btn:hover { background: #1a3a6b; }
+  .submit-btn:disabled { background: #999; cursor: not-allowed; }
+  .progress-wrap { margin-top: 12px; display: none; }
+  .progress-bar-bg { background: #eee; border-radius: 20px; height: 6px; overflow: hidden; }
+  .progress-bar-fill { background: #4a6cf7; height: 6px; width: 0%; border-radius: 20px; transition: width 0.3s; }
+  .progress-label { font-size: 12px; color: #4a6cf7; margin-top: 6px; text-align: center; }
+  .success-box { background: #f0fff4; border: 1px solid #9ae6b4; border-radius: 10px; padding: 2rem; text-align: center; display: none; }
+  .success-box h2 { font-size: 18px; font-weight: 600; color: #276749; }
+  .success-box p { font-size: 14px; color: #555; margin-top: 8px; line-height: 1.6; }
+  .error-msg { font-size: 12px; color: #e53e3e; margin-top: 8px; display: none; }
+</style>
+<style>
+/* ===== NAVBAR STYLES ===== */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+#main-nav {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: #0f1f3d;
+  border-bottom: 2px solid #c9a84c;
   box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 .nav-inner {
-  max-width: 1100px; margin: 0 auto;
-  padding: 0 1.5rem; height: 64px;
-  display: flex; align-items: center; justify-content: space-between;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
 }
-.nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
-.nav-logo-agr { font-family: Georgia, serif; font-size: 20px; font-weight: 700; color: var(--gold); letter-spacing: 2px; border: 2px solid var(--gold); padding: 2px 8px; border-radius: 4px; }
-.nav-logo-name { font-size: 13px; color: rgba(255,255,255,0.7); }
-.nav-right { display: flex; align-items: center; gap: 12px; }
-.nav-user { display: flex; align-items: center; gap: 8px; }
-.nav-user img { width: 32px; height: 32px; border-radius: 50%; border: 2px solid var(--gold); }
-.nav-user span { font-size: 13px; color: rgba(255,255,255,0.8); }
-.nav-btn { font-size: 13px; font-weight: 500; padding: 7px 16px; border-radius: 6px; cursor: pointer; border: none; transition: all 0.2s; font-family: inherit; }
-.btn-gold { background: var(--gold); color: var(--navy); }
-.btn-gold:hover { background: var(--gold-light); }
-.btn-outline { background: transparent; color: rgba(255,255,255,0.7); border: 1px solid rgba(255,255,255,0.3); }
-.btn-outline:hover { border-color: var(--gold); color: var(--gold); }
-.nav-links { display: flex; gap: 4px; }
-.nav-link { color: rgba(255,255,255,0.7); text-decoration: none; font-size: 13px; padding: 7px 12px; border-radius: 6px; transition: all 0.2s; }
-.nav-link:hover, .nav-link.active { color: var(--gold); background: rgba(201,168,76,0.1); }
-.back-link { font-size: 13px; color: rgba(255,255,255,0.6); text-decoration: none; }
-.back-link:hover { color: var(--gold); }
-
-/* PAGES */
-.page { display: none; }
-.page.active { display: block; }
-
-/* LANDING */
-.landing-hero {
-  background: linear-gradient(135deg, var(--navy) 0%, #1a3a6b 60%, #0d2744 100%);
-  padding: 5rem 2rem;
-  text-align: center;
-  position: relative; overflow: hidden;
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  flex-shrink: 0;
 }
-.landing-hero::before {
-  content: ''; position: absolute;
-  top: -100px; right: -100px;
-  width: 500px; height: 500px; border-radius: 50%;
-  background: radial-gradient(circle, rgba(201,168,76,0.1) 0%, transparent 70%);
+.nav-logo-agr {
+  font-family: Georgia, serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: #c9a84c;
+  letter-spacing: 2px;
+  border: 2px solid #c9a84c;
+  padding: 2px 8px;
+  border-radius: 4px;
+  line-height: 1.3;
 }
-.hero-tag { font-size: 11px; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); border: 1px solid rgba(201,168,76,0.4); padding: 5px 14px; border-radius: 20px; display: inline-block; margin-bottom: 1.5rem; }
-.landing-hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 5vw, 3.5rem); color: white; margin-bottom: 1rem; line-height: 1.2; }
-.landing-hero h1 span { color: var(--gold); }
-.landing-hero p { font-size: 16px; color: rgba(255,255,255,0.65); max-width: 560px; margin: 0 auto 2.5rem; line-height: 1.75; font-weight: 300; }
-.hero-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
-.hero-btn-primary { background: var(--gold); color: var(--navy); padding: 13px 32px; border-radius: 8px; font-size: 15px; font-weight: 600; text-decoration: none; border: none; cursor: pointer; font-family: inherit; transition: all 0.2s; }
-.hero-btn-primary:hover { background: var(--gold-light); transform: translateY(-1px); }
-.hero-btn-secondary { background: transparent; color: white; padding: 13px 32px; border-radius: 8px; font-size: 15px; font-weight: 500; border: 1px solid rgba(255,255,255,0.3); cursor: pointer; font-family: inherit; transition: all 0.2s; }
-.hero-btn-secondary:hover { border-color: var(--gold); color: var(--gold); }
-
-/* STATS STRIP */
-.stats-strip { background: white; border-bottom: 1px solid var(--border); padding: 1.5rem 2rem; }
-.stats-inner { max-width: 1100px; margin: 0 auto; display: flex; justify-content: center; gap: 4rem; flex-wrap: wrap; }
-.stat-item { text-align: center; }
-.stat-num { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700; color: var(--navy); display: block; }
-.stat-lbl { font-size: 12px; color: var(--muted); margin-top: 2px; }
-
-/* SESSIONS SECTION */
-.sessions-section { max-width: 1100px; margin: 3rem auto; padding: 0 2rem; }
-.section-header { margin-bottom: 2rem; }
-.section-tag { font-size: 11px; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); display: block; margin-bottom: 4px; }
-.section-title { font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--navy); }
-.sessions-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.25rem; }
-.session-card {
-  background: white; border: 1px solid var(--border); border-radius: 12px;
-  padding: 1.75rem; cursor: pointer; transition: all 0.25s;
-  border-top: 4px solid var(--gold); position: relative; overflow: hidden;
+.nav-logo-name {
+  font-size: 13px;
+  color: rgba(255,255,255,0.75);
+  font-weight: 400;
+  letter-spacing: 0.3px;
 }
-.session-card:hover { box-shadow: 0 8px 30px rgba(0,0,0,0.1); transform: translateY(-2px); }
-.session-card.locked { opacity: 0.6; cursor: not-allowed; }
-.session-card.locked:hover { transform: none; box-shadow: none; }
-.session-year { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
-.session-dept { font-size: 13px; color: var(--muted); margin-bottom: 1rem; }
-.session-stats { display: flex; gap: 1rem; margin-bottom: 1rem; }
-.session-stat { text-align: center; }
-.session-stat-num { font-size: 20px; font-weight: 700; color: var(--gold); display: block; }
-.session-stat-lbl { font-size: 10px; color: var(--muted); }
-.session-badge { display: inline-block; font-size: 11px; padding: 3px 10px; border-radius: 10px; background: rgba(201,168,76,0.1); color: #92701e; font-weight: 500; }
-.session-badge.coming { background: #f3f4f6; color: var(--muted); }
-.session-arrow { position: absolute; right: 1.5rem; top: 50%; transform: translateY(-50%); font-size: 20px; color: var(--gold); opacity: 0.5; }
-
-/* LOGIN PAGE */
-.login-wrap { max-width: 440px; margin: 4rem auto; padding: 0 1.5rem; }
-.login-card { background: white; border: 1px solid var(--border); border-radius: 16px; padding: 2.5rem; box-shadow: 0 4px 30px rgba(0,0,0,0.06); }
-.login-logo { text-align: center; margin-bottom: 2rem; }
-.login-logo .agr { font-family: Georgia, serif; font-size: 32px; font-weight: 700; color: var(--gold); letter-spacing: 3px; border: 3px solid var(--gold); padding: 6px 16px; border-radius: 8px; display: inline-block; }
-.login-logo p { font-size: 13px; color: var(--muted); margin-top: 8px; }
-.login-title { font-family: 'Playfair Display', serif; font-size: 22px; color: var(--navy); text-align: center; margin-bottom: 0.5rem; }
-.login-sub { font-size: 13px; color: var(--muted); text-align: center; margin-bottom: 2rem; line-height: 1.6; }
-.google-btn {
-  width: 100%; padding: 13px; border: 1.5px solid var(--border); border-radius: 8px;
-  background: white; display: flex; align-items: center; justify-content: center; gap: 12px;
-  font-size: 15px; font-weight: 500; cursor: pointer; transition: all 0.2s; font-family: inherit; color: var(--text);
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  list-style: none;
 }
-.google-btn:hover { border-color: var(--gold); background: #faf8f4; box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
-.google-icon { width: 20px; height: 20px; }
-.login-note { font-size: 11px; color: var(--muted); text-align: center; margin-top: 1.5rem; line-height: 1.6; }
-
-/* PROFILE SETUP */
-.setup-wrap { max-width: 680px; margin: 3rem auto; padding: 0 1.5rem 3rem; }
-.setup-card { background: white; border: 1px solid var(--border); border-radius: 16px; overflow: hidden; box-shadow: 0 4px 30px rgba(0,0,0,0.06); }
-.setup-header { background: var(--navy); padding: 2rem; }
-.setup-header h2 { font-family: 'Playfair Display', serif; font-size: 22px; color: white; margin-bottom: 4px; }
-.setup-header p { font-size: 13px; color: rgba(255,255,255,0.6); }
-.setup-body { padding: 2rem; }
-.setup-photo-upload { text-align: center; margin-bottom: 2rem; }
-.photo-circle-upload {
-  width: 100px; height: 100px; border-radius: 50%;
-  background: #f3f4f6; border: 3px dashed var(--border);
-  margin: 0 auto 0.75rem; cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 32px; overflow: hidden; transition: all 0.2s;
+.nav-link {
+  color: rgba(255,255,255,0.75);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 400;
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: all 0.2s;
+  white-space: nowrap;
 }
-.photo-circle-upload:hover { border-color: var(--gold); background: #faf8f4; }
-.photo-circle-upload img { width: 100%; height: 100%; object-fit: cover; }
-.setup-photo-label { font-size: 12px; color: var(--muted); }
-.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
-.form-group { margin-bottom: 1rem; }
-.form-group label { display: block; font-size: 13px; color: #555; margin-bottom: 5px; font-weight: 500; }
-.form-group label .req { color: var(--red); margin-left: 2px; }
-.form-group label .opt { font-size: 11px; color: var(--muted); font-weight: 400; margin-left: 4px; }
-.form-group input, .form-group select, .form-group textarea {
-  width: 100%; padding: 10px 12px; font-size: 14px;
-  border: 1px solid var(--border); border-radius: 8px;
-  background: white; color: var(--text); outline: none;
-  transition: border 0.15s; font-family: inherit;
+.nav-link:hover, .nav-link.active {
+  color: #c9a84c;
+  background: rgba(201,168,76,0.1);
 }
-.form-group input:focus, .form-group select:focus, .form-group textarea:focus {
-  border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201,168,76,0.1);
+.nav-cta {
+  background: #c9a84c;
+  color: #0f1f3d !important;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: 6px;
+  transition: all 0.2s;
+  white-space: nowrap;
+  margin-left: 8px;
 }
-.form-group input:disabled { background: #f8f9fa; color: var(--muted); }
-.name-display { background: #f8f9fa; border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; font-size: 14px; font-weight: 600; color: var(--navy); min-height: 42px; display: flex; align-items: center; }
-.name-placeholder { color: var(--muted); font-weight: 400; font-style: italic; }
-.submit-btn { width: 100%; padding: 13px; background: var(--navy); color: white; border: none; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; font-family: inherit; transition: all 0.2s; margin-top: 1rem; }
-.submit-btn:hover { background: #1a3a6b; }
-.submit-btn:disabled { background: var(--muted); cursor: not-allowed; }
-.section-divider { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin: 1.5rem 0 1rem; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
-.error-box { background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; padding: 10px 14px; font-size: 13px; color: var(--red); margin-bottom: 1rem; display: none; }
-.success-box { background: #f0fff4; border: 1px solid #9ae6b4; border-radius: 8px; padding: 10px 14px; font-size: 13px; color: #276749; margin-bottom: 1rem; display: none; }
+.nav-cta:hover { background: #e8d5a3; }
 
-/* DIRECTORY */
-.directory-wrap { max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem 3rem; }
-.directory-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem; }
-.directory-filters { display: flex; gap: 8px; flex-wrap: wrap; }
-.filter-btn { padding: 7px 16px; border-radius: 20px; font-size: 13px; border: 1px solid var(--border); background: white; color: var(--muted); cursor: pointer; transition: all 0.2s; font-family: inherit; }
-.filter-btn.active, .filter-btn:hover { background: var(--navy); color: white; border-color: var(--navy); }
-.search-box { padding: 9px 14px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; width: 240px; outline: none; font-family: inherit; }
-.search-box:focus { border-color: var(--gold); }
-.alumni-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; }
-.alumni-card {
-  background: white; border: 1px solid var(--border); border-radius: 12px;
-  padding: 1.5rem; text-align: center; cursor: pointer;
-  transition: all 0.25s; position: relative;
+/* Hamburger for mobile */
+.nav-hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
 }
-.alumni-card:hover { box-shadow: 0 6px 24px rgba(0,0,0,0.08); transform: translateY(-2px); border-color: var(--gold-light); }
-.alumni-photo { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; margin: 0 auto 0.75rem; border: 3px solid var(--gold-light); background: #f3f4f6; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 700; color: var(--navy); overflow: hidden; }
-.alumni-photo img { width: 100%; height: 100%; object-fit: cover; }
-.alumni-name { font-size: 14px; font-weight: 600; color: var(--navy); margin-bottom: 3px; }
-.alumni-roll { font-size: 11px; color: var(--muted); margin-bottom: 6px; }
-.alumni-job { font-size: 12px; color: var(--text); margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.alumni-country { font-size: 11px; color: var(--muted); }
-.alumni-session-badge { position: absolute; top: 10px; right: 10px; font-size: 9px; padding: 2px 7px; border-radius: 8px; background: rgba(201,168,76,0.12); color: #92701e; font-weight: 600; }
-.loading-spinner { text-align: center; padding: 4rem; color: var(--muted); font-size: 14px; }
-
-/* PROFILE VIEW */
-.profile-wrap { max-width: 800px; margin: 2rem auto; padding: 0 1.5rem 3rem; }
-.profile-card { background: white; border: 1px solid var(--border); border-radius: 16px; overflow: hidden; box-shadow: 0 4px 30px rgba(0,0,0,0.06); }
-.profile-banner { background: linear-gradient(135deg, var(--navy), #1a3a6b); height: 120px; position: relative; }
-.profile-avatar { width: 100px; height: 100px; border-radius: 50%; border: 4px solid white; position: absolute; bottom: -50px; left: 2rem; background: #f3f4f6; display: flex; align-items: center; justify-content: center; font-size: 36px; font-weight: 700; color: var(--navy); overflow: hidden; box-shadow: 0 4px 16px rgba(0,0,0,0.15); }
-.profile-avatar img { width: 100%; height: 100%; object-fit: cover; }
-.profile-info { padding: 4rem 2rem 2rem; }
-.profile-name { font-family: 'Playfair Display', serif; font-size: 26px; color: var(--navy); margin-bottom: 4px; }
-.profile-roll { font-size: 13px; color: var(--muted); margin-bottom: 1rem; }
-.profile-details { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.5rem; }
-.profile-detail { display: flex; gap: 10px; align-items: flex-start; }
-.detail-icon { font-size: 18px; flex-shrink: 0; }
-.detail-label { font-size: 11px; color: var(--muted); margin-bottom: 2px; }
-.detail-val { font-size: 14px; color: var(--text); font-weight: 500; }
-.detail-val a { color: var(--gold); text-decoration: none; }
-.detail-val a:hover { text-decoration: underline; }
-.profile-actions { display: flex; gap: 10px; margin-top: 1.5rem; flex-wrap: wrap; }
-.profile-btn { padding: 9px 20px; border-radius: 8px; font-size: 13px; font-weight: 500; cursor: pointer; border: 1px solid var(--border); background: white; color: var(--text); font-family: inherit; transition: all 0.2s; }
-.profile-btn:hover { border-color: var(--gold); color: var(--gold); }
-.profile-btn.primary { background: var(--navy); color: white; border-color: var(--navy); }
-.profile-btn.primary:hover { background: #1a3a6b; }
-.hidden-field { font-size: 13px; color: var(--muted); font-style: italic; }
-.phone-locked { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); }
-
-/* MY PROFILE PAGE */
-.my-profile-wrap { max-width: 800px; margin: 2rem auto; padding: 0 1.5rem 3rem; }
-
-/* FOOTER */
-.portal-footer { background: var(--navy); padding: 1.5rem 2rem; text-align: center; margin-top: 3rem; }
-.portal-footer p { font-size: 12px; color: rgba(255,255,255,0.4); }
-.portal-footer a { color: var(--gold); text-decoration: none; }
-
-/* TOAST */
-.toast { position: fixed; bottom: 2rem; right: 2rem; background: var(--navy); color: white; padding: 12px 20px; border-radius: 8px; font-size: 13px; border-left: 4px solid var(--gold); box-shadow: 0 4px 20px rgba(0,0,0,0.2); z-index: 9999; transform: translateY(100px); opacity: 0; transition: all 0.3s; }
-.toast.show { transform: translateY(0); opacity: 1; }
+.nav-hamburger span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: #c9a84c;
+  border-radius: 2px;
+  transition: all 0.3s;
+}
 
 @media (max-width: 768px) {
   .nav-logo-name { display: none; }
-  .nav-links { display: none; }
-  .form-row { grid-template-columns: 1fr; }
-  .profile-details { grid-template-columns: 1fr; }
-  .alumni-grid { grid-template-columns: repeat(2, 1fr); }
-  .stats-inner { gap: 2rem; }
+  .nav-hamburger { display: flex; }
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: 64px;
+    left: 0;
+    right: 0;
+    background: #0f1f3d;
+    flex-direction: column;
+    padding: 1rem;
+    gap: 0.25rem;
+    border-bottom: 2px solid #c9a84c;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+  }
+  .nav-links.open { display: flex; }
+  .nav-link { width: 100%; padding: 12px 16px; }
+  .nav-cta { width: 100%; text-align: center; margin-left: 0; margin-top: 0.5rem; padding: 12px 16px; }
 }
+
 </style>
 </head>
 <body>
-
-<!-- NAVBAR -->
-<nav>
+<!-- ===== NAVBAR ===== -->
+<nav id="main-nav">
   <div class="nav-inner">
     <a href="/" class="nav-logo">
       <span class="nav-logo-agr">AGR</span>
-      <span class="nav-logo-name">ranaadeem.de</span>
+      <span class="nav-logo-name">Dr. Adeem Ghaffar Rana</span>
     </a>
-    <div class="nav-right">
-      <div class="nav-links">
-        <a href="/" class="nav-link">← Main Site</a>
-      </div>
-      <div id="nav-user-area">
-        <button class="nav-btn btn-gold" onclick="showPage('login')">Sign In</button>
-      </div>
-    </div>
+    <button class="nav-hamburger" onclick="toggleMenu()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="/" class="nav-link">Home</a></li>
+      <li><a href="/about.html" class="nav-link">About</a></li>
+      <li><a href="/research.html" class="nav-link">Research</a></li>
+      <li><a href="/publications.html" class="nav-link">Publications</a></li>
+      <li><a href="/blog.html" class="nav-link">Blog</a></li>
+      <li><a href="/session2006.html" class="nav-link">Session 2006</a></li>
+      <li><a href="/photography.html" class="nav-link">Photography</a></li>
+      <li><a href="mailto:ranaadeem@hotmail.com" class="nav-cta">Contact</a></li>
+    </ul>
   </div>
 </nav>
 
-<!-- TOAST -->
-<div class="toast" id="toast"></div>
 
-<!-- ===== PAGE: LANDING ===== -->
-<div class="page active" id="page-landing">
-  <div class="landing-hero">
-    <span class="hero-tag">ICET · University of the Punjab</span>
-    <h1>Chemical Engineering<br><span>Alumni Network</span></h1>
-    <p>Connecting graduates of the Institute of Chemical Engineering & Technology across the globe. Register your profile, find your batchmates, and stay connected.</p>
-    <div class="hero-btns">
-      <button class="hero-btn-primary" onclick="handleJoinClick()">Join the Network</button>
-      <button class="hero-btn-secondary" onclick="handleJoinClick()">Browse Alumni</button>
-    </div>
-  </div>
-
-  <div class="stats-strip">
-    <div class="stats-inner">
-      <div class="stat-item"><span class="stat-num" id="stat-total">—</span><span class="stat-lbl">Registered Alumni</span></div>
-      <div class="stat-item"><span class="stat-num" id="stat-countries">—</span><span class="stat-lbl">Countries</span></div>
-      <div class="stat-item"><span class="stat-num">245</span><span class="stat-lbl">Session 2006 Batch</span></div>
-      <div class="stat-item"><span class="stat-num">1+</span><span class="stat-lbl">Sessions</span></div>
-    </div>
-  </div>
-
-  <div class="sessions-section">
-    <div class="section-header">
-      <span class="section-tag">Browse by Session</span>
-      <h2 class="section-title">Select Your Batch</h2>
-    </div>
-    <div class="sessions-grid">
-      <div class="session-card" onclick="handleSessionClick('2006')">
-        <div class="session-year">2006 – 2010</div>
-        <div class="session-dept">Chemical Engineering · ICET</div>
-        <div class="session-stats">
-          <div class="session-stat"><span class="session-stat-num">245</span><span class="session-stat-lbl">Total</span></div>
-          <div class="session-stat"><span class="session-stat-num" id="sess-2006-reg">—</span><span class="session-stat-lbl">Registered</span></div>
-        </div>
-        <span class="session-badge">🟢 Active</span>
-        <span class="session-arrow">→</span>
+<!-- HEADER -->
+<div class="page-header">
+  <div class="header-inner">
+    <span class="page-tag">Alumni Network</span>
+    <div style="display:flex; align-items:center; justify-content:space-between; gap:1.5rem; flex-wrap:wrap; width:100%;">
+      <div style="flex:1;">
+        <h1>Session <span>2006 – 2010</span></h1>
+        <p style="font-size:13px; color:rgba(255,255,255,0.55); margin-top:4px; line-height:1.5;">Institute of Chemical Engineering & Technology · University of the Punjab, Lahore</p>
+        <p class="header-sub" style="margin-top:4px;">Chemical Engineering Alumni · Institute of Chemical Engineering & Technology · University of the Punjab, Lahore. Reconnecting batchmates across the globe — register, update your profile, and stay connected.</p>
       </div>
-      <div class="session-card locked">
-        <div class="session-year">2010 – 2014</div>
-        <div class="session-dept">Chemical Engineering · ICET</div>
-        <div class="session-stats">
-          <div class="session-stat"><span class="session-stat-num">—</span><span class="session-stat-lbl">Total</span></div>
-          <div class="session-stat"><span class="session-stat-num">—</span><span class="session-stat-lbl">Registered</span></div>
-        </div>
-        <span class="session-badge coming">🔜 Coming Soon</span>
-      </div>
-      <div class="session-card locked">
-        <div class="session-year">2014 – 2018</div>
-        <div class="session-dept">Chemical Engineering · ICET</div>
-        <div class="session-stats">
-          <div class="session-stat"><span class="session-stat-num">—</span><span class="session-stat-lbl">Total</span></div>
-          <div class="session-stat"><span class="session-stat-num">—</span><span class="session-stat-lbl">Registered</span></div>
-        </div>
-        <span class="session-badge coming">🔜 Coming Soon</span>
-      </div>
+      <img src="data:image/jpeg;base64,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" alt="ICET Logo" style="height:240px; width:240px; border-radius:50%; border:4px solid rgba(201,168,76,0.6); background:white; padding:4px; flex-shrink:0; margin-right:60px;">
     </div>
-  </div>
-
-  <div class="portal-footer">
-    <p>ICET Alumni Network · Chemical Engineering · University of the Punjab, Lahore · Maintained by <a href="mailto:ranaadeem@hotmail.com">Dr. Adeem Ghaffar Rana</a></p>
-  </div>
-</div>
-
-<!-- ===== PAGE: LOGIN ===== -->
-<div class="page" id="page-login">
-  <div class="login-wrap">
-    <div class="login-card">
-      <div class="login-logo">
-        <div class="agr">AGR</div>
-        <p>ICET Alumni Network</p>
-      </div>
-      <h2 class="login-title">Welcome Back</h2>
-      <p class="login-sub">Sign in with your Google account to access the ICET Chemical Engineering Alumni Network.</p>
-      <button class="google-btn" onclick="signInWithGoogle()">
-        <svg class="google-icon" viewBox="0 0 24 24">
-          <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-          <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-          <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-        </svg>
-        Continue with Google
-      </button>
-      <p class="login-note">By signing in you agree to our community guidelines. Only ICET Chemical Engineering alumni may register a profile.</p>
-      <p style="text-align:center;margin-top:1rem;"><a href="#" onclick="showPage('landing')" style="font-size:13px;color:var(--muted);text-decoration:none;">← Back to home</a></p>
+    <div class="header-stats">
+      <div><span class="hstat-num" id="total-registered">0</span><span class="hstat-lbl">Registered Alumni</span></div>
+      <div><span class="hstat-num" id="total-countries">0</span><span class="hstat-lbl">Countries Represented</span></div>
+      <div><span class="hstat-num">245</span><span class="hstat-lbl">Total Batch Size</span></div>
+      <div><span class="hstat-num">2010</span><span class="hstat-lbl">Graduation Year</span></div>
     </div>
   </div>
 </div>
 
-<!-- ===== PAGE: PROFILE SETUP ===== -->
-<div class="page" id="page-setup">
-  <div class="setup-wrap">
-    <div class="setup-card">
-      <div class="setup-header">
-        <h2>Complete Your Profile</h2>
-        <p>Tell your batchmates where life has taken you since ICET</p>
-      </div>
-      <div class="setup-body">
-        <div class="error-box" id="setup-error"></div>
-        <div class="success-box" id="setup-success"></div>
+<!-- MAIN -->
+<div class="main-wrap">
 
-        <!-- PHOTO -->
-        <div class="setup-photo-upload">
-          <div class="photo-circle-upload" id="photo-upload-circle" onclick="document.getElementById('photo-file').click()">
-            📷
-          </div>
-          <input type="file" id="photo-file" accept="image/*" style="display:none" onchange="handlePhotoSelect(event)">
-          <div class="setup-photo-label">Click to upload profile photo (optional)</div>
-        </div>
+  <!-- LEFT COLUMN -->
+  <div>
 
-        <!-- IDENTITY -->
-        <div class="section-divider">Identity</div>
-        <div class="form-row">
-          <div class="form-group">
-            <label>Session <span class="req">*</span></label>
-            <select id="setup-session" onchange="onSetupSessionChange()">
-              <option value="">Select your session</option>
-              <option value="2006-Morning">2006–2010 · Morning</option>
-              <option value="2006-Evening">2006–2010 · Evening</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label>Roll Number <span class="req">*</span></label>
-            <select id="setup-roll" onchange="onSetupRollChange()" disabled>
-              <option value="">Select session first</option>
-            </select>
-          </div>
+    <!-- ALUMNI PORTAL LINK -->
+    <div class="form-section">
+      <span class="section-tag">Alumni Registration</span>
+      <h2 class="section-title">Join the Alumni Network</h2>
+      <div style="background:white;border:1px solid var(--border);border-radius:12px;overflow:hidden;">
+        <div style="background:var(--navy);padding:1.5rem;">
+          <h3 style="font-family:'Playfair Display',serif;font-size:18px;color:white;margin-bottom:6px;">ICET Alumni Portal</h3>
+          <p style="font-size:13px;color:rgba(255,255,255,0.6);">Create your profile, connect with batchmates, and join the directory</p>
         </div>
-        <div class="form-group">
-          <label>Full Name</label>
-          <div class="name-display" id="setup-name-display"><span class="name-placeholder">Auto-filled from roll number</span></div>
-        </div>
-
-        <!-- CURRENT STATUS -->
-        <div class="section-divider">Current Status</div>
-        <div class="form-row">
-          <div class="form-group">
-            <label>Country of Residence <span class="req">*</span></label>
-            <select id="setup-country" onchange="onSetupCountryChange()">
-              <option value="">Select country</option>
-            </select>
+        <div style="padding:2rem;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem;">
+            <div style="display:flex;gap:10px;align-items:flex-start;">
+              <span style="font-size:20px;">🔐</span>
+              <div><div style="font-size:13px;font-weight:600;color:var(--navy);margin-bottom:2px;">Secure Google Login</div><div style="font-size:12px;color:var(--muted);">Sign in with your Google account — no password needed</div></div>
+            </div>
+            <div style="display:flex;gap:10px;align-items:flex-start;">
+              <span style="font-size:20px;">👤</span>
+              <div><div style="font-size:13px;font-weight:600;color:var(--navy);margin-bottom:2px;">Your Profile</div><div style="font-size:12px;color:var(--muted);">Create and update your profile anytime</div></div>
+            </div>
+            <div style="display:flex;gap:10px;align-items:flex-start;">
+              <span style="font-size:20px;">🌍</span>
+              <div><div style="font-size:13px;font-weight:600;color:var(--navy);margin-bottom:2px;">Alumni Directory</div><div style="font-size:12px;color:var(--muted);">Browse all registered batchmates by session</div></div>
+            </div>
+            <div style="display:flex;gap:10px;align-items:flex-start;">
+              <span style="font-size:20px;">🔒</span>
+              <div><div style="font-size:13px;font-weight:600;color:var(--navy);margin-bottom:2px;">Privacy Protected</div><div style="font-size:12px;color:var(--muted);">Contact details visible only to same session members</div></div>
+            </div>
           </div>
-          <div class="form-group">
-            <label>City <span class="req">*</span></label>
-            <select id="setup-city" disabled>
-              <option value="">Select country first</option>
-            </select>
+          <div style="display:flex;gap:12px;flex-wrap:wrap;">
+            <a href="/alumni.html" style="display:inline-block;background:var(--navy);color:white;padding:13px 32px;border-radius:8px;font-size:15px;font-weight:600;text-decoration:none;transition:all 0.2s;" onmouseover="this.style.background='#1a3a6b'" onmouseout="this.style.background='var(--navy)'">
+              🎓 Join Alumni Network
+            </a>
+            <a href="/alumni.html" style="display:inline-block;background:transparent;color:var(--navy);padding:13px 32px;border-radius:8px;font-size:15px;font-weight:500;text-decoration:none;border:1.5px solid var(--navy);transition:all 0.2s;" onmouseover="this.style.borderColor='var(--gold)';this.style.color='var(--gold)'" onmouseout="this.style.borderColor='var(--navy)';this.style.color='var(--navy)'">
+              Browse Directory →
+            </a>
           </div>
+          <p style="font-size:11px;color:var(--muted);margin-top:12px;">Already registered? <a href="/alumni.html" style="color:var(--gold);text-decoration:none;">Sign in here →</a></p>
         </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label>Job Title <span class="req">*</span></label>
-            <input type="text" id="setup-job" placeholder="e.g. Senior Process Engineer">
-          </div>
-          <div class="form-group">
-            <label>Company / Organisation <span class="req">*</span></label>
-            <input type="text" id="setup-company" placeholder="e.g. Shell Pakistan">
-          </div>
-        </div>
-
-        <!-- CONTACT -->
-        <div class="section-divider">Contact Details</div>
-        <div class="form-row">
-          <div class="form-group">
-            <label>Email Address <span class="req">*</span></label>
-            <input type="email" id="setup-email" placeholder="you@example.com">
-          </div>
-          <div class="form-group">
-            <label>Phone Number <span style="font-size:11px;color:var(--muted);font-weight:400;">(same session only)</span></label>
-            <input type="tel" id="setup-phone" placeholder="+92 300 0000000">
-          </div>
-        </div>
-        <div class="form-group">
-          <label>LinkedIn Profile URL <span class="opt">(optional)</span></label>
-          <input type="url" id="setup-linkedin" placeholder="https://linkedin.com/in/yourname">
-        </div>
-        <div class="form-group">
-          <label>About / Bio <span class="opt">(optional)</span></label>
-          <textarea id="setup-bio" rows="3" placeholder="A brief note about yourself, your career, or memories from ICET..." style="resize:vertical;"></textarea>
-        </div>
-
-        <button class="submit-btn" id="setup-submit-btn" onclick="submitProfile()">Save Profile & Join Network</button>
       </div>
     </div>
+
+<!-- WORLD MAP / COUNTRY DISTRIBUTION -->
+    <div class="map-section">
+      <span class="section-tag">Global Distribution</span>
+      <h2 class="section-title">Where Are We in the World?</h2>
+      <div class="map-placeholder">
+        <div style="background: var(--navy); padding: 1rem 1.25rem; display:flex; justify-content:space-between; align-items:center;">
+          <span style="font-size:13px; color:rgba(255,255,255,0.8); font-weight:500;">🌍 Registered Alumni by Country</span>
+          <span style="font-size:11px; color:rgba(255,255,255,0.4);" id="map-update-time">Loading...</span>
+        </div>
+        <!-- WORLD MAP SVG -->
+        <div style="position:relative; background:#e8f4f8; overflow:hidden; border-bottom: 1px solid var(--border);">
+          <div id="world-map-container" style="width:100%; height:340px; position:relative; overflow:hidden;">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m2!1m1!1s0x0:0x0!2m2!1d20!2d10!3m3!1m2!1s0x0%3A0x0!5e0!3m2!1sen!2s!4v1&z=1"
+              style="display:none">
+            </iframe>
+            <div id="map-pins-layer" style="width:100%;height:340px;position:relative;background:linear-gradient(180deg,#cce8f4 0%,#a8d8ea 100%);overflow:hidden;">
+              <!-- Simplified world map SVG -->
+              <svg viewBox="0 0 1000 500" style="width:100%;height:100%;position:absolute;top:0;left:0;" id="world-svg">
+                <defs>
+                  <style>
+                    .land { fill: #d4e6c3; stroke: #fff; stroke-width: 0.5; }
+                    .land:hover { fill: #b8d4a8; }
+                  </style>
+                </defs>
+                <!-- Simplified continent shapes -->
+                <!-- North America -->
+                <path class="land" d="M 80 80 L 230 60 L 260 90 L 280 140 L 250 200 L 220 220 L 200 260 L 170 250 L 140 230 L 110 200 L 90 160 L 70 120 Z"/>
+                <!-- Central America -->
+                <path class="land" d="M 200 260 L 220 270 L 215 300 L 200 310 L 185 290 Z"/>
+                <!-- South America -->
+                <path class="land" d="M 200 310 L 250 300 L 280 330 L 290 390 L 270 440 L 240 460 L 210 450 L 190 410 L 180 360 L 190 330 Z"/>
+                <!-- Europe -->
+                <path class="land" d="M 430 60 L 510 55 L 530 70 L 520 100 L 500 110 L 480 120 L 460 115 L 440 100 L 425 80 Z"/>
+                <!-- Scandinavia -->
+                <path class="land" d="M 460 30 L 490 25 L 505 45 L 495 65 L 470 70 L 455 55 Z"/>
+                <!-- Africa -->
+                <path class="land" d="M 440 150 L 510 140 L 540 160 L 550 220 L 545 300 L 520 360 L 490 390 L 460 380 L 430 340 L 420 270 L 415 200 L 425 170 Z"/>
+                <!-- Middle East -->
+                <path class="land" d="M 510 110 L 570 105 L 590 130 L 580 160 L 550 165 L 520 150 L 505 130 Z"/>
+                <!-- Asia (main) -->
+                <path class="land" d="M 570 50 L 720 40 L 780 60 L 800 90 L 790 140 L 760 160 L 720 155 L 680 170 L 650 160 L 610 150 L 580 130 L 560 100 Z"/>
+                <!-- South Asia -->
+                <path class="land" d="M 610 150 L 660 145 L 680 170 L 670 210 L 640 220 L 615 200 Z"/>
+                <!-- Southeast Asia -->
+                <path class="land" d="M 700 170 L 760 165 L 780 190 L 770 220 L 740 230 L 710 215 L 695 195 Z"/>
+                <!-- China/East Asia -->
+                <path class="land" d="M 720 80 L 800 70 L 840 90 L 860 120 L 840 155 L 800 160 L 760 155 L 730 135 L 715 105 Z"/>
+                <!-- Japan -->
+                <path class="land" d="M 855 100 L 875 90 L 885 110 L 875 130 L 858 125 Z"/>
+                <!-- Australia -->
+                <path class="land" d="M 760 300 L 860 285 L 900 310 L 910 360 L 880 400 L 840 415 L 790 410 L 755 380 L 745 340 Z"/>
+                <!-- UK -->
+                <path class="land" d="M 430 65 L 445 60 L 450 75 L 440 82 L 428 75 Z"/>
+                <!-- Pakistan specifically -->
+                <path class="land" id="pk-land" d="M 580 130 L 610 120 L 625 135 L 620 155 L 605 160 L 585 150 Z" style="fill:#d4e6c3;"/>
+              </svg>
+
+              <!-- PIN LAYER - populated by JS -->
+              <div id="pins-container" style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;"></div>
+
+              <!-- MAP LEGEND -->
+              <div style="position:absolute;bottom:10px;left:10px;background:rgba(255,255,255,0.92);border-radius:8px;padding:8px 12px;font-size:11px;color:#555;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+                <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;">
+                  <div style="width:12px;height:12px;border-radius:50%;background:#c9a84c;border:2px solid white;box-shadow:0 1px 3px rgba(0,0,0,0.3);"></div>
+                  <span>Alumni Location</span>
+                </div>
+                <div style="color:#aaa;">Pin size = number of alumni</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- COUNTRY LIST BELOW MAP -->
+        <div id="country-list" style="padding:1rem 1.25rem;">
+          <div style="font-size:12px;color:var(--muted);text-align:center;padding:1rem;">Loading alumni data...</div>
+        </div>
+        <p class="map-note">* Live data from alumni registrations. Updates automatically every 5 minutes.</p>
+      </div>
+    </div>
+
+    <!-- BATCH PHOTO - now below map, full width -->
+    <div class="map-section">
+      <span class="section-tag">Our Batch</span>
+      <h2 class="section-title">Batch Photo</h2>
+      <div class="map-placeholder" style="overflow:hidden;">
+        <div style="background: var(--navy); padding: 1rem 1.25rem;">
+          <span style="font-size:13px; color:rgba(255,255,255,0.8); font-weight:500;">📸 Session 2006–2010 · ICET · University of the Punjab</span>
+        </div>
+        <!-- SLIDESHOW -->
+        <div id="batch-slideshow" style="position:relative; background:#1a1a2e; min-height:320px; overflow:hidden;">
+
+          <!-- PLACEHOLDER SLIDES (replace src with real photo URLs) -->
+          <div class="slide active" style="display:flex; align-items:center; justify-content:center; min-height:320px; background:linear-gradient(135deg,#0f1f3d,#1a3a6b); flex-direction:column; gap:1rem; padding:2rem; text-align:center;">
+            <div style="font-size:56px;">📸</div>
+            <div style="font-size:18px; font-weight:600; color:white;">Slide 1 – Add Your Batch Photo</div>
+            <div style="font-size:13px; color:rgba(255,255,255,0.5); max-width:400px; line-height:1.6;">Replace this slide with a real batch photo by updating the HTML</div>
+          </div>
+
+          <div class="slide" style="display:none; align-items:center; justify-content:center; min-height:320px; background:linear-gradient(135deg,#1a3a6b,#0d2744); flex-direction:column; gap:1rem; padding:2rem; text-align:center;">
+            <div style="font-size:56px;">🎓</div>
+            <div style="font-size:18px; font-weight:600; color:white;">Slide 2 – Graduation Day 2010</div>
+            <div style="font-size:13px; color:rgba(255,255,255,0.5); max-width:400px; line-height:1.6;">Add graduation photos here</div>
+          </div>
+
+          <div class="slide" style="display:none; align-items:center; justify-content:center; min-height:320px; background:linear-gradient(135deg,#0d2744,#0f1f3d); flex-direction:column; gap:1rem; padding:2rem; text-align:center;">
+            <div style="font-size:56px;">⚗️</div>
+            <div style="font-size:18px; font-weight:600; color:white;">Slide 3 – Lab Days at ICET</div>
+            <div style="font-size:13px; color:rgba(255,255,255,0.5); max-width:400px; line-height:1.6;">Add lab or campus photos here</div>
+          </div>
+
+          <!-- NAV ARROWS -->
+          <button onclick="changeSlide(-1)" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.15);border:none;color:white;width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:background 0.2s;z-index:10;" onmouseover="this.style.background='rgba(201,168,76,0.6)'" onmouseout="this.style.background='rgba(255,255,255,0.15)'">‹</button>
+          <button onclick="changeSlide(1)" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.15);border:none;color:white;width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:background 0.2s;z-index:10;" onmouseover="this.style.background='rgba(201,168,76,0.6)'" onmouseout="this.style.background='rgba(255,255,255,0.15)'">›</button>
+
+          <!-- DOTS -->
+          <div id="slide-dots" style="position:absolute;bottom:12px;left:50%;transform:translateX(-50%);display:flex;gap:6px;z-index:10;"></div>
+
+          <!-- SLIDE COUNTER -->
+          <div id="slide-counter" style="position:absolute;top:12px;right:12px;background:rgba(0,0,0,0.4);color:white;font-size:11px;padding:3px 10px;border-radius:10px;z-index:10;">1 / 3</div>
+        </div>
+
+        <!-- CAPTION BAR -->
+        <div style="background:#f8f9fa; padding:0.75rem 1.25rem; display:flex; justify-content:space-between; align-items:center; border-top:1px solid var(--border);">
+          <span id="slide-caption" style="font-size:12px; color:var(--muted); font-style:italic;">Session 2006–2010 · ICET · University of the Punjab</span>
+          <a href="mailto:ranaadeem@hotmail.com?subject=Session 2006-2010 Batch Photo" style="font-size:12px; color:var(--gold); text-decoration:none; font-weight:500;">📸 Submit a photo →</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+
+    <!-- REGISTRATION COUNTER -->
+    <div class="reg-counter">
+      <span class="reg-num" id="counter-num">0</span>
+      <div class="reg-label">Alumni Registered</div>
+      <div class="reg-sub">out of 245 total batch members</div>
+      <div class="reg-bar-wrap">
+        <div class="reg-bar-bg"><div class="reg-bar-fill" id="reg-bar"></div></div>
+        <div class="reg-bar-label"><span>0%</span><span id="reg-pct">0% complete</span></div>
+      </div>
+    </div>
+
+    <!-- SESSION BREAKDOWN -->
+    <div class="side-card">
+      <div class="side-card-header">
+        <h3>Batch Breakdown</h3>
+        <p>Morning & Evening sessions</p>
+      </div>
+      <div class="side-card-body">
+        <div class="session-row"><span class="session-label">🌅 Morning Session</span><span class="session-count">181 students</span></div>
+        <div class="session-row"><span class="session-label">🌆 Evening Session</span><span class="session-count">64 students</span></div>
+        <div class="session-row"><span class="session-label">👥 Total Batch</span><span class="session-count">245 students</span></div>
+        <div class="session-row"><span class="session-label">🎓 Graduated</span><span class="session-count">2010</span></div>
+        <div class="session-row"><span class="session-label">📅 Session Start</span><span class="session-count">2006</span></div>
+      </div>
+    </div>
+
+
+
+    <!-- KEY MILESTONES -->
+    <div class="side-card">
+      <div class="side-card-header">
+        <h3>Key Milestones</h3>
+        <p>Our journey together</p>
+      </div>
+      <div class="side-card-body">
+        <div class="milestone">
+          <div class="ms-dot">🎒</div>
+          <div>
+            <div class="ms-year">2006</div>
+            <div class="ms-text">First day at ICET, University of the Punjab, Lahore. Session 2006–2010 begins.</div>
+          </div>
+        </div>
+        <div class="milestone">
+          <div class="ms-dot">⚗️</div>
+          <div>
+            <div class="ms-year">2007–2009</div>
+            <div class="ms-text">Core chemical engineering coursework, lab work, and industry visits across Pakistan.</div>
+          </div>
+        </div>
+        <div class="milestone">
+          <div class="ms-dot">📝</div>
+          <div>
+            <div class="ms-year">2009–2010</div>
+            <div class="ms-text">Final year projects, thesis defenses, and internships at leading Pakistani industries.</div>
+          </div>
+        </div>
+        <div class="milestone">
+          <div class="ms-dot">🎓</div>
+          <div>
+            <div class="ms-year">2010</div>
+            <div class="ms-text">Graduation — 245 Chemical Engineers step into the professional world.</div>
+          </div>
+        </div>
+        <div class="milestone">
+          <div class="ms-dot">🌍</div>
+          <div>
+            <div class="ms-year">2010–Present</div>
+            <div class="ms-text">Batchmates spread across the globe — Pakistan, Gulf, Europe, North America and beyond.</div>
+          </div>
+        </div>
+        <div class="milestone">
+          <div class="ms-dot">🔗</div>
+          <div>
+            <div class="ms-year">2025</div>
+            <div class="ms-text">Alumni network launched — reconnecting the batch after 15 years!</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DEPARTMENT INFO -->
+    <div class="side-card">
+      <div class="side-card-header">
+        <h3>Our Department</h3>
+        <p>ICET · University of the Punjab</p>
+      </div>
+      <div class="side-card-body">
+        <div class="info-row">
+          <span class="info-icon">🏛️</span>
+          <div>
+            <div class="info-label">Institute</div>
+            <div class="info-val"><a href="https://pu.edu.pk/home/department/25/Institute-of-Chemical-Engineering---Technology" target="_blank">Institute of Chemical Engineering & Technology (ICET)</a></div>
+          </div>
+        </div>
+        <div class="info-row">
+          <span class="info-icon">🎓</span>
+          <div>
+            <div class="info-label">University</div>
+            <div class="info-val"><a href="https://pu.edu.pk" target="_blank">University of the Punjab, Lahore</a></div>
+          </div>
+        </div>
+        <div class="info-row">
+          <span class="info-icon">📅</span>
+          <div>
+            <div class="info-label">Established</div>
+            <div class="info-val">1917 — over 100 years of engineering excellence</div>
+          </div>
+        </div>
+        <div class="info-row">
+          <span class="info-icon">📚</span>
+          <div>
+            <div class="info-label">Degree Awarded</div>
+            <div class="info-val">B.Sc. (Engg.) Chemical Engineering</div>
+          </div>
+        </div>
+        <div class="info-row">
+          <span class="info-icon">📍</span>
+          <div>
+            <div class="info-label">Location</div>
+            <div class="info-val">New Campus, University of the Punjab, Lahore, Pakistan</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ANNOUNCEMENTS -->
+    <div class="side-card">
+      <div class="side-card-header">
+        <h3>Announcements</h3>
+        <p>Latest updates for the batch</p>
+      </div>
+      <div class="side-card-body">
+        <div class="announcement">
+          <div class="ann-date">May 2025</div>
+          <div class="ann-text">Alumni registration portal is now live! Fill your profile and help us reconnect the entire batch.</div>
+          <span class="ann-badge">🟢 Active</span>
+        </div>
+        <div class="announcement">
+          <div class="ann-date">Coming Soon</div>
+          <div class="ann-text">Batch reunion planning is underway. Details will be announced once enough alumni have registered.</div>
+          <span class="ann-badge">📅 Planned</span>
+        </div>
+        <div class="announcement">
+          <div class="ann-date">Ongoing</div>
+          <div class="ann-text">Share the registration link with your batchmates on WhatsApp and LinkedIn to help complete the directory.</div>
+          <span class="ann-badge">📢 Action needed</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONNECT -->
+    <div class="side-card">
+      <div class="side-card-header">
+        <h3>Stay Connected</h3>
+        <p>Join the batch network</p>
+      </div>
+      <div class="side-card-body">
+        <a href="mailto:ranaadeem@hotmail.com" class="connect-btn">
+          <span class="cb-icon">✉️</span>
+          <div class="cb-text">
+            Contact Organiser
+            <span class="cb-lbl">ranaadeem@hotmail.com</span>
+          </div>
+        </a>
+        <a href="https://www.linkedin.com/in/ranaadeem/" target="_blank" class="connect-btn">
+          <span class="cb-icon">💼</span>
+          <div class="cb-text">
+            LinkedIn
+            <span class="cb-lbl">Dr. Adeem Ghaffar Rana</span>
+          </div>
+        </a>
+        <p style="font-size:11px; color:var(--muted); margin-top:8px; line-height:1.6;">To add a WhatsApp group link, contact the organiser.</p>
+      </div>
+    </div>
+
   </div>
 </div>
 
-<!-- ===== PAGE: DIRECTORY ===== -->
-<div class="page" id="page-directory">
-  <div class="directory-wrap">
-    <div class="directory-header">
-      <div>
-        <span class="section-tag">Session <span id="dir-session-label">2006–2010</span></span>
-        <h2 class="section-title">Alumni Directory</h2>
-      </div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
-        <input type="text" class="search-box" id="search-input" placeholder="Search by name or roll number..." oninput="filterDirectory()">
-        <div class="directory-filters">
-          <button class="filter-btn active" onclick="setFilter('all', this)">All</button>
-          <button class="filter-btn" onclick="setFilter('Morning', this)">Morning</button>
-          <button class="filter-btn" onclick="setFilter('Evening', this)">Evening</button>
-        </div>
-      </div>
-    </div>
-    <div class="alumni-grid" id="alumni-grid">
-      <div class="loading-spinner">Loading alumni...</div>
-    </div>
-  </div>
+<!-- FOOTER -->
+<div class="page-footer">
+  <p>Chemical Engineering Session 2006–2010 · ICET · University of the Punjab, Lahore &nbsp;·&nbsp; Organised by <a href="mailto:ranaadeem@hotmail.com">Dr. Adeem Ghaffar Rana</a></p>
 </div>
 
-<!-- ===== PAGE: PROFILE VIEW ===== -->
-<div class="page" id="page-profile">
-  <div class="profile-wrap">
-    <a href="#" onclick="showPage('directory')" style="font-size:13px;color:var(--muted);text-decoration:none;display:inline-block;margin-bottom:1rem;">← Back to Directory</a>
-    <div class="profile-card">
-      <div class="profile-banner"></div>
-      <div class="profile-info">
-        <div class="profile-avatar" id="view-avatar">👤</div>
-        <div style="margin-top:1rem;">
-          <h2 class="profile-name" id="view-name">—</h2>
-          <p class="profile-roll" id="view-roll">—</p>
-          <div class="profile-details">
-            <div class="profile-detail"><span class="detail-icon">🏢</span><div><div class="detail-label">Job / Company</div><div class="detail-val" id="view-job">—</div></div></div>
-            <div class="profile-detail"><span class="detail-icon">📍</span><div><div class="detail-label">Location</div><div class="detail-val" id="view-location">—</div></div></div>
-            <div class="profile-detail"><span class="detail-icon">✉️</span><div><div class="detail-label">Email</div><div class="detail-val" id="view-email">—</div></div></div>
-            <div class="profile-detail"><span class="detail-icon">📞</span><div><div class="detail-label">Phone</div><div class="detail-val" id="view-phone">—</div></div></div>
-            <div class="profile-detail"><span class="detail-icon">💼</span><div><div class="detail-label">LinkedIn</div><div class="detail-val" id="view-linkedin">—</div></div></div>
-            <div class="profile-detail"><span class="detail-icon">🎓</span><div><div class="detail-label">Session</div><div class="detail-val" id="view-session">—</div></div></div>
+<script>
+
+  // Country coordinates for map pins (approximate center lat/lng mapped to SVG %)
+  const countryCoords = {
+    "Pakistan": {x: 59, y: 38}, "Saudi Arabia": {x: 54, y: 38},
+    "United Arab Emirates": {x: 57, y: 40}, "United Kingdom": {x: 43, y: 18},
+    "Germany": {x: 47, y: 18}, "United States": {x: 18, y: 38},
+    "Canada": {x: 16, y: 22}, "Australia": {x: 82, y: 72},
+    "Malaysia": {x: 73, y: 52}, "Qatar": {x: 56, y: 38},
+    "Kuwait": {x: 55, y: 36}, "Oman": {x: 58, y: 42},
+    "Bahrain": {x: 56, y: 37}, "France": {x: 45, y: 22},
+    "Netherlands": {x: 46, y: 17}, "Sweden": {x: 48, y: 12},
+    "Norway": {x: 47, y: 10}, "Denmark": {x: 47, y: 15},
+    "Switzerland": {x: 47, y: 22}, "Turkey": {x: 53, y: 28},
+    "India": {x: 63, y: 44}, "China": {x: 73, y: 30},
+    "Singapore": {x: 74, y: 55}, "Japan": {x: 84, y: 28},
+    "South Korea": {x: 82, y: 26}, "Egypt": {x: 51, y: 38},
+    "Nigeria": {x: 46, y: 52}, "South Africa": {x: 48, y: 72},
+    "Brazil": {x: 24, y: 62}, "Mexico": {x: 18, y: 44},
+    "Italy": {x: 48, y: 25}, "Spain": {x: 43, y: 26},
+    "Ireland": {x: 41, y: 18}, "Finland": {x: 50, y: 10},
+    "Belgium": {x: 46, y: 19}, "Austria": {x: 48, y: 21},
+    "Poland": {x: 49, y: 18}, "Russia": {x: 62, y: 15},
+    "Iran": {x: 58, y: 33}, "Iraq": {x: 55, y: 33},
+    "Jordan": {x: 53, y: 34}, "Bangladesh": {x: 66, y: 43},
+    "Afghanistan": {x: 60, y: 33}, "Kazakhstan": {x: 62, y: 24},
+    "New Zealand": {x: 90, y: 80}, "Indonesia": {x: 76, y: 56},
+    "Thailand": {x: 71, y: 48}, "Vietnam": {x: 73, y: 46},
+    "Philippines": {x: 78, y: 48}, "Libya": {x: 48, y: 36},
+    "Morocco": {x: 42, y: 34}, "Algeria": {x: 44, y: 36},
+    "Tunisia": {x: 46, y: 32}, "Sudan": {x: 51, y: 46},
+    "Kenya": {x: 52, y: 56}, "Ghana": {x: 43, y: 52},
+    "Ethiopia": {x: 53, y: 52}, "Uganda": {x: 51, y: 54},
+    "Tanzania": {x: 52, y: 60}
+  };
+
+  const SHEETS_URL = "https://script.google.com/macros/s/AKfycby-vhhVUANxbgLL2r2k3S7sgCBi5G2yjx8VXiyPG-GwgfnkVXBN9qJ5dKnIz77KbiDmEA/exec";
+  const TOTAL_BATCH = 245;
+
+  const countryFlags = {
+    "Pakistan":"🇵🇰","Saudi Arabia":"🇸🇦","United Arab Emirates":"🇦🇪","United Kingdom":"🇬🇧",
+    "Germany":"🇩🇪","United States":"🇺🇸","Canada":"🇨🇦","Australia":"🇦🇺","Malaysia":"🇲🇾",
+    "Qatar":"🇶🇦","Kuwait":"🇰🇼","Oman":"🇴🇲","Bahrain":"🇧🇭","Turkey":"🇹🇷","France":"🇫🇷",
+    "Netherlands":"🇳🇱","Sweden":"🇸🇪","Norway":"🇳🇴","Denmark":"🇩🇰","Switzerland":"🇨🇭",
+    "India":"🇮🇳","China":"🇨🇳","Singapore":"🇸🇬","Japan":"🇯🇵","South Korea":"🇰🇷",
+    "Egypt":"🇪🇬","Nigeria":"🇳🇬","South Africa":"🇿🇦","Brazil":"🇧🇷","Mexico":"🇲🇽",
+    "Italy":"🇮🇹","Spain":"🇪🇸","Ireland":"🇮🇪","Finland":"🇫🇮","Belgium":"🇧🇪",
+    "Austria":"🇦🇹","Poland":"🇵🇱","Russia":"🇷🇺","Iran":"🇮🇷","Iraq":"🇮🇶",
+    "Jordan":"🇯🇴","Bangladesh":"🇧🇩","Afghanistan":"🇦🇫","New Zealand":"🇳🇿",
+    "Indonesia":"🇮🇩","Thailand":"🇹🇭","Vietnam":"🇻🇳","Philippines":"🇵🇭",
+    "Libya":"🇱🇾","Morocco":"🇲🇦","Algeria":"🇩🇿","Tunisia":"🇹🇳","Sudan":"🇸🇩",
+    "Kenya":"🇰🇪","Ghana":"🇬🇭","Ethiopia":"🇪🇹","Uganda":"🇺🇬","Tanzania":"🇹🇿"
+  };
+
+  function updateMapPins(countryCounts) {
+    const pinsContainer = document.getElementById('pins-container');
+    if (!pinsContainer) return;
+    pinsContainer.innerHTML = '';
+    Object.entries(countryCounts).forEach(([country, count]) => {
+      const coords = countryCoords[country];
+      if (!coords) return;
+      const size = Math.max(16, Math.min(40, 16 + count * 4));
+      const pin = document.createElement('div');
+      pin.style.cssText = `position:absolute;left:${coords.x}%;top:${coords.y}%;transform:translate(-50%,-50%);z-index:10;cursor:pointer;`;
+      pin.innerHTML = `
+        <div style="position:relative;" title="${country}: ${count} alumni">
+          <div style="width:${size}px;height:${size}px;background:#c9a84c;border:2px solid white;border-radius:50%;box-shadow:0 2px 8px rgba(0,0,0,0.3);display:flex;align-items:center;justify-content:center;font-size:${Math.max(9,size/2.5)}px;font-weight:700;color:white;animation:pulse 2s infinite;">
+            ${count}
           </div>
-          <div id="view-bio-section" style="margin-top:1.5rem;display:none;">
-            <div style="font-size:11px;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.1em;">About</div>
-            <p id="view-bio" style="font-size:14px;color:var(--text);line-height:1.7;"></p>
+          <div style="position:absolute;bottom:${size+4}px;left:50%;transform:translateX(-50%);background:rgba(15,31,61,0.9);color:white;font-size:10px;padding:3px 7px;border-radius:4px;white-space:nowrap;display:none;" class="pin-tooltip">
+            ${countryFlags[country]||''} ${country}: ${count}
           </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+        </div>`;
+      pin.addEventListener('mouseenter', () => { pin.querySelector('.pin-tooltip').style.display = 'block'; });
+      pin.addEventListener('mouseleave', () => { pin.querySelector('.pin-tooltip').style.display = 'none'; });
+      pinsContainer.appendChild(pin);
+    });
+  }
 
-<!-- Firebase SDKs -->
-<script type="module">
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js';
-import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged }
-  from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js';
-import { getFirestore, doc, setDoc, getDoc, collection, getDocs, query, where, orderBy }
-  from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js';
+  function updateCountryList(countryCounts) {
+    const list = document.getElementById('country-list');
+    if (!list) return;
+    const sorted = Object.entries(countryCounts).sort((a,b) => b[1]-a[1]);
+    if (sorted.length === 0) {
+      list.innerHTML = '<div style="font-size:12px;color:var(--muted);text-align:center;padding:1rem;">No registrations yet. Be the first to register!</div>';
+      return;
+    }
+    list.innerHTML = '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;">' +
+      sorted.map(([country, count]) =>
+        `<div style="background:#f8f9fa;border:1px solid var(--border);border-radius:8px;padding:8px 10px;display:flex;justify-content:space-between;align-items:center;">
+          <span style="font-size:12px;color:var(--text);font-weight:500;">${countryFlags[country]||''} ${country}</span>
+          <span style="font-size:11px;font-weight:600;background:rgba(201,168,76,0.15);color:#92701e;padding:2px 8px;border-radius:10px;">${count}</span>
+        </div>`
+      ).join('') + '</div>';
+  }
 
-const firebaseConfig = {
-  apiKey: "AIzaSyAgUl22Cln6QtY3-HIvI6lE8Zu7n9OblbI",
-  authDomain: "icet-alumni.firebaseapp.com",
-  projectId: "icet-alumni",
-  storageBucket: "icet-alumni.firebasestorage.app",
-  messagingSenderId: "707390888790",
-  appId: "1:707390888790:web:57e6be62e4d11e22c214f7"
-};
+  async function fetchAlumniData() {
+    try {
+      const res = await fetch(SHEETS_URL + '?action=getStats', { method: 'GET', mode: 'cors' });
+      const data = await res.json();
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-const provider = new GoogleAuthProvider();
+      const registered = data.total || 0;
+      const countryCounts = data.countries || {};
+      const countries = Object.keys(countryCounts).length;
 
-// ── Student data ──
+      // Update header stats
+      document.getElementById('total-registered').textContent = registered;
+      document.getElementById('total-countries').textContent = countries;
+      document.getElementById('counter-num').textContent = registered;
+
+      // Update progress bar
+      const pct = Math.round((registered / TOTAL_BATCH) * 100);
+      document.getElementById('reg-pct').textContent = pct + '% complete';
+      document.getElementById('reg-bar').style.width = pct + '%';
+
+      // Update map
+      updateMapPins(countryCounts);
+      updateCountryList(countryCounts);
+
+      // Update timestamp
+      const now = new Date();
+      document.getElementById('map-update-time').textContent = 'Updated: ' + now.toLocaleTimeString();
+
+    } catch(e) {
+      // Fallback if API fails
+      document.getElementById('total-registered').textContent = '—';
+      document.getElementById('total-countries').textContent = '—';
+      document.getElementById('counter-num').textContent = '—';
+      document.getElementById('map-update-time').textContent = 'Connect to see live data';
+      document.getElementById('country-list').innerHTML = '<div style="font-size:12px;color:var(--muted);text-align:center;padding:1rem;">Register to see alumni locations!</div>';
+    }
+  }
+
+  // Add pulse animation
+  const style = document.createElement('style');
+  style.textContent = '@keyframes pulse { 0%,100%{transform:scale(1);box-shadow:0 2px 8px rgba(0,0,0,0.3)} 50%{transform:scale(1.1);box-shadow:0 4px 16px rgba(201,168,76,0.5)} }';
+  document.head.appendChild(style);
+
+  // Fetch on load and every 5 minutes
+  fetchAlumniData();
+  setInterval(fetchAlumniData, 5 * 60 * 1000);
+</script>
+
+
+<script>
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby-vhhVUANxbgLL2r2k3S7sgCBi5G2yjx8VXiyPG-GwgfnkVXBN9qJ5dKnIz77KbiDmEA/exec";
+
 const morningStudents = {
   "M101":"ABDUL WAHAB KHAN","M102":"ZAHID ANJUM","M103":"USMAN RAFIQ","M104":"MEESAM ALI","M105":"IRFAN IQBAL",
   "M106":"WASEEM SAFDAR","M107":"NASEER AHMAD","M108":"RIZWAN HAIDER","M109":"UMAR FAROOQ","M110":"MUHAMMAD FIAZ",
@@ -569,377 +985,143 @@ const eveningStudents = {
   "E215":"MUHAMMAD ZAIN","E216":"USMAN ANWAR DAR","E217":"OMER SHUJAT","E218":"IMRAN RAFIQUE",
   "E219":"NAEEM BHATTI","E220":"ASIF SANI"
 };
-
 const countryCities = {
-  "Pakistan":["Karachi","Lahore","Islamabad","Rawalpindi","Faisalabad","Multan","Peshawar","Quetta","Sialkot","Gujranwala","Other"],
-  "Saudi Arabia":["Riyadh","Jeddah","Mecca","Medina","Dammam","Khobar","Jubail","Yanbu","Other"],
-  "United Arab Emirates":["Dubai","Abu Dhabi","Sharjah","Ajman","Ras Al Khaimah","Al Ain","Other"],
-  "United Kingdom":["London","Birmingham","Manchester","Leeds","Glasgow","Liverpool","Edinburgh","Bristol","Other"],
-  "United States":["New York","Los Angeles","Chicago","Houston","Dallas","Seattle","Denver","Washington DC","Other"],
-  "Canada":["Toronto","Montreal","Vancouver","Calgary","Edmonton","Ottawa","Other"],
-  "Australia":["Sydney","Melbourne","Brisbane","Perth","Adelaide","Canberra","Other"],
-  "Germany":["Berlin","Hamburg","Munich","Cologne","Frankfurt","Stuttgart","Freiberg","Other"],
-  "Malaysia":["Kuala Lumpur","George Town","Johor Bahru","Ipoh","Other"],
-  "Qatar":["Doha","Al Wakrah","Al Khor","Lusail","Other"],
-  "Kuwait":["Kuwait City","Salmiya","Hawalli","Ahmadi","Other"],
-  "Oman":["Muscat","Salalah","Sohar","Nizwa","Other"],
-  "Bahrain":["Manama","Riffa","Muharraq","Other"],
-  "Turkey":["Istanbul","Ankara","Izmir","Other"],
-  "France":["Paris","Lyon","Marseille","Other"],
-  "Netherlands":["Amsterdam","Rotterdam","The Hague","Other"],
-  "Sweden":["Stockholm","Gothenburg","Malmö","Other"],
-  "Norway":["Oslo","Bergen","Stavanger","Other"],
-  "Denmark":["Copenhagen","Aarhus","Other"],
-  "Switzerland":["Zurich","Geneva","Bern","Other"],
-  "Ireland":["Dublin","Cork","Galway","Other"],
-  "Singapore":["Singapore"],
-  "Japan":["Tokyo","Osaka","Yokohama","Other"],
-  "South Korea":["Seoul","Busan","Other"],
-  "India":["Mumbai","Delhi","Bangalore","Hyderabad","Other"],
-  "China":["Beijing","Shanghai","Guangzhou","Other"],
-  "Bangladesh":["Dhaka","Chittagong","Other"],
-  "New Zealand":["Auckland","Wellington","Christchurch","Other"]
+  "Pakistan":["Karachi","Lahore","Islamabad","Rawalpindi","Faisalabad","Multan","Peshawar","Quetta","Sialkot","Gujranwala","Hyderabad","Bahawalpur","Sargodha","Sukkur","Larkana","Sheikhupura","Rahim Yar Khan","Jhang","Gujrat","Mardan","Other"],
+  "Saudi Arabia":["Riyadh","Jeddah","Mecca","Medina","Dammam","Khobar","Dhahran","Jubail","Yanbu","Tabuk","Abha","Taif","Buraidah","Najran","Other"],
+  "United Arab Emirates":["Dubai","Abu Dhabi","Sharjah","Ajman","Ras Al Khaimah","Fujairah","Umm Al Quwain","Al Ain","Other"],
+  "United Kingdom":["London","Birmingham","Manchester","Leeds","Glasgow","Liverpool","Edinburgh","Bristol","Sheffield","Cardiff","Leicester","Coventry","Bradford","Nottingham","Other"],
+  "United States":["New York","Los Angeles","Chicago","Houston","Phoenix","Philadelphia","San Antonio","San Diego","Dallas","San Jose","Austin","Jacksonville","Fort Worth","Columbus","Charlotte","Indianapolis","Seattle","Denver","Washington DC","Nashville","Other"],
+  "Canada":["Toronto","Montreal","Vancouver","Calgary","Edmonton","Ottawa","Winnipeg","Quebec City","Hamilton","Kitchener","London","Halifax","Other"],
+  "Australia":["Sydney","Melbourne","Brisbane","Perth","Adelaide","Canberra","Gold Coast","Newcastle","Hobart","Darwin","Other"],
+  "Germany":["Berlin","Hamburg","Munich","Cologne","Frankfurt","Stuttgart","Düsseldorf","Leipzig","Dortmund","Essen","Other"],
+  "Malaysia":["Kuala Lumpur","George Town","Johor Bahru","Ipoh","Shah Alam","Petaling Jaya","Subang Jaya","Kota Kinabalu","Kuching","Other"],
+  "Qatar":["Doha","Al Wakrah","Al Khor","Dukhan","Mesaieed","Lusail","Other"],
+  "Kuwait":["Kuwait City","Salmiya","Hawalli","Ahmadi","Fahaheel","Jahra","Mangaf","Other"],
+  "Oman":["Muscat","Salalah","Sohar","Nizwa","Sur","Ibra","Buraimi","Other"],
+  "Bahrain":["Manama","Riffa","Muharraq","Hamad Town","Isa Town","Sitra","Budaiya","Other"]
 };
+const allCountries = [...new Set([...Object.keys(countryCities),"Albania","Andorra","Angola","Argentina","Armenia","Belarus","Belgium","Belize","Benin","Bhutan","Bolivia","Bosnia and Herzegovina","Botswana","Brazil","Brunei","Bulgaria","Burkina Faso","Burundi","Cambodia","Cameroon","Chad","Chile","China","Colombia","Congo","Costa Rica","Croatia","Cuba","Cyprus","Czech Republic","Denmark","Djibouti","Dominican Republic","Ecuador","Egypt","El Salvador","Estonia","Ethiopia","Finland","France","Georgia","Ghana","Greece","Guatemala","Haiti","Honduras","Hungary","Iceland","India","Indonesia","Iran","Iraq","Ireland","Israel","Italy","Jamaica","Japan","Jordan","Kazakhstan","Kenya","Kyrgyzstan","Laos","Latvia","Lebanon","Libya","Lithuania","Luxembourg","Maldives","Mali","Malta","Mexico","Moldova","Mongolia","Morocco","Mozambique","Myanmar","Namibia","Nepal","Netherlands","New Zealand","Nicaragua","Niger","Nigeria","North Korea","Norway","Panama","Paraguay","Peru","Philippines","Poland","Portugal","Romania","Russia","Rwanda","Senegal","Serbia","Sierra Leone","Singapore","Slovakia","Slovenia","Somalia","South Africa","South Korea","South Sudan","Spain","Sri Lanka","Sudan","Sweden","Switzerland","Syria","Taiwan","Tajikistan","Tanzania","Thailand","Tunisia","Turkey","Turkmenistan","Uganda","Ukraine","United States","Uruguay","Uzbekistan","Venezuela","Vietnam","Yemen","Zambia","Zimbabwe"])].sort();
 
-const allCountries = [...new Set([...Object.keys(countryCities),"Afghanistan","Albania","Algeria","Argentina","Armenia","Austria","Azerbaijan","Belarus","Belgium","Bolivia","Bosnia and Herzegovina","Brazil","Bulgaria","Cambodia","Cameroon","Chile","Colombia","Croatia","Cuba","Czech Republic","Ecuador","Egypt","Ethiopia","Finland","Georgia","Ghana","Greece","Hungary","Indonesia","Iran","Iraq","Israel","Italy","Jamaica","Jordan","Kazakhstan","Kenya","Libya","Lithuania","Luxembourg","Mexico","Moldova","Morocco","Myanmar","Nepal","Nigeria","Pakistan","Panama","Peru","Philippines","Poland","Portugal","Romania","Russia","Serbia","Slovakia","Slovenia","South Africa","Spain","Sri Lanka","Sudan","Syria","Taiwan","Thailand","Tunisia","Ukraine","Uzbekistan","Venezuela","Vietnam","Yemen"])].sort();
+const cs = document.getElementById('country-select');
+allCountries.forEach(c => { const o = document.createElement('option'); o.value = c; o.textContent = c; cs.appendChild(o); });
 
-// Populate country dropdown
-const countrySelect = document.getElementById('setup-country');
-allCountries.forEach(c => {
-  const o = document.createElement('option');
-  o.value = c; o.textContent = c;
-  countrySelect.appendChild(o);
-});
-
-// ── State ──
-let currentUser = null;
-let currentUserProfile = null;
-let allAlumni = [];
-let activeFilter = 'all';
-let selectedPhotoBase64 = '';
-let selectedPhotoMime = '';
-
-// ── Auth state ──
-onAuthStateChanged(auth, async (user) => {
-  if (user) {
-    currentUser = user;
-    updateNavUser(user);
-    const profile = await getUserProfile(user.uid);
-    currentUserProfile = profile;
-    if (!profile) {
-      showPage('setup');
-    }
-    loadStats();
-  } else {
-    currentUser = null;
-    currentUserProfile = null;
-    updateNavUser(null);
-  }
-});
-
-function updateNavUser(user) {
-  const area = document.getElementById('nav-user-area');
-  if (user) {
-    area.innerHTML = `
-      <div class="nav-user">
-        ${user.photoURL ? `<img src="${user.photoURL}" alt="avatar">` : ''}
-        <span>${user.displayName ? user.displayName.split(' ')[0] : 'User'}</span>
-        <button class="nav-btn btn-outline" onclick="showPage('directory')">Directory</button>
-        <button class="nav-btn btn-outline" onclick="signOutUser()">Sign Out</button>
-      </div>`;
-  } else {
-    area.innerHTML = `<button class="nav-btn btn-gold" onclick="showPage('login')">Sign In</button>`;
-  }
-}
-
-// ── Auth functions ──
-window.signInWithGoogle = async () => {
-  try {
-    await signInWithPopup(auth, provider);
-    showToast('Signed in successfully!');
-  } catch (e) {
-    showToast('Sign in failed. Please try again.');
-  }
-};
-
-window.signOutUser = async () => {
-  await signOut(auth);
-  showPage('landing');
-  showToast('Signed out.');
-};
-
-// ── Firestore ──
-async function getUserProfile(uid) {
-  const ref = doc(db, 'alumni', uid);
-  const snap = await getDoc(ref);
-  return snap.exists() ? snap.data() : null;
-}
-
-async function loadStats() {
-  try {
-    const snap = await getDocs(collection(db, 'alumni'));
-    const total = snap.size;
-    const countries = new Set();
-    let sess2006 = 0;
-    snap.forEach(d => {
-      const data = d.data();
-      if (data.country) countries.add(data.country);
-      if (data.session && data.session.includes('2006')) sess2006++;
-    });
-    document.getElementById('stat-total').textContent = total;
-    document.getElementById('stat-countries').textContent = countries.size;
-    document.getElementById('sess-2006-reg').textContent = sess2006;
-  } catch(e) {}
-}
-
-// ── Page navigation ──
-window.showPage = (page) => {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.getElementById('page-' + page).classList.add('active');
-  window.scrollTo(0, 0);
-};
-
-window.handleJoinClick = () => {
-  if (currentUser) {
-    if (currentUserProfile) showPage('directory');
-    else showPage('setup');
-  } else {
-    showPage('login');
-  }
-};
-
-window.handleSessionClick = (session) => {
-  if (!currentUser) { showPage('login'); return; }
-  if (!currentUserProfile) { showPage('setup'); return; }
-  loadDirectory(session);
-};
-
-// ── Setup form ──
-window.onSetupSessionChange = () => {
-  const session = document.getElementById('setup-session').value;
-  const rollSelect = document.getElementById('setup-roll');
-  rollSelect.innerHTML = '<option value="">Select roll number</option>';
-  document.getElementById('setup-name-display').innerHTML = '<span class="name-placeholder">Auto-filled from roll number</span>';
-  if (!session) { rollSelect.disabled = true; return; }
-  const db2 = session === '2006-Morning' ? morningStudents : eveningStudents;
-  Object.keys(db2).sort().forEach(r => {
-    const o = document.createElement('option');
-    o.value = r; o.textContent = r;
-    rollSelect.appendChild(o);
-  });
-  rollSelect.disabled = false;
-};
-
-window.onSetupRollChange = () => {
-  const session = document.getElementById('setup-session').value;
-  const roll = document.getElementById('setup-roll').value;
-  const db2 = session === '2006-Morning' ? morningStudents : eveningStudents;
-  const nameDisplay = document.getElementById('setup-name-display');
-  nameDisplay.innerHTML = (roll && db2[roll]) ? db2[roll] : '<span class="name-placeholder">Auto-filled from roll number</span>';
-};
-
-window.onSetupCountryChange = () => {
-  const country = document.getElementById('setup-country').value;
-  const citySelect = document.getElementById('setup-city');
+function onCountryChange() {
+  const country = document.getElementById('country-select').value;
+  const citySelect = document.getElementById('city-select');
   citySelect.innerHTML = '<option value="">Select city</option>';
-  const cities = countryCities[country] || ['Other'];
-  cities.forEach(c => { const o = document.createElement('option'); o.value = c; o.textContent = c; citySelect.appendChild(o); });
+  if (!country) { citySelect.disabled = true; citySelect.innerHTML = '<option value="">Select country first</option>'; return; }
+  const cities = countryCities[country] || ["Other"];
+  cities.forEach(city => { const o = document.createElement('option'); o.value = city; o.textContent = city; citySelect.appendChild(o); });
   citySelect.disabled = false;
-};
-
-window.handlePhotoSelect = (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
-  if (file.size > 3 * 1024 * 1024) { showToast('Photo must be under 3MB'); return; }
-  selectedPhotoMime = file.type;
+}
+function onSessionChange() {
+  const session = document.getElementById('session-select').value;
+  const rollSelect = document.getElementById('roll-select');
+  rollSelect.innerHTML = '<option value="">Select roll number</option>';
+  document.getElementById('name-display').innerHTML = '<span class="name-placeholder">Auto-filled when you select your roll number</span>';
+  if (!session) { rollSelect.disabled = true; rollSelect.innerHTML = '<option value="">Select session first</option>'; return; }
+  const db = session === 'morning' ? morningStudents : eveningStudents;
+  Object.keys(db).sort().forEach(roll => { const o = document.createElement('option'); o.value = roll; o.textContent = roll; rollSelect.appendChild(o); });
+  rollSelect.disabled = false;
+}
+function onRollChange() {
+  const session = document.getElementById('session-select').value;
+  const roll = document.getElementById('roll-select').value;
+  const db = session === 'morning' ? morningStudents : eveningStudents;
+  document.getElementById('name-display').innerHTML = (roll && db[roll]) ? db[roll] : '<span class="name-placeholder">Auto-filled when you select your roll number</span>';
+}
+let photoBase64 = '', photoMime = '';
+function onPhotoChange(e) {
+  const file = e.target.files[0]; if (!file) return;
+  const warn = document.getElementById('photo-size-warn');
+  if (file.size > 3 * 1024 * 1024) { warn.style.display = 'block'; photoBase64 = ''; return; }
+  warn.style.display = 'none'; photoMime = file.type;
   const reader = new FileReader();
-  reader.onload = ev => {
-    selectedPhotoBase64 = ev.target.result;
-    const circle = document.getElementById('photo-upload-circle');
-    circle.innerHTML = `<img src="${ev.target.result}" alt="photo">`;
+  reader.onload = function(ev) {
+    photoBase64 = ev.target.result;
+    document.getElementById('upload-icon').innerHTML = '<img class="preview-img" src="' + ev.target.result + '" alt="Preview">';
+    document.getElementById('photo-label').textContent = '✓ ' + file.name;
   };
   reader.readAsDataURL(file);
-};
-
-window.submitProfile = async () => {
-  const session = document.getElementById('setup-session').value;
-  const roll = document.getElementById('setup-roll').value;
-  const country = document.getElementById('setup-country').value;
-  const city = document.getElementById('setup-city').value;
-  const job = document.getElementById('setup-job').value.trim();
-  const company = document.getElementById('setup-company').value.trim();
-  const email = document.getElementById('setup-email').value.trim();
-  const phone = document.getElementById('setup-phone').value.trim();
-  const linkedin = document.getElementById('setup-linkedin').value.trim();
-  const bio = document.getElementById('setup-bio').value.trim();
-
-  const errBox = document.getElementById('setup-error');
-  const sucBox = document.getElementById('setup-success');
-
-  if (!session || !roll || !country || !city || !job || !company || !email) {
-    errBox.textContent = '⚠️ Please fill all required fields.';
-    errBox.style.display = 'block'; return;
-  }
-  errBox.style.display = 'none';
-
-  const db2 = session === '2006-Morning' ? morningStudents : eveningStudents;
-  const name = db2[roll];
-  if (!name) { errBox.textContent = '⚠️ Invalid roll number.'; errBox.style.display = 'block'; return; }
-
-  // Check roll number not already taken
-  const rollQuery = query(collection(db, 'alumni'), where('roll', '==', roll));
-  const rollSnap = await getDocs(rollQuery);
-  if (!rollSnap.empty && rollSnap.docs[0].id !== currentUser.uid) {
-    errBox.textContent = '⚠️ This roll number is already registered. Contact admin if this is an error.';
-    errBox.style.display = 'block'; return;
-  }
-
-  const btn = document.getElementById('setup-submit-btn');
-  btn.disabled = true; btn.textContent = 'Saving...';
-
-  try {
-    const profileData = {
-      uid: currentUser.uid,
-      name, roll, session, country, city, job, company, email, phone, linkedin, bio,
-      photoBase64: selectedPhotoBase64,
-      googleName: currentUser.displayName,
-      googlePhoto: currentUser.photoURL,
-      registeredAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
-    };
-
-    await setDoc(doc(db, 'alumni', currentUser.uid), profileData);
-    currentUserProfile = profileData;
-    sucBox.textContent = '✅ Profile saved! Welcome to the ICET Alumni Network!';
-    sucBox.style.display = 'block';
-    setTimeout(() => { loadDirectory('2006'); }, 1500);
-  } catch(e) {
-    errBox.textContent = '⚠️ Error saving profile: ' + e.message;
-    errBox.style.display = 'block';
-    btn.disabled = false; btn.textContent = 'Save Profile & Join Network';
-  }
-};
-
-// ── Directory ──
-async function loadDirectory(session) {
-  showPage('directory');
-  document.getElementById('dir-session-label').textContent = session === '2006' ? '2006–2010' : session;
-  const grid = document.getElementById('alumni-grid');
-  grid.innerHTML = '<div class="loading-spinner">Loading alumni...</div>';
-
-  try {
-    const q = query(collection(db, 'alumni'), where('session', 'in', ['2006-Morning', '2006-Evening']));
-    const snap = await getDocs(q);
-    allAlumni = [];
-    snap.forEach(d => allAlumni.push(d.data()));
-    allAlumni.sort((a, b) => a.roll.localeCompare(b.roll));
-    renderDirectory();
-  } catch(e) {
-    grid.innerHTML = '<div class="loading-spinner">Error loading data.</div>';
-  }
 }
-
-function renderDirectory() {
-  const grid = document.getElementById('alumni-grid');
-  const search = document.getElementById('search-input').value.toLowerCase();
-  let filtered = allAlumni.filter(a => {
-    const matchSearch = !search || a.name.toLowerCase().includes(search) || a.roll.toLowerCase().includes(search);
-    const matchFilter = activeFilter === 'all' || a.session.includes(activeFilter);
-    return matchSearch && matchFilter;
+function setProgress(pct, label) {
+  document.getElementById('progress-bar').style.width = pct + '%';
+  document.getElementById('progress-label').textContent = label;
+}
+function submitForm() {
+  const session = document.getElementById('session-select').value;
+  const roll = document.getElementById('roll-select').value;
+  const country = document.getElementById('country-select').value;
+  const city = document.getElementById('city-select').value;
+  const job = document.getElementById('job-input').value.trim();
+  const company = document.getElementById('company-input').value.trim();
+  const email = document.getElementById('email-input').value.trim();
+  const phone = document.getElementById('phone-input').value.trim();
+  const linkedin = document.getElementById('linkedin-input').value.trim();
+  const errMsg = document.getElementById('error-msg');
+  if (!session || !roll || !country || !city || !job || !company || !email || !phone) { errMsg.style.display = 'block'; return; }
+  errMsg.style.display = 'none';
+  const db = session === 'morning' ? morningStudents : eveningStudents;
+  const name = db[roll];
+  const btn = document.getElementById('submit-btn');
+  btn.disabled = true; btn.textContent = 'Submitting...';
+  document.getElementById('progress-wrap').style.display = 'block';
+  setProgress(20, 'Preparing your data...');
+  setTimeout(() => setProgress(50, photoBase64 ? 'Uploading photo to Google Drive...' : 'Saving your record...'), 300);
+  fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ session, roll, name, country, city, job, company, email, phone, linkedin, photoBase64, photoMime }) })
+  .then(() => {
+    setProgress(100, 'Done!');
+    setTimeout(() => {
+      document.getElementById('main-form').style.display = 'none';
+      document.getElementById('success-box').style.display = 'block';
+      document.getElementById('success-msg').textContent = roll + ' · ' + name + ' — your registration has been saved! ' + (photoBase64 ? 'Photo uploaded to Google Drive ✓' : '');
+    }, 500);
+  })
+  .catch(() => {
+    btn.disabled = false; btn.textContent = 'Submit Registration';
+    document.getElementById('progress-wrap').style.display = 'none';
+    errMsg.textContent = '⚠️ Submission failed. Please check your connection and try again.';
+    errMsg.style.display = 'block';
   });
-
-  if (filtered.length === 0) {
-    grid.innerHTML = '<div class="loading-spinner">No alumni found.</div>'; return;
-  }
-
-  grid.innerHTML = filtered.map(a => {
-    const initials = a.name.split(' ').map(w => w[0]).slice(0, 2).join('');
-    const photoHtml = a.photoBase64
-      ? `<img src="${a.photoBase64}" alt="${a.name}">`
-      : initials;
-    const sessionType = a.session.includes('Morning') ? 'M' : 'E';
-    return `<div class="alumni-card" onclick="viewProfile('${a.uid}')">
-      <span class="alumni-session-badge">${sessionType} · ${a.roll}</span>
-      <div class="alumni-photo">${photoHtml}</div>
-      <div class="alumni-name">${a.name}</div>
-      <div class="alumni-roll">${a.roll} · ${a.session}</div>
-      <div class="alumni-job">${a.job} @ ${a.company}</div>
-      <div class="alumni-country">📍 ${a.city}, ${a.country}</div>
-    </div>`;
-  }).join('');
 }
-
-window.filterDirectory = () => renderDirectory();
-window.setFilter = (filter, btn) => {
-  activeFilter = filter;
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  renderDirectory();
-};
-
-// ── Profile view ──
-window.viewProfile = (uid) => {
-  const profile = allAlumni.find(a => a.uid === uid);
-  if (!profile) return;
-
-  const isSameSession = currentUserProfile && currentUserProfile.session === profile.session;
-
-  const initials = profile.name.split(' ').map(w => w[0]).slice(0, 2).join('');
-  const avatarEl = document.getElementById('view-avatar');
-  if (profile.photoBase64) {
-    avatarEl.innerHTML = `<img src="${profile.photoBase64}" alt="${profile.name}">`;
-  } else {
-    avatarEl.innerHTML = initials;
-  }
-
-  document.getElementById('view-name').textContent = profile.name;
-  document.getElementById('view-roll').textContent = `${profile.roll} · ${profile.session}`;
-  document.getElementById('view-job').textContent = `${profile.job} @ ${profile.company}`;
-  document.getElementById('view-location').textContent = `${profile.city}, ${profile.country}`;
-  document.getElementById('view-email').innerHTML = `<a href="mailto:${profile.email}">${profile.email}</a>`;
-  document.getElementById('view-session').textContent = profile.session;
-
-  // Phone - only same session
-  const phoneEl = document.getElementById('view-phone');
-  if (isSameSession && profile.phone) {
-    phoneEl.innerHTML = `<a href="tel:${profile.phone}">${profile.phone}</a>`;
-  } else if (profile.phone) {
-    phoneEl.innerHTML = `<span class="phone-locked">🔒 Visible to same session members only</span>`;
-  } else {
-    phoneEl.textContent = 'Not provided';
-  }
-
-  // LinkedIn
-  const linkedinEl = document.getElementById('view-linkedin');
-  if (profile.linkedin) {
-    linkedinEl.innerHTML = `<a href="${profile.linkedin}" target="_blank">View Profile →</a>`;
-  } else {
-    linkedinEl.textContent = 'Not provided';
-  }
-
-  // Bio
-  const bioSection = document.getElementById('view-bio-section');
-  if (profile.bio) {
-    document.getElementById('view-bio').textContent = profile.bio;
-    bioSection.style.display = 'block';
-  } else {
-    bioSection.style.display = 'none';
-  }
-
-  showPage('profile');
-};
-
-// ── Toast ──
-window.showToast = (msg) => {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 3000);
-};
-
-// Load stats on start
-loadStats();
 </script>
 
+
+<script>
+// SLIDESHOW
+let currentSlide = 0;
+let slideTimer;
+const slides = document.querySelectorAll('.slide');
+const dotsContainer = document.getElementById('slide-dots');
+const counter = document.getElementById('slide-counter');
+
+// Create dots
+slides.forEach((_, i) => {
+  const dot = document.createElement('div');
+  dot.style.cssText = `width:8px;height:8px;border-radius:50%;background:${i===0?'white':'rgba(255,255,255,0.4)'};cursor:pointer;transition:background 0.3s;`;
+  dot.onclick = () => goToSlide(i);
+  dotsContainer.appendChild(dot);
+});
+
+function goToSlide(n) {
+  slides[currentSlide].style.display = 'none';
+  dotsContainer.children[currentSlide].style.background = 'rgba(255,255,255,0.4)';
+  currentSlide = (n + slides.length) % slides.length;
+  slides[currentSlide].style.display = 'flex';
+  dotsContainer.children[currentSlide].style.background = 'white';
+  counter.textContent = (currentSlide + 1) + ' / ' + slides.length;
+  resetTimer();
+}
+
+function changeSlide(dir) { goToSlide(currentSlide + dir); }
+
+function resetTimer() {
+  clearInterval(slideTimer);
+  slideTimer = setInterval(() => goToSlide(currentSlide + 1), 5000);
+}
+
+// Start auto-play
+slideTimer = setInterval(() => goToSlide(currentSlide + 1), 5000);
+</script>
 </body>
 </html>
