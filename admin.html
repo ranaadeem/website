@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Panel – ICET Alumni</title>
+<link rel="icon" type="image/png" href="/favicon.png">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0f1f3d;--gold:#c9a84c;--gold-light:#e8d5a3;--cream:#faf8f4;--white:#fff;--text:#1a1a2e;--muted:#6b7280;--border:#e5e7eb;--green:#059669;--red:#dc2626;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);min-height:100vh;}
+/* NAV */
+nav{background:var(--navy);border-bottom:2px solid var(--gold);padding:0 1.5rem;height:64px;display:flex;align-items:center;justify-content:space-between;}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
+.nav-logo-agr{font-family:Georgia,serif;font-size:22px;font-weight:700;color:var(--gold);letter-spacing:2px;border:2px solid var(--gold);padding:2px 8px;border-radius:4px;}
+.nav-logo-name{font-size:13px;color:rgba(255,255,255,0.75);}
+.nav-right{display:flex;gap:10px;align-items:center;}
+.nav-btn{font-size:13px;font-weight:500;padding:7px 14px;border-radius:6px;cursor:pointer;border:none;font-family:inherit;transition:all 0.2s;}
+.btn-gold{background:var(--gold);color:var(--navy);}
+.btn-outline{background:transparent;color:rgba(255,255,255,0.75);border:1px solid rgba(255,255,255,0.3);}
+.btn-outline:hover{border-color:var(--gold);color:var(--gold);}
+/* LAYOUT */
+.admin-wrap{max-width:1100px;margin:0 auto;padding:2rem;}
+.admin-header{margin-bottom:2rem;}
+.admin-header h1{font-family:'Playfair Display',serif;font-size:2rem;color:var(--navy);}
+.admin-header p{font-size:14px;color:var(--muted);margin-top:4px;}
+/* STATS ROW */
+.admin-stats{display:grid;grid-template-columns:repeat(5,1fr);gap:1rem;margin-bottom:2rem;}
+.admin-stat{background:white;border:1px solid var(--border);border-radius:10px;padding:1.25rem;text-align:center;}
+.admin-stat .num{font-family:'Playfair Display',serif;font-size:28px;font-weight:700;color:var(--navy);}
+.admin-stat .lbl{font-size:12px;color:var(--muted);margin-top:2px;}
+/* TABS */
+.admin-tabs{display:flex;gap:4px;background:white;border:1px solid var(--border);border-radius:8px;padding:4px;margin-bottom:1.5rem;width:fit-content;}
+.admin-tab{padding:8px 18px;border-radius:5px;font-size:13px;font-weight:500;cursor:pointer;border:none;background:transparent;color:var(--muted);font-family:inherit;transition:all 0.2s;}
+.admin-tab.active{background:var(--navy);color:white;}
+/* TABLES */
+.admin-section{display:none;}
+.admin-section.active{display:block;}
+.section-controls{display:flex;gap:1rem;align-items:center;margin-bottom:1rem;flex-wrap:wrap;}
+.search-input{padding:8px 12px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:inherit;outline:none;width:240px;}
+.search-input:focus{border-color:var(--gold);}
+.export-btn{background:var(--green);color:white;padding:8px 16px;border:none;border-radius:6px;font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;}
+.add-btn{background:var(--navy);color:var(--gold);padding:8px 16px;border:none;border-radius:6px;font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;}
+table{width:100%;border-collapse:collapse;background:white;border-radius:10px;overflow:hidden;border:1px solid var(--border);}
+th{background:var(--navy);color:white;text-align:left;padding:10px 14px;font-size:12px;font-weight:500;text-transform:uppercase;letter-spacing:0.06em;}
+td{padding:10px 14px;font-size:13px;border-bottom:1px solid var(--border);vertical-align:middle;}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:#f9f8f6;}
+.td-photo{width:40px;height:40px;border-radius:50%;background:var(--navy);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--gold);overflow:hidden;}
+.td-photo img{width:100%;height:100%;object-fit:cover;}
+.badge{font-size:10px;padding:2px 8px;border-radius:10px;font-weight:600;}
+.badge-morning{background:#eff6ff;color:#1d4ed8;}
+.badge-evening{background:#f0fdf4;color:#166534;}
+.badge-pending{background:#fff7ed;color:#9a3412;}
+.badge-approved{background:#f0fdf4;color:#166534;}
+.badge-deceased{background:#f3f4f6;color:var(--muted);}
+.action-btn{font-size:12px;padding:4px 10px;border-radius:4px;cursor:pointer;border:none;font-family:inherit;transition:all 0.2s;margin-right:4px;}
+.btn-approve{background:var(--green);color:white;}
+.btn-reject{background:var(--red);color:white;}
+.btn-delete{background:#fef2f2;color:var(--red);border:1px solid #fee2e2;}
+.btn-deceased{background:#f3f4f6;color:var(--muted);border:1px solid var(--border);}
+.btn-edit-admin{background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe;}
+/* ADD FORM */
+.add-form{background:white;border:1px solid var(--border);border-radius:10px;padding:1.5rem;margin-bottom:1.5rem;display:none;}
+.add-form.open{display:block;}
+.add-form h3{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--navy);margin-bottom:1rem;}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;}
+.form-field label{display:block;font-size:11px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px;}
+.form-field input,.form-field select,.form-field textarea{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:inherit;outline:none;}
+.form-field input:focus,.form-field select:focus{border-color:var(--gold);}
+.form-row-full{grid-column:1/-1;}
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:1000;display:none;align-items:center;justify-content:center;}
+.modal-overlay.open{display:flex;}
+.modal{background:white;border-radius:12px;padding:2rem;max-width:480px;width:90%;max-height:80vh;overflow-y:auto;}
+.modal h3{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--navy);margin-bottom:1rem;}
+.modal-btns{display:flex;gap:8px;margin-top:1.5rem;justify-content:flex-end;}
+.modal-btn{padding:9px 20px;border-radius:6px;font-size:13px;font-weight:500;cursor:pointer;border:none;font-family:inherit;}
+.modal-cancel{background:#f3f4f6;color:var(--muted);}
+.modal-confirm{background:var(--red);color:white;}
+/* TOAST */
+.toast{position:fixed;bottom:1.5rem;right:1.5rem;background:var(--navy);color:white;padding:12px 20px;border-radius:8px;font-size:13px;z-index:9999;opacity:0;transform:translateY(10px);transition:all 0.3s;pointer-events:none;}
+.toast.show{opacity:1;transform:translateY(0);}
+/* ACCESS DENIED */
+.access-denied{text-align:center;padding:5rem 2rem;}
+.access-denied h2{font-family:'Playfair Display',serif;font-size:1.75rem;color:var(--navy);margin-bottom:0.75rem;}
+.access-denied p{color:var(--muted);font-size:15px;}
+@media(max-width:768px){
+  .admin-stats{grid-template-columns:1fr 1fr;}
+  .form-grid{grid-template-columns:1fr;}
+  table{font-size:12px;}
+  th,td{padding:8px 10px;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo">
+    <span class="nav-logo-agr">AGR</span>
+    <span class="nav-logo-name">Admin Panel</span>
+  </a>
+  <div class="nav-right">
+    <span id="admin-user-name" style="font-size:13px;color:rgba(255,255,255,0.7);"></span>
+    <a href="/alumni.html" class="nav-btn btn-outline">← Portal</a>
+    <button class="nav-btn btn-gold" id="sign-out-btn" onclick="doSignOut()" style="display:none">Sign Out</button>
+  </div>
+</nav>
+
+<div id="toast" class="toast"></div>
+
+<!-- ACCESS DENIED (shown if not admin) -->
+<div id="access-denied" class="access-denied" style="display:none">
+  <h2>Access Denied</h2>
+  <p>This page is only accessible to the portal administrator.</p>
+  <p style="margin-top:1rem;font-size:13px;color:var(--muted);">If you're the admin, make sure you're signed in with the correct Google account and your UID is set in admin.html.</p>
+  <a href="/alumni.html" style="display:inline-block;margin-top:1.5rem;color:var(--gold);text-decoration:none;font-size:14px;">← Return to Portal</a>
+</div>
+
+<!-- LOADING -->
+<div id="loading-state" style="text-align:center;padding:5rem;color:var(--muted);">Verifying access...</div>
+
+<!-- ADMIN CONTENT (hidden until verified) -->
+<div id="admin-content" style="display:none">
+  <div class="admin-wrap">
+    <div class="admin-header">
+      <h1>⚙ Admin Panel</h1>
+      <p>ICET Chemical Engineering Alumni Portal — Management Dashboard</p>
+    </div>
+
+    <!-- Stats -->
+    <div class="admin-stats">
+      <div class="admin-stat"><div class="num" id="as-total">–</div><div class="lbl">Total Alumni</div></div>
+      <div class="admin-stat"><div class="num" id="as-morning">–</div><div class="lbl">Morning</div></div>
+      <div class="admin-stat"><div class="num" id="as-evening">–</div><div class="lbl">Evening</div></div>
+      <div class="admin-stat"><div class="num" id="as-pending-notices">–</div><div class="lbl">Pending Notices</div></div>
+      <div class="admin-stat"><div class="num" id="as-pending-ann">–</div><div class="lbl">Pending Announcements</div></div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="admin-tabs">
+      <button class="admin-tab active" onclick="switchAdminTab('alumni',this)">👥 Alumni</button>
+      <button class="admin-tab" onclick="switchAdminTab('notices',this)">📌 Notices</button>
+      <button class="admin-tab" onclick="switchAdminTab('announcements',this)">📢 Announcements</button>
+      <button class="admin-tab" onclick="switchAdminTab('add',this)">➕ Add Alumni</button>
+    </div>
+
+    <!-- ── ALUMNI TAB ── -->
+    <div id="tab-alumni" class="admin-section active">
+      <div class="section-controls">
+        <input class="search-input" id="alumni-search" placeholder="Search name, roll, email..." oninput="renderAlumniTable()">
+        <button class="export-btn" onclick="exportCSV()">📥 Export CSV</button>
+      </div>
+      <table>
+        <thead>
+          <tr><th>Photo</th><th>Name</th><th>Roll</th><th>Session</th><th>Location</th><th>Job</th><th>Email</th><th>Registered</th><th>Actions</th></tr>
+        </thead>
+        <tbody id="alumni-tbody"><tr><td colspan="9" style="text-align:center;color:var(--muted);padding:2rem">Loading...</td></tr></tbody>
+      </table>
+    </div>
+
+    <!-- ── NOTICES TAB ── -->
+    <div id="tab-notices" class="admin-section">
+      <div class="section-controls">
+        <span style="font-size:13px;color:var(--muted);">Posts pending approval appear first.</span>
+      </div>
+      <table>
+        <thead><tr><th>Author</th><th>Message</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody id="notices-tbody"><tr><td colspan="5" style="text-align:center;color:var(--muted);padding:2rem">Loading...</td></tr></tbody>
+      </table>
+    </div>
+
+    <!-- ── ANNOUNCEMENTS TAB ── -->
+    <div id="tab-announcements" class="admin-section">
+      <table>
+        <thead><tr><th>Type</th><th>Author</th><th>Title</th><th>Details</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody id="ann-tbody"><tr><td colspan="7" style="text-align:center;color:var(--muted);padding:2rem">Loading...</td></tr></tbody>
+      </table>
+    </div>
+
+    <!-- ── ADD ALUMNI TAB ── -->
+    <div id="tab-add" class="admin-section">
+      <div style="background:white;border:1px solid var(--border);border-radius:10px;padding:1.75rem;max-width:700px;">
+        <h3 style="font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--navy);margin-bottom:0.5rem;">Add Alumni Manually</h3>
+        <p style="font-size:13px;color:var(--muted);margin-bottom:1.5rem;">Use this to add alumni who can't register themselves, or to record a deceased member. All fields marked * are required.</p>
+        <div id="add-error" style="background:#fef2f2;border:1px solid #fee2e2;color:var(--red);padding:10px;border-radius:6px;font-size:13px;margin-bottom:1rem;display:none;"></div>
+        <div id="add-success" style="background:#f0fdf4;border:1px solid #bbf7d0;color:var(--green);padding:10px;border-radius:6px;font-size:13px;margin-bottom:1rem;display:none;"></div>
+        <div class="form-grid">
+          <div class="form-field">
+            <label>Session *</label>
+            <select id="add-session" onchange="onAddSessionChange()">
+              <option value="">Select</option>
+              <option value="2006-Morning">2006 Morning</option>
+              <option value="2006-Evening">2006 Evening</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label>Roll Number *</label>
+            <select id="add-roll" disabled onchange="onAddRollChange()"><option value="">Select session first</option></select>
+          </div>
+          <div class="form-field form-row-full">
+            <label>Full Name (auto-filled)</label>
+            <input type="text" id="add-name" readonly style="background:#f9f8f6;">
+          </div>
+          <div class="form-field">
+            <label>Country *</label>
+            <input type="text" id="add-country" placeholder="e.g. Pakistan">
+          </div>
+          <div class="form-field">
+            <label>City *</label>
+            <input type="text" id="add-city" placeholder="e.g. Lahore">
+          </div>
+          <div class="form-field">
+            <label>Job Title *</label>
+            <input type="text" id="add-job" placeholder="e.g. Engineer">
+          </div>
+          <div class="form-field">
+            <label>Company *</label>
+            <input type="text" id="add-company" placeholder="e.g. WAPDA">
+          </div>
+          <div class="form-field">
+            <label>Email *</label>
+            <input type="email" id="add-email" placeholder="email@example.com">
+          </div>
+          <div class="form-field">
+            <label>Phone</label>
+            <input type="tel" id="add-phone" placeholder="+92 300 ...">
+          </div>
+          <div class="form-field">
+            <label>LinkedIn</label>
+            <input type="url" id="add-linkedin" placeholder="https://linkedin.com/in/...">
+          </div>
+          <div class="form-field">
+            <label>Status</label>
+            <select id="add-deceased">
+              <option value="false">Active</option>
+              <option value="true">Deceased (In Memoriam)</option>
+            </select>
+          </div>
+          <div class="form-field form-row-full">
+            <label>Notes / Bio</label>
+            <textarea id="add-bio" rows="3" placeholder="Optional notes about this alumni..."></textarea>
+          </div>
+        </div>
+        <button onclick="addAlumniManually()" style="margin-top:1.25rem;width:100%;padding:12px;background:var(--gold);color:var(--navy);border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;">Save Alumni Record</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CONFIRM MODAL -->
+<div class="modal-overlay" id="confirm-modal">
+  <div class="modal">
+    <h3 id="modal-title">Confirm Action</h3>
+    <p id="modal-message" style="font-size:14px;color:var(--muted);line-height:1.6;"></p>
+    <div class="modal-btns">
+      <button class="modal-btn modal-cancel" onclick="closeModal()">Cancel</button>
+      <button class="modal-btn modal-confirm" id="modal-confirm-btn">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js';
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged }
+  from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js';
+import { getFirestore, doc, setDoc, getDoc, collection, getDocs, addDoc,
+         query, where, orderBy, updateDoc, deleteDoc, serverTimestamp }
+  from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAgUl22Cln6QtY3-HIvI6lE8Zu7n9OblbI",
+  authDomain: "icet-alumni.firebaseapp.com",
+  projectId: "icet-alumni",
+  storageBucket: "icet-alumni.firebasestorage.app",
+  messagingSenderId: "707390888790",
+  appId: "1:707390888790:web:57e6be62e4d11e22c214f7"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+// ⚠️ SET THIS TO YOUR GOOGLE ACCOUNT UID
+// To find your UID: sign in to the alumni portal, open browser console, type:
+// firebase.auth().currentUser.uid
+// Then paste it here and upload to GitHub
+const ADMIN_UID = 'REPLACE_WITH_YOUR_UID';
+
+const morningStudents = {"M101":"ABDUL WAHAB KHAN","M102":"ZAHID ANJUM","M103":"USMAN RAFIQ","M104":"MEESAM ALI","M105":"IRFAN IQBAL","M106":"WASEEM SAFDAR","M107":"NASEER AHMAD","M108":"RIZWAN HAIDER","M109":"UMAR FAROOQ","M110":"MUHAMMAD FIAZ","M111":"FAROOQ KHAN","M112":"SALMAN SIDIQUE","M113":"HAFIZ AAMIR","M114":"MOHSIN ALI RAZA","M115":"MUHAMMAD KASHIF","M116":"RIZWAN GHULAM NABI","M117":"AYAZ KARIM","M118":"ADEEM GHAFFAR RANA","M119":"KHIZAR HAYAT","M120":"AWAIS NADEEM","M121":"SAQIB WAHEED","M122":"RAO SHAFIQ","M123":"FAYYAZ AHMAD","M124":"KHUBAIB HASAN","M125":"TAHIR NAZIR","M126":"MANSAB ALI","M127":"ZAHID RASOOL","M128":"UMAIR ISLAM","M129":"ZOHAIB ZAIDI","M130":"ASAD ABBAS","M131":"AJMAL JAVAID","M132":"KHALIL AHMAD","M133":"WAQAS AZIZ HASHMI","M134":"AFZAL CHAUDHRY","M135":"MUJEEB UR REHMAN","M136":"ALI BUKHARI","M137":"AWAIS NAEEM","M138":"SAAD TOOR","M139":"KASHIF YOUNIS","M140":"AFFAN KHALID","M141":"JAHENZAIB KHAN","M142":"AHSAN BILAL","M143":"SAQIB RIZVI","M144":"QAISER KHAN","M145":"UMAIR RASHEED","M146":"ALI NADEEM","M147":"FAWAD FURRUKH","M148":"AFNAN HAMEED","M149":"ABDUL REHMAN","M150":"IBRAHIM SAEED","M151":"MUHAMMAD ARIF KHAN","M152":"HARIS SHAJAR","M153":"IMRAN KHAN (I)","M154":"NOUMAN AHMAD","M155":"IMRAN KHAN (II)","M156":"JAMSHAID IQBAL","M157":"FAISAL MEHMOOD","M158":"SHERAZ AFZAL","M159":"ADNAN SHOAIB","M160":"KARIM BUKSH","M161":"UMAIR DANISH","M162":"AAMIR SHAMAS","M163":"WAZIR ALI","M164":"JAMA AHMAD HERSI","M201":"TAYAB SAEED","M202":"ATIF ASHRAF","M203":"ASAD ALI","M204":"NAVEED AKHTAR","M205":"MUNZOOR AHMAD","M206":"FARAZ BUTT","M207":"SANA ULLAH","M208":"BABER ALI","M209":"AAMIR RIAZ","M210":"GHULAM ABBAS","M211":"MUHAMMAD BASIT ALI","M212":"ZEESHAN SHOAIB","M213":"MUHAMMAD KALEEM ULLAH","M214":"HAFIZ KHALIL UR REHMAN","M215":"FAISAL JOYIA","M216":"FAISAL KHALIL","M217":"MUHAMMAD ZEESHAN SALEEM","M218":"AHSAN NOOR KHAN","M219":"WAQAS SHEHRYAR","M220":"AFTAB AHMAD","M221":"TANVIR AHMAD","M222":"FAKHAR ABBAS","M223":"MUHAMMAD HASNAT ALI","M224":"YASIR ARAFAT","M225":"TAHIR WASIM","M226":"MOHSIN SAEED","M301":"SAEED AKRAM SHEIKH","M302":"IMRAN YOUSAF","M303":"MUHAMMAD ADNAN SADIQ","M304":"MUHAMMAD IRFAN","M305":"IMRAN RIAZ","M306":"NASIR MEHMOOD","M307":"SHAMSHAD-UL-HAQ","M308":"AWAIS ABDULLAH","M309":"UMAIR AZAD","M310":"ALI ZULQARNAIN","M311":"MUHAMMAD RIZWAN AZHAR","M312":"MUHAMMAD ASAD MASOOD","M313":"HAFIZ SHAFIQ","M314":"HAFIZ ZUBAIR","M315":"MUHAMMAD NAEEM","M316":"GHUFRAN AHMAD","M317":"ABDUL LATIF","M401":"AMBREEN GHALIB","M402":"MUHAMMAD SHAHZAD ALI","M403":"MUHAMMAD ILYAS","M404":"YASIR SHARIF AWAN","M405":"RAO MUNEER ALI","M406":"SAJID MAHMOOD","M407":"ALI MURAD","M408":"USMAN ALI","M409":"MUHAMMAD AWAIS","M410":"AMBREEN GULZAR","M411":"FAHIM AHMAD ZAFAR","M412":"ANWAAR AHMAD","M413":"USMAN RASHEED","M414":"KHUBAIB AHMAD","M415":"SALMAN MANSOOR","M416":"USMAN SAEED","M417":"SADIA NAUREEN"};
+const eveningStudents = {"E102":"FAHAD MASOOD","E103":"NOMAN LIAQAT","E104":"YASEEN AKRAM","E105":"ADNAN NAWAZ","E106":"AHSEN HAFEEZ","E107":"RAZA MUDASIR ALVI","E108":"GULZEB KHAN","E109":"USMAN SADIQUE","E110":"ABDUL QAYYUM","E111":"IMRAN MALIK","E112":"SHAHID NADEEM","E113":"UMAIR FURQAN","E114":"NAUMAN ASHRAF","E115":"WAQAS BUKHARI","E116":"SANA ULLAH","E117":"NAEEM YOUNIS","E118":"MASOOD HAIDER","E119":"MUHAMMAD ASIF KHAN","E120":"MOHSIN MOBEEN","E121":"FAHEEM RIAZ","E122":"FAHAD MIR","E123":"ADNAN REHMAT","E124":"YASIR AKRAM AWAN","E125":"SHAROOZ KHAN","E126":"RANA MUHAMMAD IMRAN","E127":"RIZWAN MALIK","E128":"UMER TAHIR MIR","E129":"MUHAMMAD NAEEM IQBAL","E130":"MUHAMMAD UMAIR DANISH","E131":"ABID ALI","E132":"FARHAN CHEEMA","E133":"MUHAMMAD ARSHAD","E134":"ZUBAIR SHAHID","E135":"WAQAR AHMED","E136":"AFFAN AHMAD","E137":"UMAIR SHOAIB","E138":"ARSALAN AWAN","E139":"MUHAMMAD IMRAN","E140":"ASIF IQBAL","E141":"HAKIM ALI HAIDER","E142":"GHULAM MURTAZA","E143":"ADNAN SALEEM","E144":"ASIF ALI SHAHZAD","E201":"MUHAMMAD ZAMAN","E202":"IMRAN NIAZ","E203":"SHAHID SAEED","E204":"KHURRAM JAVED","E205":"SAQIB RAZA","E206":"AAMIR KARIM","E207":"MUHAMMAD UMAR FAROOQ","E208":"ALI AHMAD","E209":"ABDUL BASIT","E210":"FARHAN RASOOL","E211":"NASEER AHMAD","E212":"MUHAMMAD USMAN","E213":"AQEEL MANSOOR CHISHTI","E214":"RIZWAN AHMED SHAH","E215":"MUHAMMAD ZAIN","E216":"USMAN ANWAR DAR","E217":"OMER SHUJAT","E218":"IMRAN RAFIQUE","E219":"NAEEM BHATTI","E220":"ASIF SANI"};
+
+let allAlumniData = [];
+let allNoticesData = [];
+let allAnnData = [];
+let pendingAction = null;
+
+// ── Auth check ──
+onAuthStateChanged(auth, async (user) => {
+  document.getElementById('loading-state').style.display = 'none';
+  if (!user || user.uid !== ADMIN_UID) {
+    // If UID is still placeholder, show setup instructions
+    if (ADMIN_UID === 'REPLACE_WITH_YOUR_UID') {
+      document.getElementById('access-denied').innerHTML = `
+        <h2>⚙ Setup Required</h2>
+        <p>To activate the admin panel, you need to set your UID.</p>
+        <div style="margin:2rem auto;max-width:500px;background:#f9f8f6;border:1px solid #e5e7eb;border-radius:8px;padding:1.5rem;text-align:left">
+          <p style="font-size:14px;margin-bottom:1rem;font-weight:600;color:#0f1f3d;">Steps:</p>
+          <ol style="font-size:13px;color:#374151;padding-left:1.25rem;line-height:2">
+            <li>Sign in to <a href="/alumni.html" style="color:#c9a84c">alumni.html</a> with your Google account</li>
+            <li>Open browser DevTools (F12) → Console tab</li>
+            <li>Your UID appears in the page as a toast — or type <code>document.querySelector('[data-uid]')?.dataset.uid</code></li>
+            <li>Open admin.html on GitHub, find <code>REPLACE_WITH_YOUR_UID</code></li>
+            <li>Replace it with your actual UID and commit</li>
+          </ol>
+        </div>`;
+    }
+    document.getElementById('access-denied').style.display = 'block';
+    return;
+  }
+  document.getElementById('admin-user-name').textContent = user.displayName || user.email;
+  document.getElementById('sign-out-btn').style.display = 'block';
+  document.getElementById('admin-content').style.display = 'block';
+  loadAllData();
+});
+
+window.doSignOut = async () => { await signOut(auth); window.location = '/alumni.html'; };
+
+async function loadAllData() {
+  // Alumni
+  const alumSnap = await getDocs(collection(db, 'alumni'));
+  allAlumniData = [];
+  let morning=0, evening=0;
+  alumSnap.forEach(d => {
+    allAlumniData.push({id:d.id, ...d.data()});
+    if (d.data().session?.includes('Morning')) morning++; else if (d.data().session?.includes('Evening')) evening++;
+  });
+  allAlumniData.sort((a,b) => a.roll?.localeCompare(b.roll||''));
+  document.getElementById('as-total').textContent = allAlumniData.length;
+  document.getElementById('as-morning').textContent = morning;
+  document.getElementById('as-evening').textContent = evening;
+  renderAlumniTable();
+
+  // Notices
+  const notSnap = await getDocs(collection(db, 'notices'));
+  allNoticesData = [];
+  notSnap.forEach(d => allNoticesData.push({id:d.id, ...d.data()}));
+  allNoticesData.sort((a,b) => (a.approved===b.approved ? (b.createdAt?.seconds||0)-(a.createdAt?.seconds||0) : a.approved?1:-1));
+  const pendingN = allNoticesData.filter(n => !n.approved).length;
+  document.getElementById('as-pending-notices').textContent = pendingN;
+  renderNoticesTable();
+
+  // Announcements
+  const annSnap = await getDocs(collection(db, 'announcements'));
+  allAnnData = [];
+  annSnap.forEach(d => allAnnData.push({id:d.id, ...d.data()}));
+  allAnnData.sort((a,b) => (a.approved===b.approved ? (b.createdAt?.seconds||0)-(a.createdAt?.seconds||0) : a.approved?1:-1));
+  const pendingA = allAnnData.filter(a => !a.approved).length;
+  document.getElementById('as-pending-ann').textContent = pendingA;
+  renderAnnTable();
+}
+
+// ── Alumni table ──
+window.renderAlumniTable = () => {
+  const search = document.getElementById('alumni-search').value.toLowerCase();
+  const filtered = allAlumniData.filter(a =>
+    !search || a.name?.toLowerCase().includes(search) || a.roll?.toLowerCase().includes(search) || a.email?.toLowerCase().includes(search)
+  );
+  const tbody = document.getElementById('alumni-tbody');
+  if (!filtered.length) { tbody.innerHTML='<tr><td colspan="9" style="text-align:center;color:var(--muted);padding:2rem">No records found.</td></tr>'; return; }
+  const sessionBadge = s => s?.includes('Morning') ? '<span class="badge badge-morning">Morning</span>' : '<span class="badge badge-evening">Evening</span>';
+  tbody.innerHTML = filtered.map(a => {
+    const initials = (a.name||'?').split(' ').map(w=>w[0]).slice(0,2).join('');
+    const photoEl = a.photoBase64 ? `<div class="td-photo"><img src="${a.photoBase64}" alt=""></div>` : `<div class="td-photo">${initials}</div>`;
+    const date = a.registeredAt ? new Date(a.registeredAt).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'2-digit'}) : '–';
+    const decBadge = a.deceased ? ' <span class="badge badge-deceased">✝</span>' : '';
+    return `<tr>
+      <td>${photoEl}</td>
+      <td><strong>${a.name||'–'}</strong>${decBadge}</td>
+      <td>${a.roll||'–'}</td>
+      <td>${sessionBadge(a.session)}</td>
+      <td>${a.city||'–'}, ${a.country||'–'}</td>
+      <td style="max-width:140px;word-wrap:break-word">${a.job||'–'}<br><span style="font-size:11px;color:var(--muted)">${a.company||''}</span></td>
+      <td><a href="mailto:${a.email}" style="color:var(--navy);text-decoration:none">${a.email||'–'}</a></td>
+      <td style="white-space:nowrap">${date}</td>
+      <td style="white-space:nowrap">
+        <button class="action-btn btn-deceased" onclick="toggleDeceased('${a.id}',${!a.deceased})">${a.deceased?'✓ Active':'✝ Deceased'}</button>
+        <button class="action-btn btn-delete" onclick="confirmDelete('alumni','${a.id}','${a.name}')">Delete</button>
+      </td>
+    </tr>`;
+  }).join('');
+};
+
+// ── Notices table ──
+function renderNoticesTable() {
+  const tbody = document.getElementById('notices-tbody');
+  if (!allNoticesData.length) { tbody.innerHTML='<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:2rem">No notices.</td></tr>'; return; }
+  tbody.innerHTML = allNoticesData.map(n => {
+    const date = n.createdAt ? new Date(n.createdAt.seconds*1000).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'2-digit'}) : '–';
+    const statusBadge = n.approved ? '<span class="badge badge-approved">Approved</span>' : '<span class="badge badge-pending">Pending</span>';
+    const approveBtn = !n.approved ? `<button class="action-btn btn-approve" onclick="approveItem('notices','${n.id}')">Approve</button>` : '';
+    return `<tr>
+      <td>${n.authorName||'–'}</td>
+      <td style="max-width:300px">${n.text||'–'}</td>
+      <td style="white-space:nowrap">${date}</td>
+      <td>${statusBadge}</td>
+      <td style="white-space:nowrap">${approveBtn}<button class="action-btn btn-delete" onclick="confirmDelete('notices','${n.id}','this post')">Delete</button></td>
+    </tr>`;
+  }).join('');
+}
+
+// ── Announcements table ──
+function renderAnnTable() {
+  const tbody = document.getElementById('ann-tbody');
+  if (!allAnnData.length) { tbody.innerHTML='<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:2rem">No announcements.</td></tr>'; return; }
+  const typeLabels = {job:'Job',achievement:'Achievement',news:'News',other:'Other'};
+  tbody.innerHTML = allAnnData.map(a => {
+    const date = a.createdAt ? new Date(a.createdAt.seconds*1000).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'2-digit'}) : '–';
+    const statusBadge = a.approved ? '<span class="badge badge-approved">Approved</span>' : '<span class="badge badge-pending">Pending</span>';
+    const approveBtn = !a.approved ? `<button class="action-btn btn-approve" onclick="approveItem('announcements','${a.id}')">Approve</button>` : '';
+    return `<tr>
+      <td><span class="badge ann-type-${a.type||'other'}">${typeLabels[a.type]||'–'}</span></td>
+      <td>${a.authorName||'–'}</td>
+      <td>${a.title||'–'}</td>
+      <td style="max-width:200px;font-size:12px">${a.body||'–'}</td>
+      <td style="white-space:nowrap">${date}</td>
+      <td>${statusBadge}</td>
+      <td style="white-space:nowrap">${approveBtn}<button class="action-btn btn-delete" onclick="confirmDelete('announcements','${a.id}','this announcement')">Delete</button></td>
+    </tr>`;
+  }).join('');
+}
+
+// ── Actions ──
+window.approveItem = async (collection_name, id) => {
+  try {
+    await updateDoc(doc(db, collection_name, id), { approved: true });
+    showToast('✅ Approved!');
+    loadAllData();
+  } catch(e) { showToast('Error: '+e.message); }
+};
+
+window.toggleDeceased = async (id, isDeceased) => {
+  try {
+    await updateDoc(doc(db, 'alumni', id), { deceased: isDeceased });
+    showToast(isDeceased ? '✝ Marked as deceased.' : '✅ Marked as active.');
+    loadAllData();
+  } catch(e) { showToast('Error: '+e.message); }
+};
+
+window.confirmDelete = (collectionName, id, label) => {
+  document.getElementById('modal-title').textContent = 'Delete Record';
+  document.getElementById('modal-message').textContent = `Are you sure you want to permanently delete "${label}"? This cannot be undone.`;
+  pendingAction = async () => {
+    await deleteDoc(doc(db, collectionName, id));
+    showToast('🗑 Deleted.');
+    loadAllData();
+  };
+  document.getElementById('modal-confirm-btn').onclick = async () => {
+    closeModal(); if (pendingAction) { await pendingAction(); pendingAction=null; }
+  };
+  document.getElementById('confirm-modal').classList.add('open');
+};
+
+window.closeModal = () => {
+  document.getElementById('confirm-modal').classList.remove('open');
+  pendingAction = null;
+};
+
+// ── Add manually ──
+window.onAddSessionChange = () => {
+  const session = document.getElementById('add-session').value;
+  const rollSelect = document.getElementById('add-roll');
+  rollSelect.innerHTML = '<option value="">Select roll</option>';
+  document.getElementById('add-name').value = '';
+  if (!session) { rollSelect.disabled=true; return; }
+  const db2 = session==='2006-Morning' ? morningStudents : eveningStudents;
+  Object.keys(db2).sort().forEach(r => { const o=document.createElement('option'); o.value=r; o.textContent=r; rollSelect.appendChild(o); });
+  rollSelect.disabled = false;
+};
+window.onAddRollChange = () => {
+  const session = document.getElementById('add-session').value;
+  const roll = document.getElementById('add-roll').value;
+  const db2 = session==='2006-Morning' ? morningStudents : eveningStudents;
+  document.getElementById('add-name').value = (roll && db2[roll]) ? db2[roll] : '';
+};
+
+window.addAlumniManually = async () => {
+  const session = document.getElementById('add-session').value;
+  const roll = document.getElementById('add-roll').value;
+  const country = document.getElementById('add-country').value.trim();
+  const city = document.getElementById('add-city').value.trim();
+  const job = document.getElementById('add-job').value.trim();
+  const company = document.getElementById('add-company').value.trim();
+  const email = document.getElementById('add-email').value.trim();
+  const phone = document.getElementById('add-phone').value.trim();
+  const linkedin = document.getElementById('add-linkedin').value.trim();
+  const bio = document.getElementById('add-bio').value.trim();
+  const deceased = document.getElementById('add-deceased').value === 'true';
+  const errBox = document.getElementById('add-error');
+  const sucBox = document.getElementById('add-success');
+  errBox.style.display='none'; sucBox.style.display='none';
+
+  if (!session||!roll||!country||!city||!job||!company||!email) {
+    errBox.textContent='⚠️ Please fill all required fields.'; errBox.style.display='block'; return;
+  }
+  const db2 = session==='2006-Morning' ? morningStudents : eveningStudents;
+  const name = db2[roll];
+  if (!name) { errBox.textContent='⚠️ Invalid roll number.'; errBox.style.display='block'; return; }
+
+  // Check if roll already exists
+  const existing = await getDocs(query(collection(db,'alumni'), where('roll','==',roll)));
+  if (!existing.empty) { errBox.textContent='⚠️ This roll number already has a registered profile.'; errBox.style.display='block'; return; }
+
+  try {
+    const uid = 'admin_' + roll.replace(/[^A-Za-z0-9]/g,'_') + '_' + Date.now();
+    await setDoc(doc(db,'alumni',uid), {
+      uid, name, roll, session, country, city, job, company, email, phone,
+      linkedin, bio, photoBase64:'', deceased,
+      registeredAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      addedByAdmin: true, googleName:'', googlePhoto:''
+    });
+    sucBox.textContent = `✅ ${name} (${roll}) added successfully!`;
+    sucBox.style.display='block';
+    document.getElementById('add-session').value='';
+    document.getElementById('add-roll').innerHTML='<option value="">Select session first</option>';
+    document.getElementById('add-roll').disabled=true;
+    document.getElementById('add-name').value='';
+    ['add-country','add-city','add-job','add-company','add-email','add-phone','add-linkedin','add-bio'].forEach(id => { document.getElementById(id).value=''; });
+    loadAllData();
+  } catch(e) { errBox.textContent='⚠️ Error: '+e.message; errBox.style.display='block'; }
+};
+
+// ── Export CSV ──
+window.exportCSV = () => {
+  const headers = ['Name','Roll','Session','Country','City','Job','Company','Email','Phone','LinkedIn','Registered','Status'];
+  const rows = allAlumniData.map(a => [
+    a.name||'', a.roll||'', a.session||'', a.country||'', a.city||'',
+    a.job||'', a.company||'', a.email||'', a.phone||'', a.linkedin||'',
+    a.registeredAt ? new Date(a.registeredAt).toLocaleDateString('en-GB') : '',
+    a.deceased ? 'Deceased' : 'Active'
+  ].map(v => `"${String(v).replace(/"/g,'""')}"`).join(','));
+  const csv = [headers.join(','), ...rows].join('\n');
+  const blob = new Blob([csv], {type:'text/csv'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href=url; a.download=`ICET_Alumni_${new Date().toISOString().slice(0,10)}.csv`;
+  a.click(); URL.revokeObjectURL(url);
+  showToast('✅ CSV exported!');
+};
+
+// ── Tab switching ──
+window.switchAdminTab = (tab, btn) => {
+  document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
+  document.getElementById('tab-'+tab).classList.add('active');
+  document.querySelectorAll('.admin-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+};
+
+// ── Toast ──
+window.showToast = (msg) => {
+  const t = document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+};
+
+// ann-type badge colours (reuse from alumni portal CSS)
+const style = document.createElement('style');
+style.textContent = '.ann-type-job{background:#eff6ff;color:#1d4ed8}.ann-type-achievement{background:#f0fdf4;color:#166534}.ann-type-news{background:#fff7ed;color:#9a3412}.ann-type-other{background:#f3f4f6;color:#6b7280}';
+document.head.appendChild(style);
+</script>
+</body>
+</html>
