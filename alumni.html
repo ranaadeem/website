@@ -457,23 +457,93 @@ nav {
 <!-- ===== PAGE: DIRECTORY ===== -->
 <div class="page" id="page-directory">
   <div class="directory-wrap">
-    <div class="directory-header">
+
+    <!-- ── SESSION STATS HEADER ── -->
+    <div class="sess-detail-header">
       <div>
-        <span class="section-tag">Session <span id="dir-session-label">2006–2010</span></span>
-        <h2 class="section-title">Alumni Directory</h2>
+        <div class="sess-detail-title">Session <span id="dir-session-label">2006–2010</span></div>
+        <div class="sess-detail-sub">Chemical Engineering · ICET, University of the Punjab, Lahore</div>
+        <div class="sess-stats-row">
+          <div class="sess-stat-box"><span class="num" id="dir-registered">–</span><span class="lbl">Registered</span></div>
+          <div class="sess-stat-box"><span class="num">245</span><span class="lbl">Total Batch</span></div>
+          <div class="sess-stat-box"><span class="num" id="dir-countries-dir">–</span><span class="lbl">Countries</span></div>
+          <div class="sess-stat-box"><span class="num" id="dir-morning">–</span><span class="lbl">Morning</span></div>
+          <div class="sess-stat-box"><span class="num" id="dir-evening">–</span><span class="lbl">Evening</span></div>
+        </div>
       </div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
-        <input type="text" class="search-box" id="search-input" placeholder="Search by name or roll number..." oninput="filterDirectory()">
+      <div style="text-align:center">
+        <div class="preview-label">Recently Joined</div>
+        <div class="sess-photo-preview" id="sess-preview-avatars" style="justify-content:center;margin-top:8px;"></div>
+      </div>
+    </div>
+
+    <!-- ── TABS ── -->
+    <div class="sess-tabs">
+      <button class="sess-tab active" onclick="switchTab('directory',this)">👥 Directory</button>
+      <button class="sess-tab" onclick="switchTab('noticeboard',this)">📌 Notice Board</button>
+      <button class="sess-tab" onclick="switchTab('announcements',this)">📢 Announcements</button>
+    </div>
+
+    <!-- ── DIRECTORY TAB ── -->
+    <div id="tab-directory">
+      <div style="display:flex;gap:1rem;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap;">
+        <input type="text" class="search-box" id="search-input" placeholder="Search by name or roll number..." oninput="filterDirectory()" style="flex:1;min-width:200px;">
         <div class="directory-filters">
           <button class="filter-btn active" onclick="setFilter('all', this)">All</button>
           <button class="filter-btn" onclick="setFilter('Morning', this)">Morning</button>
           <button class="filter-btn" onclick="setFilter('Evening', this)">Evening</button>
         </div>
       </div>
+      <div class="alumni-grid" id="alumni-grid">
+        <div class="loading-spinner">Loading alumni...</div>
+      </div>
     </div>
-    <div class="alumni-grid" id="alumni-grid">
-      <div class="loading-spinner">Loading alumni...</div>
+
+    <!-- ── NOTICE BOARD TAB ── -->
+    <div id="tab-noticeboard" style="display:none">
+      <div class="noticeboard">
+        <div class="notice-post-form">
+          <div style="font-size:13px;font-weight:600;color:var(--navy);margin-bottom:6px;">📌 Post to the Notice Board</div>
+          <p style="font-size:12px;color:var(--muted);margin-bottom:0.75rem;">Posts appear after admin approval. Keep it relevant to the batch.</p>
+          <textarea id="notice-text" style="width:100%;padding:10px;border:1px solid var(--border);border-radius:6px;font-size:14px;font-family:inherit;resize:vertical;min-height:80px;outline:none;" placeholder="Share news, a message, or anything for your batchmates..." maxlength="500" oninput="document.getElementById('notice-char').textContent=this.value.length+'/500'"></textarea>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;">
+            <span style="font-size:11px;color:var(--muted);" id="notice-char">0/500</span>
+            <button class="nav-btn btn-gold" onclick="submitNotice()">Post (needs approval)</button>
+          </div>
+        </div>
+        <div id="notices-list"><div class="notice-empty">No posts yet. Be the first to share something!</div></div>
+      </div>
     </div>
+
+    <!-- ── ANNOUNCEMENTS TAB ── -->
+    <div id="tab-announcements" style="display:none">
+      <div class="noticeboard">
+        <div class="ann-form">
+          <h3 style="font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--navy);margin-bottom:0.5rem;">📢 Submit an Announcement</h3>
+          <p style="font-size:13px;color:var(--muted);margin-bottom:1rem;">New job, promotion, or other news? Submit below — appears after admin approval.</p>
+          <div style="margin-bottom:0.75rem;">
+            <label style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;display:block;margin-bottom:4px;">Type</label>
+            <select id="ann-type" style="width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:6px;font-size:14px;font-family:inherit;outline:none;">
+              <option value="job">Job Change / New Position</option>
+              <option value="achievement">Achievement / Award</option>
+              <option value="news">News / Update</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div style="margin-bottom:0.75rem;">
+            <label style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;display:block;margin-bottom:4px;">Title / Headline *</label>
+            <input type="text" id="ann-title" placeholder="e.g. Joined XYZ as Senior Engineer" style="width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:6px;font-size:14px;font-family:inherit;outline:none;">
+          </div>
+          <div style="margin-bottom:1rem;">
+            <label style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;display:block;margin-bottom:4px;">Details (optional)</label>
+            <textarea id="ann-body" rows="3" style="width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:6px;font-size:14px;font-family:inherit;resize:vertical;outline:none;" placeholder="Add any details..."></textarea>
+          </div>
+          <button onclick="submitAnnouncement()" style="width:100%;padding:12px;background:var(--gold);color:var(--navy);border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;">Submit for Approval</button>
+        </div>
+        <div id="announcements-list"><div class="notice-empty">No announcements yet.</div></div>
+      </div>
+    </div>
+
   </div>
 </div>
 
