@@ -525,6 +525,7 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+const ADMIN_UID = 'w2AtZbhUiyY5TxyvIecHzWqheaE2';
 const auth = getAuth(app);
 const db = getFirestore(app);
 const provider = new GoogleAuthProvider();
@@ -650,6 +651,7 @@ function updateNavUser(user) {
       <div class="nav-user">
         ${user.photoURL ? `<img src="${user.photoURL}" alt="avatar">` : ''}
         <span>${user.displayName ? user.displayName.split(' ')[0] : 'User'}</span>
+        ${currentUser && currentUser.uid === 'w2AtZbhUiyY5TxyvIecHzWqheaE2' ? `<button class="nav-btn btn-gold" onclick="window.location='/admin.html'">⚙ Admin</button>` : ''}
         <button class="nav-btn btn-outline" onclick="showPage('directory')">Directory</button>
         <button class="nav-btn btn-outline" onclick="signOutUser()">Sign Out</button>
       </div>`;
