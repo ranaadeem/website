@@ -501,6 +501,7 @@ nav {
             <p id="view-bio" style="font-size:14px;color:var(--text);line-height:1.7;"></p>
           </div>
         </div>
+        <button class="edit-own-btn" id="edit-own-btn" style="display:none" onclick="openEditProfile()">✏️ Edit My Profile</button>
       </div>
     </div>
   </div>
@@ -686,15 +687,145 @@ async function loadStats() {
     const total = snap.size;
     const countries = new Set();
     let sess2006 = 0;
+    let morning=0, evening=0;
     snap.forEach(d => {
       const data = d.data();
       if (data.country) countries.add(data.country);
-      if (data.session && data.session.includes('2006')) sess2006++;
+      if (data.session && data.session.includes('2006')) {
+        sess2006++;
+        if (data.session.includes('Morning')) morning++; else evening++;
+      }
     });
     document.getElementById('stat-total').textContent = total;
     document.getElementById('stat-countries').textContent = countries.size;
     document.getElementById('sess-2006-reg').textContent = sess2006;
+    document.getElementById('sess-2006-reg-card') && (document.getElementById('sess-2006-reg-card').textContent = sess2006);
+    // Session detail stats
+    const dirReg = document.getElementById('dir-registered');
+    if (dirReg) dirReg.textContent = sess2006;
+    const dirC = document.getElementById('dir-countries-dir');
+    if (dirC) dirC.textContent = countries.size;
+    const dirM = document.getElementById('dir-morning');
+    if (dirM) dirM.textContent = morning;
+    const dirE = document.getElementById('dir-evening');
+    if (dirE) dirE.textContent = evening;
+    // Preview avatars
+    const previewEl = document.getElementById('sess-preview-avatars');
+    if (previewEl) {
+      const recent = [];
+      snap.forEach(d => { if (d.data().session && d.data().session.includes('2006')) recent.push(d.data()); });
+      recent.sort((a,b) => (b.registeredAt||'').localeCompare(a.registeredAt||''));
+      previewEl.innerHTML = recent.slice(0,5).map(a => {
+        const initials = a.name.split(' ').map(w=>w[0]).slice(0,2).join('');
+        return '<div class="preview-avatar">'+(a.photoBase64 ? '<img src="'+a.photoBase64+'" alt="">' : initials)+'</div>';
+      }).join('');
+    }
   } catch(e) {}
+}
+
+// ── Tab switching ──
+window.switchTab = (tab, btn) => {
+  ['directory','noticeboard','announcements'].forEach(t => {
+    const el = document.getElementById('tab-'+t);
+    if (el) el.style.display = t===tab ? 'block' : 'none';
+  });
+  document.querySelectorAll('.sess-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+};
+
+// ── Edit own profile ──
+window.openEditProfile = () => {
+  if (!currentUserProfile) return;
+  const p = currentUserProfile;
+  document.getElementById('setup-session').value = p.session||'';
+  onSetupSessionChange();
+  setTimeout(() => { document.getElementById('setup-roll').value = p.roll||''; onSetupRollChange(); }, 60);
+  document.getElementById('setup-country').value = p.country||'';
+  onSetupCountryChange();
+  setTimeout(() => { document.getElementById('setup-city').value = p.city||''; }, 60);
+  document.getElementById('setup-job').value = p.job||'';
+  document.getElementById('setup-company').value = p.company||'';
+  document.getElementById('setup-email').value = p.email||'';
+  document.getElementById('setup-phone').value = p.phone||'';
+  document.getElementById('setup-linkedin').value = p.linkedin||'';
+  document.getElementById('setup-bio').value = p.bio||'';
+  if (p.photoBase64) {
+    document.getElementById('photo-upload-circle').innerHTML = '<img src="'+p.photoBase64+'" alt="">';
+    selectedPhotoBase64 = p.photoBase64;
+  }
+  isEditMode = true;
+  showPage('setup');
+};
+let isEditMode = false;
+
+// ── Notice board ──
+async function loadNotices() {
+  try {
+    const { query: q2, where: w2, orderBy: ob2, collection: col2, getDocs: gd2 } = await import('https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js');
+    const snap2 = await getDocs(query(collection(db,'notices'), where('session','==','2006'), where('approved','==',true)));
+    const el = document.getElementById('notices-list');
+    if (!el) return;
+    if (snap2.empty) { el.innerHTML='<div class="notice-empty">No posts yet.</div>'; return; }
+    const items = [];
+    snap2.forEach(d => items.push({id:d.id, ...d.data()}));
+    items.sort((a,b) => (b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
+    el.innerHTML = items.map(n => {
+      const initials = (n.authorName||'?').split(' ').map(w=>w[0]).slice(0,2).join('');
+      const date = n.createdAt ? new Date(n.createdAt.seconds*1000).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}) : '';
+      return '<div class="notice-item"><div class="notice-header"><div class="notice-author"><div class="notice-avatar">'+(n.authorPhoto?'<img src="'+n.authorPhoto+'" alt="">':initials)+'</div><div><div class="notice-author-name">'+n.authorName+'</div><div class="notice-date">'+date+'</div></div></div></div><div class="notice-text">'+n.text+'</div></div>';
+    }).join('');
+  } catch(e) { console.error('notices',e); }
+}
+
+window.submitNotice = async () => {
+  if (!currentUser || !currentUserProfile) { showToast('Please sign in first.'); return; }
+  const text = document.getElementById('notice-text').value.trim();
+  if (!text) { showToast('Please write something.'); return; }
+  try {
+    const { addDoc: ad2, collection: col2, serverTimestamp: st2 } = await import('https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js');
+    await addDoc(collection(db,'notices'), {
+      text, session:'2006', approved:false,
+      authorUid:currentUser.uid, authorName:currentUserProfile.name,
+      authorPhoto:currentUser.photoURL||'', createdAt:serverTimestamp()
+    });
+    document.getElementById('notice-text').value='';
+    document.getElementById('notice-char').textContent='0/500';
+    showToast('✅ Posted! Visible once admin approves.');
+  } catch(e) { showToast('Error posting.'); }
+};
+
+// ── Announcements ──
+async function loadAnnouncements() {
+  try {
+    const snap3 = await getDocs(query(collection(db,'announcements'), where('session','==','2006'), where('approved','==',true)));
+    const el = document.getElementById('announcements-list');
+    if (!el) return;
+    if (snap3.empty) { el.innerHTML='<div class="notice-empty">No announcements yet.</div>'; return; }
+    const items = [];
+    snap3.forEach(d => items.push({id:d.id, ...d.data()}));
+    items.sort((a,b) => (b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
+    const typeLabels = {job:'Job Update',achievement:'Achievement',news:'News',other:'Update'};
+    el.innerHTML = items.map(a => '<div class="ann-item"><span class="ann-type-badge ann-type-'+(a.type||'other')+'">'+(typeLabels[a.type]||'Update')+'</span><div class="ann-title-text">'+a.title+'</div>'+(a.body?'<div class="ann-body-text">'+a.body+'</div>':'')+'<div class="ann-meta">By '+a.authorName+'</div></div>').join('');
+  } catch(e) { console.error('ann',e); }
+}
+
+window.submitAnnouncement = async () => {
+  if (!currentUser || !currentUserProfile) { showToast('Please sign in first.'); return; }
+  const type = document.getElementById('ann-type').value;
+  const title = document.getElementById('ann-title').value.trim();
+  const body = document.getElementById('ann-body').value.trim();
+  if (!title) { showToast('Please add a title.'); return; }
+  try {
+    const { addDoc: ad3, collection: col3, serverTimestamp: st3 } = await import('https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js');
+    await addDoc(collection(db,'announcements'), {
+      type, title, body, session:'2006', approved:false,
+      authorUid:currentUser.uid, authorName:currentUserProfile.name,
+      createdAt:serverTimestamp()
+    });
+    document.getElementById('ann-title').value='';
+    document.getElementById('ann-body').value='';
+    showToast('✅ Submitted for approval!');
+  } catch(e) { showToast('Error submitting.'); }
 }
 
 // ── Page navigation ──
@@ -839,6 +970,9 @@ async function loadDirectory(session) {
     snap.forEach(d => allAlumni.push(d.data()));
     allAlumni.sort((a, b) => a.roll.localeCompare(b.roll));
     renderDirectory();
+    loadStats();
+    loadNotices();
+    loadAnnouncements();
   } catch(e) {
     grid.innerHTML = '<div class="loading-spinner">Error loading data.</div>';
   }
@@ -859,15 +993,15 @@ function renderDirectory() {
 
   grid.innerHTML = filtered.map(a => {
     const initials = a.name.split(' ').map(w => w[0]).slice(0, 2).join('');
-    const photoHtml = a.photoBase64
-      ? `<img src="${a.photoBase64}" alt="${a.name}">`
-      : initials;
+    const photoHtml = a.photoBase64 ? `<img src="${a.photoBase64}" alt="${a.name}">` : initials;
     const sessionType = a.session.includes('Morning') ? 'M' : 'E';
-    return `<div class="alumni-card" onclick="viewProfile('${a.uid}')">
+    const decBadge = a.deceased ? '<span class="deceased-badge">In Memoriam</span>' : '';
+    return `<div class="alumni-card${a.deceased?' deceased':''}" onclick="viewProfile('${a.uid}')">
+      ${decBadge}
       <span class="alumni-session-badge">${sessionType} · ${a.roll}</span>
       <div class="alumni-photo">${photoHtml}</div>
-      <div class="alumni-name">${a.name}</div>
-      <div class="alumni-roll">${a.roll} · ${a.session}</div>
+      <div class="alumni-name">${a.name}${a.deceased?' 🕊️':''}</div>
+      <div class="alumni-roll">${a.roll}</div>
       <div class="alumni-job">${a.job} @ ${a.company}</div>
       <div class="alumni-country">📍 ${a.city}, ${a.country}</div>
     </div>`;
@@ -931,6 +1065,9 @@ window.viewProfile = (uid) => {
     bioSection.style.display = 'none';
   }
 
+  // Show edit button only for own profile
+  const editBtn = document.getElementById('edit-own-btn');
+  if (editBtn) editBtn.style.display = (currentUser && currentUser.uid===uid) ? 'block' : 'none';
   showPage('profile');
 };
 
@@ -946,8 +1083,5 @@ window.showToast = (msg) => {
 loadStats();
 </script>
 
-<script>
-function toggleMenu() { document.getElementById('nav-links').classList.toggle('open'); }
-</script>
 </body>
 </html>
