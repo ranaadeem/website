@@ -1,446 +1,363 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dr. Adeem Ghaffar Rana</title>
-  <link rel="icon" type="image/png" href="/favicon.png">
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --navy: #0a1628;
-      --gold: #c9a84c;
-      --gold-light: #e8c96a;
-      --white: #ffffff;
-      --light-bg: #f8f7f4;
-      --text: #2c2c2c;
-      --text-muted: #6b7280;
-      --border: #e5e0d5;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Source Sans 3', sans-serif; color: var(--text); background: var(--white); }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dr. Adeem Ghaffar Rana</title>
+<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="shortcut icon" type="image/png" href="/favicon.png">
+<link rel="apple-touch-icon" href="/favicon.png">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root { --navy:#0f1f3d; --gold:#c9a84c; --gold-light:#e8d5a3; --cream:#faf8f4; --white:#ffffff; --text:#1a1a2e; --muted:#6b7280; --border:#e5e7eb; }
+*{ box-sizing:border-box; margin:0; padding:0; }
+html{ overflow-x:hidden; }
+body{ font-family:"DM Sans",sans-serif; background:var(--cream); color:var(--text); overflow-x:hidden; width:100%; }
 
-    /* ── NAVBAR ── */
-    nav {
-      background: var(--navy);
-      border-bottom: 2px solid var(--gold);
-      padding: 0 2rem;
-      position: sticky; top: 0; z-index: 1000;
-      display: flex; align-items: center; justify-content: space-between;
-      height: 60px;
-    }
-    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
-    .nav-logo-badge {
-      width: 36px; height: 36px; border-radius: 50%;
-      border: 2px solid var(--gold);
-      background: transparent;
-      display: flex; align-items: center; justify-content: center;
-      color: var(--gold); font-weight: 700; font-size: 0.75rem;
-      font-family: 'Playfair Display', serif;
-    }
-    .nav-logo-text { color: var(--white); font-family: 'Playfair Display', serif; font-size: 1rem; }
-    .nav-links { display: flex; align-items: center; gap: 0; list-style: none; }
-    .nav-links a {
-      color: rgba(255,255,255,0.8); text-decoration: none;
-      padding: 0 0.85rem; font-size: 0.82rem; font-weight: 400;
-      letter-spacing: 0.02em; line-height: 60px;
-      transition: color 0.2s;
-    }
-    .nav-links a:hover, .nav-links a.active { color: var(--gold); }
-    .nav-contact-btn {
-      background: var(--gold); color: var(--navy) !important;
-      border-radius: 4px; padding: 6px 14px !important;
-      font-weight: 600 !important; line-height: normal !important;
-      margin-left: 0.5rem;
-    }
-    .nav-contact-btn:hover { background: var(--gold-light) !important; }
-    .nav-hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
-    .nav-hamburger span { display: block; width: 22px; height: 2px; background: var(--white); }
+/* NAV */
+#main-nav{ position:sticky; top:0; z-index:1000; background:var(--navy); border-bottom:2px solid var(--gold); box-shadow:0 2px 20px rgba(0,0,0,0.3); }
+.nav-inner{ max-width:1100px; margin:0 auto; padding:0 1.5rem; display:flex; align-items:center; justify-content:space-between; height:64px; }
+.nav-logo{ display:flex; align-items:center; gap:10px; text-decoration:none; flex-shrink:0; }
+.nav-logo-agr{ font-family:Georgia,serif; font-size:22px; font-weight:700; color:var(--gold); letter-spacing:2px; border:2px solid var(--gold); padding:2px 8px; border-radius:4px; }
+.nav-logo-name{ font-size:13px; color:rgba(255,255,255,0.75); }
+.nav-links{ display:flex; align-items:center; gap:0.25rem; list-style:none; }
+.nav-link{ color:rgba(255,255,255,0.75); text-decoration:none; font-size:13px; padding:8px 12px; border-radius:6px; transition:all 0.2s; white-space:nowrap; }
+.nav-link:hover,.nav-link.active{ color:var(--gold); background:rgba(201,168,76,0.1); }
+.nav-cta{ background:var(--gold); color:var(--navy)!important; text-decoration:none; font-size:13px; font-weight:600; padding:8px 16px; border-radius:6px; margin-left:8px; transition:all 0.2s; }
+.nav-cta:hover{ background:var(--gold-light); }
+.nav-hamburger{ display:none; flex-direction:column; gap:5px; background:none; border:none; cursor:pointer; padding:4px; }
+.nav-hamburger span{ display:block; width:24px; height:2px; background:var(--gold); border-radius:2px; }
+@media(max-width:768px){
+  .nav-logo-name{display:none;} .nav-hamburger{display:flex;}
+  .nav-links{display:none;position:absolute;top:64px;left:0;right:0;background:var(--navy);flex-direction:column;padding:1rem;border-bottom:2px solid var(--gold);}
+  .nav-links.open{display:flex;} .nav-link{width:100%;padding:12px 16px;}
+  .nav-cta{width:100%;text-align:center;margin-left:0;margin-top:0.5rem;}
+}
 
-    @media (max-width: 900px) {
-      .nav-links { display: none; flex-direction: column; position: absolute; top: 60px; left: 0; right: 0; background: var(--navy); padding: 1rem 0; }
-      .nav-links.open { display: flex; }
-      .nav-links a { line-height: 2.5rem; padding: 0 2rem; }
-      .nav-hamburger { display: flex; }
-    }
+/* HERO */
+.hero{ background:linear-gradient(135deg,var(--navy) 0%,#1a3a6b 60%,#0d2744 100%); padding:5rem 2rem; position:relative; overflow:hidden; }
+.hero::before{ content:""; position:absolute; top:-100px; right:-100px; width:500px; height:500px; border-radius:50%; background:radial-gradient(circle,rgba(201,168,76,0.12) 0%,transparent 70%); pointer-events:none; }
+.hero::after{ content:""; position:absolute; bottom:-80px; left:-80px; width:350px; height:350px; border-radius:50%; background:radial-gradient(circle,rgba(201,168,76,0.07) 0%,transparent 70%); pointer-events:none; }
+.hero-inner{ max-width:960px; margin:0 auto; display:grid; grid-template-columns:1fr 320px; gap:4rem; align-items:center; position:relative; z-index:1; }
+.hero-tag{ display:inline-block; font-size:11px; font-weight:500; letter-spacing:0.15em; text-transform:uppercase; color:var(--gold); border:1px solid rgba(201,168,76,0.4); padding:5px 14px; border-radius:20px; margin-bottom:1.5rem; }
+.hero h1{ font-family:"Playfair Display",serif; font-size:clamp(2.2rem,5vw,3.4rem); font-weight:700; color:var(--white); line-height:1.15; margin-bottom:1.25rem; }
+.hero h1 span{ color:var(--gold); }
+.hero-desc{ font-size:16px; color:rgba(255,255,255,0.72); line-height:1.75; margin-bottom:2rem; font-weight:300; max-width:520px; }
+.hero-btns{ display:flex; gap:12px; flex-wrap:wrap; }
+.btn-primary{ background:var(--gold); color:var(--navy); padding:11px 26px; border-radius:6px; font-size:14px; font-weight:500; text-decoration:none; transition:all 0.2s; display:inline-block; }
+.btn-primary:hover{ background:var(--gold-light); transform:translateY(-1px); }
+.btn-outline{ border:1px solid rgba(255,255,255,0.3); color:rgba(255,255,255,0.85); padding:11px 26px; border-radius:6px; font-size:14px; text-decoration:none; transition:all 0.2s; display:inline-block; }
+.btn-outline:hover{ border-color:var(--gold); color:var(--gold); }
 
-    /* ── HERO ── */
-    .hero {
-      background: var(--navy);
-      padding: 4rem 2rem 3rem;
-      display: flex; align-items: center; justify-content: center;
-    }
-    .hero-inner {
-      max-width: 1100px; width: 100%;
-      display: grid; grid-template-columns: auto 1fr; gap: 3rem; align-items: center;
-    }
-    .hero-photo-card {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(201,168,76,0.3);
-      border-radius: 12px; padding: 1.5rem;
-      text-align: center; min-width: 200px;
-    }
-    .hero-photo {
-      width: 130px; height: 130px; border-radius: 50%;
-      border: 3px solid var(--gold);
-      object-fit: cover; margin-bottom: 1rem;
-      display: block; margin-left: auto; margin-right: auto;
-    }
-    .hero-photo-name { color: var(--white); font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 600; margin-bottom: 0.25rem; }
-    .hero-photo-title { color: var(--gold); font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 1rem; }
-    .hero-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
-    .hero-stat { background: rgba(255,255,255,0.05); border-radius: 6px; padding: 0.5rem; text-align: center; }
-    .hero-stat-num { color: var(--gold); font-size: 1.1rem; font-weight: 700; font-family: 'Playfair Display', serif; }
-    .hero-stat-lbl { color: rgba(255,255,255,0.6); font-size: 0.65rem; line-height: 1.2; }
+/* PHOTO CARD */
+.hero-photo-card{ background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); border-radius:16px; padding:2rem; text-align:center; backdrop-filter:blur(10px); }
+.photo-circle{ width:150px; height:150px; border-radius:50%; margin:0 auto 1.25rem; border:3px solid rgba(201,168,76,0.5); overflow:hidden; background:linear-gradient(135deg,var(--gold),#8b6914); display:flex; align-items:center; justify-content:center; }
+.photo-circle img{ width:100%; height:100%; object-fit:cover; }
+.photo-name{ font-family:"Playfair Display",serif; font-size:17px; color:var(--white); margin-bottom:4px; }
+.photo-role{ font-size:12px; color:rgba(255,255,255,0.5); margin-bottom:1.25rem; }
+.photo-stats{ display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:1.25rem; }
+.stat-box{ background:rgba(255,255,255,0.07); border-radius:8px; padding:10px 8px; }
+.stat-num{ font-family:"Playfair Display",serif; font-size:20px; color:var(--gold); font-weight:700; display:block; }
+.stat-lbl{ font-size:10px; color:rgba(255,255,255,0.5); letter-spacing:0.05em; }
+.social-row{ display:flex; justify-content:center; gap:8px; }
+.social-btn{ width:34px; height:34px; border-radius:50%; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15); display:flex; align-items:center; justify-content:center; text-decoration:none; font-size:14px; color:rgba(255,255,255,0.7); transition:all 0.2s; }
+.social-btn:hover{ background:var(--gold); color:var(--navy); border-color:var(--gold); }
 
-    .hero-content { color: var(--white); }
-    .hero-location { color: var(--gold); font-size: 0.8rem; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 1rem; }
-    .hero-headline { font-family: 'Playfair Display', serif; font-size: 2.4rem; font-weight: 700; line-height: 1.2; margin-bottom: 1.25rem; }
-    .hero-headline em { color: var(--gold); font-style: normal; }
-    .hero-sub { color: rgba(255,255,255,0.75); font-size: 1.05rem; line-height: 1.7; margin-bottom: 2rem; max-width: 600px; }
-    .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
-    .btn-primary {
-      background: var(--gold); color: var(--navy);
-      padding: 0.7rem 1.6rem; border-radius: 6px;
-      font-weight: 700; font-size: 0.9rem; text-decoration: none;
-      transition: background 0.2s;
-    }
-    .btn-primary:hover { background: var(--gold-light); }
-    .btn-outline {
-      border: 1px solid rgba(255,255,255,0.35); color: var(--white);
-      padding: 0.7rem 1.6rem; border-radius: 6px;
-      font-size: 0.9rem; text-decoration: none;
-      transition: border-color 0.2s, color 0.2s;
-    }
-    .btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+/* STATS STRIP */
+.stats-strip{ background:var(--white); border-bottom:1px solid var(--border); padding:1.5rem 2rem; }
+.stats-inner{ max-width:960px; margin:0 auto; display:flex; justify-content:space-around; align-items:center; flex-wrap:wrap; gap:1rem; }
+.strip-stat{ text-align:center; }
+.strip-num{ font-family:"Playfair Display",serif; font-size:26px; font-weight:700; color:var(--navy); display:block; }
+.strip-lbl{ font-size:12px; color:var(--muted); margin-top:2px; }
+.strip-divider{ width:1px; height:40px; background:var(--border); }
 
-    @media (max-width: 700px) {
-      .hero-inner { grid-template-columns: 1fr; }
-      .hero-headline { font-size: 1.8rem; }
-    }
+/* SECTIONS */
+.section{ padding:4rem 2rem; }
+.section-inner{ max-width:960px; margin:0 auto; }
+.section-tag{ font-size:11px; font-weight:500; letter-spacing:0.15em; text-transform:uppercase; color:var(--gold); display:block; margin-bottom:0.4rem; }
+.section-title{ font-family:"Playfair Display",serif; font-size:clamp(1.6rem,3vw,2.2rem); color:var(--navy); margin-bottom:0.75rem; }
+.section-sub{ font-size:15px; color:var(--muted); margin-bottom:2.5rem; max-width:560px; line-height:1.7; }
 
-    /* ── SECTION COMMON ── */
-    section { padding: 5rem 2rem; }
-    .section-inner { max-width: 1100px; margin: 0 auto; }
-    .section-label { color: var(--gold); font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 0.5rem; }
-    .section-title { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 700; margin-bottom: 1rem; color: var(--navy); }
-    .section-lead { color: var(--text-muted); font-size: 1.05rem; line-height: 1.7; max-width: 650px; }
+/* RESEARCH CARDS */
+.research-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:1.25rem; }
+.research-card{ background:var(--white); border:1px solid var(--border); border-radius:12px; padding:1.75rem; transition:all 0.25s; position:relative; overflow:hidden; }
+.research-card::before{ content:""; position:absolute; top:0; left:0; right:0; height:3px; background:var(--gold); transform:scaleX(0); transition:transform 0.25s; transform-origin:left; }
+.research-card:hover{ box-shadow:0 8px 30px rgba(0,0,0,0.08); transform:translateY(-2px); }
+.research-card:hover::before{ transform:scaleX(1); }
+.card-icon{ font-size:28px; margin-bottom:1rem; display:block; }
+.card-title{ font-family:"Playfair Display",serif; font-size:16px; color:var(--navy); margin-bottom:0.5rem; }
+.card-text{ font-size:13px; color:var(--muted); line-height:1.65; }
+.card-tag{ display:inline-block; margin-top:0.75rem; font-size:11px; color:var(--gold); background:rgba(201,168,76,0.1); padding:3px 9px; border-radius:4px; font-weight:500; }
 
-    /* ── RESEARCH ── */
-    #research { background: var(--light-bg); }
-    .research-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 2.5rem; }
-    .research-card {
-      background: var(--white); border: 1px solid var(--border);
-      border-top: 3px solid var(--gold); border-radius: 8px;
-      padding: 1.75rem; transition: box-shadow 0.2s;
-    }
-    .research-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
-    .research-icon { font-size: 1.75rem; margin-bottom: 1rem; }
-    .research-card h3 { font-family: 'Playfair Display', serif; font-size: 1.1rem; margin-bottom: 0.75rem; color: var(--navy); }
-    .research-card p { color: var(--text-muted); font-size: 0.9rem; line-height: 1.7; }
-    .research-tag {
-      display: inline-block; margin-top: 1rem;
-      background: rgba(201,168,76,0.12); color: var(--gold);
-      padding: 0.25rem 0.6rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600;
-    }
-    @media (max-width: 768px) { .research-grid { grid-template-columns: 1fr; } }
+/* JOURNEY */
+.journey-section{ background:var(--navy); padding:4rem 2rem; }
+.journey-inner{ max-width:960px; margin:0 auto; }
+.timeline{ display:grid; grid-template-columns:repeat(4,1fr); gap:1rem; margin-top:2rem; }
+.timeline-item{ text-align:center; position:relative; }
+.timeline-item:not(:last-child)::after{ content:"→"; position:absolute; right:-12px; top:20px; color:var(--gold); font-size:18px; }
+.tl-dot{ width:44px; height:44px; border-radius:50%; background:rgba(201,168,76,0.15); border:2px solid var(--gold); display:flex; align-items:center; justify-content:center; margin:0 auto 0.75rem; font-size:18px; }
+.tl-year{ font-size:11px; color:var(--gold); font-weight:500; margin-bottom:4px; }
+.tl-place{ font-size:13px; color:var(--white); font-weight:500; margin-bottom:3px; }
+.tl-sub{ font-size:11px; color:rgba(255,255,255,0.45); }
 
-    /* ── JOURNEY ── */
-    #journey { background: var(--white); }
-    .timeline { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin-top: 2.5rem; }
-    .tl-card {
-      border: 1px solid var(--border); border-radius: 8px;
-      padding: 1.5rem; position: relative;
-    }
-    .tl-icon { font-size: 1.5rem; margin-bottom: 0.75rem; }
-    .tl-year { color: var(--gold); font-size: 0.8rem; font-weight: 600; margin-bottom: 0.25rem; }
-    .tl-place { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 600; color: var(--navy); margin-bottom: 0.25rem; }
-    .tl-desc { color: var(--text-muted); font-size: 0.85rem; line-height: 1.6; }
-    @media (max-width: 768px) { .timeline { grid-template-columns: 1fr 1fr; } }
-    @media (max-width: 480px) { .timeline { grid-template-columns: 1fr; } }
+/* PUBLICATIONS */
+.pub-card{ background:var(--white); border:1px solid var(--border); border-left:4px solid var(--gold); border-radius:8px; padding:1.25rem 1.5rem; margin-bottom:1rem; transition:box-shadow 0.2s; }
+.pub-card:hover{ box-shadow:0 4px 20px rgba(0,0,0,0.07); }
+.pub-title{ font-size:14px; font-weight:500; color:var(--navy); margin-bottom:5px; line-height:1.5; }
+.pub-meta{ font-size:12px; color:var(--muted); }
+.pub-year{ display:inline-block; background:#f3f4f6; color:var(--muted); font-size:11px; padding:2px 8px; border-radius:4px; margin-left:8px; }
+.view-all-link{ font-size:13px; color:var(--gold); text-decoration:none; font-weight:500; }
+.view-all-link:hover{ text-decoration:underline; }
 
-    /* ── PUBLICATIONS ── */
-    #publications { background: var(--light-bg); }
-    .pub-list { margin-top: 2rem; }
-    .pub-item {
-      background: var(--white); border: 1px solid var(--border);
-      border-left: 4px solid var(--gold); border-radius: 0 8px 8px 0;
-      padding: 1.25rem 1.5rem; margin-bottom: 1rem;
-    }
-    .pub-year { color: var(--gold); font-size: 0.78rem; font-weight: 700; letter-spacing: 0.1em; margin-bottom: 0.3rem; }
-    .pub-title { font-weight: 600; font-size: 0.95rem; color: var(--navy); margin-bottom: 0.3rem; line-height: 1.5; }
-    .pub-authors { color: var(--text-muted); font-size: 0.85rem; font-style: italic; }
-    .pub-view-all { display: inline-block; margin-top: 1.5rem; color: var(--gold); font-weight: 600; text-decoration: none; font-size: 0.9rem; }
-    .pub-view-all:hover { text-decoration: underline; }
+/* FEEDS */
+.feeds-grid{ display:grid; grid-template-columns:1fr 1fr; gap:2rem; margin-bottom:1rem; }
+.feed-block{ }
+.feed-label{ display:flex; align-items:center; justify-content:space-between; margin-bottom:0.75rem; }
+.feed-label-left{ display:flex; align-items:center; gap:10px; }
+.feed-label-left .title{ font-size:14px; font-weight:600; color:var(--navy); }
+.feed-label-left .sub{ font-size:12px; color:var(--muted); }
+.feed-follow{ font-size:12px; color:var(--gold); text-decoration:none; font-weight:500; }
+.feed-follow:hover{ text-decoration:underline; }
+.yt-wrap{ position:relative; padding-bottom:56.25%; height:0; overflow:hidden; border-radius:12px; border:1px solid var(--border); }
+.yt-wrap iframe{ position:absolute; top:0; left:0; width:100%; height:100%; border:none; }
 
-    /* ── BEYOND THE LAB ── */
-    #beyond { background: var(--white); }
-    .social-feed-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2.5rem; }
-    .feed-card {
-      border: 1px solid var(--border); border-radius: 10px; overflow: hidden;
-    }
-    .feed-card-header {
-      background: var(--navy); padding: 0.85rem 1.25rem;
-      display: flex; align-items: center; justify-content: space-between;
-    }
-    .feed-card-label { color: var(--white); font-size: 0.85rem; font-weight: 600; }
-    .feed-card-link { color: var(--gold); font-size: 0.8rem; text-decoration: none; }
-    .feed-card-link:hover { text-decoration: underline; }
-    .feed-card-body { padding: 1.25rem; background: var(--light-bg); }
-    .feed-card-body iframe { width: 100%; border-radius: 6px; display: block; }
-    @media (max-width: 700px) { .social-feed-grid { grid-template-columns: 1fr; } }
+/* CONTACT STRIP */
+.contact-strip{ background:var(--gold); padding:3rem 2rem; text-align:center; }
+.contact-strip h3{ font-family:"Playfair Display",serif; font-size:22px; color:var(--navy); margin-bottom:0.5rem; }
+.contact-strip p{ font-size:14px; color:rgba(15,31,61,0.7); margin-bottom:1.5rem; }
+.contact-row{ display:flex; align-items:center; justify-content:center; gap:1.5rem; flex-wrap:wrap; }
+.contact-email-btn{ background:var(--navy); color:var(--white); padding:11px 28px; border-radius:6px; text-decoration:none; font-size:14px; font-weight:500; transition:opacity 0.2s; }
+.contact-email-btn:hover{ opacity:0.85; }
+.contact-social-group{ display:flex; gap:8px; }
+.contact-social-pill{ display:flex; align-items:center; gap:6px; padding:8px 14px; border-radius:6px; border:1px solid rgba(15,31,61,0.2); text-decoration:none; font-size:13px; color:var(--navy); font-weight:500; transition:all 0.2s; background:rgba(255,255,255,0.3); }
+.contact-social-pill:hover{ background:var(--navy); color:var(--gold); border-color:var(--navy); }
 
-    /* ── COLLABORATION ── */
-    #collab { background: var(--navy); padding: 4rem 2rem; text-align: center; }
-    #collab .section-title { color: var(--white); }
-    #collab .section-lead { color: rgba(255,255,255,0.7); margin: 0.75rem auto 2rem; }
-    .collab-row {
-      display: flex; align-items: center; justify-content: center;
-      gap: 1.25rem; flex-wrap: wrap;
-    }
-    .collab-social-group { display: flex; gap: 0.75rem; }
-    .collab-social-btn {
-      display: flex; align-items: center; gap: 6px;
-      background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2);
-      color: rgba(255,255,255,0.85); text-decoration: none;
-      padding: 0.55rem 1rem; border-radius: 6px; font-size: 0.82rem;
-      transition: background 0.2s, border-color 0.2s;
-    }
-    .collab-social-btn:hover { background: rgba(201,168,76,0.2); border-color: var(--gold); color: var(--gold); }
-    .collab-email-btn {
-      background: var(--gold); color: var(--navy);
-      padding: 0.75rem 2.5rem; border-radius: 6px;
-      font-weight: 700; font-size: 1rem; text-decoration: none;
-      transition: background 0.2s;
-    }
-    .collab-email-btn:hover { background: var(--gold-light); }
-    .collab-divider { color: rgba(255,255,255,0.3); font-size: 0.8rem; }
+.page-footer{ background:var(--navy); padding:1.75rem 2rem; text-align:center; }
+.page-footer p{ font-size:13px; color:rgba(255,255,255,0.4); }
+.page-footer a{ color:var(--gold); text-decoration:none; }
 
-    /* ── FOOTER ── */
-    footer {
-      background: #060f1e; color: rgba(255,255,255,0.5);
-      text-align: center; padding: 1.5rem;
-      font-size: 0.82rem;
-    }
-    footer a { color: var(--gold); text-decoration: none; }
-  </style>
+@media(max-width:768px){
+  .hero-inner{grid-template-columns:1fr;}
+  .hero-photo-card{display:none;}
+  .research-grid{grid-template-columns:1fr;}
+  .timeline{grid-template-columns:1fr 1fr;}
+  .feeds-grid{grid-template-columns:1fr;}
+  .strip-divider{display:none;}
+  .contact-row{flex-direction:column;}
+  .contact-social-group{flex-wrap:wrap;justify-content:center;}
+}
+</style>
 </head>
 <body>
 
-<!-- NAVBAR -->
-<nav>
-  <a class="nav-logo" href="/">
-    <div class="nav-logo-badge">AGR</div>
-    <span class="nav-logo-text">Dr. Adeem Ghaffar Rana</span>
-  </a>
-  <ul class="nav-links" id="navLinks">
-    <li><a href="/" class="active">Home</a></li>
-    <li><a href="/about.html">About</a></li>
-    <li><a href="/research.html">Research</a></li>
-    <li><a href="/publications.html">Publications</a></li>
-    <li><a href="/blog.html">Blog</a></li>
-    <li><a href="/session2006.html">Session 2006</a></li>
-    <li><a href="/alumni.html">Alumni Portal</a></li>
-    <li><a href="mailto:ranaadeem@hotmail.com" class="nav-contact-btn">Contact</a></li>
-  </ul>
-  <div class="nav-hamburger" id="hamburger" onclick="document.getElementById('navLinks').classList.toggle('open')">
-    <span></span><span></span><span></span>
+<nav id="main-nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">
+      <span class="nav-logo-agr">AGR</span>
+      <span class="nav-logo-name">Dr. Adeem Ghaffar Rana</span>
+    </a>
+    <button class="nav-hamburger" onclick="toggleMenu()" aria-label="Menu"><span></span><span></span><span></span></button>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="/" class="nav-link active">Home</a></li>
+      <li><a href="/about.html" class="nav-link">About</a></li>
+      <li><a href="/research.html" class="nav-link">Research</a></li>
+      <li><a href="/publications.html" class="nav-link">Publications</a></li>
+      <li><a href="/blog.html" class="nav-link">Blog</a></li>
+      <li><a href="/session2006.html" class="nav-link">Session 2006</a></li>
+      <li><a href="/alumni.html" class="nav-link">Alumni Portal</a></li>
+      <li><a href="mailto:ranaadeem@hotmail.com" class="nav-cta">Contact</a></li>
+    </ul>
   </div>
 </nav>
 
 <!-- HERO -->
 <section class="hero">
   <div class="hero-inner">
-    <div class="hero-photo-card">
-      <img class="hero-photo" src="data:image/jpeg;base64,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" alt="Dr. Adeem Ghaffar Rana">
-      <div class="hero-photo-name">Dr. Adeem Ghaffar Rana</div>
-      <div class="hero-photo-title">Dr.-Ing. · Chemical Engineering</div>
-      <div class="hero-stats">
-        <div class="hero-stat"><div class="hero-stat-num">15+</div><div class="hero-stat-lbl">Publications</div></div>
-        <div class="hero-stat"><div class="hero-stat-num">230+</div><div class="hero-stat-lbl">Citations</div></div>
-        <div class="hero-stat"><div class="hero-stat-num">3</div><div class="hero-stat-lbl">Countries</div></div>
-        <div class="hero-stat"><div class="hero-stat-num">14+</div><div class="hero-stat-lbl">Years Exp.</div></div>
+    <div class="hero-content">
+      <span class="hero-tag">Postdoctoral Researcher · Freiberg, Germany</span>
+      <h1>Catalysis for a <span>Sustainable</span> Future</h1>
+      <p class="hero-desc">I'm Dr. Adeem Ghaffar Rana — a chemical engineer working at the intersection of heterogeneous catalysis, sustainable aviation fuels, and clean energy processes. Currently at TU Bergakademie Freiberg, Germany.</p>
+      <div class="hero-btns">
+        <a href="#research" class="btn-primary" onclick="document.getElementById('research').scrollIntoView({behavior:'smooth'});return false;">Explore My Work ↓</a>
+        <a href="https://scholar.google.com/citations?user=pUQ4nFsAAAAJ" target="_blank" class="btn-outline">Google Scholar →</a>
+        <a href="https://www.linkedin.com/in/ranaadeem/" target="_blank" class="btn-outline">LinkedIn →</a>
       </div>
     </div>
-
-    <div class="hero-content">
-      <div class="hero-location">Postdoctoral Researcher · Freiberg, Germany</div>
-      <h1 class="hero-headline">Catalysis for a<br><em>Sustainable Future</em></h1>
-      <p class="hero-sub">I'm Dr. Adeem Ghaffar Rana — a chemical engineer working at the intersection of heterogeneous catalysis, sustainable aviation fuels, and clean energy processes. Currently at TU Bergakademie Freiberg, Germany.</p>
-      <div class="hero-btns">
-        <a class="btn-primary" href="#research">Explore My Work ↓</a>
-        <a class="btn-outline" href="https://scholar.google.com/citations?user=pUQ4nFsAAAAJ" target="_blank">Google Scholar →</a>
-        <a class="btn-outline" href="https://www.linkedin.com/in/ranaadeem/" target="_blank">LinkedIn →</a>
+    <div class="hero-photo-card">
+      <div class="photo-circle">
+        <img src="data:image/jpeg;base64,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" alt="Dr. Adeem Ghaffar Rana">
+      </div>
+      <div class="photo-name">Dr. Adeem Ghaffar Rana</div>
+      <div class="photo-role">Dr.-Ing. · Chemical Engineering</div>
+      <div class="photo-stats">
+        <div class="stat-box"><span class="stat-num">15+</span><span class="stat-lbl">Publications</span></div>
+        <div class="stat-box"><span class="stat-num">230+</span><span class="stat-lbl">Citations</span></div>
+        <div class="stat-box"><span class="stat-num">3</span><span class="stat-lbl">Countries</span></div>
+        <div class="stat-box"><span class="stat-num">14+</span><span class="stat-lbl">Years Exp.</span></div>
+      </div>
+      <div class="social-row">
+        <a href="https://www.instagram.com/adeemghaffarrana" target="_blank" class="social-btn" title="Instagram">📷</a>
+        <a href="https://www.youtube.com/@AdeemGhaffarRana" target="_blank" class="social-btn" title="YouTube">▶</a>
+        <a href="https://www.facebook.com/Dr.AGRana" target="_blank" class="social-btn" title="Facebook">f</a>
+        <a href="https://x.com/ranaadeem" target="_blank" class="social-btn" title="X">𝕏</a>
+        <a href="https://www.linkedin.com/in/ranaadeem/" target="_blank" class="social-btn" title="LinkedIn">in</a>
       </div>
     </div>
   </div>
 </section>
 
+<!-- STATS STRIP -->
+<div class="stats-strip">
+  <div class="stats-inner">
+    <div class="strip-stat"><span class="strip-num">15+</span><div class="strip-lbl">Peer-reviewed Publications</div></div>
+    <div class="strip-divider"></div>
+    <div class="strip-stat"><span class="strip-num">230+</span><div class="strip-lbl">Total Citations</div></div>
+    <div class="strip-divider"></div>
+    <div class="strip-stat"><span class="strip-num">3</span><div class="strip-lbl">Countries Worked In</div></div>
+    <div class="strip-divider"></div>
+    <div class="strip-stat"><span class="strip-num">DAAD</span><div class="strip-lbl">Scholarship Recipient</div></div>
+    <div class="strip-divider"></div>
+    <div class="strip-stat"><span class="strip-num">TUM · TUBAF</span><div class="strip-lbl">Academic Institutions</div></div>
+  </div>
+</div>
+
 <!-- RESEARCH -->
-<section id="research">
+<section class="section" id="research">
   <div class="section-inner">
-    <div class="section-label">Current Work</div>
+    <span class="section-tag">Current Work</span>
     <h2 class="section-title">Research Focus Areas</h2>
-    <p class="section-lead">My work sits at the intersection of catalyst development, reaction engineering, and sustainable fuel production — from lab-scale execution to industrial collaboration.</p>
+    <p class="section-sub">My work sits at the intersection of catalyst development, reaction engineering, and sustainable fuel production — from lab-scale execution to industrial collaboration.</p>
     <div class="research-grid">
       <div class="research-card">
-        <div class="research-icon">✈️</div>
-        <h3>Sustainable Aviation Fuels</h3>
-        <p>Methanol-to-Olefins (MTO) using zeolite catalysts and hydrotreating/hydrocracking of Fischer–Tropsch feeds for SAF-range products within the REF4FU and OptiSAF frameworks.</p>
-        <span class="research-tag">Ongoing · TUBAF · 2023–</span>
+        <span class="card-icon">✈️</span>
+        <h3 class="card-title">Sustainable Aviation Fuels</h3>
+        <p class="card-text">Methanol-to-Olefins (MTO) using zeolite catalysts and hydrotreating/hydrocracking of Fischer–Tropsch feeds for SAF-range products within the REF4FU and OptiSAF frameworks.</p>
+        <span class="card-tag">Ongoing · TUBAF · 2023–</span>
       </div>
       <div class="research-card">
-        <div class="research-icon">⚗️</div>
-        <h3>Heterogeneous Catalysis</h3>
-        <p>Catalyst synthesis, screening, and kinetic evaluation. Expertise in zeolite-based systems, metal-supported catalysts, and Design of Experiments (DoE) for process optimization.</p>
-        <span class="research-tag">REF4FU · OptiSAF Projects</span>
+        <span class="card-icon">⚗️</span>
+        <h3 class="card-title">Heterogeneous Catalysis</h3>
+        <p class="card-text">Catalyst synthesis, screening, and kinetic evaluation. Expertise in zeolite-based systems, metal-supported catalysts, and Design of Experiments (DoE) for process optimization.</p>
+        <span class="card-tag">REF4FU · OptiSAF Projects</span>
       </div>
       <div class="research-card">
-        <div class="research-icon">☀️</div>
-        <h3>Photocatalysis</h3>
-        <p>Modification of graphitic carbon nitride (g-C₃N₄) for redox applications. CO₂ conversion to hydrocarbons. Photocatalytic degradation of persistent organic pollutants.</p>
-        <span class="research-tag">TUM · PhD Research</span>
+        <span class="card-icon">☀️</span>
+        <h3 class="card-title">Photocatalysis</h3>
+        <p class="card-text">Modification of graphitic carbon nitride (g-C₃N₄) for redox applications. CO₂ conversion to hydrocarbons. Photocatalytic degradation of persistent organic pollutants.</p>
+        <span class="card-tag">TUM · PhD Research</span>
       </div>
     </div>
   </div>
 </section>
 
 <!-- JOURNEY -->
-<section id="journey">
-  <div class="section-inner">
-    <div class="section-label">Academic Journey</div>
-    <h2 class="section-title">From Lahore to Freiberg</h2>
+<section class="journey-section">
+  <div class="journey-inner">
+    <span class="section-tag" style="color:var(--gold)">Academic Journey</span>
+    <h2 class="section-title" style="color:white">From Lahore to Freiberg</h2>
     <div class="timeline">
-      <div class="tl-card">
-        <div class="tl-icon">🎓</div>
+      <div class="timeline-item">
+        <div class="tl-dot">🎓</div>
         <div class="tl-year">2006 – 2010</div>
         <div class="tl-place">University of Punjab</div>
-        <div class="tl-desc">BS Chemical Engineering · Pakistan</div>
+        <div class="tl-sub">BS Chemical Engineering · Pakistan</div>
       </div>
-      <div class="tl-card">
-        <div class="tl-icon">🔬</div>
+      <div class="timeline-item">
+        <div class="tl-dot">🔬</div>
         <div class="tl-year">2013 – 2015</div>
         <div class="tl-place">KFUPM</div>
-        <div class="tl-desc">MS Chemical Engineering · Saudi Arabia</div>
+        <div class="tl-sub">MS Chemical Engineering · Saudi Arabia</div>
       </div>
-      <div class="tl-card">
-        <div class="tl-icon">🏅</div>
+      <div class="timeline-item">
+        <div class="tl-dot">🏅</div>
         <div class="tl-year">2017 – 2022</div>
         <div class="tl-place">TU Munich</div>
-        <div class="tl-desc">PhD (Dr.-Ing.) · DAAD Scholar · Germany</div>
+        <div class="tl-sub">PhD (Dr.-Ing.) · DAAD Scholar · Germany</div>
       </div>
-      <div class="tl-card">
-        <div class="tl-icon">⚗️</div>
+      <div class="timeline-item">
+        <div class="tl-dot">⚗️</div>
         <div class="tl-year">2023 – Present</div>
         <div class="tl-place">TUBAF Freiberg</div>
-        <div class="tl-desc">Postdoctoral Researcher · Germany</div>
+        <div class="tl-sub">Postdoctoral Researcher · Germany</div>
       </div>
     </div>
   </div>
 </section>
 
 <!-- PUBLICATIONS -->
-<section id="publications">
+<section class="section">
   <div class="section-inner">
-    <div class="section-label">Research Output</div>
+    <span class="section-tag">Research Output</span>
     <h2 class="section-title">Selected Publications</h2>
-    <p class="section-lead">A selection of peer-reviewed work. Full list available on Google Scholar.</p>
-    <div class="pub-list">
-      <div class="pub-item">
-        <div class="pub-year">2026</div>
-        <div class="pub-title">Advances and Challenges in Photocatalytic Water Splitting: Recent Developments and Trends</div>
-        <div class="pub-authors">Anwar, S.; Aslam, Z.; <strong>Rana, A.G.</strong> et al. · <em>Fuel</em>, 404, p. 136280</div>
-      </div>
-      <div class="pub-item">
-        <div class="pub-year">2024</div>
-        <div class="pub-title">Enhanced Gas-Phase Pollutant Removal Using Pt Nanoparticle-Modified Exfoliated Carbon Nitride Photocatalysts Under UV and Visible Light</div>
-        <div class="pub-authors">Mateos, M.J.; Hou, H.; <strong>Rana, A.G.</strong> et al. · <em>Chemical Engineering Journal</em>, 500, p. 156948</div>
-      </div>
-      <div class="pub-item">
-        <div class="pub-year">2022</div>
-        <div class="pub-title">Influence of Cocatalysts (Ni, Co, Cu) and Synthesis Method on Photocatalytic Activity of Exfoliated g-C₃N₄ for Hydrogen Production</div>
-        <div class="pub-authors"><strong>Rana, A.G.</strong>; Schwarze, M.; Tasbihi, M. et al. · <em>Nanomaterials</em>, 12(22), p. 4006</div>
-      </div>
+    <p class="section-sub">A selection of peer-reviewed work. Full list available on Google Scholar.</p>
+    <div class="pub-card">
+      <div class="pub-title">Advances and Challenges in Photocatalytic Water Splitting: Recent Developments and Trends<span class="pub-year">2026</span></div>
+      <div class="pub-meta">Anwar, S.; Aslam, Z.; <strong>Rana, A.G.</strong> et al. · <em>Fuel</em>, 404, p. 136280</div>
     </div>
-    <a class="pub-view-all" href="/publications.html">View all publications →</a>
+    <div class="pub-card">
+      <div class="pub-title">Enhanced Gas-Phase Pollutant Removal Using Pt Nanoparticle-Modified Exfoliated Carbon Nitride Photocatalysts Under UV and Visible Light<span class="pub-year">2024</span></div>
+      <div class="pub-meta">Mateos, M.J.; Hou, H.; <strong>Rana, A.G.</strong> et al. · <em>Chemical Engineering Journal</em>, 500, p. 156948</div>
+    </div>
+    <div class="pub-card">
+      <div class="pub-title">Influence of Cocatalysts (Ni, Co, Cu) and Synthesis Method on Photocatalytic Activity of Exfoliated g-C₃N₄ for Hydrogen Production<span class="pub-year">2022</span></div>
+      <div class="pub-meta"><strong>Rana, A.G.</strong>; Schwarze, M.; Tasbihi, M. et al. · <em>Nanomaterials</em>, 12(22), p. 4006</div>
+    </div>
+    <br>
+    <a href="/publications.html" class="view-all-link">View all publications →</a>
   </div>
 </section>
 
 <!-- BEYOND THE LAB -->
-<section id="beyond">
+<section class="section" style="background:var(--white);border-top:1px solid var(--border);">
   <div class="section-inner">
-    <div class="section-label">Beyond the Lab</div>
+    <span class="section-tag">Beyond the Lab</span>
     <h2 class="section-title">Travel · Photography · Cricket</h2>
-    <p class="section-lead">When not in the lab, I explore the world through a lens and on two wheels. Follow my journeys on Instagram and YouTube.</p>
-    <div class="social-feed-grid">
-      <div class="feed-card">
-        <div class="feed-card-header">
-          <span class="feed-card-label">▶️ Latest from YouTube</span>
-          <a class="feed-card-link" href="https://www.youtube.com/@AdeemGhaffarRana" target="_blank">Subscribe →</a>
+    <p class="section-sub">When not in the lab, I explore the world through a lens and on two wheels. Follow my journeys on Instagram and YouTube.</p>
+    <div class="feeds-grid">
+      <div class="feed-block">
+        <div class="feed-label">
+          <div class="feed-label-left"><span style="font-size:20px">▶️</span><div><div class="title">Latest from YouTube</div><div class="sub">@AdeemGhaffarRana · Travel · Cricket · Life in Germany</div></div></div>
+          <a href="https://www.youtube.com/@AdeemGhaffarRana" target="_blank" class="feed-follow">Subscribe →</a>
         </div>
-        <div class="feed-card-body">
-          <p style="font-size:0.8rem;color:#888;margin-bottom:0.75rem;">@AdeemGhaffarRana · Travel · Cricket · Life in Germany</p>
-          <iframe width="100%" height="215" src="https://www.youtube.com/embed/SYraexMwffY?si=XwDgbrmKSxKmTfQu&rel=0&modestbranding=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        <div class="yt-wrap">
+          <iframe src="https://www.youtube.com/embed/SYraexMwffY?si=XwDgbrmKSxKmTfQu&rel=0&modestbranding=1" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture;web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen title="Adeem Ghaffar Rana YouTube"></iframe>
         </div>
       </div>
-      <div class="feed-card">
-        <div class="feed-card-header">
-          <span class="feed-card-label">📷 Latest from Instagram</span>
-          <a class="feed-card-link" href="https://www.instagram.com/adeemghaffarrana" target="_blank">Follow →</a>
+      <div class="feed-block">
+        <div class="feed-label">
+          <div class="feed-label-left"><span style="font-size:20px">📷</span><div><div class="title">Latest from Instagram</div><div class="sub">@adeemghaffarrana · Photography &amp; Travel</div></div></div>
+          <a href="https://www.instagram.com/adeemghaffarrana" target="_blank" class="feed-follow">Follow →</a>
         </div>
-        <div class="feed-card-body">
-          <p style="font-size:0.8rem;color:#888;margin-bottom:0.75rem;">@adeemghaffarrana · Photography &amp; Travel</p>
-          <behold-widget feed-id="QAmxYCXfs1bJN6vSaQPa"></behold-widget>
-          <script>
-            (() => { const d=document,s=d.createElement("script"); s.type="module"; s.src="https://w.behold.so/widget.js"; d.head.append(s); })();
-          </script>
-        </div>
+        <behold-widget feed-id="QAmxYCXfs1bJN6vSaQPa"></behold-widget>
+        <script>(() => { const d=document,s=d.createElement("script");s.type="module";s.src="https://w.behold.so/widget.js";d.head.append(s); })();</script>
       </div>
     </div>
   </div>
 </section>
 
-<!-- COLLABORATION -->
-<section id="collab">
-  <div class="section-inner">
-    <div class="section-label" style="color:var(--gold)">Get In Touch</div>
-    <h2 class="section-title">Open to Collaborations &amp; Opportunities</h2>
-    <p class="section-lead">PhD positions, research collaborations, or industry projects — let's connect.</p>
-    <div class="collab-row">
-      <!-- Left social group -->
-      <div class="collab-social-group">
-        <a class="collab-social-btn" href="https://www.instagram.com/adeemghaffarrana" target="_blank">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg>
-          Instagram
-        </a>
-        <a class="collab-social-btn" href="https://www.facebook.com/Dr.AGRana" target="_blank">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
-          Facebook
-        </a>
-      </div>
-
-      <!-- Email button -->
-      <a class="collab-email-btn" href="mailto:ranaadeem@hotmail.com">✉ ranaadeem@hotmail.com</a>
-
-      <!-- Right social group -->
-      <div class="collab-social-group">
-        <a class="collab-social-btn" href="https://www.youtube.com/@AdeemGhaffarRana" target="_blank">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 0 0-1.95 1.96A29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58A2.78 2.78 0 0 0 3.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.95A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58zM9.75 15.02V8.98L15.5 12l-5.75 3.02z"/></svg>
-          YouTube
-        </a>
-        <a class="collab-social-btn" href="https://x.com/ranaadeem" target="_blank">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-          X / Twitter
-        </a>
-      </div>
+<!-- CONTACT / COLLABORATION -->
+<div class="contact-strip">
+  <h3>Open to Collaborations &amp; Opportunities</h3>
+  <p>PhD positions, research collaborations, or industry projects — let's connect.</p>
+  <div class="contact-row">
+    <div class="contact-social-group">
+      <a href="https://www.instagram.com/adeemghaffarrana" target="_blank" class="contact-social-pill">📷 Instagram</a>
+      <a href="https://www.facebook.com/Dr.AGRana" target="_blank" class="contact-social-pill">f Facebook</a>
+    </div>
+    <a href="mailto:ranaadeem@hotmail.com" class="contact-email-btn">✉ ranaadeem@hotmail.com</a>
+    <div class="contact-social-group">
+      <a href="https://www.youtube.com/@AdeemGhaffarRana" target="_blank" class="contact-social-pill">▶ YouTube</a>
+      <a href="https://x.com/ranaadeem" target="_blank" class="contact-social-pill">𝕏 Twitter/X</a>
     </div>
   </div>
-</section>
+</div>
 
-<!-- FOOTER -->
-<footer>
+<div class="page-footer">
   <p>© 2025 Dr. Adeem Ghaffar Rana · <a href="https://ranaadeem.de">ranaadeem.de</a> · <a href="https://www.linkedin.com/in/ranaadeem/" target="_blank">LinkedIn</a> · <a href="https://scholar.google.com/citations?user=pUQ4nFsAAAAJ" target="_blank">Google Scholar</a></p>
-</footer>
+</div>
 
+<script>
+function toggleMenu() { document.getElementById('nav-links').classList.toggle('open'); }
+</script>
 </body>
 </html>
