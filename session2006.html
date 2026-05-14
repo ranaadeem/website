@@ -782,42 +782,9 @@
       ).join('') + '</div>';
   }
 
-  async function fetchAlumniData() {
-    try {
-      const res = await fetch(SHEETS_URL + '?action=getStats', { method: 'GET', mode: 'cors' });
-      const data = await res.json();
-
-      const registered = data.total || 0;
-      const countryCounts = data.countries || {};
-      const countries = Object.keys(countryCounts).length;
-
-      // Update header stats
-      document.getElementById('total-registered').textContent = registered;
-      document.getElementById('total-countries').textContent = countries;
-      document.getElementById('counter-num').textContent = registered;
-
-      // Update progress bar
-      const pct = Math.round((registered / TOTAL_BATCH) * 100);
-      document.getElementById('reg-pct').textContent = pct + '% complete';
-      document.getElementById('reg-bar').style.width = pct + '%';
-
-      // Update map
-      updateMapPins(countryCounts);
-      updateCountryList(countryCounts);
-
-      // Update timestamp
-      const now = new Date();
-      document.getElementById('map-update-time').textContent = 'Updated: ' + now.toLocaleTimeString();
-
-    } catch(e) {
-      // Fallback if API fails
-      document.getElementById('total-registered').textContent = '—';
-      document.getElementById('total-countries').textContent = '—';
-      document.getElementById('counter-num').textContent = '—';
-      document.getElementById('map-update-time').textContent = 'Connect to see live data';
-      document.getElementById('country-list').innerHTML = '<div style="font-size:12px;color:var(--muted);text-align:center;padding:1rem;">Register to see alumni locations!</div>';
-    }
-  }
+  // fetchAlumniData — now powered by Firebase (see module script below)
+  // Stub kept so setInterval call below doesn't break
+  async function fetchAlumniData() { /* handled by Firebase module */ }
 
   // Add pulse animation
   const style = document.createElement('style');
@@ -1020,10 +987,12 @@ slideTimer = setInterval(() => goToSlide(currentSlide + 1), 5000);
 function toggleMenu() { document.getElementById('nav-links').classList.toggle('open'); }
 </script>
 
-<!-- Firebase live counter -->
+<!-- Firebase live counter — full version -->
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js';
-import { getFirestore, collection, getDocs, query, where } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js';
+import { getFirestore, collection, getDocs, query, where }
+  from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js';
+
 const app = initializeApp({
   apiKey:"AIzaSyAgUl22Cln6QtY3-HIvI6lE8Zu7n9OblbI",
   authDomain:"icet-alumni.firebaseapp.com",
@@ -1033,22 +1002,56 @@ const app = initializeApp({
   appId:"1:707390888790:web:57e6be62e4d11e22c214f7"
 });
 const db = getFirestore(app);
-(async () => {
+const TOTAL_BATCH = 245;
+
+async function loadFirebaseStats() {
   try {
-    const snap = await getDocs(query(collection(db,'alumni'), where('session','in',['2006-Morning','2006-Evening'])));
-    const count = snap.size;
-    // Update all elements that show registered count
-    document.querySelectorAll('[id="registered-count"],[data-registered]').forEach(el => { el.textContent = count; });
-    // Also try common patterns from our session2006 page
-    const els = document.querySelectorAll('.hstat-num');
-    if (els.length > 0) els[0].textContent = count;
-    // Update progress bar if present
-    const bar = document.querySelector('.reg-progress-fill');
-    if (bar) { const pct = Math.round(count/245*100); bar.style.width = pct+'%'; }
-    const pctEl = document.querySelector('.reg-pct');
-    if (pctEl) pctEl.textContent = Math.round(count/245*100)+'%';
-  } catch(e) { console.log('Firebase counter:', e.message); }
-})();
+    const snap = await getDocs(
+      query(collection(db,'alumni'), where('session','in',['2006-Morning','2006-Evening']))
+    );
+
+    const registered = snap.size;
+    const countryCounts = {};
+
+    snap.forEach(d => {
+      const data = d.data();
+      if (data.country) {
+        countryCounts[data.country] = (countryCounts[data.country] || 0) + 1;
+      }
+    });
+
+    const countries = Object.keys(countryCounts).length;
+    const pct = Math.round((registered / TOTAL_BATCH) * 100);
+
+    // ── Update header stats ──
+    const totalReg = document.getElementById('total-registered');
+    const totalCnt = document.getElementById('total-countries');
+    const counterNum = document.getElementById('counter-num');
+    const regPct = document.getElementById('reg-pct');
+    const regBar = document.getElementById('reg-bar');
+    const mapTime = document.getElementById('map-update-time');
+
+    if (totalReg) totalReg.textContent = registered;
+    if (totalCnt) totalCnt.textContent = countries;
+    if (counterNum) counterNum.textContent = registered;
+    if (regPct) regPct.textContent = pct + '% complete';
+    if (regBar) regBar.style.width = pct + '%';
+    if (mapTime) mapTime.textContent = 'Updated: ' + new Date().toLocaleTimeString();
+
+    // ── Update map and country list (existing page functions) ──
+    if (typeof updateMapPins === 'function') updateMapPins(countryCounts);
+    if (typeof updateCountryList === 'function') updateCountryList(countryCounts);
+
+  } catch(e) {
+    console.log('Firebase stats error:', e.message);
+    const ids = ['total-registered','total-countries','counter-num'];
+    ids.forEach(id => { const el = document.getElementById(id); if(el) el.textContent = '–'; });
+  }
+}
+
+// Run on load and every 5 minutes
+loadFirebaseStats();
+setInterval(loadFirebaseStats, 5 * 60 * 1000);
 </script>
 </body>
 </html>
