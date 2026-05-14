@@ -301,7 +301,7 @@ onAuthStateChanged(auth, async (user) => {
   document.getElementById('loading-state').style.display = 'none';
   if (!user || user.uid !== ADMIN_UID) {
     // If UID is still placeholder, show setup instructions
-    if (ADMIN_UID === 'w2AtZbhUiyY5TxyvIecHzWqheaE2') {
+    if (false) { // Setup complete — UID is configured
       document.getElementById('access-denied').innerHTML = `
         <h2>⚙ Setup Required</h2>
         <p>To activate the admin panel, you need to set your UID.</p>
