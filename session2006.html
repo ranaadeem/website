@@ -1019,5 +1019,36 @@ slideTimer = setInterval(() => goToSlide(currentSlide + 1), 5000);
 <script>
 function toggleMenu() { document.getElementById('nav-links').classList.toggle('open'); }
 </script>
+
+<!-- Firebase live counter -->
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js';
+import { getFirestore, collection, getDocs, query, where } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js';
+const app = initializeApp({
+  apiKey:"AIzaSyAgUl22Cln6QtY3-HIvI6lE8Zu7n9OblbI",
+  authDomain:"icet-alumni.firebaseapp.com",
+  projectId:"icet-alumni",
+  storageBucket:"icet-alumni.firebasestorage.app",
+  messagingSenderId:"707390888790",
+  appId:"1:707390888790:web:57e6be62e4d11e22c214f7"
+});
+const db = getFirestore(app);
+(async () => {
+  try {
+    const snap = await getDocs(query(collection(db,'alumni'), where('session','in',['2006-Morning','2006-Evening'])));
+    const count = snap.size;
+    // Update all elements that show registered count
+    document.querySelectorAll('[id="registered-count"],[data-registered]').forEach(el => { el.textContent = count; });
+    // Also try common patterns from our session2006 page
+    const els = document.querySelectorAll('.hstat-num');
+    if (els.length > 0) els[0].textContent = count;
+    // Update progress bar if present
+    const bar = document.querySelector('.reg-progress-fill');
+    if (bar) { const pct = Math.round(count/245*100); bar.style.width = pct+'%'; }
+    const pctEl = document.querySelector('.reg-pct');
+    if (pctEl) pctEl.textContent = Math.round(count/245*100)+'%';
+  } catch(e) { console.log('Firebase counter:', e.message); }
+})();
+</script>
 </body>
 </html>
