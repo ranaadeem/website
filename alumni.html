@@ -456,39 +456,54 @@ nav {
 
 <!-- ===== PAGE: DIRECTORY ===== -->
 <div class="page" id="page-directory">
-  <div class="directory-wrap">
+  <div style="max-width:1100px;margin:0 auto;padding:2rem;">
 
-    <!-- ── SESSION STATS HEADER ── -->
-    <div class="sess-detail-header">
-      <div>
-        <div class="sess-detail-title">Session <span id="dir-session-label">2006–2010</span></div>
-        <div class="sess-detail-sub">Chemical Engineering · ICET, University of the Punjab, Lahore</div>
-        <div class="sess-stats-row">
-          <div class="sess-stat-box"><span class="num" id="dir-registered">–</span><span class="lbl">Registered</span></div>
-          <div class="sess-stat-box"><span class="num">245</span><span class="lbl">Total Batch</span></div>
-          <div class="sess-stat-box"><span class="num" id="dir-countries-dir">–</span><span class="lbl">Countries</span></div>
-          <div class="sess-stat-box"><span class="num" id="dir-morning">–</span><span class="lbl">Morning</span></div>
-          <div class="sess-stat-box"><span class="num" id="dir-evening">–</span><span class="lbl">Evening</span></div>
+    <!-- STATS DASHBOARD -->
+    <div style="background:linear-gradient(135deg,#0f1f3d 0%,#1a3a6b 60%,#0d2744 100%);border-radius:14px;padding:2rem;margin-bottom:1.5rem;display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:1.5rem;">
+      <div style="flex:1;min-width:260px;">
+        <div style="font-family:'Playfair Display',serif;font-size:1.6rem;color:white;margin-bottom:4px;">Session <span id="dir-session-label">2006–2010</span></div>
+        <div style="font-size:13px;color:rgba(255,255,255,0.55);margin-bottom:1.5rem;">Chemical Engineering · ICET, University of the Punjab, Lahore</div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;">
+          <div style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);border-radius:10px;padding:12px 18px;text-align:center;min-width:80px;">
+            <span id="dir-registered" style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;color:#c9a84c;display:block;line-height:1;">–</span>
+            <span style="font-size:11px;color:rgba(255,255,255,0.5);margin-top:3px;display:block;">Registered</span>
+          </div>
+          <div style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);border-radius:10px;padding:12px 18px;text-align:center;min-width:80px;">
+            <span style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;color:#c9a84c;display:block;line-height:1;">245</span>
+            <span style="font-size:11px;color:rgba(255,255,255,0.5);margin-top:3px;display:block;">Total Batch</span>
+          </div>
+          <div style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);border-radius:10px;padding:12px 18px;text-align:center;min-width:80px;">
+            <span id="dir-countries-dir" style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;color:#c9a84c;display:block;line-height:1;">–</span>
+            <span style="font-size:11px;color:rgba(255,255,255,0.5);margin-top:3px;display:block;">Countries</span>
+          </div>
+          <div style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);border-radius:10px;padding:12px 18px;text-align:center;min-width:80px;">
+            <span id="dir-morning" style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;color:#c9a84c;display:block;line-height:1;">–</span>
+            <span style="font-size:11px;color:rgba(255,255,255,0.5);margin-top:3px;display:block;">Morning</span>
+          </div>
+          <div style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);border-radius:10px;padding:12px 18px;text-align:center;min-width:80px;">
+            <span id="dir-evening" style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;color:#c9a84c;display:block;line-height:1;">–</span>
+            <span style="font-size:11px;color:rgba(255,255,255,0.5);margin-top:3px;display:block;">Evening</span>
+          </div>
         </div>
       </div>
-      <div style="text-align:center">
-        <div class="preview-label">Recently Joined</div>
-        <div class="sess-photo-preview" id="sess-preview-avatars" style="justify-content:center;margin-top:8px;"></div>
+      <div style="text-align:center;min-width:140px;">
+        <div style="font-size:11px;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:10px;">Recently Joined</div>
+        <div id="sess-preview-avatars" style="display:flex;justify-content:center;"></div>
       </div>
     </div>
 
-    <!-- ── TABS ── -->
-    <div class="sess-tabs">
-      <button class="sess-tab active" onclick="switchTab('directory',this)">👥 Directory</button>
-      <button class="sess-tab" onclick="switchTab('noticeboard',this)">📌 Notice Board</button>
-      <button class="sess-tab" onclick="switchTab('announcements',this)">📢 Announcements</button>
+    <!-- TABS -->
+    <div style="display:flex;gap:4px;background:white;border:1px solid #e5e7eb;border-radius:8px;padding:4px;margin-bottom:1.5rem;width:fit-content;">
+      <button id="tab-btn-directory" onclick="switchTab('directory',this)" style="padding:8px 18px;border-radius:5px;font-size:13px;font-weight:500;cursor:pointer;border:none;background:#0f1f3d;color:white;font-family:inherit;">👥 Directory</button>
+      <button id="tab-btn-noticeboard" onclick="switchTab('noticeboard',this)" style="padding:8px 18px;border-radius:5px;font-size:13px;font-weight:500;cursor:pointer;border:none;background:transparent;color:#6b7280;font-family:inherit;">📌 Notice Board</button>
+      <button id="tab-btn-announcements" onclick="switchTab('announcements',this)" style="padding:8px 18px;border-radius:5px;font-size:13px;font-weight:500;cursor:pointer;border:none;background:transparent;color:#6b7280;font-family:inherit;">📢 Announcements</button>
     </div>
 
-    <!-- ── DIRECTORY TAB ── -->
+    <!-- DIRECTORY TAB -->
     <div id="tab-directory">
       <div style="display:flex;gap:1rem;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap;">
-        <input type="text" class="search-box" id="search-input" placeholder="Search by name or roll number..." oninput="filterDirectory()" style="flex:1;min-width:200px;">
-        <div class="directory-filters">
+        <input type="text" class="search-box" id="search-input" placeholder="Search by name or roll number..." oninput="filterDirectory()" style="flex:1;min-width:200px;padding:9px 14px;border:1px solid #e5e7eb;border-radius:8px;font-size:14px;font-family:inherit;outline:none;">
+        <div style="display:flex;gap:6px;">
           <button class="filter-btn active" onclick="setFilter('all', this)">All</button>
           <button class="filter-btn" onclick="setFilter('Morning', this)">Morning</button>
           <button class="filter-btn" onclick="setFilter('Evening', this)">Evening</button>
@@ -499,31 +514,31 @@ nav {
       </div>
     </div>
 
-    <!-- ── NOTICE BOARD TAB ── -->
-    <div id="tab-noticeboard" style="display:none">
-      <div class="noticeboard">
-        <div class="notice-post-form">
-          <div style="font-size:13px;font-weight:600;color:var(--navy);margin-bottom:6px;">📌 Post to the Notice Board</div>
-          <p style="font-size:12px;color:var(--muted);margin-bottom:0.75rem;">Posts appear after admin approval. Keep it relevant to the batch.</p>
-          <textarea id="notice-text" style="width:100%;padding:10px;border:1px solid var(--border);border-radius:6px;font-size:14px;font-family:inherit;resize:vertical;min-height:80px;outline:none;" placeholder="Share news, a message, or anything for your batchmates..." maxlength="500" oninput="document.getElementById('notice-char').textContent=this.value.length+'/500'"></textarea>
+    <!-- NOTICE BOARD TAB -->
+    <div id="tab-noticeboard" style="display:none;">
+      <div style="max-width:680px;">
+        <div style="background:white;border:1px solid #e5e7eb;border-radius:10px;padding:1.25rem;margin-bottom:1.5rem;">
+          <div style="font-size:13px;font-weight:600;color:#0f1f3d;margin-bottom:6px;">📌 Post to the Notice Board</div>
+          <p style="font-size:12px;color:#6b7280;margin-bottom:0.75rem;">Posts appear after admin approval. Keep it relevant to the batch.</p>
+          <textarea id="notice-text" style="width:100%;padding:10px;border:1px solid #e5e7eb;border-radius:6px;font-size:14px;font-family:inherit;resize:vertical;min-height:80px;outline:none;" placeholder="Share news, a message, or anything for your batchmates..." maxlength="500" oninput="document.getElementById('notice-char').textContent=this.value.length+'/500'"></textarea>
           <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;">
-            <span style="font-size:11px;color:var(--muted);" id="notice-char">0/500</span>
+            <span style="font-size:11px;color:#6b7280;" id="notice-char">0/500</span>
             <button class="nav-btn btn-gold" onclick="submitNotice()">Post (needs approval)</button>
           </div>
         </div>
-        <div id="notices-list"><div class="notice-empty">No posts yet. Be the first to share something!</div></div>
+        <div id="notices-list"><div style="text-align:center;padding:2rem;color:#6b7280;font-size:14px;">No posts yet. Be the first!</div></div>
       </div>
     </div>
 
-    <!-- ── ANNOUNCEMENTS TAB ── -->
-    <div id="tab-announcements" style="display:none">
-      <div class="noticeboard">
-        <div class="ann-form">
-          <h3 style="font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--navy);margin-bottom:0.5rem;">📢 Submit an Announcement</h3>
-          <p style="font-size:13px;color:var(--muted);margin-bottom:1rem;">New job, promotion, or other news? Submit below — appears after admin approval.</p>
+    <!-- ANNOUNCEMENTS TAB -->
+    <div id="tab-announcements" style="display:none;">
+      <div style="max-width:680px;">
+        <div style="background:white;border:1px solid #e5e7eb;border-radius:10px;padding:1.5rem;margin-bottom:1.5rem;">
+          <div style="font-family:'Playfair Display',serif;font-size:1.1rem;color:#0f1f3d;margin-bottom:0.5rem;">📢 Submit an Announcement</div>
+          <p style="font-size:13px;color:#6b7280;margin-bottom:1rem;">New job, promotion, or other news? Submit below — appears after admin approval.</p>
           <div style="margin-bottom:0.75rem;">
-            <label style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;display:block;margin-bottom:4px;">Type</label>
-            <select id="ann-type" style="width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:6px;font-size:14px;font-family:inherit;outline:none;">
+            <label style="font-size:11px;font-weight:600;color:#6b7280;text-transform:uppercase;letter-spacing:0.06em;display:block;margin-bottom:4px;">Type</label>
+            <select id="ann-type" style="width:100%;padding:9px 12px;border:1px solid #e5e7eb;border-radius:6px;font-size:14px;font-family:inherit;outline:none;">
               <option value="job">Job Change / New Position</option>
               <option value="achievement">Achievement / Award</option>
               <option value="news">News / Update</option>
@@ -531,16 +546,16 @@ nav {
             </select>
           </div>
           <div style="margin-bottom:0.75rem;">
-            <label style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;display:block;margin-bottom:4px;">Title / Headline *</label>
-            <input type="text" id="ann-title" placeholder="e.g. Joined XYZ as Senior Engineer" style="width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:6px;font-size:14px;font-family:inherit;outline:none;">
+            <label style="font-size:11px;font-weight:600;color:#6b7280;text-transform:uppercase;letter-spacing:0.06em;display:block;margin-bottom:4px;">Title / Headline *</label>
+            <input type="text" id="ann-title" placeholder="e.g. Joined XYZ as Senior Engineer" style="width:100%;padding:9px 12px;border:1px solid #e5e7eb;border-radius:6px;font-size:14px;font-family:inherit;outline:none;">
           </div>
           <div style="margin-bottom:1rem;">
-            <label style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;display:block;margin-bottom:4px;">Details (optional)</label>
-            <textarea id="ann-body" rows="3" style="width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:6px;font-size:14px;font-family:inherit;resize:vertical;outline:none;" placeholder="Add any details..."></textarea>
+            <label style="font-size:11px;font-weight:600;color:#6b7280;text-transform:uppercase;letter-spacing:0.06em;display:block;margin-bottom:4px;">Details (optional)</label>
+            <textarea id="ann-body" rows="3" style="width:100%;padding:9px 12px;border:1px solid #e5e7eb;border-radius:6px;font-size:14px;font-family:inherit;resize:vertical;outline:none;" placeholder="Add any details..."></textarea>
           </div>
-          <button onclick="submitAnnouncement()" style="width:100%;padding:12px;background:var(--gold);color:var(--navy);border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;">Submit for Approval</button>
+          <button onclick="submitAnnouncement()" style="width:100%;padding:12px;background:#c9a84c;color:#0f1f3d;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;">Submit for Approval</button>
         </div>
-        <div id="announcements-list"><div class="notice-empty">No announcements yet.</div></div>
+        <div id="announcements-list"><div style="text-align:center;padding:2rem;color:#6b7280;font-size:14px;">No announcements yet.</div></div>
       </div>
     </div>
 
@@ -773,23 +788,43 @@ async function loadStats() {
     document.getElementById('sess-2006-reg').textContent = sess2006;
     document.getElementById('sess-2006-reg-card') && (document.getElementById('sess-2006-reg-card').textContent = sess2006);
     // Session detail stats
-    const dirReg = document.getElementById('dir-registered');
-    if (dirReg) dirReg.textContent = sess2006;
-    const dirC = document.getElementById('dir-countries-dir');
-    if (dirC) dirC.textContent = countries.size;
-    const dirM = document.getElementById('dir-morning');
-    if (dirM) dirM.textContent = morning;
-    const dirE = document.getElementById('dir-evening');
-    if (dirE) dirE.textContent = evening;
+    animateCount(document.getElementById('dir-registered'), sess2006);
+    animateCount(document.getElementById('dir-countries-dir'), countries.size);
+    animateCount(document.getElementById('dir-morning'), morning);
+    animateCount(document.getElementById('dir-evening'), evening);
+    animateCount(document.getElementById('stat-total'), total);
+    animateCount(document.getElementById('stat-countries'), countries.size);
+    animateCount(document.getElementById('sess-2006-reg'), sess2006);
+    animateCount(document.getElementById('sess-2006-reg-card'), sess2006);
     // Preview avatars
+// Animated number counter
+function animateCount(el, target, duration=800) {
+  if (!el) return;
+  const start = parseInt(el.textContent) || 0;
+  if (start === target) return;
+  const step = (target - start) / (duration / 16);
+  let current = start;
+  const timer = setInterval(() => {
+    current += step;
+    if ((step > 0 && current >= target) || (step < 0 && current <= target)) {
+      current = target;
+      clearInterval(timer);
+    }
+    el.textContent = Math.round(current);
+  }, 16);
+}
+
     const previewEl = document.getElementById('sess-preview-avatars');
     if (previewEl) {
       const recent = [];
       snap.forEach(d => { if (d.data().session && d.data().session.includes('2006')) recent.push(d.data()); });
       recent.sort((a,b) => (b.registeredAt||'').localeCompare(a.registeredAt||''));
-      previewEl.innerHTML = recent.slice(0,5).map(a => {
+      previewEl.innerHTML = recent.slice(0,5).map((a,i) => {
         const initials = a.name.split(' ').map(w=>w[0]).slice(0,2).join('');
-        return '<div class="preview-avatar">'+(a.photoBase64 ? '<img src="'+a.photoBase64+'" alt="">' : initials)+'</div>';
+        const photoEl = a.photoBase64
+          ? '<img src="'+a.photoBase64+'" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" alt="">'
+          : '<span style="font-size:12px;font-weight:700;color:#c9a84c;">'+initials+'</span>';
+        return '<div style="width:38px;height:38px;border-radius:50%;border:2px solid #c9a84c;background:rgba(201,168,76,0.15);display:flex;align-items:center;justify-content:center;overflow:hidden;margin-left:'+(i===0?'0':'-8px')+';flex-shrink:0;" title="'+a.name+'">'+photoEl+'</div>';
       }).join('');
     }
   } catch(e) {}
@@ -800,9 +835,12 @@ window.switchTab = (tab, btn) => {
   ['directory','noticeboard','announcements'].forEach(t => {
     const el = document.getElementById('tab-'+t);
     if (el) el.style.display = t===tab ? 'block' : 'none';
+    const tabBtn = document.getElementById('tab-btn-'+t);
+    if (tabBtn) {
+      tabBtn.style.background = t===tab ? '#0f1f3d' : 'transparent';
+      tabBtn.style.color = t===tab ? 'white' : '#6b7280';
+    }
   });
-  document.querySelectorAll('.sess-tab').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
 };
 
 // ── Edit own profile ──
