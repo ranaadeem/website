@@ -516,46 +516,68 @@ nav {
 
     <!-- NOTICE BOARD TAB -->
     <div id="tab-noticeboard" style="display:none;">
-      <div style="max-width:680px;">
-        <div style="background:white;border:1px solid #e5e7eb;border-radius:10px;padding:1.25rem;margin-bottom:1.5rem;">
-          <div style="font-size:13px;font-weight:600;color:#0f1f3d;margin-bottom:6px;">📌 Post to the Notice Board</div>
-          <p style="font-size:12px;color:#6b7280;margin-bottom:0.75rem;">Posts appear after admin approval. Keep it relevant to the batch.</p>
-          <textarea id="notice-text" style="width:100%;padding:10px;border:1px solid #e5e7eb;border-radius:6px;font-size:14px;font-family:inherit;resize:vertical;min-height:80px;outline:none;" placeholder="Share news, a message, or anything for your batchmates..." maxlength="500" oninput="document.getElementById('notice-char').textContent=this.value.length+'/500'"></textarea>
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;">
-            <span style="font-size:11px;color:#6b7280;" id="notice-char">0/500</span>
-            <button class="nav-btn btn-gold" onclick="submitNotice()">Post (needs approval)</button>
+      <div style="display:grid;grid-template-columns:1fr 320px;gap:1.5rem;align-items:start;">
+
+        <!-- LEFT: Feed -->
+        <div>
+          <div style="font-size:11px;font-weight:600;color:#6b7280;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:1rem;">Recent Posts</div>
+          <div id="notices-list">
+            <div style="text-align:center;padding:3rem 1rem;color:#6b7280;font-size:14px;background:white;border:1px solid #e5e7eb;border-radius:10px;">
+              📌 No posts yet. Be the first to share something!
+            </div>
           </div>
         </div>
-        <div id="notices-list"><div style="text-align:center;padding:2rem;color:#6b7280;font-size:14px;">No posts yet. Be the first!</div></div>
+
+        <!-- RIGHT: Submit form -->
+        <div style="background:white;border:1px solid #e5e7eb;border-radius:12px;padding:1.25rem;position:sticky;top:80px;">
+          <div style="font-size:14px;font-weight:600;color:#0f1f3d;margin-bottom:4px;">📌 Post to Notice Board</div>
+          <p style="font-size:12px;color:#6b7280;margin-bottom:0.75rem;line-height:1.5;">Share a message with your batchmates. Appears after admin approval.</p>
+          <textarea id="notice-text" style="width:100%;padding:10px;border:1px solid #e5e7eb;border-radius:6px;font-size:13px;font-family:inherit;resize:vertical;min-height:100px;outline:none;color:#1a1a2e;" placeholder="What's on your mind?" maxlength="500" oninput="document.getElementById('notice-char').textContent=this.value.length+'/500'"></textarea>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;">
+            <span style="font-size:11px;color:#9ca3af;" id="notice-char">0/500</span>
+            <button onclick="submitNotice()" style="background:#c9a84c;color:#0f1f3d;border:none;padding:8px 16px;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">Post →</button>
+          </div>
+        </div>
       </div>
     </div>
 
     <!-- ANNOUNCEMENTS TAB -->
     <div id="tab-announcements" style="display:none;">
-      <div style="max-width:680px;">
-        <div style="background:white;border:1px solid #e5e7eb;border-radius:10px;padding:1.5rem;margin-bottom:1.5rem;">
-          <div style="font-family:'Playfair Display',serif;font-size:1.1rem;color:#0f1f3d;margin-bottom:0.5rem;">📢 Submit an Announcement</div>
-          <p style="font-size:13px;color:#6b7280;margin-bottom:1rem;">New job, promotion, or other news? Submit below — appears after admin approval.</p>
-          <div style="margin-bottom:0.75rem;">
-            <label style="font-size:11px;font-weight:600;color:#6b7280;text-transform:uppercase;letter-spacing:0.06em;display:block;margin-bottom:4px;">Type</label>
-            <select id="ann-type" style="width:100%;padding:9px 12px;border:1px solid #e5e7eb;border-radius:6px;font-size:14px;font-family:inherit;outline:none;">
+      <div style="display:grid;grid-template-columns:1fr 320px;gap:1.5rem;align-items:start;">
+
+        <!-- LEFT: Feed -->
+        <div>
+          <div style="font-size:11px;font-weight:600;color:#6b7280;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:1rem;">Recent Announcements</div>
+          <div id="announcements-list">
+            <div style="text-align:center;padding:3rem 1rem;color:#6b7280;font-size:14px;background:white;border:1px solid #e5e7eb;border-radius:10px;">
+              📢 No announcements yet.
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT: Submit form -->
+        <div style="background:white;border:1px solid #e5e7eb;border-radius:12px;padding:1.25rem;position:sticky;top:80px;">
+          <div style="font-size:14px;font-weight:600;color:#0f1f3d;margin-bottom:4px;">📢 Submit an Announcement</div>
+          <p style="font-size:12px;color:#6b7280;margin-bottom:1rem;line-height:1.5;">New job, award, or news? Share it with your batch. Appears after admin approval.</p>
+          <div style="margin-bottom:0.65rem;">
+            <label style="font-size:11px;font-weight:500;color:#6b7280;text-transform:uppercase;letter-spacing:0.06em;display:block;margin-bottom:3px;">Type</label>
+            <select id="ann-type" style="width:100%;padding:8px 10px;border:1px solid #e5e7eb;border-radius:6px;font-size:13px;font-family:inherit;outline:none;color:#1a1a2e;">
               <option value="job">Job Change / New Position</option>
               <option value="achievement">Achievement / Award</option>
               <option value="news">News / Update</option>
               <option value="other">Other</option>
             </select>
           </div>
+          <div style="margin-bottom:0.65rem;">
+            <label style="font-size:11px;font-weight:500;color:#6b7280;text-transform:uppercase;letter-spacing:0.06em;display:block;margin-bottom:3px;">Headline *</label>
+            <input type="text" id="ann-title" placeholder="e.g. Joined XYZ as Senior Engineer" style="width:100%;padding:8px 10px;border:1px solid #e5e7eb;border-radius:6px;font-size:13px;font-family:inherit;outline:none;color:#1a1a2e;">
+          </div>
           <div style="margin-bottom:0.75rem;">
-            <label style="font-size:11px;font-weight:600;color:#6b7280;text-transform:uppercase;letter-spacing:0.06em;display:block;margin-bottom:4px;">Title / Headline *</label>
-            <input type="text" id="ann-title" placeholder="e.g. Joined XYZ as Senior Engineer" style="width:100%;padding:9px 12px;border:1px solid #e5e7eb;border-radius:6px;font-size:14px;font-family:inherit;outline:none;">
+            <label style="font-size:11px;font-weight:500;color:#6b7280;text-transform:uppercase;letter-spacing:0.06em;display:block;margin-bottom:3px;">Details (optional)</label>
+            <textarea id="ann-body" rows="3" style="width:100%;padding:8px 10px;border:1px solid #e5e7eb;border-radius:6px;font-size:13px;font-family:inherit;resize:vertical;outline:none;color:#1a1a2e;" placeholder="Any extra details..."></textarea>
           </div>
-          <div style="margin-bottom:1rem;">
-            <label style="font-size:11px;font-weight:600;color:#6b7280;text-transform:uppercase;letter-spacing:0.06em;display:block;margin-bottom:4px;">Details (optional)</label>
-            <textarea id="ann-body" rows="3" style="width:100%;padding:9px 12px;border:1px solid #e5e7eb;border-radius:6px;font-size:14px;font-family:inherit;resize:vertical;outline:none;" placeholder="Add any details..."></textarea>
-          </div>
-          <button onclick="submitAnnouncement()" style="width:100%;padding:12px;background:#c9a84c;color:#0f1f3d;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;">Submit for Approval</button>
+          <button onclick="submitAnnouncement()" style="width:100%;padding:10px;background:#c9a84c;color:#0f1f3d;border:none;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">Submit for Approval →</button>
         </div>
-        <div id="announcements-list"><div style="text-align:center;padding:2rem;color:#6b7280;font-size:14px;">No announcements yet.</div></div>
       </div>
     </div>
 
@@ -882,7 +904,17 @@ async function loadNotices() {
     el.innerHTML = items.map(n => {
       const initials = (n.authorName||'?').split(' ').map(w=>w[0]).slice(0,2).join('');
       const date = n.createdAt ? new Date(n.createdAt.seconds*1000).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}) : '';
-      return '<div class="notice-item"><div class="notice-header"><div class="notice-author"><div class="notice-avatar">'+(n.authorPhoto?'<img src="'+n.authorPhoto+'" alt="">':initials)+'</div><div><div class="notice-author-name">'+n.authorName+'</div><div class="notice-date">'+date+'</div></div></div></div><div class="notice-text">'+n.text+'</div></div>';
+      const avatarContent = n.authorPhoto
+        ? '<img src="'+n.authorPhoto+'" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" alt="">'
+        : '<span style="font-size:12px;font-weight:700;color:#c9a84c;">'+initials+'</span>';
+      return '<div style="background:white;border:1px solid #e5e7eb;border-radius:10px;padding:1.1rem;margin-bottom:0.75rem;">'
+        +'<div style="display:flex;align-items:center;gap:10px;margin-bottom:0.6rem;">'
+        +'<div style="width:36px;height:36px;border-radius:50%;background:#0f1f3d;border:2px solid #c9a84c;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;">'+avatarContent+'</div>'
+        +'<div><div style="font-size:13px;font-weight:600;color:#0f1f3d;">'+n.authorName+'</div>'
+        +'<div style="font-size:11px;color:#9ca3af;">'+date+'</div></div>'
+        +'</div>'
+        +'<div style="font-size:14px;color:#374151;line-height:1.65;padding-left:46px;">'+n.text+'</div>'
+        +'</div>';
     }).join('');
   } catch(e) { console.error('notices',e); }
 }
@@ -922,7 +954,25 @@ async function loadAnnouncements() {
     snap3.forEach(d => items.push({id:d.id, ...d.data()}));
     items.sort((a,b) => (b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
     const typeLabels = {job:'Job Update',achievement:'Achievement',news:'News',other:'Update'};
-    el.innerHTML = items.map(a => '<div class="ann-item"><span class="ann-type-badge ann-type-'+(a.type||'other')+'">'+(typeLabels[a.type]||'Update')+'</span><div class="ann-title-text">'+a.title+'</div>'+(a.body?'<div class="ann-body-text">'+a.body+'</div>':'')+'<div class="ann-meta">By '+a.authorName+'</div></div>').join('');
+    const typeColors = {
+      job:'background:#eff6ff;color:#1d4ed8',
+      achievement:'background:#f0fdf4;color:#166534',
+      news:'background:#fff7ed;color:#9a3412',
+      other:'background:#f3f4f6;color:#6b7280'
+    };
+    el.innerHTML = items.map(a => {
+      const date = a.createdAt ? new Date(a.createdAt.seconds*1000).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}) : '';
+      const tColor = typeColors[a.type||'other'];
+      return '<div style="background:white;border:1px solid #e5e7eb;border-radius:10px;padding:1.1rem;margin-bottom:0.75rem;">'
+        +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.5rem;gap:8px;flex-wrap:wrap;">'
+        +'<span style="font-size:11px;font-weight:600;padding:3px 10px;border-radius:12px;'+tColor+';">'+( typeLabels[a.type]||'Update')+'</span>'
+        +'<span style="font-size:11px;color:#9ca3af;">'+date+'</span>'
+        +'</div>'
+        +'<div style="font-size:14px;font-weight:600;color:#0f1f3d;margin-bottom:4px;">'+a.title+'</div>'
+        +(a.body ? '<div style="font-size:13px;color:#6b7280;line-height:1.6;margin-bottom:6px;">'+a.body+'</div>' : '')
+        +'<div style="font-size:11px;color:#9ca3af;">By '+a.authorName+'</div>'
+        +'</div>';
+    }).join('');
   } catch(e) { console.error('ann',e); }
 }
 
