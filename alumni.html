@@ -402,19 +402,21 @@ nav {
 
         <!-- CURRENT STATUS -->
         <div class="section-divider">Current Status</div>
-        <div class="form-row">
-          <div class="form-group">
-            <label>Country of Residence <span class="req">*</span></label>
-            <select id="setup-country" onchange="onSetupCountryChange()">
-              <option value="">Select country</option>
-            </select>
+        <div class="form-group">
+          <label>City of Residence <span class="req">*</span></label>
+          <div style="position:relative;">
+            <input type="text" id="setup-city-input" autocomplete="off"
+              placeholder="Start typing your city — e.g. Freiberg, Lahore, Dubai..."
+              oninput="onCityInput()"
+              onblur="setTimeout(hideCitySuggestions,200)"
+              style="width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:6px;font-size:14px;font-family:inherit;outline:none;">
+            <div id="city-suggestions" style="display:none;position:absolute;top:100%;left:0;right:0;background:white;border:1px solid var(--border);border-radius:0 0 8px 8px;box-shadow:0 4px 16px rgba(0,0,0,0.1);z-index:500;max-height:220px;overflow-y:auto;"></div>
           </div>
-          <div class="form-group">
-            <label>City <span class="req">*</span></label>
-            <select id="setup-city" disabled>
-              <option value="">Select country first</option>
-            </select>
-          </div>
+          <!-- Hidden fields that store the resolved values -->
+          <input type="hidden" id="setup-city" value="">
+          <input type="hidden" id="setup-country" value="">
+          <div id="city-selected-display" style="display:none;margin-top:6px;font-size:12px;color:var(--green);font-weight:500;"></div>
+          <div style="font-size:11px;color:var(--muted);margin-top:4px;">Type at least 3 characters to search. Select from the list to confirm.</div>
         </div>
         <div class="form-row">
           <div class="form-group">
@@ -424,6 +426,21 @@ nav {
           <div class="form-group">
             <label>Company / Organisation <span class="req">*</span></label>
             <input type="text" id="setup-company" placeholder="e.g. Shell Pakistan">
+          </div>
+        </div>
+        <div style="background:#f8f7f4;border:1px solid var(--border);border-radius:8px;padding:0.85rem 1rem;margin-bottom:0.5rem;">
+          <div style="font-size:12px;font-weight:600;color:var(--navy);margin-bottom:8px;">🔒 Job & Company Visibility</div>
+          <div style="display:flex;gap:1.5rem;">
+            <label style="display:flex;align-items:center;gap:7px;cursor:pointer;font-size:13px;color:var(--text);">
+              <input type="radio" name="job-visibility" id="job-vis-session" value="session" checked
+                style="accent-color:var(--gold);width:15px;height:15px;">
+              My session only <span style="font-size:11px;color:var(--muted);">(recommended)</span>
+            </label>
+            <label style="display:flex;align-items:center;gap:7px;cursor:pointer;font-size:13px;color:var(--text);">
+              <input type="radio" name="job-visibility" id="job-vis-public" value="public"
+                style="accent-color:var(--gold);width:15px;height:15px;">
+              All sessions <span style="font-size:11px;color:var(--muted);">(public)</span>
+            </label>
           </div>
         </div>
 
@@ -873,9 +890,18 @@ window.openEditProfile = () => {
   document.getElementById('setup-session').value = p.session||'';
   onSetupSessionChange();
   setTimeout(() => { document.getElementById('setup-roll').value = p.roll||''; onSetupRollChange(); }, 60);
-  document.getElementById('setup-country').value = p.country||'';
-  onSetupCountryChange();
-  setTimeout(() => { document.getElementById('setup-city').value = p.city||''; }, 60);
+  // Prefill city autocomplete
+  if (p.city && p.country) {
+    document.getElementById('setup-city-input').value = p.city + ', ' + p.country;
+    document.getElementById('setup-city').value = p.city;
+    document.getElementById('setup-country').value = p.country;
+    const display = document.getElementById('city-selected-display');
+    if (display) { display.textContent = '✅ '+p.city+', '+p.country; display.style.display='block'; }
+  }
+  // Prefill job visibility
+  const jobVis = p.jobVisibility || 'session';
+  const visRadio = document.querySelector('input[name="job-visibility"][value="'+jobVis+'"]');
+  if (visRadio) visRadio.checked = true;
   document.getElementById('setup-job').value = p.job||'';
   document.getElementById('setup-company').value = p.company||'';
   document.getElementById('setup-email').value = p.email||'';
@@ -1049,14 +1075,95 @@ window.onSetupRollChange = () => {
   nameDisplay.innerHTML = (roll && db2[roll]) ? db2[roll] : '<span class="name-placeholder">Auto-filled from roll number</span>';
 };
 
-window.onSetupCountryChange = () => {
-  const country = document.getElementById('setup-country').value;
-  const citySelect = document.getElementById('setup-city');
-  citySelect.innerHTML = '<option value="">Select city</option>';
-  const cities = countryCities[country] || ['Other'];
-  cities.forEach(c => { const o = document.createElement('option'); o.value = c; o.textContent = c; citySelect.appendChild(o); });
-  citySelect.disabled = false;
+// ── City autocomplete (Teleport API — no key needed) ──
+let citySearchTimer = null;
+
+window.onCityInput = () => {
+  const input = document.getElementById('setup-city-input').value.trim();
+  clearTimeout(citySearchTimer);
+  const suggestionsEl = document.getElementById('city-suggestions');
+
+  // Reset hidden fields when user starts typing again
+  document.getElementById('setup-city').value = '';
+  document.getElementById('setup-country').value = '';
+  document.getElementById('city-selected-display').style.display = 'none';
+
+  if (input.length < 3) { suggestionsEl.style.display = 'none'; return; }
+
+  citySearchTimer = setTimeout(async () => {
+    try {
+      const res = await fetch(
+        `https://api.teleport.org/api/cities/?search=${encodeURIComponent(input)}&limit=8`,
+        { signal: AbortSignal.timeout(5000) }
+      );
+      if (!res.ok) return;
+      const data = await res.json();
+      const items = data._embedded?.['city:search-results'] || [];
+
+      if (!items.length) {
+        suggestionsEl.innerHTML = '<div style="padding:10px 14px;font-size:13px;color:var(--muted);">No cities found. Try a different spelling.</div>';
+        suggestionsEl.style.display = 'block';
+        return;
+      }
+
+      suggestionsEl.innerHTML = items.map((item, i) => {
+        const name = item.matching_full_name || item.matching_alternate_names?.[0]?.name || '';
+        return `<div onclick="selectCity('${name.replace(/'/g,"\'")}', ${i})"
+          data-index="${i}"
+          style="padding:10px 14px;font-size:13px;cursor:pointer;border-bottom:1px solid #f3f4f6;transition:background 0.15s;"
+          onmouseover="this.style.background='#f8f7f4'"
+          onmouseout="this.style.background='white'">
+          📍 ${name}
+        </div>`;
+      }).join('');
+      suggestionsEl.style.display = 'block';
+
+    } catch(e) {
+      // Teleport failed — show manual entry option
+      suggestionsEl.innerHTML = '<div style="padding:10px 14px;font-size:13px;color:var(--muted);">Search unavailable. <span onclick="useManualCity()" style="color:var(--gold);cursor:pointer;font-weight:600;">Enter manually →</span></div>';
+      suggestionsEl.style.display = 'block';
+    }
+  }, 350);
 };
+
+window.selectCity = (fullName) => {
+  // fullName is like "Freiberg, Saxony, Germany" or "Lahore, Punjab, Pakistan"
+  const parts = fullName.split(', ');
+  const city = parts[0];
+  const country = parts[parts.length - 1];
+
+  document.getElementById('setup-city-input').value = fullName;
+  document.getElementById('setup-city').value = city;
+  document.getElementById('setup-country').value = country;
+
+  const display = document.getElementById('city-selected-display');
+  display.textContent = `✅ ${city}, ${country}`;
+  display.style.display = 'block';
+
+  hideCitySuggestions();
+};
+
+window.useManualCity = () => {
+  const input = document.getElementById('setup-city-input').value.trim();
+  if (!input) return;
+  // Try to parse "City, Country" format
+  const parts = input.split(',').map(s => s.trim());
+  const city = parts[0];
+  const country = parts.length > 1 ? parts[parts.length-1] : 'Unknown';
+  document.getElementById('setup-city').value = city;
+  document.getElementById('setup-country').value = country;
+  const display = document.getElementById('city-selected-display');
+  display.textContent = `✅ ${city}, ${country} (entered manually)`;
+  display.style.display = 'block';
+  hideCitySuggestions();
+};
+
+window.hideCitySuggestions = () => {
+  document.getElementById('city-suggestions').style.display = 'none';
+};
+
+// Keep onSetupCountryChange as empty stub (referenced in edit profile prefill)
+window.onSetupCountryChange = () => {};
 
 window.handlePhotoSelect = (e) => {
   const file = e.target.files[0];
@@ -1083,12 +1190,13 @@ window.submitProfile = async () => {
   const phone = document.getElementById('setup-phone').value.trim();
   const linkedin = document.getElementById('setup-linkedin').value.trim();
   const bio = document.getElementById('setup-bio').value.trim();
+  const jobVisibility = document.querySelector('input[name="job-visibility"]:checked')?.value || 'session';
 
   const errBox = document.getElementById('setup-error');
   const sucBox = document.getElementById('setup-success');
 
   if (!session || !roll || !country || !city || !job || !company || !email) {
-    errBox.textContent = '⚠️ Please fill all required fields.';
+    errBox.textContent = '⚠️ Please fill all required fields including your city.';
     errBox.style.display = 'block'; return;
   }
   errBox.style.display = 'none';
@@ -1111,7 +1219,7 @@ window.submitProfile = async () => {
   try {
     const profileData = {
       uid: currentUser.uid,
-      name, roll, session, country, city, job, company, email, phone, linkedin, bio,
+      name, roll, session, country, city, job, company, email, phone, linkedin, bio, jobVisibility,
       photoBase64: selectedPhotoBase64,
       googleName: currentUser.displayName,
       googlePhoto: currentUser.photoURL,
@@ -1177,7 +1285,7 @@ function renderDirectory() {
       <div class="alumni-photo">${photoHtml}</div>
       <div class="alumni-name">${a.name}${a.deceased?' 🕊️':''}</div>
       <div class="alumni-roll">${a.roll}</div>
-      <div class="alumni-job">${a.job} @ ${a.company}</div>
+      <div class="alumni-job">${(a.jobVisibility==='public'||!a.jobVisibility||currentUserProfile?.session===a.session) ? a.job+' @ '+a.company : '🔒 Session members only'}</div>
       <div class="alumni-country">📍 ${a.city}, ${a.country}</div>
     </div>`;
   }).join('');
@@ -1196,8 +1304,6 @@ window.viewProfile = (uid) => {
   const profile = allAlumni.find(a => a.uid === uid);
   if (!profile) return;
 
-  const isSameSession = currentUserProfile && currentUserProfile.session === profile.session;
-
   const initials = profile.name.split(' ').map(w => w[0]).slice(0, 2).join('');
   const avatarEl = document.getElementById('view-avatar');
   if (profile.photoBase64) {
@@ -1208,7 +1314,13 @@ window.viewProfile = (uid) => {
 
   document.getElementById('view-name').textContent = profile.name;
   document.getElementById('view-roll').textContent = `${profile.roll} · ${profile.session}`;
-  document.getElementById('view-job').textContent = `${profile.job} @ ${profile.company}`;
+  // Job & company visibility
+  const isSameSession = currentUserProfile && currentUserProfile.session === profile.session;
+  const jobPublic = profile.jobVisibility === 'public' || !profile.jobVisibility;
+  const showJob = isSameSession || jobPublic;
+  document.getElementById('view-job').textContent = showJob
+    ? `${profile.job} @ ${profile.company}`
+    : '🔒 Visible to session members only';
   document.getElementById('view-location').textContent = `${profile.city}, ${profile.country}`;
   document.getElementById('view-email').innerHTML = `<a href="mailto:${profile.email}">${profile.email}</a>`;
   document.getElementById('view-session').textContent = profile.session;
