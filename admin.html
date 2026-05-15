@@ -452,19 +452,26 @@ window.confirmDelete = (collectionName, id, label) => {
   document.getElementById('modal-title').textContent = 'Delete Record';
   document.getElementById('modal-message').textContent = `Are you sure you want to permanently delete "${label}"? This cannot be undone.`;
   pendingAction = async () => {
-    await deleteDoc(doc(db, collectionName, id));
-    showToast('🗑 Deleted.');
-    loadAllData();
+    try {
+      await deleteDoc(doc(db, collectionName, id));
+      showToast('🗑 Deleted successfully.');
+      loadAllData();
+    } catch(e) {
+      console.error('Delete error:', e);
+      showToast('❌ Delete failed: ' + e.message);
+    }
   };
   document.getElementById('modal-confirm-btn').onclick = async () => {
-    closeModal(); if (pendingAction) { await pendingAction(); pendingAction=null; }
+    const action = pendingAction;  // save before closeModal nulls it
+    closeModal();
+    if (action) { await action(); }
   };
   document.getElementById('confirm-modal').classList.add('open');
 };
 
 window.closeModal = () => {
   document.getElementById('confirm-modal').classList.remove('open');
-  pendingAction = null;
+  pendingAction = null;  // only nulled if Cancel is pressed; confirm nulls via action
 };
 
 // ── Add manually ──
