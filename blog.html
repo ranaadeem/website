@@ -168,61 +168,20 @@
       <button class="cat-btn">Career</button>
     </div>
 
-    <!-- COMING SOON -->
-    <div class="coming-soon">
-      <div style="font-size:40px;margin-bottom:12px;">✍️</div>
-      <h3>Blog Coming Soon</h3>
-      <p>I'm setting up my Substack newsletter where I'll write about catalysis research, life as a researcher in Germany, travel stories, and thoughts on academia. Subscribe to be notified when the first post goes live!</p>
-      <a href="https://substack.com/signup" target="_blank" class="substack-btn">Start Reading on Substack →</a>
+    <!-- LIVE POSTS FROM SUBSTACK RSS -->
+    <div id="posts-loading" style="text-align:center;padding:3rem;color:var(--muted);">
+      <div style="font-size:32px;margin-bottom:1rem;">📡</div>
+      <div style="font-size:14px;">Loading posts from Substack...</div>
+    </div>
+    <div id="posts-error" style="display:none;background:#fef2f2;border:1px solid #fee2e2;border-radius:10px;padding:1.5rem;text-align:center;color:#dc2626;font-size:13px;margin-bottom:1rem;"></div>
+    <div id="featured-post-wrap" style="display:none;"></div>
+    <div id="posts-grid-wrap" class="posts-grid" style="display:none;"></div>
+    <div id="load-more-wrap" style="text-align:center;margin-top:1.5rem;display:none;">
+      <a id="view-all-link" href="https://ranaadeem.substack.com" target="_blank" class="substack-btn">View All Posts on Substack →</a>
     </div>
 
-    <!-- SAMPLE POSTS -->
-    <div style="margin-bottom:1rem;">
-      <span style="font-size:11px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);">Preview — Coming Soon</span>
-    </div>
-
-    <div class="featured-post">
-      <div class="featured-img">⚗️</div>
-      <div class="featured-body">
-        <span class="post-category">Research & Science</span>
-        <h2 class="post-title"><a href="#">From Methanol to Jet Fuel — How Zeolite Catalysts Are Changing Aviation</a></h2>
-        <p class="post-excerpt">Sustainable aviation fuels are no longer a distant dream. In this post I explain how methanol-to-olefins chemistry and zeolite catalysts are at the heart of the SAF revolution — and what my work at TUBAF Freiberg contributes to this.</p>
-        <div class="post-meta">
-          <div><span class="post-tag">Catalysis</span><span class="post-tag">SAF</span><span class="post-tag">Zeolites</span></div>
-          <span class="post-date">Coming soon</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="posts-grid">
-      <div class="post-card">
-        <span class="post-category">Academic Life</span>
-        <h3 class="post-title"><a href="#">What It's Really Like to Do a PhD in Germany as a Pakistani</a></h3>
-        <p class="post-excerpt">The DAAD scholarship, the culture shock, the German bureaucracy, and why I'd do it all again.</p>
-        <div class="post-meta" style="margin-top:0.75rem;"><span class="post-date">Coming soon</span></div>
-      </div>
-      <div class="post-card">
-        <span class="post-category">Travel</span>
-        <h3 class="post-title"><a href="#">Weekend in the Black Forest — A Pakistani's Guide to Schwarzwald</a></h3>
-        <p class="post-excerpt">Living in Freiberg means the Black Forest is practically at my doorstep. Here's my honest take on Germany's most famous forest.</p>
-        <div class="post-meta" style="margin-top:0.75rem;"><span class="post-date">Coming soon</span></div>
-      </div>
-      <div class="post-card">
-        <span class="post-category">Career</span>
-        <h3 class="post-title"><a href="#">Academia vs Industry — A Researcher's Honest Dilemma</a></h3>
-        <p class="post-excerpt">After years in both worlds, I reflect on the real differences and what matters most when choosing your path.</p>
-        <div class="post-meta" style="margin-top:0.75rem;"><span class="post-date">Coming soon</span></div>
-      </div>
-      <div class="post-card">
-        <span class="post-category">Pakistan</span>
-        <h3 class="post-title"><a href="#">ICET Lahore — Where It All Began</a></h3>
-        <p class="post-excerpt">A tribute to the Institute of Chemical Engineering & Technology, University of the Punjab — and what those four years taught me.</p>
-        <div class="post-meta" style="margin-top:0.75rem;"><span class="post-date">Coming soon</span></div>
-      </div>
-    </div>
-
-    <!-- SUBSTACK EMBED -->
-    <div class="substack-section">
+    <!-- SUBSTACK SUBSCRIBE EMBED -->
+    <div style="margin-top:2rem;">
       <div style="font-size:11px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:0.75rem;">Subscribe via Substack</div>
       <div class="substack-embed">
         <div class="substack-header">
@@ -296,10 +255,110 @@ function subscribeSubstack() {
   if (!email || !email.includes('@')) { alert('Please enter a valid email address.'); return; }
   window.open('https://ranaadeem.substack.com/?email=' + encodeURIComponent(email), '_blank');
 }
-const links = document.querySelectorAll('.nav-link');
-links.forEach(link => {
-  if (link.href && window.location.pathname === new URL(link.href).pathname) link.classList.add('active');
+const navLinks = document.querySelectorAll('.nav-link');
+navLinks.forEach(link => {
+  try { if (window.location.pathname === new URL(link.href).pathname) link.classList.add('active'); } catch(e) {}
 });
+
+// ── Live RSS fetch from Substack ──
+const RSS_URL = 'https://ranaadeem.substack.com/feed';
+// Use rss2json.com free API — converts RSS to JSON, bypasses CORS
+const API_URL = 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(RSS_URL) + '&api_key=ezbdm5nrsbvbcj3pbzmubzx7q1icatyf6dxnwm3e&count=10';
+
+function stripHtml(html) {
+  const tmp = document.createElement('div');
+  tmp.innerHTML = html;
+  return tmp.textContent || tmp.innerText || '';
+}
+
+function formatDate(dateStr) {
+  const d = new Date(dateStr);
+  return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+}
+
+function truncate(text, maxLen) {
+  text = stripHtml(text).trim();
+  return text.length > maxLen ? text.slice(0, maxLen).trim() + '...' : text;
+}
+
+function getEmoji(title) {
+  const t = title.toLowerCase();
+  if (t.includes('driver') || t.includes('licence') || t.includes('car')) return '🚗';
+  if (t.includes('germany') || t.includes('german') || t.includes('deutsch')) return '🇩🇪';
+  if (t.includes('pakistan') || t.includes('lahore')) return '🇵🇰';
+  if (t.includes('research') || t.includes('catalysis') || t.includes('science')) return '⚗️';
+  if (t.includes('travel') || t.includes('trip') || t.includes('journey')) return '✈️';
+  if (t.includes('phd') || t.includes('academic') || t.includes('university')) return '🎓';
+  if (t.includes('cricket')) return '🏏';
+  if (t.includes('photo') || t.includes('camera')) return '📷';
+  return '✍️';
+}
+
+async function loadPosts() {
+  try {
+    const res = await fetch(API_URL);
+    const data = await res.json();
+
+    document.getElementById('posts-loading').style.display = 'none';
+
+    if (!data.items || data.items.length === 0) {
+      document.getElementById('posts-error').style.display = 'block';
+      document.getElementById('posts-error').textContent = 'No posts found yet. Check back soon!';
+      return;
+    }
+
+    const posts = data.items;
+    const featured = posts[0];
+    const rest = posts.slice(1);
+
+    // ── Featured post (most recent) ──
+    const featuredWrap = document.getElementById('featured-post-wrap');
+    const emoji = getEmoji(featured.title);
+    const excerpt = truncate(featured.description || featured.content || '', 220);
+    featuredWrap.innerHTML = `
+      <div class="featured-post" style="cursor:pointer;" onclick="window.open('${featured.link}','_blank')">
+        <div class="featured-img">${featured.thumbnail ? '<img src="'+featured.thumbnail+'" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:8px;">' : emoji}</div>
+        <div class="featured-body">
+          <span class="post-category">Latest Post</span>
+          <h2 class="post-title"><a href="${featured.link}" target="_blank">${featured.title}</a></h2>
+          <p class="post-excerpt">${excerpt}</p>
+          <div class="post-meta">
+            <div><span class="post-tag">Substack</span></div>
+            <span class="post-date">${formatDate(featured.pubDate)}</span>
+          </div>
+        </div>
+      </div>`;
+    featuredWrap.style.display = 'block';
+
+    // ── Grid posts (remaining) ──
+    if (rest.length > 0) {
+      const grid = document.getElementById('posts-grid-wrap');
+      grid.innerHTML = rest.map(post => {
+        const e = getEmoji(post.title);
+        const ex = truncate(post.description || post.content || '', 120);
+        return `<div class="post-card" style="cursor:pointer;" onclick="window.open('${post.link}','_blank')">
+          <div style="font-size:28px;margin-bottom:0.5rem;">${e}</div>
+          <span class="post-category">Substack</span>
+          <h3 class="post-title"><a href="${post.link}" target="_blank">${post.title}</a></h3>
+          <p class="post-excerpt">${ex}</p>
+          <div class="post-meta" style="margin-top:0.75rem;">
+            <span class="post-date">${formatDate(post.pubDate)}</span>
+          </div>
+        </div>`;
+      }).join('');
+      grid.style.display = 'grid';
+    }
+
+    document.getElementById('load-more-wrap').style.display = 'block';
+
+  } catch(e) {
+    document.getElementById('posts-loading').style.display = 'none';
+    document.getElementById('posts-error').style.display = 'block';
+    document.getElementById('posts-error').innerHTML = 'Could not load posts. <a href="https://ranaadeem.substack.com" target="_blank" style="color:#c9a84c;">Read directly on Substack →</a>';
+  }
+}
+
+loadPosts();
 </script>
 </body>
 </html>
