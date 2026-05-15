@@ -597,7 +597,8 @@ nav {
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js';
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged }
   from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js';
-import { getFirestore, doc, setDoc, getDoc, collection, getDocs, query, where, orderBy }
+import { getFirestore, doc, setDoc, getDoc, collection, getDocs, addDoc,
+  query, where, orderBy, serverTimestamp }
   from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js';
 
 const firebaseConfig = {
@@ -871,7 +872,6 @@ let isEditMode = false;
 // ── Notice board ──
 async function loadNotices() {
   try {
-    const { query: q2, where: w2, orderBy: ob2, collection: col2, getDocs: gd2 } = await import('https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js');
     const snap2 = await getDocs(query(collection(db,'notices'), where('session','==','2006'), where('approved','==',true)));
     const el = document.getElementById('notices-list');
     if (!el) return;
@@ -888,20 +888,27 @@ async function loadNotices() {
 }
 
 window.submitNotice = async () => {
-  if (!currentUser || !currentUserProfile) { showToast('Please sign in first.'); return; }
+  if (!currentUser) { showToast('Please sign in first.'); return; }
+  if (!currentUserProfile) { showToast('Please complete your profile first.'); showPage('setup'); return; }
   const text = document.getElementById('notice-text').value.trim();
   if (!text) { showToast('Please write something.'); return; }
   try {
-    const { addDoc: ad2, collection: col2, serverTimestamp: st2 } = await import('https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js');
     await addDoc(collection(db,'notices'), {
-      text, session:'2006', approved:false,
-      authorUid:currentUser.uid, authorName:currentUserProfile.name,
-      authorPhoto:currentUser.photoURL||'', createdAt:serverTimestamp()
+      text,
+      session: '2006',
+      approved: false,
+      authorUid: currentUser.uid,
+      authorName: currentUserProfile.name,
+      authorPhoto: currentUser.photoURL || '',
+      createdAt: serverTimestamp()
     });
-    document.getElementById('notice-text').value='';
-    document.getElementById('notice-char').textContent='0/500';
+    document.getElementById('notice-text').value = '';
+    document.getElementById('notice-char').textContent = '0/500';
     showToast('✅ Posted! Visible once admin approves.');
-  } catch(e) { showToast('Error posting.'); }
+  } catch(e) {
+    console.error('submitNotice error:', e);
+    showToast('Error posting: ' + e.message);
+  }
 };
 
 // ── Announcements ──
@@ -920,22 +927,30 @@ async function loadAnnouncements() {
 }
 
 window.submitAnnouncement = async () => {
-  if (!currentUser || !currentUserProfile) { showToast('Please sign in first.'); return; }
+  if (!currentUser) { showToast('Please sign in first.'); return; }
+  if (!currentUserProfile) { showToast('Please complete your profile first.'); showPage('setup'); return; }
   const type = document.getElementById('ann-type').value;
   const title = document.getElementById('ann-title').value.trim();
   const body = document.getElementById('ann-body').value.trim();
   if (!title) { showToast('Please add a title.'); return; }
   try {
-    const { addDoc: ad3, collection: col3, serverTimestamp: st3 } = await import('https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js');
     await addDoc(collection(db,'announcements'), {
-      type, title, body, session:'2006', approved:false,
-      authorUid:currentUser.uid, authorName:currentUserProfile.name,
-      createdAt:serverTimestamp()
+      type,
+      title,
+      body,
+      session: '2006',
+      approved: false,
+      authorUid: currentUser.uid,
+      authorName: currentUserProfile.name,
+      createdAt: serverTimestamp()
     });
-    document.getElementById('ann-title').value='';
-    document.getElementById('ann-body').value='';
+    document.getElementById('ann-title').value = '';
+    document.getElementById('ann-body').value = '';
     showToast('✅ Submitted for approval!');
-  } catch(e) { showToast('Error submitting.'); }
+  } catch(e) {
+    console.error('submitAnnouncement error:', e);
+    showToast('Error submitting: ' + e.message);
+  }
 }
 
 // ── Page navigation ──
