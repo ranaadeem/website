@@ -1,0 +1,55 @@
+name: Fetch Substack RSS
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'   # runs every 6 hours automatically
+  workflow_dispatch:          # allows manual trigger from GitHub Actions tab
+
+jobs:
+  fetch-rss:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Fetch RSS and convert to JSON
+        run: |
+          curl -s -A "Mozilla/5.0" "https://ranaadeem.substack.com/feed" -o feed.xml
+          python3 - << 'PYEOF'
+          import xml.etree.ElementTree as ET
+          import json, re
+
+          tree = ET.parse('feed.xml')
+          root = tree.getroot()
+          ns = {'content': 'http://purl.org/rss/1.0/modules/content/'}
+
+          posts = []
+          for item in root.findall('.//item'):
+              title   = item.findtext('title', '').strip()
+              link    = item.findtext('link', '').strip()
+              pubDate = item.findtext('pubDate', '').strip()
+              desc    = item.findtext('description', '').strip()
+              content = item.findtext('content:encoded', '', ns).strip()
+              # strip HTML tags for plain excerpt
+              plain = re.sub(r'<[^>]+>', '', desc or content)
+              plain = re.sub(r'\s+', ' ', plain).strip()
+              posts.append({
+                  'title':   title,
+                  'link':    link,
+                  'pubDate': pubDate,
+                  'excerpt': plain[:300]
+              })
+
+          with open('posts.json', 'w', encoding='utf-8') as f:
+              json.dump(posts, f, ensure_ascii=False, indent=2)
+
+          print(f"Saved {len(posts)} posts to posts.json")
+          PYEOF
+
+      - name: Commit posts.json
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add posts.json
+          git diff --staged --quiet || git commit -m "Update posts.json from Substack RSS"
+          git push
