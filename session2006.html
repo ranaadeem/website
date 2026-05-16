@@ -1049,9 +1049,14 @@ async function loadFirebaseStats() {
   }
 }
 
-// Run on load and every 5 minutes
+// Run immediately on load
 loadFirebaseStats();
-setInterval(loadFirebaseStats, 5 * 60 * 1000);
+// Refresh every 2 minutes
+setInterval(loadFirebaseStats, 2 * 60 * 1000);
+// Also refresh when user returns to the tab
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible') loadFirebaseStats();
+});
 </script>
 </body>
 </html>
