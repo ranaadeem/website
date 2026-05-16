@@ -31,26 +31,38 @@
 
   /* PAGE HEADER */
   /* ── BLOG HEADER: Warm newspaper scene ── */
+  /* ── BLOG HEADER: Rich editorial desk scene ── */
   .page-header {
-    background: linear-gradient(160deg, #f5efe0 0%, #ede3cc 40%, #e8d9b8 100%);
-    padding: 3.5rem 2rem 3rem;
+    background: #1c120a;
+    padding: 0;
     position: relative; overflow: hidden;
     border-bottom: 3px solid #c8a96e;
+    min-height: 220px;
+    display: flex; flex-direction: column; justify-content: flex-end;
   }
-  /* Newspaper column lines */
+  /* Dark photo-like desk texture */
   .page-header::before {
     content: '';
     position: absolute; inset: 0;
-    background-image:
-      repeating-linear-gradient(90deg, rgba(139,105,60,0.08) 0px, rgba(139,105,60,0.08) 1px, transparent 1px, transparent 200px),
-      repeating-linear-gradient(0deg, rgba(139,105,60,0.06) 0px, rgba(139,105,60,0.06) 1px, transparent 1px, transparent 32px);
-    pointer-events: none;
+    background:
+      radial-gradient(ellipse 80% 60% at 30% 50%, rgba(101,67,33,0.45) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 80% at 80% 30%, rgba(40,25,10,0.6) 0%, transparent 55%),
+      linear-gradient(180deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.55) 100%);
+    pointer-events: none; z-index: 1;
   }
-  .header-inner { max-width: 960px; margin: 0 auto; position: relative; z-index: 1; }
-  .page-header .page-tag { border-color: rgba(139,105,60,0.4); color: #8b693c; }
-  .page-header h1 { color: #2c1e0f; }
-  .page-header h1 span { color: #b5832a; }
-  .page-header .header-sub { color: rgba(44,30,15,0.65); }
+  .header-inner {
+    max-width: 960px; margin: 0 auto;
+    position: relative; z-index: 2;
+    padding: 2rem 2rem 2.25rem;
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 2rem; align-items: end;
+    width: 100%;
+  }
+  .page-header .page-tag { border-color: rgba(201,168,76,0.5); color: var(--gold); }
+  .page-header h1 { color: white; }
+  .page-header h1 span { color: var(--gold); }
+  .page-header .header-sub { color: rgba(255,255,255,0.7); }
   .page-tag { font-size: 11px; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); border: 1px solid rgba(201,168,76,0.35); padding: 4px 12px; border-radius: 20px; display: inline-block; margin-bottom: 1rem; }
   .page-header h1 { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 4vw, 2.8rem); color: white; margin-bottom: 0; line-height: 1.15; }
   .page-header h1 span { color: var(--gold); }
@@ -84,7 +96,7 @@
   /* FEATURED POST */
   .featured-post { background: var(--white); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 1.5rem; transition: box-shadow 0.2s; }
   .featured-post:hover { box-shadow: 0 8px 30px rgba(0,0,0,0.08); }
-  .featured-img { width: 100%; height: 200px; background: linear-gradient(135deg, var(--navy), #2048a8); display: flex; align-items: center; justify-content: center; font-size: 48px; }
+  .featured-img { width: 100%; height: 200px; background: linear-gradient(135deg, #1a3a8a, #163366); display: flex; align-items: center; justify-content: center; font-size: 48px; overflow:hidden; position:relative; }
   .featured-body { padding: 1.5rem; }
   .post-category { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; display: block; }
   .post-title { font-family: 'Playfair Display', serif; font-size: 20px; color: var(--navy); margin-bottom: 8px; line-height: 1.3; }
@@ -154,45 +166,121 @@
 
 <!-- HEADER -->
 <div class="page-header">
-  
-  <!-- SVG: Coffee cup illustration -->
-  <svg style="position:absolute;right:2.5rem;bottom:0;opacity:0.22;pointer-events:none;" width="160" height="160" viewBox="0 0 160 160">
-    <!-- Cup body -->
-    <rect x="30" y="60" width="80" height="70" rx="8" fill="#6b4226"/>
-    <rect x="30" y="60" width="80" height="12" rx="4" fill="#8b5a2b"/>
-    <!-- Cup handle -->
-    <path d="M110 75 Q135 75 135 95 Q135 115 110 115" fill="none" stroke="#6b4226" stroke-width="8" stroke-linecap="round"/>
-    <!-- Coffee surface -->
-    <ellipse cx="70" cy="65" rx="37" ry="8" fill="#3d1f0a" opacity="0.8"/>
-    <!-- Steam lines -->
-    <path d="M50 52 Q53 42 50 32" fill="none" stroke="#8b693c" stroke-width="2.5" stroke-linecap="round" opacity="0.6"/>
-    <path d="M70 48 Q73 38 70 28" fill="none" stroke="#8b693c" stroke-width="2.5" stroke-linecap="round" opacity="0.6"/>
-    <path d="M90 52 Q93 42 90 32" fill="none" stroke="#8b693c" stroke-width="2.5" stroke-linecap="round" opacity="0.6"/>
-    <!-- Saucer -->
-    <ellipse cx="70" cy="133" rx="55" ry="10" fill="#5a3520"/>
-    <ellipse cx="70" cy="130" rx="50" ry="8" fill="#7a4a2a"/>
-    <!-- Newspaper folded -->
-    <rect x="5" y="80" width="110" height="75" rx="3" fill="#f0e6d0" transform="rotate(-8 60 117)"/>
-    <rect x="5" y="80" width="110" height="10" rx="2" fill="#2c1e0f" transform="rotate(-8 60 117)" opacity="0.8"/>
-    <!-- Newspaper text lines -->
-    <rect x="12" y="96" width="45" height="3" rx="1" fill="#8b7355" transform="rotate(-8 60 117)" opacity="0.5"/>
-    <rect x="12" y="103" width="55" height="2" rx="1" fill="#8b7355" transform="rotate(-8 60 117)" opacity="0.35"/>
-    <rect x="12" y="109" width="50" height="2" rx="1" fill="#8b7355" transform="rotate(-8 60 117)" opacity="0.35"/>
-    <rect x="12" y="115" width="52" height="2" rx="1" fill="#8b7355" transform="rotate(-8 60 117)" opacity="0.35"/>
+
+  <!-- Background desk scene SVG — full width atmospheric illustration -->
+  <svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;" viewBox="0 0 1100 220" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+    <!-- Desk surface warm wood -->
+    <rect x="0" y="120" width="1100" height="100" fill="#3d2008" opacity="0.9"/>
+    <rect x="0" y="118" width="1100" height="5" fill="#6b3a12" opacity="0.8"/>
+    <!-- Wood grain lines -->
+    <line x1="0" y1="135" x2="1100" y2="138" stroke="#5a2e0a" stroke-width="1" opacity="0.4"/>
+    <line x1="0" y1="155" x2="1100" y2="152" stroke="#5a2e0a" stroke-width="1" opacity="0.3"/>
+    <line x1="0" y1="175" x2="1100" y2="178" stroke="#5a2e0a" stroke-width="1" opacity="0.25"/>
+
+    <!-- NEWSPAPER spread open — centre desk -->
+    <g transform="translate(580,60)">
+      <!-- Main newspaper page -->
+      <rect x="-200" y="30" width="400" height="165" rx="2" fill="#f5f0e0" opacity="0.92"/>
+      <!-- Newspaper fold line -->
+      <line x1="0" y1="30" x2="0" y2="195" stroke="#c8b890" stroke-width="1.5" opacity="0.6"/>
+      <!-- Masthead -->
+      <rect x="-195" y="33" width="390" height="22" fill="#1a1208" opacity="0.85" rx="1"/>
+      <rect x="-120" y="36" width="240" height="16" fill="none" stroke="#c8a96e" stroke-width="0.5" rx="1"/>
+      <!-- Headline text bars left page -->
+      <rect x="-190" y="62" width="160" height="7" rx="1" fill="#1a1208" opacity="0.7"/>
+      <rect x="-190" y="74" width="130" height="4" rx="1" fill="#5a4a30" opacity="0.5"/>
+      <rect x="-190" y="82" width="150" height="3" rx="1" fill="#5a4a30" opacity="0.35"/>
+      <rect x="-190" y="89" width="140" height="3" rx="1" fill="#5a4a30" opacity="0.35"/>
+      <!-- Column divider left -->
+      <line x1="-110" y1="100" x2="-110" y2="190" stroke="#c8b890" stroke-width="0.75" opacity="0.5"/>
+      <!-- Left col text -->
+      <rect x="-190" y="100" width="73" height="2.5" rx="1" fill="#8b7355" opacity="0.4"/>
+      <rect x="-190" y="106" width="68" height="2.5" rx="1" fill="#8b7355" opacity="0.35"/>
+      <rect x="-190" y="112" width="72" height="2.5" rx="1" fill="#8b7355" opacity="0.35"/>
+      <rect x="-190" y="118" width="65" height="2.5" rx="1" fill="#8b7355" opacity="0.3"/>
+      <rect x="-190" y="124" width="70" height="2.5" rx="1" fill="#8b7355" opacity="0.3"/>
+      <rect x="-190" y="130" width="67" height="2.5" rx="1" fill="#8b7355" opacity="0.3"/>
+      <!-- Right col text -->
+      <rect x="-100" y="100" width="80" height="2.5" rx="1" fill="#8b7355" opacity="0.4"/>
+      <rect x="-100" y="106" width="75" height="2.5" rx="1" fill="#8b7355" opacity="0.35"/>
+      <rect x="-100" y="112" width="78" height="2.5" rx="1" fill="#8b7355" opacity="0.35"/>
+      <rect x="-100" y="118" width="70" height="2.5" rx="1" fill="#8b7355" opacity="0.3"/>
+      <!-- Right page headline -->
+      <rect x="10" y="62" width="170" height="7" rx="1" fill="#1a1208" opacity="0.7"/>
+      <rect x="10" y="74" width="140" height="4" rx="1" fill="#5a4a30" opacity="0.5"/>
+      <!-- Right page columns -->
+      <line x1="90" y1="85" x2="90" y2="190" stroke="#c8b890" stroke-width="0.75" opacity="0.5"/>
+      <rect x="10" y="85" width="73" height="2.5" rx="1" fill="#8b7355" opacity="0.4"/>
+      <rect x="10" y="91" width="68" height="2.5" rx="1" fill="#8b7355" opacity="0.35"/>
+      <rect x="10" y="97" width="72" height="2.5" rx="1" fill="#8b7355" opacity="0.35"/>
+      <rect x="10" y="103" width="65" height="2.5" rx="1" fill="#8b7355" opacity="0.3"/>
+      <rect x="100" y="85" width="85" height="2.5" rx="1" fill="#8b7355" opacity="0.4"/>
+      <rect x="100" y="91" width="78" height="2.5" rx="1" fill="#8b7355" opacity="0.35"/>
+      <rect x="100" y="97" width="80" height="2.5" rx="1" fill="#8b7355" opacity="0.35"/>
+      <!-- Newspaper shadow -->
+      <rect x="-200" y="192" width="400" height="8" rx="2" fill="#1a0e05" opacity="0.3"/>
+    </g>
+
+    <!-- COFFEE CUP — right side of desk -->
+    <g transform="translate(860,70)">
+      <!-- Saucer -->
+      <ellipse cx="0" cy="130" rx="52" ry="10" fill="#3d1a05" opacity="0.9"/>
+      <ellipse cx="0" cy="127" rx="46" ry="8" fill="#6b3010" opacity="0.8"/>
+      <!-- Cup -->
+      <rect x="-34" y="55" width="68" height="70" rx="10" fill="#7a3a12" opacity="0.95"/>
+      <rect x="-34" y="55" width="68" height="14" rx="6" fill="#9a4a18"/>
+      <!-- Coffee surface -->
+      <ellipse cx="0" cy="60" rx="30" ry="7" fill="#1a0a02" opacity="0.9"/>
+      <!-- Latte art heart -->
+      <path d="M-8 58 Q-4 54 0 58 Q4 54 8 58 Q8 64 0 70 Q-8 64 -8 58" fill="#c8956e" opacity="0.5"/>
+      <!-- Handle -->
+      <path d="M34 68 Q55 68 55 88 Q55 108 34 108" fill="none" stroke="#7a3a12" stroke-width="10" stroke-linecap="round"/>
+      <path d="M34 68 Q50 68 50 88 Q50 104 34 104" fill="none" stroke="#9a4a18" stroke-width="4" stroke-linecap="round" opacity="0.4"/>
+      <!-- Steam -->
+      <path d="M-12 48 Q-9 36 -12 24" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="2" stroke-linecap="round"/>
+      <path d="M0 44 Q3 32 0 20" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="2" stroke-linecap="round"/>
+      <path d="M12 48 Q15 36 12 24" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="2" stroke-linecap="round"/>
+      <!-- Shadow -->
+      <ellipse cx="8" cy="132" rx="46" ry="6" fill="#0a0503" opacity="0.25"/>
+    </g>
+
+    <!-- PEN — leaning on newspaper -->
+    <g transform="translate(750,100) rotate(-25)">
+      <rect x="-4" y="-80" width="8" height="110" rx="4" fill="#1a3a8a" opacity="0.9"/>
+      <rect x="-4" y="-80" width="8" height="18" rx="4" fill="#c9a84c" opacity="0.9"/>
+      <polygon points="-4,30 4,30 0,45" fill="#c8c8c8" opacity="0.8"/>
+      <rect x="-1" y="-62" width="2" height="6" rx="1" fill="rgba(255,255,255,0.3)"/>
+    </g>
+
+    <!-- Ambient glow around newspaper -->
+    <ellipse cx="580" cy="140" rx="320" ry="60" fill="rgba(201,168,76,0.06)"/>
+    <!-- Vignette overlay -->
+    <radial-gradient id="vig" cx="50%" cy="50%" r="70%">
+      <stop offset="0%" stop-color="transparent"/>
+      <stop offset="100%" stop-color="rgba(0,0,0,0.4)"/>
+    </radial-gradient>
   </svg>
-  <!-- Masthead decoration -->
-  <div style="position:absolute;top:1.25rem;right:2rem;font-family:Georgia,serif;font-size:11px;color:rgba(139,105,60,0.5);letter-spacing:0.15em;text-transform:uppercase;">Est. 2025</div>
+
   <div class="header-inner">
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:1rem;">
-      <div style="height:1px;width:40px;background:#8b693c;opacity:0.5;"></div>
-      <span style="font-size:10px;letter-spacing:0.25em;text-transform:uppercase;color:#8b693c;font-family:'DM Sans',sans-serif;">The Lab Notebook</span>
-      <div style="height:1px;width:40px;background:#8b693c;opacity:0.5;"></div>
+    <!-- Left: text content -->
+    <div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:0.75rem;">
+        <div style="height:1px;width:32px;background:rgba(201,168,76,0.6);"></div>
+        <span style="font-size:10px;letter-spacing:0.25em;text-transform:uppercase;color:rgba(201,168,76,0.8);font-family:'DM Sans',sans-serif;">The Lab Notebook</span>
+        <div style="height:1px;width:32px;background:rgba(201,168,76,0.6);"></div>
+      </div>
+      <span class="page-tag">Writing &amp; Thoughts</span>
+      <h1 style="margin-top:0.5rem;">Blog &amp; <span>Insights</span><span style="display:inline-block;width:3px;height:0.85em;background:var(--gold);margin-left:4px;vertical-align:middle;animation:blink 1.1s step-end infinite;"></span></h1>
+      <style>@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}</style>
+      <p class="header-sub" style="margin-top:0.5rem;">Thoughts on catalysis, sustainable energy, academic &amp; daily bureaucratic life in Germany, travel, and everything in between. Published on Substack.</p>
     </div>
-    <span class="page-tag">Writing & Thoughts</span>
-    <h1>Blog &amp; <span>Insights</span><span style="display:inline-block;width:3px;height:0.85em;background:var(--gold);margin-left:4px;vertical-align:middle;animation:blink 1.1s step-end infinite;"></span></h1>
-    <style>@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}</style>
-    <p class="header-sub">Thoughts on catalysis, sustainable energy, academic life in Germany, travel, and everything in between. Published on Substack — subscribe to get new posts by email.</p>
-    <a href="https://substack.com/@ranaadeem" target="_blank" class="substack-btn">📧 Subscribe on Substack →</a>
+    <!-- Right: subscribe CTA -->
+    <div style="text-align:center;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:12px;padding:1.25rem;backdrop-filter:blur(10px);">
+      <div style="font-size:22px;margin-bottom:6px;">📧</div>
+      <div style="font-size:13px;font-weight:600;color:white;margin-bottom:4px;">Get new posts by email</div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.6);margin-bottom:0.75rem;">Free · No spam · Unsubscribe anytime</div>
+      <a href="https://substack.com/@ranaadeem" target="_blank" style="display:block;background:var(--gold);color:#1c120a;padding:8px 16px;border-radius:6px;font-size:13px;font-weight:700;text-decoration:none;">Subscribe on Substack →</a>
+    </div>
   </div>
 </div>
 
@@ -349,20 +437,77 @@ function renderPosts(posts) {
 
   // Featured post
   const fw = document.getElementById('featured-post-wrap');
-  const emoji = getEmoji(featured.title);
   const excerpt = truncate(featured.excerpt || featured.description || '', 220);
-  fw.innerHTML = `<div class="featured-post" style="cursor:pointer;" onclick="window.open('${featured.link}','_blank')">
-    <div class="featured-img" style="font-size:48px;display:flex;align-items:center;justify-content:center;">${emoji}</div>
-    <div class="featured-body">
-      <span class="post-category">Latest Post</span>
-      <h2 class="post-title"><a href="${featured.link}" target="_blank" onclick="event.stopPropagation()">${featured.title}</a></h2>
-      <p class="post-excerpt">${excerpt}</p>
-      <div class="post-meta">
-        <div><span class="post-tag">Substack</span></div>
-        <span class="post-date">${formatDate(featured.pubDate)}</span>
-      </div>
-    </div>
-  </div>`;
+
+  // Build a themed banner based on post content
+  function buildBanner(title, link) {
+    const t = (title||'').toLowerCase();
+    // Führerschein / driving / Germany bureaucracy post
+    if (t.includes('driver') || t.includes('licence') || t.includes('führerschein') || t.includes('fahrschule')) {
+      return `<div class="featured-img" style="background:linear-gradient(135deg,#1a3a8a 0%,#2048a8 50%,#163366 100%);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;">
+        <!-- EU Führerschein card SVG -->
+        <svg width="280" height="160" viewBox="0 0 280 160" style="filter:drop-shadow(0 4px 20px rgba(0,0,0,0.4));">
+          <!-- Card body -->
+          <rect x="10" y="20" width="260" height="120" rx="10" fill="#1a2e6b"/>
+          <rect x="10" y="20" width="260" height="120" rx="10" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
+          <!-- EU blue strip left -->
+          <rect x="10" y="20" width="38" height="120" rx="10" fill="#003399"/>
+          <rect x="10" y="20" width="38" height="120" rx="0" fill="#003399"/>
+          <rect x="10" y="20" width="10" height="120" rx="10" fill="#003399"/>
+          <!-- EU stars circle -->
+          <text x="29" y="48" text-anchor="middle" font-size="7" fill="#FFCC00">★★★</text>
+          <text x="29" y="56" text-anchor="middle" font-size="7" fill="#FFCC00">★ ★</text>
+          <text x="29" y="64" text-anchor="middle" font-size="7" fill="#FFCC00">★★★</text>
+          <!-- DE identifier -->
+          <text x="29" y="82" text-anchor="middle" font-size="11" font-weight="bold" fill="white" font-family="Georgia">DE</text>
+          <!-- Führerschein title -->
+          <text x="60" y="42" font-size="9" fill="rgba(255,255,255,0.6)" font-family="Arial">EUROPÄISCHE UNION · BUNDESREPUBLIK DEUTSCHLAND</text>
+          <text x="60" y="58" font-size="14" font-weight="bold" fill="white" font-family="Arial">Führerschein</text>
+          <!-- Licence categories -->
+          <rect x="60" y="68" width="28" height="14" rx="3" fill="rgba(255,255,255,0.15)"/>
+          <text x="74" y="79" text-anchor="middle" font-size="9" fill="white" font-family="Arial">B</text>
+          <rect x="94" y="68" width="28" height="14" rx="3" fill="rgba(255,255,255,0.1)"/>
+          <text x="108" y="79" text-anchor="middle" font-size="9" fill="rgba(255,255,255,0.6)" font-family="Arial">A</text>
+          <!-- Placeholder photo box -->
+          <rect x="185" y="35" width="70" height="85" rx="4" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+          <text x="220" y="80" text-anchor="middle" font-size="20" fill="rgba(255,255,255,0.3)">👤</text>
+          <!-- Barcode-like lines -->
+          <rect x="60" y="102" width="2" height="22" fill="rgba(255,255,255,0.4)"/>
+          <rect x="64" y="102" width="4" height="22" fill="rgba(255,255,255,0.3)"/>
+          <rect x="70" y="102" width="2" height="22" fill="rgba(255,255,255,0.4)"/>
+          <rect x="74" y="102" width="3" height="22" fill="rgba(255,255,255,0.25)"/>
+          <rect x="79" y="102" width="2" height="22" fill="rgba(255,255,255,0.4)"/>
+          <rect x="83" y="102" width="5" height="22" fill="rgba(255,255,255,0.3)"/>
+          <rect x="90" y="102" width="2" height="22" fill="rgba(255,255,255,0.35)"/>
+          <rect x="94" y="102" width="3" height="22" fill="rgba(255,255,255,0.3)"/>
+          <rect x="99" y="102" width="2" height="22" fill="rgba(255,255,255,0.4)"/>
+          <rect x="103" y="102" width="4" height="22" fill="rgba(255,255,255,0.25)"/>
+          <rect x="109" y="102" width="2" height="22" fill="rgba(255,255,255,0.35)"/>
+          <!-- Autobahn sign -->
+          <rect x="130" y="95" width="40" height="30" rx="3" fill="#004d99"/>
+          <rect x="130" y="95" width="40" height="30" rx="3" fill="none" stroke="white" stroke-width="1.5"/>
+          <text x="150" y="108" text-anchor="middle" font-size="7" fill="white" font-weight="bold">BAB</text>
+          <text x="150" y="118" text-anchor="middle" font-size="10" fill="white" font-weight="bold">A8</text>
+        </svg>
+        <!-- Category badge -->
+        <div style="position:absolute;top:12px;left:12px;background:rgba(201,168,76,0.9);color:#1c120a;font-size:10px;font-weight:700;padding:4px 10px;border-radius:4px;letter-spacing:0.08em;text-transform:uppercase;">🇩🇪 Bureaucratic Life</div>
+      </div>`;
+    }
+    // Default for other posts
+    const emoji = getEmoji(title);
+    return '<div class="featured-img" style="font-size:48px;display:flex;align-items:center;justify-content:center;">'+emoji+'</div>';
+  }
+
+  fw.innerHTML = '<div class="featured-post" style="cursor:pointer;" onclick="window.open(''+featured.link+'','_blank')">'
+    + buildBanner(featured.title, featured.link)
+    + '<div class="featured-body">'
+    + '<span class="post-category">Latest Post</span>'
+    + '<h2 class="post-title"><a href="'+featured.link+'" target="_blank" onclick="event.stopPropagation()">'+featured.title+'</a></h2>'
+    + '<p class="post-excerpt">'+excerpt+'</p>'
+    + '<div class="post-meta">'
+    + '<div><span class="post-tag">Substack</span></div>'
+    + '<span class="post-date">'+formatDate(featured.pubDate)+'</span>'
+    + '</div></div></div>';
   fw.style.display = 'block';
 
   // Grid
