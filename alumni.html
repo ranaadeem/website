@@ -7,376 +7,270 @@
 <link rel="icon" type="image/png" href="/favicon.png">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-:root {
-  --navy: #0f1f3d;
-  --gold: #c9a84c;
-  --gold-light: #e8d5a3;
-  --cream: #faf8f4;
-  --white: #ffffff;
-  --text: #1a1a2e;
-  --muted: #6b7280;
-  --border: #e5e7eb;
-  --green: #059669;
-  --red: #dc2626;
-}
-* { box-sizing: border-box; margin: 0; padding: 0; }
-html, body { width: 100%; min-height: 100vh; }
-body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--text); }
-
+:root{--navy:#0f1f3d;--gold:#c9a84c;--gold-light:#e8d5a3;--cream:#faf8f4;--white:#fff;--text:#1a1a2e;--muted:#6b7280;--border:#e5e7eb;--green:#059669;--red:#dc2626;}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{width:100%;min-height:100vh;}
+body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);}
 /* NAV */
-nav {
-  background: var(--navy);
-  border-bottom: 2px solid var(--gold);
-  position: sticky; top: 0; z-index: 100;
-  box-shadow: 0 2px 20px rgba(0,0,0,0.3);
-}
-.nav-inner {
-  max-width: 1100px; margin: 0 auto;
-  padding: 0 1.5rem; height: 64px;
-  display: flex; align-items: center; justify-content: space-between;
-}
-.nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
-.nav-logo-agr { font-family: Georgia, serif; font-size: 20px; font-weight: 700; color: var(--gold); letter-spacing: 2px; border: 2px solid var(--gold); padding: 2px 8px; border-radius: 4px; }
-.nav-logo-name { font-size: 13px; color: rgba(255,255,255,0.7); }
-.nav-right { display: flex; align-items: center; gap: 12px; }
-.nav-user { display: flex; align-items: center; gap: 8px; }
-.nav-user img { width: 32px; height: 32px; border-radius: 50%; border: 2px solid var(--gold); }
-.nav-user span { font-size: 13px; color: rgba(255,255,255,0.8); }
-.nav-btn { font-size: 13px; font-weight: 500; padding: 7px 16px; border-radius: 6px; cursor: pointer; border: none; transition: all 0.2s; font-family: inherit; }
-.btn-gold { background: var(--gold); color: var(--navy); }
-.btn-gold:hover { background: var(--gold-light); }
-.btn-outline { background: transparent; color: rgba(255,255,255,0.7); border: 1px solid rgba(255,255,255,0.3); }
-.btn-outline:hover { border-color: var(--gold); color: var(--gold); }
-.nav-links { display: flex; gap: 4px; }
-.nav-link { color: rgba(255,255,255,0.7); text-decoration: none; font-size: 13px; padding: 7px 12px; border-radius: 6px; transition: all 0.2s; }
-.nav-link:hover, .nav-link.active { color: var(--gold); background: rgba(201,168,76,0.1); }
-.back-link { font-size: 13px; color: rgba(255,255,255,0.6); text-decoration: none; }
-.back-link:hover { color: var(--gold); }
-
+nav{background:var(--navy);border-bottom:2px solid var(--gold);position:sticky;top:0;z-index:1000;box-shadow:0 2px 20px rgba(0,0,0,0.3);}
+.nav-inner{max-width:1100px;margin:0 auto;padding:0 1.5rem;height:64px;display:flex;align-items:center;justify-content:space-between;}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
+.nav-logo-agr{font-family:Georgia,serif;font-size:22px;font-weight:700;color:var(--gold);letter-spacing:2px;border:2px solid var(--gold);padding:2px 8px;border-radius:4px;}
+.nav-logo-name{font-size:13px;color:rgba(255,255,255,0.75);}
+.nav-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.nav-btn{font-size:13px;font-weight:500;padding:7px 14px;border-radius:6px;cursor:pointer;border:none;transition:all 0.2s;font-family:inherit;}
+.btn-gold{background:var(--gold);color:var(--navy);}
+.btn-gold:hover{background:var(--gold-light);}
+.btn-outline{background:transparent;color:rgba(255,255,255,0.75);border:1px solid rgba(255,255,255,0.3);}
+.btn-outline:hover{border-color:var(--gold);color:var(--gold);}
 /* PAGES */
-.page { display: none; }
-.page.active { display: block; }
-
+.page{display:none;}
+.page.active{display:block;}
 /* LANDING */
-.landing-hero {
-  background: linear-gradient(135deg, var(--navy) 0%, #1a3a6b 60%, #0d2744 100%);
-  padding: 5rem 2rem;
-  text-align: center;
-  position: relative; overflow: hidden;
-}
-.landing-hero::before {
-  content: ''; position: absolute;
-  top: -100px; right: -100px;
-  width: 500px; height: 500px; border-radius: 50%;
-  background: radial-gradient(circle, rgba(201,168,76,0.1) 0%, transparent 70%);
-}
-.hero-tag { font-size: 11px; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); border: 1px solid rgba(201,168,76,0.4); padding: 5px 14px; border-radius: 20px; display: inline-block; margin-bottom: 1.5rem; }
-.landing-hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 5vw, 3.5rem); color: white; margin-bottom: 1rem; line-height: 1.2; }
-.landing-hero h1 span { color: var(--gold); }
-.landing-hero p { font-size: 16px; color: rgba(255,255,255,0.65); max-width: 560px; margin: 0 auto 2.5rem; line-height: 1.75; font-weight: 300; }
-.hero-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
-.hero-btn-primary { background: var(--gold); color: var(--navy); padding: 13px 32px; border-radius: 8px; font-size: 15px; font-weight: 600; text-decoration: none; border: none; cursor: pointer; font-family: inherit; transition: all 0.2s; }
-.hero-btn-primary:hover { background: var(--gold-light); transform: translateY(-1px); }
-.hero-btn-secondary { background: transparent; color: white; padding: 13px 32px; border-radius: 8px; font-size: 15px; font-weight: 500; border: 1px solid rgba(255,255,255,0.3); cursor: pointer; font-family: inherit; transition: all 0.2s; }
-.hero-btn-secondary:hover { border-color: var(--gold); color: var(--gold); }
-
+.landing-hero{background:linear-gradient(135deg,var(--navy) 0%,#1a3a6b 60%,#0d2744 100%);padding:5rem 2rem;text-align:center;position:relative;overflow:hidden;}
+.hero-tag{font-size:11px;font-weight:500;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);border:1px solid rgba(201,168,76,0.4);padding:5px 14px;border-radius:20px;display:inline-block;margin-bottom:1.5rem;}
+.landing-hero h1{font-family:"Playfair Display",serif;font-size:clamp(2rem,5vw,3.5rem);color:white;margin-bottom:1rem;line-height:1.2;}
+.landing-hero h1 span{color:var(--gold);}
+.landing-hero p{font-size:16px;color:rgba(255,255,255,0.65);max-width:560px;margin:0 auto 2.5rem;line-height:1.75;font-weight:300;}
+.hero-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+.hero-btn-primary{background:var(--gold);color:var(--navy);padding:13px 32px;border-radius:8px;font-size:15px;font-weight:600;border:none;cursor:pointer;font-family:inherit;transition:all 0.2s;}
+.hero-btn-primary:hover{background:var(--gold-light);transform:translateY(-1px);}
+.hero-btn-secondary{background:transparent;color:white;padding:13px 32px;border-radius:8px;font-size:15px;border:1px solid rgba(255,255,255,0.3);cursor:pointer;font-family:inherit;transition:all 0.2s;}
+.hero-btn-secondary:hover{border-color:var(--gold);color:var(--gold);}
 /* STATS STRIP */
-.stats-strip { background: white; border-bottom: 1px solid var(--border); padding: 1.5rem 2rem; }
-.stats-inner { max-width: 1100px; margin: 0 auto; display: flex; justify-content: center; gap: 4rem; flex-wrap: wrap; }
-.stat-item { text-align: center; }
-.stat-num { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700; color: var(--navy); display: block; }
-.stat-lbl { font-size: 12px; color: var(--muted); margin-top: 2px; }
-
-/* SESSIONS SECTION */
-.sessions-section { max-width: 1100px; margin: 3rem auto; padding: 0 2rem; }
-.section-header { margin-bottom: 2rem; }
-.section-tag { font-size: 11px; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); display: block; margin-bottom: 4px; }
-.section-title { font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--navy); }
-.sessions-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.25rem; }
-.session-card {
-  background: white; border: 1px solid var(--border); border-radius: 12px;
-  padding: 1.75rem; cursor: pointer; transition: all 0.25s;
-  border-top: 4px solid var(--gold); position: relative; overflow: hidden;
-}
-.session-card:hover { box-shadow: 0 8px 30px rgba(0,0,0,0.1); transform: translateY(-2px); }
-.session-card.locked { opacity: 0.6; cursor: not-allowed; }
-.session-card.locked:hover { transform: none; box-shadow: none; }
-.session-year { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
-.session-dept { font-size: 13px; color: var(--muted); margin-bottom: 1rem; }
-.session-stats { display: flex; gap: 1rem; margin-bottom: 1rem; }
-.session-stat { text-align: center; }
-.session-stat-num { font-size: 20px; font-weight: 700; color: var(--gold); display: block; }
-.session-stat-lbl { font-size: 10px; color: var(--muted); }
-.session-badge { display: inline-block; font-size: 11px; padding: 3px 10px; border-radius: 10px; background: rgba(201,168,76,0.1); color: #92701e; font-weight: 500; }
-.session-badge.coming { background: #f3f4f6; color: var(--muted); }
-.session-arrow { position: absolute; right: 1.5rem; top: 50%; transform: translateY(-50%); font-size: 20px; color: var(--gold); opacity: 0.5; }
-
-/* LOGIN PAGE */
-.login-wrap { max-width: 440px; margin: 4rem auto; padding: 0 1.5rem; }
-.login-card { background: white; border: 1px solid var(--border); border-radius: 16px; padding: 2.5rem; box-shadow: 0 4px 30px rgba(0,0,0,0.06); }
-.login-logo { text-align: center; margin-bottom: 2rem; }
-.login-logo .agr { font-family: Georgia, serif; font-size: 32px; font-weight: 700; color: var(--gold); letter-spacing: 3px; border: 3px solid var(--gold); padding: 6px 16px; border-radius: 8px; display: inline-block; }
-.login-logo p { font-size: 13px; color: var(--muted); margin-top: 8px; }
-.login-title { font-family: 'Playfair Display', serif; font-size: 22px; color: var(--navy); text-align: center; margin-bottom: 0.5rem; }
-.login-sub { font-size: 13px; color: var(--muted); text-align: center; margin-bottom: 2rem; line-height: 1.6; }
-.google-btn {
-  width: 100%; padding: 13px; border: 1.5px solid var(--border); border-radius: 8px;
-  background: white; display: flex; align-items: center; justify-content: center; gap: 12px;
-  font-size: 15px; font-weight: 500; cursor: pointer; transition: all 0.2s; font-family: inherit; color: var(--text);
-}
-.google-btn:hover { border-color: var(--gold); background: #faf8f4; box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
-.google-icon { width: 20px; height: 20px; }
-.login-note { font-size: 11px; color: var(--muted); text-align: center; margin-top: 1.5rem; line-height: 1.6; }
-
-/* PROFILE SETUP */
-.setup-wrap { max-width: 680px; margin: 3rem auto; padding: 0 1.5rem 3rem; }
-.setup-card { background: white; border: 1px solid var(--border); border-radius: 16px; overflow: hidden; box-shadow: 0 4px 30px rgba(0,0,0,0.06); }
-.setup-header { background: var(--navy); padding: 2rem; }
-.setup-header h2 { font-family: 'Playfair Display', serif; font-size: 22px; color: white; margin-bottom: 4px; }
-.setup-header p { font-size: 13px; color: rgba(255,255,255,0.6); }
-.setup-body { padding: 2rem; }
-.setup-photo-upload { text-align: center; margin-bottom: 2rem; }
-.photo-circle-upload {
-  width: 100px; height: 100px; border-radius: 50%;
-  background: #f3f4f6; border: 3px dashed var(--border);
-  margin: 0 auto 0.75rem; cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 32px; overflow: hidden; transition: all 0.2s;
-}
-.photo-circle-upload:hover { border-color: var(--gold); background: #faf8f4; }
-.photo-circle-upload img { width: 100%; height: 100%; object-fit: cover; }
-.setup-photo-label { font-size: 12px; color: var(--muted); }
-.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
-.form-group { margin-bottom: 1rem; }
-.form-group label { display: block; font-size: 13px; color: #555; margin-bottom: 5px; font-weight: 500; }
-.form-group label .req { color: var(--red); margin-left: 2px; }
-.form-group label .opt { font-size: 11px; color: var(--muted); font-weight: 400; margin-left: 4px; }
-.form-group input, .form-group select, .form-group textarea {
-  width: 100%; padding: 10px 12px; font-size: 14px;
-  border: 1px solid var(--border); border-radius: 8px;
-  background: white; color: var(--text); outline: none;
-  transition: border 0.15s; font-family: inherit;
-}
-.form-group input:focus, .form-group select:focus, .form-group textarea:focus {
-  border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201,168,76,0.1);
-}
-.form-group input:disabled { background: #f8f9fa; color: var(--muted); }
-.name-display { background: #f8f9fa; border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; font-size: 14px; font-weight: 600; color: var(--navy); min-height: 42px; display: flex; align-items: center; }
-.name-placeholder { color: var(--muted); font-weight: 400; font-style: italic; }
-.submit-btn { width: 100%; padding: 13px; background: var(--navy); color: white; border: none; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; font-family: inherit; transition: all 0.2s; margin-top: 1rem; }
-.submit-btn:hover { background: #1a3a6b; }
-.submit-btn:disabled { background: var(--muted); cursor: not-allowed; }
-.section-divider { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin: 1.5rem 0 1rem; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
-.error-box { background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; padding: 10px 14px; font-size: 13px; color: var(--red); margin-bottom: 1rem; display: none; }
-.success-box { background: #f0fff4; border: 1px solid #9ae6b4; border-radius: 8px; padding: 10px 14px; font-size: 13px; color: #276749; margin-bottom: 1rem; display: none; }
-
+.stats-strip{background:white;border-bottom:1px solid var(--border);padding:1.5rem 2rem;}
+.stats-inner{max-width:1100px;margin:0 auto;display:flex;justify-content:center;gap:4rem;flex-wrap:wrap;}
+.stat-item{text-align:center;}
+.stat-num{font-family:"Playfair Display",serif;font-size:28px;font-weight:700;color:var(--navy);display:block;}
+.stat-lbl{font-size:12px;color:var(--muted);margin-top:2px;}
+/* SESSION CARDS */
+.sessions-section{max-width:1100px;margin:3rem auto;padding:0 2rem;}
+.section-tag{font-size:11px;font-weight:500;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:4px;}
+.section-title{font-family:"Playfair Display",serif;font-size:2rem;color:var(--navy);margin-bottom:1.5rem;}
+.sessions-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.25rem;}
+.session-card{background:white;border:1px solid var(--border);border-radius:12px;padding:1.75rem;cursor:pointer;transition:all 0.25s;border-top:4px solid var(--gold);}
+.session-card:hover{box-shadow:0 8px 30px rgba(0,0,0,0.1);transform:translateY(-2px);}
+.session-card.coming-soon{opacity:0.55;cursor:default;}
+.session-card.coming-soon:hover{transform:none;box-shadow:none;}
+.session-year{font-family:"Playfair Display",serif;font-size:1.5rem;color:var(--navy);margin-bottom:4px;}
+.session-dept{font-size:13px;color:var(--muted);margin-bottom:1rem;}
+.sess-stat-num{font-family:"Playfair Display",serif;font-size:20px;color:var(--gold);font-weight:700;display:block;}
+.sess-stat-lbl{font-size:11px;color:var(--muted);}
+.cs-badge{font-size:10px;background:#f3f4f6;color:var(--muted);padding:2px 8px;border-radius:10px;font-weight:500;float:right;}
+/* LOGIN */
+.login-wrap{max-width:440px;margin:4rem auto;padding:0 2rem;}
+.login-card{background:white;border:1px solid var(--border);border-radius:14px;padding:2.5rem;text-align:center;}
+.login-card h2{font-family:"Playfair Display",serif;font-size:1.6rem;color:var(--navy);margin-bottom:0.5rem;}
+.login-card p{font-size:14px;color:var(--muted);margin-bottom:1.5rem;line-height:1.6;}
+.google-btn{display:flex;align-items:center;justify-content:center;gap:12px;width:100%;padding:13px;background:white;border:1.5px solid var(--border);border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;font-family:inherit;transition:all 0.2s;color:var(--text);}
+.google-btn:hover{border-color:var(--gold);box-shadow:0 2px 12px rgba(0,0,0,0.08);}
+/* SETUP */
+.setup-wrap{max-width:680px;margin:0 auto;padding:2rem;}
+.setup-card{background:white;border:1px solid var(--border);border-radius:14px;overflow:hidden;}
+.setup-header{background:linear-gradient(135deg,var(--navy),#1a3a6b);padding:2rem;}
+.setup-header h2{font-family:"Playfair Display",serif;font-size:1.75rem;color:white;margin-bottom:4px;}
+.setup-header p{font-size:13px;color:rgba(255,255,255,0.6);}
+.setup-body{padding:2rem;}
+.section-divider{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;padding:0.5rem 0;border-bottom:1px solid var(--border);margin:1.25rem 0 1rem;}
+.form-group{margin-bottom:1rem;}
+.form-group label{display:block;font-size:12px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:5px;}
+.form-group input,.form-group select,.form-group textarea{width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:6px;font-size:14px;font-family:inherit;outline:none;background:white;color:var(--text);}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--gold);}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+.req{color:var(--red);}
+.name-display{background:#f8f7f4;border:1px solid var(--border);border-radius:6px;padding:9px 12px;font-size:14px;color:var(--navy);font-weight:500;min-height:39px;}
+.name-placeholder{color:var(--muted);font-style:italic;font-weight:400;}
+.photo-upload-area{text-align:center;margin-bottom:1.5rem;}
+.photo-upload-circle{width:90px;height:90px;border-radius:50%;border:2px dashed var(--gold);display:flex;align-items:center;justify-content:center;font-size:28px;cursor:pointer;margin:0 auto 0.5rem;overflow:hidden;background:rgba(201,168,76,0.05);transition:all 0.2s;}
+.photo-upload-circle:hover{background:rgba(201,168,76,0.12);}
+.photo-upload-circle img{width:100%;height:100%;object-fit:cover;}
+.photo-upload-hint{font-size:12px;color:var(--muted);}
+.error-box{background:#fef2f2;border:1px solid #fee2e2;color:var(--red);padding:10px 14px;border-radius:6px;font-size:13px;margin-bottom:1rem;display:none;}
+.success-box{background:#f0fdf4;border:1px solid #bbf7d0;color:var(--green);padding:10px 14px;border-radius:6px;font-size:13px;margin-bottom:1rem;display:none;}
+.submit-btn{width:100%;padding:13px;background:var(--gold);color:var(--navy);border:none;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit;transition:all 0.2s;margin-top:0.5rem;}
+.submit-btn:hover{background:var(--gold-light);}
+.submit-btn:disabled{opacity:0.6;cursor:not-allowed;}
 /* DIRECTORY */
-.directory-wrap { max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem 3rem; }
-.directory-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem; }
-.directory-filters { display: flex; gap: 8px; flex-wrap: wrap; }
-.filter-btn { padding: 7px 16px; border-radius: 20px; font-size: 13px; border: 1px solid var(--border); background: white; color: var(--muted); cursor: pointer; transition: all 0.2s; font-family: inherit; }
-.filter-btn.active, .filter-btn:hover { background: var(--navy); color: white; border-color: var(--navy); }
-.search-box { padding: 9px 14px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; width: 240px; outline: none; font-family: inherit; }
-.search-box:focus { border-color: var(--gold); }
-.alumni-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; }
-.alumni-card {
-  background: white; border: 1px solid var(--border); border-radius: 12px;
-  padding: 1.5rem; text-align: center; cursor: pointer;
-  transition: all 0.25s; position: relative;
-}
-.alumni-card:hover { box-shadow: 0 6px 24px rgba(0,0,0,0.08); transform: translateY(-2px); border-color: var(--gold-light); }
-.alumni-photo { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; margin: 0 auto 0.75rem; border: 3px solid var(--gold-light); background: #f3f4f6; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 700; color: var(--navy); overflow: hidden; }
-.alumni-photo img { width: 100%; height: 100%; object-fit: cover; }
-.alumni-name { font-size: 14px; font-weight: 600; color: var(--navy); margin-bottom: 3px; }
-.alumni-roll { font-size: 11px; color: var(--muted); margin-bottom: 6px; }
-.alumni-job { font-size: 12px; color: var(--text); margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.alumni-country { font-size: 11px; color: var(--muted); }
-.alumni-session-badge { position: absolute; top: 10px; right: 10px; font-size: 9px; padding: 2px 7px; border-radius: 8px; background: rgba(201,168,76,0.12); color: #92701e; font-weight: 600; }
-.loading-spinner { text-align: center; padding: 4rem; color: var(--muted); font-size: 14px; }
-
+.dir-wrap{max-width:1100px;margin:0 auto;padding:2rem;}
+.alumni-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:1rem;}
+.alumni-card{background:white;border:1px solid var(--border);border-radius:10px;padding:1.25rem;text-align:center;cursor:pointer;transition:all 0.2s;position:relative;}
+.alumni-card:hover{box-shadow:0 4px 20px rgba(0,0,0,0.08);transform:translateY(-2px);}
+.alumni-card.deceased{opacity:0.65;}
+.alumni-photo{width:70px;height:70px;border-radius:50%;background:linear-gradient(135deg,var(--navy),#1a3a6b);border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;font-family:"Playfair Display",serif;font-size:20px;color:var(--gold);font-weight:700;margin:0.5rem auto 0.75rem;overflow:hidden;}
+.alumni-photo img{width:100%;height:100%;object-fit:cover;}
+.alumni-name{font-size:13px;font-weight:600;color:var(--navy);margin-bottom:3px;line-height:1.3;}
+.alumni-roll{font-size:11px;color:var(--muted);margin-bottom:4px;}
+.alumni-job{font-size:11px;color:var(--text);line-height:1.3;margin-bottom:3px;}
+.alumni-country{font-size:11px;color:var(--muted);}
+.alumni-session-badge{position:absolute;top:8px;right:8px;font-size:9px;background:rgba(201,168,76,0.12);color:var(--gold);padding:2px 6px;border-radius:4px;font-weight:600;}
+.deceased-badge{position:absolute;top:8px;left:8px;font-size:9px;background:#f3f4f6;color:var(--muted);padding:2px 6px;border-radius:4px;}
+.search-box{width:100%;max-width:400px;padding:9px 14px;border:1px solid var(--border);border-radius:8px;font-size:14px;font-family:inherit;outline:none;}
+.search-box:focus{border-color:var(--gold);}
+.filter-btn{padding:6px 14px;border-radius:20px;font-size:12px;border:1px solid var(--border);background:white;color:var(--muted);cursor:pointer;font-family:inherit;transition:all 0.2s;}
+.filter-btn.active,.filter-btn:hover{background:var(--navy);color:white;border-color:var(--navy);}
+.loading-spinner{text-align:center;padding:3rem;color:var(--muted);font-size:14px;grid-column:1/-1;}
 /* PROFILE VIEW */
-.profile-wrap { max-width: 800px; margin: 2rem auto; padding: 0 1.5rem 3rem; }
-.profile-card { background: white; border: 1px solid var(--border); border-radius: 16px; overflow: hidden; box-shadow: 0 4px 30px rgba(0,0,0,0.06); }
-.profile-banner { background: linear-gradient(135deg, var(--navy), #1a3a6b); height: 120px; position: relative; }
-.profile-avatar { width: 100px; height: 100px; border-radius: 50%; border: 4px solid white; position: absolute; bottom: -50px; left: 2rem; background: #f3f4f6; display: flex; align-items: center; justify-content: center; font-size: 36px; font-weight: 700; color: var(--navy); overflow: hidden; box-shadow: 0 4px 16px rgba(0,0,0,0.15); }
-.profile-avatar img { width: 100%; height: 100%; object-fit: cover; }
-.profile-info { padding: 4rem 2rem 2rem; }
-.profile-name { font-family: 'Playfair Display', serif; font-size: 26px; color: var(--navy); margin-bottom: 4px; }
-.profile-roll { font-size: 13px; color: var(--muted); margin-bottom: 1rem; }
-.profile-details { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.5rem; }
-.profile-detail { display: flex; gap: 10px; align-items: flex-start; }
-.detail-icon { font-size: 18px; flex-shrink: 0; }
-.detail-label { font-size: 11px; color: var(--muted); margin-bottom: 2px; }
-.detail-val { font-size: 14px; color: var(--text); font-weight: 500; }
-.detail-val a { color: var(--gold); text-decoration: none; }
-.detail-val a:hover { text-decoration: underline; }
-.profile-actions { display: flex; gap: 10px; margin-top: 1.5rem; flex-wrap: wrap; }
-.profile-btn { padding: 9px 20px; border-radius: 8px; font-size: 13px; font-weight: 500; cursor: pointer; border: 1px solid var(--border); background: white; color: var(--text); font-family: inherit; transition: all 0.2s; }
-.profile-btn:hover { border-color: var(--gold); color: var(--gold); }
-.profile-btn.primary { background: var(--navy); color: white; border-color: var(--navy); }
-.profile-btn.primary:hover { background: #1a3a6b; }
-.hidden-field { font-size: 13px; color: var(--muted); font-style: italic; }
-.phone-locked { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); }
-
-/* MY PROFILE PAGE */
-.my-profile-wrap { max-width: 800px; margin: 2rem auto; padding: 0 1.5rem 3rem; }
-
-/* FOOTER */
-.portal-footer { background: var(--navy); padding: 1.5rem 2rem; text-align: center; margin-top: 3rem; }
-.portal-footer p { font-size: 12px; color: rgba(255,255,255,0.4); }
-.portal-footer a { color: var(--gold); text-decoration: none; }
-
+.profile-wrap{max-width:700px;margin:2rem auto;padding:0 2rem 2rem;}
+.profile-card{background:white;border:1px solid var(--border);border-radius:14px;overflow:hidden;}
+.profile-header{background:linear-gradient(135deg,var(--navy),#1a3a6b);padding:2rem;text-align:center;}
+.profile-avatar{width:100px;height:100px;border-radius:50%;border:3px solid var(--gold);background:rgba(201,168,76,0.2);display:flex;align-items:center;justify-content:center;font-family:"Playfair Display",serif;font-size:32px;color:var(--gold);font-weight:700;margin:0 auto 1rem;overflow:hidden;}
+.profile-avatar img{width:100%;height:100%;object-fit:cover;}
+.profile-name{font-family:"Playfair Display",serif;font-size:1.6rem;color:white;margin-bottom:4px;}
+.profile-roll{font-size:13px;color:var(--gold);}
+.profile-body{padding:1.75rem;}
+.profile-field{display:flex;align-items:flex-start;gap:12px;padding:0.75rem 0;border-bottom:1px solid var(--border);}
+.profile-field:last-child{border-bottom:none;}
+.field-icon{font-size:16px;width:20px;text-align:center;flex-shrink:0;margin-top:1px;}
+.field-label{font-size:11px;text-transform:uppercase;letter-spacing:0.06em;color:var(--muted);margin-bottom:2px;}
+.field-value{font-size:14px;color:var(--text);}
+.field-value a{color:var(--navy);text-decoration:none;}
+.field-value a:hover{color:var(--gold);}
+.phone-locked{font-size:12px;color:var(--muted);font-style:italic;}
+/* NOTICE BOARD & ANNOUNCEMENTS */
+.noticeboard-wrap{max-width:1100px;margin:0 auto;padding:0 2rem 2rem;}
+.two-col{display:grid;grid-template-columns:1fr 300px;gap:1.5rem;align-items:start;}
+.feed-section-label{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:1rem;}
+.notice-card{background:white;border:1px solid var(--border);border-radius:10px;padding:1.1rem;margin-bottom:0.75rem;}
+.notice-meta{display:flex;align-items:center;gap:10px;margin-bottom:0.6rem;}
+.notice-avatar{width:36px;height:36px;border-radius:50%;background:var(--navy);border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--gold);overflow:hidden;flex-shrink:0;}
+.notice-avatar img{width:100%;height:100%;object-fit:cover;}
+.notice-author{font-size:13px;font-weight:600;color:var(--navy);}
+.notice-date{font-size:11px;color:#9ca3af;}
+.notice-text{font-size:14px;color:var(--text);line-height:1.65;}
+.ann-card{background:white;border:1px solid var(--border);border-radius:10px;padding:1.1rem;margin-bottom:0.75rem;}
+.ann-type-job{background:#eff6ff;color:#1d4ed8;font-size:11px;font-weight:600;padding:3px 10px;border-radius:12px;display:inline-block;margin-bottom:6px;}
+.ann-type-achievement{background:#f0fdf4;color:#166534;font-size:11px;font-weight:600;padding:3px 10px;border-radius:12px;display:inline-block;margin-bottom:6px;}
+.ann-type-news{background:#fff7ed;color:#9a3412;font-size:11px;font-weight:600;padding:3px 10px;border-radius:12px;display:inline-block;margin-bottom:6px;}
+.ann-type-other{background:#f3f4f6;color:#6b7280;font-size:11px;font-weight:600;padding:3px 10px;border-radius:12px;display:inline-block;margin-bottom:6px;}
+.ann-title{font-size:14px;font-weight:600;color:var(--navy);margin-bottom:4px;}
+.ann-body{font-size:13px;color:#6b7280;line-height:1.6;}
+.ann-footer{font-size:11px;color:#9ca3af;margin-top:6px;}
+.form-card{background:white;border:1px solid var(--border);border-radius:12px;padding:1.25rem;position:sticky;top:80px;}
+.form-card-title{font-size:14px;font-weight:600;color:var(--navy);margin-bottom:4px;}
+.form-card-sub{font-size:12px;color:var(--muted);margin-bottom:0.75rem;line-height:1.5;}
+.form-card textarea,.form-card input,.form-card select{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:inherit;outline:none;color:var(--text);margin-bottom:6px;}
+.form-card textarea{resize:vertical;min-height:90px;}
+.empty-state{text-align:center;padding:3rem 1rem;color:var(--muted);font-size:14px;background:white;border:1px solid var(--border);border-radius:10px;}
 /* TOAST */
-.toast { position: fixed; bottom: 2rem; right: 2rem; background: var(--navy); color: white; padding: 12px 20px; border-radius: 8px; font-size: 13px; border-left: 4px solid var(--gold); box-shadow: 0 4px 20px rgba(0,0,0,0.2); z-index: 9999; transform: translateY(100px); opacity: 0; transition: all 0.3s; }
-.toast.show { transform: translateY(0); opacity: 1; }
-
-@media (max-width: 768px) {
-  .nav-logo-name { display: none; }
-  .nav-links { display: none; }
-  .form-row { grid-template-columns: 1fr; }
-  .profile-details { grid-template-columns: 1fr; }
-  .alumni-grid { grid-template-columns: repeat(2, 1fr); }
-  .stats-inner { gap: 2rem; }
+.toast{position:fixed;bottom:1.5rem;right:1.5rem;background:var(--navy);color:white;padding:12px 20px;border-radius:8px;font-size:13px;z-index:9999;opacity:0;transform:translateY(10px);transition:all 0.3s;pointer-events:none;border-left:3px solid var(--gold);}
+.toast.show{opacity:1;transform:translateY(0);}
+/* CITY AUTOCOMPLETE */
+.city-suggestions{position:absolute;top:100%;left:0;right:0;background:white;border:1px solid var(--border);border-radius:0 0 8px 8px;box-shadow:0 4px 16px rgba(0,0,0,0.1);z-index:500;max-height:220px;overflow-y:auto;display:none;}
+.city-suggestion-item{padding:10px 14px;font-size:13px;cursor:pointer;border-bottom:1px solid #f3f4f6;}
+.city-suggestion-item:hover{background:#f8f7f4;}
+.city-suggestion-item:last-child{border-bottom:none;}
+.city-selected{margin-top:6px;font-size:12px;color:var(--green);font-weight:500;display:none;}
+/* JOB VISIBILITY */
+.visibility-toggle{background:#f8f7f4;border:1px solid var(--border);border-radius:8px;padding:0.85rem 1rem;margin-bottom:0.5rem;}
+.visibility-toggle-title{font-size:12px;font-weight:600;color:var(--navy);margin-bottom:8px;}
+.radio-group{display:flex;gap:1.5rem;}
+.radio-label{display:flex;align-items:center;gap:7px;cursor:pointer;font-size:13px;color:var(--text);}
+.radio-label input{accent-color:var(--gold);width:15px;height:15px;}
+@media(max-width:768px){
+  .form-row{grid-template-columns:1fr;}
+  .alumni-grid{grid-template-columns:repeat(2,1fr);}
+  .two-col{grid-template-columns:1fr;}
+  .form-card{position:static;}
+  .nav-logo-name{display:none;}
 }
 </style>
 </head>
 <body>
 
-<!-- NAVBAR -->
+<!-- NAV -->
 <nav>
   <div class="nav-inner">
     <a href="/" class="nav-logo">
       <span class="nav-logo-agr">AGR</span>
       <span class="nav-logo-name">Dr. Adeem Ghaffar Rana</span>
     </a>
-    <div class="nav-right">
-      <div class="nav-links">
-        <a href="/" class="nav-link">Home</a>
-        <a href="/about.html" class="nav-link">About</a>
-        <a href="/publications.html" class="nav-link">Publications</a>
-        <a href="/blog.html" class="nav-link">Blog</a>
-        <a href="/session2006.html" class="nav-link">Session 2006</a>
-        <a href="/alumni.html" class="nav-link active">Alumni Portal</a>
-      </div>
-      <div id="nav-user-area">
-        <button class="nav-btn btn-gold" onclick="showPage('login')">Sign In</button>
-      </div>
+    <div class="nav-right" id="nav-user-area">
+      <button class="nav-btn btn-gold" onclick="showPage('login')">Sign In</button>
     </div>
   </div>
 </nav>
-
-<!-- TOAST -->
 <div class="toast" id="toast"></div>
 
-<!-- ===== PAGE: LANDING ===== -->
+<!-- ══ LANDING ══ -->
 <div class="page active" id="page-landing">
   <div class="landing-hero">
     <span class="hero-tag">ICET · University of the Punjab</span>
     <h1>Chemical Engineering<br><span>Alumni Network</span></h1>
-    <p>Connecting graduates of the Institute of Chemical Engineering & Technology across the globe. Register your profile, find your batchmates, and stay connected.</p>
+    <p>Connecting graduates across the globe. Register your profile, find your batchmates, and network across sessions.</p>
     <div class="hero-btns">
       <button class="hero-btn-primary" onclick="handleJoinClick()">Join the Network</button>
       <button class="hero-btn-secondary" onclick="handleJoinClick()">Browse Alumni</button>
     </div>
   </div>
-
   <div class="stats-strip">
     <div class="stats-inner">
-      <div class="stat-item"><span class="stat-num" id="stat-total">—</span><span class="stat-lbl">Registered Alumni</span></div>
-      <div class="stat-item"><span class="stat-num" id="stat-countries">—</span><span class="stat-lbl">Countries</span></div>
-      <div class="stat-item"><span class="stat-num">245</span><span class="stat-lbl">Session 2006 Batch</span></div>
-      <div class="stat-item"><span class="stat-num">1+</span><span class="stat-lbl">Sessions</span></div>
+      <div class="stat-item"><span class="stat-num" id="stat-total">–</span><div class="stat-lbl">Total Registered</div></div>
+      <div class="stat-item"><span class="stat-num" id="stat-countries">–</span><div class="stat-lbl">Countries</div></div>
+      <div class="stat-item"><span class="stat-num" id="stat-sessions">2</span><div class="stat-lbl">Active Sessions</div></div>
     </div>
   </div>
-
   <div class="sessions-section">
-    <div class="section-header">
-      <span class="section-tag">Browse by Session</span>
-      <h2 class="section-title">Select Your Batch</h2>
-    </div>
+    <span class="section-tag">Choose Your Batch</span>
+    <h2 class="section-title">Sessions</h2>
     <div class="sessions-grid">
       <div class="session-card" onclick="handleSessionClick('2006')">
-        <div class="session-year">2006 – 2010</div>
-        <div class="session-dept">Chemical Engineering · ICET</div>
-        <div class="session-stats">
-          <div class="session-stat"><span class="session-stat-num">245</span><span class="session-stat-lbl">Total</span></div>
-          <div class="session-stat"><span class="session-stat-num" id="sess-2006-reg">—</span><span class="session-stat-lbl">Registered</span></div>
+        <div class="session-year">Session 2006–2010</div>
+        <div class="session-dept">Chemical Engineering · ICET · UoP</div>
+        <div style="display:flex;gap:1.25rem;margin-top:0.75rem;">
+          <div><span class="sess-stat-num" id="sess-2006-card">–</span><span class="sess-stat-lbl">Registered</span></div>
+          <div><span class="sess-stat-num">245</span><span class="sess-stat-lbl">Total Batch</span></div>
         </div>
-        <span class="session-badge">🟢 Active</span>
-        <span class="session-arrow">→</span>
       </div>
-      <div class="session-card locked">
-        <div class="session-year">2010 – 2014</div>
-        <div class="session-dept">Chemical Engineering · ICET</div>
-        <div class="session-stats">
-          <div class="session-stat"><span class="session-stat-num">—</span><span class="session-stat-lbl">Total</span></div>
-          <div class="session-stat"><span class="session-stat-num">—</span><span class="session-stat-lbl">Registered</span></div>
+      <div class="session-card" onclick="handleSessionClick('2010')">
+        <div class="session-year">Session 2010–2014</div>
+        <div class="session-dept">Chemical Engineering · ICET · UoP</div>
+        <div style="display:flex;gap:1.25rem;margin-top:0.75rem;">
+          <div><span class="sess-stat-num" id="sess-2010-card">–</span><span class="sess-stat-lbl">Registered</span></div>
+          <div><span class="sess-stat-num">245</span><span class="sess-stat-lbl">Total Batch</span></div>
         </div>
-        <span class="session-badge coming">🔜 Coming Soon</span>
       </div>
-      <div class="session-card locked">
-        <div class="session-year">2014 – 2018</div>
-        <div class="session-dept">Chemical Engineering · ICET</div>
-        <div class="session-stats">
-          <div class="session-stat"><span class="session-stat-num">—</span><span class="session-stat-lbl">Total</span></div>
-          <div class="session-stat"><span class="session-stat-num">—</span><span class="session-stat-lbl">Registered</span></div>
-        </div>
-        <span class="session-badge coming">🔜 Coming Soon</span>
+      <div class="session-card coming-soon">
+        <span class="cs-badge">Coming Soon</span>
+        <div class="session-year">Session 2014–2018</div>
+        <div class="session-dept">Chemical Engineering · ICET · UoP</div>
       </div>
     </div>
-  </div>
-
-  <div class="portal-footer">
-    <p>ICET Alumni Network · Chemical Engineering · University of the Punjab, Lahore · Maintained by <a href="mailto:ranaadeem@hotmail.com">Dr. Adeem Ghaffar Rana</a></p>
   </div>
 </div>
 
-<!-- ===== PAGE: LOGIN ===== -->
+<!-- ══ LOGIN ══ -->
 <div class="page" id="page-login">
   <div class="login-wrap">
     <div class="login-card">
-      <div class="login-logo">
-        <div class="agr">AGR</div>
-        <p>ICET Alumni Network</p>
-      </div>
-      <h2 class="login-title">Welcome Back</h2>
-      <p class="login-sub">Sign in with your Google account to access the ICET Chemical Engineering Alumni Network.</p>
+      <h2>Welcome</h2>
+      <p>Sign in with your Google account to access the ICET Chemical Engineering Alumni Network.</p>
       <button class="google-btn" onclick="signInWithGoogle()">
-        <svg class="google-icon" viewBox="0 0 24 24">
-          <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-          <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-          <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-        </svg>
+        <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
         Continue with Google
       </button>
-      <p class="login-note">By signing in you agree to our community guidelines. Only ICET Chemical Engineering alumni may register a profile.</p>
-      <p style="text-align:center;margin-top:1rem;"><a href="#" onclick="showPage('landing')" style="font-size:13px;color:var(--muted);text-decoration:none;">← Back to home</a></p>
+      <p style="font-size:12px;color:var(--muted);margin-top:1.5rem;">Only ICET Chemical Engineering alumni may register. Your roll number will be verified against the batch list.</p>
+      <p style="text-align:center;margin-top:1rem;"><a href="#" onclick="showPage('landing')" style="font-size:13px;color:var(--muted);text-decoration:none;">← Back</a></p>
     </div>
   </div>
 </div>
 
-<!-- ===== PAGE: PROFILE SETUP ===== -->
+<!-- ══ SETUP ══ -->
 <div class="page" id="page-setup">
   <div class="setup-wrap">
     <div class="setup-card">
       <div class="setup-header">
-        <h2>Complete Your Profile</h2>
-        <p>Tell your batchmates where life has taken you since ICET</p>
+        <h2 id="setup-title">Complete Your Profile</h2>
+        <p id="setup-subtitle">Tell your batchmates where life has taken you since ICET.</p>
       </div>
       <div class="setup-body">
         <div class="error-box" id="setup-error"></div>
         <div class="success-box" id="setup-success"></div>
-
         <!-- PHOTO -->
-        <div class="setup-photo-upload">
-          <div class="photo-circle-upload" id="photo-upload-circle" onclick="document.getElementById('photo-file').click()">
-            📷
-          </div>
+        <div class="photo-upload-area">
+          <div class="photo-upload-circle" id="photo-upload-circle" onclick="document.getElementById('photo-file').click()">📷</div>
           <input type="file" id="photo-file" accept="image/*" style="display:none" onchange="handlePhotoSelect(event)">
-          <div class="setup-photo-label">Click to upload profile photo (optional)</div>
+          <div class="photo-upload-hint">Profile photo <span class="req">*</span> — click to upload (max 3MB)</div>
         </div>
-
         <!-- IDENTITY -->
         <div class="section-divider">Identity</div>
         <div class="form-row">
@@ -386,6 +280,8 @@ nav {
               <option value="">Select your session</option>
               <option value="2006-Morning">2006–2010 · Morning</option>
               <option value="2006-Evening">2006–2010 · Evening</option>
+              <option value="2010-Morning">2010–2014 · Morning</option>
+              <option value="2010-Evening">2010–2014 · Evening</option>
             </select>
           </div>
           <div class="form-group">
@@ -399,25 +295,24 @@ nav {
           <label>Full Name</label>
           <div class="name-display" id="setup-name-display"><span class="name-placeholder">Auto-filled from roll number</span></div>
         </div>
-
-        <!-- CURRENT STATUS -->
-        <div class="section-divider">Current Status</div>
+        <!-- LOCATION -->
+        <div class="section-divider">Location</div>
         <div class="form-group">
           <label>City of Residence <span class="req">*</span></label>
           <div style="position:relative;">
             <input type="text" id="setup-city-input" autocomplete="off"
               placeholder="Start typing your city — e.g. Freiberg, Lahore, Dubai..."
-              oninput="onCityInput()"
-              onblur="setTimeout(hideCitySuggestions,200)"
-              style="width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:6px;font-size:14px;font-family:inherit;outline:none;">
-            <div id="city-suggestions" style="display:none;position:absolute;top:100%;left:0;right:0;background:white;border:1px solid var(--border);border-radius:0 0 8px 8px;box-shadow:0 4px 16px rgba(0,0,0,0.1);z-index:500;max-height:220px;overflow-y:auto;"></div>
+              oninput="onCityInput()" onblur="setTimeout(hideCitySuggestions,200)"
+              style="width:100%;">
+            <div class="city-suggestions" id="city-suggestions"></div>
           </div>
-          <!-- Hidden fields that store the resolved values -->
           <input type="hidden" id="setup-city" value="">
           <input type="hidden" id="setup-country" value="">
-          <div id="city-selected-display" style="display:none;margin-top:6px;font-size:12px;color:var(--green);font-weight:500;"></div>
-          <div style="font-size:11px;color:var(--muted);margin-top:4px;">Type at least 3 characters to search. Select from the list to confirm.</div>
+          <div class="city-selected" id="city-selected-display"></div>
+          <div style="font-size:11px;color:var(--muted);margin-top:4px;">Type at least 3 characters. Select from the dropdown to confirm.</div>
         </div>
+        <!-- CURRENT STATUS -->
+        <div class="section-divider">Current Status</div>
         <div class="form-row">
           <div class="form-group">
             <label>Job Title <span class="req">*</span></label>
@@ -428,22 +323,19 @@ nav {
             <input type="text" id="setup-company" placeholder="e.g. Shell Pakistan">
           </div>
         </div>
-        <div style="background:#f8f7f4;border:1px solid var(--border);border-radius:8px;padding:0.85rem 1rem;margin-bottom:0.5rem;">
-          <div style="font-size:12px;font-weight:600;color:var(--navy);margin-bottom:8px;">🔒 Job & Company Visibility</div>
-          <div style="display:flex;gap:1.5rem;">
-            <label style="display:flex;align-items:center;gap:7px;cursor:pointer;font-size:13px;color:var(--text);">
-              <input type="radio" name="job-visibility" id="job-vis-session" value="session" checked
-                style="accent-color:var(--gold);width:15px;height:15px;">
+        <div class="visibility-toggle">
+          <div class="visibility-toggle-title">🔒 Job &amp; Company Visibility</div>
+          <div class="radio-group">
+            <label class="radio-label">
+              <input type="radio" name="job-visibility" value="session" checked>
               My session only <span style="font-size:11px;color:var(--muted);">(recommended)</span>
             </label>
-            <label style="display:flex;align-items:center;gap:7px;cursor:pointer;font-size:13px;color:var(--text);">
-              <input type="radio" name="job-visibility" id="job-vis-public" value="public"
-                style="accent-color:var(--gold);width:15px;height:15px;">
+            <label class="radio-label">
+              <input type="radio" name="job-visibility" value="public">
               All sessions <span style="font-size:11px;color:var(--muted);">(public)</span>
             </label>
           </div>
         </div>
-
         <!-- CONTACT -->
         <div class="section-divider">Contact Details</div>
         <div class="form-row">
@@ -452,186 +344,155 @@ nav {
             <input type="email" id="setup-email" placeholder="you@example.com">
           </div>
           <div class="form-group">
-            <label>Phone Number <span style="font-size:11px;color:var(--muted);font-weight:400;">(same session only)</span></label>
+            <label>Phone <span style="font-size:11px;color:var(--muted);font-weight:400;">(session only)</span></label>
             <input type="tel" id="setup-phone" placeholder="+92 300 0000000">
           </div>
         </div>
         <div class="form-group">
-          <label>LinkedIn Profile URL <span class="opt">(optional)</span></label>
+          <label>LinkedIn Profile URL <span class="req">*</span></label>
           <input type="url" id="setup-linkedin" placeholder="https://linkedin.com/in/yourname">
         </div>
         <div class="form-group">
-          <label>About / Bio <span class="opt">(optional)</span></label>
-          <textarea id="setup-bio" rows="3" placeholder="A brief note about yourself, your career, or memories from ICET..." style="resize:vertical;"></textarea>
+          <label>About / Bio <span style="font-size:11px;color:var(--muted);font-weight:400;">(optional)</span></label>
+          <textarea id="setup-bio" rows="3" placeholder="A brief note about yourself, your career, or memories from ICET..."></textarea>
         </div>
-
-        <button class="submit-btn" id="setup-submit-btn" onclick="submitProfile()">Save Profile & Join Network</button>
+        <button class="submit-btn" id="setup-submit-btn" onclick="submitProfile()">Save Profile &amp; Join Network</button>
+        <p style="text-align:center;margin-top:0.75rem;"><a href="#" onclick="showPage('directory')" style="font-size:13px;color:var(--muted);text-decoration:none;">Cancel</a></p>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ===== PAGE: DIRECTORY ===== -->
+<!-- ══ DIRECTORY ══ -->
 <div class="page" id="page-directory">
-  <div style="max-width:1100px;margin:0 auto;padding:2rem;">
-
-    <!-- STATS DASHBOARD -->
+  <div class="dir-wrap">
+    <!-- Stats Header -->
     <div style="background:linear-gradient(135deg,#0f1f3d 0%,#1a3a6b 60%,#0d2744 100%);border-radius:14px;padding:2rem;margin-bottom:1.5rem;display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:1.5rem;">
       <div style="flex:1;min-width:260px;">
-        <div style="font-family:'Playfair Display',serif;font-size:1.6rem;color:white;margin-bottom:4px;">Session <span id="dir-session-label">2006–2010</span></div>
+        <div style="font-family:'Playfair Display',serif;font-size:1.6rem;color:white;margin-bottom:4px;">Session <span id="dir-session-label">–</span></div>
         <div style="font-size:13px;color:rgba(255,255,255,0.55);margin-bottom:1.5rem;">Chemical Engineering · ICET, University of the Punjab, Lahore</div>
         <div style="display:flex;gap:12px;flex-wrap:wrap;">
           <div style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);border-radius:10px;padding:12px 18px;text-align:center;min-width:80px;">
             <span id="dir-registered" style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;color:#c9a84c;display:block;line-height:1;">–</span>
-            <span style="font-size:11px;color:rgba(255,255,255,0.5);margin-top:3px;display:block;">Registered</span>
+            <span style="font-size:11px;color:rgba(255,255,255,0.5);display:block;margin-top:3px;">Registered</span>
           </div>
           <div style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);border-radius:10px;padding:12px 18px;text-align:center;min-width:80px;">
-            <span style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;color:#c9a84c;display:block;line-height:1;">245</span>
-            <span style="font-size:11px;color:rgba(255,255,255,0.5);margin-top:3px;display:block;">Total Batch</span>
+            <span id="dir-total" style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;color:#c9a84c;display:block;line-height:1;">245</span>
+            <span style="font-size:11px;color:rgba(255,255,255,0.5);display:block;margin-top:3px;">Total Batch</span>
           </div>
           <div style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);border-radius:10px;padding:12px 18px;text-align:center;min-width:80px;">
-            <span id="dir-countries-dir" style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;color:#c9a84c;display:block;line-height:1;">–</span>
-            <span style="font-size:11px;color:rgba(255,255,255,0.5);margin-top:3px;display:block;">Countries</span>
+            <span id="dir-countries" style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;color:#c9a84c;display:block;line-height:1;">–</span>
+            <span style="font-size:11px;color:rgba(255,255,255,0.5);display:block;margin-top:3px;">Countries</span>
           </div>
           <div style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);border-radius:10px;padding:12px 18px;text-align:center;min-width:80px;">
             <span id="dir-morning" style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;color:#c9a84c;display:block;line-height:1;">–</span>
-            <span style="font-size:11px;color:rgba(255,255,255,0.5);margin-top:3px;display:block;">Morning</span>
+            <span style="font-size:11px;color:rgba(255,255,255,0.5);display:block;margin-top:3px;">Morning</span>
           </div>
           <div style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);border-radius:10px;padding:12px 18px;text-align:center;min-width:80px;">
             <span id="dir-evening" style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;color:#c9a84c;display:block;line-height:1;">–</span>
-            <span style="font-size:11px;color:rgba(255,255,255,0.5);margin-top:3px;display:block;">Evening</span>
+            <span style="font-size:11px;color:rgba(255,255,255,0.5);display:block;margin-top:3px;">Evening</span>
           </div>
         </div>
       </div>
-      <div style="text-align:center;min-width:140px;">
-        <div style="font-size:11px;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:10px;">Recently Joined</div>
-        <div id="sess-preview-avatars" style="display:flex;justify-content:center;"></div>
+      <div style="text-align:center;">
+        <div style="font-size:11px;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:8px;">Recently Joined</div>
+        <div id="dir-preview-avatars" style="display:flex;justify-content:center;"></div>
       </div>
     </div>
 
-    <!-- TABS -->
-    <div style="display:flex;gap:4px;background:white;border:1px solid #e5e7eb;border-radius:8px;padding:4px;margin-bottom:1.5rem;width:fit-content;">
+    <!-- Cross-session notice -->
+    <div id="cross-session-notice" style="display:none;background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:0.75rem 1rem;margin-bottom:1rem;font-size:13px;color:#1e40af;">
+      👥 You're browsing another batch's directory. Notice board &amp; announcements are only visible to that batch's own members. You can view profiles and email alumni for networking.
+    </div>
+
+    <!-- Tabs -->
+    <div style="display:flex;gap:4px;background:white;border:1px solid var(--border);border-radius:8px;padding:4px;margin-bottom:1.5rem;width:fit-content;">
       <button id="tab-btn-directory" onclick="switchTab('directory',this)" style="padding:8px 18px;border-radius:5px;font-size:13px;font-weight:500;cursor:pointer;border:none;background:#0f1f3d;color:white;font-family:inherit;">👥 Directory</button>
       <button id="tab-btn-noticeboard" onclick="switchTab('noticeboard',this)" style="padding:8px 18px;border-radius:5px;font-size:13px;font-weight:500;cursor:pointer;border:none;background:transparent;color:#6b7280;font-family:inherit;">📌 Notice Board</button>
       <button id="tab-btn-announcements" onclick="switchTab('announcements',this)" style="padding:8px 18px;border-radius:5px;font-size:13px;font-weight:500;cursor:pointer;border:none;background:transparent;color:#6b7280;font-family:inherit;">📢 Announcements</button>
     </div>
 
-    <!-- DIRECTORY TAB -->
+    <!-- Directory Tab -->
     <div id="tab-directory">
       <div style="display:flex;gap:1rem;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap;">
-        <input type="text" class="search-box" id="search-input" placeholder="Search by name or roll number..." oninput="filterDirectory()" style="flex:1;min-width:200px;padding:9px 14px;border:1px solid #e5e7eb;border-radius:8px;font-size:14px;font-family:inherit;outline:none;">
+        <input class="search-box" id="search-input" placeholder="Search by name or roll number..." oninput="renderDirectory()">
         <div style="display:flex;gap:6px;">
-          <button class="filter-btn active" onclick="setFilter('all', this)">All</button>
-          <button class="filter-btn" onclick="setFilter('Morning', this)">Morning</button>
-          <button class="filter-btn" onclick="setFilter('Evening', this)">Evening</button>
+          <button class="filter-btn active" onclick="setFilter('all',this)">All</button>
+          <button class="filter-btn" onclick="setFilter('Morning',this)">Morning</button>
+          <button class="filter-btn" onclick="setFilter('Evening',this)">Evening</button>
         </div>
       </div>
-      <div class="alumni-grid" id="alumni-grid">
-        <div class="loading-spinner">Loading alumni...</div>
-      </div>
+      <div class="alumni-grid" id="alumni-grid"><div class="loading-spinner">Loading...</div></div>
     </div>
 
-    <!-- NOTICE BOARD TAB -->
+    <!-- Notice Board Tab -->
     <div id="tab-noticeboard" style="display:none;">
-      <div style="display:grid;grid-template-columns:1fr 320px;gap:1.5rem;align-items:start;">
-
-        <!-- LEFT: Feed -->
+      <div class="two-col">
         <div>
-          <div style="font-size:11px;font-weight:600;color:#6b7280;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:1rem;">Recent Posts</div>
-          <div id="notices-list">
-            <div style="text-align:center;padding:3rem 1rem;color:#6b7280;font-size:14px;background:white;border:1px solid #e5e7eb;border-radius:10px;">
-              📌 No posts yet. Be the first to share something!
-            </div>
-          </div>
+          <div class="feed-section-label">Recent Posts</div>
+          <div id="notices-list"><div class="empty-state">📌 No posts yet. Be the first!</div></div>
         </div>
-
-        <!-- RIGHT: Submit form -->
-        <div style="background:white;border:1px solid #e5e7eb;border-radius:12px;padding:1.25rem;position:sticky;top:80px;">
-          <div style="font-size:14px;font-weight:600;color:#0f1f3d;margin-bottom:4px;">📌 Post to Notice Board</div>
-          <p style="font-size:12px;color:#6b7280;margin-bottom:0.75rem;line-height:1.5;">Share a message with your batchmates. Appears after admin approval.</p>
-          <textarea id="notice-text" style="width:100%;padding:10px;border:1px solid #e5e7eb;border-radius:6px;font-size:13px;font-family:inherit;resize:vertical;min-height:100px;outline:none;color:#1a1a2e;" placeholder="What's on your mind?" maxlength="500" oninput="document.getElementById('notice-char').textContent=this.value.length+'/500'"></textarea>
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;">
+        <div class="form-card">
+          <div class="form-card-title">📌 Post to Notice Board</div>
+          <div class="form-card-sub">Share a message with your batchmates. Appears after admin approval.</div>
+          <textarea id="notice-text" placeholder="What's on your mind?" maxlength="500" oninput="document.getElementById('notice-char').textContent=this.value.length+'/500'"></textarea>
+          <div style="display:flex;justify-content:space-between;align-items:center;">
             <span style="font-size:11px;color:#9ca3af;" id="notice-char">0/500</span>
-            <button onclick="submitNotice()" style="background:#c9a84c;color:#0f1f3d;border:none;padding:8px 16px;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">Post →</button>
+            <button onclick="submitNotice()" style="background:var(--gold);color:var(--navy);border:none;padding:8px 16px;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">Post →</button>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- ANNOUNCEMENTS TAB -->
+    <!-- Announcements Tab -->
     <div id="tab-announcements" style="display:none;">
-      <div style="display:grid;grid-template-columns:1fr 320px;gap:1.5rem;align-items:start;">
-
-        <!-- LEFT: Feed -->
+      <div class="two-col">
         <div>
-          <div style="font-size:11px;font-weight:600;color:#6b7280;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:1rem;">Recent Announcements</div>
-          <div id="announcements-list">
-            <div style="text-align:center;padding:3rem 1rem;color:#6b7280;font-size:14px;background:white;border:1px solid #e5e7eb;border-radius:10px;">
-              📢 No announcements yet.
-            </div>
-          </div>
+          <div class="feed-section-label">Recent Announcements</div>
+          <div id="announcements-list"><div class="empty-state">📢 No announcements yet.</div></div>
         </div>
-
-        <!-- RIGHT: Submit form -->
-        <div style="background:white;border:1px solid #e5e7eb;border-radius:12px;padding:1.25rem;position:sticky;top:80px;">
-          <div style="font-size:14px;font-weight:600;color:#0f1f3d;margin-bottom:4px;">📢 Submit an Announcement</div>
-          <p style="font-size:12px;color:#6b7280;margin-bottom:1rem;line-height:1.5;">New job, award, or news? Share it with your batch. Appears after admin approval.</p>
-          <div style="margin-bottom:0.65rem;">
-            <label style="font-size:11px;font-weight:500;color:#6b7280;text-transform:uppercase;letter-spacing:0.06em;display:block;margin-bottom:3px;">Type</label>
-            <select id="ann-type" style="width:100%;padding:8px 10px;border:1px solid #e5e7eb;border-radius:6px;font-size:13px;font-family:inherit;outline:none;color:#1a1a2e;">
-              <option value="job">Job Change / New Position</option>
-              <option value="achievement">Achievement / Award</option>
-              <option value="news">News / Update</option>
-              <option value="other">Other</option>
-            </select>
-          </div>
-          <div style="margin-bottom:0.65rem;">
-            <label style="font-size:11px;font-weight:500;color:#6b7280;text-transform:uppercase;letter-spacing:0.06em;display:block;margin-bottom:3px;">Headline *</label>
-            <input type="text" id="ann-title" placeholder="e.g. Joined XYZ as Senior Engineer" style="width:100%;padding:8px 10px;border:1px solid #e5e7eb;border-radius:6px;font-size:13px;font-family:inherit;outline:none;color:#1a1a2e;">
-          </div>
-          <div style="margin-bottom:0.75rem;">
-            <label style="font-size:11px;font-weight:500;color:#6b7280;text-transform:uppercase;letter-spacing:0.06em;display:block;margin-bottom:3px;">Details (optional)</label>
-            <textarea id="ann-body" rows="3" style="width:100%;padding:8px 10px;border:1px solid #e5e7eb;border-radius:6px;font-size:13px;font-family:inherit;resize:vertical;outline:none;color:#1a1a2e;" placeholder="Any extra details..."></textarea>
-          </div>
-          <button onclick="submitAnnouncement()" style="width:100%;padding:10px;background:#c9a84c;color:#0f1f3d;border:none;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">Submit for Approval →</button>
+        <div class="form-card">
+          <div class="form-card-title">📢 Submit an Announcement</div>
+          <div class="form-card-sub">New job, award, or news? Appears after admin approval.</div>
+          <select id="ann-type" style="margin-bottom:8px;">
+            <option value="job">Job Change / New Position</option>
+            <option value="achievement">Achievement / Award</option>
+            <option value="news">News / Update</option>
+            <option value="other">Other</option>
+          </select>
+          <input type="text" id="ann-title" placeholder="Headline *">
+          <textarea id="ann-body" rows="3" placeholder="Details (optional)"></textarea>
+          <button onclick="submitAnnouncement()" style="width:100%;padding:10px;background:var(--gold);color:var(--navy);border:none;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">Submit for Approval →</button>
         </div>
       </div>
     </div>
-
   </div>
 </div>
 
-<!-- ===== PAGE: PROFILE VIEW ===== -->
+<!-- ══ PROFILE VIEW ══ -->
 <div class="page" id="page-profile">
   <div class="profile-wrap">
-    <a href="#" onclick="showPage('directory')" style="font-size:13px;color:var(--muted);text-decoration:none;display:inline-block;margin-bottom:1rem;">← Back to Directory</a>
+    <button onclick="showPage('directory')" style="background:none;border:none;color:var(--gold);font-size:13px;cursor:pointer;margin-bottom:1rem;">← Back to Directory</button>
     <div class="profile-card">
-      <div class="profile-banner"></div>
-      <div class="profile-info">
-        <div class="profile-avatar" id="view-avatar">👤</div>
-        <div style="margin-top:1rem;">
-          <h2 class="profile-name" id="view-name">—</h2>
-          <p class="profile-roll" id="view-roll">—</p>
-          <div class="profile-details">
-            <div class="profile-detail"><span class="detail-icon">🏢</span><div><div class="detail-label">Job / Company</div><div class="detail-val" id="view-job">—</div></div></div>
-            <div class="profile-detail"><span class="detail-icon">📍</span><div><div class="detail-label">Location</div><div class="detail-val" id="view-location">—</div></div></div>
-            <div class="profile-detail"><span class="detail-icon">✉️</span><div><div class="detail-label">Email</div><div class="detail-val" id="view-email">—</div></div></div>
-            <div class="profile-detail"><span class="detail-icon">📞</span><div><div class="detail-label">Phone</div><div class="detail-val" id="view-phone">—</div></div></div>
-            <div class="profile-detail"><span class="detail-icon">💼</span><div><div class="detail-label">LinkedIn</div><div class="detail-val" id="view-linkedin">—</div></div></div>
-            <div class="profile-detail"><span class="detail-icon">🎓</span><div><div class="detail-label">Session</div><div class="detail-val" id="view-session">—</div></div></div>
-          </div>
-          <div id="view-bio-section" style="margin-top:1.5rem;display:none;">
-            <div style="font-size:11px;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.1em;">About</div>
-            <p id="view-bio" style="font-size:14px;color:var(--text);line-height:1.7;"></p>
-          </div>
-        </div>
-        <button class="edit-own-btn" id="edit-own-btn" style="display:none" onclick="openEditProfile()">✏️ Edit My Profile</button>
+      <div class="profile-header">
+        <div class="profile-avatar" id="view-avatar"></div>
+        <div class="profile-name" id="view-name"></div>
+        <div class="profile-roll" id="view-roll"></div>
+      </div>
+      <div class="profile-body">
+        <div class="profile-field"><span class="field-icon">💼</span><div><div class="field-label">Job &amp; Company</div><div class="field-value" id="view-job"></div></div></div>
+        <div class="profile-field"><span class="field-icon">📍</span><div><div class="field-label">Location</div><div class="field-value" id="view-location"></div></div></div>
+        <div class="profile-field"><span class="field-icon">✉</span><div><div class="field-label">Email</div><div class="field-value" id="view-email"></div></div></div>
+        <div class="profile-field"><span class="field-icon">📞</span><div><div class="field-label">Phone</div><div class="field-value" id="view-phone"></div></div></div>
+        <div class="profile-field"><span class="field-icon">in</span><div><div class="field-label">LinkedIn</div><div class="field-value" id="view-linkedin"></div></div></div>
+        <div class="profile-field" id="view-bio-section" style="display:none;"><span class="field-icon">📝</span><div><div class="field-label">About</div><div class="field-value" id="view-bio"></div></div></div>
+        <button id="edit-own-btn" style="display:none;width:100%;margin-top:0.75rem;padding:10px;background:var(--navy);color:var(--gold);border:none;border-radius:6px;font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;" onclick="openEditProfile()">✏️ Edit My Profile</button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- Firebase SDKs -->
+<!-- Firebase -->
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js';
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged }
@@ -655,7 +516,6 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 const provider = new GoogleAuthProvider();
 
-// ── Student data ──
 const morningStudents = {
   "M101":"ABDUL WAHAB KHAN","M102":"ZAHID ANJUM","M103":"USMAN RAFIQ","M104":"MEESAM ALI","M105":"IRFAN IQBAL",
   "M106":"WASEEM SAFDAR","M107":"NASEER AHMAD","M108":"RIZWAN HAIDER","M109":"UMAR FAROOQ","M110":"MUHAMMAD FIAZ",
@@ -702,673 +562,466 @@ const eveningStudents = {
   "E219":"NAEEM BHATTI","E220":"ASIF SANI"
 };
 
-const countryCities = {
-  "Pakistan":["Karachi","Lahore","Islamabad","Rawalpindi","Faisalabad","Multan","Peshawar","Quetta","Sialkot","Gujranwala","Other"],
-  "Saudi Arabia":["Riyadh","Jeddah","Mecca","Medina","Dammam","Khobar","Jubail","Yanbu","Other"],
-  "United Arab Emirates":["Dubai","Abu Dhabi","Sharjah","Ajman","Ras Al Khaimah","Al Ain","Other"],
-  "United Kingdom":["London","Birmingham","Manchester","Leeds","Glasgow","Liverpool","Edinburgh","Bristol","Other"],
-  "United States":["New York","Los Angeles","Chicago","Houston","Dallas","Seattle","Denver","Washington DC","Other"],
-  "Canada":["Toronto","Montreal","Vancouver","Calgary","Edmonton","Ottawa","Other"],
-  "Australia":["Sydney","Melbourne","Brisbane","Perth","Adelaide","Canberra","Other"],
-  "Germany":["Berlin","Hamburg","Munich","Cologne","Frankfurt","Stuttgart","Freiberg","Other"],
-  "Malaysia":["Kuala Lumpur","George Town","Johor Bahru","Ipoh","Other"],
-  "Qatar":["Doha","Al Wakrah","Al Khor","Lusail","Other"],
-  "Kuwait":["Kuwait City","Salmiya","Hawalli","Ahmadi","Other"],
-  "Oman":["Muscat","Salalah","Sohar","Nizwa","Other"],
-  "Bahrain":["Manama","Riffa","Muharraq","Other"],
-  "Turkey":["Istanbul","Ankara","Izmir","Other"],
-  "France":["Paris","Lyon","Marseille","Other"],
-  "Netherlands":["Amsterdam","Rotterdam","The Hague","Other"],
-  "Sweden":["Stockholm","Gothenburg","Malmö","Other"],
-  "Norway":["Oslo","Bergen","Stavanger","Other"],
-  "Denmark":["Copenhagen","Aarhus","Other"],
-  "Switzerland":["Zurich","Geneva","Bern","Other"],
-  "Ireland":["Dublin","Cork","Galway","Other"],
-  "Singapore":["Singapore"],
-  "Japan":["Tokyo","Osaka","Yokohama","Other"],
-  "South Korea":["Seoul","Busan","Other"],
-  "India":["Mumbai","Delhi","Bangalore","Hyderabad","Other"],
-  "China":["Beijing","Shanghai","Guangzhou","Other"],
-  "Bangladesh":["Dhaka","Chittagong","Other"],
-  "New Zealand":["Auckland","Wellington","Christchurch","Other"]
-};
-
-const allCountries = [...new Set([...Object.keys(countryCities),"Afghanistan","Albania","Algeria","Argentina","Armenia","Austria","Azerbaijan","Belarus","Belgium","Bolivia","Bosnia and Herzegovina","Brazil","Bulgaria","Cambodia","Cameroon","Chile","Colombia","Croatia","Cuba","Czech Republic","Ecuador","Egypt","Ethiopia","Finland","Georgia","Ghana","Greece","Hungary","Indonesia","Iran","Iraq","Israel","Italy","Jamaica","Jordan","Kazakhstan","Kenya","Libya","Lithuania","Luxembourg","Mexico","Moldova","Morocco","Myanmar","Nepal","Nigeria","Pakistan","Panama","Peru","Philippines","Poland","Portugal","Romania","Russia","Serbia","Slovakia","Slovenia","South Africa","Spain","Sri Lanka","Sudan","Syria","Taiwan","Thailand","Tunisia","Ukraine","Uzbekistan","Venezuela","Vietnam","Yemen"])].sort();
-
-// Populate country dropdown
-const countrySelect = document.getElementById('setup-country');
-allCountries.forEach(c => {
-  const o = document.createElement('option');
-  o.value = c; o.textContent = c;
-  countrySelect.appendChild(o);
-});
-
 // ── State ──
-let currentUser = null;
-let currentUserProfile = null;
-let allAlumni = [];
-let activeFilter = 'all';
-let selectedPhotoBase64 = '';
-let selectedPhotoMime = '';
+let currentUser = null, currentUserProfile = null;
+let allAlumni = [], activeFilter = 'all', currentViewSession = '2006';
+let selectedPhotoBase64 = '', isEditMode = false;
 
-// ── Auth state ──
+// ── Auth ──
 onAuthStateChanged(auth, async (user) => {
   if (user) {
     currentUser = user;
     updateNavUser(user);
     const profile = await getUserProfile(user.uid);
     currentUserProfile = profile;
-    if (!profile) {
-      showPage('setup');
-    }
-    loadStats();
+    if (!profile) showPage('setup');
+    loadGlobalStats();
   } else {
-    currentUser = null;
-    currentUserProfile = null;
+    currentUser = null; currentUserProfile = null;
     updateNavUser(null);
   }
 });
 
-function updateNavUser(user) {
-  const area = document.getElementById('nav-user-area');
-  if (user) {
-    area.innerHTML = `
-      <div class="nav-user">
-        ${user.photoURL ? `<img src="${user.photoURL}" alt="avatar">` : ''}
-        <span>${user.displayName ? user.displayName.split(' ')[0] : 'User'}</span>
-        ${currentUser && currentUser.uid === 'w2AtZbhUiyY5TxyvIecHzWqheaE2' ? `<button class="nav-btn btn-gold" onclick="window.location='/admin.html'">⚙ Admin</button>` : ''}
-        <button class="nav-btn btn-outline" onclick="showPage('directory')">Directory</button>
-        <button class="nav-btn btn-outline" onclick="signOutUser()">Sign Out</button>
-      </div>`;
-  } else {
-    area.innerHTML = `<button class="nav-btn btn-gold" onclick="showPage('login')">Sign In</button>`;
-  }
-}
-
-// ── Auth functions ──
-window.signInWithGoogle = async () => {
-  try {
-    await signInWithPopup(auth, provider);
-    showToast('Signed in successfully!');
-  } catch (e) {
-    showToast('Sign in failed. Please try again.');
-  }
-};
-
-window.signOutUser = async () => {
-  await signOut(auth);
-  showPage('landing');
-  showToast('Signed out.');
-};
-
-// ── Firestore ──
 async function getUserProfile(uid) {
-  const ref = doc(db, 'alumni', uid);
-  const snap = await getDoc(ref);
+  const snap = await getDoc(doc(db,'alumni',uid));
   return snap.exists() ? snap.data() : null;
 }
 
-async function loadStats() {
-  try {
-    const snap = await getDocs(collection(db, 'alumni'));
-    const total = snap.size;
-    const countries = new Set();
-    let sess2006 = 0;
-    let morning=0, evening=0;
-    snap.forEach(d => {
-      const data = d.data();
-      if (data.country) countries.add(data.country);
-      if (data.session && data.session.includes('2006')) {
-        sess2006++;
-        if (data.session.includes('Morning')) morning++; else evening++;
-      }
-    });
-    document.getElementById('stat-total').textContent = total;
-    document.getElementById('stat-countries').textContent = countries.size;
-    document.getElementById('sess-2006-reg').textContent = sess2006;
-    document.getElementById('sess-2006-reg-card') && (document.getElementById('sess-2006-reg-card').textContent = sess2006);
-    // Session detail stats
-    animateCount(document.getElementById('dir-registered'), sess2006);
-    animateCount(document.getElementById('dir-countries-dir'), countries.size);
-    animateCount(document.getElementById('dir-morning'), morning);
-    animateCount(document.getElementById('dir-evening'), evening);
-    animateCount(document.getElementById('stat-total'), total);
-    animateCount(document.getElementById('stat-countries'), countries.size);
-    animateCount(document.getElementById('sess-2006-reg'), sess2006);
-    animateCount(document.getElementById('sess-2006-reg-card'), sess2006);
-    // Preview avatars
-// Animated number counter
-function animateCount(el, target, duration=800) {
-  if (!el) return;
-  const start = parseInt(el.textContent) || 0;
-  if (start === target) return;
-  const step = (target - start) / (duration / 16);
-  let current = start;
-  const timer = setInterval(() => {
-    current += step;
-    if ((step > 0 && current >= target) || (step < 0 && current <= target)) {
-      current = target;
-      clearInterval(timer);
-    }
-    el.textContent = Math.round(current);
-  }, 16);
+function updateNavUser(user) {
+  const area = document.getElementById('nav-user-area');
+  if (!user) { area.innerHTML = '<button class="nav-btn btn-gold" onclick="showPage('login')">Sign In</button>'; return; }
+  const isAdmin = user.uid === ADMIN_UID;
+  area.innerHTML = '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">'
+    + (user.photoURL ? '<img src="'+user.photoURL+'" style="width:32px;height:32px;border-radius:50%;border:2px solid #c9a84c;" alt="">' : '')
+    + '<span style="font-size:13px;color:rgba(255,255,255,0.8);">'+(user.displayName||'').split(' ')[0]+'</span>'
+    + (isAdmin ? '<a href="/admin.html" class="nav-btn btn-gold" style="text-decoration:none;">⚙ Admin</a>' : '')
+    + '<button class="nav-btn btn-outline" onclick="showPage('directory')">Directory</button>'
+    + '<button class="nav-btn btn-outline" onclick="doSignOut()">Sign Out</button>'
+    + '</div>';
 }
 
-    const previewEl = document.getElementById('sess-preview-avatars');
-    if (previewEl) {
-      const recent = [];
-      snap.forEach(d => { if (d.data().session && d.data().session.includes('2006')) recent.push(d.data()); });
-      recent.sort((a,b) => (b.registeredAt||'').localeCompare(a.registeredAt||''));
-      previewEl.innerHTML = recent.slice(0,5).map((a,i) => {
-        const initials = a.name.split(' ').map(w=>w[0]).slice(0,2).join('');
-        const photoEl = a.photoBase64
-          ? '<img src="'+a.photoBase64+'" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" alt="">'
-          : '<span style="font-size:12px;font-weight:700;color:#c9a84c;">'+initials+'</span>';
-        return '<div style="width:38px;height:38px;border-radius:50%;border:2px solid #c9a84c;background:rgba(201,168,76,0.15);display:flex;align-items:center;justify-content:center;overflow:hidden;margin-left:'+(i===0?'0':'-8px')+';flex-shrink:0;" title="'+a.name+'">'+photoEl+'</div>';
-      }).join('');
-    }
+window.signInWithGoogle = async () => { try { await signInWithPopup(auth,provider); showToast('Signed in!'); } catch(e) { showToast('Sign in failed.'); } };
+window.doSignOut = async () => { await signOut(auth); showPage('landing'); showToast('Signed out.'); };
+
+// ── Global stats (landing page) ──
+async function loadGlobalStats() {
+  try {
+    const snap = await getDocs(collection(db,'alumni'));
+    let total=0; const countries=new Set();
+    const sess2006=[], sess2010=[];
+    snap.forEach(d => {
+      const a=d.data(); total++;
+      if (a.country) countries.add(a.country);
+      if (a.session?.includes('2006')) sess2006.push(a);
+      if (a.session?.includes('2010')) sess2010.push(a);
+    });
+    animateCount(document.getElementById('stat-total'), total);
+    animateCount(document.getElementById('stat-countries'), countries.size);
+    animateCount(document.getElementById('sess-2006-card'), sess2006.length);
+    animateCount(document.getElementById('sess-2010-card'), sess2010.length);
   } catch(e) {}
 }
 
-// ── Tab switching ──
-window.switchTab = (tab, btn) => {
-  ['directory','noticeboard','announcements'].forEach(t => {
-    const el = document.getElementById('tab-'+t);
-    if (el) el.style.display = t===tab ? 'block' : 'none';
-    const tabBtn = document.getElementById('tab-btn-'+t);
-    if (tabBtn) {
-      tabBtn.style.background = t===tab ? '#0f1f3d' : 'transparent';
-      tabBtn.style.color = t===tab ? 'white' : '#6b7280';
-    }
-  });
-};
-
-// ── Edit own profile ──
-window.openEditProfile = () => {
-  if (!currentUserProfile) return;
-  const p = currentUserProfile;
-  document.getElementById('setup-session').value = p.session||'';
-  onSetupSessionChange();
-  setTimeout(() => { document.getElementById('setup-roll').value = p.roll||''; onSetupRollChange(); }, 60);
-  // Prefill city autocomplete
-  if (p.city && p.country) {
-    document.getElementById('setup-city-input').value = p.city + ', ' + p.country;
-    document.getElementById('setup-city').value = p.city;
-    document.getElementById('setup-country').value = p.country;
-    const display = document.getElementById('city-selected-display');
-    if (display) { display.textContent = '✅ '+p.city+', '+p.country; display.style.display='block'; }
-  }
-  // Prefill job visibility
-  const jobVis = p.jobVisibility || 'session';
-  const visRadio = document.querySelector('input[name="job-visibility"][value="'+jobVis+'"]');
-  if (visRadio) visRadio.checked = true;
-  document.getElementById('setup-job').value = p.job||'';
-  document.getElementById('setup-company').value = p.company||'';
-  document.getElementById('setup-email').value = p.email||'';
-  document.getElementById('setup-phone').value = p.phone||'';
-  document.getElementById('setup-linkedin').value = p.linkedin||'';
-  document.getElementById('setup-bio').value = p.bio||'';
-  if (p.photoBase64) {
-    document.getElementById('photo-upload-circle').innerHTML = '<img src="'+p.photoBase64+'" alt="">';
-    selectedPhotoBase64 = p.photoBase64;
-  }
-  isEditMode = true;
-  showPage('setup');
-};
-let isEditMode = false;
-
-// ── Notice board ──
-async function loadNotices() {
-  try {
-    const snap2 = await getDocs(query(collection(db,'notices'), where('session','==','2006'), where('approved','==',true)));
-    const el = document.getElementById('notices-list');
-    if (!el) return;
-    if (snap2.empty) { el.innerHTML='<div class="notice-empty">No posts yet.</div>'; return; }
-    const items = [];
-    snap2.forEach(d => items.push({id:d.id, ...d.data()}));
-    items.sort((a,b) => (b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
-    el.innerHTML = items.map(n => {
-      const initials = (n.authorName||'?').split(' ').map(w=>w[0]).slice(0,2).join('');
-      const date = n.createdAt ? new Date(n.createdAt.seconds*1000).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}) : '';
-      const avatarContent = n.authorPhoto
-        ? '<img src="'+n.authorPhoto+'" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" alt="">'
-        : '<span style="font-size:12px;font-weight:700;color:#c9a84c;">'+initials+'</span>';
-      return '<div style="background:white;border:1px solid #e5e7eb;border-radius:10px;padding:1.1rem;margin-bottom:0.75rem;">'
-        +'<div style="display:flex;align-items:center;gap:10px;margin-bottom:0.6rem;">'
-        +'<div style="width:36px;height:36px;border-radius:50%;background:#0f1f3d;border:2px solid #c9a84c;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;">'+avatarContent+'</div>'
-        +'<div><div style="font-size:13px;font-weight:600;color:#0f1f3d;">'+n.authorName+'</div>'
-        +'<div style="font-size:11px;color:#9ca3af;">'+date+'</div></div>'
-        +'</div>'
-        +'<div style="font-size:14px;color:#374151;line-height:1.65;padding-left:46px;">'+n.text+'</div>'
-        +'</div>';
-    }).join('');
-  } catch(e) { console.error('notices',e); }
+function animateCount(el, target, dur=800) {
+  if (!el || isNaN(target)) return;
+  el.textContent = target;
 }
 
-window.submitNotice = async () => {
-  if (!currentUser) { showToast('Please sign in first.'); return; }
-  if (!currentUserProfile) { showToast('Please complete your profile first.'); showPage('setup'); return; }
-  const text = document.getElementById('notice-text').value.trim();
-  if (!text) { showToast('Please write something.'); return; }
-  try {
-    await addDoc(collection(db,'notices'), {
-      text,
-      session: '2006',
-      approved: false,
-      authorUid: currentUser.uid,
-      authorName: currentUserProfile.name,
-      authorPhoto: currentUser.photoURL || '',
-      createdAt: serverTimestamp()
-    });
-    document.getElementById('notice-text').value = '';
-    document.getElementById('notice-char').textContent = '0/500';
-    showToast('✅ Posted! Visible once admin approves.');
-  } catch(e) {
-    console.error('submitNotice error:', e);
-    showToast('Error posting: ' + e.message);
-  }
-};
-
-// ── Announcements ──
-async function loadAnnouncements() {
-  try {
-    const snap3 = await getDocs(query(collection(db,'announcements'), where('session','==','2006'), where('approved','==',true)));
-    const el = document.getElementById('announcements-list');
-    if (!el) return;
-    if (snap3.empty) { el.innerHTML='<div class="notice-empty">No announcements yet.</div>'; return; }
-    const items = [];
-    snap3.forEach(d => items.push({id:d.id, ...d.data()}));
-    items.sort((a,b) => (b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
-    const typeLabels = {job:'Job Update',achievement:'Achievement',news:'News',other:'Update'};
-    const typeColors = {
-      job:'background:#eff6ff;color:#1d4ed8',
-      achievement:'background:#f0fdf4;color:#166534',
-      news:'background:#fff7ed;color:#9a3412',
-      other:'background:#f3f4f6;color:#6b7280'
-    };
-    el.innerHTML = items.map(a => {
-      const date = a.createdAt ? new Date(a.createdAt.seconds*1000).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}) : '';
-      const tColor = typeColors[a.type||'other'];
-      return '<div style="background:white;border:1px solid #e5e7eb;border-radius:10px;padding:1.1rem;margin-bottom:0.75rem;">'
-        +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.5rem;gap:8px;flex-wrap:wrap;">'
-        +'<span style="font-size:11px;font-weight:600;padding:3px 10px;border-radius:12px;'+tColor+';">'+( typeLabels[a.type]||'Update')+'</span>'
-        +'<span style="font-size:11px;color:#9ca3af;">'+date+'</span>'
-        +'</div>'
-        +'<div style="font-size:14px;font-weight:600;color:#0f1f3d;margin-bottom:4px;">'+a.title+'</div>'
-        +(a.body ? '<div style="font-size:13px;color:#6b7280;line-height:1.6;margin-bottom:6px;">'+a.body+'</div>' : '')
-        +'<div style="font-size:11px;color:#9ca3af;">By '+a.authorName+'</div>'
-        +'</div>';
-    }).join('');
-  } catch(e) { console.error('ann',e); }
-}
-
-window.submitAnnouncement = async () => {
-  if (!currentUser) { showToast('Please sign in first.'); return; }
-  if (!currentUserProfile) { showToast('Please complete your profile first.'); showPage('setup'); return; }
-  const type = document.getElementById('ann-type').value;
-  const title = document.getElementById('ann-title').value.trim();
-  const body = document.getElementById('ann-body').value.trim();
-  if (!title) { showToast('Please add a title.'); return; }
-  try {
-    await addDoc(collection(db,'announcements'), {
-      type,
-      title,
-      body,
-      session: '2006',
-      approved: false,
-      authorUid: currentUser.uid,
-      authorName: currentUserProfile.name,
-      createdAt: serverTimestamp()
-    });
-    document.getElementById('ann-title').value = '';
-    document.getElementById('ann-body').value = '';
-    showToast('✅ Submitted for approval!');
-  } catch(e) {
-    console.error('submitAnnouncement error:', e);
-    showToast('Error submitting: ' + e.message);
-  }
-}
-
-// ── Page navigation ──
+// ── Navigation ──
 window.showPage = (page) => {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.getElementById('page-' + page).classList.add('active');
-  window.scrollTo(0, 0);
+  document.getElementById('page-'+page)?.classList.add('active');
+  window.scrollTo(0,0);
 };
-
 window.handleJoinClick = () => {
-  if (currentUser) {
-    if (currentUserProfile) showPage('directory');
-    else showPage('setup');
-  } else {
-    showPage('login');
-  }
+  if (currentUser) { currentUserProfile ? showPage('directory') : showPage('setup'); }
+  else showPage('login');
 };
-
 window.handleSessionClick = (session) => {
   if (!currentUser) { showPage('login'); return; }
   if (!currentUserProfile) { showPage('setup'); return; }
   loadDirectory(session);
 };
 
-// ── Setup form ──
+// ── Setup ──
 window.onSetupSessionChange = () => {
   const session = document.getElementById('setup-session').value;
   const rollSelect = document.getElementById('setup-roll');
   rollSelect.innerHTML = '<option value="">Select roll number</option>';
   document.getElementById('setup-name-display').innerHTML = '<span class="name-placeholder">Auto-filled from roll number</span>';
-  if (!session) { rollSelect.disabled = true; return; }
-  const db2 = session === '2006-Morning' ? morningStudents : eveningStudents;
-  Object.keys(db2).sort().forEach(r => {
-    const o = document.createElement('option');
-    o.value = r; o.textContent = r;
-    rollSelect.appendChild(o);
-  });
+  if (!session) { rollSelect.disabled=true; return; }
+  const db2 = session.includes('Morning') ? morningStudents : eveningStudents;
+  Object.keys(db2).sort().forEach(r => { const o=document.createElement('option'); o.value=r; o.textContent=r; rollSelect.appendChild(o); });
   rollSelect.disabled = false;
 };
-
 window.onSetupRollChange = () => {
   const session = document.getElementById('setup-session').value;
   const roll = document.getElementById('setup-roll').value;
-  const db2 = session === '2006-Morning' ? morningStudents : eveningStudents;
-  const nameDisplay = document.getElementById('setup-name-display');
-  nameDisplay.innerHTML = (roll && db2[roll]) ? db2[roll] : '<span class="name-placeholder">Auto-filled from roll number</span>';
+  const db2 = session.includes('Morning') ? morningStudents : eveningStudents;
+  const nd = document.getElementById('setup-name-display');
+  nd.innerHTML = (roll && db2[roll]) ? db2[roll] : '<span class="name-placeholder">Auto-filled from roll number</span>';
 };
 
-// ── City autocomplete (Teleport API — no key needed) ──
-let citySearchTimer = null;
-
+// ── City autocomplete (OpenStreetMap Nominatim) ──
+let cityTimer = null;
 window.onCityInput = () => {
   const input = document.getElementById('setup-city-input').value.trim();
-  clearTimeout(citySearchTimer);
-  const suggestionsEl = document.getElementById('city-suggestions');
-
-  // Reset hidden fields when user starts typing again
+  clearTimeout(cityTimer);
+  const el = document.getElementById('city-suggestions');
   document.getElementById('setup-city').value = '';
   document.getElementById('setup-country').value = '';
   document.getElementById('city-selected-display').style.display = 'none';
-
-  if (input.length < 3) { suggestionsEl.style.display = 'none'; return; }
-
-  citySearchTimer = setTimeout(async () => {
+  if (input.length < 3) { el.style.display='none'; return; }
+  cityTimer = setTimeout(async () => {
     try {
-      const res = await fetch(
-        `https://api.teleport.org/api/cities/?search=${encodeURIComponent(input)}&limit=8`,
-        { signal: AbortSignal.timeout(5000) }
-      );
-      if (!res.ok) return;
+      // Photon API by Komoot — built on OSM, browser-safe, no key needed
+      const url = 'https://photon.komoot.io/api/?q='+encodeURIComponent(input)+'&limit=8&lang=en';
+      const res = await fetch(url, {signal: AbortSignal.timeout(8000)});
+      if (!res.ok) throw new Error('fetch failed');
       const data = await res.json();
-      const items = data._embedded?.['city:search-results'] || [];
-
-      if (!items.length) {
-        suggestionsEl.innerHTML = '<div style="padding:10px 14px;font-size:13px;color:var(--muted);">No cities found. Try a different spelling.</div>';
-        suggestionsEl.style.display = 'block';
-        return;
+      const features = data.features || [];
+      const seen=new Set(); const cities=[];
+      for (const r of features) {
+        const p = r.properties || {};
+        // Only show cities, towns, villages — skip streets/addresses
+        if (!['city','town','village','municipality'].includes(p.type) && p.osm_value !== 'city') continue;
+        const city = (p.city || p.name || '').trim();
+        const country = (p.country || '').trim();
+        const state = (p.state || p.county || '').trim();
+        if (!city||!country) continue;
+        const key=city+'|'+country;
+        if (seen.has(key)) continue;
+        seen.add(key); cities.push({city,country,state});
+        if (cities.length>=7) break;
       }
-
-      suggestionsEl.innerHTML = items.map((item, i) => {
-        const name = item.matching_full_name || item.matching_alternate_names?.[0]?.name || '';
-        return `<div onclick="selectCity('${name.replace(/'/g,"\'")}', ${i})"
-          data-index="${i}"
-          style="padding:10px 14px;font-size:13px;cursor:pointer;border-bottom:1px solid #f3f4f6;transition:background 0.15s;"
-          onmouseover="this.style.background='#f8f7f4'"
-          onmouseout="this.style.background='white'">
-          📍 ${name}
-        </div>`;
+      if (!cities.length) {
+        el.innerHTML='<div class="city-suggestion-item" style="color:var(--muted);">No cities found. <span onclick="useManualCity()" style="color:var(--gold);cursor:pointer;font-weight:600;">Enter manually →</span></div>';
+        el.style.display='block'; return;
+      }
+      el.innerHTML = cities.map(c => {
+        const d=c.state?c.city+', '+c.state+', '+c.country:c.city+', '+c.country;
+        const safe=d.replace(/'/g,"&#39;").replace(/"/g,'&quot;');
+        const citySafe=c.city.replace(/'/g,"&#39;");
+        const countrySafe=c.country.replace(/'/g,"&#39;");
+        return '<div class="city-suggestion-item" onclick="selectCity(\''+citySafe+'\',\''+countrySafe+'\',\''+safe+'\')">📍 '+d+'</div>';
       }).join('');
-      suggestionsEl.style.display = 'block';
-
+      el.style.display='block';
     } catch(e) {
-      // Teleport failed — show manual entry option
-      suggestionsEl.innerHTML = '<div style="padding:10px 14px;font-size:13px;color:var(--muted);">Search unavailable. <span onclick="useManualCity()" style="color:var(--gold);cursor:pointer;font-weight:600;">Enter manually →</span></div>';
-      suggestionsEl.style.display = 'block';
+      el.innerHTML='<div class="city-suggestion-item" style="color:var(--muted);">Search unavailable. <span onclick="useManualCity()" style="color:var(--gold);cursor:pointer;font-weight:600;">Enter manually →</span></div>';
+      el.style.display='block';
     }
-  }, 350);
+  }, 400);
 };
-
-window.selectCity = (fullName) => {
-  // fullName is like "Freiberg, Saxony, Germany" or "Lahore, Punjab, Pakistan"
-  const parts = fullName.split(', ');
-  const city = parts[0];
-  const country = parts[parts.length - 1];
-
-  document.getElementById('setup-city-input').value = fullName;
+window.selectCity = (city, country, display) => {
+  document.getElementById('setup-city-input').value = display||city+', '+country;
   document.getElementById('setup-city').value = city;
   document.getElementById('setup-country').value = country;
-
-  const display = document.getElementById('city-selected-display');
-  display.textContent = `✅ ${city}, ${country}`;
-  display.style.display = 'block';
-
-  hideCitySuggestions();
+  const d=document.getElementById('city-selected-display');
+  d.textContent='✅ '+city+', '+country; d.style.display='block';
+  document.getElementById('city-suggestions').style.display='none';
 };
-
 window.useManualCity = () => {
-  const input = document.getElementById('setup-city-input').value.trim();
-  if (!input) return;
-  // Try to parse "City, Country" format
-  const parts = input.split(',').map(s => s.trim());
-  const city = parts[0];
-  const country = parts.length > 1 ? parts[parts.length-1] : 'Unknown';
-  document.getElementById('setup-city').value = city;
-  document.getElementById('setup-country').value = country;
-  const display = document.getElementById('city-selected-display');
-  display.textContent = `✅ ${city}, ${country} (entered manually)`;
-  display.style.display = 'block';
-  hideCitySuggestions();
+  const raw=document.getElementById('setup-city-input').value.trim();
+  const parts=raw.split(',').map(s=>s.trim());
+  const city=parts[0]||raw; const country=parts.length>1?parts[parts.length-1]:'';
+  document.getElementById('setup-city').value=city;
+  document.getElementById('setup-country').value=country;
+  const d=document.getElementById('city-selected-display');
+  d.textContent='✅ '+city+(country?', '+country:''); d.style.display='block';
+  document.getElementById('city-suggestions').style.display='none';
 };
+window.hideCitySuggestions = () => { document.getElementById('city-suggestions').style.display='none'; };
 
-window.hideCitySuggestions = () => {
-  document.getElementById('city-suggestions').style.display = 'none';
-};
-
-// Keep onSetupCountryChange as empty stub (referenced in edit profile prefill)
-window.onSetupCountryChange = () => {};
-
+// ── Photo ──
 window.handlePhotoSelect = (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
-  if (file.size > 3 * 1024 * 1024) { showToast('Photo must be under 3MB'); return; }
-  selectedPhotoMime = file.type;
-  const reader = new FileReader();
-  reader.onload = ev => {
-    selectedPhotoBase64 = ev.target.result;
-    const circle = document.getElementById('photo-upload-circle');
-    circle.innerHTML = `<img src="${ev.target.result}" alt="photo">`;
+  const file=e.target.files[0]; if(!file) return;
+  if(file.size>3*1024*1024) { showToast('Photo must be under 3MB'); return; }
+  const reader=new FileReader();
+  reader.onload=ev => {
+    selectedPhotoBase64=ev.target.result;
+    document.getElementById('photo-upload-circle').innerHTML='<img src="'+ev.target.result+'" alt="photo">';
   };
   reader.readAsDataURL(file);
 };
 
+// ── Submit profile ──
 window.submitProfile = async () => {
-  const session = document.getElementById('setup-session').value;
-  const roll = document.getElementById('setup-roll').value;
-  const country = document.getElementById('setup-country').value;
-  const city = document.getElementById('setup-city').value;
-  const job = document.getElementById('setup-job').value.trim();
-  const company = document.getElementById('setup-company').value.trim();
-  const email = document.getElementById('setup-email').value.trim();
-  const phone = document.getElementById('setup-phone').value.trim();
-  const linkedin = document.getElementById('setup-linkedin').value.trim();
-  const bio = document.getElementById('setup-bio').value.trim();
-  const jobVisibility = document.querySelector('input[name="job-visibility"]:checked')?.value || 'session';
-
-  const errBox = document.getElementById('setup-error');
-  const sucBox = document.getElementById('setup-success');
-
-  if (!session || !roll || !country || !city || !job || !company || !email) {
-    errBox.textContent = '⚠️ Please fill all required fields including your city.';
-    errBox.style.display = 'block'; return;
+  const session=document.getElementById('setup-session').value;
+  const roll=document.getElementById('setup-roll').value;
+  const city=document.getElementById('setup-city').value;
+  const country=document.getElementById('setup-country').value;
+  const job=document.getElementById('setup-job').value.trim();
+  const company=document.getElementById('setup-company').value.trim();
+  const email=document.getElementById('setup-email').value.trim();
+  const phone=document.getElementById('setup-phone').value.trim();
+  const linkedin=document.getElementById('setup-linkedin').value.trim();
+  const bio=document.getElementById('setup-bio').value.trim();
+  const jobVisibility=document.querySelector('input[name="job-visibility"]:checked')?.value||'session';
+  const err=document.getElementById('setup-error');
+  const suc=document.getElementById('setup-success');
+  err.style.display='none'; suc.style.display='none';
+  if (!session||!roll||!city||!country||!job||!company||!email) {
+    err.textContent='⚠️ Please fill all required fields including your city.'; err.style.display='block'; return;
   }
-  errBox.style.display = 'none';
-
-  const db2 = session === '2006-Morning' ? morningStudents : eveningStudents;
-  const name = db2[roll];
-  if (!name) { errBox.textContent = '⚠️ Invalid roll number.'; errBox.style.display = 'block'; return; }
-
-  // Check roll number not already taken
-  const rollQuery = query(collection(db, 'alumni'), where('roll', '==', roll));
-  const rollSnap = await getDocs(rollQuery);
-  if (!rollSnap.empty && rollSnap.docs[0].id !== currentUser.uid) {
-    errBox.textContent = '⚠️ This roll number is already registered. Contact admin if this is an error.';
-    errBox.style.display = 'block'; return;
+  if (!selectedPhotoBase64) { err.textContent='⚠️ Please upload a profile photo.'; err.style.display='block'; return; }
+  if (!linkedin) { err.textContent='⚠️ Please provide your LinkedIn profile URL.'; err.style.display='block'; return; }
+  const db2=session.includes('Morning')?morningStudents:eveningStudents;
+  const name=db2[roll];
+  if (!name) { err.textContent='⚠️ Invalid roll number.'; err.style.display='block'; return; }
+  if (!isEditMode) {
+    const existing=await getDocs(query(collection(db,'alumni'),where('roll','==',roll)));
+    if (!existing.empty && existing.docs[0].id!==currentUser.uid) {
+      err.textContent='⚠️ Roll number already registered. Contact admin if error.'; err.style.display='block'; return;
+    }
   }
-
-  const btn = document.getElementById('setup-submit-btn');
-  btn.disabled = true; btn.textContent = 'Saving...';
-
+  const btn=document.getElementById('setup-submit-btn');
+  btn.disabled=true; btn.textContent='Saving...';
   try {
-    const profileData = {
-      uid: currentUser.uid,
-      name, roll, session, country, city, job, company, email, phone, linkedin, bio, jobVisibility,
-      photoBase64: selectedPhotoBase64,
-      googleName: currentUser.displayName,
-      googlePhoto: currentUser.photoURL,
-      registeredAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
+    const profileData={
+      uid:currentUser.uid, name, roll, session, city, country,
+      job, company, email, phone, linkedin, bio, jobVisibility,
+      photoBase64:selectedPhotoBase64,
+      googleName:currentUser.displayName||'', googlePhoto:currentUser.photoURL||'',
+      registeredAt:isEditMode?(currentUserProfile?.registeredAt||new Date().toISOString()):new Date().toISOString(),
+      updatedAt:new Date().toISOString(), deceased:false
     };
-
-    await setDoc(doc(db, 'alumni', currentUser.uid), profileData);
-    currentUserProfile = profileData;
-    sucBox.textContent = '✅ Profile saved! Welcome to the ICET Alumni Network!';
-    sucBox.style.display = 'block';
-    setTimeout(() => { loadDirectory('2006'); }, 1500);
+    await setDoc(doc(db,'alumni',currentUser.uid), profileData);
+    currentUserProfile=profileData;
+    suc.textContent=isEditMode?'✅ Profile updated!':'✅ Welcome to the ICET Alumni Network!';
+    suc.style.display='block';
+    loadGlobalStats();
+    setTimeout(()=>loadDirectory(session.split('-')[0]),1500);
   } catch(e) {
-    errBox.textContent = '⚠️ Error saving profile: ' + e.message;
-    errBox.style.display = 'block';
-    btn.disabled = false; btn.textContent = 'Save Profile & Join Network';
+    err.textContent='⚠️ Error: '+e.message; err.style.display='block';
+    btn.disabled=false; btn.textContent='Save Profile & Join Network';
   }
 };
 
-// ── Directory ──
-async function loadDirectory(session) {
-  showPage('directory');
-  document.getElementById('dir-session-label').textContent = session === '2006' ? '2006–2010' : session;
-  const grid = document.getElementById('alumni-grid');
-  grid.innerHTML = '<div class="loading-spinner">Loading alumni...</div>';
+// ── Edit profile ──
+window.openEditProfile = () => {
+  if (!currentUserProfile) return;
+  const p=currentUserProfile;
+  isEditMode=true;
+  document.getElementById('setup-title').textContent='Edit Your Profile';
+  document.getElementById('setup-subtitle').textContent='Update your information.';
+  document.getElementById('setup-submit-btn').textContent='Update Profile';
+  document.getElementById('setup-session').value=p.session||'';
+  onSetupSessionChange();
+  setTimeout(()=>{ document.getElementById('setup-roll').value=p.roll||''; onSetupRollChange(); },60);
+  if (p.city&&p.country) {
+    document.getElementById('setup-city-input').value=p.city+', '+p.country;
+    document.getElementById('setup-city').value=p.city;
+    document.getElementById('setup-country').value=p.country;
+    const d=document.getElementById('city-selected-display');
+    d.textContent='✅ '+p.city+', '+p.country; d.style.display='block';
+  }
+  document.getElementById('setup-job').value=p.job||'';
+  document.getElementById('setup-company').value=p.company||'';
+  document.getElementById('setup-email').value=p.email||'';
+  document.getElementById('setup-phone').value=p.phone||'';
+  document.getElementById('setup-linkedin').value=p.linkedin||'';
+  document.getElementById('setup-bio').value=p.bio||'';
+  const vis=p.jobVisibility||'session';
+  const radio=document.querySelector('input[name="job-visibility"][value="'+vis+'"]');
+  if (radio) radio.checked=true;
+  if (p.photoBase64) {
+    document.getElementById('photo-upload-circle').innerHTML='<img src="'+p.photoBase64+'" alt="">';
+    selectedPhotoBase64=p.photoBase64;
+  }
+  showPage('setup');
+};
 
+// ── Load directory ──
+async function loadDirectory(session) {
+  currentViewSession=session;
+  showPage('directory');
+  const labels={'2006':'2006–2010','2010':'2010–2014','2014':'2014–2018'};
+  document.getElementById('dir-session-label').textContent=labels[session]||session;
+  document.getElementById('alumni-grid').innerHTML='<div class="loading-spinner">Loading alumni...</div>';
   try {
-    const q = query(collection(db, 'alumni'), where('session', 'in', ['2006-Morning', '2006-Evening']));
-    const snap = await getDocs(q);
-    allAlumni = [];
-    snap.forEach(d => allAlumni.push(d.data()));
-    allAlumni.sort((a, b) => a.roll.localeCompare(b.roll));
+    const variants=[session+'-Morning',session+'-Evening'];
+    const q=query(collection(db,'alumni'),where('session','in',variants));
+    const snap=await getDocs(q);
+    allAlumni=[];
+    snap.forEach(d=>allAlumni.push(d.data()));
+    allAlumni.sort((a,b)=>a.roll.localeCompare(b.roll));
+    // Update stats header
+    const countries=new Set(); let morning=0,evening=0;
+    allAlumni.forEach(a=>{
+      if(a.country) countries.add(a.country);
+      if(a.session?.includes('Morning')) morning++; else evening++;
+    });
+    document.getElementById('dir-registered').textContent=allAlumni.length;
+    document.getElementById('dir-countries').textContent=countries.size;
+    document.getElementById('dir-morning').textContent=morning;
+    document.getElementById('dir-evening').textContent=evening;
+    // Preview avatars
+    const prev=document.getElementById('dir-preview-avatars');
+    const recent=[...allAlumni].sort((a,b)=>(b.registeredAt||'').localeCompare(a.registeredAt||'')).slice(0,5);
+    prev.innerHTML=recent.map((a,i)=>{
+      const init=a.name.split(' ').map(w=>w[0]).slice(0,2).join('');
+      const ml=i===0?'0':'-8px';
+      return '<div style="width:38px;height:38px;border-radius:50%;border:2px solid #c9a84c;background:rgba(201,168,76,0.15);display:flex;align-items:center;justify-content:center;overflow:hidden;margin-left:'+ml+';flex-shrink:0;">'
+        +(a.photoBase64?'<img src="'+a.photoBase64+'" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" alt="">'
+        :'<span style="font-size:12px;font-weight:700;color:#c9a84c;">'+init+'</span>')+'</div>';
+    }).join('');
     renderDirectory();
-    loadStats();
-    loadNotices();
-    loadAnnouncements();
+    // Show/hide notice board based on own session
+    const userSess=(currentUserProfile?.session||'').split('-')[0];
+    const isOwn=userSess===session;
+    document.getElementById('tab-btn-noticeboard').style.display=isOwn?'':'none';
+    document.getElementById('tab-btn-announcements').style.display=isOwn?'':'none';
+    document.getElementById('cross-session-notice').style.display=isOwn?'none':'block';
+    if (!isOwn) switchTab('directory',document.getElementById('tab-btn-directory'));
+    if (isOwn) { loadNotices(); loadAnnouncements(); }
   } catch(e) {
-    grid.innerHTML = '<div class="loading-spinner">Error loading data.</div>';
+    document.getElementById('alumni-grid').innerHTML='<div class="loading-spinner">Error loading data.</div>';
+    console.error(e);
   }
 }
 
 function renderDirectory() {
-  const grid = document.getElementById('alumni-grid');
-  const search = document.getElementById('search-input').value.toLowerCase();
-  let filtered = allAlumni.filter(a => {
-    const matchSearch = !search || a.name.toLowerCase().includes(search) || a.roll.toLowerCase().includes(search);
-    const matchFilter = activeFilter === 'all' || a.session.includes(activeFilter);
-    return matchSearch && matchFilter;
+  const grid=document.getElementById('alumni-grid');
+  const search=(document.getElementById('search-input')?.value||'').toLowerCase();
+  const filtered=allAlumni.filter(a=>{
+    const ms=!search||a.name.toLowerCase().includes(search)||a.roll.toLowerCase().includes(search);
+    const mf=activeFilter==='all'||a.session.includes(activeFilter);
+    return ms&&mf;
   });
-
-  if (filtered.length === 0) {
-    grid.innerHTML = '<div class="loading-spinner">No alumni found.</div>'; return;
-  }
-
-  grid.innerHTML = filtered.map(a => {
-    const initials = a.name.split(' ').map(w => w[0]).slice(0, 2).join('');
-    const photoHtml = a.photoBase64 ? `<img src="${a.photoBase64}" alt="${a.name}">` : initials;
-    const sessionType = a.session.includes('Morning') ? 'M' : 'E';
-    const decBadge = a.deceased ? '<span class="deceased-badge">In Memoriam</span>' : '';
-    return `<div class="alumni-card${a.deceased?' deceased':''}" onclick="viewProfile('${a.uid}')">
-      ${decBadge}
-      <span class="alumni-session-badge">${sessionType} · ${a.roll}</span>
-      <div class="alumni-photo">${photoHtml}</div>
-      <div class="alumni-name">${a.name}${a.deceased?' 🕊️':''}</div>
-      <div class="alumni-roll">${a.roll}</div>
-      <div class="alumni-job">${(a.jobVisibility==='public'||!a.jobVisibility||currentUserProfile?.session===a.session) ? a.job+' @ '+a.company : '🔒 Session members only'}</div>
-      <div class="alumni-country">📍 ${a.city}, ${a.country}</div>
-    </div>`;
+  if (!filtered.length) { grid.innerHTML='<div class="loading-spinner">No alumni found.</div>'; return; }
+  const userSess=currentUserProfile?.session||'';
+  grid.innerHTML=filtered.map(a=>{
+    const init=a.name.split(' ').map(w=>w[0]).slice(0,2).join('');
+    const st=a.session.includes('Morning')?'M':'E';
+    const sameS=userSess===a.session;
+    const jobPub=a.jobVisibility==='public'||!a.jobVisibility;
+    const showJob=sameS||jobPub;
+    const dec=a.deceased?' deceased':'';
+    return '<div class="alumni-card'+dec+'" onclick="viewProfile(''+a.uid+'')">'+
+      (a.deceased?'<span class="deceased-badge">In Memoriam</span>':'')+
+      '<span class="alumni-session-badge">'+st+' · '+a.roll+'</span>'+
+      '<div class="alumni-photo">'+(a.photoBase64?'<img src="'+a.photoBase64+'" alt="'+a.name+'">':init)+'</div>'+
+      '<div class="alumni-name">'+a.name+(a.deceased?' 🕊️':'')+'</div>'+
+      '<div class="alumni-roll">'+a.roll+'</div>'+
+      '<div class="alumni-job">'+(showJob?a.job+' @ '+a.company:'🔒 Session members only')+'</div>'+
+      '<div class="alumni-country">📍 '+a.city+', '+a.country+'</div>'+
+      '</div>';
   }).join('');
 }
 
-window.filterDirectory = () => renderDirectory();
-window.setFilter = (filter, btn) => {
-  activeFilter = filter;
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  renderDirectory();
+window.setFilter=(f,btn)=>{
+  activeFilter=f;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active'); renderDirectory();
 };
 
 // ── Profile view ──
-window.viewProfile = (uid) => {
-  const profile = allAlumni.find(a => a.uid === uid);
-  if (!profile) return;
-
-  const initials = profile.name.split(' ').map(w => w[0]).slice(0, 2).join('');
-  const avatarEl = document.getElementById('view-avatar');
-  if (profile.photoBase64) {
-    avatarEl.innerHTML = `<img src="${profile.photoBase64}" alt="${profile.name}">`;
-  } else {
-    avatarEl.innerHTML = initials;
-  }
-
-  document.getElementById('view-name').textContent = profile.name;
-  document.getElementById('view-roll').textContent = `${profile.roll} · ${profile.session}`;
-  // Job & company visibility
-  const isSameSession = currentUserProfile && currentUserProfile.session === profile.session;
-  const jobPublic = profile.jobVisibility === 'public' || !profile.jobVisibility;
-  const showJob = isSameSession || jobPublic;
-  document.getElementById('view-job').textContent = showJob
-    ? `${profile.job} @ ${profile.company}`
-    : '🔒 Visible to session members only';
-  document.getElementById('view-location').textContent = `${profile.city}, ${profile.country}`;
-  document.getElementById('view-email').innerHTML = `<a href="mailto:${profile.email}">${profile.email}</a>`;
-  document.getElementById('view-session').textContent = profile.session;
-
-  // Phone - only same session
-  const phoneEl = document.getElementById('view-phone');
-  if (isSameSession && profile.phone) {
-    phoneEl.innerHTML = `<a href="tel:${profile.phone}">${profile.phone}</a>`;
-  } else if (profile.phone) {
-    phoneEl.innerHTML = `<span class="phone-locked">🔒 Visible to same session members only</span>`;
-  } else {
-    phoneEl.textContent = 'Not provided';
-  }
-
-  // LinkedIn
-  const linkedinEl = document.getElementById('view-linkedin');
-  if (profile.linkedin) {
-    linkedinEl.innerHTML = `<a href="${profile.linkedin}" target="_blank">View Profile →</a>`;
-  } else {
-    linkedinEl.textContent = 'Not provided';
-  }
-
-  // Bio
-  const bioSection = document.getElementById('view-bio-section');
-  if (profile.bio) {
-    document.getElementById('view-bio').textContent = profile.bio;
-    bioSection.style.display = 'block';
-  } else {
-    bioSection.style.display = 'none';
-  }
-
-  // Show edit button only for own profile
-  const editBtn = document.getElementById('edit-own-btn');
-  if (editBtn) editBtn.style.display = (currentUser && currentUser.uid===uid) ? 'block' : 'none';
+window.viewProfile=(uid)=>{
+  const p=allAlumni.find(a=>a.uid===uid); if(!p) return;
+  const isSame=currentUserProfile?.session===p.session;
+  const isOwn=currentUser?.uid===uid;
+  const init=p.name.split(' ').map(w=>w[0]).slice(0,2).join('');
+  const av=document.getElementById('view-avatar');
+  av.innerHTML=p.photoBase64?'<img src="'+p.photoBase64+'" alt="'+p.name+'">':init;
+  document.getElementById('view-name').textContent=p.name+(p.deceased?' 🕊️':'');
+  document.getElementById('view-roll').textContent=p.roll+' · '+p.session;
+  // Job visibility
+  const jobPub=p.jobVisibility==='public'||!p.jobVisibility;
+  const showJob=isSame||jobPub;
+  document.getElementById('view-job').textContent=showJob?p.job+' @ '+p.company:'🔒 Visible to session members only';
+  document.getElementById('view-location').textContent=p.city+', '+p.country;
+  document.getElementById('view-email').innerHTML='<a href="mailto:'+p.email+'">'+p.email+'</a>';
+  const ph=document.getElementById('view-phone');
+  if(isSame&&p.phone) ph.innerHTML='<a href="tel:'+p.phone+'">'+p.phone+'</a>';
+  else if(p.phone) ph.innerHTML='<span class="phone-locked">🔒 Session members only</span>';
+  else ph.textContent='Not provided';
+  const li=document.getElementById('view-linkedin');
+  li.innerHTML=p.linkedin?'<a href="'+p.linkedin+'" target="_blank">View Profile →</a>':'Not provided';
+  const bioSec=document.getElementById('view-bio-section');
+  if(p.bio){document.getElementById('view-bio').textContent=p.bio;bioSec.style.display='flex';}
+  else bioSec.style.display='none';
+  document.getElementById('edit-own-btn').style.display=isOwn?'block':'none';
   showPage('profile');
 };
 
-// ── Toast ──
-window.showToast = (msg) => {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 3000);
+// ── Tabs ──
+window.switchTab=(tab,btn)=>{
+  ['directory','noticeboard','announcements'].forEach(t=>{
+    const el=document.getElementById('tab-'+t); if(el) el.style.display=t===tab?'block':'none';
+    const b=document.getElementById('tab-btn-'+t);
+    if(b){ b.style.background=t===tab?'#0f1f3d':'transparent'; b.style.color=t===tab?'white':'#6b7280'; }
+  });
 };
 
-// Load stats on start
-loadStats();
-</script>
+// ── Notice Board ──
+async function loadNotices() {
+  try {
+    const snap=await getDocs(query(collection(db,'notices'),where('session','==',currentViewSession),where('approved','==',true)));
+    const el=document.getElementById('notices-list');
+    if(snap.empty){ el.innerHTML='<div class="empty-state">📌 No posts yet. Be the first!</div>'; return; }
+    const items=[]; snap.forEach(d=>items.push({id:d.id,...d.data()}));
+    items.sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
+    el.innerHTML=items.map(n=>{
+      const init=(n.authorName||'?').split(' ').map(w=>w[0]).slice(0,2).join('');
+      const date=n.createdAt?new Date(n.createdAt.seconds*1000).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}):'';
+      const ava=n.authorPhoto?'<img src="'+n.authorPhoto+'" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" alt="">':init;
+      return '<div class="notice-card"><div class="notice-meta"><div class="notice-avatar">'+ava+'</div><div><div class="notice-author">'+n.authorName+'</div><div class="notice-date">'+date+'</div></div></div><div class="notice-text">'+n.text+'</div></div>';
+    }).join('');
+  } catch(e){ console.error('loadNotices',e); }
+}
 
+window.submitNotice=async()=>{
+  if(!currentUser){ showToast('Please sign in.'); return; }
+  if(!currentUserProfile){ showToast('Complete your profile first.'); showPage('setup'); return; }
+  const text=document.getElementById('notice-text').value.trim();
+  if(!text){ showToast('Please write something.'); return; }
+  try{
+    await addDoc(collection(db,'notices'),{text,session:currentViewSession,approved:false,authorUid:currentUser.uid,authorName:currentUserProfile.name,authorPhoto:currentUser.photoURL||'',createdAt:serverTimestamp()});
+    document.getElementById('notice-text').value='';
+    document.getElementById('notice-char').textContent='0/500';
+    showToast('✅ Posted! Visible once admin approves.');
+  }catch(e){showToast('Error: '+e.message);}
+};
+
+// ── Announcements ──
+async function loadAnnouncements() {
+  try {
+    const snap=await getDocs(query(collection(db,'announcements'),where('session','==',currentViewSession),where('approved','==',true)));
+    const el=document.getElementById('announcements-list');
+    if(snap.empty){ el.innerHTML='<div class="empty-state">📢 No announcements yet.</div>'; return; }
+    const items=[]; snap.forEach(d=>items.push({id:d.id,...d.data()}));
+    items.sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
+    const tl={job:'Job Update',achievement:'Achievement',news:'News',other:'Update'};
+    el.innerHTML=items.map(a=>{
+      const date=a.createdAt?new Date(a.createdAt.seconds*1000).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}):'';
+      return '<div class="ann-card"><span class="ann-type-'+(a.type||'other')+'">'+( tl[a.type]||'Update')+'</span><div class="ann-title">'+a.title+'</div>'+(a.body?'<div class="ann-body">'+a.body+'</div>':'')+'<div class="ann-footer">By '+a.authorName+' · '+date+'</div></div>';
+    }).join('');
+  }catch(e){console.error('loadAnnouncements',e);}
+}
+
+window.submitAnnouncement=async()=>{
+  if(!currentUser){ showToast('Please sign in.'); return; }
+  if(!currentUserProfile){ showToast('Complete your profile first.'); showPage('setup'); return; }
+  const type=document.getElementById('ann-type').value;
+  const title=document.getElementById('ann-title').value.trim();
+  const body=document.getElementById('ann-body').value.trim();
+  if(!title){ showToast('Please add a title.'); return; }
+  try{
+    await addDoc(collection(db,'announcements'),{type,title,body,session:currentViewSession,approved:false,authorUid:currentUser.uid,authorName:currentUserProfile.name,createdAt:serverTimestamp()});
+    document.getElementById('ann-title').value='';
+    document.getElementById('ann-body').value='';
+    showToast('✅ Submitted for approval!');
+  }catch(e){showToast('Error: '+e.message);}
+};
+
+// ── Toast ──
+window.showToast=(msg)=>{
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3000);
+};
+
+loadGlobalStats();
+</script>
 </body>
 </html>
