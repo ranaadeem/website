@@ -97,7 +97,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
   }
   /* Page tag strip below columns */
   .header-tag-strip {
-    background: white;
+    background: #ffffff;
     padding: 0.75rem 2rem;
     display: flex; align-items: center; justify-content: space-between;
     border-bottom: 1px solid #e5e7eb;
@@ -105,9 +105,10 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
   .header-tag-strip h1 {
     font-family: "Playfair Display", serif;
     font-size: clamp(1.2rem, 2.5vw, 1.6rem);
-    color: var(--navy);
+    color: #1a3a8a;
+    font-weight: 700;
   }
-  .header-tag-strip h1 span { color: var(--navy); }
+  .header-tag-strip h1 span { color: #1a3a8a; }
   .header-tag-strip p {
     font-size: 13px; color: #6b7280;
     max-width: 500px;
@@ -274,7 +275,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
     <div class="journey-cols">
 
       <!-- PAKISTAN / University of Punjab -->
-      <div class="journey-col col-pakistan">
+      <div class="journey-col col-pakistan" style="background-image:url('https://pu.edu.pk/new/images/1.jpg');background-size:cover;background-position:center;">
         <!-- To use a photo: add style="background-image:url('/lahore.jpg')" above -->
         <!-- Badshahi Mosque silhouette -->
         <svg style="position:absolute;bottom:0;left:0;right:0;opacity:0.25;pointer-events:none;" viewBox="0 0 300 120" preserveAspectRatio="none" width="100%" height="120">
@@ -298,7 +299,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
       </div>
 
       <!-- SAUDI ARABIA / KFUPM -->
-      <div class="journey-col col-saudi">
+      <div class="journey-col col-saudi" style="background-image:url('https://www.kfupm.edu.sa/images/default-source/default-album/journey_to_success.jpg?sfvrsn=9ff429dc_0');background-size:cover;background-position:center;">
         <!-- Kingdom Tower silhouette -->
         <svg style="position:absolute;bottom:0;left:0;right:0;opacity:0.25;pointer-events:none;" viewBox="0 0 300 120" preserveAspectRatio="none" width="100%" height="120">
           <rect x="0" y="90" width="300" height="30" fill="white"/>
@@ -319,7 +320,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
       </div>
 
       <!-- GERMANY / TUM + TUBAF -->
-      <div class="journey-col col-germany">
+      <div class="journey-col col-germany" style="background-image:url('https://softwarecampus.de/wp-content/uploads/headerbild-tumuenchen-e1700472480423.webp');background-size:cover;background-position:center;">
         <!-- Frauenkirche / church silhouette -->
         <svg style="position:absolute;bottom:0;left:0;right:0;opacity:0.25;pointer-events:none;" viewBox="0 0 300 120" preserveAspectRatio="none" width="100%" height="120">
           <rect x="0" y="85" width="300" height="35" fill="white"/>
@@ -350,12 +351,24 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
         <h1>Dr. Adeem Ghaffar Rana</h1>
         <p>Research Scientist · Catalysis &amp; Sustainable Fuels · TU Bergakademie Freiberg, Germany</p>
       </div>
-      <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:#6b7280;">
-        <span>🇵🇰 Lahore</span>
-        <span style="color:#d1d5db;">→</span>
-        <span>🇸🇦 Dhahran</span>
-        <span style="color:#d1d5db;">→</span>
-        <span>🇩🇪 Freiberg</span>
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+        <div style="text-align:center;">
+          <div style="font-size:22px;">🇵🇰</div>
+          <div style="font-size:13px;font-weight:600;color:#1a3a8a;">Pakistan</div>
+          <div style="font-size:11px;color:#6b7280;">Lahore · UoP</div>
+        </div>
+        <span style="font-size:20px;color:#d1d5db;font-weight:300;">→</span>
+        <div style="text-align:center;">
+          <div style="font-size:22px;">🇸🇦</div>
+          <div style="font-size:13px;font-weight:600;color:#1a3a8a;">Saudi Arabia</div>
+          <div style="font-size:11px;color:#6b7280;">Dhahran · KFUPM</div>
+        </div>
+        <span style="font-size:20px;color:#d1d5db;font-weight:300;">→</span>
+        <div style="text-align:center;">
+          <div style="font-size:22px;">🇩🇪</div>
+          <div style="font-size:13px;font-weight:600;color:#1a3a8a;">Germany</div>
+          <div style="font-size:11px;color:#6b7280;">Munich · Freiberg</div>
+        </div>
       </div>
     </div>
 
