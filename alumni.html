@@ -215,7 +215,7 @@ nav{background:var(--navy);border-bottom:2px solid var(--gold);position:sticky;t
     <div class="sessions-grid">
       <div class="session-card" onclick="handleSessionClick('2006')">
         <div class="session-year">Session 2006–2010</div>
-        <div class="session-dept">Chemical Engineering · ICET · UoP</div>
+        <div class="session-dept">Chemical Engineering · ICET · University of Punjab</div>
         <div style="display:flex;gap:1.25rem;margin-top:0.75rem;">
           <div><span class="sess-stat-num" id="sess-2006-card">–</span><span class="sess-stat-lbl">Registered</span></div>
           <div><span class="sess-stat-num">245</span><span class="sess-stat-lbl">Total Batch</span></div>
@@ -223,7 +223,7 @@ nav{background:var(--navy);border-bottom:2px solid var(--gold);position:sticky;t
       </div>
       <div class="session-card" onclick="handleSessionClick('2010')">
         <div class="session-year">Session 2010–2014</div>
-        <div class="session-dept">Chemical Engineering · ICET · UoP</div>
+        <div class="session-dept">Chemical Engineering · ICET · University of Punjab</div>
         <div style="display:flex;gap:1.25rem;margin-top:0.75rem;">
           <div><span class="sess-stat-num" id="sess-2010-card">–</span><span class="sess-stat-lbl">Registered</span></div>
           <div><span class="sess-stat-num">245</span><span class="sess-stat-lbl">Total Batch</span></div>
@@ -232,7 +232,7 @@ nav{background:var(--navy);border-bottom:2px solid var(--gold);position:sticky;t
       <div class="session-card coming-soon">
         <span class="cs-badge">Coming Soon</span>
         <div class="session-year">Session 2014–2018</div>
-        <div class="session-dept">Chemical Engineering · ICET · UoP</div>
+        <div class="session-dept">Chemical Engineering · ICET · University of Punjab</div>
       </div>
     </div>
   </div>
@@ -603,6 +603,22 @@ function updateNavUser(user) {
 window.signInWithGoogle = async () => { try { await signInWithPopup(auth,provider); showToast('Signed in!'); } catch(e) { showToast('Sign in failed.'); } };
 window.doSignOut = async () => { await signOut(auth); showPage('landing'); showToast('Signed out.'); };
 
+// ── Navigation — defined at top level so onclick works immediately ──
+window.showPage = (page) => {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-'+page)?.classList.add('active');
+  window.scrollTo(0,0);
+};
+window.handleJoinClick = () => {
+  if (currentUser) { currentUserProfile ? showPage('directory') : showPage('setup'); }
+  else showPage('login');
+};
+window.handleSessionClick = (session) => {
+  if (!currentUser) { showPage('login'); return; }
+  if (!currentUserProfile) { showPage('setup'); return; }
+  loadDirectory(session);
+};
+
 // ── Global stats (landing page) ──
 async function loadGlobalStats() {
   try {
@@ -627,21 +643,7 @@ function animateCount(el, target, dur=800) {
   el.textContent = target;
 }
 
-// ── Navigation ──
-window.showPage = (page) => {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.getElementById('page-'+page)?.classList.add('active');
-  window.scrollTo(0,0);
-};
-window.handleJoinClick = () => {
-  if (currentUser) { currentUserProfile ? showPage('directory') : showPage('setup'); }
-  else showPage('login');
-};
-window.handleSessionClick = (session) => {
-  if (!currentUser) { showPage('login'); return; }
-  if (!currentUserProfile) { showPage('setup'); return; }
-  loadDirectory(session);
-};
+// Navigation functions defined above
 
 // ── Setup ──
 window.onSetupSessionChange = () => {
