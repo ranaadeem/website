@@ -35,7 +35,7 @@ body{ font-family:"DM Sans",sans-serif; background:var(--cream); color:var(--tex
 }
 
 /* HERO */
-.hero{ background:linear-gradient(135deg,var(--navy) 0%,#2048a8 60%,#163366 100%); padding:5rem 2rem; position:relative; overflow:hidden; }
+.hero{ background:linear-gradient(135deg,var(--navy) 0%,#2048a8 60%,#163366 100%); padding:3rem 2rem; position:relative; overflow:hidden; }
 .hero::before{ content:""; position:absolute; top:-100px; right:-100px; width:500px; height:500px; border-radius:50%; background:radial-gradient(circle,rgba(201,168,76,0.12) 0%,transparent 70%); pointer-events:none; }
 .hero::after{ content:""; position:absolute; bottom:-80px; left:-80px; width:350px; height:350px; border-radius:50%; background:radial-gradient(circle,rgba(201,168,76,0.07) 0%,transparent 70%); pointer-events:none; }
 .hero-inner{ max-width:960px; margin:0 auto; display:grid; grid-template-columns:1fr 320px; gap:4rem; align-items:center; position:relative; z-index:1; }
@@ -50,9 +50,9 @@ body{ font-family:"DM Sans",sans-serif; background:var(--cream); color:var(--tex
 .btn-outline:hover{ border-color:var(--gold); color:var(--gold); }
 
 /* PHOTO CARD */
-.hero-photo-card{ background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); border-radius:16px; padding:2rem; text-align:center; backdrop-filter:blur(10px); }
+.hero-photo-card{ background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); border-radius:16px; padding:1.5rem; text-align:center; backdrop-filter:blur(10px); }
 .photo-circle{ width:150px; height:150px; border-radius:50%; margin:0 auto 1.25rem; border:3px solid rgba(201,168,76,0.5); overflow:hidden; background:linear-gradient(135deg,var(--gold),#8b6914); display:flex; align-items:center; justify-content:center; }
-.photo-circle img{ width:100%; height:100%; object-fit:cover; }
+.photo-circle img{ width:100%; height:100%; object-fit:cover; object-position:center top; }
 .photo-name{ font-family:"Playfair Display",serif; font-size:17px; color:var(--white); margin-bottom:4px; }
 .photo-role{ font-size:12px; color:rgba(255,255,255,0.5); margin-bottom:1.25rem; }
 .photo-stats{ display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:1.25rem; }
