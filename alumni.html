@@ -215,7 +215,7 @@ nav{background:var(--navy);border-bottom:2px solid var(--gold);position:sticky;t
     <div class="sessions-grid">
       <div class="session-card" onclick="handleSessionClick('2006')">
         <div class="session-year">Session 2006–2010</div>
-        <div class="session-dept">Chemical Engineering · ICET · University of Punjab</div>
+        <div class="session-dept">Chemical Engineering · ICET · University of the Punjab</div>
         <div style="display:flex;gap:1.25rem;margin-top:0.75rem;">
           <div><span class="sess-stat-num" id="sess-2006-card">–</span><span class="sess-stat-lbl">Registered</span></div>
           <div><span class="sess-stat-num">245</span><span class="sess-stat-lbl">Total Batch</span></div>
@@ -223,7 +223,7 @@ nav{background:var(--navy);border-bottom:2px solid var(--gold);position:sticky;t
       </div>
       <div class="session-card" onclick="handleSessionClick('2010')">
         <div class="session-year">Session 2010–2014</div>
-        <div class="session-dept">Chemical Engineering · ICET · University of Punjab</div>
+        <div class="session-dept">Chemical Engineering · ICET · University of the Punjab</div>
         <div style="display:flex;gap:1.25rem;margin-top:0.75rem;">
           <div><span class="sess-stat-num" id="sess-2010-card">–</span><span class="sess-stat-lbl">Registered</span></div>
           <div><span class="sess-stat-num">245</span><span class="sess-stat-lbl">Total Batch</span></div>
@@ -232,7 +232,7 @@ nav{background:var(--navy);border-bottom:2px solid var(--gold);position:sticky;t
       <div class="session-card coming-soon">
         <span class="cs-badge">Coming Soon</span>
         <div class="session-year">Session 2014–2018</div>
-        <div class="session-dept">Chemical Engineering · ICET · University of Punjab</div>
+        <div class="session-dept">Chemical Engineering · ICET · University of the Punjab</div>
       </div>
     </div>
   </div>
@@ -493,6 +493,40 @@ nav{background:var(--navy);border-bottom:2px solid var(--gold);position:sticky;t
 </div>
 
 <!-- Firebase -->
+<script>
+// These functions MUST be available immediately on window
+// before Firebase module loads, so onclick attributes work from page load
+window.showPage = function(page) {
+  document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
+  var el = document.getElementById('page-' + page);
+  if (el) el.classList.add('active');
+  window.scrollTo(0, 0);
+};
+window.handleJoinClick = function() {
+  var cu = window._alumniCurrentUser;
+  var cp = window._alumniCurrentProfile;
+  if (cu) { cp ? window.showPage('directory') : window.showPage('setup'); }
+  else window.showPage('login');
+};
+window.handleSessionClick = function(session) {
+  var cu = window._alumniCurrentUser;
+  var cp = window._alumniCurrentProfile;
+  if (!cu) { window.showPage('login'); return; }
+  if (!cp) { window.showPage('setup'); return; }
+  if (window._loadDirectory) window._loadDirectory(session);
+};
+window.showToast = function(msg) {
+  var t = document.getElementById('toast');
+  if (!t) return;
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(function() { t.classList.remove('show'); }, 3000);
+};
+// State holders accessible to early script
+window._alumniCurrentUser = null;
+window._alumniCurrentProfile = null;
+window._loadDirectory = null;
+</script>
+
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js';
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged }
@@ -567,17 +601,43 @@ let currentUser = null, currentUserProfile = null;
 let allAlumni = [], activeFilter = 'all', currentViewSession = '2006';
 let selectedPhotoBase64 = '', isEditMode = false;
 
+// ── Navigation — MUST be on window before auth resolves so onclick works immediately ──
+window.showPage = (page) => {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-'+page)?.classList.add('active');
+  window.scrollTo(0,0);
+};
+window.handleJoinClick = () => {
+  if (currentUser) { currentUserProfile ? window.showPage('directory') : window.showPage('setup'); }
+  else window.showPage('login');
+};
+window.handleSessionClick = (session) => {
+  if (!currentUser) { window.showPage('login'); return; }
+  if (!currentUserProfile) { window.showPage('setup'); return; }
+  loadDirectory(session);
+};
+window.showToast = (msg) => {
+  const t = document.getElementById('toast');
+  if (!t) return;
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+};
+
 // ── Auth ──
 onAuthStateChanged(auth, async (user) => {
   if (user) {
     currentUser = user;
+    window._alumniCurrentUser = user;
     updateNavUser(user);
     const profile = await getUserProfile(user.uid);
     currentUserProfile = profile;
+    window._alumniCurrentProfile = profile;
     if (!profile) showPage('setup');
     loadGlobalStats();
   } else {
     currentUser = null; currentUserProfile = null;
+    window._alumniCurrentUser = null;
+    window._alumniCurrentProfile = null;
     updateNavUser(null);
   }
 });
@@ -603,21 +663,7 @@ function updateNavUser(user) {
 window.signInWithGoogle = async () => { try { await signInWithPopup(auth,provider); showToast('Signed in!'); } catch(e) { showToast('Sign in failed.'); } };
 window.doSignOut = async () => { await signOut(auth); showPage('landing'); showToast('Signed out.'); };
 
-// ── Navigation — defined at top level so onclick works immediately ──
-window.showPage = (page) => {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.getElementById('page-'+page)?.classList.add('active');
-  window.scrollTo(0,0);
-};
-window.handleJoinClick = () => {
-  if (currentUser) { currentUserProfile ? showPage('directory') : showPage('setup'); }
-  else showPage('login');
-};
-window.handleSessionClick = (session) => {
-  if (!currentUser) { showPage('login'); return; }
-  if (!currentUserProfile) { showPage('setup'); return; }
-  loadDirectory(session);
-};
+// Navigation functions defined below onAuthStateChanged — moved to top
 
 // ── Global stats (landing page) ──
 async function loadGlobalStats() {
@@ -643,7 +689,6 @@ function animateCount(el, target, dur=800) {
   el.textContent = target;
 }
 
-// Navigation functions defined above
 
 // ── Setup ──
 window.onSetupSessionChange = () => {
@@ -834,6 +879,7 @@ window.openEditProfile = () => {
 };
 
 // ── Load directory ──
+window._loadDirectory = loadDirectory;
 async function loadDirectory(session) {
   currentViewSession=session;
   showPage('directory');
