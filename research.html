@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Research – Dr. Adeem Ghaffar Rana</title>
+<link rel="icon" type="image/png" href="/favicon.png">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:#0f1f3d; --gold:#c9a84c; --gold-light:#e8d5a3;
+  --cream:#faf8f4; --white:#fff; --text:#1a1a2e;
+  --muted:#6b7280; --border:#e5e7eb; --green:#059669;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);}
+
+/* ── NAV ── */
+nav{background:var(--navy);border-bottom:2px solid var(--gold);position:sticky;top:0;z-index:1000;box-shadow:0 2px 20px rgba(0,0,0,0.3);}
+.nav-inner{max-width:1100px;margin:0 auto;padding:0 1.5rem;height:64px;display:flex;align-items:center;justify-content:space-between;}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
+.nav-logo-agr{font-family:Georgia,serif;font-size:22px;font-weight:700;color:var(--gold);letter-spacing:2px;border:2px solid var(--gold);padding:2px 8px;border-radius:4px;}
+.nav-logo-name{font-size:13px;color:rgba(255,255,255,0.75);}
+.nav-links{display:flex;align-items:center;gap:0.25rem;list-style:none;}
+.nav-link{color:rgba(255,255,255,0.75);text-decoration:none;font-size:13px;padding:8px 12px;border-radius:6px;transition:all 0.2s;white-space:nowrap;}
+.nav-link:hover,.nav-link.active{color:var(--gold);background:rgba(201,168,76,0.1);}
+.nav-cta{background:var(--gold);color:var(--navy)!important;text-decoration:none;font-size:13px;font-weight:600;padding:8px 16px;border-radius:6px;margin-left:8px;transition:all 0.2s;}
+.nav-cta:hover{background:var(--gold-light);}
+.nav-hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:4px;}
+.nav-hamburger span{display:block;width:24px;height:2px;background:var(--gold);border-radius:2px;}
+@media(max-width:768px){
+  .nav-logo-name{display:none;}.nav-hamburger{display:flex;}
+  .nav-links{display:none;position:absolute;top:64px;left:0;right:0;background:var(--navy);flex-direction:column;padding:1rem;border-bottom:2px solid var(--gold);}
+  .nav-links.open{display:flex;}.nav-link{width:100%;padding:12px 16px;}
+  .nav-cta{width:100%;text-align:center;margin-left:0;margin-top:0.5rem;}
+}
+
+/* ── PAGE HEADER — compact lab/reactor theme ── */
+.page-header {
+  background: linear-gradient(150deg, #f7f2e8 0%, #eee8d8 50%, #e8dfc8 100%);
+  padding: 2.5rem 2rem 2rem;
+  position: relative; overflow: hidden;
+  border-bottom: 3px solid #b8965a;
+}
+/* Graph paper grid */
+.page-header::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(100,140,100,0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(100,140,100,0.07) 1px, transparent 1px);
+  background-size: 24px 24px;
+  pointer-events: none;
+}
+.header-inner {
+  max-width: 1100px; margin: 0 auto;
+  position: relative; z-index: 1;
+  display: flex; align-items: center; justify-content: space-between; gap: 2rem;
+}
+.header-text { flex: 1; }
+.page-tag {
+  font-size: 10px; font-weight: 500; letter-spacing: 0.2em;
+  text-transform: uppercase; color: #5a8040;
+  border: 1px solid rgba(90,128,64,0.35);
+  padding: 3px 11px; border-radius: 20px;
+  display: inline-block; margin-bottom: 0.6rem;
+}
+.page-header h1 {
+  font-family: "Playfair Display", serif;
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  color: #1e2c1e; line-height: 1.15; margin-bottom: 0.4rem;
+}
+.page-header h1 span { color: #7a5a20; }
+.header-sub {
+  font-size: 14px; color: rgba(30,44,30,0.6);
+  font-weight: 300; max-width: 520px; line-height: 1.6;
+}
+/* Reactor SVG on right */
+.header-reactor {
+  flex-shrink: 0; opacity: 0.2;
+}
+@media(max-width:640px) { .header-reactor{display:none;} .page-header{padding:2rem 1.5rem 1.75rem;} }
+
+/* ── MAIN LAYOUT ── */
+.page-wrap { max-width: 1100px; margin: 0 auto; padding: 2.5rem 2rem; }
+.main-grid { display: grid; grid-template-columns: 1fr 280px; gap: 2.5rem; align-items: start; }
+@media(max-width:768px){ .main-grid{grid-template-columns:1fr;} }
+
+/* ── SECTION HEADERS ── */
+.section-label {
+  font-size: 10px; font-weight: 600; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--gold);
+  display: block; margin-bottom: 4px;
+}
+.section-title {
+  font-family: "Playfair Display", serif;
+  font-size: 1.5rem; color: var(--navy); margin-bottom: 1.25rem;
+  padding-bottom: 0.6rem;
+  border-bottom: 2px solid var(--gold);
+}
+
+/* ── ONGOING PROJECTS ── */
+.projects-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; margin-bottom: 2.5rem; }
+.project-card {
+  background: white; border: 1px solid var(--border);
+  border-radius: 10px; padding: 1.25rem 1.5rem;
+  border-left: 4px solid var(--gold);
+  display: grid; grid-template-columns: 1fr auto; gap: 1rem;
+  align-items: start; transition: box-shadow 0.2s;
+}
+.project-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.07); }
+.project-card.green { border-left-color: #059669; }
+.project-card.blue { border-left-color: #3b82f6; }
+.project-badge {
+  font-size: 10px; font-weight: 600; padding: 3px 10px;
+  border-radius: 12px; white-space: nowrap; align-self: flex-start;
+}
+.badge-ongoing { background: rgba(5,150,105,0.1); color: #059669; }
+.badge-early   { background: rgba(59,130,246,0.1); color: #3b82f6; }
+.project-title {
+  font-family: "Playfair Display", serif;
+  font-size: 1rem; color: var(--navy); margin-bottom: 4px;
+}
+.project-partners {
+  font-size: 11px; color: var(--gold); font-weight: 600;
+  letter-spacing: 0.04em; margin-bottom: 6px;
+}
+.project-desc { font-size: 13px; color: var(--muted); line-height: 1.65; }
+.project-tags { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 8px; }
+.project-tag {
+  font-size: 10px; padding: 2px 8px; border-radius: 4px;
+  background: #f3f4f6; color: #374151;
+}
+
+/* ── RESEARCH INTERESTS STRIP ── */
+.interests-strip {
+  background: var(--navy); border-radius: 10px;
+  padding: 1rem 1.5rem; margin-bottom: 2.5rem;
+  display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;
+}
+.interests-label {
+  font-size: 10px; font-weight: 600; letter-spacing: 0.15em;
+  text-transform: uppercase; color: var(--gold); white-space: nowrap;
+}
+.interest-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+.interest-tag {
+  font-size: 12px; color: rgba(255,255,255,0.8);
+  background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
+  padding: 4px 12px; border-radius: 20px;
+}
+
+/* ── PUBLICATIONS ── */
+.pub-section { margin-bottom: 2.5rem; }
+.pub-item {
+  background: white; border: 1px solid var(--border);
+  border-left: 4px solid var(--gold); border-radius: 0 8px 8px 0;
+  padding: 1rem 1.25rem; margin-bottom: 0.75rem;
+  transition: box-shadow 0.2s;
+}
+.pub-item:hover { box-shadow: 0 3px 15px rgba(0,0,0,0.06); }
+.pub-year-tag {
+  font-size: 10px; font-weight: 700; color: var(--gold);
+  letter-spacing: 0.08em; margin-bottom: 4px; display: block;
+}
+.pub-title { font-size: 14px; font-weight: 500; color: var(--navy); line-height: 1.5; margin-bottom: 4px; }
+.pub-authors { font-size: 12px; color: var(--muted); font-style: italic; margin-bottom: 4px; line-height: 1.5; }
+.pub-journal { font-size: 12px; color: var(--text); }
+.pub-doi { font-size: 11px; color: var(--gold); text-decoration: none; margin-top: 5px; display: inline-block; }
+.pub-doi:hover { text-decoration: underline; }
+.pub-oa { font-size: 10px; background: rgba(5,150,105,0.1); color: #059669; padding: 2px 7px; border-radius: 4px; margin-left: 8px; font-weight: 600; }
+.scholar-cta {
+  display: flex; align-items: center; gap: 12px;
+  background: white; border: 1px solid var(--border);
+  border-radius: 10px; padding: 1rem 1.5rem; margin-top: 0.5rem;
+}
+.scholar-cta p { font-size: 13px; color: var(--muted); flex: 1; }
+.scholar-cta a {
+  background: var(--navy); color: var(--gold);
+  padding: 8px 18px; border-radius: 6px;
+  font-size: 13px; font-weight: 600; text-decoration: none; white-space: nowrap;
+}
+.scholar-cta a:hover { background: #1a3a6b; }
+
+/* ── CONFERENCES ── */
+.conf-section { margin-bottom: 2rem; }
+.conf-card {
+  background: white; border: 1px solid var(--border);
+  border-radius: 10px; padding: 1.25rem; margin-bottom: 0.75rem;
+  display: grid; grid-template-columns: auto 1fr; gap: 1rem; align-items: start;
+}
+.conf-icon {
+  width: 48px; height: 48px; border-radius: 8px;
+  background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px; flex-shrink: 0;
+}
+.conf-icon img { width: 100%; height: 100%; object-fit: cover; border-radius: 8px; }
+.conf-type {
+  font-size: 10px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.1em; color: var(--muted); margin-bottom: 4px;
+}
+.conf-title { font-size: 14px; font-weight: 500; color: var(--navy); margin-bottom: 4px; line-height: 1.4; }
+.conf-event { font-size: 12px; color: var(--muted); font-style: italic; }
+.conf-note { font-size:11px; color: var(--gold); margin-top: 4px; }
+.conf-upload-hint { font-size:11px; color:#9ca3af; font-style:italic; margin-top:4px; }
+
+/* ── SIDEBAR ── */
+.sidebar { display: flex; flex-direction: column; gap: 1.25rem; }
+.side-card {
+  background: white; border: 1px solid var(--border);
+  border-radius: 10px; overflow: hidden;
+}
+.side-card-title {
+  background: var(--navy); padding: 0.65rem 1rem;
+  font-family: "Playfair Display", serif; color: white;
+  font-size: 0.9rem;
+}
+.side-card-body { padding: 1rem; }
+.metric-row {
+  display: flex; justify-content: space-between;
+  align-items: center; padding: 6px 0;
+  border-bottom: 1px solid #f3f4f6; font-size: 13px;
+}
+.metric-row:last-of-type { border-bottom: none; }
+.metric-label { color: var(--muted); }
+.metric-val { font-weight: 700; color: var(--navy); font-family: "Playfair Display", serif; font-size: 15px; }
+.profile-btn {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  width: 100%; padding: 9px; border-radius: 6px;
+  font-size: 13px; font-weight: 600; text-decoration: none;
+  margin-top: 8px; transition: opacity 0.2s;
+}
+.profile-btn:hover { opacity: 0.85; }
+.btn-scholar { background: var(--navy); color: var(--gold); }
+.btn-rg { background: #00d0af; color: white; }
+.topic-bar { margin-bottom: 10px; }
+.topic-top { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px; }
+.topic-name { color: var(--text); font-weight: 500; }
+.topic-count { color: var(--muted); }
+.bar-bg { height: 4px; background: #f3f4f6; border-radius: 2px; }
+.bar-fill { height: 4px; background: var(--gold); border-radius: 2px; }
+.collab-item { font-size: 12px; color: var(--muted); padding: 5px 0; border-bottom: 1px solid #f3f4f6; line-height: 1.5; }
+.collab-item:last-child { border-bottom: none; }
+.collab-item strong { color: var(--navy); font-weight: 600; }
+
+/* ── FOOTER ── */
+.page-footer { background: var(--navy); padding: 1.75rem 2rem; text-align: center; }
+.page-footer p { font-size: 13px; color: rgba(255,255,255,0.4); }
+.page-footer a { color: var(--gold); text-decoration: none; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">
+      <span class="nav-logo-agr">AGR</span>
+      <span class="nav-logo-name">Dr. Adeem Ghaffar Rana</span>
+    </a>
+    <button class="nav-hamburger" onclick="toggleMenu()" aria-label="Menu"><span></span><span></span><span></span></button>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="/" class="nav-link">Home</a></li>
+      <li><a href="/about.html" class="nav-link">About</a></li>
+      <li><a href="/research.html" class="nav-link active">Research</a></li>
+      <li><a href="/blog.html" class="nav-link">Blog</a></li>
+      <li><a href="/session2006.html" class="nav-link">Session 2006</a></li>
+      <li><a href="/alumni.html" class="nav-link">Alumni Portal</a></li>
+      <li><a href="mailto:ranaadeem@hotmail.com" class="nav-cta">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- HEADER -->
+<div class="page-header">
+  <div class="header-inner">
+    <div class="header-text">
+      <span class="page-tag">Research</span>
+      <h1>Projects &amp; <span>Publications</span></h1>
+      <p class="header-sub">Catalyst development, reaction engineering, and sustainable fuel processes — from lab bench to industrial collaboration.</p>
+    </div>
+    <!-- Compact reactor SVG -->
+    <svg class="header-reactor" width="110" height="120" viewBox="0 0 110 120">
+      <!-- Reactor vessel -->
+      <rect x="25" y="28" width="60" height="70" rx="6" fill="none" stroke="#5a8040" stroke-width="2.5"/>
+      <rect x="25" y="28" width="60" height="14" rx="4" fill="#5a8040" opacity="0.3"/>
+      <!-- Inlet/outlet pipes -->
+      <line x1="55" y1="28" x2="55" y2="8" stroke="#5a8040" stroke-width="3" stroke-linecap="round"/>
+      <line x1="48" y1="8" x2="62" y2="8" stroke="#5a8040" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="55" y1="98" x2="55" y2="116" stroke="#5a8040" stroke-width="3" stroke-linecap="round"/>
+      <line x1="48" y1="116" x2="62" y2="116" stroke="#5a8040" stroke-width="2.5" stroke-linecap="round"/>
+      <!-- Side ports -->
+      <line x1="25" y1="56" x2="8" y2="56" stroke="#5a8040" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="85" y1="70" x2="102" y2="70" stroke="#5a8040" stroke-width="2.5" stroke-linecap="round"/>
+      <!-- Catalyst bed -->
+      <rect x="32" y="52" width="46" height="28" rx="2" fill="#7a5a20" opacity="0.25"/>
+      <!-- Particles in bed -->
+      <circle cx="42" cy="60" r="3" fill="#7a5a20" opacity="0.5"/>
+      <circle cx="52" cy="57" r="3" fill="#7a5a20" opacity="0.5"/>
+      <circle cx="62" cy="61" r="3" fill="#7a5a20" opacity="0.5"/>
+      <circle cx="47" cy="67" r="3" fill="#7a5a20" opacity="0.5"/>
+      <circle cx="57" cy="65" r="3" fill="#7a5a20" opacity="0.5"/>
+      <circle cx="68" cy="58" r="3" fill="#7a5a20" opacity="0.5"/>
+      <!-- Temperature indicator -->
+      <rect x="80" y="42" width="8" height="30" rx="4" fill="none" stroke="#5a8040" stroke-width="1.5"/>
+      <rect x="81" y="55" width="6" height="16" rx="3" fill="#b8965a" opacity="0.6"/>
+    </svg>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="page-wrap">
+  <div class="main-grid">
+    <div class="main-content">
+
+      <!-- ══ ONGOING PROJECTS ══ -->
+      <span class="section-label">Active Research</span>
+      <h2 class="section-title">Ongoing Projects</h2>
+
+      <div class="projects-grid">
+
+        <div class="project-card">
+          <div>
+            <div class="project-partners">REF4FU · TUBAF · 2023–Present</div>
+            <div class="project-title">Methanol-to-Olefins (MTO) for Sustainable Aviation Fuels</div>
+            <div class="project-desc">Lead researcher for catalyst development and performance evaluation of zeolite-based systems. Designing experimental matrices using DoE to maximise olefin yield. Interfacing with industrial partners for performance benchmarking within the REF4FU sustainable aviation fuel value chain.</div>
+            <div class="project-tags">
+              <span class="project-tag">Zeolite Catalysts</span>
+              <span class="project-tag">Methanol-to-Olefins</span>
+              <span class="project-tag">SAF Value Chain</span>
+              <span class="project-tag">DoE / Minitab</span>
+              <span class="project-tag">Kinetic Evaluation</span>
+            </div>
+          </div>
+          <span class="project-badge badge-ongoing">● Ongoing</span>
+        </div>
+
+        <div class="project-card green">
+          <div>
+            <div class="project-partners">Ineratec · OptiSAF · TUBAF · 2023–Present</div>
+            <div class="project-title">Hydrotreating &amp; Hydrocracking for SAF Production</div>
+            <div class="project-desc">Full execution responsibility for lab-scale hydrotreating and hydrocracking of Fischer–Tropsch wax and OGD-derived feeds. Installed and commissioned lab-scale reactor systems; conducted continuous experimental campaigns and catalyst evaluation. Direct interface with industrial partners in project meetings.</div>
+            <div class="project-tags">
+              <span class="project-tag">Hydrotreating</span>
+              <span class="project-tag">Hydrocracking</span>
+              <span class="project-tag">Fischer–Tropsch</span>
+              <span class="project-tag">Reactor Commissioning</span>
+              <span class="project-tag">SAF</span>
+            </div>
+          </div>
+          <span class="project-badge badge-ongoing">● Ongoing</span>
+        </div>
+
+        <div class="project-card blue">
+          <div>
+            <div class="project-partners">TUBAF · Petrochemical Industry · 2024–Present</div>
+            <div class="project-title">Methanol-to-Aromatics (MTA) — Catalyst Development</div>
+            <div class="project-desc">Early-stage involvement in catalyst and process development for methanol-to-aromatics conversion targeting petrochemical applications. Contributing to conceptual catalyst design, reaction pathway assessment, and experimental framework establishment.</div>
+            <div class="project-tags">
+              <span class="project-tag">Methanol-to-Aromatics</span>
+              <span class="project-tag">Catalyst Design</span>
+              <span class="project-tag">Reaction Pathways</span>
+              <span class="project-tag">Petrochemicals</span>
+            </div>
+          </div>
+          <span class="project-badge badge-early">● Ongoing</span>
+        </div>
+
+      </div>
+
+      <!-- ══ RESEARCH INTERESTS ══ -->
+      <div class="interests-strip">
+        <span class="interests-label">Research Interests</span>
+        <div class="interest-tags">
+          <span class="interest-tag">Heterogeneous Catalysis</span>
+          <span class="interest-tag">Zeolite Systems</span>
+          <span class="interest-tag">Sustainable Aviation Fuels</span>
+          <span class="interest-tag">Photocatalysis</span>
+          <span class="interest-tag">CO₂ Conversion</span>
+          <span class="interest-tag">Reaction Engineering</span>
+        </div>
+      </div>
+
+      <!-- ══ SELECTED PUBLICATIONS ══ -->
+      <span class="section-label">Research Output</span>
+      <h2 class="section-title">Selected Publications</h2>
+
+      <div class="pub-section">
+
+        <div class="pub-item">
+          <span class="pub-year-tag">2026 · J.13</span>
+          <div class="pub-title">Advances and Challenges in Photocatalytic Water Splitting: Recent Developments and Trends</div>
+          <div class="pub-authors">Anwar, S.; Aslam, Z.; Aslam, U.; Mehmood, U.; <strong>Rana, A.G.</strong>; Mahmood, N.; Rafique, A.</div>
+          <div class="pub-journal"><em>Fuel</em> · 404, p. 136280</div>
+        </div>
+
+        <div class="pub-item">
+          <span class="pub-year-tag">2024 · J.12</span>
+          <div class="pub-title">Enhanced Gas-Phase Pollutant Removal Using Pt Nanoparticle-Modified Exfoliated Carbon Nitride Photocatalysts Under UV and Visible Light</div>
+          <div class="pub-authors">Mateos, M.J.; Hou, H.; <strong>Rana, A.G.</strong>; Lao-Zea, A.; Romero, N.; Sala, X. et al.</div>
+          <div class="pub-journal"><em>Chemical Engineering Journal</em> · 500, p. 156948</div>
+        </div>
+
+        <div class="pub-item">
+          <span class="pub-year-tag">2022 · J.11</span>
+          <div class="pub-title">Influence of Cocatalysts (Ni, Co, and Cu) and Synthesis Method on the Photocatalytic Activity of Exfoliated Graphitic Carbon Nitride for Hydrogen Production</div>
+          <div class="pub-authors"><strong>Rana, A.G.</strong>; Schwarze, M.; Tasbihi, M.; Sala, X.; García-Antón, J.; Minceva, M.</div>
+          <div class="pub-journal"><em>Nanomaterials</em> · 12(22), p. 4006</div>
+          <a href="https://doi.org/10.3390/nano12224006" target="_blank" class="pub-doi">DOI: 10.3390/nano12224006 ↗</a>
+          <span class="pub-oa">Open Access</span>
+        </div>
+
+        <div class="pub-item">
+          <span class="pub-year-tag">2022 · J.9</span>
+          <div class="pub-title">Synthesis of Highly Active Doped Graphitic Carbon Nitride Using Acid-Functionalized Precursors for Efficient Adsorption and Photodegradation of Endocrine-Disrupting Compounds</div>
+          <div class="pub-authors"><strong>Rana, A.G.</strong>; Zahid Hussain, M.; Hammond, N.; Vlad Luca, S.; Fischer, R.A.; Minceva, M.</div>
+          <div class="pub-journal"><em>ChemistrySelect</em> · 7(32), e202201909</div>
+          <a href="https://doi.org/10.1002/slct.202201909" target="_blank" class="pub-doi">DOI: 10.1002/slct.202201909 ↗</a>
+        </div>
+
+        <div class="pub-item">
+          <span class="pub-year-tag">2021 · J.8</span>
+          <div class="pub-title">Analysis of Photocatalytic Degradation of Phenol with Exfoliated Graphitic Carbon Nitride and Light-Emitting Diodes Using Response Surface Methodology</div>
+          <div class="pub-authors"><strong>Rana, A.G.</strong>; Minceva, M.</div>
+          <div class="pub-journal"><em>Catalysts</em> · 11(8), p. 898</div>
+          <a href="https://doi.org/10.3390/catal11080898" target="_blank" class="pub-doi">DOI: 10.3390/catal11080898 ↗</a>
+          <span class="pub-oa">Open Access</span>
+        </div>
+
+        <div class="scholar-cta">
+          <p>Showing 5 of 13 journal articles. Full list including all citations, co-authors, and DOI links available on Google Scholar.</p>
+          <a href="https://scholar.google.com/citations?user=pUQ4nFsAAAAJ" target="_blank">View All 13 Papers →</a>
+        </div>
+
+      </div>
+
+      <!-- ══ CONFERENCE PRESENTATIONS ══ -->
+      <span class="section-label">Conferences &amp; Presentations</span>
+      <h2 class="section-title">Conference Activity</h2>
+
+      <div class="conf-section">
+
+        <div class="conf-card">
+          <div class="conf-icon">🧪</div>
+          <div>
+            <div class="conf-type">Oral / Poster Presentation</div>
+            <div class="conf-title">Synthesis and Characterization of New Cu-Based Catalyst for Conversion of CO₂</div>
+            <div class="conf-event">7th International Workshop on Characterization of Porous Materials · May 3–6, 2015 · Florida, USA</div>
+            <div class="conf-upload-hint">Poster or photo can be added here — upload image to GitHub and update the src below</div>
+          </div>
+        </div>
+
+        <div class="conf-card">
+          <div class="conf-icon">🧫</div>
+          <div>
+            <div class="conf-type">Conference Paper</div>
+            <div class="conf-title">Development of Novel Cross-Linked Chitosan for the Removal of Anionic Azo-Dye</div>
+            <div class="conf-event">International Conference on Advance Materials and Emerging Technologies (ICAMET) · Nov 28–29, 2016 · Lahore, Pakistan</div>
+            <div class="conf-upload-hint">Poster or photo can be added here — upload image to GitHub and update the src below</div>
+          </div>
+        </div>
+
+        <!-- ── HOW TO ADD A CONFERENCE WITH PHOTO/POSTER ──
+        Copy this block and paste above to add a new conference.
+        Upload your poster/photo to GitHub root, then replace
+        the emoji in conf-icon with: <img src="/your-poster.jpg" alt="poster">
+
+        <div class="conf-card">
+          <div class="conf-icon"><img src="/conference-photo.jpg" alt="conference"></div>
+          <div>
+            <div class="conf-type">Oral Presentation</div>
+            <div class="conf-title">Your Presentation Title</div>
+            <div class="conf-event">Conference Name · Date · Location</div>
+            <div class="conf-note">REF4FU project presentation</div>
+          </div>
+        </div>
+        ── END TEMPLATE ── -->
+
+      </div>
+
+    </div><!-- /main-content -->
+
+    <!-- ══ SIDEBAR ══ -->
+    <div class="sidebar">
+
+      <div class="side-card">
+        <div class="side-card-title">Research Metrics</div>
+        <div class="side-card-body">
+          <div class="metric-row"><span class="metric-label">Journal Articles</span><span class="metric-val">13</span></div>
+          <div class="metric-row"><span class="metric-label">Total Citations</span><span class="metric-val">230+</span></div>
+          <div class="metric-row"><span class="metric-label">h-index</span><span class="metric-val">9</span></div>
+          <div class="metric-row"><span class="metric-label">i10-index</span><span class="metric-val">9</span></div>
+          <div class="metric-row"><span class="metric-label">Conference Papers</span><span class="metric-val">2</span></div>
+          <p style="font-size:10px;color:var(--muted);margin-top:8px;text-align:center;">h-index & i10-index updated manually from Google Scholar</p>
+          <a href="https://scholar.google.com/citations?user=pUQ4nFsAAAAJ" target="_blank" class="profile-btn btn-scholar">🎓 Google Scholar</a>
+          <a href="https://www.researchgate.net/profile/Adeem-Rana" target="_blank" class="profile-btn btn-rg" style="margin-top:6px;">🔬 ResearchGate</a>
+        </div>
+      </div>
+
+      <div class="side-card">
+        <div class="side-card-title">Research Topics</div>
+        <div class="side-card-body">
+          <div class="topic-bar">
+            <div class="topic-top"><span class="topic-name">Photocatalysis / g-C₃N₄</span><span class="topic-count">8 papers</span></div>
+            <div class="bar-bg"><div class="bar-fill" style="width:100%"></div></div>
+          </div>
+          <div class="topic-bar">
+            <div class="topic-top"><span class="topic-name">CO₂ Conversion</span><span class="topic-count">3 papers</span></div>
+            <div class="bar-bg"><div class="bar-fill" style="width:38%"></div></div>
+          </div>
+          <div class="topic-bar">
+            <div class="topic-top"><span class="topic-name">Water Treatment</span><span class="topic-count">2 papers</span></div>
+            <div class="bar-bg"><div class="bar-fill" style="width:25%"></div></div>
+          </div>
+          <div class="topic-bar">
+            <div class="topic-top"><span class="topic-name">Solar Cells / TiO₂</span><span class="topic-count">1 paper</span></div>
+            <div class="bar-bg"><div class="bar-fill" style="width:13%"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="side-card">
+        <div class="side-card-title">Industrial Partners</div>
+        <div class="side-card-body">
+          <div class="collab-item"><strong>Ineratec GmbH</strong><br>Hydrotreating · OptiSAF</div>
+          <div class="collab-item"><strong>REF4FU Consortium</strong><br>MTO · SAF value chain</div>
+          <div class="collab-item"><strong>TU Munich (TUM)</strong><br>Photocatalysis · g-C₃N₄</div>
+          <div class="collab-item"><strong>KFUPM, Saudi Arabia</strong><br>CO₂ conversion · TiO₂</div>
+        </div>
+      </div>
+
+      <div class="side-card">
+        <div class="side-card-title">Journals Published In</div>
+        <div class="side-card-body">
+          <div class="collab-item">Fuel</div>
+          <div class="collab-item">Chemical Engineering Journal</div>
+          <div class="collab-item">Nanomaterials</div>
+          <div class="collab-item">Catalysts</div>
+          <div class="collab-item">ChemistrySelect</div>
+          <div class="collab-item">Environmental Technology</div>
+          <div class="collab-item">Chemie Ingenieur Technik</div>
+          <div class="collab-item">IEEE Journal of Photovoltaics</div>
+          <div class="collab-item">Water, Air, &amp; Soil Pollution</div>
+        </div>
+      </div>
+
+    </div><!-- /sidebar -->
+  </div><!-- /main-grid -->
+</div><!-- /page-wrap -->
+
+<div class="page-footer">
+  <p>© 2025 Dr. Adeem Ghaffar Rana · <a href="https://ranaadeem.de">ranaadeem.de</a> · <a href="https://scholar.google.com/citations?user=pUQ4nFsAAAAJ" target="_blank">Google Scholar</a> · <a href="https://www.researchgate.net/profile/Adeem-Rana" target="_blank">ResearchGate</a></p>
+</div>
+
+<script>
+function toggleMenu() { document.getElementById('nav-links').classList.toggle('open'); }
+</script>
+</body>
+</html>
