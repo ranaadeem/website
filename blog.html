@@ -423,85 +423,65 @@ function renderPosts(posts) {
       'No posts yet. <a href="https://ranaadeem.substack.com" target="_blank" style="color:#c9a84c;font-weight:600;">Read on Substack →</a>';
     return;
   }
+
   const featured = posts[0];
   const rest = posts.slice(1);
-
-  // Featured post
-  const fw = document.getElementById('featured-post-wrap');
   const excerpt = truncate(featured.excerpt || featured.description || '', 220);
 
-  // Build a themed banner based on post content
-  function buildBanner(title, link) {
-    const t = (title||'').toLowerCase();
-    // Führerschein / driving / Germany bureaucracy post
-    if (t.includes('driver') || t.includes('licence') || t.includes('führerschein') || t.includes('fahrschule')) {
-      return `<div class="featured-img" style="background:linear-gradient(135deg,#1a3a8a 0%,#2048a8 50%,#163366 100%);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;">
-        <!-- EU Führerschein card SVG -->
-        <svg width="280" height="160" viewBox="0 0 280 160" style="filter:drop-shadow(0 4px 20px rgba(0,0,0,0.4));">
-          <!-- Card body -->
-          <rect x="10" y="20" width="260" height="120" rx="10" fill="#1a2e6b"/>
-          <rect x="10" y="20" width="260" height="120" rx="10" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
-          <!-- EU blue strip left -->
-          <rect x="10" y="20" width="38" height="120" rx="10" fill="#003399"/>
-          <rect x="10" y="20" width="38" height="120" rx="0" fill="#003399"/>
-          <rect x="10" y="20" width="10" height="120" rx="10" fill="#003399"/>
-          <!-- EU stars circle -->
-          <text x="29" y="48" text-anchor="middle" font-size="7" fill="#FFCC00">★★★</text>
-          <text x="29" y="56" text-anchor="middle" font-size="7" fill="#FFCC00">★ ★</text>
-          <text x="29" y="64" text-anchor="middle" font-size="7" fill="#FFCC00">★★★</text>
-          <!-- DE identifier -->
-          <text x="29" y="82" text-anchor="middle" font-size="11" font-weight="bold" fill="white" font-family="Georgia">DE</text>
-          <!-- Führerschein title -->
-          <text x="60" y="42" font-size="9" fill="rgba(255,255,255,0.6)" font-family="Arial">EUROPÄISCHE UNION · BUNDESREPUBLIK DEUTSCHLAND</text>
-          <text x="60" y="58" font-size="14" font-weight="bold" fill="white" font-family="Arial">Führerschein</text>
-          <!-- Licence categories -->
-          <rect x="60" y="68" width="28" height="14" rx="3" fill="rgba(255,255,255,0.15)"/>
-          <text x="74" y="79" text-anchor="middle" font-size="9" fill="white" font-family="Arial">B</text>
-          <rect x="94" y="68" width="28" height="14" rx="3" fill="rgba(255,255,255,0.1)"/>
-          <text x="108" y="79" text-anchor="middle" font-size="9" fill="rgba(255,255,255,0.6)" font-family="Arial">A</text>
-          <!-- Placeholder photo box -->
-          <rect x="185" y="35" width="70" height="85" rx="4" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
-          <text x="220" y="80" text-anchor="middle" font-size="20" fill="rgba(255,255,255,0.3)">👤</text>
-          <!-- Barcode-like lines -->
-          <rect x="60" y="102" width="2" height="22" fill="rgba(255,255,255,0.4)"/>
-          <rect x="64" y="102" width="4" height="22" fill="rgba(255,255,255,0.3)"/>
-          <rect x="70" y="102" width="2" height="22" fill="rgba(255,255,255,0.4)"/>
-          <rect x="74" y="102" width="3" height="22" fill="rgba(255,255,255,0.25)"/>
-          <rect x="79" y="102" width="2" height="22" fill="rgba(255,255,255,0.4)"/>
-          <rect x="83" y="102" width="5" height="22" fill="rgba(255,255,255,0.3)"/>
-          <rect x="90" y="102" width="2" height="22" fill="rgba(255,255,255,0.35)"/>
-          <rect x="94" y="102" width="3" height="22" fill="rgba(255,255,255,0.3)"/>
-          <rect x="99" y="102" width="2" height="22" fill="rgba(255,255,255,0.4)"/>
-          <rect x="103" y="102" width="4" height="22" fill="rgba(255,255,255,0.25)"/>
-          <rect x="109" y="102" width="2" height="22" fill="rgba(255,255,255,0.35)"/>
-          <!-- Autobahn sign -->
-          <rect x="130" y="95" width="40" height="30" rx="3" fill="#004d99"/>
-          <rect x="130" y="95" width="40" height="30" rx="3" fill="none" stroke="white" stroke-width="1.5"/>
-          <text x="150" y="108" text-anchor="middle" font-size="7" fill="white" font-weight="bold">BAB</text>
-          <text x="150" y="118" text-anchor="middle" font-size="10" fill="white" font-weight="bold">A8</text>
-        </svg>
-        <!-- Category badge -->
-        <div style="position:absolute;top:12px;left:12px;background:rgba(201,168,76,0.9);color:#1c120a;font-size:10px;font-weight:700;padding:4px 10px;border-radius:4px;letter-spacing:0.08em;text-transform:uppercase;">🇩🇪 Bureaucratic Life</div>
-      </div>`;
-    }
-    // Default for other posts
-    const emoji = getEmoji(title);
-    return '<div class="featured-img" style="font-size:48px;display:flex;align-items:center;justify-content:center;">'+emoji+'</div>';
+  // Choose banner for featured post
+  const t = (featured.title || '').toLowerCase();
+  let bannerHTML;
+  if (t.includes('driver') || t.includes('licence') || t.includes('fuhrerschein') || t.includes('fahrschule')) {
+    bannerHTML = `<div class="featured-img" style="background:linear-gradient(135deg,#1a3a8a 0%,#2048a8 50%,#163366 100%);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;">
+      <svg width="280" height="160" viewBox="0 0 280 160" style="filter:drop-shadow(0 4px 20px rgba(0,0,0,0.4));">
+        <rect x="10" y="20" width="260" height="120" rx="10" fill="#1a2e6b"/>
+        <rect x="10" y="20" width="260" height="120" rx="10" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
+        <rect x="10" y="20" width="38" height="120" rx="4" fill="#003399"/>
+        <text x="29" y="48" text-anchor="middle" font-size="7" fill="#FFCC00">&#9733;&#9733;&#9733;</text>
+        <text x="29" y="58" text-anchor="middle" font-size="7" fill="#FFCC00">&#9733; &#9733;</text>
+        <text x="29" y="68" text-anchor="middle" font-size="7" fill="#FFCC00">&#9733;&#9733;&#9733;</text>
+        <text x="29" y="86" text-anchor="middle" font-size="11" font-weight="bold" fill="white">DE</text>
+        <text x="60" y="42" font-size="8" fill="rgba(255,255,255,0.6)">EUROPÄISCHE UNION · BUNDESREPUBLIK DEUTSCHLAND</text>
+        <text x="60" y="60" font-size="15" font-weight="bold" fill="white">Führerschein</text>
+        <rect x="60" y="70" width="28" height="15" rx="3" fill="rgba(255,255,255,0.15)"/>
+        <text x="74" y="81" text-anchor="middle" font-size="9" fill="white">B</text>
+        <rect x="94" y="70" width="28" height="15" rx="3" fill="rgba(255,255,255,0.08)"/>
+        <text x="108" y="81" text-anchor="middle" font-size="9" fill="rgba(255,255,255,0.5)">A</text>
+        <rect x="185" y="35" width="70" height="85" rx="4" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+        <text x="220" y="82" text-anchor="middle" font-size="22" fill="rgba(255,255,255,0.25)">&#128100;</text>
+        <rect x="60" y="104" width="2" height="20" fill="rgba(255,255,255,0.4)"/>
+        <rect x="64" y="104" width="4" height="20" fill="rgba(255,255,255,0.3)"/>
+        <rect x="70" y="104" width="2" height="20" fill="rgba(255,255,255,0.4)"/>
+        <rect x="74" y="104" width="3" height="20" fill="rgba(255,255,255,0.25)"/>
+        <rect x="79" y="104" width="5" height="20" fill="rgba(255,255,255,0.35)"/>
+        <rect x="86" y="104" width="2" height="20" fill="rgba(255,255,255,0.4)"/>
+        <rect x="130" y="95" width="40" height="30" rx="3" fill="#004d99" stroke="white" stroke-width="1.5"/>
+        <text x="150" y="109" text-anchor="middle" font-size="7" fill="white" font-weight="bold">BAB</text>
+        <text x="150" y="120" text-anchor="middle" font-size="10" fill="white" font-weight="bold">A8</text>
+      </svg>
+      <div style="position:absolute;top:12px;left:12px;background:rgba(201,168,76,0.9);color:#1c120a;font-size:10px;font-weight:700;padding:4px 10px;border-radius:4px;letter-spacing:0.08em;text-transform:uppercase;">&#127465;&#127466; Bureaucratic Life</div>
+    </div>`;
+  } else {
+    bannerHTML = `<div class="featured-img" style="font-size:48px;display:flex;align-items:center;justify-content:center;">${getEmoji(featured.title)}</div>`;
   }
 
-  fw.innerHTML = '<div class="featured-post" style="cursor:pointer;" onclick="window.open(''+featured.link+'','_blank')">'
-    + buildBanner(featured.title, featured.link)
-    + '<div class="featured-body">'
-    + '<span class="post-category">Latest Post</span>'
-    + '<h2 class="post-title"><a href="'+featured.link+'" target="_blank" onclick="event.stopPropagation()">'+featured.title+'</a></h2>'
-    + '<p class="post-excerpt">'+excerpt+'</p>'
-    + '<div class="post-meta">'
-    + '<div><span class="post-tag">Substack</span></div>'
-    + '<span class="post-date">'+formatDate(featured.pubDate)+'</span>'
-    + '</div></div></div>';
+  // Render featured post
+  const fw = document.getElementById('featured-post-wrap');
+  fw.innerHTML = `<div class="featured-post" style="cursor:pointer;" onclick="window.open('${featured.link}','_blank')">
+    ${bannerHTML}
+    <div class="featured-body">
+      <span class="post-category">Latest Post</span>
+      <h2 class="post-title"><a href="${featured.link}" target="_blank" onclick="event.stopPropagation()">${featured.title}</a></h2>
+      <p class="post-excerpt">${excerpt}</p>
+      <div class="post-meta">
+        <div><span class="post-tag">Substack</span></div>
+        <span class="post-date">${formatDate(featured.pubDate)}</span>
+      </div>
+    </div>
+  </div>`;
   fw.style.display = 'block';
 
-  // Grid
+  // Render grid
   if (rest.length) {
     const grid = document.getElementById('posts-grid-wrap');
     grid.innerHTML = rest.map(p => `
