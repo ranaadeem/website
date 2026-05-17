@@ -35,18 +35,37 @@ nav{background:var(--navy);border-bottom:2px solid var(--gold);position:sticky;t
 .stat-item{text-align:center;}
 .stat-num{font-family:"Playfair Display",serif;font-size:28px;font-weight:700;color:var(--navy);display:block;}
 .stat-lbl{font-size:12px;color:var(--muted);margin-top:2px;}
-.sessions-section{max-width:1100px;margin:3rem auto;padding:0 2rem;}
+.sessions-section{max-width:1200px;margin:2rem auto;padding:0 2rem;}
 .section-tag{font-size:11px;font-weight:500;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:4px;}
-.section-title{font-family:"Playfair Display",serif;font-size:2rem;color:var(--navy);margin-bottom:1.5rem;}
-.sessions-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.25rem;}
-.session-card{background:white;border:1px solid var(--border);border-radius:12px;padding:1.75rem;cursor:pointer;transition:all 0.25s;border-top:4px solid var(--gold);}
-.session-card:hover{box-shadow:0 8px 30px rgba(0,0,0,0.1);transform:translateY(-2px);}
-.session-card.coming-soon{opacity:0.55;cursor:default;}.session-card.coming-soon:hover{transform:none;box-shadow:none;}
-.session-year{font-family:"Playfair Display",serif;font-size:1.5rem;color:var(--navy);margin-bottom:4px;}
-.session-dept{font-size:13px;color:var(--muted);margin-bottom:1rem;}
-.sess-stat-num{font-family:"Playfair Display",serif;font-size:20px;color:var(--gold);font-weight:700;display:block;}
-.sess-stat-lbl{font-size:11px;color:var(--muted);}
-.cs-badge{font-size:10px;background:#f3f4f6;color:var(--muted);padding:2px 8px;border-radius:10px;font-weight:500;float:right;}
+.section-title{font-family:"Playfair Display",serif;font-size:1.75rem;color:var(--navy);margin-bottom:1rem;}
+.sessions-layout{display:grid;grid-template-columns:1fr 280px;gap:2rem;align-items:start;}
+.session-search{width:100%;padding:9px 14px 9px 36px;border:1px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit;outline:none;background:white url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.35-4.35'/%3E%3C/svg%3E") no-repeat 12px center;margin-bottom:1rem;}
+.session-search:focus{border-color:var(--gold);}
+.sessions-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0.65rem;}
+.session-card{background:white;border:1px solid var(--border);border-radius:8px;padding:0.85rem 1rem;cursor:pointer;transition:all 0.2s;border-left:3px solid var(--gold);position:relative;}
+.session-card:hover{box-shadow:0 4px 16px rgba(0,0,0,0.08);transform:translateY(-1px);}
+.session-card.coming-soon{border-left-color:#d1d5db;opacity:0.7;cursor:not-allowed;}
+.session-card.coming-soon:hover{transform:none;box-shadow:none;}
+.session-card.hidden{display:none;}
+.session-year{font-family:"Playfair Display",serif;font-size:0.95rem;color:var(--navy);font-weight:600;margin-bottom:2px;}
+.session-dept{font-size:10px;color:var(--muted);margin-bottom:0.5rem;line-height:1.3;}
+.sess-stat-num{font-family:"Playfair Display",serif;font-size:14px;color:var(--gold);font-weight:700;}
+.sess-stat-lbl{font-size:9px;color:var(--muted);margin-left:2px;}
+.cs-badge{font-size:9px;background:#f3f4f6;color:#9ca3af;padding:1px 6px;border-radius:6px;font-weight:500;}
+.active-badge{font-size:9px;background:rgba(5,150,105,0.1);color:#059669;padding:1px 6px;border-radius:6px;font-weight:600;}
+/* STATS SIDEBAR */
+.stats-sidebar{display:flex;flex-direction:column;gap:0.85rem;position:sticky;top:80px;}
+.stat-card{background:white;border:1px solid var(--border);border-radius:10px;overflow:hidden;}
+.stat-card-header{background:var(--navy);padding:0.6rem 1rem;font-family:"Playfair Display",serif;color:white;font-size:0.85rem;}
+.stat-card-body{padding:0.85rem 1rem;}
+.stat-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid #f3f4f6;font-size:12px;}
+.stat-row:last-child{border-bottom:none;}
+.stat-row-label{color:var(--muted);}
+.stat-row-val{font-weight:700;color:var(--navy);font-family:"Playfair Display",serif;font-size:14px;}
+.split-bar{height:6px;border-radius:3px;background:#f3f4f6;margin-top:4px;overflow:hidden;}
+.split-bar-fill{height:100%;background:var(--gold);border-radius:3px;transition:width 0.8s ease;}
+@media(max-width:900px){.sessions-layout{grid-template-columns:1fr;}.stats-sidebar{position:static;}.sessions-grid{grid-template-columns:repeat(3,1fr);}}
+@media(max-width:600px){.sessions-grid{grid-template-columns:repeat(2,1fr);}}
 .login-wrap{max-width:440px;margin:4rem auto;padding:0 2rem;}
 .login-card{background:white;border:1px solid var(--border);border-radius:14px;padding:2.5rem;text-align:center;}
 .login-card h2{font-family:"Playfair Display",serif;font-size:1.6rem;color:var(--navy);margin-bottom:0.5rem;}
@@ -175,35 +194,261 @@ nav{background:var(--navy);border-bottom:2px solid var(--gold);position:sticky;t
   </div>
   <div class="stats-strip">
     <div class="stats-inner">
-      <div class="stat-item"><span class="stat-num" id="stat-total">&ndash;</span><div class="stat-lbl">Total Registered</div></div>
+      <div class="stat-item"><span class="stat-num" id="stat-total">&ndash;</span><div class="stat-lbl">Alumni Registered</div></div>
       <div class="stat-item"><span class="stat-num" id="stat-countries">&ndash;</span><div class="stat-lbl">Countries</div></div>
-      <div class="stat-item"><span class="stat-num">2</span><div class="stat-lbl">Active Sessions</div></div>
+      <div class="stat-item"><span class="stat-num">23</span><div class="stat-lbl">Batches in Network</div></div>
+      <div class="stat-item"><span class="stat-num">1</span><div class="stat-lbl">Active Sessions</div></div>
     </div>
   </div>
   <div class="sessions-section">
-    <span class="section-tag">Choose Your Batch</span>
-    <h2 class="section-title">Sessions</h2>
-    <div class="sessions-grid">
-      <div class="session-card" id="card-2006">
-        <div class="session-year">Session 2006&ndash;2010</div>
-        <div class="session-dept">Chemical Engineering &middot; ICET &middot; University of the Punjab</div>
-        <div style="display:flex;gap:1.25rem;margin-top:0.75rem;">
-          <div><span class="sess-stat-num" id="sess-2006-card">&ndash;</span><span class="sess-stat-lbl">Registered</span></div>
-          <div><span class="sess-stat-num">245</span><span class="sess-stat-lbl">Total Batch</span></div>
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:1rem;flex-wrap:wrap;gap:0.5rem;">
+      <div>
+        <span class="section-tag">Choose Your Batch</span>
+        <h2 class="section-title" style="margin-bottom:0;">Sessions &amp; Batches</h2>
+      </div>
+      <div style="font-size:12px;color:var(--muted);">
+        <span id="batch-count-visible">23</span> batches &middot; <span style="color:var(--green);font-weight:600;">1 active</span>
+      </div>
+    </div>
+    <div class="sessions-layout">
+      <div>
+        <input class="session-search" id="session-search" placeholder="Search batch year — e.g. type 2006 or 201...">
+        <div class="sessions-grid" id="sessions-grid">
+      <div class="session-card coming-soon" data-year="2000">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+          <div class="session-year">2000&ndash;2004</div>
+          <span class="cs-badge">Soon</span>
+        </div>
+        <div class="session-dept">Chemical Eng &middot; ICET &middot; UoP</div>
+        <div style="margin-top:0.4rem;font-size:10px;color:#9ca3af;">Opening soon</div>
+      </div>
+      <div class="session-card coming-soon" data-year="2001">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+          <div class="session-year">2001&ndash;2005</div>
+          <span class="cs-badge">Soon</span>
+        </div>
+        <div class="session-dept">Chemical Eng &middot; ICET &middot; UoP</div>
+        <div style="margin-top:0.4rem;font-size:10px;color:#9ca3af;">Opening soon</div>
+      </div>
+      <div class="session-card coming-soon" data-year="2002">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+          <div class="session-year">2002&ndash;2006</div>
+          <span class="cs-badge">Soon</span>
+        </div>
+        <div class="session-dept">Chemical Eng &middot; ICET &middot; UoP</div>
+        <div style="margin-top:0.4rem;font-size:10px;color:#9ca3af;">Opening soon</div>
+      </div>
+      <div class="session-card coming-soon" data-year="2003">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+          <div class="session-year">2003&ndash;2007</div>
+          <span class="cs-badge">Soon</span>
+        </div>
+        <div class="session-dept">Chemical Eng &middot; ICET &middot; UoP</div>
+        <div style="margin-top:0.4rem;font-size:10px;color:#9ca3af;">Opening soon</div>
+      </div>
+      <div class="session-card coming-soon" data-year="2004">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+          <div class="session-year">2004&ndash;2008</div>
+          <span class="cs-badge">Soon</span>
+        </div>
+        <div class="session-dept">Chemical Eng &middot; ICET &middot; UoP</div>
+        <div style="margin-top:0.4rem;font-size:10px;color:#9ca3af;">Opening soon</div>
+      </div>
+      <div class="session-card coming-soon" data-year="2005">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+          <div class="session-year">2005&ndash;2009</div>
+          <span class="cs-badge">Soon</span>
+        </div>
+        <div class="session-dept">Chemical Eng &middot; ICET &middot; UoP</div>
+        <div style="margin-top:0.4rem;font-size:10px;color:#9ca3af;">Opening soon</div>
+      </div>
+      <div class="session-card" id="card-2006" data-year="2006">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+          <div class="session-year">2006&ndash;2010</div>
+          <span class="active-badge">&#9679; Active</span>
+        </div>
+        <div class="session-dept">Chemical Eng &middot; ICET &middot; UoP</div>
+        <div style="margin-top:0.4rem;">
+          <span class="sess-stat-num" id="sess-2006-card">&ndash;</span><span class="sess-stat-lbl">registered</span>
         </div>
       </div>
-      <div class="session-card" id="card-2010">
-        <div class="session-year">Session 2010&ndash;2014</div>
-        <div class="session-dept">Chemical Engineering &middot; ICET &middot; University of the Punjab</div>
-        <div style="display:flex;gap:1.25rem;margin-top:0.75rem;">
-          <div><span class="sess-stat-num" id="sess-2010-card">&ndash;</span><span class="sess-stat-lbl">Registered</span></div>
-          <div><span class="sess-stat-num">245</span><span class="sess-stat-lbl">Total Batch</span></div>
+      <div class="session-card coming-soon" data-year="2007">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+          <div class="session-year">2007&ndash;2011</div>
+          <span class="cs-badge">Soon</span>
         </div>
+        <div class="session-dept">Chemical Eng &middot; ICET &middot; UoP</div>
+        <div style="margin-top:0.4rem;font-size:10px;color:#9ca3af;">Opening soon</div>
       </div>
-      <div class="session-card coming-soon">
-        <span class="cs-badge">Coming Soon</span>
-        <div class="session-year">Session 2014&ndash;2018</div>
-        <div class="session-dept">Chemical Engineering &middot; ICET &middot; University of the Punjab</div>
+      <div class="session-card coming-soon" data-year="2008">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+          <div class="session-year">2008&ndash;2012</div>
+          <span class="cs-badge">Soon</span>
+        </div>
+        <div class="session-dept">Chemical Eng &middot; ICET &middot; UoP</div>
+        <div style="margin-top:0.4rem;font-size:10px;color:#9ca3af;">Opening soon</div>
+      </div>
+      <div class="session-card coming-soon" data-year="2009">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+          <div class="session-year">2009&ndash;2013</div>
+          <span class="cs-badge">Soon</span>
+        </div>
+        <div class="session-dept">Chemical Eng &middot; ICET &middot; UoP</div>
+        <div style="margin-top:0.4rem;font-size:10px;color:#9ca3af;">Opening soon</div>
+      </div>
+      <div class="session-card coming-soon" data-year="2010">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+          <div class="session-year">2010&ndash;2014</div>
+          <span class="cs-badge">Soon</span>
+        </div>
+        <div class="session-dept">Chemical Eng &middot; ICET &middot; UoP</div>
+        <div style="margin-top:0.4rem;font-size:10px;color:#9ca3af;">Opening soon</div>
+      </div>
+      <div class="session-card coming-soon" data-year="2011">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+          <div class="session-year">2011&ndash;2015</div>
+          <span class="cs-badge">Soon</span>
+        </div>
+        <div class="session-dept">Chemical Eng &middot; ICET &middot; UoP</div>
+        <div style="margin-top:0.4rem;font-size:10px;color:#9ca3af;">Opening soon</div>
+      </div>
+      <div class="session-card coming-soon" data-year="2012">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+          <div class="session-year">2012&ndash;2016</div>
+          <span class="cs-badge">Soon</span>
+        </div>
+        <div class="session-dept">Chemical Eng &middot; ICET &middot; UoP</div>
+        <div style="margin-top:0.4rem;font-size:10px;color:#9ca3af;">Opening soon</div>
+      </div>
+      <div class="session-card coming-soon" data-year="2013">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+          <div class="session-year">2013&ndash;2017</div>
+          <span class="cs-badge">Soon</span>
+        </div>
+        <div class="session-dept">Chemical Eng &middot; ICET &middot; UoP</div>
+        <div style="margin-top:0.4rem;font-size:10px;color:#9ca3af;">Opening soon</div>
+      </div>
+      <div class="session-card coming-soon" data-year="2014">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+          <div class="session-year">2014&ndash;2018</div>
+          <span class="cs-badge">Soon</span>
+        </div>
+        <div class="session-dept">Chemical Eng &middot; ICET &middot; UoP</div>
+        <div style="margin-top:0.4rem;font-size:10px;color:#9ca3af;">Opening soon</div>
+      </div>
+      <div class="session-card coming-soon" data-year="2015">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+          <div class="session-year">2015&ndash;2019</div>
+          <span class="cs-badge">Soon</span>
+        </div>
+        <div class="session-dept">Chemical Eng &middot; ICET &middot; UoP</div>
+        <div style="margin-top:0.4rem;font-size:10px;color:#9ca3af;">Opening soon</div>
+      </div>
+      <div class="session-card coming-soon" data-year="2016">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+          <div class="session-year">2016&ndash;2020</div>
+          <span class="cs-badge">Soon</span>
+        </div>
+        <div class="session-dept">Chemical Eng &middot; ICET &middot; UoP</div>
+        <div style="margin-top:0.4rem;font-size:10px;color:#9ca3af;">Opening soon</div>
+      </div>
+      <div class="session-card coming-soon" data-year="2017">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+          <div class="session-year">2017&ndash;2021</div>
+          <span class="cs-badge">Soon</span>
+        </div>
+        <div class="session-dept">Chemical Eng &middot; ICET &middot; UoP</div>
+        <div style="margin-top:0.4rem;font-size:10px;color:#9ca3af;">Opening soon</div>
+      </div>
+      <div class="session-card coming-soon" data-year="2018">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+          <div class="session-year">2018&ndash;2022</div>
+          <span class="cs-badge">Soon</span>
+        </div>
+        <div class="session-dept">Chemical Eng &middot; ICET &middot; UoP</div>
+        <div style="margin-top:0.4rem;font-size:10px;color:#9ca3af;">Opening soon</div>
+      </div>
+      <div class="session-card coming-soon" data-year="2019">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+          <div class="session-year">2019&ndash;2023</div>
+          <span class="cs-badge">Soon</span>
+        </div>
+        <div class="session-dept">Chemical Eng &middot; ICET &middot; UoP</div>
+        <div style="margin-top:0.4rem;font-size:10px;color:#9ca3af;">Opening soon</div>
+      </div>
+      <div class="session-card coming-soon" data-year="2020">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+          <div class="session-year">2020&ndash;2024</div>
+          <span class="cs-badge">Soon</span>
+        </div>
+        <div class="session-dept">Chemical Eng &middot; ICET &middot; UoP</div>
+        <div style="margin-top:0.4rem;font-size:10px;color:#9ca3af;">Opening soon</div>
+      </div>
+      <div class="session-card coming-soon" data-year="2021">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+          <div class="session-year">2021&ndash;2025</div>
+          <span class="cs-badge">Soon</span>
+        </div>
+        <div class="session-dept">Chemical Eng &middot; ICET &middot; UoP</div>
+        <div style="margin-top:0.4rem;font-size:10px;color:#9ca3af;">Opening soon</div>
+      </div>
+      <div class="session-card coming-soon" data-year="2022">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+          <div class="session-year">2022&ndash;2026</div>
+          <span class="cs-badge">Soon</span>
+        </div>
+        <div class="session-dept">Chemical Eng &middot; ICET &middot; UoP</div>
+        <div style="margin-top:0.4rem;font-size:10px;color:#9ca3af;">Opening soon</div>
+      </div>
+        </div>
+        <div id="no-batch-found" style="display:none;text-align:center;padding:2rem;color:var(--muted);font-size:13px;">No batches found for that year.</div>
+      </div>
+      <!-- STATS SIDEBAR -->
+      <div class="stats-sidebar">
+        <div class="stat-card">
+          <div class="stat-card-header">&#128200; Network Overview</div>
+          <div class="stat-card-body">
+            <div class="stat-row"><span class="stat-row-label">Total Registered</span><span class="stat-row-val" id="sb-total">&ndash;</span></div>
+            <div class="stat-row"><span class="stat-row-label">Countries</span><span class="stat-row-val" id="sb-countries">&ndash;</span></div>
+            <div class="stat-row"><span class="stat-row-label">Active Sessions</span><span class="stat-row-val">1</span></div>
+            <div class="stat-row"><span class="stat-row-label">Total Batches</span><span class="stat-row-val">23</span></div>
+            <div class="stat-row"><span class="stat-row-label">Network Since</span><span class="stat-row-val">2006</span></div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-header">&#127758; Global Reach</div>
+          <div class="stat-card-body">
+            <div class="stat-row"><span class="stat-row-label">Top Country</span><span class="stat-row-val" id="sb-top-country">&ndash;</span></div>
+            <div class="stat-row"><span class="stat-row-label">In Germany</span><span class="stat-row-val" id="sb-germany">&ndash;</span></div>
+            <div class="stat-row"><span class="stat-row-label">In Gulf Region</span><span class="stat-row-val" id="sb-gulf">&ndash;</span></div>
+            <div class="stat-row"><span class="stat-row-label">In Pakistan</span><span class="stat-row-val" id="sb-pakistan">&ndash;</span></div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-header">&#127968; Batch Breakdown</div>
+          <div class="stat-card-body">
+            <div class="stat-row"><span class="stat-row-label">Morning</span><span class="stat-row-val" id="sb-morning">&ndash;</span></div>
+            <div class="stat-row"><span class="stat-row-label">Evening</span><span class="stat-row-val" id="sb-evening">&ndash;</span></div>
+            <div style="margin-top:6px;">
+              <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-bottom:3px;"><span>Morning</span><span>Evening</span></div>
+              <div class="split-bar"><div class="split-bar-fill" id="sb-morning-bar" style="width:50%"></div></div>
+            </div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-header">&#128188; Career Insights</div>
+          <div class="stat-card-body">
+            <div class="stat-row"><span class="stat-row-label">Most Common Role</span><span class="stat-row-val" id="sb-top-role">&ndash;</span></div>
+            <div class="stat-row"><span class="stat-row-label">On LinkedIn</span><span class="stat-row-val" id="sb-linkedin">&ndash;</span></div>
+            <div class="stat-row"><span class="stat-row-label">Reg. Rate</span><span class="stat-row-val" id="sb-reg-rate">&ndash;</span></div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-header">&#9201; Recently Joined</div>
+          <div class="stat-card-body" id="sb-recent">
+            <div style="text-align:center;color:var(--muted);font-size:12px;padding:0.5rem 0;">No data yet</div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -281,7 +526,7 @@ nav{background:var(--navy);border-bottom:2px solid var(--gold);position:sticky;t
           <div class="form-group"><label>Email <span class="req">*</span></label><input type="email" id="setup-email" placeholder="you@example.com"></div>
           <div class="form-group"><label>Phone <span style="font-size:11px;color:var(--muted);font-weight:400;">(session only)</span></label><input type="tel" id="setup-phone" placeholder="+92 300 0000000"></div>
         </div>
-        <div class="form-group"><label>LinkedIn URL <span class="req">*</span></label><input type="url" id="setup-linkedin" placeholder="https://linkedin.com/in/yourname"></div>
+        <div class="form-group"><label>LinkedIn URL <span style="font-size:11px;color:var(--muted);font-weight:400;">(optional — recommended)</span></label><input type="url" id="setup-linkedin" placeholder="https://linkedin.com/in/yourname"></div>
         <div class="form-group"><label>Bio <span style="font-size:11px;color:var(--muted);font-weight:400;">(optional)</span></label><textarea id="setup-bio" rows="3" placeholder="A brief note about yourself..."></textarea></div>
         <button class="submit-btn" id="setup-submit-btn">Save Profile &amp; Join Network</button>
         <p style="text-align:center;margin-top:0.75rem;"><a href="#" id="btn-cancel-setup" style="font-size:13px;color:var(--muted);text-decoration:none;">Cancel</a></p>
@@ -486,7 +731,14 @@ document.getElementById('btn-join').addEventListener('click',()=>{ if(currentUse
 document.getElementById('nav-portal-link').addEventListener('click',(e)=>{ e.preventDefault(); showPage('landing'); });
 document.getElementById('btn-browse').addEventListener('click',()=>{ if(currentUser){currentUserProfile?showPage('directory'):showPage('setup');}else showPage('login'); });
 document.getElementById('card-2006').addEventListener('click',()=>handleSession('2006'));
-document.getElementById('card-2010').addEventListener('click',()=>handleSession('2010'));
+// Future active sessions — delegate clicks on sessions grid
+document.getElementById('sessions-grid').addEventListener('click', e => {
+  const card = e.target.closest('.session-card');
+  if (!card || card.classList.contains('coming-soon')) return;
+  const year = card.dataset.year;
+  if (year) handleSession(year);
+});
+// card-2010 is coming soon — no click handler
 document.getElementById('btn-back-login').addEventListener('click',(e)=>{e.preventDefault();showPage('landing');});
 document.getElementById('btn-back-profile').addEventListener('click',()=>showPage('directory'));
 document.getElementById('btn-cancel-setup').addEventListener('click',(e)=>{e.preventDefault();showPage('directory');});
@@ -500,12 +752,106 @@ function handleSession(session) { if(!currentUser){showPage('login');return;} if
 
 async function loadGlobalStats() {
   try {
-    const snap=await getDocs(collection(db,'alumni')); let total=0; const countries=new Set(); const s6=[],s10=[];
-    snap.forEach(d=>{const a=d.data();total++;if(a.country)countries.add(a.country);if(a.session?.includes('2006'))s6.push(a);if(a.session?.includes('2010'))s10.push(a);});
-    document.getElementById('stat-total').textContent=total; document.getElementById('stat-countries').textContent=countries.size;
-    document.getElementById('sess-2006-card').textContent=s6.length; document.getElementById('sess-2010-card').textContent=s10.length;
-  } catch(e){}
+    const snap = await getDocs(collection(db,'alumni'));
+    let total = 0, morning = 0, evening = 0, withLinkedin = 0;
+    const countries = new Set(), countryCount = {}, roles = {};
+    const gulf = ['Saudi Arabia','UAE','Qatar','Kuwait','Bahrain','Oman'];
+    let gulfCount = 0, germanyCount = 0, pakistanCount = 0;
+    let recentAlumni = [];
+
+    snap.forEach(d => {
+      const a = d.data(); total++;
+      if (a.country) { countries.add(a.country); countryCount[a.country] = (countryCount[a.country]||0)+1; }
+      if (a.session?.includes('Morning')) morning++; else evening++;
+      if (a.linkedin) withLinkedin++;
+      if (gulf.includes(a.country)) gulfCount++;
+      if (a.country === 'Germany') germanyCount++;
+      if (a.country === 'Pakistan') pakistanCount++;
+      if (a.job) { const role = a.job.split(' ').slice(0,2).join(' '); roles[role] = (roles[role]||0)+1; }
+      recentAlumni.push(a);
+    });
+
+    // Sort recent by registration date
+    recentAlumni.sort((a,b) => (b.registeredAt||'').localeCompare(a.registeredAt||''));
+
+    // Top country
+    const topCountry = Object.entries(countryCount).sort((a,b)=>b[1]-a[1])[0];
+    const topRole = Object.entries(roles).sort((a,b)=>b[1]-a[1])[0];
+    const regRate = total > 0 ? Math.round((total/245)*100) : 0;
+    const morningPct = total > 0 ? Math.round((morning/total)*100) : 50;
+
+    // Update hero strip
+    const elTotal = document.getElementById('stat-total');
+    const elCountries = document.getElementById('stat-countries');
+    if (elTotal) elTotal.textContent = total;
+    if (elCountries) elCountries.textContent = countries.size;
+
+    // Update active session card
+    snap.forEach(d => {
+      const a = d.data();
+      if (a.session?.includes('2006')) {
+        const el = document.getElementById('sess-2006-card');
+        if (el) el.textContent = snap.size;
+      }
+    });
+    const s6count = [...snap.docs].filter(d => d.data().session?.includes('2006')).length;
+    const el6 = document.getElementById('sess-2006-card');
+    if (el6) el6.textContent = s6count;
+
+    // Update sidebar stats
+    const set = (id, val) => { const el = document.getElementById(id); if(el) el.textContent = val; };
+    set('sb-total', total);
+    set('sb-countries', countries.size);
+    set('sb-morning', morning);
+    set('sb-evening', evening);
+    set('sb-germany', germanyCount || '–');
+    set('sb-gulf', gulfCount || '–');
+    set('sb-pakistan', pakistanCount || '–');
+    set('sb-top-country', topCountry ? topCountry[0] : '–');
+    set('sb-top-role', topRole ? topRole[0] : '–');
+    set('sb-linkedin', withLinkedin > 0 ? withLinkedin + ' (' + Math.round((withLinkedin/total)*100) + '%)' : '–');
+    set('sb-reg-rate', total > 0 ? regRate + '% of 2006' : '–');
+
+    // Morning/Evening bar
+    const bar = document.getElementById('sb-morning-bar');
+    if (bar) bar.style.width = morningPct + '%';
+
+    // Recently joined — show last 3
+    const recentEl = document.getElementById('sb-recent');
+    if (recentEl && recentAlumni.length > 0) {
+      recentEl.innerHTML = '';
+      recentAlumni.slice(0, 3).forEach(a => {
+        const div = document.createElement('div');
+        div.style.cssText = 'display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid #f3f4f6;';
+        const av = document.createElement('div');
+        av.style.cssText = 'width:28px;height:28px;border-radius:50%;background:var(--navy);border:1.5px solid var(--gold);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:var(--gold);overflow:hidden;flex-shrink:0;';
+        if (a.photoBase64) { const img = document.createElement('img'); img.src = a.photoBase64; img.style.cssText='width:100%;height:100%;object-fit:cover;border-radius:50%;'; av.appendChild(img); }
+        else { av.textContent = a.name.split(' ').map(w=>w[0]).slice(0,2).join(''); }
+        const info = document.createElement('div');
+        info.innerHTML = '<div style="font-size:11px;font-weight:600;color:var(--navy);">'+a.name.split(' ')[0]+' '+( a.name.split(' ')[1]||'')+'</div><div style="font-size:10px;color:var(--muted);">'+a.session+'</div>';
+        div.appendChild(av); div.appendChild(info);
+        recentEl.appendChild(div);
+      });
+    }
+
+  } catch(e) { console.error('loadGlobalStats:', e); }
 }
+
+// ── Session search filter ──
+document.getElementById('session-search').addEventListener('input', function() {
+  const q = this.value.trim().toLowerCase();
+  const cards = document.querySelectorAll('#sessions-grid .session-card');
+  let visible = 0;
+  cards.forEach(card => {
+    const year = card.dataset.year || '';
+    const yearEnd = String(parseInt(year) + 4);
+    const matches = !q || year.includes(q) || yearEnd.includes(q);
+    card.classList.toggle('hidden', !matches);
+    if (matches) visible++;
+  });
+  document.getElementById('batch-count-visible').textContent = visible;
+  document.getElementById('no-batch-found').style.display = visible === 0 ? 'block' : 'none';
+});
 
 document.getElementById('setup-session').addEventListener('change',function(){
   const session=this.value; const rs=document.getElementById('setup-roll');
@@ -543,7 +889,7 @@ async function submitProfile(){
   err.style.display='none'; suc.style.display='none';
   if(!session||!roll||!city||!country||!job||!company||!email){err.textContent='Please fill all required fields including city.';err.style.display='block';return;}
   if(!selectedPhotoBase64){err.textContent='Please upload a profile photo.';err.style.display='block';return;}
-  if(!linkedin){err.textContent='Please provide your LinkedIn URL.';err.style.display='block';return;}
+  // LinkedIn is optional — no validation needed
   const db2=session.includes('Morning')?morningStudents:eveningStudents, name=db2[roll];
   if(!name){err.textContent='Invalid roll number.';err.style.display='block';return;}
   const btn=document.getElementById('setup-submit-btn'); btn.disabled=true; btn.textContent='Saving...';
@@ -563,10 +909,20 @@ document.getElementById('setup-city-input').addEventListener('input',function(){
   if(input.length<3){el.style.display='none';return;}
   cityTimer=setTimeout(async()=>{
     try{
-      const res=await fetch('https://photon.komoot.io/api/?q='+encodeURIComponent(input)+'&limit=8&lang=en',{signal:AbortSignal.timeout(8000)});
+      // Open-Meteo geocoding — completely free, no key, full CORS support
+      const res=await fetch('https://geocoding-api.open-meteo.com/v1/search?name='+encodeURIComponent(input)+'&count=10&language=en&format=json',{signal:AbortSignal.timeout(8000)});
       if(!res.ok)throw new Error('fail');
-      const data=await res.json(); const features=data.features||[]; const seen=new Set(); const cities=[];
-      for(const r of features){const p=r.properties||{}; if(!['city','town','village','municipality'].includes(p.type)&&p.osm_value!=='city')continue; const city=(p.city||p.name||'').trim(),country=(p.country||'').trim(),state=(p.state||p.county||'').trim(); if(!city||!country)continue; const key=city+'|'+country; if(seen.has(key))continue; seen.add(key);cities.push({city,country,state});if(cities.length>=7)break;}
+      const data=await res.json(); const results=data.results||[]; const seen=new Set(); const cities=[];
+      for(const r of results){
+        const city=(r.name||'').trim();
+        const country=(r.country||'').trim();
+        const state=(r.admin1||r.admin2||'').trim();
+        if(!city||!country)continue;
+        const key=city+'|'+country;
+        if(seen.has(key))continue;
+        seen.add(key); cities.push({city,country,state});
+        if(cities.length>=7)break;
+      }
       el.innerHTML='';
       if(!cities.length){const d=document.createElement('div');d.className='city-suggestion-item';d.style.color='var(--muted)';d.textContent='No cities found. ';const s=document.createElement('span');s.style.cssText='color:var(--gold);cursor:pointer;font-weight:600;';s.textContent='Enter manually';s.addEventListener('click',useManualCity);d.appendChild(s);el.appendChild(d);}
       else{cities.forEach(c=>{const display=c.state?c.city+', '+c.state+', '+c.country:c.city+', '+c.country;const d=document.createElement('div');d.className='city-suggestion-item';d.textContent='📍 '+display;d.addEventListener('click',()=>selectCity(c.city,c.country,display));el.appendChild(d);});}
