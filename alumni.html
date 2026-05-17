@@ -9,62 +9,50 @@
 <style>
 :root{--navy:#1a3a8a;--gold:#c9a84c;--gold-light:#e8d5a3;--cream:#faf8f4;--white:#fff;--text:#1a1a2e;--muted:#6b7280;--border:#e5e7eb;--green:#059669;--red:#dc2626;}
 *{box-sizing:border-box;margin:0;padding:0;}
-html,body{width:100%;min-height:100vh;}
 body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);}
-/* NAV */
 nav{background:var(--navy);border-bottom:2px solid var(--gold);position:sticky;top:0;z-index:1000;box-shadow:0 2px 20px rgba(0,0,0,0.3);}
 .nav-inner{max-width:1100px;margin:0 auto;padding:0 1.5rem;height:64px;display:flex;align-items:center;justify-content:space-between;}
 .nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
 .nav-logo-agr{font-family:Georgia,serif;font-size:22px;font-weight:700;color:var(--gold);letter-spacing:2px;border:2px solid var(--gold);padding:2px 8px;border-radius:4px;}
 .nav-logo-name{font-size:13px;color:rgba(255,255,255,0.75);}
-.nav-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.nav-right{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
 .nav-btn{font-size:13px;font-weight:500;padding:7px 14px;border-radius:6px;cursor:pointer;border:none;transition:all 0.2s;font-family:inherit;}
-.btn-gold{background:var(--gold);color:var(--navy);}
-.btn-gold:hover{background:var(--gold-light);}
-.btn-outline{background:transparent;color:rgba(255,255,255,0.75);border:1px solid rgba(255,255,255,0.3);}
-.btn-outline:hover{border-color:var(--gold);color:var(--gold);}
-/* PAGES */
-.page{display:none;}
-.page.active{display:block;}
-/* LANDING */
-.landing-hero{background:linear-gradient(135deg,var(--navy) 0%,#2048a8 60%,#163366 100%);padding:2.5rem 2rem;text-align:center;position:relative;overflow:hidden;min-height:220px;display:flex;align-items:flex-end;}
-.hero-tag{font-size:11px;font-weight:500;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);border:1px solid rgba(201,168,76,0.4);padding:5px 14px;border-radius:20px;display:inline-block;margin-bottom:1.5rem;}
-.landing-hero h1{font-family:"Playfair Display",serif;font-size:clamp(2rem,5vw,3.5rem);color:white;margin-bottom:1rem;line-height:1.2;}
+.btn-gold{background:var(--gold);color:var(--navy);}.btn-gold:hover{background:var(--gold-light);}
+.btn-outline{background:transparent;color:rgba(255,255,255,0.75);border:1px solid rgba(255,255,255,0.3);}.btn-outline:hover{border-color:var(--gold);color:var(--gold);}
+.page{display:none;}.page.active{display:block;}
+.landing-hero{padding:2.5rem 2rem;text-align:center;position:relative;overflow:hidden;min-height:220px;display:flex;align-items:flex-end;background-size:cover;background-position:center 40%;background-color:var(--navy);}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(10,20,60,0.85) 0%,rgba(10,20,60,0.5) 50%,rgba(10,20,60,0.3) 100%);pointer-events:none;}
+.hero-content{position:relative;z-index:1;width:100%;max-width:960px;margin:0 auto;padding:2rem 0 2.5rem;}
+.hero-tag{font-size:10px;font-weight:500;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);border:1px solid rgba(201,168,76,0.4);padding:3px 11px;border-radius:20px;display:inline-block;margin-bottom:0.75rem;}
+.landing-hero h1{font-family:"Playfair Display",serif;font-size:clamp(1.8rem,4vw,2.8rem);color:white;margin-bottom:0.5rem;line-height:1.2;}
 .landing-hero h1 span{color:var(--gold);}
-.landing-hero p{font-size:16px;color:rgba(255,255,255,0.65);max-width:560px;margin:0 auto 2.5rem;line-height:1.75;font-weight:300;}
+.landing-hero p{font-size:14px;color:rgba(255,255,255,0.75);max-width:480px;margin:0 auto 1.5rem;line-height:1.65;font-weight:300;}
 .hero-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
-.hero-btn-primary{background:var(--gold);color:var(--navy);padding:13px 32px;border-radius:8px;font-size:15px;font-weight:600;border:none;cursor:pointer;font-family:inherit;transition:all 0.2s;}
-.hero-btn-primary:hover{background:var(--gold-light);transform:translateY(-1px);}
-.hero-btn-secondary{background:transparent;color:white;padding:13px 32px;border-radius:8px;font-size:15px;border:1px solid rgba(255,255,255,0.3);cursor:pointer;font-family:inherit;transition:all 0.2s;}
-.hero-btn-secondary:hover{border-color:var(--gold);color:var(--gold);}
-/* STATS STRIP */
-.stats-strip{background:white;border-bottom:1px solid var(--border);padding:1.5rem 2rem;}
+.hero-btn-primary{background:var(--gold);color:var(--navy);padding:11px 28px;border-radius:8px;font-size:14px;font-weight:600;border:none;cursor:pointer;font-family:inherit;}
+.hero-btn-secondary{background:transparent;color:white;padding:11px 28px;border-radius:8px;font-size:14px;border:1px solid rgba(255,255,255,0.35);cursor:pointer;font-family:inherit;}
+.stats-strip{background:white;border-bottom:1px solid var(--border);padding:1.25rem 2rem;}
 .stats-inner{max-width:1100px;margin:0 auto;display:flex;justify-content:center;gap:4rem;flex-wrap:wrap;}
 .stat-item{text-align:center;}
 .stat-num{font-family:"Playfair Display",serif;font-size:28px;font-weight:700;color:var(--navy);display:block;}
 .stat-lbl{font-size:12px;color:var(--muted);margin-top:2px;}
-/* SESSION CARDS */
 .sessions-section{max-width:1100px;margin:3rem auto;padding:0 2rem;}
 .section-tag{font-size:11px;font-weight:500;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:4px;}
 .section-title{font-family:"Playfair Display",serif;font-size:2rem;color:var(--navy);margin-bottom:1.5rem;}
 .sessions-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.25rem;}
 .session-card{background:white;border:1px solid var(--border);border-radius:12px;padding:1.75rem;cursor:pointer;transition:all 0.25s;border-top:4px solid var(--gold);}
 .session-card:hover{box-shadow:0 8px 30px rgba(0,0,0,0.1);transform:translateY(-2px);}
-.session-card.coming-soon{opacity:0.55;cursor:default;}
-.session-card.coming-soon:hover{transform:none;box-shadow:none;}
+.session-card.coming-soon{opacity:0.55;cursor:default;}.session-card.coming-soon:hover{transform:none;box-shadow:none;}
 .session-year{font-family:"Playfair Display",serif;font-size:1.5rem;color:var(--navy);margin-bottom:4px;}
 .session-dept{font-size:13px;color:var(--muted);margin-bottom:1rem;}
 .sess-stat-num{font-family:"Playfair Display",serif;font-size:20px;color:var(--gold);font-weight:700;display:block;}
 .sess-stat-lbl{font-size:11px;color:var(--muted);}
 .cs-badge{font-size:10px;background:#f3f4f6;color:var(--muted);padding:2px 8px;border-radius:10px;font-weight:500;float:right;}
-/* LOGIN */
 .login-wrap{max-width:440px;margin:4rem auto;padding:0 2rem;}
 .login-card{background:white;border:1px solid var(--border);border-radius:14px;padding:2.5rem;text-align:center;}
 .login-card h2{font-family:"Playfair Display",serif;font-size:1.6rem;color:var(--navy);margin-bottom:0.5rem;}
 .login-card p{font-size:14px;color:var(--muted);margin-bottom:1.5rem;line-height:1.6;}
-.google-btn{display:flex;align-items:center;justify-content:center;gap:12px;width:100%;padding:13px;background:white;border:1.5px solid var(--border);border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;font-family:inherit;transition:all 0.2s;color:var(--text);}
-.google-btn:hover{border-color:var(--gold);box-shadow:0 2px 12px rgba(0,0,0,0.08);}
-/* SETUP */
+.google-btn{display:flex;align-items:center;justify-content:center;gap:12px;width:100%;padding:13px;background:white;border:1.5px solid var(--border);border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;font-family:inherit;color:var(--text);}
+.google-btn:hover{border-color:var(--gold);}
 .setup-wrap{max-width:680px;margin:0 auto;padding:2rem;}
 .setup-card{background:white;border:1px solid var(--border);border-radius:14px;overflow:hidden;}
 .setup-header{background:linear-gradient(135deg,var(--navy),#2048a8);padding:2rem;}
@@ -81,16 +69,19 @@ nav{background:var(--navy);border-bottom:2px solid var(--gold);position:sticky;t
 .name-display{background:#f8f7f4;border:1px solid var(--border);border-radius:6px;padding:9px 12px;font-size:14px;color:var(--navy);font-weight:500;min-height:39px;}
 .name-placeholder{color:var(--muted);font-style:italic;font-weight:400;}
 .photo-upload-area{text-align:center;margin-bottom:1.5rem;}
-.photo-upload-circle{width:90px;height:90px;border-radius:50%;border:2px dashed var(--gold);display:flex;align-items:center;justify-content:center;font-size:28px;cursor:pointer;margin:0 auto 0.5rem;overflow:hidden;background:rgba(201,168,76,0.05);transition:all 0.2s;}
-.photo-upload-circle:hover{background:rgba(201,168,76,0.12);}
-.photo-upload-circle img{width:100%;height:100%;object-fit:cover;}
+.photo-upload-circle{width:90px;height:90px;border-radius:50%;border:2px dashed var(--gold);display:flex;align-items:center;justify-content:center;font-size:28px;cursor:pointer;margin:0 auto 0.5rem;overflow:hidden;background:rgba(201,168,76,0.05);}
 .photo-upload-hint{font-size:12px;color:var(--muted);}
 .error-box{background:#fef2f2;border:1px solid #fee2e2;color:var(--red);padding:10px 14px;border-radius:6px;font-size:13px;margin-bottom:1rem;display:none;}
 .success-box{background:#f0fdf4;border:1px solid #bbf7d0;color:var(--green);padding:10px 14px;border-radius:6px;font-size:13px;margin-bottom:1rem;display:none;}
-.submit-btn{width:100%;padding:13px;background:var(--gold);color:var(--navy);border:none;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit;transition:all 0.2s;margin-top:0.5rem;}
-.submit-btn:hover{background:var(--gold-light);}
-.submit-btn:disabled{opacity:0.6;cursor:not-allowed;}
-/* DIRECTORY */
+.submit-btn{width:100%;padding:13px;background:var(--gold);color:var(--navy);border:none;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit;margin-top:0.5rem;}
+.visibility-toggle{background:#f8f7f4;border:1px solid var(--border);border-radius:8px;padding:0.85rem 1rem;margin-bottom:0.5rem;}
+.visibility-toggle-title{font-size:12px;font-weight:600;color:var(--navy);margin-bottom:8px;}
+.radio-group{display:flex;gap:1.5rem;}
+.radio-label{display:flex;align-items:center;gap:7px;cursor:pointer;font-size:13px;color:var(--text);}
+.city-suggestions{position:absolute;top:100%;left:0;right:0;background:white;border:1px solid var(--border);border-radius:0 0 8px 8px;box-shadow:0 4px 16px rgba(0,0,0,0.1);z-index:500;max-height:220px;overflow-y:auto;display:none;}
+.city-suggestion-item{padding:10px 14px;font-size:13px;cursor:pointer;border-bottom:1px solid #f3f4f6;}
+.city-suggestion-item:hover{background:#f8f7f4;}
+.city-selected{margin-top:6px;font-size:12px;color:var(--green);font-weight:500;display:none;}
 .dir-wrap{max-width:1100px;margin:0 auto;padding:2rem;}
 .alumni-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:1rem;}
 .alumni-card{background:white;border:1px solid var(--border);border-radius:10px;padding:1.25rem;text-align:center;cursor:pointer;transition:all 0.2s;position:relative;}
@@ -106,10 +97,9 @@ nav{background:var(--navy);border-bottom:2px solid var(--gold);position:sticky;t
 .deceased-badge{position:absolute;top:8px;left:8px;font-size:9px;background:#f3f4f6;color:var(--muted);padding:2px 6px;border-radius:4px;}
 .search-box{width:100%;max-width:400px;padding:9px 14px;border:1px solid var(--border);border-radius:8px;font-size:14px;font-family:inherit;outline:none;}
 .search-box:focus{border-color:var(--gold);}
-.filter-btn{padding:6px 14px;border-radius:20px;font-size:12px;border:1px solid var(--border);background:white;color:var(--muted);cursor:pointer;font-family:inherit;transition:all 0.2s;}
+.filter-btn{padding:6px 14px;border-radius:20px;font-size:12px;border:1px solid var(--border);background:white;color:var(--muted);cursor:pointer;font-family:inherit;}
 .filter-btn.active,.filter-btn:hover{background:var(--navy);color:white;border-color:var(--navy);}
 .loading-spinner{text-align:center;padding:3rem;color:var(--muted);font-size:14px;grid-column:1/-1;}
-/* PROFILE VIEW */
 .profile-wrap{max-width:700px;margin:2rem auto;padding:0 2rem 2rem;}
 .profile-card{background:white;border:1px solid var(--border);border-radius:14px;overflow:hidden;}
 .profile-header{background:linear-gradient(135deg,var(--navy),#2048a8);padding:2rem;text-align:center;}
@@ -125,9 +115,6 @@ nav{background:var(--navy);border-bottom:2px solid var(--gold);position:sticky;t
 .field-value{font-size:14px;color:var(--text);}
 .field-value a{color:var(--navy);text-decoration:none;}
 .field-value a:hover{color:var(--gold);}
-.phone-locked{font-size:12px;color:var(--muted);font-style:italic;}
-/* NOTICE BOARD & ANNOUNCEMENTS */
-.noticeboard-wrap{max-width:1100px;margin:0 auto;padding:0 2rem 2rem;}
 .two-col{display:grid;grid-template-columns:1fr 300px;gap:1.5rem;align-items:start;}
 .feed-section-label{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:1rem;}
 .notice-card{background:white;border:1px solid var(--border);border-radius:10px;padding:1.1rem;margin-bottom:0.75rem;}
@@ -138,12 +125,8 @@ nav{background:var(--navy);border-bottom:2px solid var(--gold);position:sticky;t
 .notice-date{font-size:11px;color:#9ca3af;}
 .notice-text{font-size:14px;color:var(--text);line-height:1.65;}
 .ann-card{background:white;border:1px solid var(--border);border-radius:10px;padding:1.1rem;margin-bottom:0.75rem;}
-.ann-type-job{background:#eff6ff;color:#1d4ed8;font-size:11px;font-weight:600;padding:3px 10px;border-radius:12px;display:inline-block;margin-bottom:6px;}
-.ann-type-achievement{background:#f0fdf4;color:#166534;font-size:11px;font-weight:600;padding:3px 10px;border-radius:12px;display:inline-block;margin-bottom:6px;}
-.ann-type-news{background:#fff7ed;color:#9a3412;font-size:11px;font-weight:600;padding:3px 10px;border-radius:12px;display:inline-block;margin-bottom:6px;}
-.ann-type-other{background:#f3f4f6;color:#6b7280;font-size:11px;font-weight:600;padding:3px 10px;border-radius:12px;display:inline-block;margin-bottom:6px;}
-.ann-title{font-size:14px;font-weight:600;color:var(--navy);margin-bottom:4px;}
-.ann-body{font-size:13px;color:#6b7280;line-height:1.6;}
+.ann-title-text{font-size:14px;font-weight:600;color:var(--navy);margin-bottom:4px;}
+.ann-body-text{font-size:13px;color:#6b7280;line-height:1.6;}
 .ann-footer{font-size:11px;color:#9ca3af;margin-top:6px;}
 .form-card{background:white;border:1px solid var(--border);border-radius:12px;padding:1.25rem;position:sticky;top:80px;}
 .form-card-title{font-size:14px;font-weight:600;color:var(--navy);margin-bottom:4px;}
@@ -151,331 +134,228 @@ nav{background:var(--navy);border-bottom:2px solid var(--gold);position:sticky;t
 .form-card textarea,.form-card input,.form-card select{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:inherit;outline:none;color:var(--text);margin-bottom:6px;}
 .form-card textarea{resize:vertical;min-height:90px;}
 .empty-state{text-align:center;padding:3rem 1rem;color:var(--muted);font-size:14px;background:white;border:1px solid var(--border);border-radius:10px;}
-/* TOAST */
+.cross-notice{background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:0.75rem 1rem;margin-bottom:1rem;font-size:13px;color:#1e40af;display:none;}
 .toast{position:fixed;bottom:1.5rem;right:1.5rem;background:var(--navy);color:white;padding:12px 20px;border-radius:8px;font-size:13px;z-index:9999;opacity:0;transform:translateY(10px);transition:all 0.3s;pointer-events:none;border-left:3px solid var(--gold);}
 .toast.show{opacity:1;transform:translateY(0);}
-/* CITY AUTOCOMPLETE */
-.city-suggestions{position:absolute;top:100%;left:0;right:0;background:white;border:1px solid var(--border);border-radius:0 0 8px 8px;box-shadow:0 4px 16px rgba(0,0,0,0.1);z-index:500;max-height:220px;overflow-y:auto;display:none;}
-.city-suggestion-item{padding:10px 14px;font-size:13px;cursor:pointer;border-bottom:1px solid #f3f4f6;}
-.city-suggestion-item:hover{background:#f8f7f4;}
-.city-suggestion-item:last-child{border-bottom:none;}
-.city-selected{margin-top:6px;font-size:12px;color:var(--green);font-weight:500;display:none;}
-/* JOB VISIBILITY */
-.visibility-toggle{background:#f8f7f4;border:1px solid var(--border);border-radius:8px;padding:0.85rem 1rem;margin-bottom:0.5rem;}
-.visibility-toggle-title{font-size:12px;font-weight:600;color:var(--navy);margin-bottom:8px;}
-.radio-group{display:flex;gap:1.5rem;}
-.radio-label{display:flex;align-items:center;gap:7px;cursor:pointer;font-size:13px;color:var(--text);}
-.radio-label input{accent-color:var(--gold);width:15px;height:15px;}
-@media(max-width:768px){
-  .form-row{grid-template-columns:1fr;}
-  .alumni-grid{grid-template-columns:repeat(2,1fr);}
-  .two-col{grid-template-columns:1fr;}
-  .form-card{position:static;}
-  .nav-logo-name{display:none;}
-}
+@media(max-width:768px){.form-row{grid-template-columns:1fr;}.alumni-grid{grid-template-columns:repeat(2,1fr);}.two-col{grid-template-columns:1fr;}.form-card{position:static;}.nav-logo-name{display:none;}}
 </style>
 </head>
 <body>
-
-<!-- NAV -->
 <nav>
   <div class="nav-inner">
-    <a href="/" class="nav-logo">
-      <span class="nav-logo-agr">AGR</span>
-      <span class="nav-logo-name">Dr. Adeem Ghaffar Rana</span>
-    </a>
-    <div class="nav-right" id="nav-user-area">
-      <button class="nav-btn btn-gold" onclick="showPage('login')">Sign In</button>
+    <a href="/" class="nav-logo"><span class="nav-logo-agr">AGR</span><span class="nav-logo-name">Dr. Adeem Ghaffar Rana</span></a>
+    <div style="display:flex;align-items:center;gap:0.25rem;">
+      <a href="/" style="color:rgba(255,255,255,0.75);text-decoration:none;font-size:13px;padding:8px 12px;border-radius:6px;transition:all 0.2s;" onmouseover="this.style.color='#c9a84c'" onmouseout="this.style.color='rgba(255,255,255,0.75)'">Home</a>
+      <a href="/about.html" style="color:rgba(255,255,255,0.75);text-decoration:none;font-size:13px;padding:8px 12px;border-radius:6px;transition:all 0.2s;" onmouseover="this.style.color='#c9a84c'" onmouseout="this.style.color='rgba(255,255,255,0.75)'">About</a>
+      <a href="/research.html" style="color:rgba(255,255,255,0.75);text-decoration:none;font-size:13px;padding:8px 12px;border-radius:6px;transition:all 0.2s;" onmouseover="this.style.color='#c9a84c'" onmouseout="this.style.color='rgba(255,255,255,0.75)'">Research</a>
+      <a href="/blog.html" style="color:rgba(255,255,255,0.75);text-decoration:none;font-size:13px;padding:8px 12px;border-radius:6px;transition:all 0.2s;" onmouseover="this.style.color='#c9a84c'" onmouseout="this.style.color='rgba(255,255,255,0.75)'">Blog</a>
+      <a href="/session2006.html" style="color:rgba(255,255,255,0.75);text-decoration:none;font-size:13px;padding:8px 12px;border-radius:6px;transition:all 0.2s;" onmouseover="this.style.color='#c9a84c'" onmouseout="this.style.color='rgba(255,255,255,0.75)'">Session 2006</a>
+      <span style="color:var(--gold);font-size:13px;padding:8px 12px;font-weight:600;">Alumni Portal</span>
+      <div id="nav-user-area" style="display:flex;align-items:center;gap:8px;margin-left:8px;"></div>
     </div>
   </div>
 </nav>
 <div class="toast" id="toast"></div>
 
-<!-- ══ LANDING ══ -->
+<!-- LANDING -->
 <div class="page active" id="page-landing">
-  <div class="landing-hero" style="background-image:url('/icet-header.jpg');background-size:cover;background-position:center 40%;">
-  <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(10,20,60,0.85) 0%,rgba(10,20,60,0.5) 50%,rgba(10,20,60,0.3) 100%);pointer-events:none;"></div>
-  <div style="position:relative;z-index:1;width:100%;max-width:960px;margin:0 auto;padding:2rem 2rem 2.5rem;">
-    <span style="font-size:10px;font-weight:500;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);border:1px solid rgba(201,168,76,0.4);padding:3px 11px;border-radius:20px;display:inline-block;margin-bottom:0.75rem;">ICET · University of the Punjab</span>
-    <h1 style="font-family:'Playfair Display',serif;font-size:clamp(1.8rem,4vw,2.8rem);color:white;margin-bottom:0.5rem;line-height:1.2;">Chemical Engineering<br><span style="color:var(--gold);">Alumni Network</span></h1>
-    <p style="font-size:14px;color:rgba(255,255,255,0.75);max-width:480px;margin:0 auto 1.5rem;line-height:1.65;font-weight:300;">Connecting graduates across the globe. Register your profile, find your batchmates, and network across sessions.</p>
-    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
-      <button onclick="handleJoinClick()" style="background:var(--gold);color:var(--navy);padding:11px 28px;border-radius:8px;font-size:14px;font-weight:600;border:none;cursor:pointer;font-family:inherit;">Join the Network</button>
-      <button onclick="handleJoinClick()" style="background:transparent;color:white;padding:11px 28px;border-radius:8px;font-size:14px;border:1px solid rgba(255,255,255,0.35);cursor:pointer;font-family:inherit;">Browse Alumni</button>
+  <div class="landing-hero" id="landing-hero">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <span class="hero-tag">ICET &middot; University of the Punjab</span>
+      <h1>Chemical Engineering<br><span>Alumni Network</span></h1>
+      <p>Connecting graduates across the globe. Register your profile, find your batchmates, and network across sessions.</p>
+      <div class="hero-btns">
+        <button class="hero-btn-primary" id="btn-join">Join the Network</button>
+        <button class="hero-btn-secondary" id="btn-browse">Browse Alumni</button>
+      </div>
     </div>
   </div>
-</div>
   <div class="stats-strip">
     <div class="stats-inner">
-      <div class="stat-item"><span class="stat-num" id="stat-total">–</span><div class="stat-lbl">Total Registered</div></div>
-      <div class="stat-item"><span class="stat-num" id="stat-countries">–</span><div class="stat-lbl">Countries</div></div>
-      <div class="stat-item"><span class="stat-num" id="stat-sessions">2</span><div class="stat-lbl">Active Sessions</div></div>
+      <div class="stat-item"><span class="stat-num" id="stat-total">&ndash;</span><div class="stat-lbl">Total Registered</div></div>
+      <div class="stat-item"><span class="stat-num" id="stat-countries">&ndash;</span><div class="stat-lbl">Countries</div></div>
+      <div class="stat-item"><span class="stat-num">2</span><div class="stat-lbl">Active Sessions</div></div>
     </div>
   </div>
   <div class="sessions-section">
     <span class="section-tag">Choose Your Batch</span>
     <h2 class="section-title">Sessions</h2>
     <div class="sessions-grid">
-      <div class="session-card" onclick="handleSessionClick('2006')">
-        <div class="session-year">Session 2006–2010</div>
-        <div class="session-dept">Chemical Engineering · ICET · University of the Punjab</div>
+      <div class="session-card" id="card-2006">
+        <div class="session-year">Session 2006&ndash;2010</div>
+        <div class="session-dept">Chemical Engineering &middot; ICET &middot; University of the Punjab</div>
         <div style="display:flex;gap:1.25rem;margin-top:0.75rem;">
-          <div><span class="sess-stat-num" id="sess-2006-card">–</span><span class="sess-stat-lbl">Registered</span></div>
+          <div><span class="sess-stat-num" id="sess-2006-card">&ndash;</span><span class="sess-stat-lbl">Registered</span></div>
           <div><span class="sess-stat-num">245</span><span class="sess-stat-lbl">Total Batch</span></div>
         </div>
       </div>
-      <div class="session-card" onclick="handleSessionClick('2010')">
-        <div class="session-year">Session 2010–2014</div>
-        <div class="session-dept">Chemical Engineering · ICET · University of the Punjab</div>
+      <div class="session-card" id="card-2010">
+        <div class="session-year">Session 2010&ndash;2014</div>
+        <div class="session-dept">Chemical Engineering &middot; ICET &middot; University of the Punjab</div>
         <div style="display:flex;gap:1.25rem;margin-top:0.75rem;">
-          <div><span class="sess-stat-num" id="sess-2010-card">–</span><span class="sess-stat-lbl">Registered</span></div>
+          <div><span class="sess-stat-num" id="sess-2010-card">&ndash;</span><span class="sess-stat-lbl">Registered</span></div>
           <div><span class="sess-stat-num">245</span><span class="sess-stat-lbl">Total Batch</span></div>
         </div>
       </div>
       <div class="session-card coming-soon">
         <span class="cs-badge">Coming Soon</span>
-        <div class="session-year">Session 2014–2018</div>
-        <div class="session-dept">Chemical Engineering · ICET · University of the Punjab</div>
+        <div class="session-year">Session 2014&ndash;2018</div>
+        <div class="session-dept">Chemical Engineering &middot; ICET &middot; University of the Punjab</div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ══ LOGIN ══ -->
+<!-- LOGIN -->
 <div class="page" id="page-login">
   <div class="login-wrap">
     <div class="login-card">
       <h2>Welcome</h2>
       <p>Sign in with your Google account to access the ICET Chemical Engineering Alumni Network.</p>
-      <button class="google-btn" onclick="signInWithGoogle()">
+      <button class="google-btn" id="btn-google-signin">
         <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
         Continue with Google
       </button>
-      <p style="font-size:12px;color:var(--muted);margin-top:1.5rem;">Only ICET Chemical Engineering alumni may register. Your roll number will be verified against the batch list.</p>
-      <p style="text-align:center;margin-top:1rem;"><a href="#" onclick="showPage('landing')" style="font-size:13px;color:var(--muted);text-decoration:none;">← Back</a></p>
+      <p style="font-size:12px;color:var(--muted);margin-top:1.5rem;">Only ICET Chemical Engineering alumni may register.</p>
+      <p style="text-align:center;margin-top:1rem;"><a href="#" id="btn-back-login" style="font-size:13px;color:var(--muted);text-decoration:none;">&larr; Back</a></p>
     </div>
   </div>
 </div>
 
-<!-- ══ SETUP ══ -->
+<!-- SETUP -->
 <div class="page" id="page-setup">
   <div class="setup-wrap">
     <div class="setup-card">
-      <div class="setup-header">
-        <h2 id="setup-title">Complete Your Profile</h2>
-        <p id="setup-subtitle">Tell your batchmates where life has taken you since ICET.</p>
-      </div>
+      <div class="setup-header"><h2 id="setup-title">Complete Your Profile</h2><p id="setup-subtitle">Tell your batchmates where life has taken you since ICET.</p></div>
       <div class="setup-body">
         <div class="error-box" id="setup-error"></div>
         <div class="success-box" id="setup-success"></div>
-        <!-- PHOTO -->
         <div class="photo-upload-area">
-          <div class="photo-upload-circle" id="photo-upload-circle" onclick="document.getElementById('photo-file').click()">📷</div>
-          <input type="file" id="photo-file" accept="image/*" style="display:none" onchange="handlePhotoSelect(event)">
-          <div class="photo-upload-hint">Profile photo <span class="req">*</span> — click to upload (max 3MB)</div>
+          <div class="photo-upload-circle" id="photo-upload-circle">&#128247;</div>
+          <input type="file" id="photo-file" accept="image/*" style="display:none">
+          <div class="photo-upload-hint">Profile photo <span class="req">*</span> &mdash; click to upload (max 3MB)</div>
         </div>
-        <!-- IDENTITY -->
         <div class="section-divider">Identity</div>
         <div class="form-row">
-          <div class="form-group">
-            <label>Session <span class="req">*</span></label>
-            <select id="setup-session" onchange="onSetupSessionChange()">
+          <div class="form-group"><label>Session <span class="req">*</span></label>
+            <select id="setup-session">
               <option value="">Select your session</option>
-              <option value="2006-Morning">2006–2010 · Morning</option>
-              <option value="2006-Evening">2006–2010 · Evening</option>
-              <option value="2010-Morning">2010–2014 · Morning</option>
-              <option value="2010-Evening">2010–2014 · Evening</option>
+              <option value="2006-Morning">2006&ndash;2010 &middot; Morning</option>
+              <option value="2006-Evening">2006&ndash;2010 &middot; Evening</option>
+              <option value="2010-Morning">2010&ndash;2014 &middot; Morning</option>
+              <option value="2010-Evening">2010&ndash;2014 &middot; Evening</option>
             </select>
           </div>
-          <div class="form-group">
-            <label>Roll Number <span class="req">*</span></label>
-            <select id="setup-roll" onchange="onSetupRollChange()" disabled>
-              <option value="">Select session first</option>
-            </select>
-          </div>
+          <div class="form-group"><label>Roll Number <span class="req">*</span></label><select id="setup-roll" disabled><option value="">Select session first</option></select></div>
         </div>
-        <div class="form-group">
-          <label>Full Name</label>
-          <div class="name-display" id="setup-name-display"><span class="name-placeholder">Auto-filled from roll number</span></div>
-        </div>
-        <!-- LOCATION -->
+        <div class="form-group"><label>Full Name</label><div class="name-display" id="setup-name-display"><span class="name-placeholder">Auto-filled from roll number</span></div></div>
         <div class="section-divider">Location</div>
         <div class="form-group">
           <label>City of Residence <span class="req">*</span></label>
           <div style="position:relative;">
-            <input type="text" id="setup-city-input" autocomplete="off"
-              placeholder="Start typing your city — e.g. Freiberg, Lahore, Dubai..."
-              oninput="onCityInput()" onblur="setTimeout(hideCitySuggestions,200)"
-              style="width:100%;">
+            <input type="text" id="setup-city-input" autocomplete="off" placeholder="Start typing your city...">
             <div class="city-suggestions" id="city-suggestions"></div>
           </div>
           <input type="hidden" id="setup-city" value="">
           <input type="hidden" id="setup-country" value="">
           <div class="city-selected" id="city-selected-display"></div>
-          <div style="font-size:11px;color:var(--muted);margin-top:4px;">Type at least 3 characters. Select from the dropdown to confirm.</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:4px;">Type at least 3 characters. Select from the list.</div>
         </div>
-        <!-- CURRENT STATUS -->
         <div class="section-divider">Current Status</div>
         <div class="form-row">
-          <div class="form-group">
-            <label>Job Title <span class="req">*</span></label>
-            <input type="text" id="setup-job" placeholder="e.g. Senior Process Engineer">
-          </div>
-          <div class="form-group">
-            <label>Company / Organisation <span class="req">*</span></label>
-            <input type="text" id="setup-company" placeholder="e.g. Shell Pakistan">
-          </div>
+          <div class="form-group"><label>Job Title <span class="req">*</span></label><input type="text" id="setup-job" placeholder="e.g. Senior Process Engineer"></div>
+          <div class="form-group"><label>Company <span class="req">*</span></label><input type="text" id="setup-company" placeholder="e.g. Shell Pakistan"></div>
         </div>
         <div class="visibility-toggle">
-          <div class="visibility-toggle-title">🔒 Job &amp; Company Visibility</div>
+          <div class="visibility-toggle-title">&#128274; Job &amp; Company Visibility</div>
           <div class="radio-group">
-            <label class="radio-label">
-              <input type="radio" name="job-visibility" value="session" checked>
-              My session only <span style="font-size:11px;color:var(--muted);">(recommended)</span>
-            </label>
-            <label class="radio-label">
-              <input type="radio" name="job-visibility" value="public">
-              All sessions <span style="font-size:11px;color:var(--muted);">(public)</span>
-            </label>
+            <label class="radio-label"><input type="radio" name="job-visibility" value="session" checked> My session only <span style="font-size:11px;color:var(--muted);">(recommended)</span></label>
+            <label class="radio-label"><input type="radio" name="job-visibility" value="public"> All sessions</label>
           </div>
         </div>
-        <!-- CONTACT -->
         <div class="section-divider">Contact Details</div>
         <div class="form-row">
-          <div class="form-group">
-            <label>Email Address <span class="req">*</span></label>
-            <input type="email" id="setup-email" placeholder="you@example.com">
-          </div>
-          <div class="form-group">
-            <label>Phone <span style="font-size:11px;color:var(--muted);font-weight:400;">(session only)</span></label>
-            <input type="tel" id="setup-phone" placeholder="+92 300 0000000">
-          </div>
+          <div class="form-group"><label>Email <span class="req">*</span></label><input type="email" id="setup-email" placeholder="you@example.com"></div>
+          <div class="form-group"><label>Phone <span style="font-size:11px;color:var(--muted);font-weight:400;">(session only)</span></label><input type="tel" id="setup-phone" placeholder="+92 300 0000000"></div>
         </div>
-        <div class="form-group">
-          <label>LinkedIn Profile URL <span class="req">*</span></label>
-          <input type="url" id="setup-linkedin" placeholder="https://linkedin.com/in/yourname">
-        </div>
-        <div class="form-group">
-          <label>About / Bio <span style="font-size:11px;color:var(--muted);font-weight:400;">(optional)</span></label>
-          <textarea id="setup-bio" rows="3" placeholder="A brief note about yourself, your career, or memories from ICET..."></textarea>
-        </div>
-        <button class="submit-btn" id="setup-submit-btn" onclick="submitProfile()">Save Profile &amp; Join Network</button>
-        <p style="text-align:center;margin-top:0.75rem;"><a href="#" onclick="showPage('directory')" style="font-size:13px;color:var(--muted);text-decoration:none;">Cancel</a></p>
+        <div class="form-group"><label>LinkedIn URL <span class="req">*</span></label><input type="url" id="setup-linkedin" placeholder="https://linkedin.com/in/yourname"></div>
+        <div class="form-group"><label>Bio <span style="font-size:11px;color:var(--muted);font-weight:400;">(optional)</span></label><textarea id="setup-bio" rows="3" placeholder="A brief note about yourself..."></textarea></div>
+        <button class="submit-btn" id="setup-submit-btn">Save Profile &amp; Join Network</button>
+        <p style="text-align:center;margin-top:0.75rem;"><a href="#" id="btn-cancel-setup" style="font-size:13px;color:var(--muted);text-decoration:none;">Cancel</a></p>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ══ DIRECTORY ══ -->
+<!-- DIRECTORY -->
 <div class="page" id="page-directory">
   <div class="dir-wrap">
-    <!-- Stats Header -->
     <div style="background:linear-gradient(135deg,#1a3a8a 0%,#2048a8 60%,#163366 100%);border-radius:14px;padding:2rem;margin-bottom:1.5rem;display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:1.5rem;">
       <div style="flex:1;min-width:260px;">
-        <div style="font-family:'Playfair Display',serif;font-size:1.6rem;color:white;margin-bottom:4px;">Session <span id="dir-session-label">–</span></div>
-        <div style="font-size:13px;color:rgba(255,255,255,0.55);margin-bottom:1.5rem;">Chemical Engineering · ICET, University of the Punjab, Lahore</div>
+        <div style="font-family:'Playfair Display',serif;font-size:1.6rem;color:white;margin-bottom:4px;">Session <span id="dir-session-label">&ndash;</span></div>
+        <div style="font-size:13px;color:rgba(255,255,255,0.55);margin-bottom:1.5rem;">Chemical Engineering &middot; ICET, University of the Punjab, Lahore</div>
         <div style="display:flex;gap:12px;flex-wrap:wrap;">
-          <div style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);border-radius:10px;padding:12px 18px;text-align:center;min-width:80px;">
-            <span id="dir-registered" style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;color:#c9a84c;display:block;line-height:1;">–</span>
-            <span style="font-size:11px;color:rgba(255,255,255,0.5);display:block;margin-top:3px;">Registered</span>
-          </div>
-          <div style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);border-radius:10px;padding:12px 18px;text-align:center;min-width:80px;">
-            <span id="dir-total" style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;color:#c9a84c;display:block;line-height:1;">245</span>
-            <span style="font-size:11px;color:rgba(255,255,255,0.5);display:block;margin-top:3px;">Total Batch</span>
-          </div>
-          <div style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);border-radius:10px;padding:12px 18px;text-align:center;min-width:80px;">
-            <span id="dir-countries" style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;color:#c9a84c;display:block;line-height:1;">–</span>
-            <span style="font-size:11px;color:rgba(255,255,255,0.5);display:block;margin-top:3px;">Countries</span>
-          </div>
-          <div style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);border-radius:10px;padding:12px 18px;text-align:center;min-width:80px;">
-            <span id="dir-morning" style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;color:#c9a84c;display:block;line-height:1;">–</span>
-            <span style="font-size:11px;color:rgba(255,255,255,0.5);display:block;margin-top:3px;">Morning</span>
-          </div>
-          <div style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);border-radius:10px;padding:12px 18px;text-align:center;min-width:80px;">
-            <span id="dir-evening" style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;color:#c9a84c;display:block;line-height:1;">–</span>
-            <span style="font-size:11px;color:rgba(255,255,255,0.5);display:block;margin-top:3px;">Evening</span>
-          </div>
+          <div style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);border-radius:10px;padding:12px 18px;text-align:center;min-width:80px;"><span id="dir-registered" style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;color:#c9a84c;display:block;line-height:1;">&ndash;</span><span style="font-size:11px;color:rgba(255,255,255,0.5);display:block;margin-top:3px;">Registered</span></div>
+          <div style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);border-radius:10px;padding:12px 18px;text-align:center;min-width:80px;"><span style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;color:#c9a84c;display:block;line-height:1;">245</span><span style="font-size:11px;color:rgba(255,255,255,0.5);display:block;margin-top:3px;">Total Batch</span></div>
+          <div style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);border-radius:10px;padding:12px 18px;text-align:center;min-width:80px;"><span id="dir-countries" style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;color:#c9a84c;display:block;line-height:1;">&ndash;</span><span style="font-size:11px;color:rgba(255,255,255,0.5);display:block;margin-top:3px;">Countries</span></div>
+          <div style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);border-radius:10px;padding:12px 18px;text-align:center;min-width:80px;"><span id="dir-morning" style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;color:#c9a84c;display:block;line-height:1;">&ndash;</span><span style="font-size:11px;color:rgba(255,255,255,0.5);display:block;margin-top:3px;">Morning</span></div>
+          <div style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);border-radius:10px;padding:12px 18px;text-align:center;min-width:80px;"><span id="dir-evening" style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;color:#c9a84c;display:block;line-height:1;">&ndash;</span><span style="font-size:11px;color:rgba(255,255,255,0.5);display:block;margin-top:3px;">Evening</span></div>
         </div>
       </div>
-      <div style="text-align:center;">
-        <div style="font-size:11px;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:8px;">Recently Joined</div>
-        <div id="dir-preview-avatars" style="display:flex;justify-content:center;"></div>
-      </div>
+      <div style="text-align:center;"><div style="font-size:11px;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:8px;">Recently Joined</div><div id="dir-preview-avatars" style="display:flex;justify-content:center;"></div></div>
     </div>
-
-    <!-- Cross-session notice -->
-    <div id="cross-session-notice" style="display:none;background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:0.75rem 1rem;margin-bottom:1rem;font-size:13px;color:#1e40af;">
-      👥 You're browsing another batch's directory. Notice board &amp; announcements are only visible to that batch's own members. You can view profiles and email alumni for networking.
-    </div>
-
-    <!-- Tabs -->
+    <div class="cross-notice" id="cross-session-notice">&#128101; You are browsing another batch's directory. Notice board and announcements are only visible to that batch's own members.</div>
     <div style="display:flex;gap:4px;background:white;border:1px solid var(--border);border-radius:8px;padding:4px;margin-bottom:1.5rem;width:fit-content;">
-      <button id="tab-btn-directory" onclick="switchTab('directory',this)" style="padding:8px 18px;border-radius:5px;font-size:13px;font-weight:500;cursor:pointer;border:none;background:#1a3a8a;color:white;font-family:inherit;">👥 Directory</button>
-      <button id="tab-btn-noticeboard" onclick="switchTab('noticeboard',this)" style="padding:8px 18px;border-radius:5px;font-size:13px;font-weight:500;cursor:pointer;border:none;background:transparent;color:#6b7280;font-family:inherit;">📌 Notice Board</button>
-      <button id="tab-btn-announcements" onclick="switchTab('announcements',this)" style="padding:8px 18px;border-radius:5px;font-size:13px;font-weight:500;cursor:pointer;border:none;background:transparent;color:#6b7280;font-family:inherit;">📢 Announcements</button>
+      <button id="tab-btn-directory" style="padding:8px 18px;border-radius:5px;font-size:13px;font-weight:500;cursor:pointer;border:none;background:#1a3a8a;color:white;font-family:inherit;">&#128101; Directory</button>
+      <button id="tab-btn-noticeboard" style="padding:8px 18px;border-radius:5px;font-size:13px;font-weight:500;cursor:pointer;border:none;background:transparent;color:#6b7280;font-family:inherit;">&#128204; Notice Board</button>
+      <button id="tab-btn-announcements" style="padding:8px 18px;border-radius:5px;font-size:13px;font-weight:500;cursor:pointer;border:none;background:transparent;color:#6b7280;font-family:inherit;">&#128226; Announcements</button>
     </div>
-
-    <!-- Directory Tab -->
     <div id="tab-directory">
       <div style="display:flex;gap:1rem;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap;">
-        <input class="search-box" id="search-input" placeholder="Search by name or roll number..." oninput="renderDirectory()">
+        <input class="search-box" id="search-input" placeholder="Search by name or roll number...">
         <div style="display:flex;gap:6px;">
-          <button class="filter-btn active" onclick="setFilter('all',this)">All</button>
-          <button class="filter-btn" onclick="setFilter('Morning',this)">Morning</button>
-          <button class="filter-btn" onclick="setFilter('Evening',this)">Evening</button>
+          <button class="filter-btn active" id="filter-all">All</button>
+          <button class="filter-btn" id="filter-morning">Morning</button>
+          <button class="filter-btn" id="filter-evening">Evening</button>
         </div>
       </div>
-      <div class="alumni-grid" id="alumni-grid"><div class="loading-spinner">Loading...</div></div>
+      <div class="alumni-grid" id="alumni-grid"><div class="loading-spinner">Loading alumni...</div></div>
     </div>
-
-    <!-- Notice Board Tab -->
     <div id="tab-noticeboard" style="display:none;">
       <div class="two-col">
-        <div>
-          <div class="feed-section-label">Recent Posts</div>
-          <div id="notices-list"><div class="empty-state">📌 No posts yet. Be the first!</div></div>
-        </div>
+        <div><div class="feed-section-label">Recent Posts</div><div id="notices-list"><div class="empty-state">&#128204; No posts yet. Be the first!</div></div></div>
         <div class="form-card">
-          <div class="form-card-title">📌 Post to Notice Board</div>
-          <div class="form-card-sub">Share a message with your batchmates. Appears after admin approval.</div>
-          <textarea id="notice-text" placeholder="What's on your mind?" maxlength="500" oninput="document.getElementById('notice-char').textContent=this.value.length+'/500'"></textarea>
+          <div class="form-card-title">&#128204; Post to Notice Board</div>
+          <div class="form-card-sub">Share a message. Appears after admin approval.</div>
+          <textarea id="notice-text" placeholder="What's on your mind?" maxlength="500"></textarea>
           <div style="display:flex;justify-content:space-between;align-items:center;">
             <span style="font-size:11px;color:#9ca3af;" id="notice-char">0/500</span>
-            <button onclick="submitNotice()" style="background:var(--gold);color:var(--navy);border:none;padding:8px 16px;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">Post →</button>
+            <button id="btn-submit-notice" style="background:var(--gold);color:var(--navy);border:none;padding:8px 16px;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">Post &rarr;</button>
           </div>
         </div>
       </div>
     </div>
-
-    <!-- Announcements Tab -->
     <div id="tab-announcements" style="display:none;">
       <div class="two-col">
-        <div>
-          <div class="feed-section-label">Recent Announcements</div>
-          <div id="announcements-list"><div class="empty-state">📢 No announcements yet.</div></div>
-        </div>
+        <div><div class="feed-section-label">Recent Announcements</div><div id="announcements-list"><div class="empty-state">&#128226; No announcements yet.</div></div></div>
         <div class="form-card">
-          <div class="form-card-title">📢 Submit an Announcement</div>
+          <div class="form-card-title">&#128226; Submit an Announcement</div>
           <div class="form-card-sub">New job, award, or news? Appears after admin approval.</div>
-          <select id="ann-type" style="margin-bottom:8px;">
-            <option value="job">Job Change / New Position</option>
-            <option value="achievement">Achievement / Award</option>
-            <option value="news">News / Update</option>
-            <option value="other">Other</option>
-          </select>
+          <select id="ann-type" style="margin-bottom:8px;"><option value="job">Job Change / New Position</option><option value="achievement">Achievement / Award</option><option value="news">News / Update</option><option value="other">Other</option></select>
           <input type="text" id="ann-title" placeholder="Headline *">
           <textarea id="ann-body" rows="3" placeholder="Details (optional)"></textarea>
-          <button onclick="submitAnnouncement()" style="width:100%;padding:10px;background:var(--gold);color:var(--navy);border:none;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">Submit for Approval →</button>
+          <button id="btn-submit-ann" style="width:100%;padding:10px;background:var(--gold);color:var(--navy);border:none;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">Submit for Approval &rarr;</button>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ══ PROFILE VIEW ══ -->
+<!-- PROFILE VIEW -->
 <div class="page" id="page-profile">
   <div class="profile-wrap">
-    <button onclick="showPage('directory')" style="background:none;border:none;color:var(--gold);font-size:13px;cursor:pointer;margin-bottom:1rem;">← Back to Directory</button>
+    <button id="btn-back-profile" style="background:none;border:none;color:var(--gold);font-size:13px;cursor:pointer;margin-bottom:1rem;">&larr; Back to Directory</button>
     <div class="profile-card">
       <div class="profile-header">
         <div class="profile-avatar" id="view-avatar"></div>
@@ -483,85 +363,24 @@ nav{background:var(--navy);border-bottom:2px solid var(--gold);position:sticky;t
         <div class="profile-roll" id="view-roll"></div>
       </div>
       <div class="profile-body">
-        <div class="profile-field"><span class="field-icon">💼</span><div><div class="field-label">Job &amp; Company</div><div class="field-value" id="view-job"></div></div></div>
-        <div class="profile-field"><span class="field-icon">📍</span><div><div class="field-label">Location</div><div class="field-value" id="view-location"></div></div></div>
-        <div class="profile-field"><span class="field-icon">✉</span><div><div class="field-label">Email</div><div class="field-value" id="view-email"></div></div></div>
-        <div class="profile-field"><span class="field-icon">📞</span><div><div class="field-label">Phone</div><div class="field-value" id="view-phone"></div></div></div>
+        <div class="profile-field"><span class="field-icon">&#128188;</span><div><div class="field-label">Job &amp; Company</div><div class="field-value" id="view-job"></div></div></div>
+        <div class="profile-field"><span class="field-icon">&#128205;</span><div><div class="field-label">Location</div><div class="field-value" id="view-location"></div></div></div>
+        <div class="profile-field"><span class="field-icon">&#9993;</span><div><div class="field-label">Email</div><div class="field-value" id="view-email"></div></div></div>
+        <div class="profile-field"><span class="field-icon">&#128222;</span><div><div class="field-label">Phone</div><div class="field-value" id="view-phone"></div></div></div>
         <div class="profile-field"><span class="field-icon">in</span><div><div class="field-label">LinkedIn</div><div class="field-value" id="view-linkedin"></div></div></div>
-        <div class="profile-field" id="view-bio-section" style="display:none;"><span class="field-icon">📝</span><div><div class="field-label">About</div><div class="field-value" id="view-bio"></div></div></div>
-        <button id="edit-own-btn" style="display:none;width:100%;margin-top:0.75rem;padding:10px;background:var(--navy);color:var(--gold);border:none;border-radius:6px;font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;" onclick="openEditProfile()">✏️ Edit My Profile</button>
+        <div class="profile-field" id="view-bio-section" style="display:none;"><span class="field-icon">&#128221;</span><div><div class="field-label">About</div><div class="field-value" id="view-bio"></div></div></div>
+        <button id="btn-edit-profile" style="display:none;width:100%;margin-top:0.75rem;padding:10px;background:var(--navy);color:var(--gold);border:none;border-radius:6px;font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;">&#9999;&#65039; Edit My Profile</button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- Firebase -->
-<script>
-// These functions MUST be available immediately on window
-// before Firebase module loads, so onclick attributes work from page load
-window.showPage = function(page) {
-  document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
-  var el = document.getElementById('page-' + page);
-  if (el) el.classList.add('active');
-  window.scrollTo(0, 0);
-};
-window.handleJoinClick = function() {
-  var cu = window._alumniCurrentUser;
-  var cp = window._alumniCurrentProfile;
-  if (cu) { cp ? window.showPage('directory') : window.showPage('setup'); }
-  else window.showPage('login');
-};
-window.handleSessionClick = function(session) {
-  var cu = window._alumniCurrentUser;
-  var cp = window._alumniCurrentProfile;
-  if (!cu) { window.showPage('login'); return; }
-  if (!cp) { window.showPage('setup'); return; }
-  if (window._loadDirectory) window._loadDirectory(session);
-};
-window.showToast = function(msg) {
-  var t = document.getElementById('toast');
-  if (!t) return;
-  t.textContent = msg; t.classList.add('show');
-  setTimeout(function() { t.classList.remove('show'); }, 3000);
-};
-// State holders accessible to early script
-window._alumniCurrentUser = null;
-window._alumniCurrentProfile = null;
-window._loadDirectory = null;
-// Firebase ready promise — resolves when module finishes loading
-window._firebaseReady = new Promise(function(resolve) {
-  window._firebaseResolve = resolve;
-});
-window.signInWithGoogle = function() {
-  window._firebaseReady.then(function() {
-    window._firebaseSignIn();
-  });
-};
-window.doSignOut = function() {
-  window._firebaseReady.then(function() {
-    window._firebaseSignOut();
-  });
-};
-</script>
-
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js';
-import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged }
-  from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js';
-import { getFirestore, doc, setDoc, getDoc, collection, getDocs, addDoc,
-  query, where, orderBy, serverTimestamp }
-  from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js';
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js';
+import { getFirestore, doc, setDoc, getDoc, collection, getDocs, addDoc, query, where, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js';
 
-const firebaseConfig = {
-  apiKey: "AIzaSyAgUl22Cln6QtY3-HIvI6lE8Zu7n9OblbI",
-  authDomain: "icet-alumni.firebaseapp.com",
-  projectId: "icet-alumni",
-  storageBucket: "icet-alumni.firebasestorage.app",
-  messagingSenderId: "707390888790",
-  appId: "1:707390888790:web:57e6be62e4d11e22c214f7"
-};
-
-const app = initializeApp(firebaseConfig);
+const app = initializeApp({apiKey:"AIzaSyAgUl22Cln6QtY3-HIvI6lE8Zu7n9OblbI",authDomain:"icet-alumni.firebaseapp.com",projectId:"icet-alumni",storageBucket:"icet-alumni.firebasestorage.app",messagingSenderId:"707390888790",appId:"1:707390888790:web:57e6be62e4d11e22c214f7"});
 const ADMIN_UID = 'w2AtZbhUiyY5TxyvIecHzWqheaE2';
 const auth = getAuth(app);
 const db = getFirestore(app);
@@ -613,532 +432,268 @@ const eveningStudents = {
   "E219":"NAEEM BHATTI","E220":"ASIF SANI"
 };
 
-// ── State ──
 let currentUser = null, currentUserProfile = null;
 let allAlumni = [], activeFilter = 'all', currentViewSession = '2006';
 let selectedPhotoBase64 = '', isEditMode = false;
 
-// ── Navigation — MUST be on window before auth resolves so onclick works immediately ──
-window.showPage = (page) => {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.getElementById('page-'+page)?.classList.add('active');
-  window.scrollTo(0,0);
-};
-window.handleJoinClick = () => {
-  if (currentUser) { currentUserProfile ? window.showPage('directory') : window.showPage('setup'); }
-  else window.showPage('login');
-};
-window.handleSessionClick = (session) => {
-  if (!currentUser) { window.showPage('login'); return; }
-  if (!currentUserProfile) { window.showPage('setup'); return; }
-  loadDirectory(session);
-};
-window.showToast = (msg) => {
-  const t = document.getElementById('toast');
-  if (!t) return;
-  t.textContent = msg; t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 3000);
-};
+function showToast(msg) { const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),3000); }
+function showPage(page) { document.querySelectorAll('.page').forEach(p=>p.classList.remove('active')); document.getElementById('page-'+page)?.classList.add('active'); window.scrollTo(0,0); }
 
-// ── Auth ──
+// Set hero background
+document.getElementById('landing-hero').style.backgroundImage = "url('/icet-header.jpg')";
+
 onAuthStateChanged(auth, async (user) => {
+  currentUser = user;
+  buildNav(user);
   if (user) {
-    currentUser = user;
-    window._alumniCurrentUser = user;
-    updateNavUser(user);
-    const profile = await getUserProfile(user.uid);
-    currentUserProfile = profile;
-    window._alumniCurrentProfile = profile;
-    if (!profile) showPage('setup');
+    const snap = await getDoc(doc(db,'alumni',user.uid));
+    currentUserProfile = snap.exists() ? snap.data() : null;
+    if (!currentUserProfile) showPage('setup');
     loadGlobalStats();
-  } else {
-    currentUser = null; currentUserProfile = null;
-    window._alumniCurrentUser = null;
-    window._alumniCurrentProfile = null;
-    updateNavUser(null);
-  }
+  } else { currentUserProfile = null; }
 });
 
-async function getUserProfile(uid) {
-  const snap = await getDoc(doc(db,'alumni',uid));
-  return snap.exists() ? snap.data() : null;
-}
-
-function updateNavUser(user) {
+function buildNav(user) {
   const area = document.getElementById('nav-user-area');
-  if (!user) {
-    area.innerHTML = '';
-    const btn = document.createElement('button');
-    btn.className = 'nav-btn btn-gold';
-    btn.textContent = 'Sign In';
-    btn.onclick = function() { window.showPage('login'); };
-    area.appendChild(btn);
-    return;
-  }
-  const isAdmin = user.uid === ADMIN_UID;
   area.innerHTML = '';
-  const wrap = document.createElement('div');
-  wrap.style.cssText = 'display:flex;align-items:center;gap:8px;flex-wrap:wrap;';
-  if (user.photoURL) {
-    const img = document.createElement('img');
-    img.src = user.photoURL;
-    img.style.cssText = 'width:32px;height:32px;border-radius:50%;border:2px solid #c9a84c;';
-    wrap.appendChild(img);
+  if (!user) {
+    const b = document.createElement('button'); b.className='nav-btn btn-gold'; b.textContent='Sign In';
+    b.addEventListener('click', ()=>showPage('login')); area.appendChild(b); return;
   }
-  const nameEl = document.createElement('span');
-  nameEl.style.cssText = 'font-size:13px;color:rgba(255,255,255,0.8);';
-  nameEl.textContent = (user.displayName||'').split(' ')[0];
-  wrap.appendChild(nameEl);
-  if (isAdmin) {
-    const adminBtn = document.createElement('a');
-    adminBtn.href = '/admin.html';
-    adminBtn.className = 'nav-btn btn-gold';
-    adminBtn.style.textDecoration = 'none';
-    adminBtn.textContent = '⚙ Admin';
-    wrap.appendChild(adminBtn);
-  }
-  const dirBtn = document.createElement('button');
-  dirBtn.className = 'nav-btn btn-outline';
-  dirBtn.textContent = 'Directory';
-  dirBtn.onclick = function() { window.showPage('directory'); };
-  wrap.appendChild(dirBtn);
-  const outBtn = document.createElement('button');
-  outBtn.className = 'nav-btn btn-outline';
-  outBtn.textContent = 'Sign Out';
-  outBtn.onclick = function() { window.doSignOut(); };
-  wrap.appendChild(outBtn);
+  const wrap = document.createElement('div'); wrap.style.cssText='display:flex;align-items:center;gap:8px;flex-wrap:wrap;';
+  if (user.photoURL) { const img=document.createElement('img'); img.src=user.photoURL; img.style.cssText='width:32px;height:32px;border-radius:50%;border:2px solid #c9a84c;'; wrap.appendChild(img); }
+  const nm=document.createElement('span'); nm.style.cssText='font-size:13px;color:rgba(255,255,255,0.8);'; nm.textContent=(user.displayName||'').split(' ')[0]; wrap.appendChild(nm);
+  if (user.uid===ADMIN_UID) { const a=document.createElement('a'); a.href='/admin.html'; a.className='nav-btn btn-gold'; a.style.textDecoration='none'; a.textContent='⚙ Admin'; wrap.appendChild(a); }
+  const db2=document.createElement('button'); db2.className='nav-btn btn-outline'; db2.textContent='Directory'; db2.addEventListener('click',()=>showPage('directory')); wrap.appendChild(db2);
+  const ob=document.createElement('button'); ob.className='nav-btn btn-outline'; ob.textContent='Sign Out'; ob.addEventListener('click',async()=>{await signOut(auth);showPage('landing');showToast('Signed out.');}); wrap.appendChild(ob);
   area.appendChild(wrap);
 }
 
-// Expose Firebase auth functions
-window._firebaseSignIn = async () => {
-  try {
-    await signInWithPopup(auth, provider);
-    showToast('Signed in!');
-  } catch(e) {
-    console.error('Sign in error:', e);
-    if (e.code === 'auth/popup-blocked') {
-      showToast('Popup blocked — please allow popups for this site.');
-    } else if (e.code === 'auth/cancelled-popup-request') {
-      // User closed popup — do nothing
-    } else {
-      showToast('Sign in failed: ' + (e.message || e.code));
-    }
-  }
-};
-window._firebaseSignOut = async () => {
-  await signOut(auth);
-  window.showPage('landing');
-  showToast('Signed out.');
-};
-// Signal that Firebase is ready — resolves the promise in the early script
-if (window._firebaseResolve) window._firebaseResolve();
+document.getElementById('btn-join').addEventListener('click',()=>{ if(currentUser){currentUserProfile?showPage('directory'):showPage('setup');}else showPage('login'); });
+document.getElementById('btn-browse').addEventListener('click',()=>{ if(currentUser){currentUserProfile?showPage('directory'):showPage('setup');}else showPage('login'); });
+document.getElementById('card-2006').addEventListener('click',()=>handleSession('2006'));
+document.getElementById('card-2010').addEventListener('click',()=>handleSession('2010'));
+document.getElementById('btn-back-login').addEventListener('click',(e)=>{e.preventDefault();showPage('landing');});
+document.getElementById('btn-back-profile').addEventListener('click',()=>showPage('directory'));
+document.getElementById('btn-cancel-setup').addEventListener('click',(e)=>{e.preventDefault();showPage('directory');});
+document.getElementById('btn-edit-profile').addEventListener('click',openEditProfile);
+document.getElementById('btn-google-signin').addEventListener('click',async()=>{
+  try { await signInWithPopup(auth,provider); showToast('Signed in!'); }
+  catch(e) { if(e.code==='auth/popup-blocked') showToast('Popup blocked — allow popups for this site.'); else if(e.code!=='auth/cancelled-popup-request') showToast('Sign in failed: '+e.message); }
+});
 
-// Navigation functions defined below onAuthStateChanged — moved to top
+function handleSession(session) { if(!currentUser){showPage('login');return;} if(!currentUserProfile){showPage('setup');return;} loadDirectory(session); }
 
-// ── Global stats (landing page) ──
 async function loadGlobalStats() {
   try {
-    const snap = await getDocs(collection(db,'alumni'));
-    let total=0; const countries=new Set();
-    const sess2006=[], sess2010=[];
-    snap.forEach(d => {
-      const a=d.data(); total++;
-      if (a.country) countries.add(a.country);
-      if (a.session?.includes('2006')) sess2006.push(a);
-      if (a.session?.includes('2010')) sess2010.push(a);
-    });
-    animateCount(document.getElementById('stat-total'), total);
-    animateCount(document.getElementById('stat-countries'), countries.size);
-    animateCount(document.getElementById('sess-2006-card'), sess2006.length);
-    animateCount(document.getElementById('sess-2010-card'), sess2010.length);
-  } catch(e) {}
+    const snap=await getDocs(collection(db,'alumni')); let total=0; const countries=new Set(); const s6=[],s10=[];
+    snap.forEach(d=>{const a=d.data();total++;if(a.country)countries.add(a.country);if(a.session?.includes('2006'))s6.push(a);if(a.session?.includes('2010'))s10.push(a);});
+    document.getElementById('stat-total').textContent=total; document.getElementById('stat-countries').textContent=countries.size;
+    document.getElementById('sess-2006-card').textContent=s6.length; document.getElementById('sess-2010-card').textContent=s10.length;
+  } catch(e){}
 }
 
-function animateCount(el, target, dur=800) {
-  if (!el || isNaN(target)) return;
-  el.textContent = target;
-}
-
-
-// ── Setup ──
-window.onSetupSessionChange = () => {
-  const session = document.getElementById('setup-session').value;
-  const rollSelect = document.getElementById('setup-roll');
-  rollSelect.innerHTML = '<option value="">Select roll number</option>';
-  document.getElementById('setup-name-display').innerHTML = '<span class="name-placeholder">Auto-filled from roll number</span>';
-  if (!session) { rollSelect.disabled=true; return; }
-  const db2 = session.includes('Morning') ? morningStudents : eveningStudents;
-  Object.keys(db2).sort().forEach(r => { const o=document.createElement('option'); o.value=r; o.textContent=r; rollSelect.appendChild(o); });
-  rollSelect.disabled = false;
-};
-window.onSetupRollChange = () => {
-  const session = document.getElementById('setup-session').value;
-  const roll = document.getElementById('setup-roll').value;
-  const db2 = session.includes('Morning') ? morningStudents : eveningStudents;
-  const nd = document.getElementById('setup-name-display');
-  nd.innerHTML = (roll && db2[roll]) ? db2[roll] : '<span class="name-placeholder">Auto-filled from roll number</span>';
-};
-
-// ── City autocomplete (OpenStreetMap Nominatim) ──
-let cityTimer = null;
-window.onCityInput = () => {
-  const input = document.getElementById('setup-city-input').value.trim();
-  clearTimeout(cityTimer);
-  const el = document.getElementById('city-suggestions');
-  document.getElementById('setup-city').value = '';
-  document.getElementById('setup-country').value = '';
-  document.getElementById('city-selected-display').style.display = 'none';
-  if (input.length < 3) { el.style.display='none'; return; }
-  cityTimer = setTimeout(async () => {
-    try {
-      // Photon API by Komoot — built on OSM, browser-safe, no key needed
-      const url = 'https://photon.komoot.io/api/?q='+encodeURIComponent(input)+'&limit=8&lang=en';
-      const res = await fetch(url, {signal: AbortSignal.timeout(8000)});
-      if (!res.ok) throw new Error('fetch failed');
-      const data = await res.json();
-      const features = data.features || [];
-      const seen=new Set(); const cities=[];
-      for (const r of features) {
-        const p = r.properties || {};
-        // Only show cities, towns, villages — skip streets/addresses
-        if (!['city','town','village','municipality'].includes(p.type) && p.osm_value !== 'city') continue;
-        const city = (p.city || p.name || '').trim();
-        const country = (p.country || '').trim();
-        const state = (p.state || p.county || '').trim();
-        if (!city||!country) continue;
-        const key=city+'|'+country;
-        if (seen.has(key)) continue;
-        seen.add(key); cities.push({city,country,state});
-        if (cities.length>=7) break;
-      }
-      if (!cities.length) {
-        el.innerHTML='<div class="city-suggestion-item" style="color:var(--muted);">No cities found. <span onclick="useManualCity()" style="color:var(--gold);cursor:pointer;font-weight:600;">Enter manually →</span></div>';
-        el.style.display='block'; return;
-      }
-      el.innerHTML = cities.map(c => {
-        const d=c.state?c.city+', '+c.state+', '+c.country:c.city+', '+c.country;
-        const safe=d.replace(/'/g,"&#39;").replace(/"/g,'&quot;');
-        const citySafe=c.city.replace(/'/g,"&#39;");
-        const countrySafe=c.country.replace(/'/g,"&#39;");
-        return '<div class="city-suggestion-item" onclick="selectCity(\''+citySafe+'\',\''+countrySafe+'\',\''+safe+'\')">📍 '+d+'</div>';
-      }).join('');
-      el.style.display='block';
-    } catch(e) {
-      el.innerHTML='<div class="city-suggestion-item" style="color:var(--muted);">Search unavailable. <span onclick="useManualCity()" style="color:var(--gold);cursor:pointer;font-weight:600;">Enter manually →</span></div>';
-      el.style.display='block';
-    }
-  }, 400);
-};
-window.selectCity = (city, country, display) => {
-  document.getElementById('setup-city-input').value = display||city+', '+country;
-  document.getElementById('setup-city').value = city;
-  document.getElementById('setup-country').value = country;
-  const d=document.getElementById('city-selected-display');
-  d.textContent='✅ '+city+', '+country; d.style.display='block';
-  document.getElementById('city-suggestions').style.display='none';
-};
-window.useManualCity = () => {
-  const raw=document.getElementById('setup-city-input').value.trim();
-  const parts=raw.split(',').map(s=>s.trim());
-  const city=parts[0]||raw; const country=parts.length>1?parts[parts.length-1]:'';
-  document.getElementById('setup-city').value=city;
-  document.getElementById('setup-country').value=country;
-  const d=document.getElementById('city-selected-display');
-  d.textContent='✅ '+city+(country?', '+country:''); d.style.display='block';
-  document.getElementById('city-suggestions').style.display='none';
-};
-window.hideCitySuggestions = () => { document.getElementById('city-suggestions').style.display='none'; };
-
-// ── Photo ──
-window.handlePhotoSelect = (e) => {
-  const file=e.target.files[0]; if(!file) return;
-  if(file.size>3*1024*1024) { showToast('Photo must be under 3MB'); return; }
-  const reader=new FileReader();
-  reader.onload=ev => {
-    selectedPhotoBase64=ev.target.result;
-    document.getElementById('photo-upload-circle').innerHTML='<img src="'+ev.target.result+'" alt="photo">';
-  };
-  reader.readAsDataURL(file);
-};
-
-// ── Submit profile ──
-window.submitProfile = async () => {
-  const session=document.getElementById('setup-session').value;
-  const roll=document.getElementById('setup-roll').value;
-  const city=document.getElementById('setup-city').value;
-  const country=document.getElementById('setup-country').value;
-  const job=document.getElementById('setup-job').value.trim();
-  const company=document.getElementById('setup-company').value.trim();
-  const email=document.getElementById('setup-email').value.trim();
-  const phone=document.getElementById('setup-phone').value.trim();
-  const linkedin=document.getElementById('setup-linkedin').value.trim();
-  const bio=document.getElementById('setup-bio').value.trim();
-  const jobVisibility=document.querySelector('input[name="job-visibility"]:checked')?.value||'session';
-  const err=document.getElementById('setup-error');
-  const suc=document.getElementById('setup-success');
-  err.style.display='none'; suc.style.display='none';
-  if (!session||!roll||!city||!country||!job||!company||!email) {
-    err.textContent='⚠️ Please fill all required fields including your city.'; err.style.display='block'; return;
-  }
-  if (!selectedPhotoBase64) { err.textContent='⚠️ Please upload a profile photo.'; err.style.display='block'; return; }
-  if (!linkedin) { err.textContent='⚠️ Please provide your LinkedIn profile URL.'; err.style.display='block'; return; }
+document.getElementById('setup-session').addEventListener('change',function(){
+  const session=this.value; const rs=document.getElementById('setup-roll');
+  rs.innerHTML='<option value="">Select roll number</option>';
+  document.getElementById('setup-name-display').innerHTML='<span class="name-placeholder">Auto-filled from roll number</span>';
+  if(!session){rs.disabled=true;return;}
   const db2=session.includes('Morning')?morningStudents:eveningStudents;
-  const name=db2[roll];
-  if (!name) { err.textContent='⚠️ Invalid roll number.'; err.style.display='block'; return; }
-  if (!isEditMode) {
-    const existing=await getDocs(query(collection(db,'alumni'),where('roll','==',roll)));
-    if (!existing.empty && existing.docs[0].id!==currentUser.uid) {
-      err.textContent='⚠️ Roll number already registered. Contact admin if error.'; err.style.display='block'; return;
-    }
-  }
-  const btn=document.getElementById('setup-submit-btn');
-  btn.disabled=true; btn.textContent='Saving...';
+  Object.keys(db2).sort().forEach(r=>{const o=document.createElement('option');o.value=r;o.textContent=r;rs.appendChild(o);});
+  rs.disabled=false;
+});
+document.getElementById('setup-roll').addEventListener('change',function(){
+  const session=document.getElementById('setup-session').value; const roll=this.value;
+  const db2=session.includes('Morning')?morningStudents:eveningStudents;
+  const nd=document.getElementById('setup-name-display');
+  nd.innerHTML=(roll&&db2[roll])?db2[roll]:'<span class="name-placeholder">Auto-filled from roll number</span>';
+});
+document.getElementById('photo-upload-circle').addEventListener('click',()=>document.getElementById('photo-file').click());
+document.getElementById('photo-file').addEventListener('change',function(e){
+  const file=e.target.files[0]; if(!file)return;
+  if(file.size>3*1024*1024){showToast('Photo must be under 3MB');return;}
+  const reader=new FileReader(); reader.onload=ev=>{selectedPhotoBase64=ev.target.result; document.getElementById('photo-upload-circle').innerHTML='<img src="'+ev.target.result+'" style="width:100%;height:100%;object-fit:cover;" alt="">';};
+  reader.readAsDataURL(file);
+});
+document.getElementById('notice-text').addEventListener('input',function(){document.getElementById('notice-char').textContent=this.value.length+'/500';});
+document.getElementById('setup-submit-btn').addEventListener('click',submitProfile);
+
+async function submitProfile(){
+  const session=document.getElementById('setup-session').value, roll=document.getElementById('setup-roll').value;
+  const city=document.getElementById('setup-city').value, country=document.getElementById('setup-country').value;
+  const job=document.getElementById('setup-job').value.trim(), company=document.getElementById('setup-company').value.trim();
+  const email=document.getElementById('setup-email').value.trim(), phone=document.getElementById('setup-phone').value.trim();
+  const linkedin=document.getElementById('setup-linkedin').value.trim(), bio=document.getElementById('setup-bio').value.trim();
+  const jobVisibility=document.querySelector('input[name="job-visibility"]:checked')?.value||'session';
+  const err=document.getElementById('setup-error'), suc=document.getElementById('setup-success');
+  err.style.display='none'; suc.style.display='none';
+  if(!session||!roll||!city||!country||!job||!company||!email){err.textContent='Please fill all required fields including city.';err.style.display='block';return;}
+  if(!selectedPhotoBase64){err.textContent='Please upload a profile photo.';err.style.display='block';return;}
+  if(!linkedin){err.textContent='Please provide your LinkedIn URL.';err.style.display='block';return;}
+  const db2=session.includes('Morning')?morningStudents:eveningStudents, name=db2[roll];
+  if(!name){err.textContent='Invalid roll number.';err.style.display='block';return;}
+  const btn=document.getElementById('setup-submit-btn'); btn.disabled=true; btn.textContent='Saving...';
   try {
-    const profileData={
-      uid:currentUser.uid, name, roll, session, city, country,
-      job, company, email, phone, linkedin, bio, jobVisibility,
-      photoBase64:selectedPhotoBase64,
-      googleName:currentUser.displayName||'', googlePhoto:currentUser.photoURL||'',
-      registeredAt:isEditMode?(currentUserProfile?.registeredAt||new Date().toISOString()):new Date().toISOString(),
-      updatedAt:new Date().toISOString(), deceased:false
-    };
-    await setDoc(doc(db,'alumni',currentUser.uid), profileData);
-    currentUserProfile=profileData;
-    suc.textContent=isEditMode?'✅ Profile updated!':'✅ Welcome to the ICET Alumni Network!';
-    suc.style.display='block';
-    loadGlobalStats();
-    setTimeout(()=>loadDirectory(session.split('-')[0]),1500);
-  } catch(e) {
-    err.textContent='⚠️ Error: '+e.message; err.style.display='block';
-    btn.disabled=false; btn.textContent='Save Profile & Join Network';
-  }
-};
+    const profileData={uid:currentUser.uid,name,roll,session,city,country,job,company,email,phone,linkedin,bio,jobVisibility,photoBase64:selectedPhotoBase64,googleName:currentUser.displayName||'',googlePhoto:currentUser.photoURL||'',registeredAt:isEditMode?(currentUserProfile?.registeredAt||new Date().toISOString()):new Date().toISOString(),updatedAt:new Date().toISOString(),deceased:false};
+    await setDoc(doc(db,'alumni',currentUser.uid),profileData);
+    currentUserProfile=profileData; suc.textContent=isEditMode?'Profile updated!':'Welcome to the ICET Alumni Network!'; suc.style.display='block';
+    loadGlobalStats(); setTimeout(()=>loadDirectory(session.split('-')[0]),1500);
+  } catch(e){err.textContent='Error: '+e.message;err.style.display='block';btn.disabled=false;btn.textContent='Save Profile & Join Network';}
+}
 
-// ── Edit profile ──
-window.openEditProfile = () => {
-  if (!currentUserProfile) return;
-  const p=currentUserProfile;
-  isEditMode=true;
-  document.getElementById('setup-title').textContent='Edit Your Profile';
-  document.getElementById('setup-subtitle').textContent='Update your information.';
-  document.getElementById('setup-submit-btn').textContent='Update Profile';
-  document.getElementById('setup-session').value=p.session||'';
-  onSetupSessionChange();
-  setTimeout(()=>{ document.getElementById('setup-roll').value=p.roll||''; onSetupRollChange(); },60);
-  if (p.city&&p.country) {
-    document.getElementById('setup-city-input').value=p.city+', '+p.country;
-    document.getElementById('setup-city').value=p.city;
-    document.getElementById('setup-country').value=p.country;
-    const d=document.getElementById('city-selected-display');
-    d.textContent='✅ '+p.city+', '+p.country; d.style.display='block';
-  }
-  document.getElementById('setup-job').value=p.job||'';
-  document.getElementById('setup-company').value=p.company||'';
-  document.getElementById('setup-email').value=p.email||'';
-  document.getElementById('setup-phone').value=p.phone||'';
-  document.getElementById('setup-linkedin').value=p.linkedin||'';
-  document.getElementById('setup-bio').value=p.bio||'';
-  const vis=p.jobVisibility||'session';
-  const radio=document.querySelector('input[name="job-visibility"][value="'+vis+'"]');
-  if (radio) radio.checked=true;
-  if (p.photoBase64) {
-    document.getElementById('photo-upload-circle').innerHTML='<img src="'+p.photoBase64+'" alt="">';
-    selectedPhotoBase64=p.photoBase64;
-  }
-  showPage('setup');
-};
+let cityTimer=null;
+document.getElementById('setup-city-input').addEventListener('input',function(){
+  const input=this.value.trim(); clearTimeout(cityTimer);
+  const el=document.getElementById('city-suggestions');
+  document.getElementById('setup-city').value=''; document.getElementById('setup-country').value=''; document.getElementById('city-selected-display').style.display='none';
+  if(input.length<3){el.style.display='none';return;}
+  cityTimer=setTimeout(async()=>{
+    try{
+      const res=await fetch('https://photon.komoot.io/api/?q='+encodeURIComponent(input)+'&limit=8&lang=en',{signal:AbortSignal.timeout(8000)});
+      if(!res.ok)throw new Error('fail');
+      const data=await res.json(); const features=data.features||[]; const seen=new Set(); const cities=[];
+      for(const r of features){const p=r.properties||{}; if(!['city','town','village','municipality'].includes(p.type)&&p.osm_value!=='city')continue; const city=(p.city||p.name||'').trim(),country=(p.country||'').trim(),state=(p.state||p.county||'').trim(); if(!city||!country)continue; const key=city+'|'+country; if(seen.has(key))continue; seen.add(key);cities.push({city,country,state});if(cities.length>=7)break;}
+      el.innerHTML='';
+      if(!cities.length){const d=document.createElement('div');d.className='city-suggestion-item';d.style.color='var(--muted)';d.textContent='No cities found. ';const s=document.createElement('span');s.style.cssText='color:var(--gold);cursor:pointer;font-weight:600;';s.textContent='Enter manually';s.addEventListener('click',useManualCity);d.appendChild(s);el.appendChild(d);}
+      else{cities.forEach(c=>{const display=c.state?c.city+', '+c.state+', '+c.country:c.city+', '+c.country;const d=document.createElement('div');d.className='city-suggestion-item';d.textContent='📍 '+display;d.addEventListener('click',()=>selectCity(c.city,c.country,display));el.appendChild(d);});}
+      el.style.display='block';
+    }catch(e){el.innerHTML='<div class="city-suggestion-item" style="color:var(--muted);">Search unavailable</div>';el.style.display='block';}
+  },400);
+});
+document.getElementById('setup-city-input').addEventListener('blur',()=>setTimeout(()=>{document.getElementById('city-suggestions').style.display='none';},200));
+function selectCity(city,country,display){document.getElementById('setup-city-input').value=display||city+', '+country;document.getElementById('setup-city').value=city;document.getElementById('setup-country').value=country;const d=document.getElementById('city-selected-display');d.textContent='✅ '+city+', '+country;d.style.display='block';document.getElementById('city-suggestions').style.display='none';}
+function useManualCity(){const raw=document.getElementById('setup-city-input').value.trim();const parts=raw.split(',').map(s=>s.trim());const city=parts[0]||raw,country=parts.length>1?parts[parts.length-1]:'';document.getElementById('setup-city').value=city;document.getElementById('setup-country').value=country;const d=document.getElementById('city-selected-display');d.textContent='✅ '+city+(country?', '+country:'');d.style.display='block';document.getElementById('city-suggestions').style.display='none';}
 
-// ── Load directory ──
-window._loadDirectory = loadDirectory;
-async function loadDirectory(session) {
-  currentViewSession=session;
-  showPage('directory');
-  const labels={'2006':'2006–2010','2010':'2010–2014','2014':'2014–2018'};
-  document.getElementById('dir-session-label').textContent=labels[session]||session;
+async function loadDirectory(session){
+  currentViewSession=session; showPage('directory');
+  const labels={'2006':'2006–2010','2010':'2010–2014'}; document.getElementById('dir-session-label').textContent=labels[session]||session;
   document.getElementById('alumni-grid').innerHTML='<div class="loading-spinner">Loading alumni...</div>';
-  try {
-    const variants=[session+'-Morning',session+'-Evening'];
-    const q=query(collection(db,'alumni'),where('session','in',variants));
-    const snap=await getDocs(q);
-    allAlumni=[];
-    snap.forEach(d=>allAlumni.push(d.data()));
-    allAlumni.sort((a,b)=>a.roll.localeCompare(b.roll));
-    // Update stats header
-    const countries=new Set(); let morning=0,evening=0;
-    allAlumni.forEach(a=>{
-      if(a.country) countries.add(a.country);
-      if(a.session?.includes('Morning')) morning++; else evening++;
-    });
+  try{
+    const snap=await getDocs(query(collection(db,'alumni'),where('session','in',[session+'-Morning',session+'-Evening'])));
+    allAlumni=[]; snap.forEach(d=>allAlumni.push(d.data())); allAlumni.sort((a,b)=>a.roll.localeCompare(b.roll));
+    const countries=new Set();let morning=0,evening=0;
+    allAlumni.forEach(a=>{if(a.country)countries.add(a.country);if(a.session?.includes('Morning'))morning++;else evening++;});
     document.getElementById('dir-registered').textContent=allAlumni.length;
     document.getElementById('dir-countries').textContent=countries.size;
     document.getElementById('dir-morning').textContent=morning;
     document.getElementById('dir-evening').textContent=evening;
-    // Preview avatars
-    const prev=document.getElementById('dir-preview-avatars');
+    const prev=document.getElementById('dir-preview-avatars'); prev.innerHTML='';
     const recent=[...allAlumni].sort((a,b)=>(b.registeredAt||'').localeCompare(a.registeredAt||'')).slice(0,5);
-    prev.innerHTML=recent.map((a,i)=>{
-      const init=a.name.split(' ').map(w=>w[0]).slice(0,2).join('');
-      const ml=i===0?'0':'-8px';
-      return '<div style="width:38px;height:38px;border-radius:50%;border:2px solid #c9a84c;background:rgba(201,168,76,0.15);display:flex;align-items:center;justify-content:center;overflow:hidden;margin-left:'+ml+';flex-shrink:0;">'
-        +(a.photoBase64?'<img src="'+a.photoBase64+'" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" alt="">'
-        :'<span style="font-size:12px;font-weight:700;color:#c9a84c;">'+init+'</span>')+'</div>';
-    }).join('');
+    recent.forEach((a,i)=>{const init=a.name.split(' ').map(w=>w[0]).slice(0,2).join('');const av=document.createElement('div');av.style.cssText='width:38px;height:38px;border-radius:50%;border:2px solid #c9a84c;background:rgba(201,168,76,0.15);display:flex;align-items:center;justify-content:center;overflow:hidden;margin-left:'+(i===0?'0':'-8px')+';flex-shrink:0;';if(a.photoBase64){const img=document.createElement('img');img.src=a.photoBase64;img.style.cssText='width:100%;height:100%;object-fit:cover;border-radius:50%;';av.appendChild(img);}else{av.textContent=init;av.style.fontSize='12px';av.style.fontWeight='700';av.style.color='#c9a84c';}prev.appendChild(av);});
     renderDirectory();
-    // Show/hide notice board based on own session
-    const userSess=(currentUserProfile?.session||'').split('-')[0];
-    const isOwn=userSess===session;
+    const userSess=(currentUserProfile?.session||'').split('-')[0], isOwn=userSess===session;
     document.getElementById('tab-btn-noticeboard').style.display=isOwn?'':'none';
     document.getElementById('tab-btn-announcements').style.display=isOwn?'':'none';
     document.getElementById('cross-session-notice').style.display=isOwn?'none':'block';
-    if (!isOwn) switchTab('directory',document.getElementById('tab-btn-directory'));
-    if (isOwn) { loadNotices(); loadAnnouncements(); }
-  } catch(e) {
-    document.getElementById('alumni-grid').innerHTML='<div class="loading-spinner">Error loading data.</div>';
-    console.error(e);
-  }
+    if(!isOwn)switchTab('directory');
+    if(isOwn){loadNotices();loadAnnouncements();}
+  }catch(e){document.getElementById('alumni-grid').innerHTML='<div class="loading-spinner">Error loading data.</div>';console.error(e);}
 }
 
-function renderDirectory() {
+function renderDirectory(){
   const grid=document.getElementById('alumni-grid');
   const search=(document.getElementById('search-input')?.value||'').toLowerCase();
-  const filtered=allAlumni.filter(a=>{
-    const ms=!search||a.name.toLowerCase().includes(search)||a.roll.toLowerCase().includes(search);
-    const mf=activeFilter==='all'||a.session.includes(activeFilter);
-    return ms&&mf;
-  });
-  if (!filtered.length) { grid.innerHTML='<div class="loading-spinner">No alumni found.</div>'; return; }
+  const filtered=allAlumni.filter(a=>{const ms=!search||a.name.toLowerCase().includes(search)||a.roll.toLowerCase().includes(search);const mf=activeFilter==='all'||a.session.includes(activeFilter);return ms&&mf;});
+  if(!filtered.length){grid.innerHTML='<div class="loading-spinner">No alumni found.</div>';return;}
+  grid.innerHTML='';
   const userSess=currentUserProfile?.session||'';
-  grid.innerHTML=filtered.map(a=>{
+  filtered.forEach(a=>{
     const init=a.name.split(' ').map(w=>w[0]).slice(0,2).join('');
     const st=a.session.includes('Morning')?'M':'E';
-    const sameS=userSess===a.session;
-    const jobPub=a.jobVisibility==='public'||!a.jobVisibility;
-    const showJob=sameS||jobPub;
-    const dec=a.deceased?' deceased':'';
-    return '<div class="alumni-card'+dec+'" onclick="viewProfile(''+a.uid+'')">'+
-      (a.deceased?'<span class="deceased-badge">In Memoriam</span>':'')+
-      '<span class="alumni-session-badge">'+st+' · '+a.roll+'</span>'+
-      '<div class="alumni-photo">'+(a.photoBase64?'<img src="'+a.photoBase64+'" alt="'+a.name+'">':init)+'</div>'+
-      '<div class="alumni-name">'+a.name+(a.deceased?' 🕊️':'')+'</div>'+
-      '<div class="alumni-roll">'+a.roll+'</div>'+
-      '<div class="alumni-job">'+(showJob?a.job+' @ '+a.company:'🔒 Session members only')+'</div>'+
-      '<div class="alumni-country">📍 '+a.city+', '+a.country+'</div>'+
-      '</div>';
-  }).join('');
+    const showJob=userSess===a.session||a.jobVisibility==='public'||!a.jobVisibility;
+    const card=document.createElement('div');card.className='alumni-card'+(a.deceased?' deceased':'');
+    card.addEventListener('click',()=>viewProfile(a.uid));
+    const badge=document.createElement('span');badge.className='alumni-session-badge';badge.textContent=st+' · '+a.roll;card.appendChild(badge);
+    if(a.deceased){const db3=document.createElement('span');db3.className='deceased-badge';db3.textContent='In Memoriam';card.appendChild(db3);}
+    const photoDiv=document.createElement('div');photoDiv.className='alumni-photo';
+    if(a.photoBase64){const img=document.createElement('img');img.src=a.photoBase64;img.alt=a.name;photoDiv.appendChild(img);}else{photoDiv.textContent=init;}
+    card.appendChild(photoDiv);
+    const nameDiv=document.createElement('div');nameDiv.className='alumni-name';nameDiv.textContent=a.name+(a.deceased?' 🕊️':'');card.appendChild(nameDiv);
+    const rollDiv=document.createElement('div');rollDiv.className='alumni-roll';rollDiv.textContent=a.roll;card.appendChild(rollDiv);
+    const jobDiv=document.createElement('div');jobDiv.className='alumni-job';jobDiv.textContent=showJob?a.job+' @ '+a.company:'🔒 Session members only';card.appendChild(jobDiv);
+    const locDiv=document.createElement('div');locDiv.className='alumni-country';locDiv.textContent='📍 '+a.city+', '+a.country;card.appendChild(locDiv);
+    grid.appendChild(card);
+  });
 }
 
-window.setFilter=(f,btn)=>{
-  activeFilter=f;
-  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active'); renderDirectory();
-};
+document.getElementById('search-input').addEventListener('input',renderDirectory);
+document.getElementById('filter-all').addEventListener('click',function(){activeFilter='all';setActiveFilter(this);});
+document.getElementById('filter-morning').addEventListener('click',function(){activeFilter='Morning';setActiveFilter(this);});
+document.getElementById('filter-evening').addEventListener('click',function(){activeFilter='Evening';setActiveFilter(this);});
+function setActiveFilter(btn){document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderDirectory();}
 
-// ── Profile view ──
-window.viewProfile=(uid)=>{
-  const p=allAlumni.find(a=>a.uid===uid); if(!p) return;
-  const isSame=currentUserProfile?.session===p.session;
-  const isOwn=currentUser?.uid===uid;
+function switchTab(tab){['directory','noticeboard','announcements'].forEach(t=>{const el=document.getElementById('tab-'+t);if(el)el.style.display=t===tab?'block':'none';const btn=document.getElementById('tab-btn-'+t);if(btn){btn.style.background=t===tab?'#1a3a8a':'transparent';btn.style.color=t===tab?'white':'#6b7280';}});}
+document.getElementById('tab-btn-directory').addEventListener('click',()=>switchTab('directory'));
+document.getElementById('tab-btn-noticeboard').addEventListener('click',()=>switchTab('noticeboard'));
+document.getElementById('tab-btn-announcements').addEventListener('click',()=>switchTab('announcements'));
+
+function viewProfile(uid){
+  const p=allAlumni.find(a=>a.uid===uid);if(!p)return;
+  const isSame=currentUserProfile?.session===p.session, isOwn=currentUser?.uid===uid;
   const init=p.name.split(' ').map(w=>w[0]).slice(0,2).join('');
-  const av=document.getElementById('view-avatar');
-  av.innerHTML=p.photoBase64?'<img src="'+p.photoBase64+'" alt="'+p.name+'">':init;
+  const av=document.getElementById('view-avatar');av.innerHTML=p.photoBase64?'<img src="'+p.photoBase64+'" alt="'+p.name+'">':init;
   document.getElementById('view-name').textContent=p.name+(p.deceased?' 🕊️':'');
   document.getElementById('view-roll').textContent=p.roll+' · '+p.session;
-  // Job visibility
-  const jobPub=p.jobVisibility==='public'||!p.jobVisibility;
-  const showJob=isSame||jobPub;
+  const showJob=isSame||p.jobVisibility==='public'||!p.jobVisibility;
   document.getElementById('view-job').textContent=showJob?p.job+' @ '+p.company:'🔒 Visible to session members only';
   document.getElementById('view-location').textContent=p.city+', '+p.country;
-  document.getElementById('view-email').innerHTML='<a href="mailto:'+p.email+'">'+p.email+'</a>';
-  const ph=document.getElementById('view-phone');
-  if(isSame&&p.phone) ph.innerHTML='<a href="tel:'+p.phone+'">'+p.phone+'</a>';
-  else if(p.phone) ph.innerHTML='<span class="phone-locked">🔒 Session members only</span>';
-  else ph.textContent='Not provided';
-  const li=document.getElementById('view-linkedin');
-  li.innerHTML=p.linkedin?'<a href="'+p.linkedin+'" target="_blank">View Profile →</a>':'Not provided';
-  const bioSec=document.getElementById('view-bio-section');
-  if(p.bio){document.getElementById('view-bio').textContent=p.bio;bioSec.style.display='flex';}
-  else bioSec.style.display='none';
-  document.getElementById('edit-own-btn').style.display=isOwn?'block':'none';
+  const emailEl=document.getElementById('view-email');const ea=document.createElement('a');ea.href='mailto:'+p.email;ea.textContent=p.email;emailEl.innerHTML='';emailEl.appendChild(ea);
+  const phoneEl=document.getElementById('view-phone');if(isSame&&p.phone){const a=document.createElement('a');a.href='tel:'+p.phone;a.textContent=p.phone;phoneEl.innerHTML='';phoneEl.appendChild(a);}else if(p.phone){phoneEl.innerHTML='<span style="color:var(--muted);font-style:italic;">🔒 Session members only</span>';}else{phoneEl.textContent='Not provided';}
+  const liEl=document.getElementById('view-linkedin');if(p.linkedin){const a=document.createElement('a');a.href=p.linkedin;a.target='_blank';a.textContent='View Profile →';liEl.innerHTML='';liEl.appendChild(a);}else{liEl.textContent='Not provided';}
+  const bioSec=document.getElementById('view-bio-section');if(p.bio){document.getElementById('view-bio').textContent=p.bio;bioSec.style.display='flex';}else{bioSec.style.display='none';}
+  document.getElementById('btn-edit-profile').style.display=isOwn?'block':'none';
   showPage('profile');
-};
-
-// ── Tabs ──
-window.switchTab=(tab,btn)=>{
-  ['directory','noticeboard','announcements'].forEach(t=>{
-    const el=document.getElementById('tab-'+t); if(el) el.style.display=t===tab?'block':'none';
-    const b=document.getElementById('tab-btn-'+t);
-    if(b){ b.style.background=t===tab?'#1a3a8a':'transparent'; b.style.color=t===tab?'white':'#6b7280'; }
-  });
-};
-
-// ── Notice Board ──
-async function loadNotices() {
-  try {
-    const snap=await getDocs(query(collection(db,'notices'),where('session','==',currentViewSession),where('approved','==',true)));
-    const el=document.getElementById('notices-list');
-    if(snap.empty){ el.innerHTML='<div class="empty-state">📌 No posts yet. Be the first!</div>'; return; }
-    const items=[]; snap.forEach(d=>items.push({id:d.id,...d.data()}));
-    items.sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
-    el.innerHTML=items.map(n=>{
-      const init=(n.authorName||'?').split(' ').map(w=>w[0]).slice(0,2).join('');
-      const date=n.createdAt?new Date(n.createdAt.seconds*1000).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}):'';
-      const ava=n.authorPhoto?'<img src="'+n.authorPhoto+'" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" alt="">':init;
-      return '<div class="notice-card"><div class="notice-meta"><div class="notice-avatar">'+ava+'</div><div><div class="notice-author">'+n.authorName+'</div><div class="notice-date">'+date+'</div></div></div><div class="notice-text">'+n.text+'</div></div>';
-    }).join('');
-  } catch(e){ console.error('loadNotices',e); }
 }
 
-window.submitNotice=async()=>{
-  if(!currentUser){ showToast('Please sign in.'); return; }
-  if(!currentUserProfile){ showToast('Complete your profile first.'); showPage('setup'); return; }
-  const text=document.getElementById('notice-text').value.trim();
-  if(!text){ showToast('Please write something.'); return; }
-  try{
-    await addDoc(collection(db,'notices'),{text,session:currentViewSession,approved:false,authorUid:currentUser.uid,authorName:currentUserProfile.name,authorPhoto:currentUser.photoURL||'',createdAt:serverTimestamp()});
-    document.getElementById('notice-text').value='';
-    document.getElementById('notice-char').textContent='0/500';
-    showToast('✅ Posted! Visible once admin approves.');
-  }catch(e){showToast('Error: '+e.message);}
-};
-
-// ── Announcements ──
-async function loadAnnouncements() {
-  try {
-    const snap=await getDocs(query(collection(db,'announcements'),where('session','==',currentViewSession),where('approved','==',true)));
-    const el=document.getElementById('announcements-list');
-    if(snap.empty){ el.innerHTML='<div class="empty-state">📢 No announcements yet.</div>'; return; }
-    const items=[]; snap.forEach(d=>items.push({id:d.id,...d.data()}));
-    items.sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
-    const tl={job:'Job Update',achievement:'Achievement',news:'News',other:'Update'};
-    el.innerHTML=items.map(a=>{
-      const date=a.createdAt?new Date(a.createdAt.seconds*1000).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}):'';
-      return '<div class="ann-card"><span class="ann-type-'+(a.type||'other')+'">'+( tl[a.type]||'Update')+'</span><div class="ann-title">'+a.title+'</div>'+(a.body?'<div class="ann-body">'+a.body+'</div>':'')+'<div class="ann-footer">By '+a.authorName+' · '+date+'</div></div>';
-    }).join('');
-  }catch(e){console.error('loadAnnouncements',e);}
+function openEditProfile(){
+  if(!currentUserProfile)return;const p=currentUserProfile;isEditMode=true;
+  document.getElementById('setup-title').textContent='Edit Your Profile';
+  document.getElementById('setup-subtitle').textContent='Update your information.';
+  document.getElementById('setup-submit-btn').textContent='Update Profile';
+  document.getElementById('setup-session').value=p.session||'';
+  document.getElementById('setup-session').dispatchEvent(new Event('change'));
+  setTimeout(()=>{document.getElementById('setup-roll').value=p.roll||'';document.getElementById('setup-roll').dispatchEvent(new Event('change'));},60);
+  if(p.city&&p.country){document.getElementById('setup-city-input').value=p.city+', '+p.country;document.getElementById('setup-city').value=p.city;document.getElementById('setup-country').value=p.country;const d=document.getElementById('city-selected-display');d.textContent='✅ '+p.city+', '+p.country;d.style.display='block';}
+  document.getElementById('setup-job').value=p.job||'';document.getElementById('setup-company').value=p.company||'';
+  document.getElementById('setup-email').value=p.email||'';document.getElementById('setup-phone').value=p.phone||'';
+  document.getElementById('setup-linkedin').value=p.linkedin||'';document.getElementById('setup-bio').value=p.bio||'';
+  const vis=p.jobVisibility||'session';const radio=document.querySelector('input[name="job-visibility"][value="'+vis+'"]');if(radio)radio.checked=true;
+  if(p.photoBase64){document.getElementById('photo-upload-circle').innerHTML='<img src="'+p.photoBase64+'" style="width:100%;height:100%;object-fit:cover;" alt="">';selectedPhotoBase64=p.photoBase64;}
+  showPage('setup');
 }
 
-window.submitAnnouncement=async()=>{
-  if(!currentUser){ showToast('Please sign in.'); return; }
-  if(!currentUserProfile){ showToast('Complete your profile first.'); showPage('setup'); return; }
-  const type=document.getElementById('ann-type').value;
-  const title=document.getElementById('ann-title').value.trim();
-  const body=document.getElementById('ann-body').value.trim();
-  if(!title){ showToast('Please add a title.'); return; }
-  try{
-    await addDoc(collection(db,'announcements'),{type,title,body,session:currentViewSession,approved:false,authorUid:currentUser.uid,authorName:currentUserProfile.name,createdAt:serverTimestamp()});
-    document.getElementById('ann-title').value='';
-    document.getElementById('ann-body').value='';
-    showToast('✅ Submitted for approval!');
-  }catch(e){showToast('Error: '+e.message);}
-};
+async function loadNotices(){
+  try{const snap=await getDocs(query(collection(db,'notices'),where('session','==',currentViewSession),where('approved','==',true)));
+  const el=document.getElementById('notices-list');
+  if(snap.empty){el.innerHTML='<div class="empty-state">📌 No posts yet. Be the first!</div>';return;}
+  const items=[];snap.forEach(d=>items.push({id:d.id,...d.data()}));items.sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
+  el.innerHTML='';items.forEach(n=>{const date=n.createdAt?new Date(n.createdAt.seconds*1000).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}):'';const init=(n.authorName||'?').split(' ').map(w=>w[0]).slice(0,2).join('');const card=document.createElement('div');card.className='notice-card';const meta=document.createElement('div');meta.className='notice-meta';const av=document.createElement('div');av.className='notice-avatar';if(n.authorPhoto){const img=document.createElement('img');img.src=n.authorPhoto;img.style.cssText='width:100%;height:100%;object-fit:cover;border-radius:50%;';av.appendChild(img);}else{av.textContent=init;}meta.appendChild(av);const info=document.createElement('div');const aname=document.createElement('div');aname.className='notice-author';aname.textContent=n.authorName;const adate=document.createElement('div');adate.className='notice-date';adate.textContent=date;info.appendChild(aname);info.appendChild(adate);meta.appendChild(info);card.appendChild(meta);const txt=document.createElement('div');txt.className='notice-text';txt.textContent=n.text;card.appendChild(txt);el.appendChild(card);});
+  }catch(e){console.error(e);}
+}
 
-// ── Toast ──
-window.showToast=(msg)=>{
-  const t=document.getElementById('toast');
-  t.textContent=msg; t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),3000);
-};
+document.getElementById('btn-submit-notice').addEventListener('click',async()=>{
+  if(!currentUser){showToast('Please sign in.');return;}if(!currentUserProfile){showToast('Complete your profile first.');showPage('setup');return;}
+  const text=document.getElementById('notice-text').value.trim();if(!text){showToast('Please write something.');return;}
+  try{await addDoc(collection(db,'notices'),{text,session:currentViewSession,approved:false,authorUid:currentUser.uid,authorName:currentUserProfile.name,authorPhoto:currentUser.photoURL||'',createdAt:serverTimestamp()});document.getElementById('notice-text').value='';document.getElementById('notice-char').textContent='0/500';showToast('Posted! Visible once admin approves.');}catch(e){showToast('Error: '+e.message);}
+});
+
+async function loadAnnouncements(){
+  try{const snap=await getDocs(query(collection(db,'announcements'),where('session','==',currentViewSession),where('approved','==',true)));
+  const el=document.getElementById('announcements-list');
+  if(snap.empty){el.innerHTML='<div class="empty-state">📢 No announcements yet.</div>';return;}
+  const items=[];snap.forEach(d=>items.push({id:d.id,...d.data()}));items.sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
+  const tl={job:'Job Update',achievement:'Achievement',news:'News',other:'Update'};
+  const tc={job:'background:#eff6ff;color:#1d4ed8',achievement:'background:#f0fdf4;color:#166534',news:'background:#fff7ed;color:#9a3412',other:'background:#f3f4f6;color:#6b7280'};
+  el.innerHTML='';items.forEach(a=>{const date=a.createdAt?new Date(a.createdAt.seconds*1000).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}):'';const card=document.createElement('div');card.className='ann-card';const badge=document.createElement('span');badge.style.cssText='font-size:11px;font-weight:600;padding:3px 10px;border-radius:12px;display:inline-block;margin-bottom:6px;'+(tc[a.type]||tc.other);badge.textContent=tl[a.type]||'Update';card.appendChild(badge);const title=document.createElement('div');title.className='ann-title-text';title.textContent=a.title;card.appendChild(title);if(a.body){const body=document.createElement('div');body.className='ann-body-text';body.textContent=a.body;card.appendChild(body);}const footer=document.createElement('div');footer.className='ann-footer';footer.textContent='By '+a.authorName+' · '+date;card.appendChild(footer);el.appendChild(card);});
+  }catch(e){console.error(e);}
+}
+
+document.getElementById('btn-submit-ann').addEventListener('click',async()=>{
+  if(!currentUser){showToast('Please sign in.');return;}if(!currentUserProfile){showToast('Complete your profile first.');showPage('setup');return;}
+  const type=document.getElementById('ann-type').value,title=document.getElementById('ann-title').value.trim(),body=document.getElementById('ann-body').value.trim();
+  if(!title){showToast('Please add a headline.');return;}
+  try{await addDoc(collection(db,'announcements'),{type,title,body,session:currentViewSession,approved:false,authorUid:currentUser.uid,authorName:currentUserProfile.name,createdAt:serverTimestamp()});document.getElementById('ann-title').value='';document.getElementById('ann-body').value='';showToast('Submitted for approval!');}catch(e){showToast('Error: '+e.message);}
+});
 
 loadGlobalStats();
 </script>
