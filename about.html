@@ -35,12 +35,14 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
     padding: 0;
     position: relative; overflow: hidden;
     border-bottom: 3px solid #c8a96e;
+    width: 100%;
   }
-  .header-inner { max-width: 100%; margin: 0; position: relative; z-index: 1; }
+  .header-inner { width: 100%; margin: 0; position: relative; z-index: 1; }
   .journey-cols {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    height: 200px;
+    height: 380px;
+    width: 100%;
   }
   .journey-col {
     position: relative; overflow: hidden;
@@ -102,6 +104,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
     display: flex; align-items: center; justify-content: space-between;
     border-bottom: 1px solid #e5e7eb;
     gap: 1rem;
+    width: 100%;
   }
   .header-tag-strip h1 {
     font-family: "Playfair Display", serif;
@@ -117,7 +120,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
   .header-tag-strip-left { display: flex; flex-direction: column; gap: 3px; }
   @media(max-width:640px) {
     .journey-cols { grid-template-columns: 1fr; height: auto; }
-    .journey-col { height: 100px; }
+    .journey-col { height: 200px; }
     .header-tag-strip { flex-direction: column; align-items: flex-start; gap: 4px; }
   }
 
