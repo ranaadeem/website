@@ -35,7 +35,7 @@ body{ font-family:"DM Sans",sans-serif; background:var(--cream); color:var(--tex
 }
 
 /* HERO */
-.hero{ background:linear-gradient(135deg,var(--navy) 0%,#2048a8 60%,#163366 100%); padding:3rem 2rem; position:relative; overflow:hidden; }
+.hero{ background:linear-gradient(135deg,var(--navy) 0%,#2048a8 60%,#163366 100%); padding:2rem 2rem; position:relative; overflow:hidden; }
 .hero::before{ content:""; position:absolute; top:-100px; right:-100px; width:500px; height:500px; border-radius:50%; background:radial-gradient(circle,rgba(201,168,76,0.12) 0%,transparent 70%); pointer-events:none; }
 .hero::after{ content:""; position:absolute; bottom:-80px; left:-80px; width:350px; height:350px; border-radius:50%; background:radial-gradient(circle,rgba(201,168,76,0.07) 0%,transparent 70%); pointer-events:none; }
 .hero-inner{ max-width:960px; margin:0 auto; display:grid; grid-template-columns:1fr 320px; gap:4rem; align-items:center; position:relative; z-index:1; }
@@ -101,7 +101,7 @@ body{ font-family:"DM Sans",sans-serif; background:var(--cream); color:var(--tex
 .tl-sub{ font-size:11px; color:rgba(255,255,255,0.45); }
 
 /* PUBLICATIONS */
-.pub-card{ background:var(--white); border:1px solid var(--border); border-left:4px solid var(--gold); border-radius:8px; padding:1.25rem 1.5rem; margin-bottom:1rem; transition:box-shadow 0.2s; }
+.pub-card{ background:var(--white); border:1px solid var(--border); border-left:4px solid var(--gold); border-radius:8px; padding:1.25rem 1.5rem; margin-bottom:1rem; transition:box-shadow 0.2s; color:var(--text); }
 .pub-card:hover{ box-shadow:0 4px 20px rgba(0,0,0,0.07); }
 .pub-title{ font-size:14px; font-weight:500; color:var(--navy); margin-bottom:5px; line-height:1.5; }
 .pub-meta{ font-size:12px; color:var(--muted); }
@@ -289,20 +289,23 @@ body{ font-family:"DM Sans",sans-serif; background:var(--cream); color:var(--tex
     <span class="section-tag">Research Output</span>
     <h2 class="section-title">Selected Publications</h2>
     <p class="section-sub">A selection of peer-reviewed work. Full list available on Google Scholar.</p>
-    <div class="pub-card">
+    <a href="https://doi.org/10.1016/j.fuel.2025.136280" target="_blank" class="pub-card" style="display:block;text-decoration:none;cursor:pointer;">
       <div class="pub-title">Advances and Challenges in Photocatalytic Water Splitting: Recent Developments and Trends<span class="pub-year">2026</span></div>
       <div class="pub-meta">Anwar, S.; Aslam, Z.; <strong>Rana, A.G.</strong> et al. · <em>Fuel</em>, 404, p. 136280</div>
-    </div>
-    <div class="pub-card">
+      <div style="font-size:11px;color:var(--gold);margin-top:5px;">doi.org/10.1016/j.fuel.2025.136280 ↗</div>
+    </a>
+    <a href="https://doi.org/10.1016/j.cej.2024.156948" target="_blank" class="pub-card" style="display:block;text-decoration:none;cursor:pointer;">
       <div class="pub-title">Enhanced Gas-Phase Pollutant Removal Using Pt Nanoparticle-Modified Exfoliated Carbon Nitride Photocatalysts Under UV and Visible Light<span class="pub-year">2024</span></div>
       <div class="pub-meta">Mateos, M.J.; Hou, H.; <strong>Rana, A.G.</strong> et al. · <em>Chemical Engineering Journal</em>, 500, p. 156948</div>
-    </div>
-    <div class="pub-card">
+      <div style="font-size:11px;color:var(--gold);margin-top:5px;">doi.org/10.1016/j.cej.2024.156948 ↗</div>
+    </a>
+    <a href="https://doi.org/10.3390/nano12224006" target="_blank" class="pub-card" style="display:block;text-decoration:none;cursor:pointer;">
       <div class="pub-title">Influence of Cocatalysts (Ni, Co, Cu) and Synthesis Method on Photocatalytic Activity of Exfoliated g-C₃N₄ for Hydrogen Production<span class="pub-year">2022</span></div>
       <div class="pub-meta"><strong>Rana, A.G.</strong>; Schwarze, M.; Tasbihi, M. et al. · <em>Nanomaterials</em>, 12(22), p. 4006</div>
-    </div>
+      <div style="font-size:11px;color:var(--gold);margin-top:5px;">doi.org/10.3390/nano12224006 ↗</div>
+    </a>
     <br>
-    <a href="/publications.html" class="view-all-link">View all publications →</a>
+    <a href="https://scholar.google.com/citations?user=pUQ4nFsAAAAJ" target="_blank" class="view-all-link">View all publications on Google Scholar →</a>
   </div>
 </section>
 
@@ -357,6 +360,24 @@ body{ font-family:"DM Sans",sans-serif; background:var(--cream); color:var(--tex
 
 <script>
 function toggleMenu() { document.getElementById('nav-links').classList.toggle('open'); }
+
+// ── OpenAlex live citation stats ──
+(async function loadOpenAlexStats() {
+  const ORCID = '0000-0003-4725-2312';
+  try {
+    // Fetch author profile
+    const r1 = await fetch('https://api.openalex.org/authors?filter=orcid:' + ORCID);
+    if (!r1.ok) return;
+    const d1 = await r1.json();
+    const author = d1.results?.[0];
+    if (!author) return;
+    const citations = author.cited_by_count || 0;
+    const hIndex = author.summary_stats?.h_index || 0;
+    // Update any citation/h-index displays on the page
+    document.querySelectorAll('[data-citations]').forEach(el => el.textContent = citations.toLocaleString() + '+');
+    document.querySelectorAll('[data-hindex]').forEach(el => el.textContent = hIndex);
+  } catch(e) {}
+})();
 </script>
 </body>
 </html>
