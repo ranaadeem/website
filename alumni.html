@@ -528,13 +528,19 @@ window.showToast = function(msg) {
 window._alumniCurrentUser = null;
 window._alumniCurrentProfile = null;
 window._loadDirectory = null;
-// signInWithGoogle needs Firebase — bridge via window._firebaseSignIn
+// Firebase ready promise — resolves when module finishes loading
+window._firebaseReady = new Promise(function(resolve) {
+  window._firebaseResolve = resolve;
+});
 window.signInWithGoogle = function() {
-  if (window._firebaseSignIn) window._firebaseSignIn();
-  else window.showToast('Loading... please try again in a moment.');
+  window._firebaseReady.then(function() {
+    window._firebaseSignIn();
+  });
 };
 window.doSignOut = function() {
-  if (window._firebaseSignOut) window._firebaseSignOut();
+  window._firebaseReady.then(function() {
+    window._firebaseSignOut();
+  });
 };
 </script>
 
@@ -671,11 +677,29 @@ function updateNavUser(user) {
     + '</div>';
 }
 
-// Expose Firebase auth functions via bridge
-window._firebaseSignIn = async () => { try { await signInWithPopup(auth,provider); showToast('Signed in!'); } catch(e) { console.error(e); showToast('Sign in failed: '+e.message); } };
-window._firebaseSignOut = async () => { await signOut(auth); window.showPage('landing'); showToast('Signed out.'); };
-// Keep window.signInWithGoogle pointing to bridge (already set in early script)
-// Keep window.doSignOut pointing to bridge (already set in early script)
+// Expose Firebase auth functions
+window._firebaseSignIn = async () => {
+  try {
+    await signInWithPopup(auth, provider);
+    showToast('Signed in!');
+  } catch(e) {
+    console.error('Sign in error:', e);
+    if (e.code === 'auth/popup-blocked') {
+      showToast('Popup blocked — please allow popups for this site.');
+    } else if (e.code === 'auth/cancelled-popup-request') {
+      // User closed popup — do nothing
+    } else {
+      showToast('Sign in failed: ' + (e.message || e.code));
+    }
+  }
+};
+window._firebaseSignOut = async () => {
+  await signOut(auth);
+  window.showPage('landing');
+  showToast('Signed out.');
+};
+// Signal that Firebase is ready — resolves the promise in the early script
+if (window._firebaseResolve) window._firebaseResolve();
 
 // Navigation functions defined below onAuthStateChanged — moved to top
 
