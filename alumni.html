@@ -1163,7 +1163,12 @@ async function submitProfile(){
         if (d.data().uid !== currentUser.uid) takenByOther = true;
       });
       if (takenByOther) {
-        err.textContent = '⚠️ Roll number ' + roll + ' is already registered. If this is you, sign in with the Google account you used originally. Contact admin if you need help.';
+        const subject = encodeURIComponent('Alumni Portal — Roll Number Issue');
+        const body = encodeURIComponent('Hi Adeem,\n\nI am trying to register on the ICET Alumni Portal but roll number ' + roll + ' (Session ' + session + ') appears to be already taken.\n\nPlease help me access my profile.\n\nThank you.');
+        err.innerHTML = '⚠️ Roll number <strong>' + roll + '</strong> is already registered. If this is you, sign in with the Google account you used originally.<br><br>'
+          + '<a href="mailto:ranaadeem@hotmail.com?subject=' + subject + '&body=' + body + '" '
+          + 'style="display:inline-flex;align-items:center;gap:8px;background:var(--navy);color:white;padding:9px 18px;border-radius:7px;font-size:13px;font-weight:600;text-decoration:none;margin-top:4px;">'
+          + '📧 Contact Admin</a>';
         err.style.display = 'block';
         btn.disabled = false;
         btn.textContent = 'Save Profile & Join Network';
