@@ -190,7 +190,7 @@ body{ font-family:"DM Sans",sans-serif; background:var(--cream); color:var(--tex
       <div class="photo-role">Dr.-Ing. · Chemical Engineering</div>
       <div class="photo-stats">
         <div class="stat-box"><span class="stat-num">15+</span><span class="stat-lbl">Publications</span></div>
-        <div class="stat-box"><span class="stat-num">230+</span><span class="stat-lbl">Citations</span></div>
+        <div class="stat-box"><span class="stat-num" id="home-citations-1">230+</span><span class="stat-lbl">Citations</span></div>
         <div class="stat-box"><span class="stat-num">3</span><span class="stat-lbl">Countries</span></div>
         <div class="stat-box"><span class="stat-num">14+</span><span class="stat-lbl">Years Exp.</span></div>
       </div>
@@ -210,7 +210,7 @@ body{ font-family:"DM Sans",sans-serif; background:var(--cream); color:var(--tex
   <div class="stats-inner">
     <div class="strip-stat"><span class="strip-num">15+</span><div class="strip-lbl">Peer-reviewed Publications</div></div>
     <div class="strip-divider"></div>
-    <div class="strip-stat"><span class="strip-num">230+</span><div class="strip-lbl">Total Citations</div></div>
+    <div class="strip-stat"><span class="strip-num" id="home-citations-2">230+</span><div class="strip-lbl">Total Citations</div></div>
     <div class="strip-divider"></div>
     <div class="strip-stat"><span class="strip-num">3</span><div class="strip-lbl">Countries Worked In</div></div>
     <div class="strip-divider"></div>
@@ -374,8 +374,11 @@ function toggleMenu() { document.getElementById('nav-links').classList.toggle('o
     const citations = author.cited_by_count || 0;
     const hIndex = author.summary_stats?.h_index || 0;
     // Update any citation/h-index displays on the page
-    document.querySelectorAll('[data-citations]').forEach(el => el.textContent = citations.toLocaleString() + '+');
-    document.querySelectorAll('[data-hindex]').forEach(el => el.textContent = hIndex);
+    // Update all citation displays
+    ['home-citations-1','home-citations-2'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = citations.toLocaleString() + '+';
+    });
   } catch(e) {}
 })();
 </script>
