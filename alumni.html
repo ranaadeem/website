@@ -666,15 +666,48 @@ async function getUserProfile(uid) {
 
 function updateNavUser(user) {
   const area = document.getElementById('nav-user-area');
-  if (!user) { area.innerHTML = '<button class="nav-btn btn-gold" onclick="showPage('login')">Sign In</button>'; return; }
+  if (!user) {
+    area.innerHTML = '';
+    const btn = document.createElement('button');
+    btn.className = 'nav-btn btn-gold';
+    btn.textContent = 'Sign In';
+    btn.onclick = function() { window.showPage('login'); };
+    area.appendChild(btn);
+    return;
+  }
   const isAdmin = user.uid === ADMIN_UID;
-  area.innerHTML = '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">'
-    + (user.photoURL ? '<img src="'+user.photoURL+'" style="width:32px;height:32px;border-radius:50%;border:2px solid #c9a84c;" alt="">' : '')
-    + '<span style="font-size:13px;color:rgba(255,255,255,0.8);">'+(user.displayName||'').split(' ')[0]+'</span>'
-    + (isAdmin ? '<a href="/admin.html" class="nav-btn btn-gold" style="text-decoration:none;">⚙ Admin</a>' : '')
-    + '<button class="nav-btn btn-outline" onclick="showPage('directory')">Directory</button>'
-    + '<button class="nav-btn btn-outline" onclick="doSignOut()">Sign Out</button>'
-    + '</div>';
+  area.innerHTML = '';
+  const wrap = document.createElement('div');
+  wrap.style.cssText = 'display:flex;align-items:center;gap:8px;flex-wrap:wrap;';
+  if (user.photoURL) {
+    const img = document.createElement('img');
+    img.src = user.photoURL;
+    img.style.cssText = 'width:32px;height:32px;border-radius:50%;border:2px solid #c9a84c;';
+    wrap.appendChild(img);
+  }
+  const nameEl = document.createElement('span');
+  nameEl.style.cssText = 'font-size:13px;color:rgba(255,255,255,0.8);';
+  nameEl.textContent = (user.displayName||'').split(' ')[0];
+  wrap.appendChild(nameEl);
+  if (isAdmin) {
+    const adminBtn = document.createElement('a');
+    adminBtn.href = '/admin.html';
+    adminBtn.className = 'nav-btn btn-gold';
+    adminBtn.style.textDecoration = 'none';
+    adminBtn.textContent = '⚙ Admin';
+    wrap.appendChild(adminBtn);
+  }
+  const dirBtn = document.createElement('button');
+  dirBtn.className = 'nav-btn btn-outline';
+  dirBtn.textContent = 'Directory';
+  dirBtn.onclick = function() { window.showPage('directory'); };
+  wrap.appendChild(dirBtn);
+  const outBtn = document.createElement('button');
+  outBtn.className = 'nav-btn btn-outline';
+  outBtn.textContent = 'Sign Out';
+  outBtn.onclick = function() { window.doSignOut(); };
+  wrap.appendChild(outBtn);
+  area.appendChild(wrap);
 }
 
 // Expose Firebase auth functions
