@@ -35,7 +35,7 @@ body{ font-family:"DM Sans",sans-serif; background:var(--cream); color:var(--tex
 }
 
 /* HERO */
-.hero{ background:linear-gradient(135deg,var(--navy) 0%,#2048a8 60%,#163366 100%); padding:2rem 2rem; position:relative; overflow:hidden; }
+.hero{ background:linear-gradient(135deg,var(--navy) 0%,#2048a8 60%,#163366 100%); padding:1.25rem 2rem; position:relative; overflow:hidden; }
 .hero::before{ content:""; position:absolute; top:-100px; right:-100px; width:500px; height:500px; border-radius:50%; background:radial-gradient(circle,rgba(201,168,76,0.12) 0%,transparent 70%); pointer-events:none; }
 .hero::after{ content:""; position:absolute; bottom:-80px; left:-80px; width:350px; height:350px; border-radius:50%; background:radial-gradient(circle,rgba(201,168,76,0.07) 0%,transparent 70%); pointer-events:none; }
 .hero-inner{ max-width:960px; margin:0 auto; display:grid; grid-template-columns:1fr 320px; gap:4rem; align-items:center; position:relative; z-index:1; }
@@ -79,10 +79,23 @@ body{ font-family:"DM Sans",sans-serif; background:var(--cream); color:var(--tex
 .section-sub{ font-size:15px; color:var(--muted); margin-bottom:2.5rem; max-width:560px; line-height:1.7; }
 
 /* RESEARCH CARDS */
-.research-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:1.25rem; }
-.research-card{ background:var(--white); border:1px solid var(--border); border-radius:12px; padding:1.75rem; transition:all 0.25s; position:relative; overflow:hidden; }
+.research-grid{ display:grid; grid-template-columns:1fr; gap:1rem; }
+.research-card{ background:var(--white); border:1px solid var(--border); border-radius:12px; padding:1.1rem 1.25rem; transition:all 0.25s; position:relative; overflow:hidden; }
 .research-card::before{ content:""; position:absolute; top:0; left:0; right:0; height:3px; background:var(--gold); transform:scaleX(0); transition:transform 0.25s; transform-origin:left; }
 .research-card:hover{ box-shadow:0 8px 30px rgba(0,0,0,0.08); transform:translateY(-2px); }
+
+/* NEWS CARDS */
+.news-card{ background:var(--white); border:1px solid var(--border); border-radius:12px; padding:1.1rem 1.25rem; transition:all 0.2s; border-left:4px solid var(--gold); }
+.news-card:hover{ box-shadow:0 4px 20px rgba(0,0,0,0.07); transform:translateY(-1px); }
+.news-badge{ display:inline-block; font-size:10px; font-weight:700; padding:3px 10px; border-radius:20px; margin-bottom:7px; letter-spacing:0.04em; }
+.news-badge-paper{ background:rgba(26,58,138,0.08); color:var(--navy); }
+.news-badge-career{ background:rgba(201,168,76,0.12); color:#8b6914; }
+.news-badge-award{ background:rgba(5,150,105,0.08); color:#065f46; }
+.news-badge-news{ background:rgba(220,38,38,0.08); color:#991b1b; }
+.news-title{ font-size:14px; font-weight:600; color:var(--navy); margin-bottom:4px; line-height:1.35; }
+.news-meta{ font-size:12px; color:var(--muted); margin-bottom:6px; }
+.news-link{ font-size:12px; color:var(--gold); font-weight:600; text-decoration:none; }
+.news-link:hover{ text-decoration:underline; }
 .research-card:hover::before{ transform:scaleX(1); }
 .card-icon{ font-size:28px; margin-bottom:1rem; display:block; }
 .card-title{ font-family:"Playfair Display",serif; font-size:16px; color:var(--navy); margin-bottom:0.5rem; }
@@ -237,31 +250,79 @@ body{ font-family:"DM Sans",sans-serif; background:var(--cream); color:var(--tex
   </div>
 </div>
 
-<!-- RESEARCH -->
+<!-- RESEARCH + NEWS -->
 <section class="section" id="research">
   <div class="section-inner">
-    <span class="section-tag">Current Work</span>
-    <h2 class="section-title">Research Focus Areas</h2>
-    <p class="section-sub">My work sits at the intersection of catalyst development, reaction engineering, and sustainable fuel production — from lab-scale execution to industrial collaboration.</p>
-    <div class="research-grid">
-      <div class="research-card">
-        <span class="card-icon">✈️</span>
-        <h3 class="card-title">Sustainable Aviation Fuels</h3>
-        <p class="card-text">Methanol-to-Olefins (MTO) using zeolite catalysts and hydrotreating/hydrocracking of Fischer–Tropsch feeds for SAF-range products within the REF4FU and OptiSAF frameworks.</p>
-        <span class="card-tag">Ongoing · TUBAF · 2023–</span>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:2.5rem;align-items:start;">
+
+      <!-- LEFT: Research Focus 2x2 -->
+      <div>
+        <span class="section-tag">Current Work</span>
+        <h2 class="section-title">Research Focus Areas</h2>
+        <div class="research-grid">
+          <div class="research-card">
+            <span class="card-icon">✈️</span>
+            <h3 class="card-title">Sustainable Aviation Fuels</h3>
+            <p class="card-text">Methanol-to-Olefins (MTO) using zeolite catalysts and hydrotreating/hydrocracking of Fischer–Tropsch feeds for SAF-range products within the REF4FU and OptiSAF frameworks.</p>
+            <span class="card-tag">Ongoing · TUBAF · 2023–</span>
+          </div>
+          <div class="research-card">
+            <span class="card-icon">⚗️</span>
+            <h3 class="card-title">Heterogeneous Catalysis</h3>
+            <p class="card-text">Catalyst synthesis, screening, and kinetic evaluation. Zeolite-based systems, metal-supported catalysts, and Design of Experiments for process optimization.</p>
+            <span class="card-tag">REF4FU · OptiSAF Projects</span>
+          </div>
+          <div class="research-card">
+            <span class="card-icon">☀️</span>
+            <h3 class="card-title">Photocatalysis</h3>
+            <p class="card-text">Modification of graphitic carbon nitride (g-C₃N₄) for redox applications. CO₂ conversion to hydrocarbons. Photocatalytic degradation of persistent organic pollutants.</p>
+            <span class="card-tag">TUM · PhD Research</span>
+          </div>
+          <div class="research-card">
+            <span class="card-icon">🏗️</span>
+            <h3 class="card-title">Zeolite Catalysts &amp; Hydrocarbon Processing</h3>
+            <p class="card-text">Synthesis and characterisation of zeolite frameworks for selective hydrocarbon conversion. Focus on acidity, porosity, and deactivation behaviour in fixed-bed reactors.</p>
+            <span class="card-tag">TUBAF · Ongoing</span>
+          </div>
+        </div>
       </div>
-      <div class="research-card">
-        <span class="card-icon">⚗️</span>
-        <h3 class="card-title">Heterogeneous Catalysis</h3>
-        <p class="card-text">Catalyst synthesis, screening, and kinetic evaluation. Expertise in zeolite-based systems, metal-supported catalysts, and Design of Experiments (DoE) for process optimization.</p>
-        <span class="card-tag">REF4FU · OptiSAF Projects</span>
+
+      <!-- RIGHT: Latest News 4 cards -->
+      <div>
+        <span class="section-tag">Updates</span>
+        <h2 class="section-title">Latest News</h2>
+        <div style="display:flex;flex-direction:column;gap:1rem;" id="news-cards">
+
+          <div class="news-card">
+            <div class="news-badge news-badge-paper">📄 New Paper</div>
+            <div class="news-title">Advances and Challenges in Photocatalytic Water Splitting</div>
+            <div class="news-meta">Published in <em>Fuel</em> · 2026</div>
+            <a href="https://doi.org/10.1016/j.fuel.2025.136280" target="_blank" class="news-link">Read Paper →</a>
+          </div>
+
+          <div class="news-card">
+            <div class="news-badge news-badge-paper">📄 New Paper</div>
+            <div class="news-title">Enhanced Gas-Phase Pollutant Removal Using Pt-Modified Carbon Nitride</div>
+            <div class="news-meta">Published in <em>Chemical Engineering Journal</em> · 2024</div>
+            <a href="https://doi.org/10.1016/j.cej.2024.156948" target="_blank" class="news-link">Read Paper →</a>
+          </div>
+
+          <div class="news-card">
+            <div class="news-badge news-badge-career">💼 Career</div>
+            <div class="news-title">Postdoctoral Researcher at TU Bergakademie Freiberg</div>
+            <div class="news-meta">Freiberg, Germany · 2024 – Present</div>
+          </div>
+
+          <div class="news-card">
+            <div class="news-badge news-badge-award">🎓 Milestone</div>
+            <div class="news-title">PhD Completed at TU Munich</div>
+            <div class="news-meta">Chemical Engineering · TU Munich · 2023</div>
+          </div>
+
+        </div>
+        <p style="font-size:11px;color:var(--muted);margin-top:1rem;font-style:italic;">To update: edit the news-cards section in index.html</p>
       </div>
-      <div class="research-card">
-        <span class="card-icon">☀️</span>
-        <h3 class="card-title">Photocatalysis</h3>
-        <p class="card-text">Modification of graphitic carbon nitride (g-C₃N₄) for redox applications. CO₂ conversion to hydrocarbons. Photocatalytic degradation of persistent organic pollutants.</p>
-        <span class="card-tag">TUM · PhD Research</span>
-      </div>
+
     </div>
   </div>
 </section>
