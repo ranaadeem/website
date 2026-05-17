@@ -644,7 +644,7 @@ nav{background:var(--navy);border-bottom:2px solid var(--gold);position:sticky;t
     <div style="background:white;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.08);">
       <!-- Profile Header -->
       <div style="background:linear-gradient(135deg,var(--navy) 0%,#2048a8 100%);padding:2.5rem 2rem;display:flex;align-items:center;gap:2rem;flex-wrap:wrap;">
-        <div id="view-avatar" style="width:110px;height:110px;border-radius:50%;border:3px solid var(--gold);background:rgba(201,168,76,0.2);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:36px;color:var(--gold);font-weight:700;overflow:hidden;flex-shrink:0;"></div>
+        <div id="view-avatar" style="width:110px;height:110px;border-radius:50%;border:3px solid var(--gold);background:rgba(201,168,76,0.2);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:36px;color:var(--gold);font-weight:700;overflow:hidden;flex-shrink:0;position:relative;"></div>
         <div style="flex:1;min-width:180px;">
           <div id="view-name" style="font-family:'Playfair Display',serif;font-size:1.6rem;color:white;font-weight:700;margin-bottom:4px;"></div>
           <div id="view-roll" style="font-size:13px;color:var(--gold);margin-bottom:12px;"></div>
@@ -1249,7 +1249,7 @@ function viewProfile(uid){
   const p=allAlumni.find(a=>a.uid===uid);if(!p)return;
   const isSame=currentUserProfile?.session===p.session, isOwn=currentUser?.uid===uid;
   const init=p.name.split(' ').map(w=>w[0]).slice(0,2).join('');
-  const av=document.getElementById('view-avatar');av.innerHTML=p.photoBase64?'<img src="'+p.photoBase64+'" alt="'+p.name+'">':init;
+  const av=document.getElementById('view-avatar');av.innerHTML=p.photoBase64?'<img src="'+p.photoBase64+'" alt="'+p.name+'" style="width:100%;height:100%;object-fit:cover;object-position:center top;border-radius:50%;">':init;
   document.getElementById('view-name').textContent=p.name+(p.deceased?' 🕊️':'');
   document.getElementById('view-roll').textContent=p.roll+' · '+p.session;
   const batchEl=document.getElementById('view-batch');
