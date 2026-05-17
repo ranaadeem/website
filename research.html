@@ -155,7 +155,7 @@ nav{background:var(--navy);border-bottom:2px solid var(--gold);position:sticky;t
   background: white; border: 1px solid var(--border);
   border-left: 4px solid var(--gold); border-radius: 0 8px 8px 0;
   padding: 1rem 1.25rem; margin-bottom: 0.75rem;
-  transition: box-shadow 0.2s;
+  transition: box-shadow 0.2s; color: var(--text);
 }
 .pub-item:hover { box-shadow: 0 3px 15px rgba(0,0,0,0.06); }
 .pub-year-tag {
@@ -387,45 +387,40 @@ nav{background:var(--navy);border-bottom:2px solid var(--gold);position:sticky;t
 
       <div class="pub-section">
 
-        <div class="pub-item">
+        <a href="https://doi.org/10.1016/j.fuel.2025.136280" target="_blank" class="pub-item" style="display:block;text-decoration:none;cursor:pointer;">
           <span class="pub-year-tag">2026 · J.13</span>
           <div class="pub-title">Advances and Challenges in Photocatalytic Water Splitting: Recent Developments and Trends</div>
           <div class="pub-authors">Anwar, S.; Aslam, Z.; Aslam, U.; Mehmood, U.; <strong>Rana, A.G.</strong>; Mahmood, N.; Rafique, A.</div>
           <div class="pub-journal"><em>Fuel</em> · 404, p. 136280</div>
-        </div>
+        </a>
 
-        <div class="pub-item">
+        <a href="https://doi.org/10.1016/j.cej.2024.156948" target="_blank" class="pub-item" style="display:block;text-decoration:none;cursor:pointer;">
           <span class="pub-year-tag">2024 · J.12</span>
           <div class="pub-title">Enhanced Gas-Phase Pollutant Removal Using Pt Nanoparticle-Modified Exfoliated Carbon Nitride Photocatalysts Under UV and Visible Light</div>
           <div class="pub-authors">Mateos, M.J.; Hou, H.; <strong>Rana, A.G.</strong>; Lao-Zea, A.; Romero, N.; Sala, X. et al.</div>
           <div class="pub-journal"><em>Chemical Engineering Journal</em> · 500, p. 156948</div>
-        </div>
+        </a>
 
-        <div class="pub-item">
+        <a href="https://doi.org/10.3390/nano12224006" target="_blank" class="pub-item" style="display:block;text-decoration:none;cursor:pointer;">
           <span class="pub-year-tag">2022 · J.11</span>
           <div class="pub-title">Influence of Cocatalysts (Ni, Co, and Cu) and Synthesis Method on the Photocatalytic Activity of Exfoliated Graphitic Carbon Nitride for Hydrogen Production</div>
           <div class="pub-authors"><strong>Rana, A.G.</strong>; Schwarze, M.; Tasbihi, M.; Sala, X.; García-Antón, J.; Minceva, M.</div>
-          <div class="pub-journal"><em>Nanomaterials</em> · 12(22), p. 4006</div>
-          <a href="https://doi.org/10.3390/nano12224006" target="_blank" class="pub-doi">DOI: 10.3390/nano12224006 ↗</a>
-          <span class="pub-oa">Open Access</span>
-        </div>
+          <div class="pub-journal"><em>Nanomaterials</em> · 12(22), p. 4006 <span class="pub-oa">Open Access</span></div>
+        </a>
 
-        <div class="pub-item">
+        <a href="https://doi.org/10.1002/slct.202201909" target="_blank" class="pub-item" style="display:block;text-decoration:none;cursor:pointer;">
           <span class="pub-year-tag">2022 · J.9</span>
           <div class="pub-title">Synthesis of Highly Active Doped Graphitic Carbon Nitride Using Acid-Functionalized Precursors for Efficient Adsorption and Photodegradation of Endocrine-Disrupting Compounds</div>
           <div class="pub-authors"><strong>Rana, A.G.</strong>; Zahid Hussain, M.; Hammond, N.; Vlad Luca, S.; Fischer, R.A.; Minceva, M.</div>
           <div class="pub-journal"><em>ChemistrySelect</em> · 7(32), e202201909</div>
-          <a href="https://doi.org/10.1002/slct.202201909" target="_blank" class="pub-doi">DOI: 10.1002/slct.202201909 ↗</a>
-        </div>
+        </a>
 
-        <div class="pub-item">
+        <a href="https://doi.org/10.3390/catal11080898" target="_blank" class="pub-item" style="display:block;text-decoration:none;cursor:pointer;">
           <span class="pub-year-tag">2021 · J.8</span>
           <div class="pub-title">Analysis of Photocatalytic Degradation of Phenol with Exfoliated Graphitic Carbon Nitride and Light-Emitting Diodes Using Response Surface Methodology</div>
           <div class="pub-authors"><strong>Rana, A.G.</strong>; Minceva, M.</div>
-          <div class="pub-journal"><em>Catalysts</em> · 11(8), p. 898</div>
-          <a href="https://doi.org/10.3390/catal11080898" target="_blank" class="pub-doi">DOI: 10.3390/catal11080898 ↗</a>
-          <span class="pub-oa">Open Access</span>
-        </div>
+          <div class="pub-journal"><em>Catalysts</em> · 11(8), p. 898 <span class="pub-oa">Open Access</span></div>
+        </a>
 
         <div class="scholar-cta">
           <p>Showing 5 of 13 journal articles. Full list including all citations, co-authors, and DOI links available on Google Scholar.</p>
@@ -486,12 +481,12 @@ nav{background:var(--navy);border-bottom:2px solid var(--gold);position:sticky;t
       <div class="side-card">
         <div class="side-card-title">Research Metrics</div>
         <div class="side-card-body">
-          <div class="metric-row"><span class="metric-label">Journal Articles</span><span class="metric-val">13</span></div>
-          <div class="metric-row"><span class="metric-label">Total Citations</span><span class="metric-val">230+</span></div>
-          <div class="metric-row"><span class="metric-label">h-index</span><span class="metric-val">9</span></div>
-          <div class="metric-row"><span class="metric-label">i10-index</span><span class="metric-val">9</span></div>
+          <div class="metric-row"><span class="metric-label">Journal Articles</span><span class="metric-val" id="oa-papers">13</span></div>
+          <div class="metric-row"><span class="metric-label">Total Citations</span><span class="metric-val" id="oa-citations">230+</span></div>
+          <div class="metric-row"><span class="metric-label">h-index</span><span class="metric-val" id="oa-hindex">9</span></div>
+          <div class="metric-row"><span class="metric-label">i10-index</span><span class="metric-val" id="oa-i10">9</span></div>
           <div class="metric-row"><span class="metric-label">Conference Papers</span><span class="metric-val">2</span></div>
-          <p style="font-size:10px;color:var(--muted);margin-top:8px;text-align:center;">h-index & i10-index updated manually from Google Scholar</p>
+          <p style="font-size:10px;color:var(--muted);margin-top:8px;text-align:center;">&#128260; Citations auto-updated via OpenAlex</p>
           <a href="https://scholar.google.com/citations?user=pUQ4nFsAAAAJ" target="_blank" class="profile-btn btn-scholar">🎓 Google Scholar</a>
           <a href="https://www.researchgate.net/profile/Adeem-Rana" target="_blank" class="profile-btn btn-rg" style="margin-top:6px;">🔬 ResearchGate</a>
         </div>
@@ -554,6 +549,41 @@ nav{background:var(--navy);border-bottom:2px solid var(--gold);position:sticky;t
 
 <script>
 function toggleMenu() { document.getElementById('nav-links').classList.toggle('open'); }
+
+// ── OpenAlex live citation stats ──
+(async function loadOpenAlexStats() {
+  const ORCID = '0000-0003-4725-2312';
+  try {
+    // Author profile — citations + h-index
+    const r1 = await fetch('https://api.openalex.org/authors?filter=orcid:' + ORCID);
+    if (!r1.ok) return;
+    const d1 = await r1.json();
+    const author = d1.results?.[0];
+    if (!author) return;
+    const citations = author.cited_by_count || 0;
+    const hIndex = author.summary_stats?.h_index || 0;
+    const paperCount = author.works_count || 0;
+
+    // Works — for i10-index calculation
+    const r2 = await fetch('https://api.openalex.org/works?filter=author.orcid:' + ORCID + '&per-page=50');
+    let i10 = 0;
+    if (r2.ok) {
+      const d2 = await r2.json();
+      i10 = (d2.results || []).filter(w => (w.cited_by_count || 0) >= 10).length;
+    }
+
+    // Update DOM
+    const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+    set('oa-citations', citations.toLocaleString());
+    set('oa-hindex', hIndex);
+    set('oa-i10', i10);
+    if (paperCount > 0) set('oa-papers', paperCount);
+
+    console.log('OpenAlex: ' + citations + ' citations, h=' + hIndex + ', i10=' + i10);
+  } catch(e) {
+    console.log('OpenAlex stats unavailable:', e.message);
+  }
+})();
 </script>
 </body>
 </html>
