@@ -85,7 +85,7 @@ body{ font-family:"DM Sans",sans-serif; background:var(--cream); color:var(--tex
 .research-card:hover{ box-shadow:0 8px 30px rgba(0,0,0,0.08); transform:translateY(-2px); }
 
 /* NEWS CARDS */
-.news-card{ background:var(--white); border:1px solid var(--border); border-radius:12px; padding:1.1rem 1.25rem; transition:all 0.2s; border-left:4px solid var(--gold); }
+.news-card{ background:var(--white); border:1px solid var(--border); border-radius:12px; padding:1.1rem 1.25rem; transition:all 0.25s; position:relative; overflow:hidden; border-left:3px solid var(--gold); }
 .news-card:hover{ box-shadow:0 4px 20px rgba(0,0,0,0.07); transform:translateY(-1px); }
 .news-badge{ display:inline-block; font-size:10px; font-weight:700; padding:3px 10px; border-radius:20px; margin-bottom:7px; letter-spacing:0.04em; }
 .news-badge-paper{ background:rgba(26,58,138,0.08); color:var(--navy); }
@@ -97,8 +97,8 @@ body{ font-family:"DM Sans",sans-serif; background:var(--cream); color:var(--tex
 .news-link{ font-size:12px; color:var(--gold); font-weight:600; text-decoration:none; }
 .news-link:hover{ text-decoration:underline; }
 .research-card:hover::before{ transform:scaleX(1); }
-.card-icon{ font-size:28px; margin-bottom:1rem; display:block; }
-.card-title{ font-family:"Playfair Display",serif; font-size:16px; color:var(--navy); margin-bottom:0.5rem; }
+.card-icon{ font-size:20px; margin-right:8px; display:inline; vertical-align:middle; }
+.card-title{ font-family:"Playfair Display",serif; font-size:15px; color:var(--navy); margin-bottom:0.5rem; display:inline; vertical-align:middle; }
 .card-text{ font-size:13px; color:var(--muted); line-height:1.65; }
 .card-tag{ display:inline-block; margin-top:0.75rem; font-size:11px; color:var(--gold); background:rgba(201,168,76,0.1); padding:3px 9px; border-radius:4px; font-weight:500; }
 
@@ -261,26 +261,22 @@ body{ font-family:"DM Sans",sans-serif; background:var(--cream); color:var(--tex
         <h2 class="section-title">Research Focus Areas</h2>
         <div class="research-grid">
           <div class="research-card">
-            <span class="card-icon">✈️</span>
-            <h3 class="card-title">Sustainable Aviation Fuels</h3>
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:0.5rem;"><span class="card-icon">✈️</span><h3 class="card-title">Sustainable Aviation Fuels</h3></div>
             <p class="card-text">Methanol-to-Olefins (MTO) using zeolite catalysts and hydrotreating/hydrocracking of Fischer–Tropsch feeds for SAF-range products within the REF4FU and OptiSAF frameworks.</p>
             <span class="card-tag">Ongoing · TUBAF · 2023–</span>
           </div>
           <div class="research-card">
-            <span class="card-icon">⚗️</span>
-            <h3 class="card-title">Heterogeneous Catalysis</h3>
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:0.5rem;"><span class="card-icon">⚗️</span><h3 class="card-title">Heterogeneous Catalysis</h3></div>
             <p class="card-text">Catalyst synthesis, screening, and kinetic evaluation. Zeolite-based systems, metal-supported catalysts, and Design of Experiments for process optimization.</p>
             <span class="card-tag">REF4FU · OptiSAF Projects</span>
           </div>
           <div class="research-card">
-            <span class="card-icon">☀️</span>
-            <h3 class="card-title">Photocatalysis</h3>
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:0.5rem;"><span class="card-icon">☀️</span><h3 class="card-title">Photocatalysis</h3></div>
             <p class="card-text">Modification of graphitic carbon nitride (g-C₃N₄) for redox applications. CO₂ conversion to hydrocarbons. Photocatalytic degradation of persistent organic pollutants.</p>
             <span class="card-tag">TUM · PhD Research</span>
           </div>
           <div class="research-card">
-            <span class="card-icon">🏗️</span>
-            <h3 class="card-title">Zeolite Catalysts &amp; Hydrocarbon Processing</h3>
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:0.5rem;"><span class="card-icon">🏗️</span><h3 class="card-title">Zeolite Catalysts &amp; Hydrocarbon Processing</h3></div>
             <p class="card-text">Synthesis and characterisation of zeolite frameworks for selective hydrocarbon conversion. Focus on acidity, porosity, and deactivation behaviour in fixed-bed reactors.</p>
             <span class="card-tag">TUBAF · Ongoing</span>
           </div>
