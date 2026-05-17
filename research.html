@@ -36,50 +36,72 @@ nav{background:var(--navy);border-bottom:2px solid var(--gold);position:sticky;t
 }
 
 /* ── PAGE HEADER — compact lab/reactor theme ── */
+/* ── RESEARCH HEADER: Photo with overlay — same compact size as about page ── */
 .page-header {
-  background: linear-gradient(150deg, #f7f2e8 0%, #eee8d8 50%, #e8dfc8 100%);
-  padding: 2.5rem 2rem 2rem;
+  padding: 0;
   position: relative; overflow: hidden;
-  border-bottom: 3px solid #b8965a;
+  border-bottom: 3px solid var(--gold);
 }
-/* Graph paper grid */
-.page-header::before {
+.research-header-img {
+  width: 100%; height: 200px;
+  background: url('/research-header.jpg') center 20% / cover no-repeat;
+  position: relative;
+}
+.research-header-img::after {
   content: '';
   position: absolute; inset: 0;
-  background-image:
-    linear-gradient(rgba(100,140,100,0.07) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(100,140,100,0.07) 1px, transparent 1px);
-  background-size: 24px 24px;
-  pointer-events: none;
+  background: linear-gradient(
+    100deg,
+    rgba(8,15,50,0.88) 0%,
+    rgba(10,20,60,0.72) 35%,
+    rgba(10,20,60,0.45) 60%,
+    rgba(0,60,30,0.15) 100%
+  );
 }
 .header-inner {
+  position: absolute; inset: 0; z-index: 2;
   max-width: 1100px; margin: 0 auto;
-  position: relative; z-index: 1;
-  display: flex; align-items: center; justify-content: space-between; gap: 2rem;
+  padding: 0 2rem;
+  display: flex; align-items: center; gap: 2rem;
+  width: 100%;
 }
 .header-text { flex: 1; }
 .page-tag {
   font-size: 10px; font-weight: 500; letter-spacing: 0.2em;
-  text-transform: uppercase; color: #5a8040;
-  border: 1px solid rgba(90,128,64,0.35);
+  text-transform: uppercase; color: var(--gold);
+  border: 1px solid rgba(201,168,76,0.5);
   padding: 3px 11px; border-radius: 20px;
   display: inline-block; margin-bottom: 0.6rem;
 }
 .page-header h1 {
   font-family: "Playfair Display", serif;
   font-size: clamp(1.6rem, 3vw, 2.2rem);
-  color: #1e2c1e; line-height: 1.15; margin-bottom: 0.4rem;
+  color: white; line-height: 1.15; margin-bottom: 0.4rem;
 }
-.page-header h1 span { color: #7a5a20; }
+.page-header h1 span { color: var(--gold); }
 .header-sub {
-  font-size: 14px; color: rgba(30,44,30,0.6);
-  font-weight: 300; max-width: 520px; line-height: 1.6;
+  font-size: 13px; color: rgba(255,255,255,0.75);
+  font-weight: 300; max-width: 500px; line-height: 1.6;
 }
-/* Reactor SVG on right */
-.header-reactor {
-  flex-shrink: 0; opacity: 0.2;
+/* Key stats strip below image */
+.header-stats-strip {
+  background: white; border-bottom: 1px solid var(--border);
+  padding: 0.6rem 2rem;
 }
-@media(max-width:640px) { .header-reactor{display:none;} .page-header{padding:2rem 1.5rem 1.75rem;} }
+.header-stats-inner {
+  max-width: 1100px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;
+}
+.header-stat {
+  display: flex; align-items: center; gap: 8px; font-size: 13px;
+}
+.header-stat-num {
+  font-family: "Playfair Display", serif; font-size: 1.3rem;
+  font-weight: 700; color: var(--navy);
+}
+.header-stat-lbl { font-size: 12px; color: var(--muted); }
+.header-divider { width: 1px; height: 24px; background: var(--border); }
+@media(max-width:640px) { .research-header-img{height:160px;} .header-divider{display:none;} }
 
 /* ── MAIN LAYOUT ── */
 .page-wrap { max-width: 1100px; margin: 0 auto; padding: 2.5rem 2rem; }
@@ -273,38 +295,46 @@ nav{background:var(--navy);border-bottom:2px solid var(--gold);position:sticky;t
 
 <!-- HEADER -->
 <div class="page-header">
-  <div class="header-inner">
-    <div class="header-text">
-      <span class="page-tag">Research</span>
-      <h1>Projects &amp; <span>Publications</span></h1>
-      <p class="header-sub">Catalyst development, reaction engineering, and sustainable fuel processes — from lab bench to industrial collaboration.</p>
+  <div class="research-header-img">
+    <div class="header-inner">
+      <div class="header-text">
+        <span class="page-tag">Research &amp; Publications</span>
+        <h1>Catalysis &amp; <span>Sustainable Fuels</span></h1>
+        <p class="header-sub">Zeolite catalyst development, reactor engineering, and sustainable aviation fuel processes — from lab bench to industrial scale.</p>
+      </div>
     </div>
-    <!-- Compact reactor SVG -->
-    <svg class="header-reactor" width="110" height="120" viewBox="0 0 110 120">
-      <!-- Reactor vessel -->
-      <rect x="25" y="28" width="60" height="70" rx="6" fill="none" stroke="#5a8040" stroke-width="2.5"/>
-      <rect x="25" y="28" width="60" height="14" rx="4" fill="#5a8040" opacity="0.3"/>
-      <!-- Inlet/outlet pipes -->
-      <line x1="55" y1="28" x2="55" y2="8" stroke="#5a8040" stroke-width="3" stroke-linecap="round"/>
-      <line x1="48" y1="8" x2="62" y2="8" stroke="#5a8040" stroke-width="2.5" stroke-linecap="round"/>
-      <line x1="55" y1="98" x2="55" y2="116" stroke="#5a8040" stroke-width="3" stroke-linecap="round"/>
-      <line x1="48" y1="116" x2="62" y2="116" stroke="#5a8040" stroke-width="2.5" stroke-linecap="round"/>
-      <!-- Side ports -->
-      <line x1="25" y1="56" x2="8" y2="56" stroke="#5a8040" stroke-width="2.5" stroke-linecap="round"/>
-      <line x1="85" y1="70" x2="102" y2="70" stroke="#5a8040" stroke-width="2.5" stroke-linecap="round"/>
-      <!-- Catalyst bed -->
-      <rect x="32" y="52" width="46" height="28" rx="2" fill="#7a5a20" opacity="0.25"/>
-      <!-- Particles in bed -->
-      <circle cx="42" cy="60" r="3" fill="#7a5a20" opacity="0.5"/>
-      <circle cx="52" cy="57" r="3" fill="#7a5a20" opacity="0.5"/>
-      <circle cx="62" cy="61" r="3" fill="#7a5a20" opacity="0.5"/>
-      <circle cx="47" cy="67" r="3" fill="#7a5a20" opacity="0.5"/>
-      <circle cx="57" cy="65" r="3" fill="#7a5a20" opacity="0.5"/>
-      <circle cx="68" cy="58" r="3" fill="#7a5a20" opacity="0.5"/>
-      <!-- Temperature indicator -->
-      <rect x="80" y="42" width="8" height="30" rx="4" fill="none" stroke="#5a8040" stroke-width="1.5"/>
-      <rect x="81" y="55" width="6" height="16" rx="3" fill="#b8965a" opacity="0.6"/>
-    </svg>
+  </div>
+  <!-- Stats strip below image -->
+  <div class="header-stats-strip">
+    <div class="header-stats-inner">
+      <div class="header-stat">
+        <div><span class="header-stat-num" id="oa-papers-strip">13</span><div class="header-stat-lbl">Journal Articles</div></div>
+      </div>
+      <div class="header-divider"></div>
+      <div class="header-stat">
+        <div><span class="header-stat-num" id="oa-citations-strip">230+</span><div class="header-stat-lbl">Total Citations</div></div>
+      </div>
+      <div class="header-divider"></div>
+      <div class="header-stat">
+        <div><span class="header-stat-num" id="oa-hindex-strip">9</span><div class="header-stat-lbl">h-index</div></div>
+      </div>
+      <div class="header-divider"></div>
+      <div class="header-stat">
+        <div><span class="header-stat-num" id="oa-i10-strip">9</span><div class="header-stat-lbl">i10-index</div></div>
+      </div>
+      <div class="header-divider"></div>
+      <div class="header-stat">
+        <div><span class="header-stat-num">3</span><div class="header-stat-lbl">Ongoing Projects</div></div>
+      </div>
+      <div style="margin-left:auto;">
+        <a href="https://scholar.google.com/citations?user=pUQ4nFsAAAAJ" target="_blank"
+          style="font-size:12px;color:var(--navy);text-decoration:none;font-weight:600;border:1px solid var(--border);padding:5px 12px;border-radius:6px;transition:all 0.2s;"
+          onmouseover="this.style.borderColor='var(--gold)';this.style.color='var(--gold)'"
+          onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--navy)'">
+          🎓 Google Scholar ↗
+        </a>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -577,7 +607,10 @@ function toggleMenu() { document.getElementById('nav-links').classList.toggle('o
     set('oa-citations', citations.toLocaleString());
     set('oa-hindex', hIndex);
     set('oa-i10', i10);
-    if (paperCount > 0) set('oa-papers', paperCount);
+    set('oa-citations-strip', citations.toLocaleString() + '+');
+    set('oa-hindex-strip', hIndex);
+    set('oa-i10-strip', i10);
+    if (paperCount > 0) { set('oa-papers', paperCount); set('oa-papers-strip', paperCount); }
 
     console.log('OpenAlex: ' + citations + ' citations, h=' + hIndex + ', i10=' + i10);
   } catch(e) {
