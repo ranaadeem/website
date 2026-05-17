@@ -27,7 +27,7 @@ nav{background:var(--navy);border-bottom:2px solid var(--gold);position:sticky;t
 .page{display:none;}
 .page.active{display:block;}
 /* LANDING */
-.landing-hero{background:linear-gradient(135deg,var(--navy) 0%,#2048a8 60%,#163366 100%);padding:5rem 2rem;text-align:center;position:relative;overflow:hidden;}
+.landing-hero{background:linear-gradient(135deg,var(--navy) 0%,#2048a8 60%,#163366 100%);padding:2.5rem 2rem;text-align:center;position:relative;overflow:hidden;min-height:220px;display:flex;align-items:flex-end;}
 .hero-tag{font-size:11px;font-weight:500;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);border:1px solid rgba(201,168,76,0.4);padding:5px 14px;border-radius:20px;display:inline-block;margin-bottom:1.5rem;}
 .landing-hero h1{font-family:"Playfair Display",serif;font-size:clamp(2rem,5vw,3.5rem);color:white;margin-bottom:1rem;line-height:1.2;}
 .landing-hero h1 span{color:var(--gold);}
@@ -193,15 +193,18 @@ nav{background:var(--navy);border-bottom:2px solid var(--gold);position:sticky;t
 
 <!-- ══ LANDING ══ -->
 <div class="page active" id="page-landing">
-  <div class="landing-hero">
-    <span class="hero-tag">ICET · University of the Punjab</span>
-    <h1>Chemical Engineering<br><span>Alumni Network</span></h1>
-    <p>Connecting graduates across the globe. Register your profile, find your batchmates, and network across sessions.</p>
-    <div class="hero-btns">
-      <button class="hero-btn-primary" onclick="handleJoinClick()">Join the Network</button>
-      <button class="hero-btn-secondary" onclick="handleJoinClick()">Browse Alumni</button>
+  <div class="landing-hero" style="background-image:url('/icet-header.jpg');background-size:cover;background-position:center 40%;">
+  <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(10,20,60,0.85) 0%,rgba(10,20,60,0.5) 50%,rgba(10,20,60,0.3) 100%);pointer-events:none;"></div>
+  <div style="position:relative;z-index:1;width:100%;max-width:960px;margin:0 auto;padding:2rem 2rem 2.5rem;">
+    <span style="font-size:10px;font-weight:500;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);border:1px solid rgba(201,168,76,0.4);padding:3px 11px;border-radius:20px;display:inline-block;margin-bottom:0.75rem;">ICET · University of the Punjab</span>
+    <h1 style="font-family:'Playfair Display',serif;font-size:clamp(1.8rem,4vw,2.8rem);color:white;margin-bottom:0.5rem;line-height:1.2;">Chemical Engineering<br><span style="color:var(--gold);">Alumni Network</span></h1>
+    <p style="font-size:14px;color:rgba(255,255,255,0.75);max-width:480px;margin:0 auto 1.5rem;line-height:1.65;font-weight:300;">Connecting graduates across the globe. Register your profile, find your batchmates, and network across sessions.</p>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+      <button onclick="handleJoinClick()" style="background:var(--gold);color:var(--navy);padding:11px 28px;border-radius:8px;font-size:14px;font-weight:600;border:none;cursor:pointer;font-family:inherit;">Join the Network</button>
+      <button onclick="handleJoinClick()" style="background:transparent;color:white;padding:11px 28px;border-radius:8px;font-size:14px;border:1px solid rgba(255,255,255,0.35);cursor:pointer;font-family:inherit;">Browse Alumni</button>
     </div>
   </div>
+</div>
   <div class="stats-strip">
     <div class="stats-inner">
       <div class="stat-item"><span class="stat-num" id="stat-total">–</span><div class="stat-lbl">Total Registered</div></div>
@@ -525,6 +528,14 @@ window.showToast = function(msg) {
 window._alumniCurrentUser = null;
 window._alumniCurrentProfile = null;
 window._loadDirectory = null;
+// signInWithGoogle needs Firebase — bridge via window._firebaseSignIn
+window.signInWithGoogle = function() {
+  if (window._firebaseSignIn) window._firebaseSignIn();
+  else window.showToast('Loading... please try again in a moment.');
+};
+window.doSignOut = function() {
+  if (window._firebaseSignOut) window._firebaseSignOut();
+};
 </script>
 
 <script type="module">
@@ -660,8 +671,11 @@ function updateNavUser(user) {
     + '</div>';
 }
 
-window.signInWithGoogle = async () => { try { await signInWithPopup(auth,provider); showToast('Signed in!'); } catch(e) { showToast('Sign in failed.'); } };
-window.doSignOut = async () => { await signOut(auth); showPage('landing'); showToast('Signed out.'); };
+// Expose Firebase auth functions via bridge
+window._firebaseSignIn = async () => { try { await signInWithPopup(auth,provider); showToast('Signed in!'); } catch(e) { console.error(e); showToast('Sign in failed: '+e.message); } };
+window._firebaseSignOut = async () => { await signOut(auth); window.showPage('landing'); showToast('Signed out.'); };
+// Keep window.signInWithGoogle pointing to bridge (already set in early script)
+// Keep window.doSignOut pointing to bridge (already set in early script)
 
 // Navigation functions defined below onAuthStateChanged — moved to top
 
