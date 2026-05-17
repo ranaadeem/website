@@ -533,7 +533,9 @@ nav{background:var(--navy);border-bottom:2px solid var(--gold);position:sticky;t
 
             </select>
           </div>
-          <div class="form-group"><label>Roll Number <span class="req">*</span></label><select id="setup-roll" disabled><option value="">Select session first</option></select></div>
+          <div class="form-group"><label>Roll Number <span class="req">*</span></label><select id="setup-roll" disabled><option value="">Select session first</option></select>
+            <div id="roll-lock-notice" style="display:none;font-size:11px;color:#059669;margin-top:4px;">🔒 Roll number locked after registration. Contact admin to change.</div>
+          </div>
         </div>
         <div class="form-group"><label>Full Name</label><div class="name-display" id="setup-name-display"><span class="name-placeholder">Auto-filled from roll number</span></div></div>
         <div class="section-divider">Location</div>
@@ -831,7 +833,16 @@ document.getElementById('sessions-grid').addEventListener('click', e => {
 // card-2010 is coming soon — no click handler
 document.getElementById('btn-back-login').addEventListener('click',(e)=>{e.preventDefault();showPage('landing');});
 document.getElementById('btn-back-profile').addEventListener('click',()=>showPage('directory'));
-document.getElementById('btn-cancel-setup').addEventListener('click',(e)=>{e.preventDefault();showPage('directory');});
+document.getElementById('btn-cancel-setup').addEventListener('click',(e)=>{
+  e.preventDefault();
+  // Reset lock state when cancelling
+  isEditMode = false;
+  document.getElementById('setup-session').disabled = false;
+  document.getElementById('setup-session').style.opacity = '';
+  document.getElementById('setup-roll').disabled = false;
+  document.getElementById('setup-roll').style.opacity = '';
+  showPage('directory');
+});
 document.getElementById('btn-edit-profile').addEventListener('click',openEditProfile);
 document.getElementById('btn-google-signin').addEventListener('click',async()=>{
   try { await signInWithPopup(auth,provider); showToast('Signed in!'); }
@@ -1141,7 +1152,29 @@ async function submitProfile(){
   // LinkedIn is optional — no validation needed
   const db2=session.includes('Morning')?morningStudents:eveningStudents, name=db2[roll];
   if(!name){err.textContent='Invalid roll number.';err.style.display='block';return;}
-  const btn=document.getElementById('setup-submit-btn'); btn.disabled=true; btn.textContent='Saving...';
+  const btn=document.getElementById('setup-submit-btn'); btn.disabled=true; btn.textContent='Checking...';
+
+  // ── Option C: Check if roll number already taken by another account ──
+  if (!isEditMode) {
+    try {
+      const rollCheck = await getDocs(query(collection(db,'alumni'), where('roll','==',roll), where('session','==',session)));
+      let takenByOther = false;
+      rollCheck.forEach(d => {
+        if (d.data().uid !== currentUser.uid) takenByOther = true;
+      });
+      if (takenByOther) {
+        err.textContent = '⚠️ Roll number ' + roll + ' is already registered. If this is you, sign in with the Google account you used originally. Contact admin if you need help.';
+        err.style.display = 'block';
+        btn.disabled = false;
+        btn.textContent = 'Save Profile & Join Network';
+        return;
+      }
+    } catch(e) {
+      console.error('Roll check error:', e);
+    }
+  }
+
+  btn.textContent = 'Saving...';
   try {
     const profileData={uid:currentUser.uid,name,roll,session,city,country,job,company,email,phone,linkedin,bio,jobVisibility,photoBase64:selectedPhotoBase64,googleName:currentUser.displayName||'',googlePhoto:currentUser.photoURL||'',registeredAt:isEditMode?(currentUserProfile?.registeredAt||new Date().toISOString()):new Date().toISOString(),updatedAt:new Date().toISOString(),deceased:false};
     await setDoc(doc(db,'alumni',currentUser.uid),profileData);
@@ -1272,9 +1305,25 @@ function openEditProfile(){
   document.getElementById('setup-title').textContent='Edit Your Profile';
   document.getElementById('setup-subtitle').textContent='Update your information.';
   document.getElementById('setup-submit-btn').textContent='Update Profile';
-  document.getElementById('setup-session').value=p.session||'';
-  document.getElementById('setup-session').dispatchEvent(new Event('change'));
-  setTimeout(()=>{document.getElementById('setup-roll').value=p.roll||'';document.getElementById('setup-roll').dispatchEvent(new Event('change'));},60);
+  // Lock session and roll number in edit mode — cannot be changed after registration
+  const sessionEl = document.getElementById('setup-session');
+  const rollEl = document.getElementById('setup-roll');
+  sessionEl.value = p.session||'';
+  sessionEl.dispatchEvent(new Event('change'));
+  setTimeout(()=>{
+    rollEl.value = p.roll||'';
+    rollEl.dispatchEvent(new Event('change'));
+    // Lock both fields
+    sessionEl.disabled = true;
+    sessionEl.style.opacity = '0.6';
+    sessionEl.style.cursor = 'not-allowed';
+    rollEl.disabled = true;
+    rollEl.style.opacity = '0.6';
+    rollEl.style.cursor = 'not-allowed';
+    // Add lock notice
+    const lockNote = document.getElementById('roll-lock-notice');
+    if (lockNote) lockNote.style.display = 'block';
+  }, 60);
   if(p.city&&p.country){document.getElementById('setup-city-input').value=p.city+', '+p.country;document.getElementById('setup-city').value=p.city;document.getElementById('setup-country').value=p.country;const d=document.getElementById('city-selected-display');d.textContent='✅ '+p.city+', '+p.country;d.style.display='block';}
   document.getElementById('setup-job').value=p.job||'';document.getElementById('setup-company').value=p.company||'';
   document.getElementById('setup-email').value=p.email||'';document.getElementById('setup-phone').value=p.phone||'';
