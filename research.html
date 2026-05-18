@@ -208,6 +208,23 @@ nav{background:var(--navy);border-bottom:2px solid var(--gold);position:sticky;t
 
 /* ── CONFERENCES ── */
 .conf-section { margin-bottom: 2rem; }
+.conf-card-media {
+  margin-top: 1rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+.conf-card-media img {
+  width: 100%;
+  border-radius: 8px;
+  cursor: zoom-in;
+  transition: transform 0.2s;
+  border: 1px solid var(--border);
+}
+.conf-card-media img:hover { transform: scale(1.02); }
+.conf-card-media img.portrait {
+  grid-row: span 1;
+}
 .conf-card {
   background: white; border: 1px solid var(--border);
   border-radius: 10px; padding: 1.25rem; margin-bottom: 0.75rem;
@@ -502,6 +519,35 @@ nav{background:var(--navy);border-bottom:2px solid var(--gold);position:sticky;t
             <div class="conf-title">Development of Novel Cross-Linked Chitosan for the Removal of Anionic Azo-Dye</div>
             <div class="conf-event">International Conference on Advance Materials and Emerging Technologies (ICAMET) · Nov 28–29, 2016 · Lahore, Pakistan</div>
             <div class="conf-upload-hint">Poster or photo can be added here — upload image to GitHub and update the src below</div>
+          </div>
+        </div>
+
+        <!-- 2025: Jahrestreffen Deutscher Katalytiker, Weimar -->
+        <div class="conf-card">
+          <div class="conf-icon">🏛️</div>
+          <div style="flex:1;">
+            <div class="conf-type">Poster Presentation</div>
+            <div class="conf-title">Effect of Steaming and Atomic Si/Al Ratio on the Methanol to Olefins (MtO) Performance of Zeolite Catalysts</div>
+            <div class="conf-event">58. Jahrestreffen Deutscher Katalytiker · March 12–14, 2025 · Weimar, Germany</div>
+            <div class="conf-note" style="font-size:12px;color:var(--muted);margin-top:4px;">REF4FU Project · TUBAF Freiberg · Professur für Reaktionstechnik</div>
+            <div class="conf-card-media" style="margin-top:1rem;display:grid;grid-template-columns:1.4fr 1fr;gap:0.75rem;align-items:start;">
+              <a href="/conf-weimar-2025.jpg" target="_blank"><img src="/conf-weimar-2025.jpg" alt="Group photo at Congress Centrum Weimarhalle, Jahrestreffen Deutscher Katalytiker 2025" style="width:100%;border-radius:8px;cursor:zoom-in;border:1px solid var(--border);"></a>
+              <a href="/conf-poster-2025.jpg" target="_blank"><img src="/conf-poster-2025.jpg" alt="Conference poster: Effect of steaming and Si/Al ratio on MtO performance of zeolite catalysts" style="width:100%;border-radius:8px;cursor:zoom-in;border:1px solid var(--border);"></a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2024: Jahrestreffen Deutscher Katalytiker, Weimar (previous year poster) -->
+        <div class="conf-card">
+          <div class="conf-icon">📋</div>
+          <div style="flex:1;">
+            <div class="conf-type">Poster Presentation</div>
+            <div class="conf-title">Impact of Hydrothermal Treatment on the Physicochemical Properties and MTO Activity of H-ZSM-5 Catalysts</div>
+            <div class="conf-event">57. Jahrestreffen Deutscher Katalytiker · 2024 · Weimar, Germany</div>
+            <div class="conf-note" style="font-size:12px;color:var(--muted);margin-top:4px;">REF4FU Project · TUBAF Freiberg · Professur für Reaktionstechnik</div>
+            <div class="conf-card-media" style="margin-top:1rem;">
+              <a href="/conf-poster-2024.jpg" target="_blank"><img src="/conf-poster-2024.jpg" alt="Conference poster: Impact of hydrothermal treatment on H-ZSM-5 catalyst MTO activity" style="width:60%;border-radius:8px;cursor:zoom-in;border:1px solid var(--border);display:block;"></a>
+            </div>
           </div>
         </div>
 
