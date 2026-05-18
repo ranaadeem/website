@@ -501,14 +501,17 @@ async function fetchRSS() {
 }
 
 async function loadPosts() {
-  // Try RSS first — fully automatic, updates when you publish on Substack
-  const rssPosts = await fetchRSS();
-  if (rssPosts && rssPosts.length > 0) {
-    renderPosts(rssPosts);
-    return;
-  }
-  // Fallback to hardcoded posts
+  // Show fallback posts IMMEDIATELY — no waiting
   renderPosts(FALLBACK_POSTS);
+  // Then try RSS in background — if it works, update silently
+  try {
+    const rssPosts = await fetchRSS();
+    if (rssPosts && rssPosts.length > 0) {
+      renderPosts(rssPosts);
+    }
+  } catch(e) {
+    // RSS failed — fallback already showing, do nothing
+  }
 }
 
 loadPosts();
