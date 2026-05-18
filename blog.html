@@ -458,60 +458,8 @@ const FALLBACK_POSTS = [
   // { title: "Post Title", link: "https://ranaadeem.substack.com/p/slug", pubDate: "...", excerpt: "..." },
 ];
 
-function parseRSS(xml) {
-  const parser = new DOMParser();
-  const doc = parser.parseFromString(xml, 'text/xml');
-  const items = doc.querySelectorAll('item');
-  const posts = [];
-  items.forEach(item => {
-    const title = item.querySelector('title')?.textContent || '';
-    const link = item.querySelector('link')?.textContent || '';
-    const pubDate = item.querySelector('pubDate')?.textContent || '';
-    const desc = item.querySelector('description')?.textContent || '';
-    // Strip HTML from description
-    const tmp = document.createElement('div');
-    tmp.innerHTML = desc;
-    const excerpt = (tmp.textContent || '').trim().slice(0, 280);
-    if (title && link) posts.push({ title, link, pubDate, excerpt });
-  });
-  return posts;
-}
-
-async function fetchRSS() {
-  const RSS_URL = 'https://ranaadeem.substack.com/feed';
-  const PROXIES = [
-    'https://api.allorigins.win/get?url=' + encodeURIComponent(RSS_URL),
-    'https://corsproxy.io/?' + encodeURIComponent(RSS_URL),
-  ];
-  for (const proxy of PROXIES) {
-    try {
-      const res = await fetch(proxy, { signal: AbortSignal.timeout(6000) });
-      if (!res.ok) continue;
-      const data = await res.json().catch(() => null);
-      // allorigins returns {contents: "..."}
-      const xml = data?.contents || await res.text();
-      if (!xml || !xml.includes('<item>')) continue;
-      const posts = parseRSS(xml);
-      if (posts.length > 0) return posts;
-    } catch(e) {
-      continue;
-    }
-  }
-  return null;
-}
-
-async function loadPosts() {
-  // Show fallback posts IMMEDIATELY — no waiting
+function loadPosts() {
   renderPosts(FALLBACK_POSTS);
-  // Then try RSS in background — if it works, update silently
-  try {
-    const rssPosts = await fetchRSS();
-    if (rssPosts && rssPosts.length > 0) {
-      renderPosts(rssPosts);
-    }
-  } catch(e) {
-    // RSS failed — fallback already showing, do nothing
-  }
 }
 
 loadPosts();
