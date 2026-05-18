@@ -212,13 +212,13 @@
 <div class="main-wrap">
   <div>
     <!-- CATEGORIES -->
-    <div class="category-tabs">
-      <button class="cat-btn active">All Posts</button>
-      <button class="cat-btn">Research & Science</button>
-      <button class="cat-btn">Academic Life</button>
-      <button class="cat-btn">Travel</button>
-      <button class="cat-btn">Pakistan</button>
-      <button class="cat-btn">Career</button>
+    <div class="category-tabs" id="category-tabs">
+      <button class="cat-btn active" data-cat="All Posts">All Posts</button>
+      <button class="cat-btn" data-cat="Research &amp; Science">Research &amp; Science</button>
+      <button class="cat-btn" data-cat="Academic Life">Academic Life</button>
+      <button class="cat-btn" data-cat="Travel">Travel</button>
+      <button class="cat-btn" data-cat="Pakistan">Pakistan</button>
+      <button class="cat-btn" data-cat="Career">Career</button>
     </div>
 
     <!-- LIVE POSTS FROM SUBSTACK RSS -->
@@ -409,7 +409,7 @@ function renderPosts(posts) {
   fw.innerHTML = `<div class="featured-post" style="cursor:pointer;" onclick="window.open('${featured.link}','_blank')">
     ${bannerHTML}
     <div class="featured-body">
-      <span class="post-category">Latest Post</span>
+      <span class="post-category">${featured.category || "Latest Post"}</span>
       <h2 class="post-title"><a href="${featured.link}" target="_blank" onclick="event.stopPropagation()">${featured.title}</a></h2>
       <p class="post-excerpt">${excerpt}</p>
       <div class="post-meta">
@@ -426,7 +426,7 @@ function renderPosts(posts) {
     grid.innerHTML = rest.map(p => `
       <div class="post-card" style="cursor:pointer;" onclick="window.open('${p.link}','_blank')">
         <div style="font-size:28px;margin-bottom:0.5rem;">${getEmoji(p.title)}</div>
-        <span class="post-category">Substack</span>
+        <span class="post-category">${p.category || "Substack"}</span>
         <h3 class="post-title"><a href="${p.link}" target="_blank" onclick="event.stopPropagation()">${p.title}</a></h3>
         <p class="post-excerpt">${truncate(p.excerpt||p.description||'',120)}</p>
         <div class="post-meta" style="margin-top:0.75rem;">
@@ -445,17 +445,52 @@ const POSTS = [
     title: "TUM Degree Verification and Apostille in Munich: A Step-by-Step Guide for Internationals",
     link: "https://ranaadeem.substack.com/p/tum-degree-verification-and-apostille",
     pubDate: "Sun, 18 May 2026 00:00:00 GMT",
-    excerpt: "A step-by-step guide to getting your TUM degree certified and apostilled in Bavaria — including the Regierung von Oberbayern process, fees, postal and in-person options, based on personal experience."
+    excerpt: "A step-by-step guide to getting your TUM degree certified and apostilled in Bavaria — including the Regierung von Oberbayern process, fees, postal and in-person options, based on personal experience.",
+    category: "Academic Life"
   },
   {
     title: "Getting Your Drivers Licence in Germany",
     link: "https://ranaadeem.substack.com/p/getting-your-drivers-licence-in-germany",
     pubDate: "Wed, 14 May 2026 00:00:00 GMT",
-    excerpt: "A step-by-step guide to getting your Pakistani driving licence converted or obtaining a new German Fuehrerschein — covering the Fahrschule process, theory test, costs, and what to expect on the day."
+    excerpt: "A step-by-step guide to getting your Pakistani driving licence converted or obtaining a new German Fuehrerschein — covering the Fahrschule process, theory test, costs, and what to expect on the day.",
+    category: "Academic Life"
   }
+  // When adding new posts, include category: "Academic Life" | "Research & Science" | "Travel" | "Pakistan" | "Career"
 ];
 
-function loadPosts() { renderPosts(POSTS); }
+let activeCategory = 'All Posts';
+
+function filterAndRender() {
+  const filtered = activeCategory === 'All Posts'
+    ? POSTS
+    : POSTS.filter(p => p.category === activeCategory);
+  if (filtered.length === 0) {
+    // Show empty state
+    document.getElementById('posts-loading').style.display = 'none';
+    document.getElementById('featured-post-wrap').style.display = 'none';
+    document.getElementById('posts-grid-wrap').style.display = 'none';
+    document.getElementById('load-more-wrap').style.display = 'none';
+    document.getElementById('posts-error').style.display = 'block';
+    document.getElementById('posts-error').innerHTML =
+      'No posts in this category yet. <a href="https://ranaadeem.substack.com" target="_blank" style="color:#c9a84c;font-weight:600;">Read all posts on Substack →</a>';
+    return;
+  }
+  document.getElementById('posts-error').style.display = 'none';
+  renderPosts(filtered);
+}
+
+// Wire up category buttons
+document.getElementById('category-tabs').addEventListener('click', function(e) {
+  const btn = e.target.closest('.cat-btn');
+  if (!btn) return;
+  // Update active state
+  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  activeCategory = btn.dataset.cat;
+  filterAndRender();
+});
+
+function loadPosts() { filterAndRender(); }
 loadPosts();
 </script>
 </body>
