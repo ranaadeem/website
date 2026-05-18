@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="shortcut icon" type="image/png" href="/favicon.png">
+<link rel="apple-touch-icon" href="/favicon.png">
+<title>Blog – Dr. Adeem Ghaffar Rana</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root { --navy: #1a3a8a; --gold: #c9a84c; --gold-light: #e8d5a3; --cream: #faf8f4; --white: #ffffff; --text: #1a1a2e; --muted: #6b7280; --border: #e5e7eb; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { overflow-x: hidden; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--text); overflow-x: hidden; margin-left: -24px; margin-right: -24px; width: calc(100% + 48px); }
+
+  /* NAV */
+  #main-nav { position: sticky; top: 0; z-index: 1000; background: var(--navy); border-bottom: 2px solid var(--gold); box-shadow: 0 2px 20px rgba(0,0,0,0.3); font-family: 'DM Sans', sans-serif; }
+  .nav-inner { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; display: flex; align-items: center; justify-content: space-between; height: 64px; }
+  .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; flex-shrink: 0; }
+  .nav-logo-agr { font-family: Georgia, serif; font-size: 22px; font-weight: 700; color: var(--gold); letter-spacing: 2px; border: 2px solid var(--gold); padding: 2px 8px; border-radius: 4px; line-height: 1.3; }
+  .nav-logo-name { font-size: 13px; color: rgba(255,255,255,0.75); font-weight: 400; }
+  .nav-links { display: flex; align-items: center; gap: 0.25rem; list-style: none; }
+  .nav-link { color: rgba(255,255,255,0.75); text-decoration: none; font-size: 13px; padding: 8px 12px; border-radius: 6px; transition: all 0.2s; white-space: nowrap; }
+  .nav-link:hover, .nav-link.active { color: var(--gold); background: rgba(201,168,76,0.1); }
+  .nav-cta { background: var(--gold); color: var(--navy) !important; font-weight: 600; padding: 8px 16px; border-radius: 6px; margin-left: 8px; }
+  .nav-cta:hover { background: var(--gold-light) !important; }
+  .nav-hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: 4px; }
+  .nav-hamburger span { display: block; width: 24px; height: 2px; background: var(--gold); border-radius: 2px; }
+  @media (max-width: 768px) { .nav-logo-name { display: none; } .nav-hamburger { display: flex; } .nav-links { display: none; position: absolute; top: 64px; left: 0; right: 0; background: var(--navy); flex-direction: column; padding: 1rem; border-bottom: 2px solid var(--gold); } .nav-links.open { display: flex; } .nav-link { width: 100%; padding: 12px 16px; } .nav-cta { width: 100%; text-align: center; margin-left: 0; margin-top: 0.5rem; } }
+
+  /* PAGE HEADER */
+  /* ── BLOG HEADER: Warm newspaper scene ── */
+  /* ── BLOG HEADER: Editorial desk photo — same size as about/research ── */
+  .page-header {
+    width: 100%;
+    height: 380px;
+    background: url('/blog-header.jpg') center center / auto 380px no-repeat;
+    background-color: #2c1a08;
+    position: relative; overflow: hidden;
+    border-bottom: 3px solid var(--gold);
+  }
+  .page-header::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(
+      100deg,
+      rgba(15,8,3,0.88) 0%,
+      rgba(20,12,4,0.72) 30%,
+      rgba(20,12,4,0.45) 55%,
+      rgba(10,6,2,0.1) 100%
+    );
+    pointer-events: none;
+  }
+  .header-inner {
+    position: absolute; inset: 0; z-index: 2;
+    max-width: 960px; margin: 0 auto;
+    padding: 0 2rem;
+    display: flex; align-items: center;
+    width: 100%;
+  }
+  .page-header .page-tag { border-color: rgba(201,168,76,0.5); color: var(--gold); }
+  .page-header h1 { color: white; }
+  .page-header h1 span { color: var(--gold); }
+  .page-header .header-sub { color: rgba(255,255,255,0.75); }
+  .page-tag { font-size: 11px; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); border: 1px solid rgba(201,168,76,0.35); padding: 4px 12px; border-radius: 20px; display: inline-block; margin-bottom: 1rem; }
+  .page-header h1 { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 4vw, 2.8rem); color: white; margin-bottom: 0; line-height: 1.15; }
+  .page-header h1 span { color: var(--gold); }
+  .header-sub { font-size: 15px; color: rgba(255,255,255,0.6); font-weight: 300; max-width: 560px; line-height: 1.7; margin-top: 4px; margin-bottom: 1.5rem; }
+  .substack-btn { display: inline-block; background: #FF6719; color: white; padding: 11px 26px; border-radius: 8px; font-size: 14px; font-weight: 600; text-decoration: none; transition: opacity 0.2s; }
+  .substack-btn:hover { opacity: 0.85; }
+
+  /* SUBSCRIBE STRIP */
+  .subscribe-strip { background: var(--white); border-bottom: 1px solid var(--border); padding: 1.25rem 2rem; }
+  .subscribe-inner { max-width: 960px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+  .subscribe-text { font-size: 14px; color: var(--text); }
+  .subscribe-form { display: flex; gap: 8px; }
+  .subscribe-input { padding: 9px 14px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; width: 240px; outline: none; font-family: inherit; }
+  .subscribe-input:focus { border-color: var(--gold); }
+  .subscribe-btn { padding: 9px 20px; background: var(--gold); color: var(--navy); border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; white-space: nowrap; }
+  .subscribe-btn:hover { background: var(--gold-light); }
+
+  /* MAIN LAYOUT */
+  .main-wrap { max-width: 960px; margin: 0 auto; padding: 2.5rem 2rem 4rem; display: grid; grid-template-columns: 1fr 280px; gap: 2.5rem; align-items: start; }
+
+  /* CATEGORY TABS */
+  .category-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 2rem; }
+  .cat-btn { padding: 7px 16px; border-radius: 20px; font-size: 13px; border: 1px solid var(--border); background: var(--white); color: var(--muted); cursor: pointer; transition: all 0.2s; font-family: inherit; }
+  .cat-btn.active, .cat-btn:hover { background: var(--navy); color: white; border-color: var(--navy); }
+
+  /* COMING SOON */
+  .coming-soon { background: linear-gradient(135deg, #f0f4ff, #e8f0fe); border: 1.5px dashed #c7d2fe; border-radius: 12px; padding: 2rem; text-align: center; margin-bottom: 1.5rem; }
+  .coming-soon h3 { font-family: 'Playfair Display', serif; font-size: 18px; color: var(--navy); margin-bottom: 8px; }
+  .coming-soon p { font-size: 13px; color: var(--muted); margin-bottom: 1.25rem; line-height: 1.6; }
+
+  /* FEATURED POST */
+  .featured-post { background: var(--white); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 1.5rem; transition: box-shadow 0.2s; }
+  .featured-post:hover { box-shadow: 0 8px 30px rgba(0,0,0,0.08); }
+  .featured-img { width: 100%; height: 200px; background: linear-gradient(135deg, #1a3a8a, #163366); display: flex; align-items: center; justify-content: center; font-size: 48px; overflow:hidden; position:relative; }
+  .featured-body { padding: 1.5rem; }
+  .post-category { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; display: block; }
+  .post-title { font-family: 'Playfair Display', serif; font-size: 20px; color: var(--navy); margin-bottom: 8px; line-height: 1.3; }
+  .post-title a { color: inherit; text-decoration: none; }
+  .post-title a:hover { color: var(--gold); }
+  .post-excerpt { font-size: 14px; color: var(--muted); line-height: 1.7; margin-bottom: 1rem; font-weight: 300; }
+  .post-meta { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+  .post-date { font-size: 12px; color: var(--muted); }
+  .post-tag { display: inline-block; font-size: 10px; padding: 2px 8px; border-radius: 4px; background: #f3f4f6; color: var(--muted); margin-right: 4px; }
+
+  /* POSTS GRID */
+  .posts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .post-card { background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 1.25rem; transition: all 0.2s; border-left: 4px solid var(--gold); }
+  .post-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.07); transform: translateY(-1px); }
+  .post-card .post-title { font-size: 15px; margin-bottom: 6px; }
+  .post-card .post-excerpt { font-size: 13px; -webkit-line-clamp: 3; display: -webkit-box; -webkit-box-orient: vertical; overflow: hidden; }
+
+  /* SUBSTACK EMBED */
+  .substack-section { margin-top: 2rem; }
+  .substack-embed { background: var(--white); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+  .substack-header { background: var(--navy); padding: 1rem 1.25rem; display: flex; align-items: center; gap: 10px; }
+  .substack-header span { font-size: 13px; color: rgba(255,255,255,0.8); font-weight: 500; }
+
+  /* SIDEBAR */
+  .sidebar { display: flex; flex-direction: column; gap: 1.5rem; }
+  .side-card { background: var(--white); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+  .side-card-header { background: var(--navy); padding: 1rem 1.25rem; }
+  .side-card-header h3 { font-family: 'Playfair Display', serif; font-size: 15px; color: white; }
+  .side-card-body { padding: 1.25rem; }
+  .side-link { display: block; font-size: 13px; color: var(--text); text-decoration: none; padding: 8px 0; border-bottom: 1px solid var(--border); line-height: 1.4; transition: color 0.2s; }
+  .side-link:last-child { border-bottom: none; }
+  .side-link:hover { color: var(--gold); }
+  .side-link span { font-size: 11px; color: var(--muted); display: block; margin-top: 2px; }
+  .topic-tag { display: inline-block; font-size: 12px; padding: 4px 12px; border-radius: 20px; border: 1px solid var(--border); color: var(--muted); margin: 3px; text-decoration: none; transition: all 0.2s; }
+  .topic-tag:hover { border-color: var(--gold); color: var(--gold); }
+
+  /* FOOTER */
+  .blog-footer { background: var(--navy); padding: 1.5rem 2rem; text-align: center; }
+  .blog-footer p { font-size: 12px; color: rgba(255,255,255,0.4); }
+  .blog-footer a { color: var(--gold); text-decoration: none; }
+
+  @media (max-width: 768px) { .main-wrap { grid-template-columns: 1fr; } .posts-grid { grid-template-columns: 1fr; } .subscribe-form { width: 100%; } .subscribe-input { width: 100%; } }
+</style>
+
+  <!-- Open Graph / Social sharing -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Dr. Adeem Ghaffar Rana">
+  <meta property="og:url" content="https://ranaadeem.de/blog.html">
+  <meta property="og:title" content="The Lab Notebook — Blog by Dr. Adeem Ghaffar Rana">
+  <meta property="og:description" content="Thoughts on catalysis, sustainable energy, academic & daily bureaucratic life in Germany, travel, and everything in between. Published on Substack.">
+  <meta property="og:image" content="https://ranaadeem.de/blog-header.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="The Lab Notebook — Blog by Dr. Adeem Ghaffar Rana">
+  <meta name="twitter:description" content="Thoughts on catalysis, sustainable energy, academic & daily bureaucratic life in Germany, travel, and everything in between. Published on Substack.">
+  <meta name="twitter:image" content="https://ranaadeem.de/blog-header.jpg">
+  <!-- General -->
+  <meta name="description" content="Thoughts on catalysis, sustainable energy, academic & daily bureaucratic life in Germany, travel, and everything in between. Published on Substack.">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav id="main-nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">
+      <span class="nav-logo-agr">AGR</span>
+      <span class="nav-logo-name">Dr. Adeem Ghaffar Rana</span>
+    </a>
+    <button class="nav-hamburger" onclick="toggleMenu()" aria-label="Menu"><span></span><span></span><span></span></button>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="/" class="nav-link">Home</a></li>
+      <li><a href="/about.html" class="nav-link">About</a></li>
+      <li><a href="/research.html" class="nav-link">Research</a></li>
+      <li><a href="/blog.html" class="nav-link active">Blog</a></li>
+      <li><a href="/session2006.html" class="nav-link">Session 2006</a></li>
+      <li><a href="/alumni.html" class="nav-link">Alumni Portal</a></li>
+      <li><a href="mailto:ranaadeem@hotmail.com" class="nav-cta">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- HEADER -->
+<a href="/blog-header.jpg" target="_blank" title="Click to view full image" style="display:block;cursor:zoom-in;text-decoration:none;color:inherit;outline:none;"><div class="page-header">
+  <div class="header-inner" style="max-width:960px;width:100%;">
+    <div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:0.75rem;">
+        <div style="height:1px;width:32px;background:rgba(201,168,76,0.6);"></div>
+        <span style="font-size:10px;letter-spacing:0.25em;text-transform:uppercase;color:rgba(201,168,76,0.85);font-family:'DM Sans',sans-serif;">The Lab Notebook</span>
+        <div style="height:1px;width:32px;background:rgba(201,168,76,0.6);"></div>
+      </div>
+      <span class="page-tag">Writing &amp; Thoughts</span>
+      <h1 style="margin-top:0.5rem;">Blog &amp; <span>Insights</span><span style="display:inline-block;width:3px;height:0.85em;background:var(--gold);margin-left:4px;vertical-align:middle;animation:blink 1.1s step-end infinite;"></span></h1>
+      <style>@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}</style>
+      <p class="header-sub" style="margin-top:0.5rem;max-width:520px;">Thoughts on catalysis, sustainable energy, academic &amp; daily bureaucratic life in Germany, travel, and everything in between. Published on Substack.</p>
+    </div>
+  </div>
+</div></a>
+
+<!-- SUBSCRIBE STRIP -->
+<div class="subscribe-strip">
+  <div class="subscribe-inner">
+    <div class="subscribe-text"><strong>Get new posts in your inbox</strong> — subscribe to the newsletter</div>
+    <div class="subscribe-form">
+      <input type="email" class="subscribe-input" placeholder="your@email.com" id="sub-email">
+      <button class="subscribe-btn" onclick="subscribeSubstack()">Subscribe Free</button>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main-wrap">
+  <div>
+    <!-- CATEGORIES -->
+    <div class="category-tabs">
+      <button class="cat-btn active">All Posts</button>
+      <button class="cat-btn">Research & Science</button>
+      <button class="cat-btn">Academic Life</button>
+      <button class="cat-btn">Travel</button>
+      <button class="cat-btn">Pakistan</button>
+      <button class="cat-btn">Career</button>
+    </div>
+
+    <!-- LIVE POSTS FROM SUBSTACK RSS -->
+    <div id="posts-loading" style="text-align:center;padding:3rem;color:var(--muted);">
+      <div style="font-size:32px;margin-bottom:1rem;">📡</div>
+      <div style="font-size:14px;">Loading posts from Substack...</div>
+    </div>
+    <div id="posts-error" style="display:none;background:#fef2f2;border:1px solid #fee2e2;border-radius:10px;padding:1.5rem;text-align:center;color:#dc2626;font-size:13px;margin-bottom:1rem;"></div>
+    <div id="featured-post-wrap" style="display:none;"></div>
+    <div id="posts-grid-wrap" class="posts-grid" style="display:none;"></div>
+    <div id="load-more-wrap" style="text-align:center;margin-top:1.5rem;display:none;">
+      <a id="view-all-link" href="https://ranaadeem.substack.com" target="_blank" class="substack-btn">View All Posts on Substack →</a>
+    </div>
+
+    <!-- SUBSTACK SUBSCRIBE EMBED -->
+    <div style="margin-top:2rem;">
+      <div style="font-size:11px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:0.75rem;">Subscribe via Substack</div>
+      <div class="substack-embed">
+        <div class="substack-header">
+          <span style="font-size:18px;">📧</span>
+          <span>Get new posts delivered to your inbox</span>
+        </div>
+        <div style="padding:1.5rem;">
+          <iframe src="https://ranaadeem.substack.com/embed" width="100%" height="150" style="border:none;background:white;" frameborder="0" scrolling="no"></iframe>
+          <p style="font-size:11px;color:var(--muted);margin-top:8px;text-align:center;">Don't have a Substack account? <a href="https://substack.com" target="_blank" style="color:var(--gold);">Sign up free →</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+        <div class="side-card">
+      <div class="side-card-header"><h3>About This Blog</h3></div>
+      <div class="side-card-body">
+        <p style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:1rem;">I write about research, academia, travel, and life between two cultures — Pakistan and Germany. Published on Substack, syndicated here.</p>
+        <a href="https://substack.com/@ranaadeem" target="_blank" style="display:block;text-align:center;background:#FF6719;color:white;padding:10px;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none;">Follow on Substack</a>
+      </div>
+    </div>
+
+    <div class="side-card">
+      <div class="side-card-header"><h3>Topics</h3></div>
+      <div class="side-card-body">
+        <a href="#" class="topic-tag">⚗️ Catalysis</a>
+        <a href="#" class="topic-tag">✈️ Sustainable Fuels</a>
+        <a href="#" class="topic-tag">🎓 Academia</a>
+        <a href="#" class="topic-tag">🇩🇪 Germany</a>
+        <a href="#" class="topic-tag">🇵🇰 Pakistan</a>
+        <a href="#" class="topic-tag">🌍 Travel</a>
+        <a href="#" class="topic-tag">📸 Photography</a>
+        <a href="#" class="topic-tag">🏏 Cricket</a>
+        <a href="#" class="topic-tag">💼 Career</a>
+        <a href="#" class="topic-tag">🔬 Research Life</a>
+      </div>
+    </div>
+
+    <div class="side-card">
+      <div class="side-card-header"><h3>Follow Along</h3></div>
+      <div class="side-card-body">
+        <a href="https://www.linkedin.com/in/ranaadeem/" target="_blank" class="side-link">💼 LinkedIn<span>Professional updates & research</span></a>
+        <a href="https://www.instagram.com/adeemghaffarrana" target="_blank" class="side-link">📸 Instagram<span>Travel & photography</span></a>
+        <a href="https://www.youtube.com/@AdeemGhaffarRana" target="_blank" class="side-link">▶️ YouTube<span>Travel vlogs & cricket</span></a>
+        <a href="https://x.com/ranaadeem" target="_blank" class="side-link">𝕏 Twitter/X<span>Thoughts & commentary</span></a>
+        <a href="https://scholar.google.com/citations?user=pUQ4nFsAAAAJ" target="_blank" class="side-link">🎓 Google Scholar<span>Research publications</span></a>
+      </div>
+    </div>
+
+    <div class="side-card">
+      <div class="side-card-header"><h3>Newsletter</h3></div>
+      <div class="side-card-body">
+        <p style="font-size:12px;color:var(--muted);margin-bottom:12px;line-height:1.6;">New posts straight to your inbox. No spam, unsubscribe anytime.</p>
+        <input type="email" placeholder="your@email.com" id="side-email" style="width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit;outline:none;margin-bottom:8px;">
+        <button onclick="subscribeSubstack()" style="width:100%;padding:10px;background:var(--navy);color:white;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">Subscribe Free</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="blog-footer">
+  <p>© 2025 Dr. Adeem Ghaffar Rana · <a href="mailto:ranaadeem@hotmail.com">ranaadeem@hotmail.com</a> · Freiberg, Germany</p>
+</div>
+
+<script>
+function toggleMenu() { document.getElementById('nav-links').classList.toggle('open'); }
+function subscribeSubstack() {
+  const email = document.getElementById('sub-email')?.value || document.getElementById('side-email')?.value;
+  if (!email || !email.includes('@')) { alert('Please enter a valid email address.'); return; }
+  window.open('https://ranaadeem.substack.com/?email=' + encodeURIComponent(email), '_blank');
+}
+const navLinks = document.querySelectorAll('.nav-link');
+navLinks.forEach(link => {
+  try { if (window.location.pathname === new URL(link.href).pathname) link.classList.add('active'); } catch(e) {}
+});
+
+// ── Live RSS fetch from Substack ──
+// ── Helpers ──
+function formatDate(s) {
+  try { return new Date(s).toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'}); }
+  catch(e) { return s; }
+}
+function getEmoji(title) {
+  const t = (title||'').toLowerCase();
+  if (t.includes('driver')||t.includes('licence')||t.includes('car')) return '🚗';
+  if (t.includes('germany')||t.includes('german')) return '🇩🇪';
+  if (t.includes('pakistan')||t.includes('lahore')) return '🇵🇰';
+  if (t.includes('research')||t.includes('catalysis')) return '⚗️';
+  if (t.includes('travel')||t.includes('trip')) return '✈️';
+  if (t.includes('phd')||t.includes('academic')) return '🎓';
+  if (t.includes('cricket')) return '🏏';
+  if (t.includes('photo')) return '📷';
+  return '✍️';
+}
+function truncate(text, max) {
+  text = (text||'').replace(/<[^>]+>/g,'').replace(/\s+/g,' ').trim();
+  return text.length > max ? text.slice(0,max).trim()+'...' : text;
+}
+
+// ── Render posts ──
+function renderPosts(posts) {
+  document.getElementById('posts-loading').style.display = 'none';
+  if (!posts || !posts.length) {
+    document.getElementById('posts-error').style.display = 'block';
+    document.getElementById('posts-error').innerHTML =
+      'No posts yet. <a href="https://ranaadeem.substack.com" target="_blank" style="color:#c9a84c;font-weight:600;">Read on Substack →</a>';
+    return;
+  }
+
+  const featured = posts[0];
+  const rest = posts.slice(1);
+  const excerpt = truncate(featured.excerpt || featured.description || '', 220);
+
+  // Choose banner for featured post
+  const t = (featured.title || '').toLowerCase();
+  let bannerHTML;
+  if (t.includes('tum') || t.includes('degree') || t.includes('apostille') || t.includes('verification') || t.includes('munich')) {
+      return `<div class="featured-img" style="background:linear-gradient(135deg,#1a3a8a 0%,#2048a8 50%,#163366 100%);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;">
+        <svg width="300" height="160" viewBox="0 0 300 160">
+          <rect x="20" y="20" width="260" height="120" rx="8" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+          <rect x="20" y="20" width="260" height="30" rx="8" fill="rgba(201,168,76,0.3)"/>
+          <text x="150" y="42" text-anchor="middle" font-size="12" font-weight="bold" fill="white">TECHNISCHE UNIVERSITÄT MÜNCHEN</text>
+          <text x="150" y="75" text-anchor="middle" font-size="18" font-weight="bold" fill="#c9a84c">Zeugnis</text>
+          <text x="150" y="95" text-anchor="middle" font-size="10" fill="rgba(255,255,255,0.7)">Chemical Engineering · PhD</text>
+          <rect x="60" y="108" width="80" height="20" rx="3" fill="rgba(201,168,76,0.2)" stroke="rgba(201,168,76,0.5)" stroke-width="1"/>
+          <text x="100" y="122" text-anchor="middle" font-size="9" fill="#c9a84c">APOSTILLE</text>
+          <rect x="160" y="108" width="80" height="20" rx="3" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+          <text x="200" y="122" text-anchor="middle" font-size="9" fill="rgba(255,255,255,0.7)">VERIFIED ✓</text>
+          <text x="150" y="148" text-anchor="middle" font-size="8" fill="rgba(255,255,255,0.4)">Regierung von Oberbayern · Bavaria, Germany</text>
+        </svg>
+        <div style="position:absolute;top:12px;left:12px;background:rgba(201,168,76,0.9);color:#1c120a;font-size:10px;font-weight:700;padding:4px 10px;border-radius:4px;letter-spacing:0.08em;text-transform:uppercase;">🇩🇪 Bureaucratic Life</div>
+      </div>`;
+    }
+    if (t.includes('driver') || t.includes('licence') || t.includes('fuhrerschein') || t.includes('fahrschule')) {
+    bannerHTML = `<div class="featured-img" style="background:linear-gradient(135deg,#1a3a8a 0%,#2048a8 50%,#163366 100%);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;">
+      <svg width="280" height="160" viewBox="0 0 280 160" style="filter:drop-shadow(0 4px 20px rgba(0,0,0,0.4));">
+        <rect x="10" y="20" width="260" height="120" rx="10" fill="#1a2e6b"/>
+        <rect x="10" y="20" width="260" height="120" rx="10" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
+        <rect x="10" y="20" width="38" height="120" rx="4" fill="#003399"/>
+        <text x="29" y="48" text-anchor="middle" font-size="7" fill="#FFCC00">&#9733;&#9733;&#9733;</text>
+        <text x="29" y="58" text-anchor="middle" font-size="7" fill="#FFCC00">&#9733; &#9733;</text>
+        <text x="29" y="68" text-anchor="middle" font-size="7" fill="#FFCC00">&#9733;&#9733;&#9733;</text>
+        <text x="29" y="86" text-anchor="middle" font-size="11" font-weight="bold" fill="white">DE</text>
+        <text x="60" y="42" font-size="8" fill="rgba(255,255,255,0.6)">EUROPÄISCHE UNION · BUNDESREPUBLIK DEUTSCHLAND</text>
+        <text x="60" y="60" font-size="15" font-weight="bold" fill="white">Führerschein</text>
+        <rect x="60" y="70" width="28" height="15" rx="3" fill="rgba(255,255,255,0.15)"/>
+        <text x="74" y="81" text-anchor="middle" font-size="9" fill="white">B</text>
+        <rect x="94" y="70" width="28" height="15" rx="3" fill="rgba(255,255,255,0.08)"/>
+        <text x="108" y="81" text-anchor="middle" font-size="9" fill="rgba(255,255,255,0.5)">A</text>
+        <rect x="185" y="35" width="70" height="85" rx="4" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+        <text x="220" y="82" text-anchor="middle" font-size="22" fill="rgba(255,255,255,0.25)">&#128100;</text>
+        <rect x="60" y="104" width="2" height="20" fill="rgba(255,255,255,0.4)"/>
+        <rect x="64" y="104" width="4" height="20" fill="rgba(255,255,255,0.3)"/>
+        <rect x="70" y="104" width="2" height="20" fill="rgba(255,255,255,0.4)"/>
+        <rect x="74" y="104" width="3" height="20" fill="rgba(255,255,255,0.25)"/>
+        <rect x="79" y="104" width="5" height="20" fill="rgba(255,255,255,0.35)"/>
+        <rect x="86" y="104" width="2" height="20" fill="rgba(255,255,255,0.4)"/>
+        <rect x="130" y="95" width="40" height="30" rx="3" fill="#004d99" stroke="white" stroke-width="1.5"/>
+        <text x="150" y="109" text-anchor="middle" font-size="7" fill="white" font-weight="bold">BAB</text>
+        <text x="150" y="120" text-anchor="middle" font-size="10" fill="white" font-weight="bold">A8</text>
+      </svg>
+      <div style="position:absolute;top:12px;left:12px;background:rgba(201,168,76,0.9);color:#1c120a;font-size:10px;font-weight:700;padding:4px 10px;border-radius:4px;letter-spacing:0.08em;text-transform:uppercase;">&#127465;&#127466; Bureaucratic Life</div>
+    </div>`;
+  } else {
+    bannerHTML = `<div class="featured-img" style="font-size:48px;display:flex;align-items:center;justify-content:center;">${getEmoji(featured.title)}</div>`;
+  }
+
+  // Render featured post
+  const fw = document.getElementById('featured-post-wrap');
+  fw.innerHTML = `<div class="featured-post" style="cursor:pointer;" onclick="window.open('${featured.link}','_blank')">
+    ${bannerHTML}
+    <div class="featured-body">
+      <span class="post-category">Latest Post</span>
+      <h2 class="post-title"><a href="${featured.link}" target="_blank" onclick="event.stopPropagation()">${featured.title}</a></h2>
+      <p class="post-excerpt">${excerpt}</p>
+      <div class="post-meta">
+        <div><span class="post-tag">Substack</span></div>
+        <span class="post-date">${formatDate(featured.pubDate)}</span>
+      </div>
+    </div>
+  </div>`;
+  fw.style.display = 'block';
+
+  // Render grid
+  if (rest.length) {
+    const grid = document.getElementById('posts-grid-wrap');
+    grid.innerHTML = rest.map(p => `
+      <div class="post-card" style="cursor:pointer;" onclick="window.open('${p.link}','_blank')">
+        <div style="font-size:28px;margin-bottom:0.5rem;">${getEmoji(p.title)}</div>
+        <span class="post-category">Substack</span>
+        <h3 class="post-title"><a href="${p.link}" target="_blank" onclick="event.stopPropagation()">${p.title}</a></h3>
+        <p class="post-excerpt">${truncate(p.excerpt||p.description||'',120)}</p>
+        <div class="post-meta" style="margin-top:0.75rem;">
+          <span class="post-date">${formatDate(p.pubDate)}</span>
+        </div>
+      </div>`).join('');
+    grid.style.display = 'grid';
+  }
+  document.getElementById('load-more-wrap').style.display = 'block';
+}
+
+// ── Load posts from local posts.json (generated by GitHub Action) ──
+// Falls back to hardcoded list if file not yet generated
+const POSTS = [
+  {
+    title: "TUM Degree Verification and Apostille in Munich: A Step-by-Step Guide for Internationals",
+    link: "https://ranaadeem.substack.com/p/tum-degree-verification-and-apostille",
+    pubDate: "Sun, 18 May 2026 00:00:00 GMT",
+    excerpt: "A step-by-step guide to getting your TUM degree certified and apostilled in Bavaria — including the Regierung von Oberbayern process, fees, postal and in-person options, based on personal experience."
+  },
+  {
+    title: "Getting Your Drivers Licence in Germany",
+    link: "https://ranaadeem.substack.com/p/getting-your-drivers-licence-in-germany",
+    pubDate: "Wed, 14 May 2026 00:00:00 GMT",
+    excerpt: "A step-by-step guide to getting your Pakistani driving licence converted or obtaining a new German Fuehrerschein — covering the Fahrschule process, theory test, costs, and what to expect on the day."
+  }
+];
+
+function loadPosts() { renderPosts(POSTS); }
+loadPosts();
+</script>
+</body>
+</html>
