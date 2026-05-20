@@ -101,7 +101,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
 .stats-sidebar{display:flex;flex-direction:column;gap:0.85rem;position:sticky;top:80px;}
 .stat-card{background:white;border:1px solid var(--border);border-radius:10px;overflow:hidden;}
 .stat-card-header{background:var(--navy);padding:0.6rem 1rem;font-family:"Playfair Display",serif;color:white;font-size:0.85rem;}
-.stat-card-
+.stat-card-body{padding:0.5rem 0;}
 .stat-row{display:flex;align-items:center;justify-content:space-between;padding:7px 1rem;border-bottom:1px solid #f3f4f6;}
 .stat-row:last-child{border-bottom:none;}
 .stat-row-label{font-size:12px;color:var(--muted);flex:1;}
@@ -120,7 +120,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
 .setup-header{background:linear-gradient(135deg,var(--navy),#2048a8);padding:2rem;}
 .setup-header h2{font-family:"Playfair Display",serif;font-size:1.75rem;color:white;margin-bottom:4px;}
 .setup-header p{font-size:13px;color:rgba(255,255,255,0.6);}
-.setup-
+.setup-body{padding:1.75rem 2rem 2rem;}
 .section-divider{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;padding:0.5rem 0;border-bottom:1px solid var(--border);margin:1.25rem 0 1rem;}
 .form-group{margin-bottom:1rem;}
 .form-group label{display:block;font-size:12px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:5px;}
@@ -169,7 +169,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
 .profile-avatar img{width:100%;height:100%;object-fit:cover;}
 .profile-name{font-family:"Playfair Display",serif;font-size:1.6rem;color:white;margin-bottom:4px;}
 .profile-roll{font-size:13px;color:var(--gold);}
-.profile-
+.profile-body{padding:0.5rem 1.75rem 1.75rem;}
 .profile-field{display:flex;align-items:flex-start;gap:12px;padding:0.75rem 0;border-bottom:1px solid var(--border);}
 .profile-field:last-child{border-bottom:none;}
 .field-icon{font-size:16px;width:20px;text-align:center;flex-shrink:0;margin-top:1px;}
@@ -600,8 +600,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
               <option value="">Select your session</option>
               <option value="2006-Morning">2006&ndash;2010 &middot; Morning</option>
               <option value="2006-Evening">2006&ndash;2010 &middot; Evening</option>
-              <option value="2010-Morning">2010&ndash;2014 &middot; Morning</option>
-              <option value="2010-Evening">2010&ndash;2014 &middot; Evening</option>
+
             </select>
           </div>
           <div class="form-group"><label>Roll Number <span class="req">*</span></label><select id="setup-roll" disabled><option value="">Select session first</option></select></div>
@@ -763,7 +762,6 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
 </div>
 
 <script type="module">
-import { initializeApp } from '
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js';
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js';
 import { getFirestore, doc, setDoc, getDoc, deleteDoc, collection, getDocs, addDoc, query, where, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js';
@@ -886,7 +884,7 @@ function buildNav(user) {
 }
 
 document.getElementById('btn-join').addEventListener('click',()=>{ if(currentUser){currentUserProfile?showPage('directory'):showPage('setup');}else showPage('login'); });
-document.getElementById('nav-portal-link').addEventListener('click',(e)=>{ e.preventDefault(); showPage('landing'); });
+// nav-portal-link removed - doesn't exist in new nav
 document.getElementById('btn-browse').addEventListener('click',() => {
   if (!currentUser) { showPage('login'); return; }
   // Scroll to global search bar and focus it
@@ -1480,14 +1478,7 @@ document.addEventListener('click', function(e) {
   }
 });
 </script>
-<script>
-document.addEventListener('keydown',function(e){
-  if(e.key==='Escape'){
-    const lb=document.getElementById('profile-lightbox');
-    if(lb) lb.style.display='none';
-  }
-});
-</script>
+
 
 <!-- Profile photo lightbox - must be at body level to work when page is hidden -->
 <div id="profile-lightbox" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:9999;align-items:center;justify-content:center;cursor:zoom-out;" onclick="this.style.display='none';">
