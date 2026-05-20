@@ -1446,22 +1446,24 @@ async function deleteProfile(){
 }
 document.getElementById('btn-delete-profile').addEventListener('click', deleteProfile);
 
-// Avatar lightbox via addEventListener (module scope safe)
+// ── Avatar photo lightbox (module-safe via addEventListener) ──
 document.getElementById('view-avatar').addEventListener('click', function(){
   const img = this.querySelector('img');
   if(!img) return;
-  const lb = document.getElementById('profile-lightbox');
-  if(!lb) return;
   document.getElementById('profile-lightbox-img').src = img.src;
-  lb.style.display = 'flex';
+  document.getElementById('profile-lightbox').style.display = 'flex';
 });
-// Lightbox escape key
+
+// ── Escape closes all lightboxes ──
 document.addEventListener('keydown', function(e){
-  if(e.key==='Escape'){
-    const lb=document.getElementById('profile-lightbox');
-    if(lb) lb.style.display='none';
+  if(e.key === 'Escape'){
+    const lb = document.getElementById('profile-lightbox');
+    if(lb) lb.style.display = 'none';
   }
-});lementById('nav-hamburger').addEventListener('click', function() {
+});
+
+
+document.getElementById('nav-hamburger').addEventListener('click', function() {
   document.getElementById('nav-links').classList.toggle('open');
 });
 document.querySelectorAll('.nav-dropdown-trigger').forEach(function(trigger) {
