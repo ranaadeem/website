@@ -758,6 +758,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
       <div style="padding:0 1.5rem 1.5rem;display:flex;gap:0.75rem;flex-wrap:wrap;">
         <button id="btn-edit-profile" style="display:none;flex:1;min-width:140px;padding:11px;background:var(--navy);color:var(--gold);border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">✏️ Edit My Profile</button>
         <button id="btn-delete-profile" style="display:none;padding:11px 20px;background:white;color:#dc2626;border:1.5px s
+<script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js';
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js';
 import { getFirestore, doc, setDoc, getDoc, deleteDoc, collection, getDocs, addDoc, query, where, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js';
@@ -1145,7 +1146,7 @@ function viewGlobalProfile(p) {
   const init = p.name.split(' ').map(w => w[0]).slice(0, 2).join('');
 
   const av = document.getElementById('view-avatar');
-  av.innerHTML = p.photoBase64 ? '<img src="' + p.photoBase64 + '" alt="' + p.name + '">' : init;
+  if(p.photoBase64){const _i=document.createElement('img');_i.src=p.photoBase64;_i.alt=p.name;av.innerHTML='';av.appendChild(_i);}else{av.innerHTML=init;}
   document.getElementById('view-name').textContent = p.name + (p.deceased ? ' 🕊️' : '');
   document.getElementById('view-roll').textContent = p.roll + ' · ' + p.session;
 
@@ -1222,7 +1223,7 @@ document.getElementById('photo-upload-circle').addEventListener('click',()=>docu
 document.getElementById('photo-file').addEventListener('change',function(e){
   const file=e.target.files[0]; if(!file)return;
   if(file.size>3*1024*1024){showToast('Photo must be under 3MB');return;}
-  const reader=new FileReader(); reader.onload=ev=>{selectedPhotoBase64=ev.target.result; document.getElementById('photo-upload-circle').innerHTML='<img src="'+ev.target.result+'" style="width:100%;height:100%;object-fit:cover;" alt="">';};
+  const reader=new FileReader(); reader.onload=ev=>{selectedPhotoBase64=ev.target.result; const _uploadImg=document.createElement('img');_uploadImg.src=ev.target.result;_uploadImg.style.cssText='width:100%;height:100%;object-fit:cover;';const _circle=document.getElementById('photo-upload-circle');_circle.innerHTML='';_circle.appendChild(_uploadImg);};
   reader.readAsDataURL(file);
 });
 document.getElementById('notice-text').addEventListener('input',function(){document.getElementById('notice-char').textContent=this.value.length+'/500';});
@@ -1390,7 +1391,7 @@ function viewProfile(uid){
   // Avatar with clickable lightbox
   const av=document.getElementById('view-avatar');
   if(p.photoBase64){
-    av.innerHTML='<img src="'+p.photoBase64+'" alt="'+p.name+'" style="width:100%;height:100%;object-fit:cover;object-position:center top;border-radius:50%;">';
+    const _vpi=document.createElement('img');_vpi.src=p.photoBase64;_vpi.alt=p.name;_vpi.style.cssText='width:100%;height:100%;object-fit:cover;object-position:center top;border-radius:50%;';av.innerHTML='';av.appendChild(_vpi);
     av.style.cursor='zoom-in';
     av.title='Click to view full photo';
   } else {
@@ -1439,7 +1440,7 @@ window.openEditProfile = function openEditProfile(){
   document.getElementById('setup-email').value=p.email||'';document.getElementById('setup-phone').value=p.phone||'';
   document.getElementById('setup-linkedin').value=p.linkedin||'';document.getElementById('setup-bio').value=p.bio||'';
   const vis=p.jobVisibility||'session';const radio=document.querySelector('input[name="job-visibility"][value="'+vis+'"]');if(radio)radio.checked=true;
-  if(p.photoBase64){document.getElementById('photo-upload-circle').innerHTML='<img src="'+p.photoBase64+'" style="width:100%;height:100%;object-fit:cover;" alt="">';selectedPhotoBase64=p.photoBase64;}
+  if(p.photoBase64){const _epc=document.getElementById('photo-upload-circle');const _epi=document.createElement('img');_epi.src=p.photoBase64;_epi.style.cssText='width:100%;height:100%;object-fit:cover;';_epc.innerHTML='';_epc.appendChild(_epi);selectedPhotoBase64=p.photoBase64;}
   showPage('setup');
 }
 
