@@ -922,7 +922,7 @@ document.getElementById('btn-back-profile').addEventListener('click',()=>{
   }
 });
 document.getElementById('btn-cancel-setup').addEventListener('click',(e)=>{e.preventDefault();showPage('directory');});
-document.getElementById('btn-edit-profile').addEventListener('click',openEditProfile);
+document.getElementById('btn-edit-profile').addEventListener('click',()=>openEditProfile());
 document.getElementById('btn-google-signin').addEventListener('click',async()=>{
   try { await signInWithPopup(auth,provider); showToast('Signed in!'); }
   catch(e) { if(e.code==='auth/popup-blocked') showToast('Popup blocked — allow popups for this site.'); else if(e.code!=='auth/cancelled-popup-request') showToast('Sign in failed: '+e.message); }
@@ -1442,7 +1442,7 @@ async function deleteProfile(){
     alert('Error deleting profile: '+e.message);
   }
 }
-document.getElementById('btn-delete-profile').addEventListener('click', deleteProfile);
+document.getElementById('btn-delete-profile').addEventListener('click', ()=>deleteProfile());
 
 // ── Avatar photo lightbox (module-safe via addEventListener) ──
 document.getElementById('view-avatar').addEventListener('click', function(){
