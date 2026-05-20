@@ -289,6 +289,93 @@ nav{background:var(--navy);border-bottom:2px solid var(--gold);position:sticky;t
 .page-footer { background: var(--navy); padding: 1.75rem 2rem; text-align: center; }
 .page-footer p { font-size: 13px; color: rgba(255,255,255,0.4); }
 .page-footer a { color: var(--gold); text-decoration: none; }
+
+/* DROPDOWN NAV */
+.nav-dropdown { position: relative; }
+.nav-dropdown-menu {
+  display: none; position: absolute; top: 100%; left: 50%;
+  transform: translateX(-50%); min-width: 180px;
+  background: var(--navy); border: 1px solid rgba(201,168,76,0.3);
+  border-radius: 8px; padding: 0.5rem 0; z-index: 2000;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3); margin-top: 4px;
+}
+.nav-dropdown:hover .nav-dropdown-menu,
+.nav-dropdown.open .nav-dropdown-menu { display: block; }
+.nav-dropdown-menu a {
+  display: block; padding: 8px 16px; color: rgba(255,255,255,0.8);
+  text-decoration: none; font-size: 13px; white-space: nowrap;
+  transition: all 0.15s;
+}
+.nav-dropdown-menu a:hover { color: var(--gold); background: rgba(201,168,76,0.08); }
+.nav-dropdown-menu .menu-divider { height: 1px; background: rgba(255,255,255,0.08); margin: 4px 0; }
+.nav-dropdown > .nav-link::after { content: ' ▾'; font-size: 9px; opacity: 0.7; }
+@media(max-width:768px){
+  .nav-dropdown-menu { position: static; transform: none; box-shadow: none;
+    border: none; border-left: 2px solid rgba(201,168,76,0.3); margin-left: 1rem;
+    border-radius: 0; background: rgba(255,255,255,0.03); }
+  .nav-dropdown.open .nav-dropdown-menu { display: block; }
+  .nav-dropdown:hover .nav-dropdown-menu { display: none; }
+}
+
+
+  /* ── DROPDOWN NAV ── */
+  .nav-dropdown { position: relative; }
+  .nav-dropdown-menu {
+    display: none;
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--navy);
+    border: 1px solid rgba(201,168,76,0.25);
+    border-radius: 10px;
+    padding: 0.4rem;
+    min-width: 180px;
+    list-style: none;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.35);
+    z-index: 2000;
+  }
+  .nav-dropdown-menu::before {
+    content: '';
+    position: absolute;
+    top: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-bottom: 6px solid rgba(201,168,76,0.25);
+  }
+  .nav-dropdown:hover .nav-dropdown-menu,
+  .nav-dropdown.open .nav-dropdown-menu { display: block; }
+  .nav-dropdown-item {
+    display: block;
+    padding: 8px 14px;
+    color: rgba(255,255,255,0.8);
+    text-decoration: none;
+    font-size: 13px;
+    border-radius: 6px;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .nav-dropdown-item:hover { background: rgba(201,168,76,0.12); color: var(--gold); }
+  .nav-dropdown-trigger { user-select: none; }
+  @media(max-width:768px){
+    .nav-dropdown-menu {
+      position: static;
+      transform: none;
+      box-shadow: none;
+      border: none;
+      border-radius: 0;
+      background: rgba(255,255,255,0.05);
+      padding: 0 0 0 1rem;
+      margin: 0;
+    }
+    .nav-dropdown-menu::before { display: none; }
+    .nav-dropdown:hover .nav-dropdown-menu { display: none; }
+    .nav-dropdown.open .nav-dropdown-menu { display: block; }
+    .nav-dropdown-item { padding: 8px 12px; color: rgba(255,255,255,0.7); }
+  }
+
 </style>
 
   <!-- Open Graph / Social sharing -->
@@ -311,20 +398,34 @@ nav{background:var(--navy);border-bottom:2px solid var(--gold);position:sticky;t
 <body>
 
 <!-- NAV -->
-<nav>
+<nav id="main-nav">
   <div class="nav-inner">
     <a href="/" class="nav-logo">
       <span class="nav-logo-agr">AGR</span>
       <span class="nav-logo-name">Dr. Adeem Ghaffar Rana</span>
     </a>
-    <button class="nav-hamburger" onclick="toggleMenu()" aria-label="Menu"><span></span><span></span><span></span></button>
+    <button class="nav-hamburger" id="nav-hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
     <ul class="nav-links" id="nav-links">
       <li><a href="/" class="nav-link">Home</a></li>
       <li><a href="/about.html" class="nav-link">About</a></li>
-      <li><a href="/research.html" class="nav-link active">Research</a></li>
+      <li class="nav-dropdown">
+        <a href="/research.html" class="nav-link active nav-dropdown-trigger">Research ▾</a>
+        <ul class="nav-dropdown-menu">
+          <li><a href="/research.html" class="nav-dropdown-item">📄 Publications</a></li>
+          <li><a href="/teaching.html" class="nav-dropdown-item">🎓 Teaching</a></li>
+          <li><a href="/cv.html" class="nav-dropdown-item">📋 CV</a></li>
+        </ul>
+      </li>
       <li><a href="/blog.html" class="nav-link">Blog</a></li>
-      <li><a href="/session2006.html" class="nav-link">Session 2006</a></li>
-      <li><a href="/alumni.html" class="nav-link">Alumni Portal</a></li>
+      <li class="nav-dropdown">
+        <a href="/alumni.html" class="nav-link nav-dropdown-trigger">Alumni ▾</a>
+        <ul class="nav-dropdown-menu">
+          <li><a href="/session2006.html" class="nav-dropdown-item">🎓 Session 2006</a></li>
+          <li><a href="/alumni.html" class="nav-dropdown-item">👥 Alumni Portal</a></li>
+        </ul>
+      </li>
       <li><a href="mailto:ranaadeem@hotmail.com" class="nav-cta">Contact</a></li>
     </ul>
   </div>
@@ -452,51 +553,155 @@ nav{background:var(--navy);border-bottom:2px solid var(--gold);position:sticky;t
       <span class="section-label">Research Output</span>
       <h2 class="section-title">Selected Publications</h2>
 
-      <div class="pub-section">
+      <div class="pub-section" id="pubs-list">
 
         <a href="https://doi.org/10.1016/j.fuel.2025.136280" target="_blank" class="pub-item" style="display:block;text-decoration:none;cursor:pointer;">
-          <span class="pub-year-tag">2026 · J.13</span>
-          <div class="pub-title">Advances and Challenges in Photocatalytic Water Splitting: Recent Developments and Trends</div>
-          <div class="pub-authors">Anwar, S.; Aslam, Z.; Aslam, U.; Mehmood, U.; <strong>Rana, A.G.</strong>; Mahmood, N.; Rafique, A.</div>
-          <div class="pub-journal"><em>Fuel</em> · 404, p. 136280</div>
+          <div class="pub-year-badge">2026</div>
+          <div class="pub-body">
+            <div class="pub-number">J.13</div>
+            <div class="pub-title">Advances and Challenges in Photocatalytic Water Splitting: Recent Developments and Trends</div>
+            <div class="pub-authors">Anwar, S.; Aslam, Z.; Aslam, U.; Mehmood, U.; <strong>Rana, A.G.</strong>; Mahmood, N.; Rafique, A.</div>
+            <div class="pub-journal"><em>Fuel</em> · 404, p. 136280</div>
+          </div>
         </a>
 
         <a href="https://doi.org/10.1016/j.cej.2024.156948" target="_blank" class="pub-item" style="display:block;text-decoration:none;cursor:pointer;">
-          <span class="pub-year-tag">2024 · J.12</span>
-          <div class="pub-title">Enhanced Gas-Phase Pollutant Removal Using Pt Nanoparticle-Modified Exfoliated Carbon Nitride Photocatalysts Under UV and Visible Light</div>
-          <div class="pub-authors">Mateos, M.J.; Hou, H.; <strong>Rana, A.G.</strong>; Lao-Zea, A.; Romero, N.; Sala, X. et al.</div>
-          <div class="pub-journal"><em>Chemical Engineering Journal</em> · 500, p. 156948</div>
+          <div class="pub-year-badge">2024</div>
+          <div class="pub-body">
+            <div class="pub-number">J.12</div>
+            <div class="pub-title">Enhanced Gas-Phase Pollutant Removal Using Pt Nanoparticle-Modified Exfoliated Carbon Nitride Photocatalysts Under UV and Visible Light</div>
+            <div class="pub-authors">Mateos, M.J.; Hou, H.; <strong>Rana, A.G.</strong>; Lao-Zea, A.; Romero, N.; Sala, X. et al.</div>
+            <div class="pub-journal"><em>Chemical Engineering Journal</em> · 500, p. 156948</div>
+          </div>
         </a>
 
         <a href="https://doi.org/10.3390/nano12224006" target="_blank" class="pub-item" style="display:block;text-decoration:none;cursor:pointer;">
-          <span class="pub-year-tag">2022 · J.11</span>
-          <div class="pub-title">Influence of Cocatalysts (Ni, Co, and Cu) and Synthesis Method on the Photocatalytic Activity of Exfoliated Graphitic Carbon Nitride for Hydrogen Production</div>
-          <div class="pub-authors"><strong>Rana, A.G.</strong>; Schwarze, M.; Tasbihi, M.; Sala, X.; García-Antón, J.; Minceva, M.</div>
-          <div class="pub-journal"><em>Nanomaterials</em> · 12(22), p. 4006 <span class="pub-oa">Open Access</span></div>
+          <div class="pub-year-badge">2022</div>
+          <div class="pub-body">
+            <div class="pub-number">J.11</div>
+            <div class="pub-title">Influence of Cocatalysts (Ni, Co, and Cu) and Synthesis Method on the Photocatalytic Activity of Exfoliated Graphitic Carbon Nitride for Hydrogen Production</div>
+            <div class="pub-authors"><strong>Rana, A.G.</strong>; Schwarze, M.; Tasbihi, M.; Sala, X.; García-Antón, J.; Minceva, M.</div>
+            <div class="pub-journal"><em>Nanomaterials</em> · 12(22), p. 4006 <span class="pub-oa">Open Access</span></div>
+          </div>
         </a>
 
         <a href="https://doi.org/10.1002/slct.202201909" target="_blank" class="pub-item" style="display:block;text-decoration:none;cursor:pointer;">
-          <span class="pub-year-tag">2022 · J.9</span>
-          <div class="pub-title">Synthesis of Highly Active Doped Graphitic Carbon Nitride Using Acid-Functionalized Precursors for Efficient Adsorption and Photodegradation of Endocrine-Disrupting Compounds</div>
-          <div class="pub-authors"><strong>Rana, A.G.</strong>; Zahid Hussain, M.; Hammond, N.; Vlad Luca, S.; Fischer, R.A.; Minceva, M.</div>
-          <div class="pub-journal"><em>ChemistrySelect</em> · 7(32), e202201909</div>
+          <div class="pub-year-badge">2022</div>
+          <div class="pub-body">
+            <div class="pub-number">J.10</div>
+            <div class="pub-title">Synthesis of Highly Active Doped Graphitic Carbon Nitride Using Acid-Functionalized Precursors for Efficient Adsorption and Photodegradation of Endocrine-Disrupting Compounds</div>
+            <div class="pub-authors"><strong>Rana, A.G.</strong>; Hussain, M.Z.; Hammond, N.; Luca, S.V.; Fischer, R.A.; Minceva, M.</div>
+            <div class="pub-journal"><em>ChemistrySelect</em> · 7, e202201909</div>
+          </div>
+        </a>
+
+        <a href="https://doi.org/10.1002/jctb.7158" target="_blank" class="pub-item" style="display:block;text-decoration:none;cursor:pointer;">
+          <div class="pub-year-badge">2022</div>
+          <div class="pub-body">
+            <div class="pub-number">J.9</div>
+            <div class="pub-title">Analysis of Photocatalytic Degradation of Phenol with Exfoliated Graphitic Carbon Nitride and Light-Emitting Diodes Using Response Surface Methodology</div>
+            <div class="pub-authors"><strong>Rana, A.G.</strong>; Schwarze, M.; Tasbihi, M.; Minceva, M.</div>
+            <div class="pub-journal"><em>Journal of Chemical Technology &amp; Biotechnology</em> · 97(3), pp. 720–730</div>
+          </div>
         </a>
 
         <a href="https://doi.org/10.3390/catal11080898" target="_blank" class="pub-item" style="display:block;text-decoration:none;cursor:pointer;">
-          <span class="pub-year-tag">2021 · J.8</span>
-          <div class="pub-title">Analysis of Photocatalytic Degradation of Phenol with Exfoliated Graphitic Carbon Nitride and Light-Emitting Diodes Using Response Surface Methodology</div>
-          <div class="pub-authors"><strong>Rana, A.G.</strong>; Minceva, M.</div>
-          <div class="pub-journal"><em>Catalysts</em> · 11(8), p. 898 <span class="pub-oa">Open Access</span></div>
+          <div class="pub-year-badge">2021</div>
+          <div class="pub-body">
+            <div class="pub-number">J.8</div>
+            <div class="pub-title">Efficient Advanced Oxidation Process (AOP) for Photocatalytic Contaminant Degradation Using Exfoliated Metal-Free Graphitic Carbon Nitride and Visible Light-Emitting Diodes</div>
+            <div class="pub-authors"><strong>Rana, A.G.</strong>; Minceva, M.</div>
+            <div class="pub-journal"><em>Catalysts</em> · 11(8), p. 898 <span class="pub-oa">Open Access</span></div>
+          </div>
         </a>
 
-        <div class="scholar-cta">
-          <p>Showing 5 of 13 journal articles. Full list including all citations, co-authors, and DOI links available on Google Scholar.</p>
-          <a href="https://scholar.google.com/citations?user=pUQ4nFsAAAAJ" target="_blank">View All 13 Papers →</a>
-        </div>
+      </div><!-- /pubs-list -->
 
+      <!-- Hidden earlier publications -->
+      <div id="pubs-hidden" style="display:none;">
+        <div class="pub-section">
+
+        <a href="https://doi.org/10.1002/cite.202200070" target="_blank" class="pub-item" style="display:block;text-decoration:none;cursor:pointer;">
+          <div class="pub-year-badge">2022</div>
+          <div class="pub-body">
+            <div class="pub-number">J.7</div>
+            <div class="pub-title">Influence of Hydrothermal Treatment on the Physicochemical Properties and MTO Activity of H-ZSM-5 Zeolite Catalysts</div>
+            <div class="pub-authors"><strong>Rana, A.G.</strong>; Knüpfer, P.; Kureti, S.</div>
+            <div class="pub-journal"><em>Chemie Ingenieur Technik</em> · 94(12), pp. 1880–1887</div>
+          </div>
+        </a>
+
+        <a href="https://doi.org/10.3390/catal11060662" target="_blank" class="pub-item" style="display:block;text-decoration:none;cursor:pointer;">
+          <div class="pub-year-badge">2021</div>
+          <div class="pub-body">
+            <div class="pub-number">J.6</div>
+            <div class="pub-title">Efficient Advanced Oxidation Process for Photocatalytic Degradation Using Exfoliated g-C₃N₄ and Visible LEDs</div>
+            <div class="pub-authors"><strong>Rana, A.G.</strong>; Tasbihi, M.; Schwarze, M.; Minceva, M.</div>
+            <div class="pub-journal"><em>Catalysts</em> · 11(6), p. 662 <span class="pub-oa">Open Access</span></div>
+          </div>
+        </a>
+
+        <a href="https://doi.org/10.1007/s13738-018-1457-1" target="_blank" class="pub-item" style="display:block;text-decoration:none;cursor:pointer;">
+          <div class="pub-year-badge">2018</div>
+          <div class="pub-body">
+            <div class="pub-number">J.5</div>
+            <div class="pub-title">Synthesis of Bimetallic/Carbon Nanocomposite and Its Application for Phenol Removal</div>
+            <div class="pub-authors">Zarin, S.; Aslam, Z.; Zahir, A.; Kamal, M.S.; <strong>Rana, A.G.</strong>; Ahmad, W.; Ahmed, S.</div>
+            <div class="pub-journal"><em>Journal of the Iranian Chemical Society</em> · 15(12), pp. 2689–2701</div>
+          </div>
+        </a>
+
+        <a href="https://doi.org/10.1007/s11270-018-3758-5" target="_blank" class="pub-item" style="display:block;text-decoration:none;cursor:pointer;">
+          <div class="pub-year-badge">2018</div>
+          <div class="pub-body">
+            <div class="pub-number">J.4</div>
+            <div class="pub-title">Alkali-Activated Boiler Fly Ash for Ni(II) Removal: Characterization and Parametric Study</div>
+            <div class="pub-authors">Samiullah, M.; Aslam, Z.; <strong>Rana, A.G.</strong>; Abbas, A.; Ahmad, W.</div>
+            <div class="pub-journal"><em>Water, Air, &amp; Soil Pollution</em> · 229, p. 113</div>
+          </div>
+        </a>
+
+        <a href="https://doi.org/10.1080/09593330.2016.1217940" target="_blank" class="pub-item" style="display:block;text-decoration:none;cursor:pointer;">
+          <div class="pub-year-badge">2017</div>
+          <div class="pub-body">
+            <div class="pub-number">J.3</div>
+            <div class="pub-title">Synthesis and Characterization of Cu-Zn/TiO₂ for the Photocatalytic Conversion of CO₂ to Methane</div>
+            <div class="pub-authors"><strong>Rana, A.G.</strong>; Ahmad, W.; Al-Matar, A.; Shawabkeh, R.; Aslam, Z.</div>
+            <div class="pub-journal"><em>Environmental Technology</em> · 38(9), pp. 1085–1092</div>
+          </div>
+        </a>
+
+        <a href="https://doi.org/10.1016/j.jece.2016.05.019" target="_blank" class="pub-item" style="display:block;text-decoration:none;cursor:pointer;">
+          <div class="pub-year-badge">2016</div>
+          <div class="pub-body">
+            <div class="pub-number">J.2</div>
+            <div class="pub-title">An Experimental and Thermodynamic Study for Conversion of CO₂ to CO and Methane over Cu-K/Al₂O₃</div>
+            <div class="pub-authors">Ahmad, W.; Al-Matar, A.; Shawabkeh, R.; <strong>Rana, A.G.</strong></div>
+            <div class="pub-journal"><em>Journal of Environmental Chemical Engineering</em> · 4(3), pp. 2725–2735</div>
+          </div>
+        </a>
+
+        <a href="https://doi.org/10.1109/JPHOTOV.2016.2574127" target="_blank" class="pub-item" style="display:block;text-decoration:none;cursor:pointer;">
+          <div class="pub-year-badge">2016</div>
+          <div class="pub-body">
+            <div class="pub-number">J.1</div>
+            <div class="pub-title">Improvement in Photovoltaic Performance of Dye Sensitized Solar Cell Using Activated Carbon-TiO₂ Composites-Based Photoanode</div>
+            <div class="pub-authors">Mehmood, U.; Aslam, M.Z.; Shawabkeh, R.A.; Hussein, I.A.; Ahmad, W.; <strong>Rana, A.G.</strong></div>
+            <div class="pub-journal"><em>IEEE Journal of Photovoltaics</em> · 6(5), pp. 1191–1195</div>
+          </div>
+        </a>
+
+        </div>
+      </div><!-- /pubs-hidden -->
+
+      <!-- Toggle button -->
+      <div style="text-align:center;margin:1.5rem 0 2rem;">
+        <button id="pub-toggle-btn" onclick="(function(){var h=document.getElementById('pubs-hidden'),b=document.getElementById('pub-toggle-btn');if(h.style.display==='none'){h.style.display='block';b.textContent='Show Fewer Publications ▴';}else{h.style.display='none';b.textContent='Show 7 Earlier Publications ▾';}})()"
+          style="background:none;border:1.5px solid var(--navy);color:var(--navy);padding:10px 28px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:all 0.2s;">
+          Show 7 Earlier Publications ▾
+        </button>
       </div>
 
-      <!-- ══ CONFERENCE PRESENTATIONS ══ -->
       <span class="section-label">Conferences &amp; Presentations</span>
       <h2 class="section-title">Conference Activity</h2>
 
@@ -512,7 +717,15 @@ nav{background:var(--navy);border-bottom:2px solid var(--gold);position:sticky;t
           </div>
         </div>
 
-    
+        <div class="conf-card">
+          <div class="conf-icon">🧫</div>
+          <div>
+            <div class="conf-type">Conference Paper</div>
+            <div class="conf-title">Development of Novel Cross-Linked Chitosan for the Removal of Anionic Azo-Dye</div>
+            <div class="conf-event">International Conference on Advance Materials and Emerging Technologies (ICAMET) · Nov 28–29, 2016 · Lahore, Pakistan</div>
+            <div class="conf-upload-hint">Poster or photo can be added here — upload image to GitHub and update the src below</div>
+          </div>
+        </div>
 
         <!-- 2025: Jahrestreffen Deutscher Katalytiker, Weimar -->
         <div class="conf-card">
@@ -675,6 +888,22 @@ function toggleMenu() { document.getElementById('nav-links').classList.toggle('o
     console.log('OpenAlex stats unavailable:', e.message);
   }
 })();
+</script>
+
+<script>
+// Hamburger menu
+document.getElementById('nav-hamburger').addEventListener('click', function() {
+  document.getElementById('nav-links').classList.toggle('open');
+});
+// Mobile dropdowns — tap to open
+document.querySelectorAll('.nav-dropdown > .nav-link').forEach(function(link) {
+  link.addEventListener('click', function(e) {
+    if (window.innerWidth <= 768) {
+      e.preventDefault();
+      this.parentElement.classList.toggle('open');
+    }
+  });
+});
 </script>
 </body>
 </html>
