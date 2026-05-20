@@ -709,22 +709,58 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
 
 <!-- PROFILE VIEW -->
 <div class="page" id="page-profile">
-  <div class="profile-wrap">
-    <button id="btn-back-profile" style="background:none;border:none;color:var(--gold);font-size:13px;cursor:pointer;margin-bottom:1rem;">&larr; Back to Directory</button>
-    <div class="profile-card">
-      <div class="profile-header">
-        <div class="profile-avatar" id="view-avatar"></div>
-        <div class="profile-name" id="view-name"></div>
-        <div class="profile-roll" id="view-roll"></div>
+  <!-- Photo lightbox -->
+  <div id="profile-lightbox" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:9999;align-items:center;justify-content:center;cursor:zoom-out;" onclick="document.getElementById('profile-lightbox').style.display='none';">
+    <img id="profile-lightbox-img" src="" style="max-width:90vw;max-height:90vh;border-radius:8px;box-shadow:0 8px 40px rgba(0,0,0,0.5);">
+    <button onclick="document.getElementById('profile-lightbox').style.display='none';" style="position:absolute;top:1.5rem;right:2rem;background:none;border:none;color:white;font-size:2rem;cursor:pointer;line-height:1;">✕</button>
+  </div>
+
+  <div style="max-width:760px;margin:0 auto;padding:1.5rem 1.5rem 3rem;">
+    <button id="btn-back-profile" style="background:none;border:none;color:var(--gold);font-size:13px;cursor:pointer;margin-bottom:1.25rem;display:inline-flex;align-items:center;gap:6px;">&larr; Back to Directory</button>
+
+    <div style="background:white;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.08);">
+      <!-- Header banner -->
+      <div style="background:linear-gradient(135deg,var(--navy) 0%,#2048a8 100%);padding:2rem;display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;">
+        <div id="view-avatar" onclick="openProfileLightbox()" style="width:100px;height:100px;border-radius:50%;border:3px solid var(--gold);overflow:hidden;flex-shrink:0;cursor:zoom-in;background:rgba(201,168,76,0.2);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:32px;color:var(--gold);font-weight:700;"></div>
+        <div style="flex:1;min-width:160px;">
+          <div id="view-name" style="font-family:'Playfair Display',serif;font-size:1.5rem;color:white;font-weight:700;margin-bottom:3px;"></div>
+          <div id="view-roll" style="font-size:13px;color:var(--gold);margin-bottom:10px;"></div>
+          <div id="view-job" style="font-size:13px;color:rgba(255,255,255,0.82);"></div>
+        </div>
       </div>
-      <div class="profile-body">
-        <div class="profile-field"><span class="field-icon">&#128188;</span><div><div class="field-label">Job &amp; Company</div><div class="field-value" id="view-job"></div></div></div>
-        <div class="profile-field"><span class="field-icon">&#128205;</span><div><div class="field-label">Location</div><div class="field-value" id="view-location"></div></div></div>
-        <div class="profile-field"><span class="field-icon">&#9993;</span><div><div class="field-label">Email</div><div class="field-value" id="view-email"></div></div></div>
-        <div class="profile-field"><span class="field-icon">&#128222;</span><div><div class="field-label">Phone</div><div class="field-value" id="view-phone"></div></div></div>
-        <div class="profile-field"><span class="field-icon">in</span><div><div class="field-label">LinkedIn</div><div class="field-value" id="view-linkedin"></div></div></div>
-        <div class="profile-field" id="view-bio-section" style="display:none;"><span class="field-icon">&#128221;</span><div><div class="field-label">About</div><div class="field-value" id="view-bio"></div></div></div>
-        <button id="btn-edit-profile" style="display:none;width:100%;margin-top:0.75rem;padding:10px;background:var(--navy);color:var(--gold);border:none;border-radius:6px;font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;">&#9999;&#65039; Edit My Profile</button>
+
+      <!-- Info grid -->
+      <div style="padding:1.5rem;display:grid;grid-template-columns:1fr 1fr;gap:0.85rem;">
+        <div style="background:#f8f7f4;border-radius:10px;padding:0.9rem;">
+          <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:3px;">📍 Location</div>
+          <div id="view-location" style="font-size:14px;font-weight:600;color:var(--navy);"></div>
+        </div>
+        <div style="background:#f8f7f4;border-radius:10px;padding:0.9rem;">
+          <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:3px;">🎓 Batch</div>
+          <div id="view-batch" style="font-size:14px;font-weight:600;color:var(--navy);"></div>
+        </div>
+        <div style="background:#f8f7f4;border-radius:10px;padding:0.9rem;">
+          <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:3px;">✉ Email</div>
+          <div id="view-email" style="font-size:13px;color:var(--text);word-break:break-all;"></div>
+        </div>
+        <div style="background:#f8f7f4;border-radius:10px;padding:0.9rem;">
+          <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:3px;">📞 Phone</div>
+          <div id="view-phone" style="font-size:13px;color:var(--text);"></div>
+        </div>
+        <div style="background:#f8f7f4;border-radius:10px;padding:0.9rem;grid-column:1/-1;">
+          <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:3px;display:flex;align-items:center;gap:4px;"><svg width="11" height="11" viewBox="0 0 24 24" fill="#0077b5"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg> LinkedIn</div>
+          <div id="view-linkedin" style="font-size:13px;color:var(--text);"></div>
+        </div>
+        <div id="view-bio-section" style="display:none;background:#f8f7f4;border-radius:10px;padding:0.9rem;grid-column:1/-1;">
+          <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:3px;">📝 About</div>
+          <div id="view-bio" style="font-size:13px;color:var(--text);line-height:1.65;"></div>
+        </div>
+      </div>
+
+      <!-- Action buttons -->
+      <div style="padding:0 1.5rem 1.5rem;display:flex;gap:0.75rem;flex-wrap:wrap;">
+        <button id="btn-edit-profile" style="display:none;flex:1;min-width:140px;padding:11px;background:var(--navy);color:var(--gold);border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">✏️ Edit My Profile</button>
+        <button id="btn-delete-profile" style="display:none;padding:11px 20px;background:white;color:#dc2626;border:1.5px solid #dc2626;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">🗑 Delete Profile</button>
       </div>
     </div>
   </div>
@@ -841,7 +877,10 @@ function buildNav(user) {
   if (user.photoURL) { const img=document.createElement('img'); img.src=user.photoURL; img.style.cssText='width:32px;height:32px;border-radius:50%;border:2px solid #c9a84c;'; wrap.appendChild(img); }
   const nm=document.createElement('span'); nm.style.cssText='font-size:13px;color:rgba(255,255,255,0.8);'; nm.textContent=(user.displayName||'').split(' ')[0]; wrap.appendChild(nm);
   if (user.uid===ADMIN_UID) { const a=document.createElement('a'); a.href='/admin.html'; a.className='nav-btn btn-gold'; a.style.textDecoration='none'; a.textContent='⚙ Admin'; wrap.appendChild(a); }
-  const db2=document.createElement('button'); db2.className='nav-btn btn-outline'; db2.textContent='Directory'; db2.addEventListener('click',()=>showPage('directory')); wrap.appendChild(db2);
+  const db2=document.createElement('button'); db2.className='nav-btn btn-outline'; db2.textContent='Directory'; db2.addEventListener('click',()=>{
+    if(currentUserProfile){const s=currentUserProfile.session.split('-')[0];loadDirectory(s);}else{showPage('directory');}
+  }); wrap.appendChild(db2);
+  const ab=document.createElement('button'); ab.className='nav-btn btn-outline'; ab.textContent='All Sessions'; ab.addEventListener('click',()=>showPage('landing')); wrap.appendChild(ab);
   const ob=document.createElement('button'); ob.className='nav-btn btn-outline'; ob.textContent='Sign Out'; ob.addEventListener('click',async()=>{await signOut(auth);showPage('landing');showToast('Signed out.');}); wrap.appendChild(ob);
   area.appendChild(wrap);
 }
@@ -867,7 +906,15 @@ document.getElementById('sessions-grid').addEventListener('click', e => {
 });
 // card-2010 is coming soon — no click handler
 document.getElementById('btn-back-login').addEventListener('click',(e)=>{e.preventDefault();showPage('landing');});
-document.getElementById('btn-back-profile').addEventListener('click',()=>showPage('directory'));
+document.getElementById('btn-back-profile').addEventListener('click',()=>{
+  // Go back to directory if we came from it, otherwise landing
+  if(currentUserProfile){
+    const session=currentUserProfile.session.split('-')[0];
+    loadDirectory(session);
+  } else {
+    showPage('landing');
+  }
+});
 document.getElementById('btn-cancel-setup').addEventListener('click',(e)=>{e.preventDefault();showPage('directory');});
 document.getElementById('btn-edit-profile').addEventListener('click',openEditProfile);
 document.getElementById('btn-google-signin').addEventListener('click',async()=>{
@@ -1116,6 +1163,8 @@ function viewGlobalProfile(p) {
   else { bioSec.style.display = 'none'; }
 
   document.getElementById('btn-edit-profile').style.display = isOwn ? 'block' : 'none';
+  const delBtn=document.getElementById('btn-delete-profile');
+  if(delBtn) delBtn.style.display = isOwn ? 'block' : 'none';
 
   // Back button should return to landing (global search)
   const backBtn = document.getElementById('btn-back-profile');
@@ -1285,13 +1334,31 @@ document.getElementById('tab-btn-directory').addEventListener('click',()=>switch
 document.getElementById('tab-btn-noticeboard').addEventListener('click',()=>switchTab('noticeboard'));
 document.getElementById('tab-btn-announcements').addEventListener('click',()=>switchTab('announcements'));
 
+function openProfileLightbox(){
+  const av=document.getElementById('view-avatar');
+  const img=av.querySelector('img');
+  if(!img)return;
+  const lb=document.getElementById('profile-lightbox');
+  document.getElementById('profile-lightbox-img').src=img.src;
+  lb.style.display='flex';
+}
 function viewProfile(uid){
   const p=allAlumni.find(a=>a.uid===uid);if(!p)return;
   const isSame=currentUserProfile?.session===p.session, isOwn=currentUser?.uid===uid;
   const init=p.name.split(' ').map(w=>w[0]).slice(0,2).join('');
-  const av=document.getElementById('view-avatar');av.innerHTML=p.photoBase64?'<img src="'+p.photoBase64+'" alt="'+p.name+'">':init;
+  // Avatar with clickable lightbox
+  const av=document.getElementById('view-avatar');
+  if(p.photoBase64){
+    av.innerHTML='<img src="'+p.photoBase64+'" alt="'+p.name+'" style="width:100%;height:100%;object-fit:cover;object-position:center top;border-radius:50%;">';
+    av.style.cursor='zoom-in';
+    av.title='Click to view full photo';
+  } else {
+    av.innerHTML=init;
+    av.style.cursor='default';
+  }
   document.getElementById('view-name').textContent=p.name+(p.deceased?' 🕊️':'');
   document.getElementById('view-roll').textContent=p.roll+' · '+p.session;
+  const vb=document.getElementById('view-batch');if(vb)vb.textContent=p.session+(p.roll?' · '+p.roll:'');
   const showJob=isSame||p.jobVisibility==='public'||!p.jobVisibility;
   document.getElementById('view-job').textContent=showJob?p.job+' @ '+p.company:'🔒 Visible to session members only';
   document.getElementById('view-location').textContent=p.city+', '+p.country;
@@ -1300,6 +1367,7 @@ function viewProfile(uid){
   const liEl=document.getElementById('view-linkedin');if(p.linkedin){const a=document.createElement('a');a.href=p.linkedin;a.target='_blank';a.textContent='View Profile →';liEl.innerHTML='';liEl.appendChild(a);}else{liEl.textContent='Not provided';}
   const bioSec=document.getElementById('view-bio-section');if(p.bio){document.getElementById('view-bio').textContent=p.bio;bioSec.style.display='flex';}else{bioSec.style.display='none';}
   document.getElementById('btn-edit-profile').style.display=isOwn?'block':'none';
+  const db2=document.getElementById('btn-delete-profile');if(db2)db2.style.display=isOwn?'block':'none';
   showPage('profile');
 }
 
@@ -1354,6 +1422,23 @@ document.getElementById('btn-submit-ann').addEventListener('click',async()=>{
 });
 
 loadGlobalStats();
+
+async function deleteProfile(){
+  if(!currentUser||!currentUserProfile)return;
+  const confirmed=confirm('⚠️ Are you sure you want to delete your profile?\n\nThis will permanently remove your profile from the ICET Alumni Network. You cannot undo this action.\n\nClick OK to confirm deletion.');
+  if(!confirmed)return;
+  try{
+    const {deleteDoc,doc:firestoreDoc}=await import('https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js');
+    await deleteDoc(firestoreDoc(db,'alumni',currentUser.uid));
+    currentUserProfile=null;
+    window._alumniCurrentProfile=null;
+    showPage('landing');
+    alert('Your profile has been deleted. You can re-register at any time.');
+  }catch(e){
+    alert('Error deleting profile: '+e.message);
+  }
+}
+document.getElementById('btn-delete-profile').addEventListener('click', deleteProfile);
 </script>
 <script>
 document.getElementById('nav-hamburger').addEventListener('click', function() {
@@ -1370,6 +1455,14 @@ document.querySelectorAll('.nav-dropdown-trigger').forEach(function(trigger) {
 document.addEventListener('click', function(e) {
   if (!e.target.closest('.nav-dropdown')) {
     document.querySelectorAll('.nav-dropdown').forEach(d => d.classList.remove('open'));
+  }
+});
+</script>
+<script>
+document.addEventListener('keydown',function(e){
+  if(e.key==='Escape'){
+    const lb=document.getElementById('profile-lightbox');
+    if(lb) lb.style.display='none';
   }
 });
 </script>
