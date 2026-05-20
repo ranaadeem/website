@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>404 — Page Not Found · ranaadeem.de</title>
+<link rel="icon" type="image/png" href="/favicon.png">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#1a3a8a;--gold:#c9a84c;--cream:#faf8f4;--text:#1a1a2e;--muted:#6b7280;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:"DM Sans",sans-serif;background:var(--navy);color:white;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem;text-align:center;}
+.error-code{font-family:"Playfair Display",serif;font-size:clamp(6rem,20vw,12rem);color:var(--gold);line-height:1;opacity:0.15;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;user-select:none;}
+.content{position:relative;z-index:1;max-width:480px;}
+.molecule{font-size:4rem;margin-bottom:1.5rem;animation:spin 8s linear infinite;}
+@keyframes spin{0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}
+h1{font-family:"Playfair Display",serif;font-size:clamp(1.4rem,4vw,2rem);color:white;margin-bottom:0.75rem;}
+p{font-size:15px;color:rgba(255,255,255,0.65);line-height:1.7;margin-bottom:2rem;}
+.links{display:flex;flex-wrap:wrap;gap:0.75rem;justify-content:center;}
+.btn-primary{background:var(--gold);color:var(--navy);padding:11px 24px;border-radius:8px;text-decoration:none;font-weight:600;font-size:14px;transition:opacity 0.2s;}
+.btn-primary:hover{opacity:0.9;}
+.btn-secondary{background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.8);padding:11px 24px;border-radius:8px;text-decoration:none;font-size:14px;border:1px solid rgba(255,255,255,0.15);transition:all 0.2s;}
+.btn-secondary:hover{background:rgba(255,255,255,0.15);}
+.nav-strip{position:fixed;top:0;left:0;right:0;background:rgba(255,255,255,0.06);backdrop-filter:blur(10px);padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(201,168,76,0.2);}
+.nav-logo{font-family:Georgia,serif;font-size:18px;font-weight:700;color:var(--gold);letter-spacing:2px;border:2px solid var(--gold);padding:2px 8px;border-radius:4px;text-decoration:none;}
+.nav-home{font-size:13px;color:rgba(255,255,255,0.7);text-decoration:none;}
+.nav-home:hover{color:var(--gold);}
+</style>
+</head>
+<body>
+
+<div class="nav-strip">
+  <a href="/" class="nav-logo">AGR</a>
+  <a href="/" class="nav-home">← Back to Home</a>
+</div>
+
+<div class="error-code">404</div>
+
+<div class="content">
+  <div class="molecule">⚗️</div>
+  <h1>Reaction pathway not found</h1>
+  <p>The page you're looking for doesn't exist — maybe it was moved, deleted, or the URL has a typo. Even the best catalysts miss sometimes.</p>
+  <div class="links">
+    <a href="/" class="btn-primary">🏠 Go Home</a>
+    <a href="/research.html" class="btn-secondary">📄 Research</a>
+    <a href="/blog.html" class="btn-secondary">📝 Blog</a>
+    <a href="/alumni.html" class="btn-secondary">👥 Alumni</a>
+  </div>
+</div>
+
+</body>
+</html>
