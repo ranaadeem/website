@@ -717,7 +717,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
     <div style="background:white;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.08);">
       <!-- Header banner -->
       <div style="background:linear-gradient(135deg,var(--navy) 0%,#2048a8 100%);padding:2rem;display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;">
-        <div id="view-avatar" onclick="openProfileLightbox()" style="width:100px;height:100px;border-radius:50%;border:3px solid var(--gold);overflow:hidden;flex-shrink:0;cursor:zoom-in;background:rgba(201,168,76,0.2);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:32px;color:var(--gold);font-weight:700;"></div>
+        <div id="view-avatar" style="width:100px;height:100px;border-radius:50%;border:3px solid var(--gold);overflow:hidden;flex-shrink:0;cursor:zoom-in;background:rgba(201,168,76,0.2);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:32px;color:var(--gold);font-weight:700;"></div>
         <div style="flex:1;min-width:160px;">
           <div id="view-name" style="font-family:'Playfair Display',serif;font-size:1.5rem;color:white;font-weight:700;margin-bottom:3px;"></div>
           <div id="view-roll" style="font-size:13px;color:var(--gold);margin-bottom:10px;"></div>
@@ -763,6 +763,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
 </div>
 
 <script type="module">
+import { initializeApp } from '
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js';
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js';
 import { getFirestore, doc, setDoc, getDoc, deleteDoc, collection, getDocs, addDoc, query, where, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js';
@@ -822,7 +823,10 @@ let allAlumni = [], activeFilter = 'all', currentViewSession = '2006';
 let selectedPhotoBase64 = '', isEditMode = false;
 
 function showToast(msg) { const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),3000); }
+let _prevPage = 'landing';
 function showPage(page) {
+  const cur = document.querySelector('.page.active');
+  if(cur) _prevPage = cur.id.replace('page-','');
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById('page-'+page)?.classList.add('active');
   window.scrollTo(0,0);
@@ -903,8 +907,15 @@ document.getElementById('sessions-grid').addEventListener('click', e => {
 // card-2010 is coming soon — no click handler
 document.getElementById('btn-back-login').addEventListener('click',(e)=>{e.preventDefault();showPage('landing');});
 document.getElementById('btn-back-profile').addEventListener('click',()=>{
-  if(_prevPage === 'directory' || _prevPage === 'landing'){
-    showPage(_prevPage);
+  if(_prevPage && _prevPage !== 'profile'){
+    if(_prevPage === 'directory'){
+      if(currentUserProfile){
+        const session=currentUserProfile.session.split('-')[0];
+        loadDirectory(session);
+      } else { showPage('directory'); }
+    } else {
+      showPage(_prevPage);
+    }
   } else if(currentUserProfile){
     const session=currentUserProfile.session.split('-')[0];
     loadDirectory(session);
@@ -1330,7 +1341,7 @@ document.getElementById('tab-btn-directory').addEventListener('click',()=>switch
 document.getElementById('tab-btn-noticeboard').addEventListener('click',()=>switchTab('noticeboard'));
 document.getElementById('tab-btn-announcements').addEventListener('click',()=>switchTab('announcements'));
 
-function openProfileLightbox(){
+window.openProfileLightbox = function openProfileLightbox(){
   const av=document.getElementById('view-avatar');
   const img=av.querySelector('img');
   if(!img)return;
@@ -1367,7 +1378,7 @@ function viewProfile(uid){
   showPage('profile');
 }
 
-function openEditProfile(){
+window.openEditProfile = function openEditProfile(){
   if(!currentUserProfile)return;const p=currentUserProfile;isEditMode=true;
   document.getElementById('setup-title').textContent='Edit Your Profile';
   document.getElementById('setup-subtitle').textContent='Update your information.';
@@ -1434,9 +1445,23 @@ async function deleteProfile(){
   }
 }
 document.getElementById('btn-delete-profile').addEventListener('click', deleteProfile);
-</script>
-<script>
-document.getElementById('nav-hamburger').addEventListener('click', function() {
+
+// Avatar lightbox via addEventListener (module scope safe)
+document.getElementById('view-avatar').addEventListener('click', function(){
+  const img = this.querySelector('img');
+  if(!img) return;
+  const lb = document.getElementById('profile-lightbox');
+  if(!lb) return;
+  document.getElementById('profile-lightbox-img').src = img.src;
+  lb.style.display = 'flex';
+});
+// Lightbox escape key
+document.addEventListener('keydown', function(e){
+  if(e.key==='Escape'){
+    const lb=document.getElementById('profile-lightbox');
+    if(lb) lb.style.display='none';
+  }
+});lementById('nav-hamburger').addEventListener('click', function() {
   document.getElementById('nav-links').classList.toggle('open');
 });
 document.querySelectorAll('.nav-dropdown-trigger').forEach(function(trigger) {
