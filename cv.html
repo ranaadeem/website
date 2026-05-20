@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CV — Dr. Adeem Ghaffar Rana</title>
+<link rel="icon" type="image/png" href="/favicon.png">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<meta property="og:type" content="website">
+<meta property="og:title" content="CV — Dr. Adeem Ghaffar Rana">
+<meta property="og:image" content="https://ranaadeem.de/og-banner.jpg">
+<meta name="description" content="Curriculum Vitae of Dr. Adeem Ghaffar Rana — Research Scientist in Catalysis & Sustainable Fuels at TU Bergakademie Freiberg, Germany.">
+<style>
+:root{--navy:#1a3a8a;--gold:#c9a84c;--gold-light:#e8d5a3;--cream:#faf8f4;--white:#fff;--text:#1a1a2e;--muted:#6b7280;--border:#e5e7eb;}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{overflow-x:hidden;background:var(--cream);}
+body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);}
+#main-nav{position:sticky;top:0;z-index:1000;background:var(--navy);border-bottom:2px solid var(--gold);box-shadow:0 2px 20px rgba(0,0,0,0.3);}
+.nav-inner{max-width:1100px;margin:0 auto;padding:0 1.5rem;display:flex;align-items:center;justify-content:space-between;height:64px;}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0;}
+.nav-logo-agr{font-family:Georgia,serif;font-size:22px;font-weight:700;color:var(--gold);letter-spacing:2px;border:2px solid var(--gold);padding:2px 8px;border-radius:4px;}
+.nav-logo-name{font-size:13px;color:rgba(255,255,255,0.75);}
+.nav-links{display:flex;align-items:center;gap:0.25rem;list-style:none;}
+.nav-link{color:rgba(255,255,255,0.75);text-decoration:none;font-size:13px;padding:8px 12px;border-radius:6px;transition:all 0.2s;white-space:nowrap;}
+.nav-link:hover,.nav-link.active{color:var(--gold);background:rgba(201,168,76,0.1);}
+.nav-cta{background:var(--gold);color:var(--navy)!important;text-decoration:none;font-size:13px;font-weight:600;padding:8px 16px;border-radius:6px;margin-left:8px;}
+.nav-hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:4px;}
+.nav-hamburger span{display:block;width:24px;height:2px;background:var(--gold);border-radius:2px;}
+.nav-dropdown{position:relative;}
+.nav-dropdown-menu{display:none;position:absolute;top:calc(100% + 8px);left:50%;transform:translateX(-50%);background:var(--navy);border:1px solid rgba(201,168,76,0.25);border-radius:10px;padding:0.4rem;min-width:180px;list-style:none;box-shadow:0 8px 30px rgba(0,0,0,0.35);z-index:2000;}
+.nav-dropdown:hover .nav-dropdown-menu,.nav-dropdown.open .nav-dropdown-menu{display:block;}
+.nav-dropdown-item{display:block;padding:8px 14px;color:rgba(255,255,255,0.8);text-decoration:none;font-size:13px;border-radius:6px;transition:all 0.15s;white-space:nowrap;}
+.nav-dropdown-item:hover{background:rgba(201,168,76,0.12);color:var(--gold);}
+@media(max-width:768px){.nav-logo-name{display:none;}.nav-hamburger{display:flex;}.nav-links{display:none;position:absolute;top:64px;left:0;right:0;background:var(--navy);flex-direction:column;padding:1rem;border-bottom:2px solid var(--gold);}.nav-links.open{display:flex;}.nav-link{width:100%;padding:12px 16px;}.nav-cta{width:100%;text-align:center;margin-left:0;margin-top:0.5rem;}.nav-dropdown-menu{position:static;transform:none;box-shadow:none;border:none;background:rgba(255,255,255,0.05);padding:0 0 0 1rem;}.nav-dropdown:hover .nav-dropdown-menu{display:none;}.nav-dropdown.open .nav-dropdown-menu{display:block;}}
+
+/* CV HEADER */
+.cv-header{background:linear-gradient(135deg,var(--navy) 0%,#2048a8 100%);padding:2.5rem 2rem;color:white;}
+.cv-header-inner{max-width:900px;margin:0 auto;display:flex;gap:2rem;align-items:center;flex-wrap:wrap;}
+.cv-photo{width:100px;height:100px;border-radius:50%;border:3px solid var(--gold);object-fit:cover;object-position:center top;flex-shrink:0;}
+.cv-header-text h1{font-family:"Playfair Display",serif;font-size:1.9rem;margin-bottom:4px;}
+.cv-header-text .subtitle{font-size:15px;color:rgba(255,255,255,0.8);margin-bottom:0.75rem;}
+.cv-contact-row{display:flex;flex-wrap:wrap;gap:1rem;}
+.cv-contact-item{font-size:12px;color:rgba(255,255,255,0.7);display:flex;align-items:center;gap:5px;}
+.cv-contact-item a{color:var(--gold);text-decoration:none;}
+.cv-download-row{max-width:900px;margin:0 auto;padding:1rem 0 0;display:flex;gap:0.75rem;flex-wrap:wrap;}
+.cv-dl-btn{display:inline-flex;align-items:center;gap:8px;padding:8px 18px;border-radius:7px;font-size:13px;font-weight:600;text-decoration:none;transition:all 0.2s;background:rgba(255,255,255,0.1);color:white;border:1px solid rgba(255,255,255,0.25);}
+.cv-dl-btn:hover{background:var(--gold);color:var(--navy);border-color:var(--gold);}
+
+/* CV BODY */
+.cv-body{max-width:900px;margin:0 auto;padding:2.5rem 2rem 4rem;}
+.cv-section{margin-bottom:2.5rem;}
+.cv-section-title{font-family:"Playfair Display",serif;font-size:1.1rem;color:var(--navy);padding-bottom:0.5rem;border-bottom:2px solid var(--gold);margin-bottom:1.25rem;display:flex;align-items:center;gap:8px;}
+.cv-entry{display:grid;grid-template-columns:1fr auto;gap:1rem;margin-bottom:1.25rem;padding-bottom:1.25rem;border-bottom:1px solid var(--border);}
+.cv-entry:last-child{border-bottom:none;margin-bottom:0;}
+.cv-entry-title{font-weight:600;color:var(--navy);font-size:14px;margin-bottom:2px;}
+.cv-entry-org{font-size:13px;color:var(--muted);margin-bottom:6px;}
+.cv-entry-period{font-size:12px;color:var(--gold);font-weight:600;white-space:nowrap;}
+.cv-entry-desc{font-size:13px;color:var(--text);line-height:1.65;}
+.cv-tag-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;}
+.cv-tag{background:rgba(26,58,138,0.07);color:var(--navy);border:1px solid rgba(26,58,138,0.15);font-size:11px;padding:3px 9px;border-radius:20px;}
+.cv-skills-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:0.75rem;}
+.cv-skill-card{background:white;border:1px solid var(--border);border-radius:10px;padding:1rem;}
+.cv-skill-card-title{font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--gold);font-weight:600;margin-bottom:0.5rem;}
+.cv-skill-list{font-size:12px;color:var(--muted);line-height:1.8;}
+.footer{background:var(--navy);color:rgba(255,255,255,0.6);text-align:center;padding:2rem;font-size:12px;}
+.footer a{color:var(--gold);text-decoration:none;}
+</style>
+</head>
+<body>
+
+<nav id="main-nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">
+      <span class="nav-logo-agr">AGR</span>
+      <span class="nav-logo-name">Dr. Adeem Ghaffar Rana</span>
+    </a>
+    <button class="nav-hamburger" id="nav-hamburger"><span></span><span></span><span></span></button>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="/" class="nav-link">Home</a></li>
+      <li><a href="/about.html" class="nav-link">About</a></li>
+      <li class="nav-dropdown">
+        <a href="/research.html" class="nav-link active nav-dropdown-trigger">Research ▾</a>
+        <ul class="nav-dropdown-menu">
+          <li><a href="/research.html" class="nav-dropdown-item">📄 Publications</a></li>
+          <li><a href="/teaching.html" class="nav-dropdown-item">🎓 Teaching</a></li>
+          <li><a href="/cv.html" class="nav-dropdown-item">📋 CV</a></li>
+        </ul>
+      </li>
+      <li><a href="/blog.html" class="nav-link">Blog</a></li>
+      <li class="nav-dropdown">
+        <a href="/alumni.html" class="nav-link nav-dropdown-trigger">Alumni ▾</a>
+        <ul class="nav-dropdown-menu">
+          <li><a href="/session2006.html" class="nav-dropdown-item">🎓 Session 2006</a></li>
+          <li><a href="/alumni.html" class="nav-dropdown-item">👥 Alumni Portal</a></li>
+        </ul>
+      </li>
+      <li><a href="mailto:ranaadeem@hotmail.com" class="nav-cta">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="cv-header">
+  <div class="cv-header-inner">
+    <img src="/headshot.jpg" alt="Dr. Adeem Ghaffar Rana" class="cv-photo">
+    <div class="cv-header-text">
+      <h1>Dr.-Ing. Adeem Ghaffar Rana</h1>
+      <div class="subtitle">Research Scientist · Catalysis &amp; Sustainable Processes</div>
+      <div class="cv-contact-row">
+        <div class="cv-contact-item">📍 Freiberg, Germany</div>
+        <div class="cv-contact-item">✉ <a href="mailto:ranaadeem@hotmail.com">ranaadeem@hotmail.com</a></div>
+        <div class="cv-contact-item">📞 +49 157 88341120</div>
+        <div class="cv-contact-item">🔗 <a href="https://linkedin.com/in/ranaadeem" target="_blank">linkedin.com/in/ranaadeem</a></div>
+        <div class="cv-contact-item">🆔 ORCID: <a href="https://orcid.org/0000-0003-4725-2312" target="_blank">0000-0003-4725-2312</a></div>
+      </div>
+    </div>
+  </div>
+  <div class="cv-download-row">
+    <a href="/cv-academic.pdf" download class="cv-dl-btn">📥 Download Academic CV (PDF)</a>
+    <a href="/cv-industry.pdf" download class="cv-dl-btn">📥 Download Industry CV (PDF)</a>
+  </div>
+</div>
+
+<div class="cv-body">
+
+  <!-- Professional Summary -->
+  <div class="cv-section">
+    <h2 class="cv-section-title">🧑‍🔬 Professional Summary</h2>
+    <p style="font-size:14px;color:var(--text);line-height:1.8;background:white;border:1px solid var(--border);border-radius:12px;padding:1.25rem;border-left:4px solid var(--gold);">
+      Research-focused academic with strong teaching credentials and international research experience in heterogeneous catalysis, photocatalysis, and sustainable fuels. Proven track record in supervising graduate and exchange students (DAAD, Erasmus), developing and delivering core chemical engineering courses, and executing externally funded research projects in collaboration with industry and academia.
+    </p>
+  </div>
+
+  <!-- Academic Experience -->
+  <div class="cv-section">
+    <h2 class="cv-section-title">🏛️ Academic Appointments</h2>
+
+    <div class="cv-entry">
+      <div>
+        <div class="cv-entry-title">Postdoctoral Researcher</div>
+        <div class="cv-entry-org">TU Bergakademie Freiberg (TUBAF), Freiberg, Germany</div>
+        <div class="cv-entry-desc">Lead researcher for catalyst development and performance evaluation in MTO and SAF projects (REF4FU, OptiSAF). Responsible for end-to-end execution of hydrotreating and hydrocracking experiments. Managed lab-scale reactor systems and interfaced with industrial partners.</div>
+        <div class="cv-tag-row">
+          <span class="cv-tag">Zeolite Catalysts</span><span class="cv-tag">MTO</span><span class="cv-tag">SAF</span><span class="cv-tag">DoE</span><span class="cv-tag">Reactor Engineering</span>
+        </div>
+      </div>
+      <div class="cv-entry-period">Aug 2023 – Present</div>
+    </div>
+
+    <div class="cv-entry">
+      <div>
+        <div class="cv-entry-title">Research Associate</div>
+        <div class="cv-entry-org">Technical University of Munich (TUM), Freising-Weihenstephan, Germany</div>
+        <div class="cv-entry-desc">Developed modified graphitic carbon nitride (g-C₃N₄) photocatalysts for redox and hydrogen-related applications. Supervised DAAD- and Erasmus-funded visiting students. Published 8 peer-reviewed journal articles during this period.</div>
+        <div class="cv-tag-row">
+          <span class="cv-tag">Photocatalysis</span><span class="cv-tag">g-C₃N₄</span><span class="cv-tag">H₂ Production</span><span class="cv-tag">Student Supervision</span>
+        </div>
+      </div>
+      <div class="cv-entry-period">Nov 2017 – Dec 2022</div>
+    </div>
+
+    <div class="cv-entry">
+      <div>
+        <div class="cv-entry-title">Assistant Professor</div>
+        <div class="cv-entry-org">University of Engineering and Technology (UET), Lahore, Pakistan</div>
+        <div class="cv-entry-desc">Delivered 7 core undergraduate chemical engineering courses. Supervised thesis projects. Mentored students for research and industry-relevant work.</div>
+        <div class="cv-tag-row">
+          <span class="cv-tag">Mass Transfer</span><span class="cv-tag">Separation Processes</span><span class="cv-tag">Wastewater Treatment</span><span class="cv-tag">Undergraduate Teaching</span>
+        </div>
+      </div>
+      <div class="cv-entry-period">Nov 2015 – Nov 2017<br>Apr 2023 – Jul 2023</div>
+    </div>
+  </div>
+
+  <!-- Industry Experience -->
+  <div class="cv-section">
+    <h2 class="cv-section-title">🏭 Industry Experience</h2>
+    <div class="cv-entry">
+      <div>
+        <div class="cv-entry-title">Assistant Manager — Research &amp; Development</div>
+        <div class="cv-entry-org">Style Textile (Pvt.) Ltd., Lahore, Pakistan</div>
+        <div class="cv-entry-desc">Led applied R&amp;D projects aligned with NIKE, ADIDAS, and REEBOK compliance requirements. Coordinated cross-functional teams for product development and quality assurance. Implemented process improvements to meet international sustainability standards.</div>
+      </div>
+      <div class="cv-entry-period">May 2010 – Feb 2013</div>
+    </div>
+  </div>
+
+  <!-- Education -->
+  <div class="cv-section">
+    <h2 class="cv-section-title">🎓 Education</h2>
+
+    <div class="cv-entry">
+      <div>
+        <div class="cv-entry-title">PhD (Dr.-Ing.) · Chemical Engineering / Materials / Catalysis</div>
+        <div class="cv-entry-org">Technical University of Munich (TUM), Germany</div>
+        <div class="cv-entry-desc"><strong>Thesis:</strong> Modification of Graphitic Carbon Nitride (g-C₃N₄) for Redox Applications<br>DAAD Scholarship Recipient</div>
+      </div>
+      <div class="cv-entry-period">Nov 2017 – Dec 2022</div>
+    </div>
+
+    <div class="cv-entry">
+      <div>
+        <div class="cv-entry-title">MS · Chemical Engineering</div>
+        <div class="cv-entry-org">King Fahd University of Petroleum &amp; Minerals (KFUPM), Saudi Arabia</div>
+        <div class="cv-entry-desc"><strong>Thesis:</strong> Photocatalytic Conversion of CO₂ to Hydrocarbons Using Cu-Zn/TiO₂ Catalyst<br>Saudi Government Scholarship Recipient</div>
+      </div>
+      <div class="cv-entry-period">Jan 2013 – May 2015</div>
+    </div>
+
+    <div class="cv-entry">
+      <div>
+        <div class="cv-entry-title">BS · Chemical Engineering</div>
+        <div class="cv-entry-org">University of the Punjab, Lahore, Pakistan</div>
+        <div class="cv-entry-desc"><strong>Research:</strong> Extraction of Rare Earth Metals from Carbonatite Rock · Distinction Scholarship Recipient</div>
+      </div>
+      <div class="cv-entry-period">Jan 2006 – Apr 2010</div>
+    </div>
+  </div>
+
+  <!-- Skills -->
+  <div class="cv-section">
+    <h2 class="cv-section-title">⚙️ Key Skills</h2>
+    <div class="cv-skills-grid">
+      <div class="cv-skill-card">
+        <div class="cv-skill-card-title">Technical</div>
+        <div class="cv-skill-list">Catalyst synthesis &amp; modification<br>Reactor operation &amp; commissioning<br>Hydrotreating / Hydrocracking<br>GC-MS, NH₃-TPD, HPLC, LC-MS<br>DoE, Minitab</div>
+      </div>
+      <div class="cv-skill-card">
+        <div class="cv-skill-card-title">Research</div>
+        <div class="cv-skill-list">Heterogeneous catalysis<br>Photocatalysis<br>Reaction engineering &amp; kinetics<br>Scientific writing<br>Peer review</div>
+      </div>
+      <div class="cv-skill-card">
+        <div class="cv-skill-card-title">Digital Tools</div>
+        <div class="cv-skill-list">MS Office<br>ChemDraw<br>Origin<br>Minitab<br>CAD Design</div>
+      </div>
+      <div class="cv-skill-card">
+        <div class="cv-skill-card-title">Languages</div>
+        <div class="cv-skill-list">English (C1)<br>German (B1)<br>Urdu (Native)<br>Punjabi (Native)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Selected Publications -->
+  <div class="cv-section">
+    <h2 class="cv-section-title">📄 Selected Publications</h2>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:1rem;">13 peer-reviewed journal articles · 230+ citations · h-index 9 · <a href="/research.html" style="color:var(--gold);font-weight:600;">View full list →</a></p>
+    <div style="font-size:13px;color:var(--text);line-height:1.8;">
+      <p style="margin-bottom:0.5rem;">• Anwar et al. (2026) — <em>Fuel</em> 404, 136280</p>
+      <p style="margin-bottom:0.5rem;">• Mateos et al. (2024) — <em>Chemical Engineering Journal</em> 500, 156948</p>
+      <p style="margin-bottom:0.5rem;">• <strong>Rana</strong> et al. (2022) — <em>Nanomaterials</em> 12(22), 4006</p>
+      <p style="margin-bottom:0.5rem;">• <strong>Rana</strong> et al. (2022) — <em>Chemie Ingenieur Technik</em> 94(12), 1880</p>
+      <p><a href="/research.html" style="color:var(--gold);font-weight:600;">+ 9 more publications →</a></p>
+    </div>
+  </div>
+
+</div>
+
+<footer class="footer">
+  <p>&copy; 2025 Dr. Adeem Ghaffar Rana · <a href="/">ranaadeem.de</a></p>
+</footer>
+
+<script>
+document.getElementById('nav-hamburger').addEventListener('click', function() {
+  document.getElementById('nav-links').classList.toggle('open');
+});
+document.querySelectorAll('.nav-dropdown-trigger').forEach(function(trigger) {
+  trigger.addEventListener('click', function(e) {
+    if (window.innerWidth <= 768) {
+      e.preventDefault();
+      this.closest('.nav-dropdown').classList.toggle('open');
+    }
+  });
+});
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.nav-dropdown')) {
+    document.querySelectorAll('.nav-dropdown').forEach(d => d.classList.remove('open'));
+  }
+});
+</script>
+</body>
+</html>
