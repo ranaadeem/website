@@ -277,6 +277,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
       </li>
       <li><a href="mailto:ranaadeem@hotmail.com" class="nav-cta">Contact</a></li>
     </ul>
+    <div id="nav-user-area" style="display:flex;align-items:center;gap:8px;margin-left:8px;"></div>
   </div>
 </nav>
 <div class="toast" id="toast"></div>
@@ -989,6 +990,8 @@ async function loadGlobalStats() {
     const set = (id, val) => { const el = document.getElementById(id); if(el) el.textContent = val; };
     set('sb-total', total);
     set('sb-countries', countries.size);
+    set('stat-total', total);
+    set('stat-countries', countries.size);
     set('sb-morning', morning);
     set('sb-evening', evening);
     set('sb-germany', germanyCount || '–');
