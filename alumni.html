@@ -603,7 +603,9 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
 
             </select>
           </div>
-          <div class="form-group"><label>Roll Number <span class="req">*</span></label><select id="setup-roll" disabled><option value="">Select session first</option></select></div>
+          <div class="form-group"><label>Roll Number <span class="req">*</span></label><select id="setup-roll" disabled><option value="">Select session first</option></select>
+            <div id="roll-lock-notice" style="display:none;font-size:11px;color:#059669;margin-top:4px;">🔒 Roll number locked after registration. Contact admin to change.</div>
+          </div>
         </div>
         <div class="form-group"><label>Full Name</label><div class="name-display" id="setup-name-display"><span class="name-placeholder">Auto-filled from roll number</span></div></div>
         <div class="section-divider">Location</div>
@@ -755,13 +757,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
       <!-- Action buttons -->
       <div style="padding:0 1.5rem 1.5rem;display:flex;gap:0.75rem;flex-wrap:wrap;">
         <button id="btn-edit-profile" style="display:none;flex:1;min-width:140px;padding:11px;background:var(--navy);color:var(--gold);border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">✏️ Edit My Profile</button>
-        <button id="btn-delete-profile" style="display:none;padding:11px 20px;background:white;color:#dc2626;border:1.5px solid #dc2626;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">🗑 Delete Profile</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<script type="module">
+        <button id="btn-delete-profile" style="display:none;padding:11px 20px;background:white;color:#dc2626;border:1.5px s
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js';
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js';
 import { getFirestore, doc, setDoc, getDoc, deleteDoc, collection, getDocs, addDoc, query, where, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js';
@@ -921,7 +917,18 @@ document.getElementById('btn-back-profile').addEventListener('click',()=>{
     showPage('landing');
   }
 });
-document.getElementById('btn-cancel-setup').addEventListener('click',(e)=>{e.preventDefault();showPage('directory');});
+document.getElementById('btn-cancel-setup').addEventListener('click',(e)=>{
+  e.preventDefault();
+  // Reset lock state
+  isEditMode = false;
+  const se = document.getElementById('setup-session');
+  const re2 = document.getElementById('setup-roll');
+  se.disabled = false; se.style.opacity = ''; se.style.cursor = '';
+  re2.disabled = false; re2.style.opacity = ''; re2.style.cursor = '';
+  const ln = document.getElementById('roll-lock-notice');
+  if(ln) ln.style.display = 'none';
+  showPage('directory');
+});
 document.getElementById('btn-edit-profile').addEventListener('click',()=>openEditProfile());
 document.getElementById('btn-google-signin').addEventListener('click',async()=>{
   try { await signInWithPopup(auth,provider); showToast('Signed in!'); }
@@ -1235,11 +1242,40 @@ async function submitProfile(){
   // LinkedIn is optional — no validation needed
   const db2=session.includes('Morning')?morningStudents:eveningStudents, name=db2[roll];
   if(!name){err.textContent='Invalid roll number.';err.style.display='block';return;}
-  const btn=document.getElementById('setup-submit-btn'); btn.disabled=true; btn.textContent='Saving...';
+  const btn=document.getElementById('setup-submit-btn'); btn.disabled=true; btn.textContent='Checking...';
+
+  // Check if roll number already taken by another account
+  if(!isEditMode){
+    try{
+      const rollCheck = await getDocs(query(collection(db,'alumni'),where('roll','==',roll),where('session','==',session)));
+      let takenByOther = false;
+      rollCheck.forEach(d=>{ if(d.data().uid !== currentUser.uid) takenByOther = true; });
+      if(takenByOther){
+        const subject = encodeURIComponent('Alumni Portal — Roll Number Issue');
+        const body = encodeURIComponent('Hi Adeem,\n\nI am trying to register but roll number ' + roll + ' (Session ' + session + ') appears to be already registered.\n\nPlease help me access my profile.\n\nThank you.');
+        err.innerHTML = '⚠️ Roll number <strong>' + roll + '</strong> is already registered. If this is you, sign in with the Google account you used originally.<br><br>'
+          + '<a href="mailto:ranaadeem@hotmail.com?subject=' + subject + '&body=' + body + '" '
+          + 'style="display:inline-flex;align-items:center;gap:8px;background:var(--navy);color:white;padding:9px 18px;border-radius:7px;font-size:13px;font-weight:600;text-decoration:none;margin-top:4px;">'
+          + '📧 Contact Admin</a>';
+        err.style.display='block';
+        btn.disabled=false; btn.textContent='Save Profile & Join Network';
+        return;
+      }
+    }catch(e){ console.error('Roll check:',e); }
+  }
+  btn.textContent='Saving...';
   try {
     const profileData={uid:currentUser.uid,name,roll,session,city,country,job,company,email,phone,linkedin,bio,jobVisibility,photoBase64:selectedPhotoBase64,googleName:currentUser.displayName||'',googlePhoto:currentUser.photoURL||'',registeredAt:isEditMode?(currentUserProfile?.registeredAt||new Date().toISOString()):new Date().toISOString(),updatedAt:new Date().toISOString(),deceased:false};
     await setDoc(doc(db,'alumni',currentUser.uid),profileData);
     currentUserProfile=profileData; suc.textContent=isEditMode?'Profile updated!':'Welcome to the ICET Alumni Network!'; suc.style.display='block';
+    // Reset lock state after save
+    isEditMode=false;
+    const seEl=document.getElementById('setup-session');
+    const reEl=document.getElementById('setup-roll');
+    seEl.disabled=false; seEl.style.opacity=''; seEl.style.cursor='';
+    reEl.disabled=false; reEl.style.opacity=''; reEl.style.cursor='';
+    const lnEl=document.getElementById('roll-lock-notice');
+    if(lnEl) lnEl.style.display='none';
     loadGlobalStats(); setTimeout(()=>loadDirectory(session.split('-')[0]),1500);
   } catch(e){err.textContent='Error: '+e.message;err.style.display='block';btn.disabled=false;btn.textContent='Save Profile & Join Network';}
 }
@@ -1381,9 +1417,23 @@ window.openEditProfile = function openEditProfile(){
   document.getElementById('setup-title').textContent='Edit Your Profile';
   document.getElementById('setup-subtitle').textContent='Update your information.';
   document.getElementById('setup-submit-btn').textContent='Update Profile';
-  document.getElementById('setup-session').value=p.session||'';
-  document.getElementById('setup-session').dispatchEvent(new Event('change'));
-  setTimeout(()=>{document.getElementById('setup-roll').value=p.roll||'';document.getElementById('setup-roll').dispatchEvent(new Event('change'));},60);
+  const sessionEl = document.getElementById('setup-session');
+  const rollEl = document.getElementById('setup-roll');
+  sessionEl.value = p.session||'';
+  sessionEl.dispatchEvent(new Event('change'));
+  setTimeout(()=>{
+    rollEl.value = p.roll||'';
+    rollEl.dispatchEvent(new Event('change'));
+    // Lock both — cannot change after registration
+    sessionEl.disabled = true;
+    sessionEl.style.opacity = '0.6';
+    sessionEl.style.cursor = 'not-allowed';
+    rollEl.disabled = true;
+    rollEl.style.opacity = '0.6';
+    rollEl.style.cursor = 'not-allowed';
+    const lockNote = document.getElementById('roll-lock-notice');
+    if(lockNote) lockNote.style.display = 'block';
+  }, 80);
   if(p.city&&p.country){document.getElementById('setup-city-input').value=p.city+', '+p.country;document.getElementById('setup-city').value=p.city;document.getElementById('setup-country').value=p.country;const d=document.getElementById('city-selected-display');d.textContent='✅ '+p.city+', '+p.country;d.style.display='block';}
   document.getElementById('setup-job').value=p.job||'';document.getElementById('setup-company').value=p.company||'';
   document.getElementById('setup-email').value=p.email||'';document.getElementById('setup-phone').value=p.phone||'';
@@ -1473,6 +1523,11 @@ document.querySelectorAll('.nav-dropdown-trigger').forEach(function(trigger) {
   });
 });
 document.addEventListener('click', function(e) {
+  if (!e.target.closest('.nav-dropdown')) {
+    document.querySelectorAll('.nav-dropdown').forEach(d => d.classList.remove('open'));
+  }
+});
+cument.addEventListener('click', function(e) {
   if (!e.target.closest('.nav-dropdown')) {
     document.querySelectorAll('.nav-dropdown').forEach(d => d.classList.remove('open'));
   }
