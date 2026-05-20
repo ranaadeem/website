@@ -840,7 +840,6 @@ function showPage(page) {
 document.getElementById('landing-hero').style.backgroundImage = "url('/icet-header.jpg')";
 
 onAuthStateChanged(auth, async (user) => {
-  console.log('[DEBUG] auth state:',user?user.email:'logged out');
   currentUser = user;
   buildNav(user);
   if (user) {
@@ -937,7 +936,7 @@ document.getElementById('btn-google-signin').addEventListener('click',async()=>{
   catch(e) { if(e.code==='auth/popup-blocked') showToast('Popup blocked — allow popups for this site.'); else if(e.code!=='auth/cancelled-popup-request') showToast('Sign in failed: '+e.message); }
 });
 
-function handleSession(session) { console.log('[DEBUG] handleSession',session,'user:',!!currentUser,'profile:',!!currentUserProfile); if(!currentUser){showPage('login');return;} if(!currentUserProfile){showPage('setup');return;} loadDirectory(session); }
+function handleSession(session) {  if(!currentUser){showPage('login');return;} if(!currentUserProfile){showPage('setup');return;} loadDirectory(session); }
 
 async function loadGlobalStats() {
   try {
@@ -1386,8 +1385,7 @@ window.openProfileLightbox = function openProfileLightbox(){
   lb.style.display='flex';
 }
 function viewProfile(uid){
-  console.log('[DEBUG] viewProfile uid:',uid,'allAlumni count:',allAlumni.length);
-  const p=allAlumni.find(a=>a.uid===uid);if(!p){console.log('[DEBUG] profile not found in allAlumni');return;}
+const p=allAlumni.find(a=>a.uid===uid);if(!p)return;
   const isSame=currentUserProfile?.session===p.session, isOwn=currentUser?.uid===uid;
   const init=p.name.split(' ').map(w=>w[0]).slice(0,2).join('');
   // Avatar with clickable lightbox
@@ -1530,7 +1528,11 @@ document.addEventListener('click', function(e) {
     document.querySelectorAll('.nav-dropdown').forEach(d => d.classList.remove('open'));
   }
 });
-
+cument.addEventListener('click', function(e) {
+  if (!e.target.closest('.nav-dropdown')) {
+    document.querySelectorAll('.nav-dropdown').forEach(d => d.classList.remove('open'));
+  }
+});
 </script>
 
 
