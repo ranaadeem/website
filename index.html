@@ -302,7 +302,7 @@ body{ font-family:"DM Sans",sans-serif; background:var(--cream); color:var(--tex
     </div>
     <div class="hero-photo-card">
       <div class="photo-circle">
-        <img src="/headshot.jpg" alt="Dr. Adeem Ghaffar Rana" class="hero-photo" style="width:100%;height:auto;display:block;object-fit:cover;object-position:center top;" onclick="openLightbox(this.src)">
+        <img src="/headshot.jpg" alt="Dr. Adeem Ghaffar Rana" class="hero-photo" id="hero-headshot" style="width:100%;height:auto;display:block;object-fit:cover;object-position:center top;cursor:zoom-in;">
       </div>
       <div class="photo-name">Dr. Adeem Ghaffar Rana</div>
       <div class="photo-role">Dr.-Ing. · Chemical Engineering</div>
@@ -541,11 +541,14 @@ document.addEventListener('click', function(e) {
   }
 });
 function openLightbox(src){
-  document.getElementById('lightbox-img').src=src;
+  var img=document.getElementById('lightbox-img');
+  img.src=src;
+  img.style.display='block';
   document.getElementById('lightbox-overlay').classList.add('active');
 }
 function closeLightbox(){
   document.getElementById('lightbox-overlay').classList.remove('active');
+  document.getElementById('lightbox-img').style.display='none';
 }
 document.addEventListener('keydown',function(e){if(e.key==='Escape')closeLightbox();});
 </script>
@@ -573,7 +576,7 @@ document.addEventListener('click', function(e) {
 
 <div id="lightbox-overlay" onclick="closeLightbox()">
   <button id="lightbox-close" onclick="closeLightbox()">✕</button>
-  <img id="lightbox-img" src="" alt="Photo">
+  <img id="lightbox-img" src="" alt="Photo" style="display:none;">
 </div>
 
 <script type="module">
@@ -586,13 +589,24 @@ async function loadCitations() {
     const hindex = data.summary_stats?.h_index;
     const i10 = data.summary_stats?.i10_index;
     // Update home page stats strip
-    const c = document.getElementById('home-citations-2');
-    if (c && citations) c.textContent = citations + '+';
+    const c1 = document.getElementById('home-citations-1');
+    const c2 = document.getElementById('home-citations-2');
+    if (citations) {
+      if (c1) c1.textContent = citations + '+';
+      if (c2) c2.textContent = citations + '+';
+    }
     const hi = document.getElementById('home-hindex');
     if (hi && hindex) hi.textContent = hindex;
   } catch(e) { /* keep static fallbacks */ }
 }
 loadCitations();
+</script>
+
+<script>
+// Hero headshot click → lightbox
+document.getElementById('hero-headshot').addEventListener('click', function() {
+  openLightbox(this.src);
+});
 </script>
 </body>
 </html>
