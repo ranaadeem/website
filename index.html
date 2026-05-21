@@ -51,7 +51,7 @@ body{ font-family:"DM Sans",sans-serif; background:var(--cream); color:var(--tex
 
 /* PHOTO CARD */
 .hero-photo-card{ background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); border-radius:16px; padding:1.5rem; text-align:center; backdrop-filter:blur(10px); }
-.photo-circle{ width:100%; border-radius:10px; overflow:hidden; border:2px solid rgba(201,168,76,0.4); cursor:zoom-in; }
+.photo-circle{ width:100%; border-radius:10px; overflow:hidden; border:2px solid rgba(201,168,76,0.4);  }
 .photo-circle img{ width:100%; height:100%; object-fit:cover; object-position:center top; }
 .photo-name{ font-family:"Playfair Display",serif; font-size:17px; color:var(--white); margin-bottom:4px; }
 .photo-role{ font-size:12px; color:rgba(255,255,255,0.5); margin-bottom:1.25rem; }
@@ -302,7 +302,7 @@ body{ font-family:"DM Sans",sans-serif; background:var(--cream); color:var(--tex
     </div>
     <div class="hero-photo-card">
       <div class="photo-circle">
-        <img src="/headshot.jpg" alt="Dr. Adeem Ghaffar Rana" class="hero-photo" id="hero-headshot" style="width:100%;height:auto;display:block;object-fit:cover;object-position:center top;cursor:zoom-in;">
+        <img src="/headshot.jpg" alt="Dr. Adeem Ghaffar Rana" class="hero-photo" style="width:100%;height:auto;display:block;object-fit:cover;object-position:center top;">
       </div>
       <div class="photo-name">Dr. Adeem Ghaffar Rana</div>
       <div class="photo-role">Dr.-Ing. · Chemical Engineering</div>
@@ -602,11 +602,5 @@ async function loadCitations() {
 loadCitations();
 </script>
 
-<script>
-// Hero headshot click → lightbox
-document.getElementById('hero-headshot').addEventListener('click', function() {
-  openLightbox(this.src);
-});
-</script>
 </body>
 </html>
