@@ -425,7 +425,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
 
 <!-- ABOUT CONTENT: Bio + Quick Facts -->
 <div style="background:var(--cream);padding:3rem 2rem 1rem;">
-  <div style="max-width:1000px;margin:0 auto;display:grid;grid-template-columns:1fr 320px;gap:3rem;align-items:start;">
+  <div class="about-bio-grid" style="max-width:1000px;margin:0 auto;display:grid;grid-template-columns:1fr 320px;gap:3rem;align-items:start;">
 
     <div>
       <span style="font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:0.5rem;">Biography</span>
@@ -477,7 +477,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
 
 <!-- Experience & Research Focus -->
 <div style="background:white;border-top:1px solid var(--border);padding:3rem 2rem 4rem;">
-  <div style="max-width:1000px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:3rem;">
+  <div class="about-exp-grid" style="max-width:1000px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:3rem;">
 
     <div>
       <span style="font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:1rem;">Experience</span>
@@ -530,9 +530,9 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
 </div>
 
 <style>
-@media(max-width:768px){
-  .about-grid-main{grid-template-columns:1fr!important;}
-  .about-grid-exp{grid-template-columns:1fr!important;}
+@media(max-width:900px){
+  .about-bio-grid{grid-template-columns:1fr!important;}
+  .about-exp-grid{grid-template-columns:1fr!important;}
 }
 </style>
 </body>
