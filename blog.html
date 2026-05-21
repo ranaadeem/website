@@ -17,6 +17,11 @@
 *{box-sizing:border-box;margin:0;padding:0;}
 html{overflow-x:hidden;background:var(--cream);}
 body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);}
+/* Parchment texture via CSS */
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
+  background-repeat:repeat;}
+.blog-wrap,.admin-panel{position:relative;z-index:1;}
 #main-nav{position:sticky;top:0;z-index:1000;background:var(--navy);border-bottom:2px solid var(--gold);box-shadow:0 2px 20px rgba(0,0,0,0.3);}
 .nav-inner{max-width:1100px;margin:0 auto;padding:0 1.5rem;display:flex;align-items:center;justify-content:space-between;height:64px;}
 .nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0;}
@@ -182,6 +187,10 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
     <span class="page-tag">Writing & Ideas</span>
     <h1>The <span>Lab Notebook</span></h1>
     <p class="header-sub">Research, academic life, navigating Germany as a Pakistani researcher, and anything else worth writing about.</p>
+    <div style="margin-top:1.5rem;padding:0.75rem 1.25rem;border-left:3px solid var(--gold);background:rgba(201,168,76,0.08);border-radius:0 6px 6px 0;max-width:440px;">
+      <p style="font-size:13px;font-style:italic;color:rgba(255,255,255,0.8);line-height:1.6;margin:0;">"The first draft of anything is shit."</p>
+      <p style="font-size:11px;color:var(--gold);margin-top:4px;font-weight:600;margin-bottom:0;">— Ernest Hemingway</p>
+    </div>
   </div>
 </div>
 <div class="blog-wrap">
@@ -380,6 +389,7 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 const provider = new GoogleAuthProvider();
 let currentUser = null;
+const ADMIN_UID_CHECK = 'w2AtZbhUiyY5TxyvIecHzWqheaE2';
 let adminCoverBase64 = '', guestCoverBase64 = '';
 
 // ── Load posts ──
@@ -414,6 +424,15 @@ async function loadPosts() {
             ${date?`<span>·</span><span>${date}</span>`:''}
           </div>
         </div>`;
+      // Add edit button overlay for admin
+      if (currentUser && currentUser.uid === ADMIN_UID_CHECK) {
+        const editBtn = document.createElement('button');
+        editBtn.style.cssText = 'position:absolute;top:8px;left:8px;background:var(--gold);color:var(--navy);border:none;padding:5px 10px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;z-index:2;';
+        editBtn.textContent = '✏️ Edit';
+        editBtn.addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); window.location.href = '/blog/post.html?id='+p.id+'&edit=1'; });
+        card.style.position = 'relative';
+        card.appendChild(editBtn);
+      }
       grid.appendChild(card);
     });
   } catch(e) {
