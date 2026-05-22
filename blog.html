@@ -335,7 +335,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
     <div id="subscribe-form" style="display:flex;gap:0.75rem;justify-content:center;flex-wrap:wrap;max-width:480px;margin:0 auto;">
       <input type="text" id="sub-name" placeholder="Your name" style="flex:1;min-width:140px;padding:10px 14px;border:none;border-radius:8px;font-size:14px;font-family:inherit;outline:none;">
       <input type="email" id="sub-email" placeholder="Your email" style="flex:1;min-width:180px;padding:10px 14px;border:none;border-radius:8px;font-size:14px;font-family:inherit;outline:none;">
-      <button onclick="subscribe()" style="background:var(--gold);color:var(--navy);border:none;padding:10px 22px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap;">Subscribe →</button>
+      <button onclick="window.subscribe()" style="background:var(--gold);color:var(--navy);border:none;padding:10px 22px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap;">Subscribe →</button>
     </div>
     <div id="sub-msg" style="margin-top:0.75rem;font-size:13px;color:rgba(255,255,255,0.8);display:none;"></div>
   </div>
@@ -733,7 +733,7 @@ window.subscribe = async function() {
   } catch(e) { showSubMsg('Error: '+e.message, false); }
 };
 
-function showSubMsg(msg, success) {
+window.showSubMsg = function showSubMsg(msg, success) {
   const el = document.getElementById('sub-msg');
   el.textContent = msg;
   el.style.color = success ? '#86efac' : '#fca5a5';
