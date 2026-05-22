@@ -99,17 +99,25 @@ async function loadAuthor() {
     document.title = name + ' — The Lab Notebook';
     const firstPost = posts[0];
     const initials = name.split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase();
-    const photoHtml = firstPost.authorPhoto
-      ? `<img class="author-avatar" src="${firstPost.authorPhoto}" alt="${name}">`
-      : `<div class="author-avatar">${initials}</div>`;
+    // Use real photo for the blog owner
+    const isOwner = name === 'Dr. Adeem Ghaffar Rana';
+    const photoHtml = isOwner
+      ? `<img class="author-avatar" src="/headshot.jpg" alt="${name}" style="width:100px;height:100px;border-radius:50%;border:3px solid var(--gold);object-fit:cover;object-position:center top;">`
+      : firstPost.authorPhoto
+        ? `<img class="author-avatar" src="${firstPost.authorPhoto}" alt="${name}">`
+        : `<div class="author-avatar">${initials}</div>`;
+    const bioText = isOwner
+      ? 'Research Scientist in Catalysis & Sustainable Fuels at TU Bergakademie Freiberg. PhD from TU Munich (DAAD Scholar). Writing about research, academic life, Germany, and everything in between.'
+      : firstPost.authorBio || '';
 
     area.innerHTML = `
       <div class="author-card">
         ${photoHtml}
         <div style="flex:1;min-width:200px;">
           <div class="author-name">${name}</div>
-          ${firstPost.authorBio ? `<p class="author-bio-text">${firstPost.authorBio}</p>` : ''}
+          ${bioText ? `<p class="author-bio-text">${bioText}</p>` : ''}
           <div class="author-meta">${posts.length} post${posts.length>1?'s':''} on The Lab Notebook</div>
+          ${isOwner ? '<a href="/about.html" style="display:inline-block;margin-top:6px;font-size:13px;color:var(--gold);font-weight:600;text-decoration:none;">View full profile →</a>' : ''}
         </div>
       </div>
       <div class="posts-title">Posts by ${name}</div>
