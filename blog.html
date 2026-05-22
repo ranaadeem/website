@@ -53,7 +53,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
 /* PAGE HEADER */
 .page-header{width:100%;height:320px;background:url('/blog-header.jpg') center/cover no-repeat;background-color:var(--navy);position:relative;border-bottom:3px solid var(--gold);}
 .page-header::before{content:'';position:absolute;inset:0;background:linear-gradient(100deg,rgba(8,15,50,0.88) 0%,rgba(10,20,60,0.6) 50%,rgba(10,20,60,0.25) 100%);}
-.page-header-inner{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:2rem 2.5rem;max-width:700px;z-index:1;}
+.page-header-inner{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:2rem 2.5rem;z-index:1;width:100%;}
 .page-tag{font-size:11px;font-weight:600;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);border:1px solid rgba(201,168,76,0.4);padding:4px 12px;border-radius:20px;display:inline-block;margin-bottom:1rem;width:fit-content;}
 .page-header h1{font-family:"Playfair Display",serif;font-size:clamp(1.8rem,4vw,2.6rem);color:white;line-height:1.2;margin-bottom:0.5rem;}
 .page-header h1 span{color:var(--gold);}
@@ -152,6 +152,8 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
 .toast.show{opacity:1;transform:translateY(0);}
 @media(max-width:600px){.form-row{grid-template-columns:1fr;}.posts-grid{grid-template-columns:1fr;}}
 </style>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>emailjs.init('NMUbpQ_Tz1ZXT1Ipk');</script>
 </head>
 <body>
 <nav id="main-nav">
@@ -194,8 +196,8 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
     <h1>The <span>Lab Notebook</span></h1>
     <p class="header-sub">Research, academic life, navigating Germany as a Pakistani researcher, and anything else worth writing about.</p>
     <div style="margin-top:1.5rem;padding:0.75rem 1.25rem;border-left:3px solid var(--gold);background:rgba(201,168,76,0.08);border-radius:0 6px 6px 0;max-width:440px;">
-      <p style="font-size:13px;font-style:italic;color:rgba(255,255,255,0.8);line-height:1.6;margin:0;">"The first draft of anything is shit."</p>
-      <p style="font-size:11px;color:var(--gold);margin-top:4px;font-weight:600;margin-bottom:0;">— Ernest Hemingway</p>
+      <p style="font-size:13px;font-style:italic;color:rgba(255,255,255,0.8);line-height:1.6;margin:0;">"Writing is thinking. To write well is to think clearly."</p>
+      <p style="font-size:11px;color:var(--gold);margin-top:4px;font-weight:600;margin-bottom:0;">— David McCullough</p>
     </div>
   </div>
 </div>
@@ -209,6 +211,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
     <div class="admin-tabs">
       <button class="admin-tab active" id="atab-write-btn" onclick="switchAdminTab('write')">✍️ Write Post</button>
       <button class="admin-tab" id="atab-pending-btn" onclick="switchAdminTab('pending')">📬 Pending</button>
+      <button class="admin-tab" id="atab-manage-btn" onclick="switchAdminTab('manage')">📋 Manage Posts</button>
     </div>
     <!-- Write -->
     <div id="atab-write">
@@ -224,16 +227,12 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
             <select id="admin-category">
               <option value="">Select a category</option>
               <option value="Life in Germany">Life in Germany</option>
-<option value="Research & Catalysis">Research & Catalysis</option>
-<option value="Academic Career">Academic Career</option>
-<option value="Pakistan & Diaspora">Pakistan & Diaspora</option>
-<option value="Teaching & Mentoring">Teaching & Mentoring</option>
-<option value="Travel">Travel</option>
-<option value="Personal">Personal</option>
-<option value="Opinion">Opinion</option>
-              <option value="__custom__">Other (type below)</option>
+              <option value="Life in Pakistan">Life in Pakistan</option>
+              <option value="Science & Research">Science & Research</option>
+              <option value="Academic Career">Academic Career</option>
+              <option value="Travel">Travel</option>
+              <option value="Opinion & Personal">Opinion & Personal</option>
             </select>
-            <input type="text" id="admin-category-custom" placeholder="Custom category..." style="margin-top:6px;display:none;">
           </div>
         <div class="form-group"><label>Cover Image <span style="font-size:11px;color:var(--muted);font-weight:400;">(optional)</span></label><input type="file" id="admin-cover" accept="image/*"><img id="admin-cover-preview" class="cover-preview"></div>
       </div>
@@ -303,6 +302,10 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
     <div id="atab-pending" style="display:none;">
       <div id="pending-list"><div class="loading">Loading pending submissions...</div></div>
     </div>
+    <!-- Manage Published -->
+    <div id="atab-manage" style="display:none;">
+      <div id="manage-list"><div class="loading">Loading published posts...</div></div>
+    </div>
   </div>
   <!-- BLOG TOOLBAR -->
   <div class="blog-toolbar">
@@ -324,6 +327,18 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
   </div>
   <!-- POSTS GRID -->
   <div id="posts-grid" class="posts-grid"><div class="loading">Loading posts...</div></div>
+
+  <!-- SUBSCRIBE -->
+  <div style="background:linear-gradient(135deg,var(--navy) 0%,#2048a8 100%);border-radius:16px;padding:2.5rem;margin-top:3rem;text-align:center;">
+    <h3 style="font-family:'Playfair Display',serif;font-size:1.4rem;color:white;margin-bottom:0.5rem;">📬 Stay in the Loop</h3>
+    <p style="font-size:14px;color:rgba(255,255,255,0.7);margin-bottom:1.5rem;max-width:480px;margin-left:auto;margin-right:auto;">Get notified when new posts are published. No spam — just writing worth reading.</p>
+    <div id="subscribe-form" style="display:flex;gap:0.75rem;justify-content:center;flex-wrap:wrap;max-width:480px;margin:0 auto;">
+      <input type="text" id="sub-name" placeholder="Your name" style="flex:1;min-width:140px;padding:10px 14px;border:none;border-radius:8px;font-size:14px;font-family:inherit;outline:none;">
+      <input type="email" id="sub-email" placeholder="Your email" style="flex:1;min-width:180px;padding:10px 14px;border:none;border-radius:8px;font-size:14px;font-family:inherit;outline:none;">
+      <button onclick="subscribe()" style="background:var(--gold);color:var(--navy);border:none;padding:10px 22px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap;">Subscribe →</button>
+    </div>
+    <div id="sub-msg" style="margin-top:0.75rem;font-size:13px;color:rgba(255,255,255,0.8);display:none;"></div>
+  </div>
 </div>
 
 <!-- GUEST MODAL -->
@@ -351,16 +366,12 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
             <select id="guest-category">
               <option value="">Select a category</option>
               <option value="Life in Germany">Life in Germany</option>
-<option value="Research & Catalysis">Research & Catalysis</option>
-<option value="Academic Career">Academic Career</option>
-<option value="Pakistan & Diaspora">Pakistan & Diaspora</option>
-<option value="Teaching & Mentoring">Teaching & Mentoring</option>
-<option value="Travel">Travel</option>
-<option value="Personal">Personal</option>
-<option value="Opinion">Opinion</option>
-              <option value="__custom__">Other (type below)</option>
+              <option value="Life in Pakistan">Life in Pakistan</option>
+              <option value="Science & Research">Science & Research</option>
+              <option value="Academic Career">Academic Career</option>
+              <option value="Travel">Travel</option>
+              <option value="Opinion & Personal">Opinion & Personal</option>
             </select>
-            <input type="text" id="guest-category-custom" placeholder="Custom category..." style="margin-top:6px;display:none;">
           </div>
         <div class="form-group"><label>Cover Image</label><input type="file" id="guest-cover" accept="image/*"><img id="guest-cover-preview" class="cover-preview"></div>
       </div>
@@ -446,7 +457,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js';
 import { getAuth, GoogleAuthProvider, signInWithPopup } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js';
-import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, query, where, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js';
+import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, query, where, orderBy, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js';
 
 const app = initializeApp({apiKey:"AIzaSyAgUl22Cln6QtY3-HIvI6lE8Zu7n9OblbI",authDomain:"icet-alumni.firebaseapp.com",projectId:"icet-alumni",storageBucket:"icet-alumni.firebasestorage.app",messagingSenderId:"707390888790",appId:"1:707390888790:web:57e6be62e4d11e22c214f7"});
 const ADMIN_UID = 'w2AtZbhUiyY5TxyvIecHzWqheaE2';
@@ -605,7 +616,7 @@ window.publishPost = async function() {
       title,
       subtitle: document.getElementById('admin-subtitle').value.trim(),
       tags: document.getElementById('admin-tags').value.trim(),
-      category: (document.getElementById('admin-category').value === '__custom__' ? document.getElementById('admin-category-custom').value.trim() : document.getElementById('admin-category').value) || 'Uncategorised',
+      category: document.getElementById('admin-category').value || 'Uncategorised',
       content,
       coverImage: adminCoverBase64,
       authorName: 'Dr. Adeem Ghaffar Rana',
@@ -614,7 +625,7 @@ window.publishPost = async function() {
       publishedAt: serverTimestamp(),
       createdAt: serverTimestamp()
     });
-    suc.textContent='✅ Post published!'; suc.style.display='block';
+    suc.innerHTML='✅ Post published! <button onclick="notifySubscribers(document.getElementById(\'admin-title\').value,\'https://ranaadeem.de/blog/post.html\',\'Dr. Adeem Ghaffar Rana\')" style="background:var(--gold);color:var(--navy);border:none;padding:3px 10px;border-radius:5px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;margin-left:8px;">📬 Notify Subscribers</button>'; suc.style.display='block';
     document.getElementById('admin-title').value='';
     document.getElementById('admin-subtitle').value='';
     document.getElementById('admin-tags').value='';
@@ -639,7 +650,7 @@ window.submitGuestPost = async function() {
       title: document.getElementById('guest-title').value.trim(),
       subtitle: document.getElementById('guest-subtitle').value.trim(),
       tags: document.getElementById('guest-tags').value.trim(),
-      category: (document.getElementById('guest-category').value === '__custom__' ? document.getElementById('guest-category-custom').value.trim() : document.getElementById('guest-category').value) || 'Uncategorised',
+      category: document.getElementById('guest-category').value || 'Uncategorised',
       content: document.getElementById('guest-editor').innerHTML,
       coverImage: guestCoverBase64,
       authorName: document.getElementById('guest-name').value.trim(),
@@ -694,6 +705,62 @@ window.approvePost = async function(id, btn) {
     btn.closest('.pending-item').remove();
     showToast('Post approved and published.');
     loadPosts();
+
+// ── Subscribe ──
+window.subscribe = async function() {
+  const name = document.getElementById('sub-name').value.trim();
+  const email = document.getElementById('sub-email').value.trim();
+  const msg = document.getElementById('sub-msg');
+  if (!name || !email) { showSubMsg('Please enter your name and email.', false); return; }
+  if (!email.includes('@')) { showSubMsg('Please enter a valid email.', false); return; }
+  try {
+    // Check if already subscribed
+    const existing = await getDocs(query(collection(db,'subscribers'), where('email','==',email)));
+    if (!existing.empty) { showSubMsg('You are already subscribed!', true); return; }
+    // Save to Firestore
+    await addDoc(collection(db,'subscribers'), {
+      name, email,
+      subscribedAt: serverTimestamp()
+    });
+    // Send welcome email via EmailJS
+    emailjs.send('service_1hyb7v5', 'template_onvizmg', {
+      subscriber_name: name,
+      subscriber_email: email
+    }).catch(()=>{});
+    document.getElementById('sub-name').value = '';
+    document.getElementById('sub-email').value = '';
+    showSubMsg('✅ You are subscribed! Welcome to The Lab Notebook.', true);
+  } catch(e) { showSubMsg('Error: '+e.message, false); }
+};
+
+function showSubMsg(msg, success) {
+  const el = document.getElementById('sub-msg');
+  el.textContent = msg;
+  el.style.color = success ? '#86efac' : '#fca5a5';
+  el.style.display = 'block';
+}
+
+// ── Admin: Notify subscribers of new post ──
+window.notifySubscribers = async function(postTitle, postUrl, postAuthor) {
+  try {
+    const snap = await getDocs(collection(db,'subscribers'));
+    let count = 0;
+    const sends = [];
+    snap.forEach(d => {
+      const sub = d.data();
+      sends.push(emailjs.send('service_1hyb7v5', 'template_g4pn0is', {
+        subscriber_name: sub.name || 'Reader',
+        subscriber_email: sub.email,
+        post_title: postTitle,
+        post_author: postAuthor,
+        post_url: postUrl
+      }));
+      count++;
+    });
+    await Promise.allSettled(sends);
+    showToast('Notified ' + count + ' subscriber(s) ✓');
+  } catch(e) { showToast('Error notifying: '+e.message); }
+};;
   } catch(e) { showToast('Error: '+e.message); btn.disabled=false; btn.textContent='✅ Approve'; }
 };
 window.rejectPost = async function(id, btn) {
@@ -731,14 +798,7 @@ setupMdUpload('guest');
 setupImgAlign('admin');
 setupImgAlign('guest');
 
-// Category custom field toggle
-['admin','guest'].forEach(p => {
-  const sel = document.getElementById(p+'-category');
-  const cust = document.getElementById(p+'-category-custom');
-  if(sel && cust) sel.addEventListener('change', () => {
-    cust.style.display = sel.value === '__custom__' ? 'block' : 'none';
-  });
-});
+// Categories are fixed dropdown - no custom field needed
 
 function loadMdFile(file, prefix) {
   if (!file) return;
