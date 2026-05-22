@@ -63,6 +63,9 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
 .blog-toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:2rem;flex-wrap:wrap;gap:1rem;}
 .blog-toolbar h2{font-family:"Playfair Display",serif;font-size:1.4rem;color:var(--navy);}
 .btn-submit{background:var(--gold);color:var(--navy);border:none;padding:10px 22px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:all 0.2s;}
+.filter-chip{background:white;border:1.5px solid var(--border);color:var(--muted);padding:5px 14px;border-radius:20px;font-size:12px;font-weight:500;cursor:pointer;font-family:inherit;transition:all 0.2s;}
+.filter-chip:hover{border-color:var(--navy);color:var(--navy);}
+.filter-chip.active{background:var(--navy);border-color:var(--navy);color:white;}
 .btn-submit:hover{background:var(--gold-light);}
 .posts-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.5rem;}
 .post-card{background:white;border:1px solid var(--border);border-radius:14px;overflow:hidden;cursor:pointer;transition:all 0.2s;text-decoration:none;display:block;color:inherit;}
@@ -99,11 +102,14 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
 .editor-tabs{display:flex;gap:4px;background:#f3f4f6;border-radius:8px;padding:4px;margin-bottom:0.75rem;width:fit-content;}
 .editor-tab{padding:6px 16px;border-radius:5px;font-size:13px;font-weight:500;cursor:pointer;border:none;background:transparent;color:var(--muted);font-family:inherit;transition:all 0.2s;}
 .editor-tab.active{background:var(--navy);color:white;}
-.toolbar{display:flex;flex-wrap:wrap;gap:4px;padding:8px;background:#f8f7f4;border:1px solid var(--border);border-radius:8px 8px 0 0;border-bottom:none;}
+.toolbar{display:flex;flex-wrap:wrap;gap:4px;padding:8px;background:#f8f7f4;border:1px solid var(--border);border-radius:8px 8px 0 0;border-bottom:none;position:sticky;top:64px;z-index:100;}
 .tb-btn{background:white;border:1px solid var(--border);border-radius:4px;padding:4px 8px;font-size:13px;cursor:pointer;font-family:inherit;color:var(--text);transition:all 0.15s;min-width:30px;text-align:center;}
 .tb-btn:hover{background:var(--navy);color:white;border-color:var(--navy);}
 .tb-sep{width:1px;background:var(--border);margin:0 2px;}
-.tb-color{width:28px;height:28px;padding:2px;border:1px solid var(--border);border-radius:4px;cursor:pointer;}
+.tb-color{width:36px;height:30px;padding:2px;border:2px solid var(--border);border-radius:4px;cursor:pointer;background:white;}
+.tb-color:hover{border-color:var(--navy);}
+.tb-color-wrap{display:flex;flex-direction:column;align-items:center;gap:1px;}
+.tb-color-label{font-size:9px;color:var(--muted);white-space:nowrap;line-height:1;}
 .editor-area{width:100%;min-height:280px;padding:12px;border:1px solid var(--border);border-radius:0 0 8px 8px;font-size:14px;font-family:inherit;outline:none;resize:vertical;line-height:1.7;}
 .editor-area:focus{border-color:var(--gold);}
 .md-drop-area{border:2px dashed var(--border);border-radius:8px;padding:2rem;text-align:center;cursor:pointer;transition:all 0.2s;color:var(--muted);font-size:14px;}
@@ -214,6 +220,21 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
       </div>
       <div class="form-row">
         <div class="form-group"><label>Tags <span style="font-size:11px;color:var(--muted);font-weight:400;">(comma separated)</span></label><input type="text" id="admin-tags" placeholder="research, germany, catalysis"></div>
+        <div class="form-group"><label>Category <span class="req">*</span></label>
+            <select id="admin-category">
+              <option value="">Select a category</option>
+              <option value="Life in Germany">Life in Germany</option>
+<option value="Research & Catalysis">Research & Catalysis</option>
+<option value="Academic Career">Academic Career</option>
+<option value="Pakistan & Diaspora">Pakistan & Diaspora</option>
+<option value="Teaching & Mentoring">Teaching & Mentoring</option>
+<option value="Travel">Travel</option>
+<option value="Personal">Personal</option>
+<option value="Opinion">Opinion</option>
+              <option value="__custom__">Other (type below)</option>
+            </select>
+            <input type="text" id="admin-category-custom" placeholder="Custom category..." style="margin-top:6px;display:none;">
+          </div>
         <div class="form-group"><label>Cover Image <span style="font-size:11px;color:var(--muted);font-weight:400;">(optional)</span></label><input type="file" id="admin-cover" accept="image/*"><img id="admin-cover-preview" class="cover-preview"></div>
       </div>
       <div class="form-group">
@@ -246,10 +267,18 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
             <button class="tb-btn" onclick="insertLink('admin')" title="Link">🔗</button>
             <button class="tb-btn" onclick="document.getElementById('admin-img-upload').click()" title="Insert Image">🖼</button>
             <input type="file" id="admin-img-upload" accept="image/*" style="display:none" onchange="insertImage('admin',this)">
+            <button class="tb-btn" onclick="alignSelectedImg('left')" title="Image Left">🖼⬅</button>
+            <button class="tb-btn" onclick="alignSelectedImg('center')" title="Image Center">🖼⬌</button>
+            <button class="tb-btn" onclick="alignSelectedImg('right')" title="Image Right">🖼➡</button>
             <div class="tb-sep"></div>
-            <label style="font-size:11px;color:var(--muted);align-self:center;margin:0 2px;">Color:</label>
-            <input type="color" class="tb-color" id="admin-color" value="#1a1a2e" onchange="fmt('admin','foreColor',this.value)" title="Text Color">
-            <input type="color" class="tb-color" id="admin-bgcolor" value="#ffffff" onchange="fmt('admin','hiliteColor',this.value)" title="Highlight Color">
+            <div class="tb-color-wrap">
+              <input type="color" class="tb-color" id="admin-color" value="#1a1a2e" onchange="document.getElementById('admin-editor').focus();fmt('admin','foreColor',this.value)" title="Text Color">
+              <span class="tb-color-label">Text</span>
+            </div>
+            <div class="tb-color-wrap">
+              <input type="color" class="tb-color" id="admin-bgcolor" value="#fef08a" onchange="fmt('admin','backColor',this.value)" title="Highlight Color">
+              <span class="tb-color-label">Highlight</span>
+            </div>
           </div>
           <div id="admin-editor" class="editor-area" contenteditable="true" style="border-radius:0 0 8px 8px;" placeholder="Start writing your post here..."></div>
         </div>
@@ -280,6 +309,19 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
     <h2>Latest Posts</h2>
     <button class="btn-submit" onclick="openGuestModal()">✍️ Submit a Guest Post</button>
   </div>
+  <!-- FILTERS -->
+  <div id="blog-filters" style="margin-bottom:1.5rem;display:flex;flex-wrap:wrap;gap:0.75rem;align-items:center;">
+    <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;">
+      <span style="font-size:12px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:0.06em;">Category:</span>
+      <button class="filter-chip active" data-filter-type="category" data-filter-val="all" onclick="setFilter('category','all',this)">All</button>
+      <div id="category-chips" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
+    </div>
+    <div id="author-filter-wrap" style="display:none;display:flex;flex-wrap:wrap;gap:6px;align-items:center;">
+      <span style="font-size:12px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:0.06em;">Author:</span>
+      <button class="filter-chip active" data-filter-type="author" data-filter-val="all" onclick="setFilter('author','all',this)">All</button>
+      <div id="author-chips" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
+    </div>
+  </div>
   <!-- POSTS GRID -->
   <div id="posts-grid" class="posts-grid"><div class="loading">Loading posts...</div></div>
 </div>
@@ -305,6 +347,21 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
       </div>
       <div class="form-row">
         <div class="form-group"><label>Tags</label><input type="text" id="guest-tags" placeholder="research, germany"></div>
+            <div class="form-group"><label>Category <span class="req">*</span></label>
+            <select id="guest-category">
+              <option value="">Select a category</option>
+              <option value="Life in Germany">Life in Germany</option>
+<option value="Research & Catalysis">Research & Catalysis</option>
+<option value="Academic Career">Academic Career</option>
+<option value="Pakistan & Diaspora">Pakistan & Diaspora</option>
+<option value="Teaching & Mentoring">Teaching & Mentoring</option>
+<option value="Travel">Travel</option>
+<option value="Personal">Personal</option>
+<option value="Opinion">Opinion</option>
+              <option value="__custom__">Other (type below)</option>
+            </select>
+            <input type="text" id="guest-category-custom" placeholder="Custom category..." style="margin-top:6px;display:none;">
+          </div>
         <div class="form-group"><label>Cover Image</label><input type="file" id="guest-cover" accept="image/*"><img id="guest-cover-preview" class="cover-preview"></div>
       </div>
       <div class="form-group">
@@ -336,10 +393,18 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
             <button class="tb-btn" onclick="insertLink('guest')">🔗</button>
             <button class="tb-btn" onclick="document.getElementById('guest-img-upload').click()">🖼</button>
             <input type="file" id="guest-img-upload" accept="image/*" style="display:none" onchange="insertImage('guest',this)">
+            <button class="tb-btn" onclick="alignSelectedImg('left')" title="Image Left">🖼⬅</button>
+            <button class="tb-btn" onclick="alignSelectedImg('center')" title="Image Center">🖼⬌</button>
+            <button class="tb-btn" onclick="alignSelectedImg('right')" title="Image Right">🖼➡</button>
             <div class="tb-sep"></div>
-            <label style="font-size:11px;color:var(--muted);align-self:center;margin:0 2px;">Color:</label>
-            <input type="color" class="tb-color" id="guest-color" value="#1a1a2e" onchange="fmt('guest','foreColor',this.value)">
-            <input type="color" class="tb-color" id="guest-bgcolor" value="#ffffff" onchange="fmt('guest','hiliteColor',this.value)">
+            <div class="tb-color-wrap">
+              <input type="color" class="tb-color" id="guest-color" value="#1a1a2e" onchange="document.getElementById('guest-editor').focus();fmt('guest','foreColor',this.value)" title="Text Color">
+              <span class="tb-color-label">Text</span>
+            </div>
+            <div class="tb-color-wrap">
+              <input type="color" class="tb-color" id="guest-bgcolor" value="#fef08a" onchange="fmt('guest','backColor',this.value)" title="Highlight Color">
+              <span class="tb-color-label">Highlight</span>
+            </div>
           </div>
           <div id="guest-editor" class="editor-area" contenteditable="true" style="border-radius:0 0 8px 8px;"></div>
         </div>
@@ -391,6 +456,65 @@ const provider = new GoogleAuthProvider();
 let currentUser = null;
 const ADMIN_UID_CHECK = 'w2AtZbhUiyY5TxyvIecHzWqheaE2';
 let adminCoverBase64 = '', guestCoverBase64 = '';
+let allPosts = [];
+let activeFilters = {category:'all', author:'all'};
+
+window.setFilter = function(type, val, btn) {
+  activeFilters[type] = val;
+  // Update chip UI
+  const parent = btn.closest('div[style]') || btn.parentElement;
+  parent.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  renderFilteredPosts();
+};
+
+function renderFilteredPosts() {
+  const grid = document.getElementById('posts-grid');
+  let filtered = allPosts.filter(p => {
+    const catMatch = activeFilters.category === 'all' || p.category === activeFilters.category;
+    const authMatch = activeFilters.author === 'all' || p.authorName === activeFilters.author;
+    return catMatch && authMatch;
+  });
+  if (!filtered.length) {
+    grid.innerHTML = '<div class="empty-state"><div class="empty-state-icon">🔍</div><p style="color:var(--muted);">No posts match this filter.</p></div>';
+    return;
+  }
+  grid.innerHTML = '';
+  filtered.forEach(p => renderPostCard(p, grid));
+}
+
+// ── Render single post card ──
+function renderPostCard(p, grid) {
+  const tags = (p.tags||'').split(',').map(t=>t.trim()).filter(Boolean);
+  const tagsHtml = tags.map(t=>`<span class="post-tag">${t}</span>`).join('');
+  const date = p.publishedAt ? new Date(p.publishedAt.seconds*1000).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}) : '';
+  const card = document.createElement('a');
+  card.href = '/blog/post.html?id='+p.id;
+  card.className = 'post-card';
+  card.style.position = 'relative';
+  card.innerHTML = `
+    ${p.coverImage?`<img class="post-card-img" src="${p.coverImage}" alt="${p.title}">`:
+      `<div class="post-card-img-placeholder">📝</div>`}
+    <div class="post-card-body">
+      ${p.category?`<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--gold);margin-bottom:4px;">${p.category}</div>`:''}
+      ${tagsHtml?`<div class="post-card-tags">${tagsHtml}</div>`:''}
+      <div class="post-card-title">${p.title}</div>
+      ${p.subtitle?`<div class="post-card-sub">${p.subtitle}</div>`:''}
+      <div class="post-card-meta">
+        <span class="post-card-author">${p.authorName||'Dr. Adeem Ghaffar Rana'}</span>
+        ${date?`<span>·</span><span>${date}</span>`:''}
+        ${p.likes?`<span>·</span><span>❤️ ${p.likes}</span>`:''}
+      </div>
+    </div>`;
+  if (currentUser && currentUser.uid === ADMIN_UID_CHECK) {
+    const editBtn = document.createElement('button');
+    editBtn.style.cssText = 'position:absolute;top:8px;left:8px;background:var(--gold);color:var(--navy);border:none;padding:5px 10px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;z-index:2;';
+    editBtn.textContent = '✏️ Edit';
+    editBtn.addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); window.location.href='/blog/post.html?id='+p.id+'&edit=1'; });
+    card.appendChild(editBtn);
+  }
+  grid.appendChild(card);
+}
 
 // ── Load posts ──
 async function loadPosts() {
@@ -401,40 +525,27 @@ async function loadPosts() {
       grid.innerHTML = '<div class="empty-state"><div class="empty-state-icon">✍️</div><p style="color:var(--muted);">No posts yet. Check back soon.</p></div>';
       return;
     }
-    const posts = [];
-    snap.forEach(d => posts.push({id:d.id,...d.data()}));
-    posts.sort((a,b)=>(b.publishedAt?.seconds||0)-(a.publishedAt?.seconds||0));
-    grid.innerHTML = '';
-    posts.forEach(p => {
-      const tags = (p.tags||'').split(',').map(t=>t.trim()).filter(Boolean);
-      const tagsHtml = tags.map(t=>`<span class="post-tag">${t}</span>`).join('');
-      const date = p.publishedAt ? new Date(p.publishedAt.seconds*1000).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}) : '';
-      const card = document.createElement('a');
-      card.href = '/blog/post.html?id='+p.id;
-      card.className = 'post-card';
-      card.innerHTML = `
-        ${p.coverImage?`<img class="post-card-img" src="${p.coverImage}" alt="${p.title}">`:
-          `<div class="post-card-img-placeholder">📝</div>`}
-        <div class="post-card-body">
-          ${tagsHtml?`<div class="post-card-tags">${tagsHtml}</div>`:''}
-          <div class="post-card-title">${p.title}</div>
-          ${p.subtitle?`<div class="post-card-sub">${p.subtitle}</div>`:''}
-          <div class="post-card-meta">
-            <span class="post-card-author">${p.authorName||'Dr. Adeem Ghaffar Rana'}</span>
-            ${date?`<span>·</span><span>${date}</span>`:''}
-          </div>
-        </div>`;
-      // Add edit button overlay for admin
-      if (currentUser && currentUser.uid === ADMIN_UID_CHECK) {
-        const editBtn = document.createElement('button');
-        editBtn.style.cssText = 'position:absolute;top:8px;left:8px;background:var(--gold);color:var(--navy);border:none;padding:5px 10px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;z-index:2;';
-        editBtn.textContent = '✏️ Edit';
-        editBtn.addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); window.location.href = '/blog/post.html?id='+p.id+'&edit=1'; });
-        card.style.position = 'relative';
-        card.appendChild(editBtn);
-      }
-      grid.appendChild(card);
-    });
+    allPosts = [];
+    snap.forEach(d => allPosts.push({id:d.id,...d.data()}));
+    allPosts.sort((a,b)=>(b.publishedAt?.seconds||0)-(a.publishedAt?.seconds||0));
+
+    // Build category chips
+    const cats = [...new Set(allPosts.map(p=>p.category).filter(Boolean))];
+    const catChips = document.getElementById('category-chips');
+    if (catChips) {
+      catChips.innerHTML = cats.map(c=>`<button class="filter-chip" data-filter-type="category" data-filter-val="${c}" onclick="setFilter('category','${c}',this)">${c}</button>`).join('');
+    }
+
+    // Build author chips (only if multiple authors)
+    const authors = [...new Set(allPosts.map(p=>p.authorName).filter(Boolean))];
+    if (authors.length > 1) {
+      const authWrap = document.getElementById('author-filter-wrap');
+      const authChips = document.getElementById('author-chips');
+      if (authWrap) authWrap.style.display = 'flex';
+      if (authChips) authChips.innerHTML = authors.map(a=>`<button class="filter-chip" data-filter-type="author" data-filter-val="${a}" onclick="setFilter('author','${a}',this)">${a}</button>`).join('');
+    }
+
+    renderFilteredPosts();
   } catch(e) {
     grid.innerHTML = '<div class="loading">Error loading posts. Please refresh.</div>';
     console.error(e);
@@ -494,6 +605,7 @@ window.publishPost = async function() {
       title,
       subtitle: document.getElementById('admin-subtitle').value.trim(),
       tags: document.getElementById('admin-tags').value.trim(),
+      category: (document.getElementById('admin-category').value === '__custom__' ? document.getElementById('admin-category-custom').value.trim() : document.getElementById('admin-category').value) || 'Uncategorised',
       content,
       coverImage: adminCoverBase64,
       authorName: 'Dr. Adeem Ghaffar Rana',
@@ -527,6 +639,7 @@ window.submitGuestPost = async function() {
       title: document.getElementById('guest-title').value.trim(),
       subtitle: document.getElementById('guest-subtitle').value.trim(),
       tags: document.getElementById('guest-tags').value.trim(),
+      category: (document.getElementById('guest-category').value === '__custom__' ? document.getElementById('guest-category-custom').value.trim() : document.getElementById('guest-category').value) || 'Uncategorised',
       content: document.getElementById('guest-editor').innerHTML,
       coverImage: guestCoverBase64,
       authorName: document.getElementById('guest-name').value.trim(),
@@ -615,6 +728,17 @@ function setupMdUpload(prefix) {
 }
 setupMdUpload('admin');
 setupMdUpload('guest');
+setupImgAlign('admin');
+setupImgAlign('guest');
+
+// Category custom field toggle
+['admin','guest'].forEach(p => {
+  const sel = document.getElementById(p+'-category');
+  const cust = document.getElementById(p+'-category-custom');
+  if(sel && cust) sel.addEventListener('change', () => {
+    cust.style.display = sel.value === '__custom__' ? 'block' : 'none';
+  });
+});
 
 function loadMdFile(file, prefix) {
   if (!file) return;
@@ -659,9 +783,76 @@ function showToast(msg) {
 
 <script>
 // ── Editor toolbar functions (non-module) ──
+function alignSelectedImg(align) {
+  // Find selected image or last inserted image in any active editor
+  const editors = ['admin-editor','guest-editor'];
+  let targetImg = null;
+  for (const id of editors) {
+    const el = document.getElementById(id);
+    if (!el) continue;
+    const sel = window.getSelection();
+    if (sel && sel.rangeCount > 0) {
+      const node = sel.getRangeAt(0).commonAncestorContainer;
+      if (el.contains(node)) {
+        // Find img in or near selection
+        targetImg = el.querySelector('img:last-of-type');
+        break;
+      }
+    }
+  }
+  if (!targetImg) {
+    // Just align last image in whichever editor has content
+    for (const id of editors) {
+      const el = document.getElementById(id);
+      if (el && el.querySelector('img')) { targetImg = el.querySelector('img:last-of-type'); break; }
+    }
+  }
+  if (!targetImg) return;
+  const alignMap = {
+    left: 'display:block;margin-right:auto;margin-left:0;max-width:100%;border-radius:8px;',
+    center: 'display:block;margin:0 auto;max-width:100%;border-radius:8px;',
+    right: 'display:block;margin-left:auto;margin-right:0;max-width:100%;border-radius:8px;'
+  };
+  targetImg.style.cssText = alignMap[align] || alignMap.center;
+}
 function fmt(prefix, cmd, val) {
   document.getElementById(prefix+'-editor').focus();
   document.execCommand(cmd, false, val||null);
+}
+
+// Image alignment in contenteditable
+function setupImgAlign(prefix) {
+  const editor = document.getElementById(prefix+'-editor');
+  if (!editor) return;
+  editor.addEventListener('click', function(e) {
+    if (e.target.tagName === 'IMG') {
+      // Remove existing img toolbars
+      document.querySelectorAll('.img-align-bar').forEach(b => b.remove());
+      const img = e.target;
+      const bar = document.createElement('div');
+      bar.className = 'img-align-bar';
+      bar.style.cssText = 'display:inline-flex;gap:4px;background:var(--navy);border-radius:6px;padding:4px 6px;margin:4px 0;';
+      const aligns = [
+        {label:'⬅ Left', fn: () => { img.style.float='left'; img.style.margin='0 12px 8px 0'; img.style.display='block'; bar.remove(); }},
+        {label:'⬌ Center', fn: () => { img.style.float='none'; img.style.margin='8px auto'; img.style.display='block'; bar.remove(); }},
+        {label:'➡ Right', fn: () => { img.style.float='right'; img.style.margin='0 0 8px 12px'; img.style.display='block'; bar.remove(); }},
+        {label:'↕ Full Width', fn: () => { img.style.float='none'; img.style.width='100%'; img.style.margin='8px 0'; img.style.display='block'; bar.remove(); }},
+        {label:'✕ Remove', fn: () => { img.remove(); bar.remove(); }},
+      ];
+      aligns.forEach(a => {
+        const btn = document.createElement('button');
+        btn.textContent = a.label;
+        btn.style.cssText = 'background:none;border:none;color:white;font-size:11px;cursor:pointer;padding:2px 6px;border-radius:4px;font-family:inherit;white-space:nowrap;';
+        btn.onmouseenter = () => btn.style.background='rgba(201,168,76,0.3)';
+        btn.onmouseleave = () => btn.style.background='none';
+        btn.addEventListener('click', e => { e.preventDefault(); a.fn(); });
+        bar.appendChild(btn);
+      });
+      img.insertAdjacentElement('afterend', bar);
+    } else {
+      document.querySelectorAll('.img-align-bar').forEach(b => b.remove());
+    }
+  });
 }
 function fmtBlock(prefix, tag) {
   document.getElementById(prefix+'-editor').focus();
