@@ -269,25 +269,28 @@ let isSpeaking = false;
 
 onAuthStateChanged(auth, user => {
   currentUser = user;
+  // If post already rendered, inject admin buttons now
+  injectAdminButtons();
+});
+
+function injectAdminButtons() {
   const bar = document.getElementById('post-action-bar');
-  if (!bar) return;
-  // Remove any existing admin buttons first
-  bar.querySelectorAll('.admin-btn').forEach(b=>b.remove());
-  if (user && user.uid === ADMIN_UID) {
+  if (!bar) return; // Post not loaded yet - renderPost will call this
+  bar.querySelectorAll('.admin-btn, .admin-del-btn').forEach(b=>b.remove());
+  if (currentUser && currentUser.uid === ADMIN_UID) {
     const editBtn = document.createElement('button');
     editBtn.className = 'action-btn admin-btn';
     editBtn.textContent = '✏️ Edit';
     editBtn.addEventListener('click', openEditModal);
     bar.appendChild(editBtn);
-
     const delBtn = document.createElement('button');
-    delBtn.className = 'action-btn';
-    delBtn.style.cssText = 'background:white;color:var(--red);border-color:var(--red);';
+    delBtn.className = 'action-btn admin-del-btn';
+    delBtn.style.cssText = 'background:white;color:var(--red);border-color:var(--red);border:1.5px solid var(--red);';
     delBtn.textContent = '🗑 Delete';
     delBtn.addEventListener('click', deletePost);
     bar.appendChild(delBtn);
   }
-});
+}
 
 // ── Load post ──
 async function loadPost() {
@@ -356,6 +359,8 @@ function renderPost(p) {
     <div class="comments-section" id="comments-section"></div>`;
 
   buildTOC();
+  // Inject admin buttons after render (may already have auth state)
+  injectAdminButtons();
 }
 
 function buildTOC() {
@@ -598,6 +603,39 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')document.getElementB
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
 
 loadPost();
+
+// ── Secret A+G+R shortcut for admin login on post page ──
+const _keysHeld = new Set();
+document.addEventListener('keydown', e => {
+  _keysHeld.add(e.key.toLowerCase());
+  if (_keysHeld.has('a') && _keysHeld.has('g') && _keysHeld.has('r')) {
+    _keysHeld.clear();
+    triggerAdminLogin();
+  }
+});
+document.addEventListener('keyup', e => _keysHeld.delete(e.key.toLowerCase()));
+
+async function triggerAdminLogin() {
+  if (currentUser && currentUser.uid === ADMIN_UID) {
+    showToast('Already signed in as admin ✓');
+    injectAdminButtons();
+    return;
+  }
+  try {
+    const result = await signInWithPopup(auth, new GoogleAuthProvider());
+    currentUser = result.user;
+    if (currentUser.uid === ADMIN_UID) {
+      showToast('Signed in as admin ✓');
+      injectAdminButtons();
+    } else {
+      showToast('Access denied.');
+      await auth.signOut();
+      currentUser = null;
+    }
+  } catch(e) {
+    if (e.code !== 'auth/cancelled-popup-request') showToast('Sign in failed.');
+  }
+}
 </script>
 
 <script>
