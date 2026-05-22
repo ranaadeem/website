@@ -8,6 +8,13 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Dr. Adeem Ghaffar Rana">
+<meta id="og-title" property="og:title" content="Post — Dr. Adeem Ghaffar Rana">
+<meta id="og-description" property="og:description" content="">
+<meta id="og-image" property="og:image" content="https://ranaadeem.de/og-banner.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta id="tw-title" name="twitter:title" content="Post — Dr. Adeem Ghaffar Rana">
+<meta id="tw-image" name="twitter:image" content="https://ranaadeem.de/og-banner.jpg">
+<meta id="tw-description" name="twitter:description" content="">
 <style>
 :root{--navy:#1a3a8a;--gold:#c9a84c;--gold-light:#e8d5a3;--cream:#faf8f4;--white:#fff;--text:#1a1a2e;--muted:#6b7280;--border:#e5e7eb;--red:#dc2626;--green:#059669;}
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -143,6 +150,8 @@ hr.post-divider{border:none;border-top:1px solid var(--border);margin:0 0 2rem;}
 .toast.show{opacity:1;transform:translateY(0);}
 @media(max-width:600px){.form-row{grid-template-columns:1fr;}.post-action-bar{flex-direction:column;}.comment-form-row{grid-template-columns:1fr;}}
 </style>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>emailjs.init('NMUbpQ_Tz1ZXT1Ipk');</script>
 </head>
 <body>
 <nav id="main-nav">
@@ -249,9 +258,7 @@ import { getFirestore, doc, getDoc, getDocs, collection, addDoc, updateDoc, dele
 
 const app = initializeApp({apiKey:"AIzaSyAgUl22Cln6QtY3-HIvI6lE8Zu7n9OblbI",authDomain:"icet-alumni.firebaseapp.com",projectId:"icet-alumni",storageBucket:"icet-alumni.firebasestorage.app",messagingSenderId:"707390888790",appId:"1:707390888790:web:57e6be62e4d11e22c214f7"});
 const ADMIN_UID = 'w2AtZbhUiyY5TxyvIecHzWqheaE2';
-const EMAILJS_SVC = 'service_ranaadeem';
-const EMAILJS_TPL = 'template_comment';
-const EMAILJS_KEY = 'YOUR_EMAILJS_PUBLIC_KEY';
+// EmailJS configured in head script
 const auth = getAuth(app);
 const db = getFirestore(app);
 let currentUser = null;
@@ -262,8 +269,24 @@ let isSpeaking = false;
 
 onAuthStateChanged(auth, user => {
   currentUser = user;
-  const btn = document.getElementById('btn-edit');
-  if (btn) btn.style.display = user && user.uid === ADMIN_UID ? 'inline-flex' : 'none';
+  const bar = document.getElementById('post-action-bar');
+  if (!bar) return;
+  // Remove any existing admin buttons first
+  bar.querySelectorAll('.admin-btn').forEach(b=>b.remove());
+  if (user && user.uid === ADMIN_UID) {
+    const editBtn = document.createElement('button');
+    editBtn.className = 'action-btn admin-btn';
+    editBtn.textContent = '✏️ Edit';
+    editBtn.addEventListener('click', openEditModal);
+    bar.appendChild(editBtn);
+
+    const delBtn = document.createElement('button');
+    delBtn.className = 'action-btn';
+    delBtn.style.cssText = 'background:white;color:var(--red);border-color:var(--red);';
+    delBtn.textContent = '🗑 Delete';
+    delBtn.addEventListener('click', deletePost);
+    bar.appendChild(delBtn);
+  }
 });
 
 // ── Load post ──
@@ -288,6 +311,15 @@ async function loadPost() {
 
 function renderPost(p) {
   document.title = p.title + ' — Dr. Adeem Ghaffar Rana';
+  // Update OG/Twitter meta dynamically
+  const ogImg = p.coverImage || 'https://ranaadeem.de/og-banner.jpg';
+  const desc = p.subtitle || p.content.replace(/<[^>]+>/g,' ').slice(0,150).trim();
+  document.getElementById('og-title')?.setAttribute('content', p.title);
+  document.getElementById('og-description')?.setAttribute('content', desc);
+  document.getElementById('og-image')?.setAttribute('content', ogImg);
+  document.getElementById('tw-title')?.setAttribute('content', p.title);
+  document.getElementById('tw-image')?.setAttribute('content', ogImg);
+  document.getElementById('tw-description')?.setAttribute('content', desc);
   const date = p.publishedAt ? new Date(p.publishedAt.seconds*1000).toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'}) : '';
   const tags = (p.tags||'').split(',').map(t=>t.trim()).filter(Boolean);
   const tagsHtml = tags.map(t=>`<span class="post-tag">${t}</span>`).join('');
@@ -303,13 +335,13 @@ function renderPost(p) {
     <h1 class="post-title">${p.title}</h1>
     ${p.subtitle?`<p class="post-subtitle">${p.subtitle}</p>`:''}
     <div class="post-meta">
-      <span class="post-author">${p.authorName||'Dr. Adeem Ghaffar Rana'}</span>
+      <a href="${p.authorName==='Dr. Adeem Ghaffar Rana'?'/about.html':'/blog/author.html?name='+encodeURIComponent(p.authorName||'Dr. Adeem Ghaffar Rana')}" class="post-author" style="color:var(--text);text-decoration:none;" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--text)'">${p.authorName||'Dr. Adeem Ghaffar Rana'}</a>
       ${date?`<span>·</span><span>${date}</span>`:''}
       <span>·</span><span>⏱ ${readMin} min read</span>
       <span>·</span><span>${words} words</span>
     </div>
     ${p.authorBio?`<p class="post-author-bio">${p.authorBio}</p>`:''}
-    <div class="post-action-bar">
+    <div class="post-action-bar" id="post-action-bar">
       <button class="action-btn ${liked?'liked':''}" id="btn-like" onclick="toggleLike()">
         ${liked?'❤️':'🤍'} <span id="like-count">${p.likes||0}</span> ${liked?'Liked':'Like'}
       </button>
@@ -317,7 +349,6 @@ function renderPost(p) {
       <button class="action-btn" onclick="shareLinkedIn()"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg> LinkedIn</button>
       <button class="action-btn" onclick="shareTwitter()">𝕏 Twitter</button>
       <button class="action-btn" onclick="copyLink()">🔗 Copy Link</button>
-      <button class="action-btn admin-btn" id="btn-edit" style="display:${isAdmin?'inline-flex':'none'};" onclick="openEditModal()">✏️ Edit</button>
     </div>
     <hr class="post-divider">
     <div id="toc-area"></div>
@@ -461,15 +492,15 @@ window.deleteComment = async function(id){
 };
 
 function sendCommentNotification(name, text) {
-  // EmailJS — set up at emailjs.com, replace YOUR_EMAILJS_PUBLIC_KEY
-  if (EMAILJS_KEY === 'YOUR_EMAILJS_PUBLIC_KEY') return;
   if (typeof emailjs === 'undefined') return;
-  emailjs.send(EMAILJS_SVC, EMAILJS_TPL, {
+  emailjs.send('service_1hyb7v5', 'template_onvizmg', {
     post_title: currentPost?.title || 'A post',
     post_url: window.location.href,
     commenter_name: name,
-    comment_text: text.slice(0,200)
-  }, EMAILJS_KEY).catch(()=>{});
+    comment_text: text.slice(0,200),
+    subscriber_name: 'Adeem',
+    subscriber_email: 'ranaadeem@hotmail.com'
+  }).catch(()=>{});
 }
 
 // ── Sidebar ──
@@ -526,6 +557,16 @@ window.openEditModal = function(){
   document.getElementById('edit-editor').innerHTML=currentPost.content||'';
   editCoverBase64=currentPost.coverImage||'';
   document.getElementById('edit-modal').classList.add('active');
+};
+
+window.deletePost = async function(){
+  if(!currentUser || currentUser.uid !== ADMIN_UID) return;
+  if(!confirm('⚠️ Delete this post permanently?\n\nThis cannot be undone.')) return;
+  try {
+    await deleteDoc(doc(db,'posts',currentPostId));
+    showToast('Post deleted.');
+    setTimeout(()=>window.location.href='/blog.html', 1200);
+  } catch(e){ showToast('Error: '+e.message); }
 };
 
 window.saveEdit = async function(){
