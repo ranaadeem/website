@@ -131,8 +131,19 @@ window.checkUsername = function(val) {
   const hint = document.getElementById('username-hint');
   const clean = val.replace(/[^a-zA-Z0-9-]/g,'');
   if (val !== clean) document.getElementById('reg-username').value = clean;
-  if (clean.length < 3) { hint.textContent='Too short (min 3 chars)'; hint.style.color='#dc2626'; }
-  else { hint.textContent='✓ Looks good'; hint.style.color='#059669'; }
+  if (clean.length < 3) { hint.textContent='Too short (min 3 chars)'; hint.style.color='#dc2626'; return; }
+  hint.textContent='Checking...'; hint.style.color='#6b7280';
+  clearTimeout(window._uTimer);
+  window._uTimer = setTimeout(async () => {
+    if (['ranaadeem','admin','moderator'].includes(clean.toLowerCase())) {
+      hint.textContent='✗ Username not available'; hint.style.color='#dc2626'; return;
+    }
+    try {
+      const snap = await getDocs(query(collection(db,'authors'), where('username','==',clean)));
+      if (!snap.empty) { hint.textContent='✗ Username already taken'; hint.style.color='#dc2626'; }
+      else { hint.textContent='✓ Username available'; hint.style.color='#059669'; }
+    } catch(e) { hint.textContent='Could not verify'; hint.style.color='#6b7280'; }
+  }, 600);
 };
 
 window.checkStrength = function(val) {
@@ -170,9 +181,12 @@ window.register = async function() {
   btn.disabled=true; btn.textContent='Creating account...';
 
   try {
-    // Check username uniqueness
+    // Check username uniqueness + reserved
+    if (['ranaadeem','admin','moderator'].includes(username)) {
+      err.textContent='This username is not available.'; err.style.display='block'; btn.disabled=false; btn.textContent='Create Account →'; return;
+    }
     const existing = await getDocs(query(collection(db,'authors'), where('username','==',username)));
-    if (!existing.empty) { err.textContent='This username is already taken.'; err.style.display='block'; btn.disabled=false; btn.textContent='Create Account →'; return; }
+    if (!existing.empty) { err.textContent='This username is already taken. Please choose another.'; err.style.display='block'; btn.disabled=false; btn.textContent='Create Account →'; return; }
 
     // Create Firebase Auth account
     const cred = await createUserWithEmailAndPassword(auth, email, password);
