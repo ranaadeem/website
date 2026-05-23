@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Author Dashboard — The Lab Notebook</title>
+<link rel="icon" type="image/png" href="/favicon.png">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js"></script>
+<style>
+:root{--navy:#1a3a8a;--gold:#c9a84c;--gold-light:#e8d5a3;--cream:#faf8f4;--white:#fff;--text:#1a1a2e;--muted:#6b7280;--border:#e5e7eb;--red:#dc2626;--green:#059669;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);min-height:100vh;}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");background-repeat:repeat;}
+nav{background:var(--navy);border-bottom:2px solid var(--gold);padding:0 1.5rem;height:64px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
+.nav-logo-agr{font-family:Georgia,serif;font-size:22px;font-weight:700;color:var(--gold);letter-spacing:2px;border:2px solid var(--gold);padding:2px 8px;border-radius:4px;}
+.nav-logo-name{font-size:13px;color:rgba(255,255,255,0.75);}
+.nav-right{display:flex;align-items:center;gap:0.75rem;}
+.nav-user{font-size:13px;color:rgba(255,255,255,0.75);}
+.nav-signout{background:none;border:1px solid rgba(255,255,255,0.3);color:rgba(255,255,255,0.75);padding:5px 12px;border-radius:6px;font-size:12px;cursor:pointer;font-family:inherit;}
+/* Login screen */
+#login-screen{max-width:420px;margin:4rem auto;padding:0 1.5rem;position:relative;z-index:1;}
+.login-card{background:white;border:1px solid var(--border);border-radius:16px;padding:2rem;box-shadow:0 4px 20px rgba(0,0,0,0.06);}
+.login-card h1{font-family:"Playfair Display",serif;font-size:1.5rem;color:var(--navy);margin-bottom:0.25rem;text-align:center;}
+.login-card p{font-size:13px;color:var(--muted);text-align:center;margin-bottom:1.5rem;}
+/* Dashboard */
+#dashboard-screen{max-width:900px;margin:0 auto;padding:2.5rem 1.5rem 5rem;position:relative;z-index:1;display:none;}
+.dash-header{display:flex;align-items:center;gap:1.25rem;margin-bottom:2rem;background:white;border:1px solid var(--border);border-radius:14px;padding:1.25rem 1.5rem;}
+.dash-avatar{width:70px;height:70px;border-radius:50%;object-fit:cover;border:3px solid var(--gold);flex-shrink:0;}
+.dash-avatar-placeholder{width:70px;height:70px;border-radius:50%;background:var(--navy);display:flex;align-items:center;justify-content:center;font-family:"Playfair Display",serif;font-size:1.8rem;color:var(--gold);font-weight:700;flex-shrink:0;}
+.dash-name{font-family:"Playfair Display",serif;font-size:1.4rem;color:var(--navy);margin-bottom:2px;}
+.dash-meta{font-size:12px;color:var(--muted);}
+.dash-tabs{display:flex;gap:4px;background:#f3f4f6;border-radius:8px;padding:4px;margin-bottom:1.5rem;width:fit-content;}
+.dash-tab{padding:8px 18px;border-radius:5px;font-size:13px;font-weight:500;cursor:pointer;border:none;background:transparent;color:var(--muted);font-family:inherit;transition:all 0.2s;}
+.dash-tab.active{background:var(--navy);color:white;}
+/* Forms */
+.form-group{margin-bottom:1rem;}
+.form-group label{display:block;font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:5px;}
+.form-group input,.form-group textarea,.form-group select{width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:6px;font-size:14px;font-family:inherit;outline:none;color:var(--text);}
+.form-group input:focus,.form-group textarea:focus,.form-group select:focus{border-color:var(--gold);}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+.submit-btn{width:100%;padding:11px;background:var(--gold);color:var(--navy);border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;margin-top:0.5rem;}
+.btn-secondary{width:100%;padding:11px;background:white;color:var(--navy);border:1.5px solid var(--navy);border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;margin-top:0.5rem;}
+.error-box{background:#fef2f2;border:1px solid #fee2e2;color:var(--red);padding:10px 14px;border-radius:6px;font-size:13px;margin-bottom:1rem;display:none;}
+.success-box{background:#f0fdf4;border:1px solid #bbf7d0;color:var(--green);padding:10px 14px;border-radius:6px;font-size:13px;margin-bottom:1rem;display:none;}
+/* Post cards */
+.my-post-item{background:white;border:1px solid var(--border);border-radius:10px;padding:1rem 1.25rem;margin-bottom:0.75rem;display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;}
+.my-post-title{font-weight:600;color:var(--navy);font-size:14px;margin-bottom:3px;}
+.my-post-meta{font-size:12px;color:var(--muted);}
+.status-pill{font-size:11px;font-weight:600;padding:3px 10px;border-radius:12px;flex-shrink:0;}
+.status-published{background:#f0fdf4;color:var(--green);}
+.status-pending{background:#fef9c3;color:#b45309;}
+/* Toolbar */
+.toolbar{display:flex;flex-wrap:wrap;gap:4px;padding:8px;background:#f8f7f4;border:1px solid var(--border);border-radius:8px 8px 0 0;border-bottom:none;position:sticky;top:64px;z-index:100;}
+.tb-btn{background:white;border:1px solid var(--border);border-radius:4px;padding:4px 8px;font-size:13px;cursor:pointer;font-family:inherit;color:var(--text);transition:all 0.15s;min-width:30px;text-align:center;}
+.tb-btn:hover{background:var(--navy);color:white;border-color:var(--navy);}
+.tb-sep{width:1px;background:var(--border);margin:0 2px;}
+.editor-area{width:100%;min-height:280px;padding:12px;border:1px solid var(--border);border-radius:0 0 8px 8px;font-size:14px;font-family:inherit;outline:none;resize:vertical;line-height:1.7;}
+.editor-area:focus{border-color:var(--gold);}
+.editor-tabs{display:flex;gap:4px;background:#f3f4f6;border-radius:8px;padding:4px;margin-bottom:0.75rem;width:fit-content;}
+.editor-tab{padding:6px 14px;border-radius:5px;font-size:13px;font-weight:500;cursor:pointer;border:none;background:transparent;color:var(--muted);font-family:inherit;transition:all 0.2s;}
+.editor-tab.active{background:var(--navy);color:white;}
+.md-drop{border:2px dashed var(--border);border-radius:8px;padding:2rem;text-align:center;cursor:pointer;color:var(--muted);font-size:14px;}
+.md-drop:hover{border-color:var(--gold);}
+.photo-preview{width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid var(--gold);margin-top:8px;display:none;}
+.cover-preview{width:100%;height:140px;object-fit:cover;border-radius:8px;margin-top:8px;display:none;}
+.toast{position:fixed;bottom:1.5rem;right:1.5rem;background:var(--navy);color:white;padding:12px 20px;border-radius:8px;font-size:13px;z-index:9999;opacity:0;transform:translateY(10px);transition:all 0.3s;pointer-events:none;border-left:3px solid var(--gold);}
+.toast.show{opacity:1;transform:translateY(0);}
+@media(max-width:600px){.form-row{grid-template-columns:1fr;}.dash-tabs{overflow-x:auto;}}
+</style>
+</head>
+<body>
+<nav>
+  <a href="/" class="nav-logo">
+    <span class="nav-logo-agr">AGR</span>
+    <span class="nav-logo-name">The Lab Notebook</span>
+  </a>
+  <div class="nav-right"><a href="/blog.html" style="font-size:13px;color:rgba(255,255,255,0.75);text-decoration:none;margin-right:0.5rem;">← Blog</a>
+    <span class="nav-user" id="nav-user-name"></span>
+    <button class="nav-signout" id="nav-signout" style="display:none;" onclick="_callWhenReady('signOut',[])">Sign Out</button>
+  </div>
+</nav>
+<div class="toast" id="toast"></div>
+
+<!-- LOGIN SCREEN -->
+<div id="login-screen">
+  <div class="login-card">
+    <h1>Author Sign In</h1>
+    <p>Sign in to your author account to manage your posts and profile.</p>
+    <div class="error-box" id="login-error"></div>
+    <div class="form-group"><label>Email</label><input type="email" id="login-email" placeholder="your@email.com"></div>
+    <div class="form-group"><label>Password</label><input type="password" id="login-password" placeholder="Your password" onkeydown="if(event.key==='Enter')_callWhenReady('signIn',[])"></div>
+    <button class="submit-btn" id="btn-signin" onclick="_callWhenReady('signIn',[])">Sign In →</button>
+    <button class="btn-secondary" onclick="_callWhenReady('signInGoogle',[])" style="margin-top:8px;display:flex;align-items:center;justify-content:center;gap:8px;"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg> Sign in with Google</button>
+    <button class="btn-secondary" onclick="window.location.href='/blog/register.html'" style="margin-top:8px;">Create Account</button>
+    <p style="text-align:center;font-size:12px;color:var(--muted);margin-top:0.75rem;"><a href="#" onclick="_callWhenReady('resetPassword',[])" style="color:var(--navy);">Forgot password?</a></p>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard-screen">
+  <div class="dash-header">
+    <div id="dash-avatar-wrap"></div>
+    <div style="flex:1;">
+      <div class="dash-name" id="dash-name">Loading...</div>
+      <div class="dash-meta" id="dash-meta"></div>
+    </div>
+    <a id="dash-profile-link" href="#" target="_blank" style="font-size:13px;color:var(--gold);font-weight:600;text-decoration:none;">View Profile →</a>
+  </div>
+
+  <div class="dash-tabs">
+    <button class="dash-tab active" id="dtab-write-btn" onclick="switchTab('write')">✍️ Write Post</button>
+    <button class="dash-tab" id="dtab-posts-btn" onclick="switchTab('posts')">📄 My Posts</button>
+    <button class="dash-tab" id="dtab-profile-btn" onclick="switchTab('profile')">👤 Edit Profile</button>
+  </div>
+
+  <!-- Write Post -->
+  <div id="dtab-write">
+    <div class="error-box" id="write-error"></div>
+    <div class="success-box" id="write-success"></div>
+    <div class="form-row">
+      <div class="form-group"><label>Title *</label><input type="text" id="w-title" placeholder="Post title"></div>
+      <div class="form-group"><label>Subtitle</label><input type="text" id="w-subtitle" placeholder="Optional subtitle"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Category *</label>
+        <select id="w-category">
+          <option value="">Select category</option>
+          <option>Life in Germany</option>
+          <option>Life in Pakistan</option>
+          <option>Science &amp; Research</option>
+          <option>Academic Career</option>
+          <option>Travel</option>
+          <option>Opinion &amp; Personal</option>
+        </select>
+      </div>
+      <div class="form-group"><label>Tags</label><input type="text" id="w-tags" placeholder="catalysis, germany, career"></div>
+    </div>
+    <div class="form-group">
+      <label>Cover Image</label>
+      <input type="file" id="w-cover" accept="image/*">
+      <img id="w-cover-preview" class="cover-preview">
+    </div>
+    <div class="form-group">
+      <label>Content *</label>
+      <div class="editor-tabs">
+        <button class="editor-tab active" onclick="switchEditorTab('write')">✏️ Write</button>
+        <button class="editor-tab" onclick="switchEditorTab('md')">📄 Upload .md</button>
+        <button class="editor-tab" onclick="switchEditorTab('preview')">👁 Preview</button>
+      </div>
+      <div id="etab-write">
+        <div class="toolbar">
+          <button class="tb-btn" onclick="fmt('bold')"><b>B</b></button>
+          <button class="tb-btn" onclick="fmt('italic')"><i>I</i></button>
+          <button class="tb-btn" onclick="fmt('underline')"><u>U</u></button>
+          <div class="tb-sep"></div>
+          <button class="tb-btn" onclick="fmtBlock('h1')">H1</button>
+          <button class="tb-btn" onclick="fmtBlock('h2')">H2</button>
+          <button class="tb-btn" onclick="fmtBlock('h3')">H3</button>
+          <div class="tb-sep"></div>
+          <button class="tb-btn" onclick="fmtAlign('left')">⬅</button>
+          <button class="tb-btn" onclick="fmtAlign('center')">⬌</button>
+          <button class="tb-btn" onclick="fmtAlign('right')">➡</button>
+          <button class="tb-btn" onclick="fmtAlign('justify')">≡</button>
+          <div class="tb-sep"></div>
+          <button class="tb-btn" onclick="fmt('insertUnorderedList')">• List</button>
+          <button class="tb-btn" onclick="fmt('insertOrderedList')">1. List</button>
+          <button class="tb-btn" onclick="fmtBlock('blockquote')">❝</button>
+          <div class="tb-sep"></div>
+          <button class="tb-btn" onclick="insertLink()">🔗</button>
+          <button class="tb-btn" onclick="document.getElementById('w-img-upload').click()">🖼</button>
+          <input type="file" id="w-img-upload" accept="image/*" style="display:none" onchange="insertImage(this)">
+          <div class="tb-sep"></div>
+          <button class="tb-btn" style="position:relative;">🎨<input type="color" value="#1a1a2e" onchange="document.getElementById('w-editor').focus();document.execCommand('foreColor',false,this.value)" style="position:absolute;opacity:0;width:100%;height:100%;top:0;left:0;cursor:pointer;"></button>
+          <button class="tb-btn" style="position:relative;">🖊<input type="color" value="#ffff00" onchange="document.getElementById('w-editor').focus();document.execCommand('backColor',false,this.value)" style="position:absolute;opacity:0;width:100%;height:100%;top:0;left:0;cursor:pointer;"></button>
+        </div>
+        <div id="w-editor" class="editor-area" contenteditable="true" style="border-radius:0 0 8px 8px;"></div>
+      </div>
+      <div id="etab-md" style="display:none;">
+        <div class="md-drop" id="w-md-drop" onclick="document.getElementById('w-md-file').click()">
+          <div style="font-size:2rem;margin-bottom:0.5rem;">📄</div>
+          <div>Click to upload a <strong>.md</strong> file or drag and drop</div>
+          <div style="font-size:12px;margin-top:4px;">Markdown → converted to editor</div>
+        </div>
+        <input type="file" id="w-md-file" accept=".md,.markdown" style="display:none">
+      </div>
+      <div id="etab-preview" style="display:none;">
+        <div style="background:white;border:1px solid var(--border);border-radius:8px;padding:1.5rem;min-height:200px;font-size:15px;line-height:1.85;" id="w-preview-content"></div>
+      </div>
+    </div>
+    <button class="submit-btn" onclick="_callWhenReady('submitPost',[])">📬 Submit for Review</button>
+    <p style="font-size:12px;color:var(--muted);margin-top:0.5rem;text-align:center;">Your post will be reviewed before publishing.</p>
+  </div>
+
+  <!-- My Posts -->
+  <div id="dtab-posts" style="display:none;">
+    <div id="my-posts-list"><div style="text-align:center;padding:2rem;color:var(--muted);">Loading your posts...</div></div>
+  </div>
+
+  <!-- Edit Profile -->
+  <div id="dtab-profile" style="display:none;">
+    <div class="error-box" id="profile-error"></div>
+    <div class="success-box" id="profile-success"></div>
+    <div class="form-group"><label>Full Name</label><input type="text" id="p-name"></div>
+    <div class="form-group"><label>Username</label><input type="text" id="p-username" readonly style="background:#f3f4f6;color:var(--muted);cursor:not-allowed;" title="Username cannot be changed"></div>
+    <div class="form-group"><label>One-line Bio</label><input type="text" id="p-bio" placeholder="Researcher at XYZ University"></div>
+    <div class="form-group">
+      <label>Profile Photo</label>
+      <input type="file" id="p-photo" accept="image/*">
+      <img id="p-photo-preview" class<script type="module">
+// Global bridge - assigned before module functions so HTML can call them
+window._dash = {};
+
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js';
+import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, signOut as fbSignOut, onAuthStateChanged, sendPasswordResetEmail, deleteUser } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js';
+import { getFirestore, collection, addDoc, getDocs, updateDoc, deleteDoc, doc, query, where, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js';
+
+const app = initializeApp({apiKey:"AIzaSyAgUl22Cln6QtY3-HIvI6lE8Zu7n9OblbI",authDomain:"icet-alumni.firebaseapp.com",projectId:"icet-alumni",storageBucket:"icet-alumni.firebasestorage.app",messagingSenderId:"707390888790",appId:"1:707390888790:web:57e6be62e4d11e22c214f7"});
+const auth = getAuth(app);
+window._auth = auth;
+const db = getFirestore(app);
+window._db = db;
+let currentUser = null;
+let authorDoc = null;
+let authorDocId = null;
+let coverBase64 = '';
+let profilePhotoBase64 = '';
+
+const ADMIN_UID = 'w2AtZbhUiyY5TxyvIecHzWqheaE2';
+
+onAuthStateChanged(auth, async (user) => {
+  if (user) {
+    currentUser = user;
+    // Admin: bypass email verification, load admin dashboard
+    if (user.uid === ADMIN_UID) {
+      authorDoc = {
+        name: 'Dr. Adeem Ghaffar Rana',
+        username: 'ranaadeem',
+        bio: 'Research Scientist · TU Bergakademie Freiberg',
+        photoBase64: null,
+        isAdmin: true
+      };
+      authorDocId = 'admin';
+      showDashboard();
+      return;
+    }
+    // Regular author: check email verification
+    if (!user.emailVerified) {
+      document.getElementById('login-error').textContent = 'Please verify your email first. Check your inbox for the verification link.';
+      document.getElementById('login-error').style.display = 'block';
+      await fbSignOut(auth);
+      return;
+    }
+    // Load author profile
+    try {
+      const snap = await getDocs(query(collection(db,'authors'), where('uid','==',user.uid)));
+      if (!snap.empty) {
+        authorDocId = snap.docs[0].id;
+        authorDoc = snap.docs[0].data();
+        showDashboard();
+      } else {
+        document.getElementById('login-error').textContent = 'No author profile found. Please register first.';
+        document.getElementById('login-error').style.display = 'block';
+        await fbSignOut(auth);
+      }
+    } catch(e) { showToast('Error loading profile: '+e.message); }
+  } else {
+    currentUser = null;
+    document.getElementById('login-screen').style.display = 'block';
+    document.getElementById('dashboard-screen').style.display = 'none';
+    document.getElementById('nav-signout').style.display = 'none';
+  }
+});
+
+function showDashboard() {
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('dashboard-screen').style.display = 'block';
+  document.getElementById('nav-user-name').textContent = authorDoc.name;
+  document.getElementById('nav-signout').style.display = 'block';
+  document.getElementById('dash-name').textContent = authorDoc.name + (authorDoc.isAdmin ? ' ⚡' : '');
+  document.getElementById('dash-meta').textContent = '@' + authorDoc.username + ' · ' + (authorDoc.bio||'');
+  document.getElementById('dash-profile-link').href = '/blog/author.html?u=' + authorDoc.username;
+  // Show admin tabs if admin
+  if (authorDoc.isAdmin) {
+    const tabsEl = document.querySelector('.dash-tabs');
+    if (tabsEl && !document.getElementById('dtab-admin-btn')) {
+      const adminTabBtn = document.createElement('button');
+      adminTabBtn.className = 'dash-tab';
+      adminTabBtn.id = 'dtab-admin-btn';
+      adminTabBtn.textContent = '⚙️ Admin';
+      adminTabBtn.addEventListener('click', () => switchTab('admin'));
+      tabsEl.appendChild(adminTabBtn);      const adminPanel = document.createElement('div');
+      adminPanel.id = 'dtab-admin';
+      adminPanel.style.display = 'none';
+      adminPanel.innerHTML = '<p style="font-size:14px;color:var(--muted);margin-bottom:1rem;">Quick admin access. Full admin panel is on the <a href="/blog.html" style="color:var(--navy);font-weight:600;">blog page</a> when signed in.</p><a href="/blog.html" style="display:inline-block;background:var(--gold);color:var(--navy);padding:10px 22px;border-radius:8px;font-size:14px;font-weight:600;text-decoration:none;">→ Go to Blog Admin Panel</a>';
+      document.getElementById('dashboard-screen').appendChild(adminPanel);
+    }
+  }
+  // Avatar
+  const wrap = document.getElementById('dash-avatar-wrap');
+  if (authorDoc.photoBase64) {
+    wrap.innerHTML = `<img class="dash-avatar" src="${authorDoc.photoBase64}" alt="${authorDoc.name}">`;
+  } else {
+    const initials = authorDoc.name.split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase();
+    wrap.innerHTML = `<div class="dash-avatar-placeholder">${initials}</div>`;
+  }
+  // Pre-fill profile tab
+  document.getElementById('p-name').value = authorDoc.name||'';
+  document.getElementById('p-username').value = authorDoc.username||'';
+  document.getElementById('p-bio').value = authorDoc.bio||'';
+  if (authorDoc.photoBase64) {
+    const prev = document.getElementById('p-photo-preview');
+    prev.src = authorDoc.photoBase64; prev.style.display='block';
+    profilePhotoBase64 = authorDoc.photoBase64;
+  }
+  loadMyPosts();
+}
+
+// ── Sign in ──
+window.signIn = async function() {
+  const email = document.getElementById('login-email').value.trim();
+  const password = document.getElementById('login-password').value;
+  const err = document.getElementById('login-error');
+  err.style.display='none';
+  if (!email||!password) { err.textContent='Please enter email and password.'; err.style.display='block'; return; }
+  const btn = document.getElementById('btn-signin');
+  btn.disabled=true; btn.textContent='Signing in...';
+  try {
+    await signInWithEmailAndPassword(auth, email, password);
+  } catch(e) {
+    let msg = 'Sign in failed.';
+    if (e.code==='auth/user-not-found'||e.code==='auth/wrong-password'||e.code==='auth/invalid-credential') msg='Incorrect email or password.';
+    if (e.code==='auth/too-many-requests') msg='Too many attempts. Please try again later.';
+    err.textContent=msg; err.style.display='block';
+    btn.disabled=false; btn.textContent='Sign In →';
+  }
+};
+
+window.signInGoogle = async function() {
+  const err = document.getElementById('login-error');
+  err.style.display='none';
+  try {
+    const provider = new GoogleAuthProvider();
+    await signInWithPopup(auth, provider);
+  } catch(e) {
+    if (e.code !== 'auth/cancelled-popup-request') {
+      err.textContent='Google sign in failed: '+e.message;
+      err.style.display='block';
+    }
+  }
+};
+
+window.signOut = async function() {
+  await fbSignOut(auth);
+};
+
+window.deleteProfile = async function() {
+  if (!currentUser || !authorDocId) return;
+  if (!confirm('⚠️ Delete your author profile permanently?\n\nThis will delete your account and all your profile data. Your published posts will remain but show as anonymous.\n\nThis cannot be undone.')) return;
+  const secondConfirm = prompt('Type DELETE to confirm:');
+  if (secondConfirm !== 'DELETE') { showToast('Deletion cancelled.'); return; }
+  try {
+    // Delete author doc from Firestore (frees up username)
+    await deleteDoc(doc(db,'authors',authorDocId));
+    // Delete Firebase Auth account
+    await deleteUser(currentUser);
+    showToast('Profile deleted. Redirecting...');
+    setTimeout(()=>window.location.href='/blog.html', 1500);
+  } catch(e) {
+    if (e.code==='auth/requires-recent-login') {
+      showToast('Please sign out and sign back in, then try again.');
+    } else {
+      showToast('Error: '+e.message);
+    }
+  }
+};
+
+window.resetPassword = async function() {
+  const email = document.getElementById('login-email').value.trim();
+  if (!email) { document.getElementById('login-error').textContent='Enter your email above first.'; document.getElementById('login-error').style.display='block'; return; }
+  try {
+    await sendPasswordResetEmail(auth, email);
+    showToast('Reset email sent. Check your inbox.');
+  } catch(e) { showToast('Error: '+e.message); }
+};
+
+// ── Submit post ──
+window.submitPost = async function() {
+  const title = document.getElementById('w-title').value.trim();
+  const category = document.getElementById('w-category').value;
+  const content = document.getElementById('w-editor').innerHTML;
+  const err = document.getElementById('write-error');
+  const suc = document.getElementById('write-success');
+  err.style.display='none'; suc.style.display='none';
+  if (!title) { err.textContent='Title is required.'; err.style.display='block'; return; }
+  if (!category) { err.textContent='Please select a category.'; err.style.display='block'; return; }
+  if (document.getElementById('w-editor').innerText.trim().length < 50) { err.textContent='Content is too short (min 50 chars).'; err.style.display='block'; return; }
+  const btn = document.querySelector('#dtab-write .submit-btn');
+  btn.disabled=true; btn.textContent='Submitting...';
+  try {
+    await addDoc(collection(db,'posts'), {
+      title,
+      subtitle: document.getElementById('w-subtitle').value.trim(),
+      category,
+      tags: document.getElementById('w-tags').value.trim(),
+      content,
+      coverImage: coverBase64,
+      authorName: authorDoc.name,
+      authorEmail: authorDoc.email,
+      authorBio: authorDoc.bio||'',
+      authorPhoto: authorDoc.photoBase64||'',
+      authorUsername: authorDoc.username,
+      authorUid: currentUser.uid,
+      status: 'pending',
+      submittedAt: serverTimestamp(),
+      createdAt: serverTimestamp()
+    });
+    suc.textContent='✅ Post submitted for review! You will be notified when it goes live.';
+    suc.style.display='block';
+    document.getElementById('w-title').value='';
+    document.getElementById('w-subtitle').value='';
+    document.getElementById('w-tags').value='';
+    document.getElementById('w-editor').innerHTML='';
+    coverBase64='';
+    document.getElementById('w-cover-preview').style.display='none';
+    btn.disabled=false; btn.textContent='📬 Submit for Review';
+    loadMyPosts();
+    switchTab('posts');
+  } catch(e) {
+    err.textContent='Error: '+e.message; err.style.display='block';
+    btn.disabled=false; btn.textContent='📬 Submit for Review';
+  }
+};
+
+// ── My posts ──
+async function loadMyPosts() {
+  const list = document.getElementById('my-posts-list');
+  try {
+    const snap = await getDocs(query(collection(db,'posts'), where('authorUid','==',currentUser.uid)));
+    if (snap.empty) { list.innerHTML='<div style="text-align:center;padding:2rem;color:var(--muted);">No posts yet. Write your first post!</div>'; return; }
+    const posts=[]; snap.forEach(d=>posts.push({id:d.id,...d.data()}));
+    posts.sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
+    list.innerHTML='';
+    posts.forEach(p=>{
+      const date=p.createdAt?new Date(p.createdAt.seconds*1000).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}):'';
+      const el=document.createElement('div');
+      el.className='my-post-item';
+      el.innerHTML=`
+        <div style="flex:1;">
+          <div class="my-post-title">${p.title}</div>
+          <div class="my-post-meta">${p.category||''} · ${date}</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+          <span class="status-pill status-${p.status}">${p.status==='published'?'✅ Published':'⏳ Pending'}</span>
+          ${p.status==='published'?`<a href="/blog/post.html?id=${p.id}" target="_blank" style="font-size:12px;color:var(--navy);font-weight:600;text-decoration:none;">View →</a>`:''}
+        </div>`;
+      list.appendChild(el);
+    });
+  } catch(e) { list.innerHTML='<div style="color:var(--red);padding:1rem;">Error loading posts.</div>'; }
+}
+
+// ── Save profile ──
+window.saveProfile = async function() {
+  const name = document.getElementById('p-name').value.trim();
+  const bio = document.getElementById('p-bio').value.trim();
+  const err = document.getElementById('profile-error');
+  const suc = document.getElementById('profile-success');
+  err.style.display='none'; suc.style.display='none';
+  if (!name) { err.textContent='Name is required.'; err.style.display='block'; return; }
+  const btn = document.querySelector('#dtab-profile .submit-btn');
+  btn.disabled=true; btn.textContent='Saving...';
+  try {
+    const updates = { name, bio };
+    if (profilePhotoBase64) updates.photoBase64 = profilePhotoBase64;
+    await updateDoc(doc(db,'authors',authorDocId), updates);
+    authorDoc = {...authorDoc,...updates};
+    showDashboard();
+    suc.textContent='✅ Profile updated!'; suc.style.display='block';
+    btn.disabled=false; btn.textContent='💾 Save Profile';
+  } catch(e) {
+    err.textContent='Error: '+e.message; err.style.display='block';
+    btn.disabled=false; btn.textContent='💾 Save Profile';
+  }
+};
+
+// ── Cover image ──
+document.getElementById('w-cover').addEventListener('change', e=>{
+  resizeImg(e.target.files[0],'w-cover-preview',b64=>coverBase64=b64);
+});
+document.getElementById('p-photo').addEventListener('change', e=>{
+  resizeImg(e.target.files[0],'p-photo-preview',b64=>profilePhotoBase64=b64);
+});
+
+// ── MD file ──
+document.getElementById('w-md-file').addEventListener('change', e=>{
+  const file=e.target.files[0]; if(!file) return;
+  const r=new FileReader(); r.onload=ev=>{
+    document.getElementById('w-editor').innerHTML=marked.parse(ev.target.result);
+    switchEditorTab('write'); showToast('Markdown loaded ✓');
+  }; r.readAsText(file);
+});
+const mdDrop=document.getElementById('w-md-drop');
+mdDrop.addEventListener('dragover',e=>{e.preventDefault();mdDrop.style.borderColor='var(--gold)';});
+mdDrop.addEventListener('dragleave',()=>mdDrop.style.borderColor='');
+mdDrop.addEventListener('drop',e=>{e.preventDefault();mdDrop.style.borderColor='';const f=e.dataTransfer.files[0];if(f){const r=new FileReader();r.onload=ev=>{document.getElementById('w-editor').innerHTML=marked.parse(ev.target.result);switchEditorTab('write');showToast('Markdown loaded ✓');};r.readAsText(f);}});
+
+function resizeImg(file,previewId,cb){
+  if(!file)return;
+  const r=new FileReader();r.onload=e=>{const img=new Image();img.onload=()=>{const c=document.createElement('canvas');const M=800;let w=img.width,h=img.height;if(w>M){h=h*(M/w);w=M;}c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);const b=c.toDataURL('image/jpeg',0.85);cb(b);const p=document.getElementById(previewId);p.src=b;p.style.display='block';};img.src=e.target.result;};r.readAsDataURL(file);
+}
+
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
+</script>getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
+</script>ntById(previewId);p.src=b;p.style.display='block';};img.src=e.target.result;};r.readAsDataURL(file);
+}
+
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
+</script>
+
+<script>
+function switchTab(tab){
+  ['write','posts','profile'].forEach(t=>{
+    document.getElementById('dtab-'+t).style.display=t===tab?'block':'none';
+    document.getElementById('dtab-'+t+'-btn').classList.toggle('active',t===tab);
+  });
+}
+function switchEditorTab(tab){
+  ['write','md','preview'].forEach(t=>{
+    const el=document.getElementById('etab-'+t);
+    if(el)el.style.display=t===tab?'block':'none';
+  });
+  if(tab==='preview'){
+    document.getElementById('w-preview-content').innerHTML=document.getElementById('w-editor').innerHTML||'<em style="color:var(--muted)">Nothing yet.</em>';
+  }
+}
+function fmt(cmd,val){document.getElementById('w-editor').focus();document.execCommand(cmd,false,val||null);}
+function fmtBlock(tag){document.getElementById('w-editor').focus();document.execCommand('formatBlock',false,tag);}
+function fmtAlign(a){document.getElementById('w-editor').focus();const c={left:'justifyLeft',center:'justifyCenter',right:'justifyRight',justify:'justifyFull'};document.execCommand(c[a],false,null);}
+function insertLink(){const u=prompt('Enter URL:');if(u){document.getElementById('w-editor').focus();document.execCommand('createLink',false,u);}}
+function insertImage(input){
+  const f=input.files[0];if(!f)return;
+  const r=new FileReader();r.onload=e=>{const img=new Image();img.onload=()=>{const c=document.createElement('canvas');const M=900;let w=img.width,h=img.height;if(w>M){h=h*(M/w);w=M;}c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);document.getElementById('w-editor').focus();document.execCommand('insertImage',false,c.toDataURL('image/jpeg',0.82));};img.src=e.target.result;};
+  r.readAsDataURL(f);input.value='';
+}
+</script>
+
+<script>
+// Stubs that delegate to module-defined window functions
+// These work because by the time user clicks, module has loaded
+function _callWhenReady(fnName, args) {
+  if (typeof window[fnName] === 'function') {
+    window[fnName].apply(null, args);
+  } else {
+    // Module still loading - retry after 200ms
+    setTimeout(() => _callWhenReady(fnName, args), 200);
+  }
+}
+</script>
+</body>
+</html>
