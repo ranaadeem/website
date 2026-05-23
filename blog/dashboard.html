@@ -298,13 +298,21 @@ function showDashboard() {
       document.getElementById('dashboard-screen').appendChild(adminPanel);
     }
   }
-  // Avatar
+  // Avatar - using DOM methods to avoid any template literal issues
   const wrap = document.getElementById('dash-avatar-wrap');
+  wrap.innerHTML = '';
   if (authorDoc.photoBase64) {
-    wrap.innerHTML = `<img class="dash-avatar" src="${authorDoc.photoBase64}" alt="${authorDoc.name}">`;
+    const img = document.createElement('img');
+    img.className = 'dash-avatar';
+    img.src = authorDoc.photoBase64;
+    img.alt = authorDoc.name;
+    wrap.appendChild(img);
   } else {
     const initials = authorDoc.name.split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase();
-    wrap.innerHTML = `<div class="dash-avatar-placeholder">${initials}</div>`;
+    const div = document.createElement('div');
+    div.className = 'dash-avatar-placeholder';
+    div.textContent = initials;
+    wrap.appendChild(div);
   }
   // Pre-fill profile tab
   document.getElementById('p-name').value = authorDoc.name||'';
