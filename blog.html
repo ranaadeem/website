@@ -67,7 +67,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
 .filter-chip:hover{border-color:var(--navy);color:var(--navy);}
 .filter-chip.active{background:var(--navy);border-color:var(--navy);color:white;}
 .btn-submit:hover{background:var(--gold-light);}
-.posts-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.5rem;}
+.posts-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.5rem;}
 .post-card{background:white;border:1px solid var(--border);border-radius:14px;overflow:hidden;cursor:pointer;transition:all 0.2s;text-decoration:none;display:block;color:inherit;}
 .post-card:hover{box-shadow:0 8px 30px rgba(0,0,0,0.1);transform:translateY(-2px);}
 .post-card-img{width:100%;height:180px;object-fit:cover;display:block;}
@@ -150,7 +150,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
 .btn-secondary{width:100%;padding:12px;background:white;color:var(--navy);border:1.5px solid var(--navy);border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit;margin-top:0.5rem;}
 .toast{position:fixed;bottom:1.5rem;right:1.5rem;background:var(--navy);color:white;padding:12px 20px;border-radius:8px;font-size:13px;z-index:9999;opacity:0;transform:translateY(10px);transition:all 0.3s;pointer-events:none;border-left:3px solid var(--gold);}
 .toast.show{opacity:1;transform:translateY(0);}
-@media(max-width:600px){.form-row{grid-template-columns:1fr;}.posts-grid{grid-template-columns:1fr;}}
+@media(max-width:600px){.form-row{grid-template-columns:1fr;}.posts-grid{grid-template-columns:1fr!important;}}
 @media(max-width:900px){.blog-wrap-inner{grid-template-columns:1fr!important;}#blog-sidebar{display:none;}}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
@@ -211,9 +211,10 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
       <button onclick="document.getElementById('admin-panel').classList.remove('active');" style="background:none;border:none;font-size:1.2rem;cursor:pointer;color:var(--muted);">✕ Close</button>
     </div>
     <div class="admin-tabs">
-      <button class="admin-tab active" id="atab-write-btn" onclick="switchAdminTab('write')">✍️ Write Post</button>
+      <button class="admin-tab active" id="atab-write-btn" onclick="switchAdminTab('write')">✍️ Write</button>
       <button class="admin-tab" id="atab-pending-btn" onclick="switchAdminTab('pending')">📬 Pending</button>
-      <button class="admin-tab" id="atab-manage-btn" onclick="switchAdminTab('manage')">📋 Manage Posts</button>
+      <button class="admin-tab" id="atab-manage-btn" onclick="switchAdminTab('manage')">📋 Posts</button>
+      <button class="admin-tab" id="atab-authors-btn" onclick="switchAdminTab('authors')">👥 Authors</button>
     </div>
     <!-- Write -->
     <div id="atab-write">
@@ -308,6 +309,10 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
     <div id="atab-manage" style="display:none;">
       <div id="manage-list"><div class="loading">Loading published posts...</div></div>
     </div>
+    <!-- Authors -->
+    <div id="atab-authors" style="display:none;">
+      <div id="authors-list"><div class="loading">Loading authors...</div></div>
+    </div>
   </div>
   <!-- BLOG TOOLBAR -->
   <div class="blog-wrap-inner" style="display:grid;grid-template-columns:1fr 280px;gap:2rem;align-items:start;">
@@ -341,16 +346,30 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
       <input type="email" id="sub-email" placeholder="Your email" style="flex:1;min-width:180px;padding:10px 14px;border:none;border-radius:8px;font-size:14px;font-family:inherit;outline:none;">
       <button onclick="window.subscribe()" style="background:var(--gold);color:var(--navy);border:none;padding:10px 22px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap;">Subscribe →</button>
     </div>
-    <div id="sub-msg" style="margin-top:0.75rem;font-size:13px;color:rgba(255,255,255,0.8);display:none;"></div>
+    <div id="sub-msg" style="margin-top:0.75rem;font-size:13px;color:rgba(255,255,255,0.8);min-height:20px;"></div>
   </div>
   </div><!-- /blog-main -->
 
   <!-- BLOG SIDEBAR -->
   <aside style="position:sticky;top:80px;display:flex;flex-direction:column;gap:1.25rem;">
     <!-- Write for Us / Author Card -->
-    <div style="background:white;border:1px solid var(--border);border-radius:12px;overflow:hidden;">
+    <div style="background:white;border:1px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.06);">
       <div style="background:var(--navy);padding:0.7rem 1rem;font-family:'Playfair Display',serif;color:white;font-size:0.9rem;font-weight:600;">✍️ Author Corner</div>
-      <div style="padding:1rem;" id="author-sidebar-card"><div style="text-align:center;padding:1rem;color:var(--muted);font-size:13px;">Loading...</div></div>
+      <div style="padding:1.1rem;" id="author-sidebar-card">
+        <div id="author-card-loggedout">
+          <p style="font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:1rem;">Have something worth writing? Share your ideas with our readers.</p>
+          <a href="/blog/register.html" style="display:block;background:var(--gold);color:var(--navy);text-align:center;padding:9px;border-radius:8px;font-size:13px;font-weight:700;text-decoration:none;margin-bottom:8px;">Create Author Account</a>
+          <a href="/blog/dashboard.html" style="display:block;background:white;color:var(--navy);text-align:center;padding:9px;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none;border:1.5px solid var(--border);">Sign In</a>
+        </div>
+        <div id="author-card-loggedin" style="display:none;">
+          <div style="display:flex;gap:10px;align-items:center;margin-bottom:0.75rem;">
+            <div id="sidebar-author-avatar" style="width:42px;height:42px;border-radius:50%;background:var(--navy);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--gold);font-size:13px;flex-shrink:0;overflow:hidden;"></div>
+            <div><div id="sidebar-author-name" style="font-size:13px;font-weight:600;color:var(--navy);"></div><div id="sidebar-author-username" style="font-size:11px;color:var(--muted);"></div></div>
+          </div>
+          <a href="/blog/dashboard.html" style="display:block;background:var(--gold);color:var(--navy);text-align:center;padding:9px;border-radius:8px;font-size:13px;font-weight:700;text-decoration:none;margin-bottom:8px;">My Dashboard</a>
+          <button onclick="window.authorSignOut()" style="display:block;width:100%;background:white;color:var(--muted);padding:9px;border-radius:8px;font-size:12px;font-weight:500;border:1.5px solid var(--border);cursor:pointer;font-family:inherit;">Sign Out</button>
+        </div>
+      </div>
     </div>
     <!-- About -->
     <div style="background:white;border:1px solid var(--border);border-radius:12px;overflow:hidden;">
@@ -470,15 +489,8 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
         <div class="preview-area" id="guest-preview-content-final"></div>
       </div>
       <div style="display:flex;gap:0.75rem;">
-        <button class="btn-secondary" onclick="backToGuestForm()" style="flex:1;">← Go Back & Edit</button>
-        <button class="submit-btn" id="guest-submit-btn" onclick="submitGuestPost()" style="flex:1;">📬 Submit for Review</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<script type="module">function switchAdminTab(tab) {
-  ['write','pending','manage'].forEach(t => {
+        <button cla<script type="module">function switchAdminTab(tab) {
+  ['write','pending','manage','authors'].forEach(t => {
     const el = document.getElementById('atab-'+t);
     if (el) el.style.display = t===tab ? 'block' : 'none';
     const btn = document.getElementById('atab-'+t+'-btn');
@@ -486,6 +498,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
   });
   if (tab==='pending') loadPending();
   if (tab==='manage') loadManage();
+  if (tab==='authors') loadAuthors();
 }
 
 async function loadManage() {
@@ -502,31 +515,110 @@ async function loadManage() {
     posts.forEach(p => {
       const date = p.publishedAt ? new Date(p.publishedAt.seconds*1000).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}) : '';
       const el = document.createElement('div');
-      el.className = 'pending-item';
+      el.id = 'manage-post-'+p.id;
+      el.style.cssText = 'background:#f8f7f4;border:1px solid var(--border);border-radius:10px;padding:1rem;margin-bottom:0.75rem;';
       el.innerHTML = `
-        <div class="pending-item-title">${p.title}</div>
-        <div class="pending-item-meta">By ${p.authorName||'Adeem'} · ${date} · <strong>${p.category||'Uncategorised'}</strong></div>
-        <div style="margin:6px 0;">
-          <select onchange="updateCategory('${p.id}',this.value)" style="padding:4px 8px;border:1px solid var(--border);border-radius:5px;font-size:12px;font-family:inherit;">
-            ${['Life in Germany','Life in Pakistan','Science & Research','Academic Career','Travel','Opinion & Personal'].map(c=>`<option value="${c}" ${p.category===c?'selected':''}>${c}</option>`).join('')}
-          </select>
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;flex-wrap:wrap;">
+          <div style="flex:1;min-width:200px;">
+            <div style="font-weight:600;color:var(--navy);font-size:14px;margin-bottom:3px;">${p.title}</div>
+            <div style="font-size:12px;color:var(--muted);">By ${p.authorName||'Adeem'} · ${date}</div>
+          </div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;flex-shrink:0;">
+            <select onchange="updateCategory('${p.id}',this.value)" style="padding:4px 8px;border:1px solid var(--border);border-radius:5px;font-size:12px;font-family:inherit;background:white;">
+              ${['Life in Germany','Life in Pakistan','Science & Research','Academic Career','Travel','Opinion & Personal'].map(c=>`<option value="${c}" ${p.category===c?'selected':''}>${c}</option>`).join('')}
+            </select>
+            <button onclick="openInlineEdit('${p.id}')" style="background:var(--navy);color:white;border:none;padding:5px 12px;border-radius:5px;font-size:12px;cursor:pointer;font-family:inherit;">✏️ Edit</button>
+            <a href="/blog/post.html?id=${p.id}" target="_blank" style="background:#f3f4f6;color:var(--text);border:1px solid var(--border);padding:5px 12px;border-radius:5px;font-size:12px;cursor:pointer;font-family:inherit;text-decoration:none;">👁 View</a>
+            <button onclick="adminDeletePost('${p.id}',this)" style="background:white;color:var(--red);border:1.5px solid var(--red);padding:5px 12px;border-radius:5px;font-size:12px;cursor:pointer;font-family:inherit;">🗑 Delete</button>
+            <button onclick="notifySubscribers('${p.title.replace(/'/g,"\'")}','https://ranaadeem.de/blog/post.html?id=${p.id}','${(p.authorName||'Dr. Adeem Ghaffar Rana').replace(/'/g,"\'")}');" style="background:var(--gold);color:var(--navy);border:none;padding:5px 12px;border-radius:5px;font-size:12px;cursor:pointer;font-family:inherit;">📬 Notify</button>
+          </div>
         </div>
-        <div class="pending-actions">
-          <a href="/blog/post.html?id=${p.id}" target="_blank" class="btn-preview-post" style="text-decoration:none;display:inline-flex;align-items:center;">👁 View</a>
-          <button class="btn-preview-post" onclick="window.location.href='/blog/post.html?id=${p.id}&edit=1'">✏️ Edit</button>
-          <button class="btn-reject" onclick="adminDeletePost('${p.id}',this)">🗑 Delete</button>
-          <button class="btn-approve" onclick="notifySubscribers('${p.title.replace(/'/g,"\'")}','https://ranaadeem.de/blog/post.html?id=${p.id}','${(p.authorName||'Dr. Adeem Ghaffar Rana').replace(/'/g,"\'")}')">📬 Notify</button>
+        <div id="inline-edit-${p.id}" style="display:none;margin-top:1rem;border-top:1px solid var(--border);padding-top:1rem;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:0.75rem;">
+            <div><label style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:3px;">Title</label>
+            <input id="ie-title-${p.id}" value="${p.title.replace(/"/g,'&quot;')}" style="width:100%;padding:7px 10px;border:1px solid var(--border);border-radius:5px;font-size:13px;font-family:inherit;outline:none;"></div>
+            <div><label style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:3px;">Subtitle</label>
+            <input id="ie-subtitle-${p.id}" value="${(p.subtitle||'').replace(/"/g,'&quot;')}" style="width:100%;padding:7px 10px;border:1px solid var(--border);border-radius:5px;font-size:13px;font-family:inherit;outline:none;"></div>
+          </div>
+          <div style="display:flex;gap:0.5rem;justify-content:flex-end;">
+            <button onclick="saveInlineEdit('${p.id}')" style="background:var(--gold);color:var(--navy);border:none;padding:7px 16px;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">💾 Save</button>
+            <button onclick="document.getElementById('inline-edit-${p.id}').style.display='none';" style="background:white;color:var(--muted);border:1px solid var(--border);padding:7px 16px;border-radius:6px;font-size:13px;cursor:pointer;font-family:inherit;">Cancel</button>
+          </div>
         </div>`;
       list.appendChild(el);
     });
   } catch(e) { list.innerHTML = '<div style="color:var(--red);padding:1rem;">Error: '+e.message+'</div>'; }
 }
 
+window.openInlineEdit = function(id) {
+  const el = document.getElementById('inline-edit-'+id);
+  if (el) el.style.display = el.style.display==='none' ? 'block' : 'none';
+};
+
+window.saveInlineEdit = async function(id) {
+  const title = document.getElementById('ie-title-'+id)?.value.trim();
+  const subtitle = document.getElementById('ie-subtitle-'+id)?.value.trim();
+  if (!title) { showToast('Title cannot be empty.'); return; }
+  try {
+    await updateDoc(doc(db,'posts',id), { title, subtitle });
+    showToast('Post updated ✓');
+    document.getElementById('inline-edit-'+id).style.display='none';
+    // Update displayed title
+    const row = document.getElementById('manage-post-'+id);
+    if (row) row.querySelector('[style*="font-weight:600"]').textContent = title;
+    loadPosts(); // refresh blog grid
+  } catch(e) { showToast('Error: '+e.message); }
+};
+
 window.updateCategory = async function(id, cat) {
   try {
     await updateDoc(doc(db,'posts',id), {category: cat});
     showToast('Category updated ✓');
   } catch(e) { showToast('Error: '+e.message); }
+};
+
+async function loadAuthors() {
+  const list = document.getElementById('authors-list');
+  if (!list) return;
+  list.innerHTML = '<div class="loading">Loading...</div>';
+  try {
+    const snap = await getDocs(collection(db,'authors'));
+    if (snap.empty) { list.innerHTML='<div style="text-align:center;padding:2rem;color:var(--muted);">No registered authors yet.</div>'; return; }
+    const authors = [];
+    snap.forEach(d => authors.push({id:d.id,...d.data()}));
+    authors.sort((a,b)=>(b.registeredAt?.seconds||0)-(a.registeredAt?.seconds||0));
+    list.innerHTML = '';
+    authors.forEach(a => {
+      const date = a.registeredAt ? new Date(a.registeredAt.seconds*1000).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}) : '';
+      const initials = (a.name||'A').split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase();
+      const el = document.createElement('div');
+      el.style.cssText = 'background:#f8f7f4;border:1px solid var(--border);border-radius:10px;padding:1rem;margin-bottom:0.75rem;display:flex;align-items:center;gap:1rem;flex-wrap:wrap;';
+      el.innerHTML = `
+        <div style="width:40px;height:40px;border-radius:50%;background:var(--navy);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--gold);font-size:13px;flex-shrink:0;overflow:hidden;">
+          ${a.photoBase64?`<img src="${a.photoBase64}" style="width:100%;height:100%;object-fit:cover;">`:initials}
+        </div>
+        <div style="flex:1;min-width:150px;">
+          <div style="font-weight:600;color:var(--navy);font-size:14px;">${a.name}</div>
+          <div style="font-size:12px;color:var(--muted);">@${a.username} · ${a.email} · Joined ${date}</div>
+          ${a.bio?`<div style="font-size:12px;color:var(--text);margin-top:2px;">${a.bio}</div>`:''}
+        </div>
+        <div style="display:flex;gap:6px;flex-shrink:0;">
+          <a href="/blog/author.html?u=${a.username}" target="_blank" style="background:#f3f4f6;color:var(--text);border:1px solid var(--border);padding:5px 12px;border-radius:5px;font-size:12px;text-decoration:none;">👁 Profile</a>
+          <button onclick="adminDeleteAuthor('${a.id}','${a.uid}',this)" style="background:white;color:var(--red);border:1.5px solid var(--red);padding:5px 12px;border-radius:5px;font-size:12px;cursor:pointer;font-family:inherit;">🗑 Delete</button>
+        </div>`;
+      list.appendChild(el);
+    });
+  } catch(e) { list.innerHTML = '<div style="color:var(--red);padding:1rem;">Error: '+e.message+'</div>'; }
+}
+
+window.adminDeleteAuthor = async function(docId, uid, btn) {
+  if (!confirm('⚠️ Delete this author profile?\n\nThis removes their profile. Their published posts remain but show as anonymous. Their Firebase Auth account will need manual deletion from Firebase Console.')) return;
+  btn.disabled=true; btn.textContent='Deleting...';
+  try {
+    await deleteDoc(doc(db,'authors',docId));
+    btn.closest('div[style]').remove();
+    showToast('Author profile deleted. Username is now available.');
+  } catch(e) { showToast('Error: '+e.message); btn.disabled=false; btn.textContent='🗑 Delete'; }
 };
 
 window.adminDeletePost = async function(id, btn) {
@@ -541,7 +633,7 @@ window.adminDeletePost = async function(id, btn) {
 };
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js';
 import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendEmailVerification, signOut, onAuthStateChanged, updateProfile } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js';
-import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, query, where, orderBy, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js';
+import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, query, where, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js';
 
 const app = initializeApp({apiKey:"AIzaSyAgUl22Cln6QtY3-HIvI6lE8Zu7n9OblbI",authDomain:"icet-alumni.firebaseapp.com",projectId:"icet-alumni",storageBucket:"icet-alumni.firebasestorage.app",messagingSenderId:"707390888790",appId:"1:707390888790:web:57e6be62e4d11e22c214f7"});
 const ADMIN_UID = 'w2AtZbhUiyY5TxyvIecHzWqheaE2';
@@ -694,7 +786,7 @@ function buildWriteForUsCard() {
     <h4 style="font-family:'Playfair Display',serif;font-size:1rem;color:var(--navy);margin-bottom:0.4rem;">Write for Us</h4>
     <p style="font-size:12px;color:var(--muted);line-height:1.55;margin-bottom:1rem;">Share your research, experiences, or perspective. Register as an author and submit posts for review.</p>
     <a href="/blog/register.html" style="display:block;background:var(--gold);color:var(--navy);padding:9px;border-radius:7px;font-size:13px;font-weight:600;text-decoration:none;margin-bottom:6px;">Register as Author</a>
-    <a href="/blog/login.html" style="display:block;background:white;color:var(--navy);border:1px solid var(--border);padding:8px;border-radius:7px;font-size:13px;text-decoration:none;">Sign In</a>
+    <a href="/blog/dashboard.html" style="display:block;background:white;color:var(--navy);border:1px solid var(--border);padding:8px;border-radius:7px;font-size:13px;text-decoration:none;">Sign In</a>
   </div>`;
 }
 
@@ -704,35 +796,31 @@ window.resendVerification = async function() {
 };
 
 // ── Author sidebar auth state ──
-import { getAuth as _getAuth2 } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js';
-// reuse same auth instance
-// check author login state for sidebar
-(async function() {
-  const { onAuthStateChanged: _oasc } = await import('https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js');
-  _oasc(auth, async (user) => {
-    if (user && user.uid !== ADMIN_UID) {
-      // Logged in as author - load their profile
-      try {
-        const snap = await getDocs(query(collection(db,'authors'), where('uid','==',user.uid)));
-        if (!snap.empty) {
-          const author = snap.docs[0].data();
-          document.getElementById('author-card-loggedout').style.display='none';
-          document.getElementById('author-card-loggedin').style.display='block';
-          document.getElementById('sidebar-author-name').textContent = author.name||'';
-          document.getElementById('sidebar-author-username').textContent = '@'+(author.username||'');
-          if (author.photoBase64) {
-            document.getElementById('sidebar-author-photo').src = author.photoBase64;
-            document.getElementById('sidebar-author-photo').style.display='block';
-            document.getElementById('sidebar-author-initials').style.display='none';
-          } else {
-            const initials = (author.name||'A').split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase();
-            document.getElementById('sidebar-author-initials').textContent = initials;
-          }
+onAuthStateChanged(auth, async (user) => {
+  if (user && user.uid !== ADMIN_UID) {
+    try {
+      const snap = await getDocs(query(collection(db,'authors'), where('uid','==',user.uid)));
+      if (!snap.empty) {
+        const author = snap.docs[0].data();
+        document.getElementById('author-card-loggedout').style.display='none';
+        document.getElementById('author-card-loggedin').style.display='block';
+        document.getElementById('sidebar-author-name').textContent = author.name||'';
+        document.getElementById('sidebar-author-username').textContent = '@'+(author.username||'');
+        const av = document.getElementById('sidebar-author-avatar');
+        if (author.photoBase64) {
+          av.innerHTML = `<img src="${author.photoBase64}" style="width:100%;height:100%;object-fit:cover;">`;
+        } else {
+          av.textContent = (author.name||'A').split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase();
         }
-      } catch(e){}
-    }
-  });
-})();
+      }
+    } catch(e){}
+  } else if (!user) {
+    const lo = document.getElementById('author-card-loggedout');
+    const li = document.getElementById('author-card-loggedin');
+    if(lo) lo.style.display='block';
+    if(li) li.style.display='none';
+  }
+});
 
 window.authorSignOut = async function() {
   await auth.signOut();
@@ -740,7 +828,18 @@ window.authorSignOut = async function() {
   document.getElementById('author-card-loggedin').style.display='none';
 };
 
-// ── Secret shortcut A+G+R ──
+// ── Auto-detect admin Google sign-in ──
+onAuthStateChanged(auth, user => {
+  if (user && user.uid === ADMIN_UID_CHECK) {
+    currentUser = user;
+    document.getElementById('admin-panel').classList.add('active');
+    loadPending();
+  } else if (!user) {
+    document.getElementById('admin-panel').classList.remove('active');
+  }
+});
+
+// ── A+G+R as manual fallback (when not signed in) ──
 const keysHeld = new Set();
 document.addEventListener('keydown', e => {
   keysHeld.add(e.key.toLowerCase());
@@ -752,16 +851,14 @@ document.addEventListener('keydown', e => {
 document.addEventListener('keyup', e => keysHeld.delete(e.key.toLowerCase()));
 
 async function triggerAdmin() {
-  if (currentUser && currentUser.uid === ADMIN_UID) {
-    const p = document.getElementById('admin-panel');
-    p.classList.toggle('active');
-    if (p.classList.contains('active')) { loadPending(); p.scrollIntoView({behavior:'smooth'}); }
+  if (currentUser && currentUser.uid === ADMIN_UID_CHECK) {
+    showToast('Already signed in as admin ✓');
     return;
   }
   try {
     const r = await signInWithPopup(auth, provider);
     currentUser = r.user;
-    if (currentUser.uid === ADMIN_UID) {
+    if (currentUser.uid === ADMIN_UID_CHECK) {
       document.getElementById('admin-panel').classList.add('active');
       document.getElementById('admin-panel').scrollIntoView({behavior:'smooth'});
       showToast('Welcome back, Adeem.');
@@ -1019,9 +1116,18 @@ function showToast(msg) {
   const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show');
   setTimeout(()=>t.classList.remove('show'),3000);
 }
-</script>
+</script>play='block';
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
 
-<script>
+function showToast(msg) {
+  const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3000);
+}
+</script>ipt>
 // ── Editor toolbar functions (non-module) ──
 function alignSelectedImg(align) {
   // Find selected image or last inserted image in any active editor
