@@ -6,13 +6,11 @@
 <title>Blog — Dr. Adeem Ghaffar Rana</title>
 <link rel="icon" type="image/png" href="/favicon.png">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-<!-- marked.js for markdown parsing -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js"></script>
-<meta property="og:type" content="website">
-<meta property="og:title" content="Blog — Dr. Adeem Ghaffar Rana">
-<meta property="og:image" content="https://ranaadeem.de/blog-header.jpg">
-<meta name="description" content="Blog by Dr. Adeem Ghaffar Rana — academic life, research, navigating Germany, and more.">
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>emailjs.init('NMUbpQ_Tz1ZXT1Ipk');</script>
 <style>
+
 :root{--navy:#1a3a8a;--gold:#c9a84c;--gold-light:#e8d5a3;--cream:#faf8f4;--white:#fff;--text:#1a1a2e;--muted:#6b7280;--border:#e5e7eb;--red:#dc2626;--green:#059669;}
 *{box-sizing:border-box;margin:0;padding:0;}
 html{overflow-x:hidden;background:var(--cream);}
@@ -152,11 +150,16 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
 .toast.show{opacity:1;transform:translateY(0);}
 @media(max-width:600px){.form-row{grid-template-columns:1fr;}.posts-grid{grid-template-columns:1fr!important;}}
 @media(max-width:900px){.blog-wrap-inner{grid-template-columns:1fr!important;}#blog-sidebar{display:none;}}
+
+/* 3-column posts, no sidebar */
+.blog-main-wrap{max-width:1100px;margin:0 auto;padding:2.5rem 2rem 4rem;}
+.posts-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;}
+@media(max-width:900px){.posts-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:580px){.posts-grid{grid-template-columns:1fr;}}
 </style>
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-<script>emailjs.init('NMUbpQ_Tz1ZXT1Ipk');</script>
 </head>
 <body>
+
 <nav id="main-nav">
   <div class="nav-inner">
     <a href="/" class="nav-logo"><span class="nav-logo-agr">AGR</span><span class="nav-logo-name">Dr. Adeem Ghaffar Rana</span></a>
@@ -190,7 +193,9 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
     </ul>
   </div>
 </nav>
+
 <div class="toast" id="toast"></div>
+
 <div class="page-header">
   <div class="page-header-inner">
     <span class="page-tag">Writing & Ideas</span>
@@ -202,13 +207,14 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
     </div>
   </div>
 </div>
-<div class="blog-wrap" style="display:grid;grid-template-columns:1fr 280px;gap:2rem;align-items:start;max-width:1100px;margin:0 auto;padding:3rem 2rem 4rem;">
-  <div id="blog-main">
+
+<div class="blog-main-wrap">
+
   <!-- ADMIN PANEL -->
-  <div id="admin-panel">
-    <div class="admin-header">
-      <h2>⚙️ Blog Admin</h2>
-      <button onclick="document.getElementById('admin-panel').classList.remove('active');" style="background:none;border:none;font-size:1.2rem;cursor:pointer;color:var(--muted);">✕ Close</button>
+  <div id="admin-panel" style="display:none;background:white;border:2px solid var(--gold);border-radius:16px;padding:2rem;margin-bottom:2rem;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid var(--border);">
+      <h2 style="font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--navy);">⚙️ Blog Admin</h2>
+      <button onclick="document.getElementById('admin-panel').style.display='none';" style="background:none;border:none;font-size:1.2rem;cursor:pointer;color:var(--muted);">✕</button>
     </div>
     <div class="admin-tabs">
       <button class="admin-tab active" id="atab-write-btn" onclick="switchAdminTab('write')">✍️ Write</button>
@@ -216,124 +222,112 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
       <button class="admin-tab" id="atab-manage-btn" onclick="switchAdminTab('manage')">📋 Posts</button>
       <button class="admin-tab" id="atab-authors-btn" onclick="switchAdminTab('authors')">👥 Authors</button>
     </div>
-    <!-- Write -->
+    <!-- Write tab -->
     <div id="atab-write">
       <div class="error-box" id="admin-error"></div>
       <div class="success-box" id="admin-success"></div>
       <div class="form-row">
         <div class="form-group"><label>Title <span class="req">*</span></label><input type="text" id="admin-title" placeholder="Post title"></div>
-        <div class="form-group"><label>Subtitle</label><input type="text" id="admin-subtitle" placeholder="Optional subtitle"></div>
+        <div class="form-group"><label>Subtitle</label><input type="text" id="admin-subtitle" placeholder="Optional"></div>
       </div>
       <div class="form-row">
-        <div class="form-group"><label>Tags <span style="font-size:11px;color:var(--muted);font-weight:400;">(comma separated)</span></label><input type="text" id="admin-tags" placeholder="research, germany, catalysis"></div>
         <div class="form-group"><label>Category <span class="req">*</span></label>
-            <select id="admin-category">
-              <option value="">Select a category</option>
+          <select id="admin-category"><option value="">Select category</option>
               <option value="Life in Germany">Life in Germany</option>
               <option value="Life in Pakistan">Life in Pakistan</option>
               <option value="Science & Research">Science & Research</option>
               <option value="Academic Career">Academic Career</option>
               <option value="Travel">Travel</option>
               <option value="Opinion & Personal">Opinion & Personal</option>
-            </select>
-          </div>
-        <div class="form-group"><label>Cover Image <span style="font-size:11px;color:var(--muted);font-weight:400;">(optional)</span></label><input type="file" id="admin-cover" accept="image/*"><img id="admin-cover-preview" class="cover-preview"></div>
+          </select>
+        </div>
+        <div class="form-group"><label>Tags</label><input type="text" id="admin-tags" placeholder="catalysis, germany"></div>
       </div>
+      <div class="form-group"><label>Cover Image</label><input type="file" id="admin-cover" accept="image/*"><img id="admin-cover-preview" class="cover-preview"></div>
       <div class="form-group">
         <label>Content <span class="req">*</span></label>
         <div class="editor-tabs">
           <button class="editor-tab active" onclick="switchEditorTab('admin','write')">✏️ Write</button>
-          <button class="editor-tab" onclick="switchEditorTab('admin','md')">📄 Upload .md</button>
+          <button class="editor-tab" onclick="switchEditorTab('admin','md')">📄 .md file</button>
           <button class="editor-tab" onclick="switchEditorTab('admin','preview')">👁 Preview</button>
         </div>
-        <!-- Write tab -->
         <div id="admin-write-tab">
           <div class="toolbar" id="admin-toolbar">
-            <button class="tb-btn" onclick="fmt('admin','bold')" title="Bold"><b>B</b></button>
-            <button class="tb-btn" onclick="fmt('admin','italic')" title="Italic"><i>I</i></button>
-            <button class="tb-btn" onclick="fmt('admin','underline')" title="Underline"><u>U</u></button>
+            <button class="tb-btn" onclick="fmt('admin','bold')"><b>B</b></button>
+            <button class="tb-btn" onclick="fmt('admin','italic')"><i>I</i></button>
+            <button class="tb-btn" onclick="fmt('admin','underline')"><u>U</u></button>
             <div class="tb-sep"></div>
-            <button class="tb-btn" onclick="fmtBlock('admin','h1')" title="Heading 1">H1</button>
-            <button class="tb-btn" onclick="fmtBlock('admin','h2')" title="Heading 2">H2</button>
-            <button class="tb-btn" onclick="fmtBlock('admin','h3')" title="Heading 3">H3</button>
+            <button class="tb-btn" onclick="fmtBlock('admin','h1')">H1</button>
+            <button class="tb-btn" onclick="fmtBlock('admin','h2')">H2</button>
+            <button class="tb-btn" onclick="fmtBlock('admin','h3')">H3</button>
             <div class="tb-sep"></div>
-            <button class="tb-btn" onclick="fmtAlign('admin','left')" title="Align Left">⬅</button>
-            <button class="tb-btn" onclick="fmtAlign('admin','center')" title="Center">⬌</button>
-            <button class="tb-btn" onclick="fmtAlign('admin','right')" title="Align Right">➡</button>
-            <button class="tb-btn" onclick="fmtAlign('admin','justify')" title="Justify">≡</button>
+            <button class="tb-btn" onclick="fmtAlign('admin','left')">⬅</button>
+            <button class="tb-btn" onclick="fmtAlign('admin','center')">⬌</button>
+            <button class="tb-btn" onclick="fmtAlign('admin','right')">➡</button>
+            <button class="tb-btn" onclick="fmtAlign('admin','justify')">≡</button>
             <div class="tb-sep"></div>
-            <button class="tb-btn" onclick="fmt('admin','insertUnorderedList')" title="Bullet List">• List</button>
-            <button class="tb-btn" onclick="fmt('admin','insertOrderedList')" title="Numbered List">1. List</button>
-            <button class="tb-btn" onclick="fmtBlock('admin','blockquote')" title="Quote">❝</button>
+            <button class="tb-btn" onclick="fmt('admin','insertUnorderedList')">• List</button>
+            <button class="tb-btn" onclick="fmt('admin','insertOrderedList')">1. List</button>
+            <button class="tb-btn" onclick="fmtBlock('admin','blockquote')">❝</button>
             <div class="tb-sep"></div>
-            <button class="tb-btn" onclick="insertLink('admin')" title="Link">🔗</button>
-            <button class="tb-btn" onclick="document.getElementById('admin-img-upload').click()" title="Insert Image">🖼</button>
+            <button class="tb-btn" onclick="insertLink('admin')">🔗</button>
+            <button class="tb-btn" onclick="document.getElementById('admin-img-upload').click()">🖼</button>
             <input type="file" id="admin-img-upload" accept="image/*" style="display:none" onchange="insertImage('admin',this)">
-            <button class="tb-btn" onclick="alignSelectedImg('left')" title="Image Left">🖼⬅</button>
-            <button class="tb-btn" onclick="alignSelectedImg('center')" title="Image Center">🖼⬌</button>
-            <button class="tb-btn" onclick="alignSelectedImg('right')" title="Image Right">🖼➡</button>
             <div class="tb-sep"></div>
-            <div class="tb-color-wrap">
-              <input type="color" class="tb-color" id="admin-color" value="#1a1a2e" onchange="document.getElementById('admin-editor').focus();fmt('admin','foreColor',this.value)" title="Text Color">
-              <span class="tb-color-label">Text</span>
-            </div>
-            <div class="tb-color-wrap">
-              <input type="color" class="tb-color" id="admin-bgcolor" value="#fef08a" onchange="fmt('admin','backColor',this.value)" title="Highlight Color">
-              <span class="tb-color-label">Highlight</span>
-            </div>
+            <button class="tb-btn" style="position:relative;">🎨 Text<input type="color" id="admin-color" value="#1a1a2e" onchange="document.getElementById('admin-editor').focus();fmt('admin','foreColor',this.value)" style="position:absolute;opacity:0;width:100%;height:100%;top:0;left:0;cursor:pointer;"></button>
+            <button class="tb-btn" style="position:relative;">🖊 Bg<input type="color" id="admin-bgcolor" value="#ffff00" onchange="document.getElementById('admin-editor').focus();fmt('admin','backColor',this.value)" style="position:absolute;opacity:0;width:100%;height:100%;top:0;left:0;cursor:pointer;"></button>
           </div>
-          <div id="admin-editor" class="editor-area" contenteditable="true" style="border-radius:0 0 8px 8px;" placeholder="Start writing your post here..."></div>
+          <div id="admin-editor" class="editor-area" contenteditable="true" style="border-radius:0 0 8px 8px;min-height:300px;"></div>
         </div>
-        <!-- MD upload tab -->
         <div id="admin-md-tab" style="display:none;">
           <div class="md-drop-area" id="admin-md-drop" onclick="document.getElementById('admin-md-file').click()">
             <div class="md-drop-area-icon">📄</div>
-            <div>Click to upload a <strong>.md</strong> file, or drag and drop it here</div>
-            <div style="font-size:12px;margin-top:4px;color:var(--muted);">Markdown will be converted and loaded into the editor</div>
+            <div>Click to upload <strong>.md</strong> file or drag and drop</div>
           </div>
-          <input type="file" id="admin-md-file" accept=".md,.markdown,text/markdown" style="display:none">
+          <input type="file" id="admin-md-file" accept=".md,.markdown" style="display:none">
         </div>
-        <!-- Preview tab -->
         <div id="admin-preview-tab" style="display:none;">
-          <div class="preview-header" id="admin-preview-header"></div>
           <div class="preview-area" id="admin-preview-content"></div>
         </div>
       </div>
       <button class="submit-btn" id="admin-publish-btn" onclick="publishPost()">🚀 Publish Post</button>
     </div>
-    <!-- Pending -->
+    <!-- Pending tab -->
     <div id="atab-pending" style="display:none;">
-      <div id="pending-list"><div class="loading">Loading pending submissions...</div></div>
+      <div id="pending-list"><div class="loading">Loading...</div></div>
     </div>
-    <!-- Manage Published -->
+    <!-- Manage tab -->
     <div id="atab-manage" style="display:none;">
-      <div id="manage-list"><div class="loading">Loading published posts...</div></div>
+      <div id="manage-list"><div class="loading">Loading...</div></div>
     </div>
-    <!-- Authors -->
+    <!-- Authors tab -->
     <div id="atab-authors" style="display:none;">
-      <div id="authors-list"><div class="loading">Loading authors...</div></div>
+      <div id="authors-list"><div class="loading">Loading...</div></div>
     </div>
   </div>
-  <!-- BLOG TOOLBAR -->
-  <div class="blog-wrap-inner" style="display:grid;grid-template-columns:1fr 280px;gap:2rem;align-items:start;">
-  <div>
+
+  <!-- TOOLBAR -->
   <div class="blog-toolbar">
     <h2>Latest Posts</h2>
-    <button class="btn-submit" onclick="openGuestModal()">✍️ Submit a Guest Post</button>
+    <div style="display:flex;gap:0.75rem;flex-wrap:wrap;">
+      <button class="btn-submit" onclick="document.getElementById('submit-modal').classList.add('active')">✍️ Submit a Post</button>
+    </div>
   </div>
+
   <!-- FILTERS -->
-  <div id="blog-filters" style="margin-bottom:1.5rem;display:flex;flex-wrap:wrap;gap:0.75rem;align-items:center;">
+  <div style="margin-bottom:1.5rem;display:flex;flex-wrap:wrap;gap:0.75rem;align-items:center;">
     <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;">
       <span style="font-size:12px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:0.06em;">Category:</span>
-      <button class="filter-chip active" data-filter-type="category" data-filter-val="all" onclick="setFilter('category','all',this)">All</button>
+      <button class="filter-chip active" onclick="setFilter('category','all',this)">All</button>
       <div id="category-chips" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
     </div>
-    <div id="author-filter-wrap" style="display:none;display:flex;flex-wrap:wrap;gap:6px;align-items:center;">
+    <div id="author-filter-wrap" style="display:none;flex-wrap:wrap;gap:6px;align-items:center;">
       <span style="font-size:12px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:0.06em;">Author:</span>
-      <button class="filter-chip active" data-filter-type="author" data-filter-val="all" onclick="setFilter('author','all',this)">All</button>
+      <button class="filter-chip active" onclick="setFilter('author','all',this)">All</button>
       <div id="author-chips" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
     </div>
   </div>
+
   <!-- POSTS GRID -->
   <div id="posts-grid" class="posts-grid"><div class="loading">Loading posts...</div></div>
 
@@ -344,72 +338,51 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
     <div id="subscribe-form" style="display:flex;gap:0.75rem;justify-content:center;flex-wrap:wrap;max-width:480px;margin:0 auto;">
       <input type="text" id="sub-name" placeholder="Your name" style="flex:1;min-width:140px;padding:10px 14px;border:none;border-radius:8px;font-size:14px;font-family:inherit;outline:none;">
       <input type="email" id="sub-email" placeholder="Your email" style="flex:1;min-width:180px;padding:10px 14px;border:none;border-radius:8px;font-size:14px;font-family:inherit;outline:none;">
-      <button onclick="window.subscribe()" style="background:var(--gold);color:var(--navy);border:none;padding:10px 22px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap;">Subscribe →</button>
+      <button id="sub-btn" onclick="window.subscribe()" style="background:var(--gold);color:var(--navy);border:none;padding:10px 22px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;">Subscribe →</button>
     </div>
-    <div id="sub-msg" style="margin-top:0.75rem;font-size:13px;color:rgba(255,255,255,0.8);min-height:20px;"></div>
+    <div id="sub-msg" style="margin-top:0.75rem;font-size:13px;min-height:20px;"></div>
   </div>
-  </div><!-- /blog-main -->
 
-  <!-- BLOG SIDEBAR -->
-  <aside style="position:sticky;top:80px;display:flex;flex-direction:column;gap:1.25rem;">
-    <!-- Write for Us / Author Card -->
-    <div style="background:white;border:1px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.06);">
-      <div style="background:var(--navy);padding:0.7rem 1rem;font-family:'Playfair Display',serif;color:white;font-size:0.9rem;font-weight:600;">✍️ Author Corner</div>
-      <div style="padding:1.1rem;" id="author-sidebar-card">
-        <div style="text-align:center;padding:1rem;color:var(--muted);font-size:13px;">Loading...</div>
-      </div>
-    </div>
-    <!-- About -->
-    <div style="background:white;border:1px solid var(--border);border-radius:12px;overflow:hidden;">
-      <div style="background:var(--navy);padding:0.7rem 1rem;font-family:'Playfair Display',serif;color:white;font-size:0.9rem;font-weight:600;">📖 About</div>
-      <div style="padding:1rem;">
-        <p style="font-size:13px;color:var(--text);line-height:1.65;margin-bottom:0.75rem;">The Lab Notebook — research, academic life, navigating Germany, and anything else worth writing about.</p>
-        <a href="/about.html" style="font-size:12px;color:var(--gold);font-weight:600;text-decoration:none;">About the editor →</a>
-      </div>
-    </div>
-  </aside>
+</div><!-- /blog-main-wrap -->
 
-</div><!-- /blog-wrap -->
-
-<!-- GUEST MODAL -->
+<!-- GUEST SUBMIT MODAL -->
 <div class="modal-overlay" id="submit-modal">
   <div class="modal-card">
-    <!-- Step 1: Form -->
     <div id="guest-step-form">
       <div class="modal-header">
-        <h2>✍️ Submit a Guest Post</h2>
-        <button class="modal-close" onclick="closeGuestModal()">✕</button>
+        <h2>✍️ Submit a Post</h2>
+        <button class="modal-close" onclick="document.getElementById('submit-modal').classList.remove('active')">✕</button>
       </div>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:1rem;">Already have an author account? <a href="/blog/dashboard.html" style="color:var(--navy);font-weight:600;">Sign in to your dashboard</a> to submit.</p>
       <div class="error-box" id="guest-error"></div>
       <div class="form-row">
-        <div class="form-group"><label>Your Name <span class="req">*</span></label><input type="text" id="guest-name" placeholder="Dr. Jane Smith"></div>
-        <div class="form-group"><label>Your Email <span class="req">*</span></label><input type="email" id="guest-email" placeholder="jane@example.com"></div>
+        <div class="form-group"><label>Name <span class="req">*</span></label><input type="text" id="guest-name" placeholder="Dr. Jane Smith"></div>
+        <div class="form-group"><label>Email <span class="req">*</span></label><input type="email" id="guest-email" placeholder="jane@example.com"></div>
       </div>
-      <div class="form-group"><label>One-line Bio <span style="font-size:11px;color:var(--muted);font-weight:400;">(optional)</span></label><input type="text" id="guest-bio" placeholder="Researcher at XYZ University"></div>
+      <div class="form-group"><label>Bio <span style="font-size:11px;color:var(--muted);font-weight:400;">(optional)</span></label><input type="text" id="guest-bio" placeholder="Researcher at XYZ University"></div>
       <div class="form-row">
         <div class="form-group"><label>Title <span class="req">*</span></label><input type="text" id="guest-title" placeholder="Post title"></div>
-        <div class="form-group"><label>Subtitle</label><input type="text" id="guest-subtitle" placeholder="Optional subtitle"></div>
+        <div class="form-group"><label>Subtitle</label><input type="text" id="guest-subtitle" placeholder="Optional"></div>
       </div>
       <div class="form-row">
-        <div class="form-group"><label>Tags</label><input type="text" id="guest-tags" placeholder="research, germany"></div>
-            <div class="form-group"><label>Category <span class="req">*</span></label>
-            <select id="guest-category">
-              <option value="">Select a category</option>
+        <div class="form-group"><label>Category <span class="req">*</span></label>
+          <select id="guest-category"><option value="">Select category</option>
               <option value="Life in Germany">Life in Germany</option>
               <option value="Life in Pakistan">Life in Pakistan</option>
               <option value="Science & Research">Science & Research</option>
               <option value="Academic Career">Academic Career</option>
               <option value="Travel">Travel</option>
               <option value="Opinion & Personal">Opinion & Personal</option>
-            </select>
-          </div>
-        <div class="form-group"><label>Cover Image</label><input type="file" id="guest-cover" accept="image/*"><img id="guest-cover-preview" class="cover-preview"></div>
+          </select>
+        </div>
+        <div class="form-group"><label>Tags</label><input type="text" id="guest-tags" placeholder="research, germany"></div>
       </div>
+      <div class="form-group"><label>Cover Image</label><input type="file" id="guest-cover" accept="image/*"><img id="guest-cover-preview" class="cover-preview"></div>
       <div class="form-group">
         <label>Content <span class="req">*</span></label>
         <div class="editor-tabs">
           <button class="editor-tab active" onclick="switchEditorTab('guest','write')">✏️ Write</button>
-          <button class="editor-tab" onclick="switchEditorTab('guest','md')">📄 Upload .md</button>
+          <button class="editor-tab" onclick="switchEditorTab('guest','md')">📄 .md file</button>
           <button class="editor-tab" onclick="switchEditorTab('guest','preview')">👁 Preview</button>
         </div>
         <div id="guest-write-tab">
@@ -434,225 +407,47 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
             <button class="tb-btn" onclick="insertLink('guest')">🔗</button>
             <button class="tb-btn" onclick="document.getElementById('guest-img-upload').click()">🖼</button>
             <input type="file" id="guest-img-upload" accept="image/*" style="display:none" onchange="insertImage('guest',this)">
-            <button class="tb-btn" onclick="alignSelectedImg('left')" title="Image Left">🖼⬅</button>
-            <button class="tb-btn" onclick="alignSelectedImg('center')" title="Image Center">🖼⬌</button>
-            <button class="tb-btn" onclick="alignSelectedImg('right')" title="Image Right">🖼➡</button>
             <div class="tb-sep"></div>
-            <div class="tb-color-wrap">
-              <input type="color" class="tb-color" id="guest-color" value="#1a1a2e" onchange="document.getElementById('guest-editor').focus();fmt('guest','foreColor',this.value)" title="Text Color">
-              <span class="tb-color-label">Text</span>
-            </div>
-            <div class="tb-color-wrap">
-              <input type="color" class="tb-color" id="guest-bgcolor" value="#fef08a" onchange="fmt('guest','backColor',this.value)" title="Highlight Color">
-              <span class="tb-color-label">Highlight</span>
-            </div>
+            <button class="tb-btn" style="position:relative;">🎨<input type="color" value="#1a1a2e" onchange="document.getElementById('guest-editor').focus();fmt('guest','foreColor',this.value)" style="position:absolute;opacity:0;width:100%;height:100%;top:0;left:0;cursor:pointer;"></button>
+            <button class="tb-btn" style="position:relative;">🖊<input type="color" value="#ffff00" onchange="document.getElementById('guest-editor').focus();fmt('guest','backColor',this.value)" style="position:absolute;opacity:0;width:100%;height:100%;top:0;left:0;cursor:pointer;"></button>
           </div>
           <div id="guest-editor" class="editor-area" contenteditable="true" style="border-radius:0 0 8px 8px;"></div>
         </div>
         <div id="guest-md-tab" style="display:none;">
           <div class="md-drop-area" id="guest-md-drop" onclick="document.getElementById('guest-md-file').click()">
             <div class="md-drop-area-icon">📄</div>
-            <div>Click to upload a <strong>.md</strong> file, or drag and drop it here</div>
-            <div style="font-size:12px;margin-top:4px;color:var(--muted);">Markdown will be converted and loaded into the editor</div>
+            <div>Click to upload <strong>.md</strong> file or drag and drop</div>
           </div>
-          <input type="file" id="guest-md-file" accept=".md,.markdown,text/markdown" style="display:none">
+          <input type="file" id="guest-md-file" accept=".md,.markdown" style="display:none">
         </div>
         <div id="guest-preview-tab" style="display:none;">
-          <div class="preview-header" id="guest-preview-header"></div>
           <div class="preview-area" id="guest-preview-content"></div>
         </div>
       </div>
       <button class="submit-btn" onclick="showGuestPreview()">👁 Preview Before Submitting</button>
     </div>
-    <!-- Step 2: Preview -->
     <div id="guest-step-preview" style="display:none;">
       <div class="modal-header">
-        <h2>👁 Preview Your Post</h2>
-        <button class="modal-close" onclick="closeGuestModal()">✕</button>
+        <h2>👁 Preview</h2>
+        <button class="modal-close" onclick="document.getElementById('submit-modal').classList.remove('active')">✕</button>
       </div>
       <div class="success-box" id="guest-success"></div>
-      <p style="font-size:13px;color:var(--muted);margin-bottom:1rem;">This is how your post will look. Go back to make changes or submit.</p>
-      <div id="guest-final-preview" style="background:#f8f7f4;border:1px solid var(--border);border-radius:12px;padding:1.5rem;margin-bottom:1.5rem;max-height:50vh;overflow-y:auto;">
-        <div class="preview-header" id="guest-preview-header-final"></div>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:1rem;">How your post will look. Go back to edit or submit.</p>
+      <div style="background:#f8f7f4;border:1px solid var(--border);border-radius:12px;padding:1.5rem;margin-bottom:1.5rem;max-height:50vh;overflow-y:auto;">
+        <div id="guest-preview-header-final"></div>
         <div class="preview-area" id="guest-preview-content-final"></div>
       </div>
       <div style="display:flex;gap:0.75rem;">
-        <button cla<script type="module">function switchAdminTab(tab) {
-  ['write','pending','manage','authors'].forEach(t => {
-    const el = document.getElementById('atab-'+t);
-    if (el) el.style.display = t===tab ? 'block' : 'none';
-    const btn = document.getElementById('atab-'+t+'-btn');
-    if (btn) btn.classList.toggle('active', t===tab);
-  });
-  if (tab==='pending') loadPending();
-  if (tab==='manage') loadManage();
-  if (tab==='authors') loadAuthors();
-}
+        <button class="btn-secondary" onclick="document.getElementById('guest-step-form').style.display='block';document.getElementById('guest-step-preview').style.display='none';" style="flex:1;">← Edit</button>
+        <button class="submit-btn" id="guest-submit-btn" onclick="submitGuestPost()" style="flex:1;">📬 Submit for Review</button>
+      </div>
+    </div>
+  </div>
+</div>
 
-async function loadManage() {
-  const list = document.getElementById('manage-list');
-  if (!list) return;
-  list.innerHTML = '<div class="loading">Loading...</div>';
-  try {
-    const snap = await getDocs(query(collection(db,'posts'), where('status','==','published')));
-    if (snap.empty) { list.innerHTML='<div style="text-align:center;padding:2rem;color:var(--muted);">No published posts yet.</div>'; return; }
-    const posts = [];
-    snap.forEach(d => posts.push({id:d.id,...d.data()}));
-    posts.sort((a,b)=>(b.publishedAt?.seconds||0)-(a.publishedAt?.seconds||0));
-    list.innerHTML = '';
-    posts.forEach(p => {
-      const date = p.publishedAt ? new Date(p.publishedAt.seconds*1000).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}) : '';
-      const el = document.createElement('div');
-      el.id = 'manage-post-'+p.id;
-      el.style.cssText = 'background:#f8f7f4;border:1px solid var(--border);border-radius:10px;padding:1rem;margin-bottom:0.75rem;';
-      el.innerHTML = `
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;flex-wrap:wrap;">
-          <div style="flex:1;min-width:200px;">
-            <div style="font-weight:600;color:var(--navy);font-size:14px;margin-bottom:3px;">${p.title}</div>
-            <d<script type="module">function switchAdminTab(tab) {
-  ['write','pending','manage','authors'].forEach(t => {
-    const el = document.getElementById('atab-'+t);
-    if (el) el.style.display = t===tab ? 'block' : 'none';
-    const btn = document.getElementById('atab-'+t+'-btn');
-    if (btn) btn.classList.toggle('active', t===tab);
-  });
-  if (tab==='pending') loadPending();
-  if (tab==='manage') loadManage();
-  if (tab==='authors') loadAuthors();
-}
-
-async function loadManage() {
-  const list = document.getElementById('manage-list');
-  if (!list) return;
-  list.innerHTML = '<div class="loading">Loading...</div>';
-  try {
-    const snap = await getDocs(query(collection(db,'posts'), where('status','==','published')));
-    if (snap.empty) { list.innerHTML='<div style="text-align:center;padding:2rem;color:var(--muted);">No published posts yet.</div>'; return; }
-    const posts = [];
-    snap.forEach(d => posts.push({id:d.id,...d.data()}));
-    posts.sort((a,b)=>(b.publishedAt?.seconds||0)-(a.publishedAt?.seconds||0));
-    list.innerHTML = '';
-    posts.forEach(p => {
-      const date = p.publishedAt ? new Date(p.publishedAt.seconds*1000).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}) : '';
-      const el = document.createElement('div');
-      el.id = 'manage-post-'+p.id;
-      el.style.cssText = 'background:#f8f7f4;border:1px solid var(--border);border-radius:10px;padding:1rem;margin-bottom:0.75rem;';
-      el.innerHTML = `
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;flex-wrap:wrap;">
-          <div style="flex:1;min-width:200px;">
-            <div style="font-weight:600;color:var(--navy);font-size:14px;margin-bottom:3px;">${p.title}</div>
-            <div style="font-size:12px;color:var(--muted);">By ${p.authorName||'Adeem'} · ${date}</div>
-          </div>
-          <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;flex-shrink:0;">
-            <select onchange="updateCategory('${p.id}',this.value)" style="padding:4px 8px;border:1px solid var(--border);border-radius:5px;font-size:12px;font-family:inherit;background:white;">
-              ${['Life in Germany','Life in Pakistan','Science & Research','Academic Career','Travel','Opinion & Personal'].map(c=>`<option value="${c}" ${p.category===c?'selected':''}>${c}</option>`).join('')}
-            </select>
-            <button onclick="openInlineEdit('${p.id}')" style="background:var(--navy);color:white;border:none;padding:5px 12px;border-radius:5px;font-size:12px;cursor:pointer;font-family:inherit;">✏️ Edit</button>
-            <a href="/blog/post.html?id=${p.id}" target="_blank" style="background:#f3f4f6;color:var(--text);border:1px solid var(--border);padding:5px 12px;border-radius:5px;font-size:12px;cursor:pointer;font-family:inherit;text-decoration:none;">👁 View</a>
-            <button onclick="adminDeletePost('${p.id}',this)" style="background:white;color:var(--red);border:1.5px solid var(--red);padding:5px 12px;border-radius:5px;font-size:12px;cursor:pointer;font-family:inherit;">🗑 Delete</button>
-            <button onclick="notifySubscribers('${p.title.replace(/'/g,"\'")}','https://ranaadeem.de/blog/post.html?id=${p.id}','${(p.authorName||'Dr. Adeem Ghaffar Rana').replace(/'/g,"\'")}');" style="background:var(--gold);color:var(--navy);border:none;padding:5px 12px;border-radius:5px;font-size:12px;cursor:pointer;font-family:inherit;">📬 Notify</button>
-          </div>
-        </div>
-        <div id="inline-edit-${p.id}" style="display:none;margin-top:1rem;border-top:1px solid var(--border);padding-top:1rem;">
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:0.75rem;">
-            <div><label style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:3px;">Title</label>
-            <input id="ie-title-${p.id}" value="${p.title.replace(/"/g,'&quot;')}" style="width:100%;padding:7px 10px;border:1px solid var(--border);border-radius:5px;font-size:13px;font-family:inherit;outline:none;"></div>
-            <div><label style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:3px;">Subtitle</label>
-            <input id="ie-subtitle-${p.id}" value="${(p.subtitle||'').replace(/"/g,'&quot;')}" style="width:100%;padding:7px 10px;border:1px solid var(--border);border-radius:5px;font-size:13px;font-family:inherit;outline:none;"></div>
-          </div>
-          <div style="display:flex;gap:0.5rem;justify-content:flex-end;">
-            <button onclick="saveInlineEdit('${p.id}')" style="background:var(--gold);color:var(--navy);border:none;padding:7px 16px;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">💾 Save</button>
-            <button onclick="document.getElementById('inline-edit-${p.id}').style.display='none';" style="background:white;color:var(--muted);border:1px solid var(--border);padding:7px 16px;border-radius:6px;font-size:13px;cursor:pointer;font-family:inherit;">Cancel</button>
-          </div>
-        </div>`;
-      list.appendChild(el);
-    });
-  } catch(e) { list.innerHTML = '<div style="color:var(--red);padding:1rem;">Error: '+e.message+'</div>'; }
-}
-
-window.openInlineEdit = function(id) {
-  const el = document.getElementById('inline-edit-'+id);
-  if (el) el.style.display = el.style.display==='none' ? 'block' : 'none';
-};
-
-window.saveInlineEdit = async function(id) {
-  const title = document.getElementById('ie-title-'+id)?.value.trim();
-  const subtitle = document.getElementById('ie-subtitle-'+id)?.value.trim();
-  if (!title) { showToast('Title cannot be empty.'); return; }
-  try {
-    await updateDoc(doc(db,'posts',id), { title, subtitle });
-    showToast('Post updated ✓');
-    document.getElementById('inline-edit-'+id).style.display='none';
-    // Update displayed title
-    const row = document.getElementById('manage-post-'+id);
-    if (row) row.querySelector('[style*="font-weight:600"]').textContent = title;
-    loadPosts(); // refresh blog grid
-  } catch(e) { showToast('Error: '+e.message); }
-};
-
-window.updateCategory = async function(id, cat) {
-  try {
-    await updateDoc(doc(db,'posts',id), {category: cat});
-    showToast('Category updated ✓');
-  } catch(e) { showToast('Error: '+e.message); }
-};
-
-async function loadAuthors() {
-  const list = document.getElementById('authors-list');
-  if (!list) return;
-  list.innerHTML = '<div class="loading">Loading...</div>';
-  try {
-    const snap = await getDocs(collection(db,'authors'));
-    if (snap.empty) { list.innerHTML='<div style="text-align:center;padding:2rem;color:var(--muted);">No registered authors yet.</div>'; return; }
-    const authors = [];
-    snap.forEach(d => authors.push({id:d.id,...d.data()}));
-    authors.sort((a,b)=>(b.registeredAt?.seconds||0)-(a.registeredAt?.seconds||0));
-    list.innerHTML = '';
-    authors.forEach(a => {
-      const date = a.registeredAt ? new Date(a.registeredAt.seconds*1000).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}) : '';
-      const initials = (a.name||'A').split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase();
-      const el = document.createElement('div');
-      el.style.cssText = 'background:#f8f7f4;border:1px solid var(--border);border-radius:10px;padding:1rem;margin-bottom:0.75rem;display:flex;align-items:center;gap:1rem;flex-wrap:wrap;';
-      el.innerHTML = `
-        <div style="width:40px;height:40px;border-radius:50%;background:var(--navy);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--gold);font-size:13px;flex-shrink:0;overflow:hidden;">
-          ${a.photoBase64?`<img src="${a.photoBase64}" style="width:100%;height:100%;object-fit:cover;">`:initials}
-        </div>
-        <div style="flex:1;min-width:150px;">
-          <div style="font-weight:600;color:var(--navy);font-size:14px;">${a.name}</div>
-          <div style="font-size:12px;color:var(--muted);">@${a.username} · ${a.email} · Joined ${date}</div>
-          ${a.bio?`<div style="font-size:12px;color:var(--text);margin-top:2px;">${a.bio}</div>`:''}
-        </div>
-        <div style="display:flex;gap:6px;flex-shrink:0;">
-          <a href="/blog/author.html?u=${a.username}" target="_blank" style="background:#f3f4f6;color:var(--text);border:1px solid var(--border);padding:5px 12px;border-radius:5px;font-size:12px;text-decoration:none;">👁 Profile</a>
-          <button onclick="adminDeleteAuthor('${a.id}','${a.uid}',this)" style="background:white;color:var(--red);border:1.5px solid var(--red);padding:5px 12px;border-radius:5px;font-size:12px;cursor:pointer;font-family:inherit;">🗑 Delete</button>
-        </div>`;
-      list.appendChild(el);
-    });
-  } catch(e) { list.innerHTML = '<div style="color:var(--red);padding:1rem;">Error: '+e.message+'</div>'; }
-}
-
-window.adminDeleteAuthor = async function(docId, uid, btn) {
-  if (!confirm('⚠️ Delete this author profile?\n\nThis removes their profile. Their published posts remain but show as anonymous. Their Firebase Auth account will need manual deletion from Firebase Console.')) return;
-  btn.disabled=true; btn.textContent='Deleting...';
-  try {
-    await deleteDoc(doc(db,'authors',docId));
-    btn.closest('div[style]').remove();
-    showToast('Author profile deleted. Username is now available.');
-  } catch(e) { showToast('Error: '+e.message); btn.disabled=false; btn.textContent='🗑 Delete'; }
-};
-
-window.adminDeletePost = async function(id, btn) {
-  if (!confirm('⚠️ Delete this post permanently?')) return;
-  btn.disabled=true; btn.textContent='Deleting...';
-  try {
-    await deleteDoc(doc(db,'posts',id));
-    btn.closest('.pending-item').remove();
-    showToast('Post deleted.');
-    loadPosts();
-  } catch(e) { showToast('Error: '+e.message); btn.disabled=false; btn.textContent='🗑 Delete'; }
-};
+<script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js';
-import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendEmailVerification, signOut, onAuthStateChanged, updateProfile } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js';
+import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js';
 import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, query, where, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js';
 
 const app = initializeApp({apiKey:"AIzaSyAgUl22Cln6QtY3-HIvI6lE8Zu7n9OblbI",authDomain:"icet-alumni.firebaseapp.com",projectId:"icet-alumni",storageBucket:"icet-alumni.firebasestorage.app",messagingSenderId:"707390888790",appId:"1:707390888790:web:57e6be62e4d11e22c214f7"});
@@ -661,66 +456,25 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 const provider = new GoogleAuthProvider();
 let currentUser = null;
-const ADMIN_UID_CHECK = 'w2AtZbhUiyY5TxyvIecHzWqheaE2';
-let adminCoverBase64 = '', guestCoverBase64 = '';
 let allPosts = [];
+let adminCoverBase64 = '', guestCoverBase64 = '';
 let activeFilters = {category:'all', author:'all'};
 
-window.setFilter = function(type, val, btn) {
-  activeFilters[type] = val;
-  // Update chip UI
-  const parent = btn.closest('div[style]') || btn.parentElement;
-  parent.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
-  btn.classList.add('active');
-  renderFilteredPosts();
-};
-
-function renderFilteredPosts() {
-  const grid = document.getElementById('posts-grid');
-  let filtered = allPosts.filter(p => {
-    const catMatch = activeFilters.category === 'all' || p.category === activeFilters.category;
-    const authMatch = activeFilters.author === 'all' || p.authorName === activeFilters.author;
-    return catMatch && authMatch;
-  });
-  if (!filtered.length) {
-    grid.innerHTML = '<div class="empty-state"><div class="empty-state-icon">🔍</div><p style="color:var(--muted);">No posts match this filter.</p></div>';
-    return;
+// ── Auth: auto-detect admin, show author corner state ──
+onAuthStateChanged(auth, async (user) => {
+  currentUser = user;
+  updateAuthorCorner(user);
+  if (user && user.uid === ADMIN_UID) {
+    document.getElementById('admin-panel').style.display = 'block';
+    loadPending();
+  } else {
+    document.getElementById('admin-panel').style.display = 'none';
   }
-  grid.innerHTML = '';
-  filtered.forEach(p => renderPostCard(p, grid));
-}
+});
 
-// ── Render single post card ──
-function renderPostCard(p, grid) {
-  const tags = (p.tags||'').split(',').map(t=>t.trim()).filter(Boolean);
-  const tagsHtml = tags.map(t=>`<span class="post-tag">${t}</span>`).join('');
-  const date = p.publishedAt ? new Date(p.publishedAt.seconds*1000).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}) : '';
-  const card = document.createElement('a');
-  card.href = '/blog/post.html?id='+p.id;
-  card.className = 'post-card';
-  card.style.position = 'relative';
-  card.innerHTML = `
-    ${p.coverImage?`<img class="post-card-img" src="${p.coverImage}" alt="${p.title}">`:
-      `<div class="post-card-img-placeholder">📝</div>`}
-    <div class="post-card-body">
-      ${p.category?`<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--gold);margin-bottom:4px;">${p.category}</div>`:''}
-      ${tagsHtml?`<div class="post-card-tags">${tagsHtml}</div>`:''}
-      <div class="post-card-title">${p.title}</div>
-      ${p.subtitle?`<div class="post-card-sub">${p.subtitle}</div>`:''}
-      <div class="post-card-meta">
-        <span class="post-card-author">${p.authorName||'Dr. Adeem Ghaffar Rana'}</span>
-        ${date?`<span>·</span><span>${date}</span>`:''}
-        ${p.likes?`<span>·</span><span>❤️ ${p.likes}</span>`:''}
-      </div>
-    </div>`;
-  if (currentUser && currentUser.uid === ADMIN_UID_CHECK) {
-    const editBtn = document.createElement('button');
-    editBtn.style.cssText = 'position:absolute;top:8px;left:8px;background:var(--gold);color:var(--navy);border:none;padding:5px 10px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;z-index:2;';
-    editBtn.textContent = '✏️ Edit';
-    editBtn.addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); window.location.href='/blog/post.html?id='+p.id+'&edit=1'; });
-    card.appendChild(editBtn);
-  }
-  grid.appendChild(card);
+async function updateAuthorCorner(user) {
+  // Author corner is now in the header - handled by blog page header state
+  // No sidebar - nothing to update on blog listing
 }
 
 // ── Load posts ──
@@ -735,188 +489,133 @@ async function loadPosts() {
     allPosts = [];
     snap.forEach(d => allPosts.push({id:d.id,...d.data()}));
     allPosts.sort((a,b)=>(b.publishedAt?.seconds||0)-(a.publishedAt?.seconds||0));
-
     // Build category chips
     const cats = [...new Set(allPosts.map(p=>p.category).filter(Boolean))];
-    const catChips = document.getElementById('category-chips');
-    if (catChips) {
-      catChips.innerHTML = cats.map(c=>`<button class="filter-chip" data-filter-type="category" data-filter-val="${c}" onclick="setFilter('category','${c}',this)">${c}</button>`).join('');
-    }
-
-    // Build author chips (only if multiple authors)
+    const catEl = document.getElementById('category-chips');
+    if (catEl) catEl.innerHTML = cats.map(c=>`<button class="filter-chip" onclick="setFilter('category','${c}',this)">${c}</button>`).join('');
+    // Build author chips (if multiple)
     const authors = [...new Set(allPosts.map(p=>p.authorName).filter(Boolean))];
     if (authors.length > 1) {
       const authWrap = document.getElementById('author-filter-wrap');
-      const authChips = document.getElementById('author-chips');
+      const authEl = document.getElementById('author-chips');
       if (authWrap) authWrap.style.display = 'flex';
-      if (authChips) authChips.innerHTML = authors.map(a=>`<button class="filter-chip" data-filter-type="author" data-filter-val="${a}" onclick="setFilter('author','${a}',this)">${a}</button>`).join('');
+      if (authEl) authEl.innerHTML = authors.map(a=>`<button class="filter-chip" onclick="setFilter('author','${a}',this)">${a}</button>`).join('');
     }
-
     renderFilteredPosts();
   } catch(e) {
-    grid.innerHTML = '<div class="loading">Error loading posts. Please refresh.</div>';
-    console.error(e);
+    grid.innerHTML = '<div class="loading">Error loading posts: '+e.message+'</div>';
+    console.error('loadPosts error:', e);
   }
 }
 loadPosts();
-loadAuthorSidebar();
 
-// ── Author sidebar ──
-async function loadAuthorSidebar() {
-  onAuthStateChanged(auth, async user => {
-    const card = document.getElementById('author-sidebar-card');
-    if (!card) return;
-    if (!user) {
-      card.innerHTML = buildWriteForUsCard();
-      return;
-    }
-    // Check if registered author
-    try {
-      const snap = await getDocs(query(collection(db,'authors'), where('uid','==',user.uid)));
-      if (snap.empty) {
-        card.innerHTML = buildWriteForUsCard();
-        return;
-      }
-      const author = snap.docs[0].data();
-      if (!user.emailVerified && !user.providerData.find(p=>p.providerId==='google.com')) {
-        card.innerHTML = `<div style="text-align:center;padding:1rem;">
-          <div style="font-size:2rem;margin-bottom:0.5rem;">📧</div>
-          <p style="font-size:13px;color:var(--muted);margin-bottom:0.75rem;">Please verify your email to access your dashboard.</p>
-          <button onclick="resendVerification()" style="background:var(--gold);color:var(--navy);border:none;padding:8px 16px;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">Resend Email</button>
-        </div>`;
-        return;
-      }
-      const initials = (author.name||'?').split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase();
-      card.innerHTML = `
-        <div style="text-align:center;padding:0.5rem 0 1rem;">
-          ${author.photoBase64?`<img src="${author.photoBase64}" style="width:60px;height:60px;border-radius:50%;object-fit:cover;border:2px solid var(--gold);margin-bottom:0.5rem;">`:`<div style="width:60px;height:60px;border-radius:50%;background:var(--navy);border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;color:var(--gold);margin:0 auto 0.5rem;">${initials}</div>`}
-          <div style="font-size:14px;font-weight:600;color:var(--navy);">${author.name}</div>
-          <div style="font-size:11px;color:var(--muted);margin-bottom:0.75rem;">@${author.username}</div>
-          <a href="/blog/dashboard.html" style="display:block;background:var(--navy);color:var(--gold);padding:8px;border-radius:7px;font-size:13px;font-weight:600;text-decoration:none;margin-bottom:6px;">📝 My Dashboard</a>
-          <a href="/blog/author.html?u=${author.username}" style="display:block;background:white;color:var(--navy);border:1px solid var(--border);padding:7px;border-radius:7px;font-size:12px;text-decoration:none;margin-bottom:6px;">👤 My Author Page</a>
-          <button onclick="signOut(auth).then(()=>loadAuthorSidebar())" style="background:none;border:none;color:var(--muted);font-size:12px;cursor:pointer;font-family:inherit;">Sign out</button>
-        </div>`;
-    } catch(e){}
+window.setFilter = function(type, val, btn) {
+  activeFilters[type] = val;
+  const filterArea = btn.closest('div[style]') || btn.parentElement;
+  filterArea.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  renderFilteredPosts();
+};
+
+function renderFilteredPosts() {
+  const grid = document.getElementById('posts-grid');
+  const filtered = allPosts.filter(p => {
+    const catOk = activeFilters.category === 'all' || p.category === activeFilters.category;
+    const authOk = activeFilters.author === 'all' || p.authorName === activeFilters.author;
+    return catOk && authOk;
   });
-}
-
-function buildWriteForUsCard() {
-  return `<div style="text-align:center;">
-    <div style="font-size:2rem;margin-bottom:0.5rem;">✍️</div>
-    <h4 style="font-family:'Playfair Display',serif;font-size:1rem;color:var(--navy);margin-bottom:0.4rem;">Write for Us</h4>
-    <p style="font-size:12px;color:var(--muted);line-height:1.55;margin-bottom:1rem;">Share your research, experiences, or perspective. Register as an author and submit posts for review.</p>
-    <a href="/blog/register.html" style="display:block;background:var(--gold);color:var(--navy);padding:9px;border-radius:7px;font-size:13px;font-weight:600;text-decoration:none;margin-bottom:6px;">Register as Author</a>
-    <a href="/blog/dashboard.html" style="display:block;background:white;color:var(--navy);border:1px solid var(--border);padding:8px;border-radius:7px;font-size:13px;text-decoration:none;">Sign In</a>
-  </div>`;
-}
-
-window.resendVerification = async function() {
-  const user = auth.currentUser;
-  if(user) { await sendEmailVerification(user); showToast('Verification email sent ✓'); }
-};
-
-// ── Author sidebar auth state ──
-// Author sidebar handled by loadAuthorSidebar() above
-window.authorSignOut = async function() {
-  await auth.signOut();
-};
-
-// ── Auto-detect admin Google sign-in ──
-onAuthStateChanged(auth, user => {
-  if (user && user.uid === ADMIN_UID_CHECK) {
-    currentUser = user;
-    document.getElementById('admin-panel').classList.add('active');
-    loadPending();
-  } else if (!user) {
-    document.getElementById('admin-panel').classList.remove('active');
-  }
-});
-
-// ── A+G+R as manual fallback (when not signed in) ──
-const keysHeld = new Set();
-document.addEventListener('keydown', e => {
-  keysHeld.add(e.key.toLowerCase());
-  if (keysHeld.has('a') && keysHeld.has('g') && keysHeld.has('r')) {
-    keysHeld.clear();
-    triggerAdmin();
-  }
-});
-document.addEventListener('keyup', e => keysHeld.delete(e.key.toLowerCase()));
-
-async function triggerAdmin() {
-  if (currentUser && currentUser.uid === ADMIN_UID_CHECK) {
-    showToast('Already signed in as admin ✓');
+  if (!filtered.length) {
+    grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1;"><div class="empty-state-icon">🔍</div><p style="color:var(--muted);">No posts match this filter.</p></div>';
     return;
   }
-  try {
-    const r = await signInWithPopup(auth, provider);
-    currentUser = r.user;
-    if (currentUser.uid === ADMIN_UID_CHECK) {
-      document.getElementById('admin-panel').classList.add('active');
-      document.getElementById('admin-panel').scrollIntoView({behavior:'smooth'});
-      showToast('Welcome back, Adeem.');
-      loadPending();
-    } else {
-      showToast('Access denied.');
-      await auth.signOut();
-      currentUser = null;
-    }
-  } catch(e) { if(e.code!=='auth/cancelled-popup-request') showToast('Sign in failed.'); }
+  grid.innerHTML = '';
+  filtered.forEach(p => renderPostCard(p));
 }
 
-// ── Publish post ──
+function renderPostCard(p) {
+  const grid = document.getElementById('posts-grid');
+  const tags = (p.tags||'').split(',').map(t=>t.trim()).filter(Boolean);
+  const tagsHtml = tags.slice(0,3).map(t=>`<span class="post-tag">${t}</span>`).join('');
+  const date = p.publishedAt ? new Date(p.publishedAt.seconds*1000).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}) : '';
+  const card = document.createElement('a');
+  card.href = '/blog/post.html?id='+p.id;
+  card.className = 'post-card';
+  card.style.position = 'relative';
+  card.innerHTML = `
+    ${p.coverImage?`<img class="post-card-img" src="${p.coverImage}" alt="${p.title}">`:`<div class="post-card-img-placeholder">📝</div>`}
+    <div class="post-card-body">
+      ${p.category?`<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--gold);margin-bottom:4px;">${p.category}</div>`:''}
+      ${tagsHtml?`<div class="post-card-tags">${tagsHtml}</div>`:''}
+      <div class="post-card-title">${p.title}</div>
+      ${p.subtitle?`<div class="post-card-sub">${p.subtitle}</div>`:''}
+      <div class="post-card-meta">
+        <span class="post-card-author">${p.authorName||'Dr. Adeem Ghaffar Rana'}</span>
+        ${date?`<span>·</span><span>${date}</span>`:''}
+        ${p.likes?`<span>·</span><span>❤️ ${p.likes}</span>`:''}
+      </div>
+    </div>`;
+  // Admin edit button
+  if (currentUser && currentUser.uid === ADMIN_UID) {
+    const editBtn = document.createElement('button');
+    editBtn.style.cssText = 'position:absolute;top:8px;left:8px;background:var(--gold);color:var(--navy);border:none;padding:4px 10px;border-radius:5px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;z-index:2;';
+    editBtn.textContent = '✏️ Edit';
+    editBtn.addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); window.location.href='/blog/post.html?id='+p.id+'&edit=1'; });
+    card.appendChild(editBtn);
+  }
+  grid.appendChild(card);
+}
+
+// ── Publish post (admin) ──
 window.publishPost = async function() {
   const title = document.getElementById('admin-title').value.trim();
+  const category = document.getElementById('admin-category').value;
   const content = document.getElementById('admin-editor').innerHTML;
   const err = document.getElementById('admin-error');
   const suc = document.getElementById('admin-success');
   err.style.display='none'; suc.style.display='none';
   if (!title) { err.textContent='Title is required.'; err.style.display='block'; return; }
-  if (document.getElementById('admin-editor').innerText.trim().length < 10) {
-    err.textContent='Content is too short.'; err.style.display='block'; return;
-  }
+  if (!category) { err.textContent='Please select a category.'; err.style.display='block'; return; }
+  if (document.getElementById('admin-editor').innerText.trim().length < 10) { err.textContent='Content too short.'; err.style.display='block'; return; }
   const btn = document.getElementById('admin-publish-btn');
   btn.disabled=true; btn.textContent='Publishing...';
   try {
-    await addDoc(collection(db,'posts'), {
+    const ref = await addDoc(collection(db,'posts'), {
       title,
       subtitle: document.getElementById('admin-subtitle').value.trim(),
+      category,
       tags: document.getElementById('admin-tags').value.trim(),
-      category: document.getElementById('admin-category').value || 'Uncategorised',
       content,
       coverImage: adminCoverBase64,
       authorName: 'Dr. Adeem Ghaffar Rana',
+      authorUsername: 'ranaadeem',
       authorUid: ADMIN_UID,
       status: 'published',
       publishedAt: serverTimestamp(),
       createdAt: serverTimestamp()
     });
-    suc.innerHTML='✅ Post published! <button onclick="notifySubscribers(document.getElementById(\'admin-title\').value,\'https://ranaadeem.de/blog/post.html\',\'Dr. Adeem Ghaffar Rana\')" style="background:var(--gold);color:var(--navy);border:none;padding:3px 10px;border-radius:5px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;margin-left:8px;">📬 Notify Subscribers</button>'; suc.style.display='block';
+    suc.innerHTML = `✅ Published! <button onclick="window.notifySubscribers('${title}','https://ranaadeem.de/blog/post.html?id=${ref.id}','Dr. Adeem Ghaffar Rana')" style="background:var(--gold);color:var(--navy);border:none;padding:3px 10px;border-radius:5px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;margin-left:8px;">📬 Notify Subscribers</button>`;
+    suc.style.display='block';
     document.getElementById('admin-title').value='';
     document.getElementById('admin-subtitle').value='';
     document.getElementById('admin-tags').value='';
     document.getElementById('admin-editor').innerHTML='';
-    adminCoverBase64='';
-    document.getElementById('admin-cover-preview').style.display='none';
+    adminCoverBase64=''; document.getElementById('admin-cover-preview').style.display='none';
     btn.disabled=false; btn.textContent='🚀 Publish Post';
     loadPosts();
-  } catch(e) {
-    err.textContent='Error: '+e.message; err.style.display='block';
-    btn.disabled=false; btn.textContent='🚀 Publish Post';
-  }
+  } catch(e) { err.textContent='Error: '+e.message; err.style.display='block'; btn.disabled=false; btn.textContent='🚀 Publish Post'; }
 };
 
 // ── Guest submit ──
 window.submitGuestPost = async function() {
   const btn = document.getElementById('guest-submit-btn');
-  btn.disabled=true; btn.textContent='Submitting...';
   const suc = document.getElementById('guest-success');
+  btn.disabled=true; btn.textContent='Submitting...';
   try {
     await addDoc(collection(db,'posts'), {
       title: document.getElementById('guest-title').value.trim(),
       subtitle: document.getElementById('guest-subtitle').value.trim(),
+      category: document.getElementById('guest-category').value,
       tags: document.getElementById('guest-tags').value.trim(),
-      category: document.getElementById('guest-category').value || 'Uncategorised',
       content: document.getElementById('guest-editor').innerHTML,
       coverImage: guestCoverBase64,
       authorName: document.getElementById('guest-name').value.trim(),
@@ -926,42 +625,70 @@ window.submitGuestPost = async function() {
       submittedAt: serverTimestamp(),
       createdAt: serverTimestamp()
     });
-    suc.textContent='✅ Thank you! Your post has been submitted for review.';
+    suc.textContent='✅ Submitted for review! Thank you.';
     suc.style.display='block';
     btn.textContent='Submitted ✓';
-  } catch(e) {
-    showToast('Error: '+e.message);
-    btn.disabled=false; btn.textContent='📬 Submit for Review';
-  }
+  } catch(e) { showToast('Error: '+e.message); btn.disabled=false; btn.textContent='📬 Submit for Review'; }
+};
+
+// ── Subscribe ──
+window.subscribe = async function() {
+  const name = document.getElementById('sub-name').value.trim();
+  const email = document.getElementById('sub-email').value.trim();
+  const msg = document.getElementById('sub-msg');
+  const btn = document.getElementById('sub-btn');
+  if (!name || !email) { msg.textContent='Please enter your name and email.'; msg.style.color='#fca5a5'; return; }
+  if (!email.includes('@')) { msg.textContent='Please enter a valid email.'; msg.style.color='#fca5a5'; return; }
+  btn.disabled=true; btn.textContent='Subscribing...';
+  try {
+    const existing = await getDocs(query(collection(db,'subscribers'), where('email','==',email)));
+    if (!existing.empty) { msg.textContent='You are already subscribed!'; msg.style.color='#86efac'; btn.disabled=false; btn.textContent='Subscribe →'; return; }
+    await addDoc(collection(db,'subscribers'), { name, email, subscribedAt: serverTimestamp() });
+    if (typeof emailjs !== 'undefined') {
+      emailjs.send('service_1hyb7v5', 'template_onvizmg', { subscriber_name: name, subscriber_email: email }).catch(()=>{});
+    }
+    document.getElementById('sub-name').value='';
+    document.getElementById('sub-email').value='';
+    msg.textContent='✅ Subscribed! Welcome to The Lab Notebook.';
+    msg.style.color='#86efac';
+    btn.disabled=false; btn.textContent='Subscribe →';
+  } catch(e) { msg.textContent='Error: '+e.message; msg.style.color='#fca5a5'; btn.disabled=false; btn.textContent='Subscribe →'; }
+};
+
+// ── Notify subscribers ──
+window.notifySubscribers = async function(title, url, author) {
+  try {
+    const snap = await getDocs(collection(db,'subscribers'));
+    const sends = [];
+    snap.forEach(d => {
+      sends.push(emailjs.send('service_1hyb7v5', 'template_g4pn0is', {
+        subscriber_name: d.data().name||'Reader',
+        subscriber_email: d.data().email,
+        post_title: title, post_author: author, post_url: url
+      }));
+    });
+    await Promise.allSettled(sends);
+    showToast('Notified '+sends.length+' subscriber(s) ✓');
+  } catch(e) { showToast('Error: '+e.message); }
 };
 
 // ── Load pending ──
 async function loadPending() {
   const list = document.getElementById('pending-list');
+  if (!list) return;
   try {
     const snap = await getDocs(query(collection(db,'posts'), where('status','==','pending')));
     if (snap.empty) { list.innerHTML='<div style="text-align:center;padding:2rem;color:var(--muted);">No pending submissions.</div>'; return; }
-    const items = [];
-    snap.forEach(d => items.push({id:d.id,...d.data()}));
+    const items=[]; snap.forEach(d=>items.push({id:d.id,...d.data()}));
     items.sort((a,b)=>(b.submittedAt?.seconds||0)-(a.submittedAt?.seconds||0));
     list.innerHTML='';
-    items.forEach(p => {
-      const date = p.submittedAt?new Date(p.submittedAt.seconds*1000).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}):'';
-      const el = document.createElement('div');
-      el.className='pending-item';
-      el.innerHTML=`
-        <div class="pending-item-title">${p.title}</div>
-        <div class="pending-item-meta">By ${p.authorName} (${p.authorEmail||''}) · ${date}</div>
-        ${p.subtitle?`<div class="pending-item-meta">${p.subtitle}</div>`:''}
-        <div class="pending-item-preview">${p.content.replace(/<[^>]+>/g,' ')}</div>
-        <div class="pending-actions">
-          <button class="btn-approve" onclick="approvePost('${p.id}',this)">✅ Approve</button>
-          <button class="btn-reject" onclick="rejectPost('${p.id}',this)">🗑 Reject</button>
-          <button class="btn-preview-post" onclick="previewPending('${p.id}')">👁 Preview</button>
-        </div>`;
+    items.forEach(p=>{
+      const date=p.submittedAt?new Date(p.submittedAt.seconds*1000).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}):'';
+      const el=document.createElement('div'); el.className='pending-item';
+      el.innerHTML=`<div class="pending-item-title">${p.title}</div><div class="pending-item-meta">By ${p.authorName||''} (${p.authorEmail||''}) · ${date} · ${p.category||''}</div><div class="pending-item-preview">${p.content.replace(/<[^>]+>/g,' ').slice(0,120)}</div><div class="pending-actions"><button class="btn-approve" onclick="approvePost('${p.id}',this)">✅ Approve</button><button class="btn-reject" onclick="rejectPost('${p.id}',this)">🗑 Reject</button></div>`;
       list.appendChild(el);
     });
-  } catch(e) { list.innerHTML='<div style="color:var(--red);padding:1rem;">Error loading.</div>'; }
+  } catch(e) { list.innerHTML='<div style="color:var(--red);padding:1rem;">Error: '+e.message+'</div>'; }
 }
 
 window.approvePost = async function(id, btn) {
@@ -969,288 +696,209 @@ window.approvePost = async function(id, btn) {
   try {
     await updateDoc(doc(db,'posts',id),{status:'published',publishedAt:serverTimestamp()});
     btn.closest('.pending-item').remove();
-    showToast('Post approved and published.');
-    loadPosts();
-
-// ── Subscribe ──
-window.subscribe = async function() {
-  const name = document.getElementById('sub-name').value.trim();
-  const email = document.getElementById('sub-email').value.trim();
-  if (!name || !email) { window.showSubMsg('Please enter your name and email.', false); return; }
-  if (!email.includes('@')) { window.showSubMsg('Please enter a valid email.', false); return; }
-  const btn = document.querySelector('#subscribe-form button');
-  if (btn) { btn.disabled=true; btn.textContent='Subscribing...'; }
-  try {
-    const existing = await getDocs(query(collection(db,'subscribers'), where('email','==',email)));
-    if (!existing.empty) {
-      window.showSubMsg('You are already subscribed!', true);
-      if (btn) { btn.disabled=false; btn.textContent='Subscribe →'; }
-      return;
-    }
-    await addDoc(collection(db,'subscribers'), { name, email, subscribedAt: serverTimestamp() });
-    if (typeof emailjs !== 'undefined') {
-      emailjs.send('service_1hyb7v5', 'template_onvizmg', {
-        subscriber_name: name, subscriber_email: email
-      }).catch(()=>{});
-    }
-    document.getElementById('sub-name').value = '';
-    document.getElementById('sub-email').value = '';
-    if (btn) { btn.disabled=false; btn.textContent='Subscribe →'; }
-    window.showSubMsg('✅ Subscribed! Welcome to The Lab Notebook.', true);
-  } catch(e) {
-    window.showSubMsg('Error: ' + e.message, false);
-    if (btn) { btn.disabled=false; btn.textContent='Subscribe →'; }
-  }
-};
-
-window.showSubMsg = function showSubMsg(msg, success) {
-  const el = document.getElementById('sub-msg');
-  el.textContent = msg;
-  el.style.color = success ? '#86efac' : '#fca5a5';
-  el.style.display = 'block';
-}
-
-// ── Admin: Notify subscribers of new post ──
-window.notifySubscribers = async function(postTitle, postUrl, postAuthor) {
-  try {
-    const snap = await getDocs(collection(db,'subscribers'));
-    let count = 0;
-    const sends = [];
-    snap.forEach(d => {
-      const sub = d.data();
-      sends.push(emailjs.send('service_1hyb7v5', 'template_g4pn0is', {
-        subscriber_name: sub.name || 'Reader',
-        subscriber_email: sub.email,
-        post_title: postTitle,
-        post_author: postAuthor,
-        post_url: postUrl
-      }));
-      count++;
-    });
-    await Promise.allSettled(sends);
-    showToast('Notified ' + count + ' subscriber(s) ✓');
-  } catch(e) { showToast('Error notifying: '+e.message); }
-};;
+    showToast('Post approved ✓'); loadPosts();
   } catch(e) { showToast('Error: '+e.message); btn.disabled=false; btn.textContent='✅ Approve'; }
 };
+
 window.rejectPost = async function(id, btn) {
-  if(!confirm('Delete this submission permanently?')) return;
+  if (!confirm('Delete this submission?')) return;
   btn.disabled=true;
+  try { await deleteDoc(doc(db,'posts',id)); btn.closest('.pending-item').remove(); showToast('Submission deleted.'); }
+  catch(e) { showToast('Error: '+e.message); btn.disabled=false; }
+};
+
+// ── Manage posts ──
+async function loadManage() {
+  const list = document.getElementById('manage-list');
+  if (!list) return;
+  list.innerHTML='<div class="loading">Loading...</div>';
   try {
-    await deleteDoc(doc(db,'posts',id));
-    btn.closest('.pending-item').remove();
-    showToast('Submission deleted.');
-  } catch(e) { showToast('Error: '+e.message); btn.disabled=false; }
+    const snap = await getDocs(query(collection(db,'posts'),where('status','==','published')));
+    if (snap.empty) { list.innerHTML='<div style="text-align:center;padding:2rem;color:var(--muted);">No published posts.</div>'; return; }
+    const posts=[]; snap.forEach(d=>posts.push({id:d.id,...d.data()}));
+    posts.sort((a,b)=>(b.publishedAt?.seconds||0)-(a.publishedAt?.seconds||0));
+    list.innerHTML='';
+    posts.forEach(p=>{
+      const date=p.publishedAt?new Date(p.publishedAt.seconds*1000).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}):'';
+      const el=document.createElement('div'); el.id='mp-'+p.id;
+      el.style.cssText='background:#f8f7f4;border:1px solid var(--border);border-radius:10px;padding:1rem;margin-bottom:0.75rem;';
+      el.innerHTML=`
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;flex-wrap:wrap;">
+          <div style="flex:1;min-width:180px;">
+            <div style="font-weight:600;color:var(--navy);font-size:14px;">${p.title}</div>
+            <div style="font-size:12px;color:var(--muted);">By ${p.authorName||'Adeem'} · ${date}</div>
+          </div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;flex-shrink:0;">
+            <select onchange="updateCategory('${p.id}',this.value)" style="padding:4px 8px;border:1px solid var(--border);border-radius:5px;font-size:12px;font-family:inherit;background:white;">${['Life in Germany','Life in Pakistan','Science & Research','Academic Career','Travel','Opinion & Personal'].map(c=>`<option value="${c}" ${p.category===c?'selected':''}>${c}</option>`).join('')}</select>
+            <button onclick="toggleInlineEdit('${p.id}')" style="background:var(--navy);color:white;border:none;padding:5px 12px;border-radius:5px;font-size:12px;cursor:pointer;font-family:inherit;">✏️ Edit</button>
+            <a href="/blog/post.html?id=${p.id}" target="_blank" style="background:#f3f4f6;color:var(--text);border:1px solid var(--border);padding:5px 12px;border-radius:5px;font-size:12px;text-decoration:none;">👁 View</a>
+            <button onclick="adminDeletePost('${p.id}',this)" style="background:white;color:var(--red);border:1.5px solid var(--red);padding:5px 12px;border-radius:5px;font-size:12px;cursor:pointer;font-family:inherit;">🗑 Delete</button>
+            <button onclick="window.notifySubscribers('${p.title.replace(/'/g,"\\'")}',' https://ranaadeem.de/blog/post.html?id=${p.id}','${(p.authorName||'Dr. Adeem Ghaffar Rana').replace(/'/g,"\\'")}')" style="background:var(--gold);color:var(--navy);border:none;padding:5px 12px;border-radius:5px;font-size:12px;cursor:pointer;font-family:inherit;">📬 Notify</button>
+          </div>
+        </div>
+        <div id="ie-${p.id}" style="display:none;margin-top:1rem;border-top:1px solid var(--border);padding-top:1rem;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:0.75rem;">
+            <div><label style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:3px;">Title</label>
+            <input id="ie-t-${p.id}" value="${p.title.replace(/"/g,'&quot;')}" style="width:100%;padding:7px 10px;border:1px solid var(--border);border-radius:5px;font-size:13px;font-family:inherit;outline:none;"></div>
+            <div><label style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:3px;">Subtitle</label>
+            <input id="ie-s-${p.id}" value="${(p.subtitle||'').replace(/"/g,'&quot;')}" style="width:100%;padding:7px 10px;border:1px solid var(--border);border-radius:5px;font-size:13px;font-family:inherit;outline:none;"></div>
+          </div>
+          <div style="display:flex;gap:0.5rem;justify-content:flex-end;">
+            <button onclick="saveInlineEdit('${p.id}')" style="background:var(--gold);color:var(--navy);border:none;padding:7px 16px;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">💾 Save</button>
+            <button onclick="document.getElementById('ie-${p.id}').style.display='none'" style="background:white;color:var(--muted);border:1px solid var(--border);padding:7px 16px;border-radius:6px;font-size:13px;cursor:pointer;font-family:inherit;">Cancel</button>
+          </div>
+        </div>`;
+      list.appendChild(el);
+    });
+  } catch(e) { list.innerHTML='<div style="color:var(--red);padding:1rem;">Error: '+e.message+'</div>'; }
+}
+
+window.toggleInlineEdit = id => { const el=document.getElementById('ie-'+id); if(el) el.style.display=el.style.display==='none'?'block':'none'; };
+window.saveInlineEdit = async function(id) {
+  const title=document.getElementById('ie-t-'+id)?.value.trim();
+  const subtitle=document.getElementById('ie-s-'+id)?.value.trim();
+  if(!title){showToast('Title cannot be empty.');return;}
+  try{
+    await updateDoc(doc(db,'posts',id),{title,subtitle});
+    showToast('Updated ✓');
+    document.getElementById('ie-'+id).style.display='none';
+    document.querySelector(`#mp-${id} [style*="font-weight:600"]`).textContent=title;
+    loadPosts();
+  }catch(e){showToast('Error: '+e.message);}
 };
-window.previewPending = function(id) {
-  window.open('/blog/post.html?id='+id+'&preview=1','_blank');
+window.updateCategory = async function(id,cat){
+  try{await updateDoc(doc(db,'posts',id),{category:cat});showToast('Category updated ✓');}
+  catch(e){showToast('Error: '+e.message);}
 };
+window.adminDeletePost = async function(id,btn){
+  if(!confirm('⚠️ Delete this post permanently?'))return;
+  btn.disabled=true;btn.textContent='Deleting...';
+  try{await deleteDoc(doc(db,'posts',id));document.getElementById('mp-'+id)?.remove();showToast('Post deleted.');loadPosts();}
+  catch(e){showToast('Error: '+e.message);btn.disabled=false;btn.textContent='🗑 Delete';}
+};
+
+// ── Load authors (admin) ──
+async function loadAuthors() {
+  const list=document.getElementById('authors-list');
+  if(!list)return;
+  list.innerHTML='<div class="loading">Loading...</div>';
+  try{
+    const snap=await getDocs(collection(db,'authors'));
+    if(snap.empty){list.innerHTML='<div style="text-align:center;padding:2rem;color:var(--muted);">No registered authors.</div>';return;}
+    const authors=[]; snap.forEach(d=>authors.push({id:d.id,...d.data()}));
+    list.innerHTML='';
+    authors.forEach(a=>{
+      const date=a.registeredAt?new Date(a.registeredAt.seconds*1000).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}):'';
+      const initials=(a.name||'A').split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase();
+      const el=document.createElement('div');
+      el.style.cssText='background:#f8f7f4;border:1px solid var(--border);border-radius:10px;padding:1rem;margin-bottom:0.75rem;display:flex;align-items:center;gap:1rem;flex-wrap:wrap;';
+      el.innerHTML=`
+        <div style="width:40px;height:40px;border-radius:50%;background:var(--navy);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--gold);font-size:13px;overflow:hidden;flex-shrink:0;">
+          ${a.photoBase64?`<img src="${a.photoBase64}" style="width:100%;height:100%;object-fit:cover;">`:initials}
+        </div>
+        <div style="flex:1;min-width:150px;">
+          <div style="font-weight:600;color:var(--navy);font-size:14px;">${a.name}</div>
+          <div style="font-size:12px;color:var(--muted);">@${a.username} · ${a.email} · Joined ${date}</div>
+        </div>
+        <div style="display:flex;gap:6px;flex-shrink:0;">
+          <a href="/blog/author.html?u=${a.username}" target="_blank" style="background:#f3f4f6;color:var(--text);border:1px solid var(--border);padding:5px 12px;border-radius:5px;font-size:12px;text-decoration:none;">👁 Profile</a>
+          <button onclick="adminDeleteAuthor('${a.id}',this)" style="background:white;color:var(--red);border:1.5px solid var(--red);padding:5px 12px;border-radius:5px;font-size:12px;cursor:pointer;font-family:inherit;">🗑 Delete</button>
+        </div>`;
+      list.appendChild(el);
+    });
+  }catch(e){list.innerHTML='<div style="color:var(--red);padding:1rem;">Error: '+e.message+'</div>';}
+}
+
+window.adminDeleteAuthor = async function(docId,btn){
+  if(!confirm('Delete this author profile? Their posts will remain but show as anonymous.'))return;
+  btn.disabled=true;btn.textContent='Deleting...';
+  try{await deleteDoc(doc(db,'authors',docId));btn.closest('div[style]').remove();showToast('Author deleted. Username now available.');}
+  catch(e){showToast('Error: '+e.message);btn.disabled=false;btn.textContent='🗑 Delete';}
+};
+
+// ── Admin tab switch ──
+window.switchAdminTab = function(tab){
+  ['write','pending','manage','authors'].forEach(t=>{
+    const el=document.getElementById('atab-'+t); if(el)el.style.display=t===tab?'block':'none';
+    const btn=document.getElementById('atab-'+t+'-btn'); if(btn)btn.classList.toggle('active',t===tab);
+  });
+  if(tab==='pending')loadPending();
+  if(tab==='manage')loadManage();
+  if(tab==='authors')loadAuthors();
+};
+
+// ── A+G+R fallback login ──
+const _kh=new Set();
+document.addEventListener('keydown',e=>{_kh.add(e.key.toLowerCase());if(_kh.has('a')&&_kh.has('g')&&_kh.has('r')){_kh.clear();if(!currentUser)signInWithPopup(auth,provider).catch(()=>{});}});
+document.addEventListener('keyup',e=>_kh.delete(e.key.toLowerCase()));
 
 // ── Cover image handling ──
-document.getElementById('admin-cover').addEventListener('change', e => resizeImg(e.target.files[0],'admin-cover-preview', b64=>adminCoverBase64=b64));
-document.getElementById('guest-cover').addEventListener('change', e => resizeImg(e.target.files[0],'guest-cover-preview', b64=>guestCoverBase64=b64));
+document.getElementById('admin-cover').addEventListener('change',e=>resizeImg(e.target.files[0],'admin-cover-preview',b=>adminCoverBase64=b));
+document.getElementById('guest-cover').addEventListener('change',e=>resizeImg(e.target.files[0],'guest-cover-preview',b=>guestCoverBase64=b));
 
-// ── Markdown file handling ──
-function setupMdUpload(prefix) {
-  const fileInput = document.getElementById(prefix+'-md-file');
-  const dropArea = document.getElementById(prefix+'-md-drop');
-  fileInput.addEventListener('change', e => loadMdFile(e.target.files[0], prefix));
-  dropArea.addEventListener('dragover', e => { e.preventDefault(); dropArea.classList.add('drag-over'); });
-  dropArea.addEventListener('dragleave', () => dropArea.classList.remove('drag-over'));
-  dropArea.addEventListener('drop', e => {
-    e.preventDefault(); dropArea.classList.remove('drag-over');
-    const file = e.dataTransfer.files[0];
-    if (file) loadMdFile(file, prefix);
-  });
-}
-setupMdUpload('admin');
-setupMdUpload('guest');
-setupImgAlign('admin');
-setupImgAlign('guest');
-
-// Categories are fixed dropdown - no custom field needed
-
-function loadMdFile(file, prefix) {
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = e => {
-    const html = marked.parse(e.target.result);
-    document.getElementById(prefix+'-editor').innerHTML = html;
-    switchEditorTab(prefix, 'write');
-    showToast('Markdown loaded into editor ✓');
-  };
-  reader.readAsText(file);
-}
-
-// ── Image resize helper ──
-function resizeImg(file, previewId, cb) {
-  if (!file) return;
-  if (file.size > 5*1024*1024) { showToast('Image must be under 5MB'); return; }
-  const reader = new FileReader();
-  reader.onload = e => {
-    const img = new Image();
-    img.onload = () => {
-      const canvas = document.createElement('canvas');
-      const MAX = 1200; let w=img.width, h=img.height;
-      if (w>MAX){h=h*(MAX/w);w=MAX;}
-      canvas.width=w; canvas.height=h;
-      canvas.getContext('2d').drawImage(img,0,0,w,h);
-      const b64 = canvas.toDataURL('image/jpeg',0.82);
-      cb(b64);
-      const prev = document.getElementById(previewId);
-      prev.src=b64; prev.style.display='block';
-    };
-    img.src = e.target.result;
-  };
-  reader.readAsDataURL(file);
-}
-
-function showToast(msg) {
-  const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),3000);
-}
-</script>
-  const editor = document.getElementById(prefix+'-editor');
-  if (!editor) return;
-  editor.addEventListener('click', function(e) {
-    if (e.target.tagName === 'IMG') {
-      // Remove existing img toolbars
-      document.querySelectorAll('.img-align-bar').forEach(b => b.remove());
-      const img = e.target;
-      const bar = document.createElement('div');
-      bar.className = 'img-align-bar';
-      bar.style.cssText = 'display:inline-flex;gap:4px;background:var(--navy);border-radius:6px;padding:4px 6px;margin:4px 0;';
-      const aligns = [
-        {label:'⬅ Left', fn: () => { img.style.float='left'; img.style.margin='0 12px 8px 0'; img.style.display='block'; bar.remove(); }},
-        {label:'⬌ Center', fn: () => { img.style.float='none'; img.style.margin='8px auto'; img.style.display='block'; bar.remove(); }},
-        {label:'➡ Right', fn: () => { img.style.float='right'; img.style.margin='0 0 8px 12px'; img.style.display='block'; bar.remove(); }},
-        {label:'↕ Full Width', fn: () => { img.style.float='none'; img.style.width='100%'; img.style.margin='8px 0'; img.style.display='block'; bar.remove(); }},
-        {label:'✕ Remove', fn: () => { img.remove(); bar.remove(); }},
-      ];
-      aligns.forEach(a => {
-        const btn = document.createElement('button');
-        btn.textContent = a.label;
-        btn.style.cssText = 'background:none;border:none;color:white;font-size:11px;cursor:pointer;padding:2px 6px;border-radius:4px;font-family:inherit;white-space:nowrap;';
-        btn.onmouseenter = () => btn.style.background='rgba(201,168,76,0.3)';
-        btn.onmouseleave = () => btn.style.background='none';
-        btn.addEventListener('click', e => { e.preventDefault(); a.fn(); });
-        bar.appendChild(btn);
-      });
-      img.insertAdjacentElement('afterend', bar);
-    } else {
-      document.querySelectorAll('.img-align-bar').forEach(b => b.remove());
-    }
-  });
-}
-function fmtBlock(prefix, tag) {
-  document.getElementById(prefix+'-editor').focus();
-  if (tag==='blockquote') { document.execCommand('formatBlock',false,'blockquote'); return; }
-  document.execCommand('formatBlock',false,tag);
-}
-function fmtAlign(prefix, align) {
-  document.getElementById(prefix+'-editor').focus();
-  const cmds = {left:'justifyLeft',center:'justifyCenter',right:'justifyRight',justify:'justifyFull'};
-  document.execCommand(cmds[align],false,null);
-}
-function insertLink(prefix) {
-  const url = prompt('Enter URL:');
-  if (url) { document.getElementById(prefix+'-editor').focus(); document.execCommand('createLink',false,url); }
-}
-function insertImage(prefix, input) {
-  const file = input.files[0]; if (!file) return;
-  const reader = new FileReader();
-  reader.onload = e => {
-    const img = new Image();
-    img.onload = () => {
-      const canvas = document.createElement('canvas');
-      const MAX=900; let w=img.width,h=img.height;
-      if(w>MAX){h=h*(MAX/w);w=MAX;}
-      canvas.width=w;canvas.height=h;
-      canvas.getContext('2d').drawImage(img,0,0,w,h);
-      const b64=canvas.toDataURL('image/jpeg',0.82);
-      document.getElementById(prefix+'-editor').focus();
-      document.execCommand('insertImage',false,b64);
-    };
-    img.src=e.target.result;
-  };
-  reader.readAsDataURL(file);
-  input.value='';
-}
-
-// ── Editor tab switching ──
-function switchEditorTab(prefix, tab) {
-  ['write','md','preview'].forEach(t => {
-    const el = document.getElementById(prefix+'-'+t+'-tab');
-    if (el) el.style.display = t===tab?'block':'none';
-  });
-  // Update tab buttons
-  const tabsEl = document.getElementById(prefix+'-'+tab+'-tab')?.closest('.form-group')?.querySelector('.editor-tabs');
-  if (tabsEl) {
-    tabsEl.querySelectorAll('.editor-tab').forEach((btn,i) => {
-      btn.classList.toggle('active', ['write','md','preview'][i]===tab);
-    });
+// ── MD upload ──
+['admin','guest'].forEach(prefix=>{
+  const fi=document.getElementById(prefix+'-md-file');
+  const dd=document.getElementById(prefix+'-md-drop');
+  if(fi)fi.addEventListener('change',e=>loadMd(e.target.files[0],prefix));
+  if(dd){
+    dd.addEventListener('dragover',e=>{e.preventDefault();dd.style.borderColor='var(--gold)';});
+    dd.addEventListener('dragleave',()=>dd.style.borderColor='');
+    dd.addEventListener('drop',e=>{e.preventDefault();dd.style.borderColor='';loadMd(e.dataTransfer.files[0],prefix);});
   }
-  if (tab==='preview') buildPreview(prefix);
+});
+function loadMd(file,prefix){
+  if(!file)return;
+  const r=new FileReader();r.onload=e=>{document.getElementById(prefix+'-editor').innerHTML=marked.parse(e.target.result);switchEditorTab(prefix,'write');showToast('Markdown loaded ✓');};r.readAsText(file);
 }
 
-function buildPreview(prefix) {
-  const title = document.getElementById(prefix+'-title')?.value || '';
-  const subtitle = document.getElementById(prefix+'-subtitle')?.value || '';
-  const name = prefix==='guest' ? (document.getElementById('guest-name')?.value||'Guest') : 'Dr. Adeem Ghaffar Rana';
-  const content = document.getElementById(prefix+'-editor').innerHTML;
-  const hdr = document.getElementById(prefix+'-preview-header');
-  const cnt = document.getElementById(prefix+'-preview-content');
-  if (hdr) hdr.innerHTML = `<div class="preview-header-title">${title||'(No title)'}</div>${subtitle?`<div class="preview-header-sub">${subtitle}</div>`:''}<div class="preview-header-meta">By ${name}</div>`;
-  if (cnt) cnt.innerHTML = content||'<em style="color:var(--muted);">No content yet.</em>';
-}
-
-// ── Guest modal ──
-function openGuestModal() { document.getElementById('submit-modal').classList.add('active'); }
-function closeGuestModal() {
-  document.getElementById('submit-modal').classList.remove('active');
-  document.getElementById('guest-step-form').style.display='block';
-  document.getElementById('guest-step-preview').style.display='none';
-  document.getElementById('guest-success').style.display='none';
-}
-function showGuestPreview() {
-  const name = document.getElementById('guest-name').value.trim();
-  const email = document.getElementById('guest-email').value.trim();
-  const title = document.getElementById('guest-title').value.trim();
-  const content = document.getElementById('guest-editor').innerHTML;
-  const err = document.getElementById('guest-error');
+// ── Guest preview ──
+window.showGuestPreview = function(){
+  const name=document.getElementById('guest-name').value.trim();
+  const email=document.getElementById('guest-email').value.trim();
+  const title=document.getElementById('guest-title').value.trim();
+  const content=document.getElementById('guest-editor').innerHTML;
+  const err=document.getElementById('guest-error');
   err.style.display='none';
-  if (!name||!email||!title) { err.textContent='Name, email and title are required.'; err.style.display='block'; return; }
-  if (document.getElementById('guest-editor').innerText.trim().length < 50) { err.textContent='Content is too short (min 50 characters).'; err.style.display='block'; return; }
-  // Build final preview
-  const sub = document.getElementById('guest-subtitle').value;
-  document.getElementById('guest-preview-header-final').innerHTML = `<div class="preview-header-title">${title}</div>${sub?`<div class="preview-header-sub">${sub}</div>`:''}<div class="preview-header-meta">By ${name}</div>`;
-  document.getElementById('guest-preview-content-final').innerHTML = content;
+  if(!name||!email||!title){err.textContent='Name, email and title are required.';err.style.display='block';return;}
+  if(document.getElementById('guest-editor').innerText.trim().length<50){err.textContent='Content too short (min 50 chars).';err.style.display='block';return;}
+  document.getElementById('guest-preview-header-final').innerHTML=`<h2 style="font-family:'Playfair Display',serif;color:var(--navy);">${title}</h2><p style="font-size:13px;color:var(--muted);margin-bottom:1rem;">By ${name}</p>`;
+  document.getElementById('guest-preview-content-final').innerHTML=content;
   document.getElementById('guest-step-form').style.display='none';
   document.getElementById('guest-step-preview').style.display='block';
-}
-function backToGuestForm() {
-  document.getElementById('guest-step-form').style.display='block';
-  document.getElementById('guest-step-preview').style.display='none';
-}
+};
 
-// ── Admin tab ──
-function switchAdminTab(tab) {
-  document.getElementById('atab-write').style.display=tab==='write'?'block':'none';
-  document.getElementById('atab-pending').style.display=tab==='pending'?'block':'none';
-  document.getElementById('atab-write-btn').classList.toggle('active',tab==='write');
-  document.getElementById('atab-pending-btn').classList.toggle('active',tab==='pending');
+// ── Helpers ──
+function resizeImg(file,previewId,cb){
+  if(!file)return;
+  const r=new FileReader();r.onload=e=>{const img=new Image();img.onload=()=>{const c=document.createElement('canvas');const M=1200;let w=img.width,h=img.height;if(w>M){h=h*(M/w);w=M;}c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);const b=c.toDataURL('image/jpeg',0.82);cb(b);const p=document.getElementById(previewId);p.src=b;p.style.display='block';};img.src=e.target.result;};r.readAsDataURL(file);
 }
 
-// ── Close modal on outside click / Escape ──
-document.getElementById('submit-modal').addEventListener('click', function(e){ if(e.target===this) closeGuestModal(); });
-document.addEventListener('keydown', e => { if(e.key==='Escape') closeGuestModal(); });
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
+</script>
 
-// ── Nav ──
-document.getElementById('nav-hamburger').addEventListener('click', function() { document.getElementById('nav-links').classList.toggle('open'); });
-document.querySelectorAll('.nav-dropdown-trigger').forEach(function(trigger) {
-  trigger.addEventListener('click', function(e) { if(window.innerWidth<=768){e.preventDefault();this.closest('.nav-dropdown').classList.toggle('open');} });
-});
-document.addEventListener('click', function(e) { if(!e.target.closest('.nav-dropdown')) document.querySelectorAll('.nav-dropdown').forEach(d=>d.classList.remove('open')); });
+<script>
+function switchEditorTab(prefix,tab){
+  ['write','md','preview'].forEach(t=>{const el=document.getElementById(prefix+'-'+t+'-tab');if(el)el.style.display=t===tab?'block':'none';});
+  if(tab==='preview'){
+    const cnt=document.getElementById(prefix+'-preview-content');
+    if(cnt)cnt.innerHTML=document.getElementById(prefix+'-editor').innerHTML||'<em style="color:var(--muted)">Nothing yet.</em>';
+  }
+}
+function fmt(p,cmd,val){document.getElementById(p+'-editor').focus();document.execCommand(cmd,false,val||null);}
+function fmtBlock(p,tag){document.getElementById(p+'-editor').focus();document.execCommand('formatBlock',false,tag);}
+function fmtAlign(p,a){document.getElementById(p+'-editor').focus();const c={left:'justifyLeft',center:'justifyCenter',right:'justifyRight',justify:'justifyFull'};document.execCommand(c[a],false,null);}
+function insertLink(p){const u=prompt('Enter URL:');if(u){document.getElementById(p+'-editor').focus();document.execCommand('createLink',false,u);}}
+function insertImage(p,input){
+  const f=input.files[0];if(!f)return;
+  const r=new FileReader();r.onload=e=>{const img=new Image();img.onload=()=>{const c=document.createElement('canvas');const M=900;let w=img.width,h=img.height;if(w>M){h=h*(M/w);w=M;}c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);document.getElementById(p+'-editor').focus();document.execCommand('insertImage',false,c.toDataURL('image/jpeg',0.82));};img.src=e.target.result;};
+  r.readAsDataURL(f);input.value='';
+}
+document.getElementById('nav-hamburger').addEventListener('click',function(){document.getElementById('nav-links').classList.toggle('open');});
+document.querySelectorAll('.nav-dropdown-trigger').forEach(function(t){t.addEventListener('click',function(e){if(window.innerWidth<=768){e.preventDefault();this.closest('.nav-dropdown').classList.toggle('open');}})});
+document.addEventListener('click',function(e){if(!e.target.closest('.nav-dropdown'))document.querySelectorAll('.nav-dropdown').forEach(d=>d.classList.remove('open'));});
+document.getElementById('submit-modal').addEventListener('click',function(e){if(e.target===this)this.classList.remove('active');});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')document.getElementById('submit-modal').classList.remove('active');});
 </script>
 </body>
 </html>
