@@ -77,50 +77,62 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;bac
 
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js';
-import { getFirestore, collection, getDocs, query, where } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js';
+import { getFirestore, collection, getDocs, query, where, orderBy } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js';
 
 const app = initializeApp({apiKey:"AIzaSyAgUl22Cln6QtY3-HIvI6lE8Zu7n9OblbI",authDomain:"icet-alumni.firebaseapp.com",projectId:"icet-alumni",storageBucket:"icet-alumni.firebasestorage.app",messagingSenderId:"707390888790",appId:"1:707390888790:web:57e6be62e4d11e22c214f7"});
 const db = getFirestore(app);
 
 async function loadAuthor() {
   const params = new URLSearchParams(window.location.search);
-  const name = params.get('name');
+  const username = params.get('u');
   const area = document.getElementById('author-area');
-  if (!name) { area.innerHTML='<div class="loading-state"><p>No author specified.</p></div>'; return; }
+  if (!username) { area.innerHTML='<div class="loading-state"><p>No author specified.</p></div>'; return; }
 
   try {
-    const snap = await getDocs(query(collection(db,'posts'), where('status','==','published'), where('authorName','==',name)));
+    // Handle blog owner special case
+    const isOwner = username === 'ranaadeem';
+    let authorName, authorBio, authorPhoto;
+
+    if (isOwner) {
+      authorName = 'Dr. Adeem Ghaffar Rana';
+      authorBio = 'Research Scientist in Catalysis & Sustainable Fuels at TU Bergakademie Freiberg. PhD from TU Munich (DAAD Scholar). Writing about research, academic life, Germany, and everything in between.';
+      authorPhoto = null; // use headshot.jpg
+    } else {
+      // Load from authors collection
+      const authSnap = await getDocs(query(collection(db,'authors'), where('username','==',username)));
+      if (authSnap.empty) { area.innerHTML='<div class="loading-state"><p>Author not found.</p></div>'; return; }
+      const authData = authSnap.docs[0].data();
+      authorName = authData.name;
+      authorBio = authData.bio||'';
+      authorPhoto = authData.photoBase64||null;
+    }
+
+    // Load posts by this author
+    const postsSnap = await getDocs(query(collection(db,'posts'), where('status','==','published'), where('authorName','==',authorName)));
     const posts = [];
-    snap.forEach(d => posts.push({id:d.id,...d.data()}));
+    postsSnap.forEach(d => posts.push({id:d.id,...d.data()}));
     posts.sort((a,b)=>(b.publishedAt?.seconds||0)-(a.publishedAt?.seconds||0));
 
-    if (!posts.length) { area.innerHTML='<div class="loading-state"><p>No published posts by this author.</p></div>'; return; }
-
-    document.title = name + ' — The Lab Notebook';
-    const firstPost = posts[0];
-    const initials = name.split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase();
-    // Use real photo for the blog owner
-    const isOwner = name === 'Dr. Adeem Ghaffar Rana';
+    document.title = authorName + ' — The Lab Notebook';
+    const initials = authorName.split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase();
     const photoHtml = isOwner
-      ? `<img class="author-avatar" src="/headshot.jpg" alt="${name}" style="width:100px;height:100px;border-radius:50%;border:3px solid var(--gold);object-fit:cover;object-position:center top;">`
-      : firstPost.authorPhoto
-        ? `<img class="author-avatar" src="${firstPost.authorPhoto}" alt="${name}">`
+      ? `<img class="author-avatar" src="/headshot.jpg" alt="${authorName}" style="object-position:center top;">`
+      : authorPhoto
+        ? `<img class="author-avatar" src="${authorPhoto}" alt="${authorName}">`
         : `<div class="author-avatar">${initials}</div>`;
-    const bioText = isOwner
-      ? 'Research Scientist in Catalysis & Sustainable Fuels at TU Bergakademie Freiberg. PhD from TU Munich (DAAD Scholar). Writing about research, academic life, Germany, and everything in between.'
-      : firstPost.authorBio || '';
 
     area.innerHTML = `
       <div class="author-card">
         ${photoHtml}
         <div style="flex:1;min-width:200px;">
-          <div class="author-name">${name}</div>
-          ${bioText ? `<p class="author-bio-text">${bioText}</p>` : ''}
-          <div class="author-meta">${posts.length} post${posts.length>1?'s':''} on The Lab Notebook</div>
+          <div class="author-name">${authorName}</div>
+          ${authorBio ? `<p class="author-bio-text">${authorBio}</p>` : ''}
+          <div class="author-meta">${posts.length} post${posts.length!==1?'s':''} on The Lab Notebook</div>
           ${isOwner ? '<a href="/about.html" style="display:inline-block;margin-top:6px;font-size:13px;color:var(--gold);font-weight:600;text-decoration:none;">View full profile →</a>' : ''}
         </div>
       </div>
-      <div class="posts-title">Posts by ${name}</div>
+      ${posts.length ? `
+      <div class="posts-title">Posts by ${authorName}</div>
       <div class="posts-grid">
         ${posts.map(p => {
           const date = p.publishedAt ? new Date(p.publishedAt.seconds*1000).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}) : '';
@@ -133,9 +145,10 @@ async function loadAuthor() {
             </div>
           </a>`;
         }).join('')}
-      </div>`;
+      </div>` : '<p style="color:var(--muted);text-align:center;padding:2rem;">No published posts yet.</p>'}`;
+
   } catch(e) {
-    area.innerHTML = '<div class="loading-state"><p>Error loading author.</p></div>';
+    area.innerHTML = '<div class="loading-state"><p>Error loading author: '+e.message+'</p></div>';
   }
 }
 
