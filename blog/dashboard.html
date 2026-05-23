@@ -76,7 +76,7 @@ nav{background:var(--navy);border-bottom:2px solid var(--gold);padding:0 1.5rem;
     <span class="nav-logo-agr">AGR</span>
     <span class="nav-logo-name">The Lab Notebook</span>
   </a>
-  <div class="nav-right">
+  <div class="nav-right"><a href="/blog.html" style="font-size:13px;color:rgba(255,255,255,0.75);text-decoration:none;margin-right:0.5rem;">← Blog</a>
     <span class="nav-user" id="nav-user-name"></span>
     <button class="nav-signout" id="nav-signout" style="display:none;" onclick="signOut()">Sign Out</button>
   </div>
@@ -91,7 +91,8 @@ nav{background:var(--navy);border-bottom:2px solid var(--gold);padding:0 1.5rem;
     <div class="error-box" id="login-error"></div>
     <div class="form-group"><label>Email</label><input type="email" id="login-email" placeholder="your@email.com"></div>
     <div class="form-group"><label>Password</label><input type="password" id="login-password" placeholder="Your password" onkeydown="if(event.key==='Enter')signIn()"></div>
-    <button class="submit-btn" onclick="signIn()">Sign In →</button>
+    <button class="submit-btn" id="btn-signin" onclick="signIn()">Sign In →</button>
+    <button class="btn-secondary" onclick="window.signInGoogle()" style="margin-top:8px;display:flex;align-items:center;justify-content:center;gap:8px;"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg> Sign in with Google</button>
     <button class="btn-secondary" onclick="window.location.href='/blog/register.html'" style="margin-top:8px;">Create Account</button>
     <p style="text-align:center;font-size:12px;color:var(--muted);margin-top:0.75rem;"><a href="#" onclick="resetPassword()" style="color:var(--navy);">Forgot password?</a></p>
   </div>
@@ -208,12 +209,9 @@ nav{background:var(--navy);border-bottom:2px solid var(--gold);padding:0 1.5rem;
     <div class="form-group">
       <label>Profile Photo</label>
       <input type="file" id="p-photo" accept="image/*">
-      <img id="p-photo-preview" class="photo-preview">
-    </div>
-    <button class="submit-btn" onclick="saveProfile()">💾 Save Profile</button>
-    <button oncli<script type="module">
+      <img id="p-photo-preview" class<script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js';
-import { getAuth, signInWithEmailAndPassword, signOut as fbSignOut, onAuthStateChanged, sendPasswordResetEmail, deleteUser } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js';
+import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, signOut as fbSignOut, onAuthStateChanged, sendPasswordResetEmail, deleteUser } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js';
 import { getFirestore, collection, addDoc, getDocs, updateDoc, deleteDoc, doc, query, where, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js';
 
 const app = initializeApp({apiKey:"AIzaSyAgUl22Cln6QtY3-HIvI6lE8Zu7n9OblbI",authDomain:"icet-alumni.firebaseapp.com",projectId:"icet-alumni",storageBucket:"icet-alumni.firebasestorage.app",messagingSenderId:"707390888790",appId:"1:707390888790:web:57e6be62e4d11e22c214f7"});
@@ -225,15 +223,31 @@ let authorDocId = null;
 let coverBase64 = '';
 let profilePhotoBase64 = '';
 
+const ADMIN_UID = 'w2AtZbhUiyY5TxyvIecHzWqheaE2';
+
 onAuthStateChanged(auth, async (user) => {
   if (user) {
+    currentUser = user;
+    // Admin: bypass email verification, load admin dashboard
+    if (user.uid === ADMIN_UID) {
+      authorDoc = {
+        name: 'Dr. Adeem Ghaffar Rana',
+        username: 'ranaadeem',
+        bio: 'Research Scientist · TU Bergakademie Freiberg',
+        photoBase64: null,
+        isAdmin: true
+      };
+      authorDocId = 'admin';
+      showDashboard();
+      return;
+    }
+    // Regular author: check email verification
     if (!user.emailVerified) {
       document.getElementById('login-error').textContent = 'Please verify your email first. Check your inbox for the verification link.';
       document.getElementById('login-error').style.display = 'block';
       await fbSignOut(auth);
       return;
     }
-    currentUser = user;
     // Load author profile
     try {
       const snap = await getDocs(query(collection(db,'authors'), where('uid','==',user.uid)));
@@ -260,9 +274,21 @@ function showDashboard() {
   document.getElementById('dashboard-screen').style.display = 'block';
   document.getElementById('nav-user-name').textContent = authorDoc.name;
   document.getElementById('nav-signout').style.display = 'block';
-  document.getElementById('dash-name').textContent = authorDoc.name;
+  document.getElementById('dash-name').textContent = authorDoc.name + (authorDoc.isAdmin ? ' ⚡' : '');
   document.getElementById('dash-meta').textContent = '@' + authorDoc.username + ' · ' + (authorDoc.bio||'');
   document.getElementById('dash-profile-link').href = '/blog/author.html?u=' + authorDoc.username;
+  // Show admin tabs if admin
+  if (authorDoc.isAdmin) {
+    const tabsEl = document.querySelector('.dash-tabs');
+    if (tabsEl && !document.getElementById('dtab-admin-btn')) {
+      tabsEl.innerHTML += '<button class="dash-tab" id="dtab-admin-btn" onclick="switchTab('admin')">⚙️ Admin</button>';
+      const adminPanel = document.createElement('div');
+      adminPanel.id = 'dtab-admin';
+      adminPanel.style.display = 'none';
+      adminPanel.innerHTML = '<p style="font-size:14px;color:var(--muted);margin-bottom:1rem;">Quick admin access. Full admin panel is on the <a href="/blog.html" style="color:var(--navy);font-weight:600;">blog page</a> when signed in.</p><a href="/blog.html" style="display:inline-block;background:var(--gold);color:var(--navy);padding:10px 22px;border-radius:8px;font-size:14px;font-weight:600;text-decoration:none;">→ Go to Blog Admin Panel</a>';
+      document.getElementById('dashboard-screen').appendChild(adminPanel);
+    }
+  }
   // Avatar
   const wrap = document.getElementById('dash-avatar-wrap');
   if (authorDoc.photoBase64) {
@@ -290,7 +316,7 @@ window.signIn = async function() {
   const err = document.getElementById('login-error');
   err.style.display='none';
   if (!email||!password) { err.textContent='Please enter email and password.'; err.style.display='block'; return; }
-  const btn = document.querySelector('#login-screen .submit-btn');
+  const btn = document.getElementById('btn-signin');
   btn.disabled=true; btn.textContent='Signing in...';
   try {
     await signInWithEmailAndPassword(auth, email, password);
@@ -300,6 +326,20 @@ window.signIn = async function() {
     if (e.code==='auth/too-many-requests') msg='Too many attempts. Please try again later.';
     err.textContent=msg; err.style.display='block';
     btn.disabled=false; btn.textContent='Sign In →';
+  }
+};
+
+window.signInGoogle = async function() {
+  const err = document.getElementById('login-error');
+  err.style.display='none';
+  try {
+    const provider = new GoogleAuthProvider();
+    await signInWithPopup(auth, provider);
+  } catch(e) {
+    if (e.code !== 'auth/cancelled-popup-request') {
+      err.textContent='Google sign in failed: '+e.message;
+      err.style.display='block';
+    }
   }
 };
 
@@ -463,6 +503,7 @@ function resizeImg(file,previewId,cb){
 }
 
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
+</script>getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
 </script>ntById(previewId);p.src=b;p.style.display='block';};img.src=e.target.result;};r.readAsDataURL(file);
 }
 
