@@ -86,7 +86,33 @@ async function loadAuthor() {
   const params = new URLSearchParams(window.location.search);
   const username = params.get('u');
   const area = document.getElementById('author-area');
-  if (!username) { area.innerHTML='<div class="loading-state"><p>No author specified.</p></div>'; return; }
+  if (!username) {
+    // Show all authors listing
+    try {
+      const authSnap = await getDocs(collection(db,'authors'));
+      const authors = [];
+      authSnap.forEach(d => authors.push({id:d.id,...d.data()}));
+      // Add blog owner
+      authors.unshift({name:'Dr. Adeem Ghaffar Rana', username:'ranaadeem', bio:'Research Scientist in Catalysis & Sustainable Fuels · TU Bergakademie Freiberg', photoBase64:null, isOwner:true});
+      document.title = 'Authors — The Lab Notebook';
+      area.innerHTML = `
+        <h2 style="font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--navy);margin-bottom:1.5rem;">Our Authors</h2>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1.25rem;">
+          ${authors.map(a => {
+            const initials = (a.name||'?').split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase();
+            return `<a href="/blog/author.html?u=${a.username}" style="background:white;border:1px solid var(--border);border-radius:12px;padding:1.25rem;text-decoration:none;display:flex;gap:12px;align-items:center;transition:all 0.2s;" onmouseover="this.style.boxShadow='0 4px 16px rgba(0,0,0,0.1)'" onmouseout="this.style.boxShadow='none'">
+              ${a.photoBase64?`<img src="${a.photoBase64}" style="width:50px;height:50px;border-radius:50%;object-fit:cover;border:2px solid var(--gold);flex-shrink:0;">`:
+              a.isOwner?`<img src="/headshot.jpg" style="width:50px;height:50px;border-radius:50%;object-fit:cover;object-position:center top;border:2px solid var(--gold);flex-shrink:0;">`:
+              `<div style="width:50px;height:50px;border-radius:50%;background:var(--navy);border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--gold);font-size:1rem;flex-shrink:0;">${initials}</div>`}
+              <div><div style="font-size:14px;font-weight:600;color:var(--navy);">${a.name}</div><div style="font-size:11px;color:var(--muted);">@${a.username}</div>${a.bio?`<div style="font-size:12px;color:var(--text);margin-top:2px;line-height:1.4;">${a.bio.slice(0,60)}${a.bio.length>60?'...':''}</div>`:''}</div>
+            </a>`;
+          }).join('')}
+        </div>`;
+    } catch(e) {
+      area.innerHTML='<div class="loading-state"><p>Error loading authors.</p></div>';
+    }
+    return;
+  }
 
   try {
     // Handle blog owner special case
