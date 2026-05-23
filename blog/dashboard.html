@@ -211,13 +211,10 @@ nav{background:var(--navy);border-bottom:2px solid var(--gold);padding:0 1.5rem;
       <img id="p-photo-preview" class="photo-preview">
     </div>
     <button class="submit-btn" onclick="saveProfile()">💾 Save Profile</button>
-  </div>
-</div>
-
-<script type="module">
+    <button oncli<script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js';
-import { getAuth, signInWithEmailAndPassword, signOut as fbSignOut, onAuthStateChanged, sendPasswordResetEmail } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js';
-import { getFirestore, collection, addDoc, getDocs, updateDoc, doc, query, where, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js';
+import { getAuth, signInWithEmailAndPassword, signOut as fbSignOut, onAuthStateChanged, sendPasswordResetEmail, deleteUser } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js';
+import { getFirestore, collection, addDoc, getDocs, updateDoc, deleteDoc, doc, query, where, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js';
 
 const app = initializeApp({apiKey:"AIzaSyAgUl22Cln6QtY3-HIvI6lE8Zu7n9OblbI",authDomain:"icet-alumni.firebaseapp.com",projectId:"icet-alumni",storageBucket:"icet-alumni.firebasestorage.app",messagingSenderId:"707390888790",appId:"1:707390888790:web:57e6be62e4d11e22c214f7"});
 const auth = getAuth(app);
@@ -308,6 +305,27 @@ window.signIn = async function() {
 
 window.signOut = async function() {
   await fbSignOut(auth);
+};
+
+window.deleteProfile = async function() {
+  if (!currentUser || !authorDocId) return;
+  if (!confirm('⚠️ Delete your author profile permanently?\n\nThis will delete your account and all your profile data. Your published posts will remain but show as anonymous.\n\nThis cannot be undone.')) return;
+  const secondConfirm = prompt('Type DELETE to confirm:');
+  if (secondConfirm !== 'DELETE') { showToast('Deletion cancelled.'); return; }
+  try {
+    // Delete author doc from Firestore (frees up username)
+    await deleteDoc(doc(db,'authors',authorDocId));
+    // Delete Firebase Auth account
+    await deleteUser(currentUser);
+    showToast('Profile deleted. Redirecting...');
+    setTimeout(()=>window.location.href='/blog.html', 1500);
+  } catch(e) {
+    if (e.code==='auth/requires-recent-login') {
+      showToast('Please sign out and sign back in, then try again.');
+    } else {
+      showToast('Error: '+e.message);
+    }
+  }
 };
 
 window.resetPassword = async function() {
@@ -442,6 +460,10 @@ mdDrop.addEventListener('drop',e=>{e.preventDefault();mdDrop.style.borderColor='
 function resizeImg(file,previewId,cb){
   if(!file)return;
   const r=new FileReader();r.onload=e=>{const img=new Image();img.onload=()=>{const c=document.createElement('canvas');const M=800;let w=img.width,h=img.height;if(w>M){h=h*(M/w);w=M;}c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);const b=c.toDataURL('image/jpeg',0.85);cb(b);const p=document.getElementById(previewId);p.src=b;p.style.display='block';};img.src=e.target.result;};r.readAsDataURL(file);
+}
+
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
+</script>ntById(previewId);p.src=b;p.style.display='block';};img.src=e.target.result;};r.readAsDataURL(file);
 }
 
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
