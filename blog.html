@@ -7,8 +7,6 @@
 <link rel="icon" type="image/png" href="/favicon.png">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-<script>emailjs.init('NMUbpQ_Tz1ZXT1Ipk');</script>
 <style>
 
 :root{--navy:#1a3a8a;--gold:#c9a84c;--gold-light:#e8d5a3;--cream:#faf8f4;--white:#fff;--text:#1a1a2e;--muted:#6b7280;--border:#e5e7eb;--red:#dc2626;--green:#059669;}
@@ -705,9 +703,12 @@ window.subscribe = async function() {
     const existing = await getDocs(query(collection(db,'subscribers'), where('email','==',email)));
     if (!existing.empty) { msg.textContent='You are already subscribed!'; msg.style.color='#86efac'; btn.disabled=false; btn.textContent='Subscribe →'; return; }
     await addDoc(collection(db,'subscribers'), { name, email, subscribedAt: serverTimestamp() });
-    if (typeof emailjs !== 'undefined') {
-      emailjs.send('service_1hyb7v5', 'template_onvizmg', { subscriber_name: name, subscriber_email: email }).catch(()=>{});
-    }
+        // Send welcome email via Resend
+    fetch('/api/send-email', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ type:'welcome', to: email, toName: name })
+    }).catch(()=>{});
     document.getElementById('sub-name').value='';
     document.getElementById('sub-email').value='';
     msg.textContent='✅ Subscribed! Welcome to The Lab Notebook.';
@@ -720,16 +721,24 @@ window.subscribe = async function() {
 window.notifySubscribers = async function(title, url, author) {
   try {
     const snap = await getDocs(collection(db,'subscribers'));
+    let count = 0;
     const sends = [];
     snap.forEach(d => {
-      sends.push(emailjs.send('service_1hyb7v5', 'template_g4pn0is', {
-        subscriber_name: d.data().name||'Reader',
-        subscriber_email: d.data().email,
-        post_title: title, post_author: author, post_url: url
+      const sub = d.data();
+      sends.push(fetch('/api/send-email', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({
+          type: 'new-post',
+          to: sub.email,
+          toName: sub.name || 'Reader',
+          data: { postTitle: title, postAuthor: author, postUrl: url }
+        })
       }));
+      count++;
     });
     await Promise.allSettled(sends);
-    showToast('Notified '+sends.length+' subscriber(s) ✓');
+    showToast('Notified ' + count + ' subscriber(s) ✓');
   } catch(e) { showToast('Error: '+e.message); }
 };
 
