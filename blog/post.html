@@ -150,8 +150,6 @@ hr.post-divider{border:none;border-top:1px solid var(--border);margin:0 0 2rem;}
 .toast.show{opacity:1;transform:translateY(0);}
 @media(max-width:600px){.form-row{grid-template-columns:1fr;}.post-action-bar{flex-direction:column;}.comment-form-row{grid-template-columns:1fr;}}
 </style>
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-<script>emailjs.init('NMUbpQ_Tz1ZXT1Ipk');</script>
 </head>
 <body>
 <nav id="main-nav">
@@ -497,14 +495,18 @@ window.deleteComment = async function(id){
 };
 
 function sendCommentNotification(name, text) {
-  if (typeof emailjs === 'undefined') return;
-  emailjs.send('service_1hyb7v5', 'template_onvizmg', {
-    post_title: currentPost?.title || 'A post',
-    post_url: window.location.href,
-    commenter_name: name,
-    comment_text: text.slice(0,200),
-    subscriber_name: 'Adeem',
-    subscriber_email: 'ranaadeem@hotmail.com'
+  fetch('/api/send-email', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({
+      type: 'comment',
+      data: {
+        postTitle: currentPost?.title || 'A post',
+        postUrl: window.location.href,
+        commenterName: name,
+        commentText: text.slice(0,300)
+      }
+    })
   }).catch(()=>{});
 }
 
