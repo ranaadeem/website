@@ -338,7 +338,7 @@ function renderPost(p) {
     <h1 class="post-title">${p.title}</h1>
     ${p.subtitle?`<p class="post-subtitle">${p.subtitle}</p>`:''}
     <div class="post-meta">
-      <a href="${p.authorName==='Dr. Adeem Ghaffar Rana'?'/about.html':'/blog/author.html?name='+encodeURIComponent(p.authorName||'Dr. Adeem Ghaffar Rana')}" class="post-author" style="color:var(--text);text-decoration:none;" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--text)'">${p.authorName||'Dr. Adeem Ghaffar Rana'}</a>
+      <a href="${p.authorName==='Dr. Adeem Ghaffar Rana'?'/blog/author.html?u=ranaadeem':'/blog/author.html?u='+(p.authorUsername||encodeURIComponent(p.authorName||''))}" class="post-author" style="color:var(--text);text-decoration:none;" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--text)'">${p.authorName||'Dr. Adeem Ghaffar Rana'}</a>
       ${date?`<span>·</span><span>${date}</span>`:''}
       <span>·</span><span>⏱ ${readMin} min read</span>
       <span>·</span><span>${words} words</span>
