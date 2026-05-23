@@ -356,19 +356,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
     <div style="background:white;border:1px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.06);">
       <div style="background:var(--navy);padding:0.7rem 1rem;font-family:'Playfair Display',serif;color:white;font-size:0.9rem;font-weight:600;">✍️ Author Corner</div>
       <div style="padding:1.1rem;" id="author-sidebar-card">
-        <div id="author-card-loggedout">
-          <p style="font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:1rem;">Have something worth writing? Share your ideas with our readers.</p>
-          <a href="/blog/register.html" style="display:block;background:var(--gold);color:var(--navy);text-align:center;padding:9px;border-radius:8px;font-size:13px;font-weight:700;text-decoration:none;margin-bottom:8px;">Create Author Account</a>
-          <a href="/blog/dashboard.html" style="display:block;background:white;color:var(--navy);text-align:center;padding:9px;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none;border:1.5px solid var(--border);">Sign In</a>
-        </div>
-        <div id="author-card-loggedin" style="display:none;">
-          <div style="display:flex;gap:10px;align-items:center;margin-bottom:0.75rem;">
-            <div id="sidebar-author-avatar" style="width:42px;height:42px;border-radius:50%;background:var(--navy);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--gold);font-size:13px;flex-shrink:0;overflow:hidden;"></div>
-            <div><div id="sidebar-author-name" style="font-size:13px;font-weight:600;color:var(--navy);"></div><div id="sidebar-author-username" style="font-size:11px;color:var(--muted);"></div></div>
-          </div>
-          <a href="/blog/dashboard.html" style="display:block;background:var(--gold);color:var(--navy);text-align:center;padding:9px;border-radius:8px;font-size:13px;font-weight:700;text-decoration:none;margin-bottom:8px;">My Dashboard</a>
-          <button onclick="window.authorSignOut()" style="display:block;width:100%;background:white;color:var(--muted);padding:9px;border-radius:8px;font-size:12px;font-weight:500;border:1.5px solid var(--border);cursor:pointer;font-family:inherit;">Sign Out</button>
-        </div>
+        <div style="text-align:center;padding:1rem;color:var(--muted);font-size:13px;">Loading...</div>
       </div>
     </div>
     <!-- About -->
@@ -490,6 +478,38 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
       </div>
       <div style="display:flex;gap:0.75rem;">
         <button cla<script type="module">function switchAdminTab(tab) {
+  ['write','pending','manage','authors'].forEach(t => {
+    const el = document.getElementById('atab-'+t);
+    if (el) el.style.display = t===tab ? 'block' : 'none';
+    const btn = document.getElementById('atab-'+t+'-btn');
+    if (btn) btn.classList.toggle('active', t===tab);
+  });
+  if (tab==='pending') loadPending();
+  if (tab==='manage') loadManage();
+  if (tab==='authors') loadAuthors();
+}
+
+async function loadManage() {
+  const list = document.getElementById('manage-list');
+  if (!list) return;
+  list.innerHTML = '<div class="loading">Loading...</div>';
+  try {
+    const snap = await getDocs(query(collection(db,'posts'), where('status','==','published')));
+    if (snap.empty) { list.innerHTML='<div style="text-align:center;padding:2rem;color:var(--muted);">No published posts yet.</div>'; return; }
+    const posts = [];
+    snap.forEach(d => posts.push({id:d.id,...d.data()}));
+    posts.sort((a,b)=>(b.publishedAt?.seconds||0)-(a.publishedAt?.seconds||0));
+    list.innerHTML = '';
+    posts.forEach(p => {
+      const date = p.publishedAt ? new Date(p.publishedAt.seconds*1000).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}) : '';
+      const el = document.createElement('div');
+      el.id = 'manage-post-'+p.id;
+      el.style.cssText = 'background:#f8f7f4;border:1px solid var(--border);border-radius:10px;padding:1rem;margin-bottom:0.75rem;';
+      el.innerHTML = `
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;flex-wrap:wrap;">
+          <div style="flex:1;min-width:200px;">
+            <div style="font-weight:600;color:var(--navy);font-size:14px;margin-bottom:3px;">${p.title}</div>
+            <d<script type="module">function switchAdminTab(tab) {
   ['write','pending','manage','authors'].forEach(t => {
     const el = document.getElementById('atab-'+t);
     if (el) el.style.display = t===tab ? 'block' : 'none';
@@ -796,36 +816,9 @@ window.resendVerification = async function() {
 };
 
 // ── Author sidebar auth state ──
-onAuthStateChanged(auth, async (user) => {
-  if (user && user.uid !== ADMIN_UID) {
-    try {
-      const snap = await getDocs(query(collection(db,'authors'), where('uid','==',user.uid)));
-      if (!snap.empty) {
-        const author = snap.docs[0].data();
-        document.getElementById('author-card-loggedout').style.display='none';
-        document.getElementById('author-card-loggedin').style.display='block';
-        document.getElementById('sidebar-author-name').textContent = author.name||'';
-        document.getElementById('sidebar-author-username').textContent = '@'+(author.username||'');
-        const av = document.getElementById('sidebar-author-avatar');
-        if (author.photoBase64) {
-          av.innerHTML = `<img src="${author.photoBase64}" style="width:100%;height:100%;object-fit:cover;">`;
-        } else {
-          av.textContent = (author.name||'A').split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase();
-        }
-      }
-    } catch(e){}
-  } else if (!user) {
-    const lo = document.getElementById('author-card-loggedout');
-    const li = document.getElementById('author-card-loggedin');
-    if(lo) lo.style.display='block';
-    if(li) li.style.display='none';
-  }
-});
-
+// Author sidebar handled by loadAuthorSidebar() above
 window.authorSignOut = async function() {
   await auth.signOut();
-  document.getElementById('author-card-loggedout').style.display='block';
-  document.getElementById('author-card-loggedin').style.display='none';
 };
 
 // ── Auto-detect admin Google sign-in ──
@@ -1116,58 +1109,7 @@ function showToast(msg) {
   const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show');
   setTimeout(()=>t.classList.remove('show'),3000);
 }
-</script>play='block';
-    };
-    img.src = e.target.result;
-  };
-  reader.readAsDataURL(file);
-}
-
-function showToast(msg) {
-  const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),3000);
-}
-</script>ipt>
-// ── Editor toolbar functions (non-module) ──
-function alignSelectedImg(align) {
-  // Find selected image or last inserted image in any active editor
-  const editors = ['admin-editor','guest-editor'];
-  let targetImg = null;
-  for (const id of editors) {
-    const el = document.getElementById(id);
-    if (!el) continue;
-    const sel = window.getSelection();
-    if (sel && sel.rangeCount > 0) {
-      const node = sel.getRangeAt(0).commonAncestorContainer;
-      if (el.contains(node)) {
-        // Find img in or near selection
-        targetImg = el.querySelector('img:last-of-type');
-        break;
-      }
-    }
-  }
-  if (!targetImg) {
-    // Just align last image in whichever editor has content
-    for (const id of editors) {
-      const el = document.getElementById(id);
-      if (el && el.querySelector('img')) { targetImg = el.querySelector('img:last-of-type'); break; }
-    }
-  }
-  if (!targetImg) return;
-  const alignMap = {
-    left: 'display:block;margin-right:auto;margin-left:0;max-width:100%;border-radius:8px;',
-    center: 'display:block;margin:0 auto;max-width:100%;border-radius:8px;',
-    right: 'display:block;margin-left:auto;margin-right:0;max-width:100%;border-radius:8px;'
-  };
-  targetImg.style.cssText = alignMap[align] || alignMap.center;
-}
-function fmt(prefix, cmd, val) {
-  document.getElementById(prefix+'-editor').focus();
-  document.execCommand(cmd, false, val||null);
-}
-
-// Image alignment in contenteditable
-function setupImgAlign(prefix) {
+</script>
   const editor = document.getElementById(prefix+'-editor');
   if (!editor) return;
   editor.addEventListener('click', function(e) {
