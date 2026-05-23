@@ -624,6 +624,28 @@ function renderPostCard(p) {
   grid.appendChild(card);
 }
 
+
+// ── Upload image to Cloudinary ──
+async function uploadToCloudinary(base64Data) {
+  if (!base64Data) return '';
+  try {
+    const res = await fetch(base64Data);
+    const blob = await res.blob();
+    const formData = new FormData();
+    formData.append('file', blob);
+    formData.append('upload_preset', 'ranaadeem_blog');
+    const response = await fetch('https://api.cloudinary.com/v1_1/duetiv9rm/image/upload', {
+      method: 'POST',
+      body: formData
+    });
+    const data = await response.json();
+    return data.secure_url || base64Data;
+  } catch(e) {
+    console.error('Cloudinary error:', e);
+    return base64Data;
+  }
+}
+
 // ── Publish post (admin) ──
 window.publishPost = async function() {
   const title = document.getElementById('admin-title').value.trim();
@@ -638,13 +660,14 @@ window.publishPost = async function() {
   const btn = document.getElementById('admin-publish-btn');
   btn.disabled=true; btn.textContent='Publishing...';
   try {
+    const coverUrl = await uploadToCloudinary(adminCoverBase64);
     const ref = await addDoc(collection(db,'posts'), {
       title,
       subtitle: document.getElementById('admin-subtitle').value.trim(),
       category,
       tags: document.getElementById('admin-tags').value.trim(),
       content,
-      coverImage: adminCoverBase64,
+      coverImage: coverUrl,
       authorName: 'Dr. Adeem Ghaffar Rana',
       authorUsername: 'ranaadeem',
       authorUid: ADMIN_UID,
@@ -670,13 +693,14 @@ window.submitGuestPost = async function() {
   const suc = document.getElementById('guest-success');
   btn.disabled=true; btn.textContent='Submitting...';
   try {
+    const guestCoverUrl = await uploadToCloudinary(guestCoverBase64);
     await addDoc(collection(db,'posts'), {
       title: document.getElementById('guest-title').value.trim(),
       subtitle: document.getElementById('guest-subtitle').value.trim(),
       category: document.getElementById('guest-category').value,
       tags: document.getElementById('guest-tags').value.trim(),
       content: document.getElementById('guest-editor').innerHTML,
-      coverImage: guestCoverBase64,
+      coverImage: guestCoverUrl,
       authorName: document.getElementById('guest-name').value.trim(),
       authorEmail: document.getElementById('guest-email').value.trim(),
       authorBio: document.getElementById('guest-bio').value.trim(),
