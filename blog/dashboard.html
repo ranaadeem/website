@@ -78,7 +78,7 @@ nav{background:var(--navy);border-bottom:2px solid var(--gold);padding:0 1.5rem;
   </a>
   <div class="nav-right"><a href="/blog.html" style="font-size:13px;color:rgba(255,255,255,0.75);text-decoration:none;margin-right:0.5rem;">← Blog</a>
     <span class="nav-user" id="nav-user-name"></span>
-    <button class="nav-signout" id="nav-signout" style="display:none;" onclick="window.signOut()">Sign Out</button>
+    <button class="nav-signout" id="nav-signout" style="display:none;" onclick="_callWhenReady('signOut',[])">Sign Out</button>
   </div>
 </nav>
 <div class="toast" id="toast"></div>
@@ -90,11 +90,11 @@ nav{background:var(--navy);border-bottom:2px solid var(--gold);padding:0 1.5rem;
     <p>Sign in to your author account to manage your posts and profile.</p>
     <div class="error-box" id="login-error"></div>
     <div class="form-group"><label>Email</label><input type="email" id="login-email" placeholder="your@email.com"></div>
-    <div class="form-group"><label>Password</label><input type="password" id="login-password" placeholder="Your password" onkeydown="if(event.key==='Enter')window.signIn()"></div>
-    <button class="submit-btn" id="btn-signin" onclick="window.signIn()">Sign In →</button>
-    <button class="btn-secondary" onclick="window.signInGoogle()" style="margin-top:8px;display:flex;align-items:center;justify-content:center;gap:8px;"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg> Sign in with Google</button>
+    <div class="form-group"><label>Password</label><input type="password" id="login-password" placeholder="Your password" onkeydown="if(event.key==='Enter')_callWhenReady('signIn',[])"></div>
+    <button class="submit-btn" id="btn-signin" onclick="_callWhenReady('signIn',[])">Sign In →</button>
+    <button class="btn-secondary" onclick="_callWhenReady('signInGoogle',[])" style="margin-top:8px;display:flex;align-items:center;justify-content:center;gap:8px;"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg> Sign in with Google</button>
     <button class="btn-secondary" onclick="window.location.href='/blog/register.html'" style="margin-top:8px;">Create Account</button>
-    <p style="text-align:center;font-size:12px;color:var(--muted);margin-top:0.75rem;"><a href="#" onclick="window.resetPassword()" style="color:var(--navy);">Forgot password?</a></p>
+    <p style="text-align:center;font-size:12px;color:var(--muted);margin-top:0.75rem;"><a href="#" onclick="_callWhenReady('resetPassword',[])" style="color:var(--navy);">Forgot password?</a></p>
   </div>
 </div>
 
@@ -190,7 +190,7 @@ nav{background:var(--navy);border-bottom:2px solid var(--gold);padding:0 1.5rem;
         <div style="background:white;border:1px solid var(--border);border-radius:8px;padding:1.5rem;min-height:200px;font-size:15px;line-height:1.85;" id="w-preview-content"></div>
       </div>
     </div>
-    <button class="submit-btn" onclick="window.submitPost()">📬 Submit for Review</button>
+    <button class="submit-btn" onclick="_callWhenReady('submitPost',[])">📬 Submit for Review</button>
     <p style="font-size:12px;color:var(--muted);margin-top:0.5rem;text-align:center;">Your post will be reviewed before publishing.</p>
   </div>
 
@@ -210,13 +210,18 @@ nav{background:var(--navy);border-bottom:2px solid var(--gold);padding:0 1.5rem;
       <label>Profile Photo</label>
       <input type="file" id="p-photo" accept="image/*">
       <img id="p-photo-preview" class<script type="module">
+// Global bridge - assigned before module functions so HTML can call them
+window._dash = {};
+
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js';
 import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, signOut as fbSignOut, onAuthStateChanged, sendPasswordResetEmail, deleteUser } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js';
 import { getFirestore, collection, addDoc, getDocs, updateDoc, deleteDoc, doc, query, where, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js';
 
 const app = initializeApp({apiKey:"AIzaSyAgUl22Cln6QtY3-HIvI6lE8Zu7n9OblbI",authDomain:"icet-alumni.firebaseapp.com",projectId:"icet-alumni",storageBucket:"icet-alumni.firebasestorage.app",messagingSenderId:"707390888790",appId:"1:707390888790:web:57e6be62e4d11e22c214f7"});
 const auth = getAuth(app);
+window._auth = auth;
 const db = getFirestore(app);
+window._db = db;
 let currentUser = null;
 let authorDoc = null;
 let authorDocId = null;
@@ -281,8 +286,12 @@ function showDashboard() {
   if (authorDoc.isAdmin) {
     const tabsEl = document.querySelector('.dash-tabs');
     if (tabsEl && !document.getElementById('dtab-admin-btn')) {
-      tabsEl.innerHTML += '<button class="dash-tab" id="dtab-admin-btn" onclick="switchTab('admin')">⚙️ Admin</button>';
-      const adminPanel = document.createElement('div');
+      const adminTabBtn = document.createElement('button');
+      adminTabBtn.className = 'dash-tab';
+      adminTabBtn.id = 'dtab-admin-btn';
+      adminTabBtn.textContent = '⚙️ Admin';
+      adminTabBtn.addEventListener('click', () => switchTab('admin'));
+      tabsEl.appendChild(adminTabBtn);      const adminPanel = document.createElement('div');
       adminPanel.id = 'dtab-admin';
       adminPanel.style.display = 'none';
       adminPanel.innerHTML = '<p style="font-size:14px;color:var(--muted);margin-bottom:1rem;">Quick admin access. Full admin panel is on the <a href="/blog.html" style="color:var(--navy);font-weight:600;">blog page</a> when signed in.</p><a href="/blog.html" style="display:inline-block;background:var(--gold);color:var(--navy);padding:10px 22px;border-radius:8px;font-size:14px;font-weight:600;text-decoration:none;">→ Go to Blog Admin Panel</a>';
@@ -534,6 +543,19 @@ function insertImage(input){
   const f=input.files[0];if(!f)return;
   const r=new FileReader();r.onload=e=>{const img=new Image();img.onload=()=>{const c=document.createElement('canvas');const M=900;let w=img.width,h=img.height;if(w>M){h=h*(M/w);w=M;}c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);document.getElementById('w-editor').focus();document.execCommand('insertImage',false,c.toDataURL('image/jpeg',0.82));};img.src=e.target.result;};
   r.readAsDataURL(f);input.value='';
+}
+</script>
+
+<script>
+// Stubs that delegate to module-defined window functions
+// These work because by the time user clicks, module has loaded
+function _callWhenReady(fnName, args) {
+  if (typeof window[fnName] === 'function') {
+    window[fnName].apply(null, args);
+  } else {
+    // Module still loading - retry after 200ms
+    setTimeout(() => _callWhenReady(fnName, args), 200);
+  }
 }
 </script>
 </body>
