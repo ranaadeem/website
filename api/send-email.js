@@ -71,7 +71,7 @@ export default async function handler(req, res) {
 
   } else if (type === 'comment') {
     // Admin notification for new comment
-    subject = `New comment on: ${data.postTitle}`;
+    subject = `New comment on your post: ${data.postTitle}`;
     html = `
       <div style="font-family:'DM Sans',sans-serif;max-width:560px;margin:0 auto;padding:2rem;">
         <div style="background:#1a3a8a;padding:1.5rem 2rem;border-radius:10px 10px 0 0;">
@@ -79,7 +79,7 @@ export default async function handler(req, res) {
           <p style="color:rgba(255,255,255,0.7);margin:4px 0 0;font-size:13px;">The Lab Notebook</p>
         </div>
         <div style="background:#faf8f4;padding:2rem;border-radius:0 0 10px 10px;border:1px solid #e5e7eb;border-top:none;">
-          <p style="color:#374151;"><strong>${data.commenterName}</strong> commented on <strong>${data.postTitle}</strong>:</p>
+          <p style="color:#374151;">Hi ${data.authorName || 'there'},</p><p style="color:#374151;"><strong>${data.commenterName}</strong> commented on your post <strong>${data.postTitle}</strong>:</p>
           <blockquote style="border-left:3px solid #c9a84c;padding:0.75rem 1rem;background:white;margin:1rem 0;border-radius:0 6px 6px 0;color:#374151;font-style:italic;">${data.commentText}</blockquote>
           <a href="${data.postUrl}" style="display:inline-block;background:#c9a84c;color:#1a3a8a;padding:10px 24px;border-radius:8px;text-decoration:none;font-weight:700;font-size:14px;">View Post →</a>
         </div>
@@ -102,8 +102,12 @@ export default async function handler(req, res) {
       },
       body: JSON.stringify({
         from: 'The Lab Notebook <noreply@ranaadeem.de>',
-        to: (type === 'new-submission' || type === 'comment')
+        to: type === 'new-submission'
           ? ['ranaadeem@hotmail.com']
+          : type === 'comment'
+          ? (data.authorEmail && data.authorEmail !== 'ranaadeem@hotmail.com'
+              ? [data.authorEmail, 'ranaadeem@hotmail.com']
+              : ['ranaadeem@hotmail.com'])
           : [to],
         subject,
         html
