@@ -328,6 +328,31 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
     </div>
   </div>
 
+  <!-- AUTHOR CORNER BANNER -->
+  <div id="author-corner-banner" style="background:white;border:1px solid var(--border);border-radius:12px;padding:1rem 1.25rem;margin-bottom:1.5rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;box-shadow:0 2px 8px rgba(0,0,0,0.04);">
+    <div id="author-corner-loggedout" style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap;width:100%;">
+      <div style="flex:1;min-width:200px;">
+        <div style="font-size:13px;font-weight:600;color:var(--navy);">✍️ Write for The Lab Notebook</div>
+        <div style="font-size:12px;color:var(--muted);">Have something worth writing? Share your research, experiences or ideas.</div>
+      </div>
+      <div style="display:flex;gap:8px;flex-shrink:0;">
+        <a href="/blog/register.html" style="background:var(--gold);color:var(--navy);padding:8px 16px;border-radius:7px;font-size:13px;font-weight:700;text-decoration:none;">Create Account</a>
+        <a href="/blog/dashboard.html" style="background:white;color:var(--navy);border:1.5px solid var(--border);padding:8px 16px;border-radius:7px;font-size:13px;font-weight:600;text-decoration:none;">Sign In</a>
+      </div>
+    </div>
+    <div id="author-corner-loggedin" style="display:none;align-items:center;gap:1rem;flex-wrap:wrap;width:100%;">
+      <div id="ac-avatar" style="width:38px;height:38px;border-radius:50%;background:var(--navy);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--gold);font-size:13px;flex-shrink:0;overflow:hidden;"></div>
+      <div style="flex:1;min-width:150px;">
+        <div id="ac-name" style="font-size:13px;font-weight:600;color:var(--navy);"></div>
+        <div id="ac-username" style="font-size:11px;color:var(--muted);"></div>
+      </div>
+      <div style="display:flex;gap:8px;flex-shrink:0;">
+        <a href="/blog/dashboard.html" style="background:var(--gold);color:var(--navy);padding:8px 16px;border-radius:7px;font-size:13px;font-weight:700;text-decoration:none;">My Dashboard</a>
+        <button onclick="window.authorSignOut()" style="background:white;color:var(--muted);border:1.5px solid var(--border);padding:8px 16px;border-radius:7px;font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;">Sign Out</button>
+      </div>
+    </div>
+  </div>
+
   <!-- POSTS GRID -->
   <div id="posts-grid" class="posts-grid"><div class="loading">Loading posts...</div></div>
 
@@ -473,9 +498,45 @@ onAuthStateChanged(auth, async (user) => {
 });
 
 async function updateAuthorCorner(user) {
-  // Author corner is now in the header - handled by blog page header state
-  // No sidebar - nothing to update on blog listing
+  const loggedout = document.getElementById('author-corner-loggedout');
+  const loggedin = document.getElementById('author-corner-loggedin');
+  if (!loggedout || !loggedin) return;
+  if (!user) {
+    loggedout.style.display = 'flex';
+    loggedin.style.display = 'none';
+    return;
+  }
+  // Check if registered author
+  try {
+    const snap = await getDocs(query(collection(db,'authors'), where('uid','==',user.uid)));
+    if (!snap.empty) {
+      const author = snap.docs[0].data();
+      loggedout.style.display = 'none';
+      loggedin.style.display = 'flex';
+      document.getElementById('ac-name').textContent = author.name + (user.uid === ADMIN_UID ? ' ⚡' : '');
+      document.getElementById('ac-username').textContent = '@' + author.username;
+      const av = document.getElementById('ac-avatar');
+      if (author.photoBase64) {
+        av.innerHTML = `<img src="${author.photoBase64}" style="width:100%;height:100%;object-fit:cover;">`;
+      } else {
+        av.textContent = (author.name||'A').split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase();
+      }
+    } else if (user.uid === ADMIN_UID) {
+      // Admin without author doc
+      loggedout.style.display = 'none';
+      loggedin.style.display = 'flex';
+      document.getElementById('ac-name').textContent = 'Dr. Adeem Ghaffar Rana ⚡';
+      document.getElementById('ac-username').textContent = '@ranaadeem';
+      document.getElementById('ac-avatar').textContent = 'AG';
+    }
+  } catch(e) { console.error('Author corner error:', e); }
 }
+
+window.authorSignOut = async function() {
+  await auth.signOut();
+  document.getElementById('author-corner-loggedout').style.display = 'flex';
+  document.getElementById('author-corner-loggedin').style.display = 'none';
+};
 
 // ── Load posts ──
 async function loadPosts() {
