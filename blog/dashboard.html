@@ -379,13 +379,14 @@ function submitPost() {
   if (text.length < 50) { showError("write-error","Content too short (min 50 chars)."); return; }
   var btn = document.querySelector("#dtab-write .submit-btn");
   btn.disabled = true; btn.textContent = "Submitting...";
-  db.collection("posts").add({
+  uploadToCloudinary(coverBase64).then(function(coverUrl) {
+  return db.collection("posts").add({
     title: title,
     subtitle: document.getElementById("w-subtitle").value.trim(),
     category: category,
     tags: document.getElementById("w-tags").value.trim(),
     content: content,
-    coverImage: coverBase64,
+    coverImage: coverUrl,
     authorName: authorDoc.name,
     authorEmail: authorDoc.email || currentUser.email,
     authorBio: authorDoc.bio || "",
@@ -424,6 +425,7 @@ function submitPost() {
     showError("write-error","Error: " + e.message);
     btn.disabled = false; btn.textContent = "📬 Submit for Review";
   });
+  }); // close uploadToCloudinary
 }
 
 // ── My posts ──
