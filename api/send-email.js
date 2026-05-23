@@ -94,7 +94,7 @@ export default async function handler(req, res) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer re_aP3f2r61_EU3YYxcgqcsxFf2StazVdqVF'
+        'Authorization': 'Bearer ' + process.env.RESEND_API_KEY
       },
       body: JSON.stringify({
         from: 'The Lab Notebook <onboarding@resend.dev>',
