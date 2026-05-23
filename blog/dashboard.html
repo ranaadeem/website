@@ -427,7 +427,8 @@ function submitPost() {
 }
 
 // ── My posts ──
-function deleteMyPost(id, btn) {
+function deleteMyPost(btn) {
+  var id = btn.getAttribute("data-id");
   if (!confirm("Delete this submission permanently?")) return;
   btn.disabled = true; btn.textContent = "Deleting...";
   db.collection("posts").doc(id).delete()
@@ -459,7 +460,7 @@ function loadMyPosts() {
           + "<div style='display:flex;align-items:center;gap:8px;flex-shrink:0;'>"
           + "<span class='status-pill status-" + p.status + "'>" + (p.status==="published"?"✅ Published":"⏳ Pending") + "</span>"
           + (p.status==="published" ? "<a href='/blog/post.html?id=" + p.id + "' target='_blank' style='font-size:12px;color:var(--navy);font-weight:600;text-decoration:none;'>View →</a>" : "")
-          + (p.status==="pending" ? "<button onclick='deleteMyPost("" + p.id + "",this)' style='background:white;color:var(--red);border:1.5px solid var(--red);padding:4px 10px;border-radius:5px;font-size:12px;cursor:pointer;font-family:inherit;'>🗑 Delete</button>" : "")
+          + (p.status==="pending" ? "<button onclick='deleteMyPost(this)' data-id='" + p.id + "' style='background:white;color:var(--red);border:1.5px solid var(--red);padding:4px 10px;border-radius:5px;font-size:12px;cursor:pointer;font-family:inherit;'>🗑 Delete</button>" : "")
           + "</div>";
         list.appendChild(el);
       });
