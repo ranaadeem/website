@@ -397,6 +397,20 @@ function submitPost() {
     createdAt: firebase.firestore.FieldValue.serverTimestamp()
   }).then(function() {
     showSuccess("write-success","✅ Submitted for review! You will be notified when it goes live.");
+    // Notify admin
+    fetch('/api/send-email', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+        type: 'new-submission',
+        data: {
+          postTitle: title,
+          authorName: authorDoc.name,
+          authorEmail: authorDoc.email || currentUser.email,
+          postCategory: category
+        }
+      })
+    }).catch(function(){});
     document.getElementById("w-title").value = "";
     document.getElementById("w-subtitle").value = "";
     document.getElementById("w-tags").value = "";
