@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Create Author Account — The Lab Notebook</title>
+<link rel="icon" type="image/png" href="/favicon.png">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#1a3a8a;--gold:#c9a84c;--cream:#faf8f4;--text:#1a1a2e;--muted:#6b7280;--border:#e5e7eb;--red:#dc2626;--green:#059669;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);min-height:100vh;display:flex;flex-direction:column;}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");background-repeat:repeat;}
+nav{background:var(--navy);border-bottom:2px solid var(--gold);padding:0 1.5rem;height:64px;display:flex;align-items:center;position:sticky;top:0;z-index:100;}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
+.nav-logo-agr{font-family:Georgia,serif;font-size:22px;font-weight:700;color:var(--gold);letter-spacing:2px;border:2px solid var(--gold);padding:2px 8px;border-radius:4px;}
+.nav-logo-name{font-size:13px;color:rgba(255,255,255,0.75);}
+.wrap{max-width:520px;margin:3rem auto;padding:0 1.5rem 4rem;position:relative;z-index:1;}
+.card{background:white;border:1px solid var(--border);border-radius:16px;padding:2rem;box-shadow:0 4px 20px rgba(0,0,0,0.06);}
+.card-header{text-align:center;margin-bottom:1.75rem;}
+.card-header h1{font-family:"Playfair Display",serif;font-size:1.6rem;color:var(--navy);margin-bottom:0.3rem;}
+.card-header p{font-size:13px;color:var(--muted);}
+.form-group{margin-bottom:1rem;}
+.form-group label{display:block;font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:5px;}
+.form-group input,.form-group textarea{width:100%;padding:10px 13px;border:1px solid var(--border);border-radius:7px;font-size:14px;font-family:inherit;outline:none;color:var(--text);transition:border 0.2s;}
+.form-group input:focus,.form-group textarea:focus{border-color:var(--gold);}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+.req{color:var(--red);}
+.hint{font-size:11px;color:var(--muted);margin-top:3px;}
+.photo-preview{width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid var(--gold);margin-top:8px;display:none;}
+.submit-btn{width:100%;padding:12px;background:var(--gold);color:var(--navy);border:none;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;margin-top:0.5rem;transition:all 0.2s;}
+.submit-btn:hover{background:#e0b84a;}
+.submit-btn:disabled{opacity:0.6;cursor:not-allowed;}
+.error-box{background:#fef2f2;border:1px solid #fee2e2;color:var(--red);padding:10px 14px;border-radius:6px;font-size:13px;margin-bottom:1rem;display:none;}
+.success-box{background:#f0fdf4;border:1px solid #bbf7d0;color:var(--green);padding:10px 14px;border-radius:6px;font-size:13px;margin-bottom:1rem;display:none;}
+.divider{display:flex;align-items:center;gap:0.75rem;margin:1.25rem 0;color:var(--muted);font-size:12px;}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border);}
+.login-link{text-align:center;font-size:13px;color:var(--muted);margin-top:1rem;}
+.login-link a{color:var(--navy);font-weight:600;text-decoration:none;}
+.strength-bar{height:4px;border-radius:2px;margin-top:5px;background:var(--border);overflow:hidden;}
+.strength-fill{height:100%;border-radius:2px;transition:all 0.3s;width:0;}
+@media(max-width:500px){.form-row{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<nav>
+  <a href="/" class="nav-logo">
+    <span class="nav-logo-agr">AGR</span>
+    <span class="nav-logo-name">The Lab Notebook</span>
+  </a>
+</nav>
+<div class="wrap">
+  <div class="card">
+    <div class="card-header">
+      <h1>Create Author Account</h1>
+      <p>Join The Lab Notebook and share your writing with our readers.</p>
+    </div>
+    <div class="error-box" id="reg-error"></div>
+    <div class="success-box" id="reg-success"></div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Full Name <span class="req">*</span></label>
+        <input type="text" id="reg-name" placeholder="Dr. Jane Smith">
+      </div>
+      <div class="form-group">
+        <label>Username <span class="req">*</span></label>
+        <input type="text" id="reg-username" placeholder="janesmith" oninput="checkUsername(this.value)">
+        <div class="hint" id="username-hint">Letters, numbers, hyphens only</div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Email Address <span class="req">*</span></label>
+      <input type="email" id="reg-email" placeholder="jane@example.com">
+    </div>
+    <div class="form-group">
+      <label>Password <span class="req">*</span></label>
+      <input type="password" id="reg-password" placeholder="Minimum 8 characters" oninput="checkStrength(this.value)">
+      <div class="strength-bar"><div class="strength-fill" id="strength-fill"></div></div>
+      <div class="hint" id="strength-hint"></div>
+    </div>
+    <div class="form-group">
+      <label>Confirm Password <span class="req">*</span></label>
+      <input type="password" id="reg-confirm" placeholder="Repeat password">
+    </div>
+    <div class="form-group">
+      <label>One-line Bio</label>
+      <input type="text" id="reg-bio" placeholder="Researcher at XYZ University · interested in catalysis and policy">
+    </div>
+    <div class="form-group">
+      <label>Profile Photo <span style="font-size:11px;color:var(--muted);font-weight:400;">(optional)</span></label>
+      <input type="file" id="reg-photo" accept="image/*">
+      <img id="reg-photo-preview" class="photo-preview">
+    </div>
+    <button class="submit-btn" id="reg-btn" onclick="register()">Create Account →</button>
+    <div class="divider">already have an account?</div>
+    <a href="/blog/dashboard.html" style="display:block;width:100%;padding:11px;background:white;color:var(--navy);border:1.5px solid var(--navy);border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;text-align:center;text-decoration:none;">Sign In to Dashboard</a>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js';
+import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js';
+import { getFirestore, collection, addDoc, getDocs, query, where, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js';
+
+const app = initializeApp({apiKey:"AIzaSyAgUl22Cln6QtY3-HIvI6lE8Zu7n9OblbI",authDomain:"icet-alumni.firebaseapp.com",projectId:"icet-alumni",storageBucket:"icet-alumni.firebasestorage.app",messagingSenderId:"707390888790",appId:"1:707390888790:web:57e6be62e4d11e22c214f7"});
+const auth = getAuth(app);
+const db = getFirestore(app);
+let photoBase64 = '';
+
+document.getElementById('reg-photo').addEventListener('change', function(e) {
+  const file = e.target.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      const MAX = 300; let w=img.width, h=img.height;
+      if (w>MAX){h=h*(MAX/w);w=MAX;} if (h>MAX){w=w*(MAX/h);h=MAX;}
+      canvas.width=w; canvas.height=h;
+      canvas.getContext('2d').drawImage(img,0,0,w,h);
+      photoBase64 = canvas.toDataURL('image/jpeg', 0.85);
+      const prev = document.getElementById('reg-photo-preview');
+      prev.src = photoBase64; prev.style.display = 'block';
+    };
+    img.src = ev.target.result;
+  };
+  reader.readAsDataURL(file);
+});
+
+window.checkUsername = function(val) {
+  const hint = document.getElementById('username-hint');
+  const clean = val.replace(/[^a-zA-Z0-9-]/g,'');
+  if (val !== clean) document.getElementById('reg-username').value = clean;
+  if (clean.length < 3) { hint.textContent='Too short (min 3 chars)'; hint.style.color='#dc2626'; }
+  else { hint.textContent='✓ Looks good'; hint.style.color='#059669'; }
+};
+
+window.checkStrength = function(val) {
+  const fill = document.getElementById('strength-fill');
+  const hint = document.getElementById('strength-hint');
+  let score = 0;
+  if (val.length >= 8) score++;
+  if (/[A-Z]/.test(val)) score++;
+  if (/[0-9]/.test(val)) score++;
+  if (/[^A-Za-z0-9]/.test(val)) score++;
+  const colors = ['#dc2626','#f97316','#eab308','#22c55e'];
+  const labels = ['Weak','Fair','Good','Strong'];
+  fill.style.width = (score*25)+'%';
+  fill.style.background = colors[score-1]||'#e5e7eb';
+  hint.textContent = score>0 ? labels[score-1] : '';
+};
+
+window.register = async function() {
+  const name = document.getElementById('reg-name').value.trim();
+  const username = document.getElementById('reg-username').value.trim().toLowerCase();
+  const email = document.getElementById('reg-email').value.trim();
+  const password = document.getElementById('reg-password').value;
+  const confirm = document.getElementById('reg-confirm').value;
+  const bio = document.getElementById('reg-bio').value.trim();
+  const err = document.getElementById('reg-error');
+  const suc = document.getElementById('reg-success');
+  err.style.display='none'; suc.style.display='none';
+
+  if (!name||!username||!email||!password) { err.textContent='All required fields must be filled.'; err.style.display='block'; return; }
+  if (username.length < 3) { err.textContent='Username must be at least 3 characters.'; err.style.display='block'; return; }
+  if (password.length < 8) { err.textContent='Password must be at least 8 characters.'; err.style.display='block'; return; }
+  if (password !== confirm) { err.textContent='Passwords do not match.'; err.style.display='block'; return; }
+
+  const btn = document.getElementById('reg-btn');
+  btn.disabled=true; btn.textContent='Creating account...';
+
+  try {
+    // Check username uniqueness
+    const existing = await getDocs(query(collection(db,'authors'), where('username','==',username)));
+    if (!existing.empty) { err.textContent='This username is already taken.'; err.style.display='block'; btn.disabled=false; btn.textContent='Create Account →'; return; }
+
+    // Create Firebase Auth account
+    const cred = await createUserWithEmailAndPassword(auth, email, password);
+    await sendEmailVerification(cred.user);
+
+    // Save author profile to Firestore
+    await addDoc(collection(db,'authors'), {
+      uid: cred.user.uid,
+      name, username, email, bio,
+      photoBase64: photoBase64,
+      registeredAt: serverTimestamp()
+    });
+
+    suc.innerHTML = '✅ Account created! <strong>Please check your email and click the verification link</strong> before signing in. Check your spam folder if you don\'t see it.';
+    suc.style.display='block';
+    btn.textContent='Account Created ✓';
+    setTimeout(()=>window.location.href='/blog/dashboard.html', 4000);
+  } catch(e) {
+    let msg = e.message;
+    if (e.code==='auth/email-already-in-use') msg='This email is already registered.';
+    if (e.code==='auth/invalid-email') msg='Please enter a valid email address.';
+    if (e.code==='auth/weak-password') msg='Password is too weak.';
+    err.textContent=msg; err.style.display='block';
+    btn.disabled=false; btn.textContent='Create Account →';
+  }
+};
+</script>
+</body>
+</html>
