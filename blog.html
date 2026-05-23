@@ -59,7 +59,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
 .page-header h1 span{color:var(--gold);}
 .header-sub{font-size:14px;color:rgba(255,255,255,0.7);line-height:1.6;max-width:500px;}
 /* BLOG */
-.blog-wrap{max-width:1000px;margin:0 auto;padding:3rem 2rem 4rem;}
+.blog-wrap{} @media(max-width:900px){.blog-wrap{grid-template-columns:1fr!important;} .blog-wrap aside{display:none;}}
 .blog-toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:2rem;flex-wrap:wrap;gap:1rem;}
 .blog-toolbar h2{font-family:"Playfair Display",serif;font-size:1.4rem;color:var(--navy);}
 .btn-submit{background:var(--gold);color:var(--navy);border:none;padding:10px 22px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:all 0.2s;}
@@ -151,6 +151,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
 .toast{position:fixed;bottom:1.5rem;right:1.5rem;background:var(--navy);color:white;padding:12px 20px;border-radius:8px;font-size:13px;z-index:9999;opacity:0;transform:translateY(10px);transition:all 0.3s;pointer-events:none;border-left:3px solid var(--gold);}
 .toast.show{opacity:1;transform:translateY(0);}
 @media(max-width:600px){.form-row{grid-template-columns:1fr;}.posts-grid{grid-template-columns:1fr;}}
+@media(max-width:900px){.blog-wrap-inner{grid-template-columns:1fr!important;}#blog-sidebar{display:none;}}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script>emailjs.init('NMUbpQ_Tz1ZXT1Ipk');</script>
@@ -201,7 +202,8 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
     </div>
   </div>
 </div>
-<div class="blog-wrap">
+<div class="blog-wrap" style="display:grid;grid-template-columns:1fr 280px;gap:2rem;align-items:start;max-width:1100px;margin:0 auto;padding:3rem 2rem 4rem;">
+  <div id="blog-main">
   <!-- ADMIN PANEL -->
   <div id="admin-panel">
     <div class="admin-header">
@@ -308,6 +310,8 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
     </div>
   </div>
   <!-- BLOG TOOLBAR -->
+  <div class="blog-wrap-inner" style="display:grid;grid-template-columns:1fr 280px;gap:2rem;align-items:start;">
+  <div>
   <div class="blog-toolbar">
     <h2>Latest Posts</h2>
     <button class="btn-submit" onclick="openGuestModal()">✍️ Submit a Guest Post</button>
@@ -339,7 +343,26 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
     </div>
     <div id="sub-msg" style="margin-top:0.75rem;font-size:13px;color:rgba(255,255,255,0.8);display:none;"></div>
   </div>
-</div>
+  </div><!-- /blog-main -->
+
+  <!-- BLOG SIDEBAR -->
+  <aside style="position:sticky;top:80px;display:flex;flex-direction:column;gap:1.25rem;">
+    <!-- Write for Us / Author Card -->
+    <div style="background:white;border:1px solid var(--border);border-radius:12px;overflow:hidden;">
+      <div style="background:var(--navy);padding:0.7rem 1rem;font-family:'Playfair Display',serif;color:white;font-size:0.9rem;font-weight:600;">✍️ Author Corner</div>
+      <div style="padding:1rem;" id="author-sidebar-card"><div style="text-align:center;padding:1rem;color:var(--muted);font-size:13px;">Loading...</div></div>
+    </div>
+    <!-- About -->
+    <div style="background:white;border:1px solid var(--border);border-radius:12px;overflow:hidden;">
+      <div style="background:var(--navy);padding:0.7rem 1rem;font-family:'Playfair Display',serif;color:white;font-size:0.9rem;font-weight:600;">📖 About</div>
+      <div style="padding:1rem;">
+        <p style="font-size:13px;color:var(--text);line-height:1.65;margin-bottom:0.75rem;">The Lab Notebook — research, academic life, navigating Germany, and anything else worth writing about.</p>
+        <a href="/about.html" style="font-size:12px;color:var(--gold);font-weight:600;text-decoration:none;">About the editor →</a>
+      </div>
+    </div>
+  </aside>
+
+</div><!-- /blog-wrap -->
 
 <!-- GUEST MODAL -->
 <div class="modal-overlay" id="submit-modal">
@@ -454,9 +477,70 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
   </div>
 </div>
 
-<script type="module">
+<script type="module">function switchAdminTab(tab) {
+  ['write','pending','manage'].forEach(t => {
+    const el = document.getElementById('atab-'+t);
+    if (el) el.style.display = t===tab ? 'block' : 'none';
+    const btn = document.getElementById('atab-'+t+'-btn');
+    if (btn) btn.classList.toggle('active', t===tab);
+  });
+  if (tab==='pending') loadPending();
+  if (tab==='manage') loadManage();
+}
+
+async function loadManage() {
+  const list = document.getElementById('manage-list');
+  if (!list) return;
+  list.innerHTML = '<div class="loading">Loading...</div>';
+  try {
+    const snap = await getDocs(query(collection(db,'posts'), where('status','==','published')));
+    if (snap.empty) { list.innerHTML='<div style="text-align:center;padding:2rem;color:var(--muted);">No published posts yet.</div>'; return; }
+    const posts = [];
+    snap.forEach(d => posts.push({id:d.id,...d.data()}));
+    posts.sort((a,b)=>(b.publishedAt?.seconds||0)-(a.publishedAt?.seconds||0));
+    list.innerHTML = '';
+    posts.forEach(p => {
+      const date = p.publishedAt ? new Date(p.publishedAt.seconds*1000).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}) : '';
+      const el = document.createElement('div');
+      el.className = 'pending-item';
+      el.innerHTML = `
+        <div class="pending-item-title">${p.title}</div>
+        <div class="pending-item-meta">By ${p.authorName||'Adeem'} · ${date} · <strong>${p.category||'Uncategorised'}</strong></div>
+        <div style="margin:6px 0;">
+          <select onchange="updateCategory('${p.id}',this.value)" style="padding:4px 8px;border:1px solid var(--border);border-radius:5px;font-size:12px;font-family:inherit;">
+            ${['Life in Germany','Life in Pakistan','Science & Research','Academic Career','Travel','Opinion & Personal'].map(c=>`<option value="${c}" ${p.category===c?'selected':''}>${c}</option>`).join('')}
+          </select>
+        </div>
+        <div class="pending-actions">
+          <a href="/blog/post.html?id=${p.id}" target="_blank" class="btn-preview-post" style="text-decoration:none;display:inline-flex;align-items:center;">👁 View</a>
+          <button class="btn-preview-post" onclick="window.location.href='/blog/post.html?id=${p.id}&edit=1'">✏️ Edit</button>
+          <button class="btn-reject" onclick="adminDeletePost('${p.id}',this)">🗑 Delete</button>
+          <button class="btn-approve" onclick="notifySubscribers('${p.title.replace(/'/g,"\'")}','https://ranaadeem.de/blog/post.html?id=${p.id}','${(p.authorName||'Dr. Adeem Ghaffar Rana').replace(/'/g,"\'")}')">📬 Notify</button>
+        </div>`;
+      list.appendChild(el);
+    });
+  } catch(e) { list.innerHTML = '<div style="color:var(--red);padding:1rem;">Error: '+e.message+'</div>'; }
+}
+
+window.updateCategory = async function(id, cat) {
+  try {
+    await updateDoc(doc(db,'posts',id), {category: cat});
+    showToast('Category updated ✓');
+  } catch(e) { showToast('Error: '+e.message); }
+};
+
+window.adminDeletePost = async function(id, btn) {
+  if (!confirm('⚠️ Delete this post permanently?')) return;
+  btn.disabled=true; btn.textContent='Deleting...';
+  try {
+    await deleteDoc(doc(db,'posts',id));
+    btn.closest('.pending-item').remove();
+    showToast('Post deleted.');
+    loadPosts();
+  } catch(e) { showToast('Error: '+e.message); btn.disabled=false; btn.textContent='🗑 Delete'; }
+};
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js';
-import { getAuth, GoogleAuthProvider, signInWithPopup } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js';
+import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendEmailVerification, signOut, onAuthStateChanged, updateProfile } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js';
 import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, query, where, orderBy, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js';
 
 const app = initializeApp({apiKey:"AIzaSyAgUl22Cln6QtY3-HIvI6lE8Zu7n9OblbI",authDomain:"icet-alumni.firebaseapp.com",projectId:"icet-alumni",storageBucket:"icet-alumni.firebasestorage.app",messagingSenderId:"707390888790",appId:"1:707390888790:web:57e6be62e4d11e22c214f7"});
@@ -563,6 +647,98 @@ async function loadPosts() {
   }
 }
 loadPosts();
+loadAuthorSidebar();
+
+// ── Author sidebar ──
+async function loadAuthorSidebar() {
+  onAuthStateChanged(auth, async user => {
+    const card = document.getElementById('author-sidebar-card');
+    if (!card) return;
+    if (!user) {
+      card.innerHTML = buildWriteForUsCard();
+      return;
+    }
+    // Check if registered author
+    try {
+      const snap = await getDocs(query(collection(db,'authors'), where('uid','==',user.uid)));
+      if (snap.empty) {
+        card.innerHTML = buildWriteForUsCard();
+        return;
+      }
+      const author = snap.docs[0].data();
+      if (!user.emailVerified && !user.providerData.find(p=>p.providerId==='google.com')) {
+        card.innerHTML = `<div style="text-align:center;padding:1rem;">
+          <div style="font-size:2rem;margin-bottom:0.5rem;">📧</div>
+          <p style="font-size:13px;color:var(--muted);margin-bottom:0.75rem;">Please verify your email to access your dashboard.</p>
+          <button onclick="resendVerification()" style="background:var(--gold);color:var(--navy);border:none;padding:8px 16px;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">Resend Email</button>
+        </div>`;
+        return;
+      }
+      const initials = (author.name||'?').split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase();
+      card.innerHTML = `
+        <div style="text-align:center;padding:0.5rem 0 1rem;">
+          ${author.photoBase64?`<img src="${author.photoBase64}" style="width:60px;height:60px;border-radius:50%;object-fit:cover;border:2px solid var(--gold);margin-bottom:0.5rem;">`:`<div style="width:60px;height:60px;border-radius:50%;background:var(--navy);border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;color:var(--gold);margin:0 auto 0.5rem;">${initials}</div>`}
+          <div style="font-size:14px;font-weight:600;color:var(--navy);">${author.name}</div>
+          <div style="font-size:11px;color:var(--muted);margin-bottom:0.75rem;">@${author.username}</div>
+          <a href="/blog/dashboard.html" style="display:block;background:var(--navy);color:var(--gold);padding:8px;border-radius:7px;font-size:13px;font-weight:600;text-decoration:none;margin-bottom:6px;">📝 My Dashboard</a>
+          <a href="/blog/author.html?u=${author.username}" style="display:block;background:white;color:var(--navy);border:1px solid var(--border);padding:7px;border-radius:7px;font-size:12px;text-decoration:none;margin-bottom:6px;">👤 My Author Page</a>
+          <button onclick="signOut(auth).then(()=>loadAuthorSidebar())" style="background:none;border:none;color:var(--muted);font-size:12px;cursor:pointer;font-family:inherit;">Sign out</button>
+        </div>`;
+    } catch(e){}
+  });
+}
+
+function buildWriteForUsCard() {
+  return `<div style="text-align:center;">
+    <div style="font-size:2rem;margin-bottom:0.5rem;">✍️</div>
+    <h4 style="font-family:'Playfair Display',serif;font-size:1rem;color:var(--navy);margin-bottom:0.4rem;">Write for Us</h4>
+    <p style="font-size:12px;color:var(--muted);line-height:1.55;margin-bottom:1rem;">Share your research, experiences, or perspective. Register as an author and submit posts for review.</p>
+    <a href="/blog/register.html" style="display:block;background:var(--gold);color:var(--navy);padding:9px;border-radius:7px;font-size:13px;font-weight:600;text-decoration:none;margin-bottom:6px;">Register as Author</a>
+    <a href="/blog/login.html" style="display:block;background:white;color:var(--navy);border:1px solid var(--border);padding:8px;border-radius:7px;font-size:13px;text-decoration:none;">Sign In</a>
+  </div>`;
+}
+
+window.resendVerification = async function() {
+  const user = auth.currentUser;
+  if(user) { await sendEmailVerification(user); showToast('Verification email sent ✓'); }
+};
+
+// ── Author sidebar auth state ──
+import { getAuth as _getAuth2 } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js';
+// reuse same auth instance
+// check author login state for sidebar
+(async function() {
+  const { onAuthStateChanged: _oasc } = await import('https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js');
+  _oasc(auth, async (user) => {
+    if (user && user.uid !== ADMIN_UID) {
+      // Logged in as author - load their profile
+      try {
+        const snap = await getDocs(query(collection(db,'authors'), where('uid','==',user.uid)));
+        if (!snap.empty) {
+          const author = snap.docs[0].data();
+          document.getElementById('author-card-loggedout').style.display='none';
+          document.getElementById('author-card-loggedin').style.display='block';
+          document.getElementById('sidebar-author-name').textContent = author.name||'';
+          document.getElementById('sidebar-author-username').textContent = '@'+(author.username||'');
+          if (author.photoBase64) {
+            document.getElementById('sidebar-author-photo').src = author.photoBase64;
+            document.getElementById('sidebar-author-photo').style.display='block';
+            document.getElementById('sidebar-author-initials').style.display='none';
+          } else {
+            const initials = (author.name||'A').split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase();
+            document.getElementById('sidebar-author-initials').textContent = initials;
+          }
+        }
+      } catch(e){}
+    }
+  });
+})();
+
+window.authorSignOut = async function() {
+  await auth.signOut();
+  document.getElementById('author-card-loggedout').style.display='block';
+  document.getElementById('author-card-loggedin').style.display='none';
+};
 
 // ── Secret shortcut A+G+R ──
 const keysHeld = new Set();
@@ -710,27 +886,31 @@ window.approvePost = async function(id, btn) {
 window.subscribe = async function() {
   const name = document.getElementById('sub-name').value.trim();
   const email = document.getElementById('sub-email').value.trim();
-  const msg = document.getElementById('sub-msg');
-  if (!name || !email) { showSubMsg('Please enter your name and email.', false); return; }
-  if (!email.includes('@')) { showSubMsg('Please enter a valid email.', false); return; }
+  if (!name || !email) { window.showSubMsg('Please enter your name and email.', false); return; }
+  if (!email.includes('@')) { window.showSubMsg('Please enter a valid email.', false); return; }
+  const btn = document.querySelector('#subscribe-form button');
+  if (btn) { btn.disabled=true; btn.textContent='Subscribing...'; }
   try {
-    // Check if already subscribed
     const existing = await getDocs(query(collection(db,'subscribers'), where('email','==',email)));
-    if (!existing.empty) { showSubMsg('You are already subscribed!', true); return; }
-    // Save to Firestore
-    await addDoc(collection(db,'subscribers'), {
-      name, email,
-      subscribedAt: serverTimestamp()
-    });
-    // Send welcome email via EmailJS
-    emailjs.send('service_1hyb7v5', 'template_onvizmg', {
-      subscriber_name: name,
-      subscriber_email: email
-    }).catch(()=>{});
+    if (!existing.empty) {
+      window.showSubMsg('You are already subscribed!', true);
+      if (btn) { btn.disabled=false; btn.textContent='Subscribe →'; }
+      return;
+    }
+    await addDoc(collection(db,'subscribers'), { name, email, subscribedAt: serverTimestamp() });
+    if (typeof emailjs !== 'undefined') {
+      emailjs.send('service_1hyb7v5', 'template_onvizmg', {
+        subscriber_name: name, subscriber_email: email
+      }).catch(()=>{});
+    }
     document.getElementById('sub-name').value = '';
     document.getElementById('sub-email').value = '';
-    showSubMsg('✅ You are subscribed! Welcome to The Lab Notebook.', true);
-  } catch(e) { showSubMsg('Error: '+e.message, false); }
+    if (btn) { btn.disabled=false; btn.textContent='Subscribe →'; }
+    window.showSubMsg('✅ Subscribed! Welcome to The Lab Notebook.', true);
+  } catch(e) {
+    window.showSubMsg('Error: ' + e.message, false);
+    if (btn) { btn.disabled=false; btn.textContent='Subscribe →'; }
+  }
 };
 
 window.showSubMsg = function showSubMsg(msg, success) {
