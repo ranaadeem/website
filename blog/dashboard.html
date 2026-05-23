@@ -78,7 +78,7 @@ nav{background:var(--navy);border-bottom:2px solid var(--gold);padding:0 1.5rem;
   </a>
   <div class="nav-right"><a href="/blog.html" style="font-size:13px;color:rgba(255,255,255,0.75);text-decoration:none;margin-right:0.5rem;">← Blog</a>
     <span class="nav-user" id="nav-user-name"></span>
-    <button class="nav-signout" id="nav-signout" style="display:none;" onclick="signOut()">Sign Out</button>
+    <button class="nav-signout" id="nav-signout" style="display:none;" onclick="window.signOut()">Sign Out</button>
   </div>
 </nav>
 <div class="toast" id="toast"></div>
@@ -190,7 +190,7 @@ nav{background:var(--navy);border-bottom:2px solid var(--gold);padding:0 1.5rem;
         <div style="background:white;border:1px solid var(--border);border-radius:8px;padding:1.5rem;min-height:200px;font-size:15px;line-height:1.85;" id="w-preview-content"></div>
       </div>
     </div>
-    <button class="submit-btn" onclick="submitPost()">📬 Submit for Review</button>
+    <button class="submit-btn" onclick="window.submitPost()">📬 Submit for Review</button>
     <p style="font-size:12px;color:var(--muted);margin-top:0.5rem;text-align:center;">Your post will be reviewed before publishing.</p>
   </div>
 
