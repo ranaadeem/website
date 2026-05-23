@@ -89,6 +89,10 @@ export default async function handler(req, res) {
   }
 
   // Send via Resend
+  if (!process.env.RESEND_API_KEY) {
+    console.error('RESEND_API_KEY not set');
+    return res.status(500).json({ error: 'API key not configured' });
+  }
   try {
     const response = await fetch('https://api.resend.com/emails', {
       method: 'POST',
@@ -97,10 +101,10 @@ export default async function handler(req, res) {
         'Authorization': 'Bearer ' + process.env.RESEND_API_KEY
       },
       body: JSON.stringify({
-        from: 'The Lab Notebook <onboarding@resend.dev>',
-        to: type === 'new-submission' || type === 'comment'
+        from: 'The Lab Notebook <noreply@ranaadeem.de>',
+        to: (type === 'new-submission' || type === 'comment')
           ? ['ranaadeem@hotmail.com']
-          : [`${toName} <${to}>`],
+          : [to],
         subject,
         html
       })
@@ -108,8 +112,8 @@ export default async function handler(req, res) {
 
     const result = await response.json();
     if (!response.ok) {
-      console.error('Resend error:', result);
-      return res.status(500).json({ error: result.message || 'Email failed' });
+      console.error('Resend error:', JSON.stringify(result));
+      return res.status(500).json({ error: result.message || result.name || 'Email failed', details: result });
     }
     return res.status(200).json({ success: true, id: result.id });
   } catch(e) {
