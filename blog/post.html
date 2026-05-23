@@ -400,20 +400,25 @@ window.toggleLike = async function() {
 };
 
 // ── Share ──
+function getShareUrl() {
+  // Use /api/og for rich previews on social media
+  return 'https://ranaadeem.de/api/og?id=' + currentPostId;
+}
+
 window.shareWhatsApp = function(){
-  const text = encodeURIComponent((currentPost?.title||'') + ' — ' + window.location.href);
+  const text = encodeURIComponent((currentPost?.title||'') + ' — ' + getShareUrl());
   window.open('https://wa.me/?text=' + text, '_blank');
 };
 
 window.shareLinkedIn = function(){
-  window.open('https://www.linkedin.com/sharing/share-offsite/?url='+encodeURIComponent(window.location.href),'_blank');
+  window.open('https://www.linkedin.com/sharing/share-offsite/?url='+encodeURIComponent(getShareUrl()),'_blank');
 };
 window.shareTwitter = function(){
   const text = encodeURIComponent((currentPost?.title||'') + ' — ');
-  window.open('https://twitter.com/intent/tweet?text='+text+'&url='+encodeURIComponent(window.location.href),'_blank');
+  window.open('https://twitter.com/intent/tweet?text='+text+'&url='+encodeURIComponent(getShareUrl()),'_blank');
 };
 window.copyLink = function(){
-  navigator.clipboard.writeText(window.location.href).then(()=>showToast('Link copied to clipboard ✓'));
+  navigator.clipboard.writeText(getShareUrl()).then(()=>showToast('Link copied ✓'));
 };
 
 // ── Listen ──
