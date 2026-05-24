@@ -1,94 +1,98 @@
 import { initializeApp, getApps, cert } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
 
-// Init Firebase Admin once
 if (!getApps().length) {
-  const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
-  initializeApp({ credential: cert(serviceAccount) });
+  try {
+    const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
+    initializeApp({ credential: cert(serviceAccount) });
+  } catch(e) {
+    console.error('Firebase init error:', e.message);
+  }
 }
-const db = getFirestore();
 
 export default async function handler(req, res) {
-  const { id } = req.query;
+  const id = req.query.id;
+  console.log('OG request for id:', id);
+  console.log('User-Agent:', req.headers['user-agent']);
 
   if (!id) {
+    console.log('No ID - redirecting to blog');
     return res.redirect(302, '/blog.html');
   }
+
+  let title = 'The Lab Notebook';
+  let description = 'Research, academic life, navigating Germany, and anything else worth writing about.';
+  let image = 'https://ranaadeem.de/og-banner.jpg';
+  let postUrl = 'https://ranaadeem.de/blog/post.html?id=' + id;
 
   try {
+    const db = getFirestore();
     const doc = await db.collection('posts').doc(id).get();
+    console.log('Doc exists:', doc.exists);
 
-    if (!doc.exists || doc.data().status !== 'published') {
-      return res.redirect(302, '/blog.html');
+    if (doc.exists) {
+      const post = doc.data();
+      console.log('Post title:', post.title);
+      console.log('Post coverImage:', post.coverImage ? post.coverImage.slice(0, 80) : 'NONE');
+      console.log('Post status:', post.status);
+
+      title = post.title || title;
+
+      const raw = (post.subtitle || (post.content || '')
+        .replace(/<[^>]+>/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim()
+        .slice(0, 200)).trim();
+      description = raw.length > 10 ? raw : description;
+
+      if (post.coverImage && post.coverImage.startsWith('https://')) {
+        image = post.coverImage;
+        // Transform Cloudinary URL for proper dimensions
+        if (image.includes('cloudinary.com/') && image.includes('/upload/')) {
+          image = image.replace('/upload/', '/upload/c_fill,w_1200,h_630,f_jpg,q_auto/');
+        }
+      }
+      console.log('Final image URL:', image);
     }
+  } catch(e) {
+    console.error('Firestore error:', e.message);
+  }
 
-    const post = doc.data();
-    const title = post.title || 'The Lab Notebook';
-    const rawDesc = (post.subtitle || (post.content || '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 200) || '').trim();
-    const description = rawDesc.length > 10 ? rawDesc : 'Read the latest from The Lab Notebook by Dr. Adeem Ghaffar Rana — research, academic life, and navigating Germany as a Pakistani researcher.';
-    // Transform Cloudinary URL to proper OG dimensions (1200x630)
-    let image = post.coverImage || 'https://ranaadeem.de/og-banner.jpg';
-    if (image.includes('cloudinary.com') && image.includes('/upload/')) {
-      image = image.replace('/upload/', '/upload/c_fill,w_1200,h_630,f_jpg,q_auto/');
-    }
-    const author = post.authorName || 'Dr. Adeem Ghaffar Rana';
-    const postUrl = `https://ranaadeem.de/blog/post.html?id=${id}`;
+  const safeTitle = title.replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  const safeDesc = description.replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
-    // Detect if request is from a human or a bot
-    const ua = (req.headers['user-agent'] || '').toLowerCase();
-    const isBot = /linkedin|twitterbot|facebookexternalhit|whatsapp|telegrambot|slackbot|discordbot|googlebot|bingbot|crawler|spider|preview/.test(ua);
-    const isHuman = !isBot;
-
-    // Return HTML with OG tags + instant redirect for humans
-    res.setHeader('Content-Type', 'text/html');
-    res.status(200).send(`<!DOCTYPE html>
-<html>
+  res.setHeader('Content-Type', 'text/html; charset=utf-8');
+  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+  res.status(200).send(`<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>${escHtml(title)} — The Lab Notebook</title>
-  <meta name="description" content="${escHtml(description)}">
-
-  <!-- Open Graph -->
-  <meta property="og:type" content="article">
-  <meta property="og:site_name" content="The Lab Notebook">
-  <meta property="og:title" content="${title.replace(/"/g, '&quot;')}">
-  <meta property="og:description" content="${description.replace(/"/g, '&quot;')}">
-  <meta name="image" property="og:image" content="${image}">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
-  <meta property="og:url" content="${postUrl}">
-
-  <!-- Twitter Card -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="${title.replace(/"/g, '&quot;')}">
-  <meta name="twitter:description" content="${description.replace(/"/g, '&quot;')}">
-  <meta name="twitter:image" content="${image}">
-  <meta name="twitter:creator" content="@ranaadeem">
-
-  <!-- WhatsApp uses OG tags -->
-  <meta property="og:image:type" content="image/jpeg">
-
-  <link rel="canonical" href="${postUrl}">
-  <meta property="article:author" content="${escHtml(author)}">
-  <meta property="article:published_time" content="${post.publishedAt ? new Date(post.publishedAt._seconds * 1000).toISOString() : new Date().toISOString()}">
-  ${isHuman ? '<meta http-equiv="refresh" content="0;url=' + postUrl + '">' : ''}
+<meta charset="UTF-8">
+<title>${safeTitle} — The Lab Notebook</title>
+<meta name="description" content="${safeDesc}">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="The Lab Notebook">
+<meta property="og:title" content="${safeTitle}">
+<meta property="og:description" content="${safeDesc}">
+<meta property="og:image" content="${image}">
+<meta property="og:image:secure_url" content="${image}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:url" content="${postUrl}">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="${safeTitle}">
+<meta name="twitter:description" content="${safeDesc}">
+<meta name="twitter:image" content="${image}">
+<meta name="twitter:site" content="@ranaadeem">
+<link rel="canonical" href="${postUrl}">
+<meta http-equiv="refresh" content="1;url=${postUrl}">
 </head>
 <body>
-  <p>Redirecting to <a href="${postUrl}">${escHtml(title)}</a>...</p>
-  ${isHuman ? '<script>window.location.replace("' + postUrl + '");</script>' : ''}
+<h1>${safeTitle}</h1>
+<p>${safeDesc}</p>
+<img src="${image}" width="1200" height="630" alt="${safeTitle}">
+<a href="${postUrl}">Read the full post</a>
+<script>setTimeout(function(){window.location.replace('${postUrl}');},500);</script>
 </body>
 </html>`);
-
-  } catch(e) {
-    console.error('OG error:', e);
-    return res.redirect(302, '/blog.html');
-  }
-}
-
-function escHtml(str) {
-  return String(str)
-    .replace(/&/g, '&amp;')
-    .replace(/"/g, '&quot;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;');
 }
