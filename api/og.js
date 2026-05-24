@@ -47,18 +47,18 @@ export default async function handler(req, res) {
   <!-- Open Graph -->
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="The Lab Notebook">
-  <meta property="og:title" content="${escHtml(title)}">
-  <meta property="og:description" content="${escHtml(description)}">
-  <meta property="og:image" content="${escHtml(image)}">
+  <meta property="og:title" content="${title.replace(/"/g, '&quot;')}">
+  <meta property="og:description" content="${description.replace(/"/g, '&quot;')}">
+  <meta name="image" property="og:image" content="${image}">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:url" content="${postUrl}">
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="${escHtml(title)}">
-  <meta name="twitter:description" content="${escHtml(description)}">
-  <meta name="twitter:image" content="${escHtml(image)}">
+  <meta name="twitter:title" content="${title.replace(/"/g, '&quot;')}">
+  <meta name="twitter:description" content="${description.replace(/"/g, '&quot;')}">
+  <meta name="twitter:image" content="${image}">
   <meta name="twitter:creator" content="@ranaadeem">
 
   <!-- WhatsApp uses OG tags -->
