@@ -24,8 +24,8 @@ export default async function handler(req, res) {
 
     const post = doc.data();
     const title = post.title || 'The Lab Notebook';
-    const rawDesc = post.subtitle || (post.content || '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 200);
-    const description = rawDesc || 'Read the latest from The Lab Notebook — research, academic life, and navigating Germany.';
+    const rawDesc = (post.subtitle || (post.content || '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 200) || '').trim();
+    const description = rawDesc.length > 10 ? rawDesc : 'Read the latest from The Lab Notebook by Dr. Adeem Ghaffar Rana — research, academic life, and navigating Germany as a Pakistani researcher.';
     // Transform Cloudinary URL to proper OG dimensions (1200x630)
     let image = post.coverImage || 'https://ranaadeem.de/og-banner.jpg';
     if (image.includes('cloudinary.com') && image.includes('/upload/')) {
