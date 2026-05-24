@@ -33,10 +33,10 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
 .nav-dropdown{position:relative;}
 .nav-dropdown-menu{display:none;position:absolute;top:calc(100% - 2px);left:50%;transform:translateX(-50%);background:var(--navy);border:1px solid rgba(201,168,76,0.25);border-radius:10px;padding:0.4rem;min-width:180px;list-style:none;box-shadow:0 8px 30px rgba(0,0,0,0.35);z-index:2000;}
 .nav-dropdown-menu::after { content:""; position:absolute; top:-10px; left:0; right:0; height:10px; }
-  .nav-dropdown:hover .nav-dropdown-menu,.nav-dropdown.open .nav-dropdown-menu{display:block;}
+  .nav-dropdown:hover .nav-dropdown-menu,.nav-dropdown.open .nav-dropdown-menu{display:block!important;}
 .nav-dropdown-item{display:block;padding:8px 14px;color:rgba(255,255,255,0.8);text-decoration:none;font-size:13px;border-radius:6px;transition:all 0.15s;white-space:nowrap;}
 .nav-dropdown-item:hover{background:rgba(201,168,76,0.12);color:var(--gold);}
-@media(max-width:768px){.nav-logo-name{display:none;}.nav-hamburger{display:flex;}.nav-links{display:none;position:absolute;top:64px;left:0;right:0;background:var(--navy);flex-direction:column;padding:1rem;border-bottom:2px solid var(--gold);}.nav-links.open{display:flex;}.nav-link{width:100%;padding:12px 16px;}.nav-cta{width:100%;text-align:center;margin-left:0;margin-top:0.5rem;}.nav-dropdown-menu{position:static;transform:none;box-shadow:none;border:none;border-radius:0;background:rgba(255,255,255,0.05);padding:0 0 0 1rem;margin:0;}.nav-dropdown:hover .nav-dropdown-menu{display:none;}.nav-dropdown.open .nav-dropdown-menu{display:block;}.nav-dropdown-item{padding:8px 12px;color:rgba(255,255,255,0.7);}}
+@media(max-width:768px){.nav-logo-name{display:none;}.nav-hamburger{display:flex;}.nav-links{display:none;position:absolute;top:64px;left:0;right:0;background:var(--navy);flex-direction:column;padding:1rem;border-bottom:2px solid var(--gold);}.nav-links.open{display:flex;}.nav-link{width:100%;padding:12px 16px;}.nav-cta{width:100%;text-align:center;margin-left:0;margin-top:0.5rem;}.nav-dropdown-menu{position:static;transform:none;box-shadow:none;border:none;border-radius:0;background:rgba(255,255,255,0.05);padding:0 0 0 1rem;margin:0;}.nav-dropdown:hover .nav-dropdown-menu{display:none;}.nav-dropdown.open .nav-dropdown-menu{display:block!important;}.nav-dropdown-item{padding:8px 12px;color:rgba(255,255,255,0.7);}}
 
 /* PAGE HEADER */
 .page-header{width:100%;height:380px;background:url('/og-banner.jpg') center center / cover no-repeat;background-color:var(--navy);position:relative;overflow:hidden;border-bottom:3px solid var(--gold);}
@@ -91,7 +91,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
   /* Invisible bridge prevents gap from closing dropdown */
   .nav-dropdown::before{content:'';position:absolute;top:calc(100% - 4px);left:0;right:0;height:8px;background:transparent;z-index:1999;}
   .nav-dropdown:hover .nav-dropdown-menu,
-  .nav-dropdown.open .nav-dropdown-menu{display:block;}
+  .nav-dropdown.open .nav-dropdown-menu{display:block!important;}
   .nav-dropdown-item{display:block;padding:9px 16px;color:rgba(255,255,255,0.85);text-decoration:none;font-size:13px;border-radius:6px;transition:all 0.15s;white-space:nowrap;}
   .nav-dropdown-item:hover{background:rgba(201,168,76,0.15);color:var(--gold);}
   .nav-dropdown-trigger{cursor:pointer;}
@@ -99,7 +99,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
     .nav-dropdown::before{display:none;}
     .nav-dropdown-menu{position:static;transform:none;box-shadow:none;border:none;border-radius:6px;background:rgba(255,255,255,0.05);padding:0 0 0 1rem;margin:0;}
     .nav-dropdown:hover .nav-dropdown-menu{display:none;}
-    .nav-dropdown.open .nav-dropdown-menu{display:block;}
+    .nav-dropdown.open .nav-dropdown-menu{display:block!important;}
     .nav-dropdown-item{padding:8px 12px;color:rgba(255,255,255,0.7);}
   }
   }
@@ -168,14 +168,22 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
         <span class="position-period">Lecturer: Nov 2015–Nov 2017 &nbsp;|&nbsp; Asst. Professor: Apr–Jul 2023</span>
         <p style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:1rem;">Delivered core chemical engineering courses to 3rd and 4th year undergraduate cohorts. Supervised undergraduate thesis projects, guiding problem formulation, experimental execution, and technical reporting. Mentored students for research-oriented and industry-relevant project work.</p>
         <div style="font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:var(--muted);margin-bottom:0.5rem;">Courses Taught</div>
-        <div class="course-grid">
-          <div class="course-tag">⚗️ Mass Transfer</div>
-          <div class="course-tag">🔬 Separation Processes</div>
-          <div class="course-tag">💧 Wastewater Treatment Engineering</div>
-          <div class="course-tag">📊 Engineering Economics</div>
-          <div class="course-tag">⚙️ Particle Technology</div>
-          <div class="course-tag">🌿 Environmental Engineering</div>
-          <div class="course-tag">🔧 Maintenance Engineering</div>
+        <div style="display:flex;flex-direction:column;gap:0.75rem;">
+          <div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:1rem 1.25rem;">
+            <div style="font-weight:600;color:var(--navy);font-size:14px;margin-bottom:3px;">⚗️ Mass Transfer</div>
+            <div style="font-size:13px;color:var(--muted);line-height:1.6;">Covered mass transfer theory including diffusion, convection, and interphase transport, with applied focus on distillation column design and sizing.</div>
+          </div>
+          <div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:1rem 1.25rem;">
+            <div style="font-weight:600;color:var(--navy);font-size:14px;margin-bottom:3px;">🔬 Separation Processes</div>
+            <div style="font-size:13px;color:var(--muted);line-height:1.6;">Taught design principles of separation operations with emphasis on absorption column design, equilibrium-stage calculations, and process optimisation.</div>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:0.5rem;margin-top:0.25rem;">
+            <span class="course-tag">💧 Wastewater Treatment Engineering</span>
+            <span class="course-tag">📊 Engineering Economics</span>
+            <span class="course-tag">⚙️ Particle Technology</span>
+            <span class="course-tag">🌿 Environmental Engineering</span>
+            <span class="course-tag">🔧 Maintenance Engineering</span>
+          </div>
         </div>
       </div>
 
@@ -191,18 +199,28 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
     <div class="teach-section">
       <h2 class="teach-section-title">Student Supervision</h2>
       <div style="background:white;border:1px solid var(--border);border-radius:14px;padding:1.5rem;">
-        <div class="supervision-item">
-          <div class="supervision-icon">🇩🇪</div>
-          <div>
-            <div style="font-size:13px;font-weight:600;color:var(--navy);">DAAD Exchange Researchers</div>
-            <div style="font-size:12px;color:var(--muted);margin-top:2px;">TU Munich · Photocatalysis & Carbon Nitride research</div>
+        <div class="supervision-item" style="flex-direction:column;align-items:flex-start;gap:0.5rem;">
+          <div style="display:flex;align-items:center;gap:0.75rem;">
+            <div class="supervision-icon">🇩🇪</div>
+            <div>
+              <div style="font-size:13px;font-weight:600;color:var(--navy);">DAAD Exchange Researcher</div>
+              <div style="font-size:12px;color:var(--muted);margin-top:2px;">TU Munich · Photocatalysis &amp; Carbon Nitride research</div>
+            </div>
+          </div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.6;">
+            Supervised <a href="https://www.linkedin.com/in/nikki-hammond-1300nmh/" target="_blank" style="color:var(--navy);font-weight:600;">Nikki Hammond</a> — currently pursuing a PhD. Our collaborative work resulted in a <a href="https://chemistry-europe.onlinelibrary.wiley.com/doi/full/10.1002/slct.202201909" target="_blank" style="color:var(--navy);font-weight:600;">peer-reviewed publication</a> in ChemistrySelect (Wiley, 2022).
           </div>
         </div>
-        <div class="supervision-item">
-          <div class="supervision-icon">🇪🇺</div>
-          <div>
-            <div style="font-size:13px;font-weight:600;color:var(--navy);">Erasmus+ Exchange Researchers</div>
-            <div style="font-size:12px;color:var(--muted);margin-top:2px;">TU Munich · Catalyst characterization & synthesis</div>
+        <div class="supervision-item" style="flex-direction:column;align-items:flex-start;gap:0.5rem;">
+          <div style="display:flex;align-items:center;gap:0.75rem;">
+            <div class="supervision-icon">🇪🇺</div>
+            <div>
+              <div style="font-size:13px;font-weight:600;color:var(--navy);">Erasmus+ Exchange Researcher</div>
+              <div style="font-size:12px;color:var(--muted);margin-top:2px;">TU Munich · Catalyst characterization &amp; synthesis</div>
+            </div>
+          </div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.6;">
+            Supervised <a href="https://www.linkedin.com/in/engrmahnoorriaz/" target="_blank" style="color:var(--navy);font-weight:600;">Mahnoor Riaz</a> — currently pursuing a PhD. Mentored her through catalyst characterisation techniques and experimental methodology during her exchange stay.
           </div>
         </div>
         <div class="supervision-item">
@@ -231,7 +249,50 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
   <div class="sidebar">
 
     <div class="sidebar-card">
-      <div class="sidebar-card-header">📊 Teaching Summary</div>
+      <!-- Conference & Presentations -->
+    <div class="teach-section">
+      <h2 class="teach-section-title">Conference &amp; Presentations</h2>
+      <div style="background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:1.25rem 1.5rem;display:flex;gap:1rem;align-items:flex-start;">
+        <div style="font-size:1.5rem;flex-shrink:0;">🎤</div>
+        <div>
+          <div style="font-weight:600;color:var(--navy);font-size:14px;">Oral Presentation — 21st Nordic Symposium on Catalysis</div>
+          <div style="font-size:13px;color:var(--muted);margin-top:3px;">Presenting research on catalysis — <a href="https://mkon.nu/21st_nordic_symposium_on_catalysis" target="_blank" style="color:var(--navy);font-weight:600;">Nordic Symposium on Catalysis</a></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Academic Leadership -->
+    <div class="teach-section">
+      <h2 class="teach-section-title">Academic Leadership &amp; Service</h2>
+      <div style="display:flex;flex-direction:column;gap:0.75rem;">
+        <div style="background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:1.25rem 1.5rem;display:flex;gap:1rem;align-items:flex-start;">
+          <div style="font-size:1.5rem;flex-shrink:0;">🏛️</div>
+          <div>
+            <div style="font-weight:600;color:var(--navy);font-size:14px;">Faculty Advisor — AIChE Student Chapter</div>
+            <div style="font-size:13px;color:var(--muted);margin-top:3px;line-height:1.6;">Served as Faculty Advisor for the <a href="https://www.aiche.org/community/students/chapters/uet-lahore-ksk-campus-student-chapter" target="_blank" style="color:var(--navy);font-weight:600;">AIChE UET Lahore KSK Campus Student Chapter</a> — supporting student professional development, chapter activities, and industry engagement.</div>
+          </div>
+        </div>
+        <div style="background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:1.25rem 1.5rem;display:flex;gap:1rem;align-items:flex-start;">
+          <div style="font-size:1.5rem;flex-shrink:0;">📋</div>
+          <div>
+            <div style="font-weight:600;color:var(--navy);font-size:14px;">Student Affairs In-Charge — UET KSK</div>
+            <div style="font-size:13px;color:var(--muted);margin-top:3px;line-height:1.6;">Handled student affairs responsibilities within the <a href="https://chemksk.uet.edu.pk/" target="_blank" style="color:var(--navy);font-weight:600;">Department of Chemical, Polymer and Composite Materials</a>, UET KSK Campus.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Future Teaching Interests -->
+    <div class="teach-section">
+      <h2 class="teach-section-title">Future Teaching Interests</h2>
+      <div style="background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:1.25rem 1.5rem;">
+        <p style="font-size:14px;color:var(--text);line-height:1.8;margin:0;">I am interested in teaching at Masters and PhD level in areas that bridge fundamental science and applied engineering — particularly <strong>heterogeneous catalysis</strong>, <strong>sustainable fuel technologies</strong>, <strong>reaction engineering and kinetics</strong>, and <strong>advanced separation processes</strong>. I am also keen to develop project-based modules that expose students to real research challenges from day one.</p>
+      </div>
+    </div>
+
+    <div class="sidebar-card-header">📄 References</div>
+
+    <div class="sidebar-card-header">📊 Teaching Summary</div>
       <div class="sidebar-card-body">
         <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px;"><span style="color:var(--muted);">Courses Taught</span><span style="font-weight:700;color:var(--navy);">7</span></div>
         <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px;"><span style="color:var(--muted);">Teaching Years</span><span style="font-weight:700;color:var(--navy);">4+</span></div>
@@ -261,7 +322,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
     </div>
 
     <div class="sidebar-card">
-      <div class="sidebar-card-header">📄 References</div>
+      
       <div class="sidebar-card-body" style="font-size:12px;color:var(--muted);line-height:1.6;">
         <div style="margin-bottom:0.75rem;"><strong style="color:var(--navy);">Prof. Sven Kureti</strong><br>TUBAF Freiberg, Germany<br><a href="mailto:sven.kureti@iec.tu-freiberg.de" style="color:var(--gold);text-decoration:none;">sven.kureti@iec.tu-freiberg.de</a></div>
         <div style="margin-bottom:0.75rem;"><strong style="color:var(--navy);">Prof. Dr.-Ing. Mirjana Minceva</strong><br>TU Munich, Germany<br><a href="mailto:mirjana.minceva@tum.de" style="color:var(--gold);text-decoration:none;">mirjana.minceva@tum.de</a></div>
