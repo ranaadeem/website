@@ -26,7 +26,11 @@ export default async function handler(req, res) {
     const title = post.title || 'The Lab Notebook';
     const rawDesc = post.subtitle || (post.content || '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 200);
     const description = rawDesc || 'Read the latest from The Lab Notebook — research, academic life, and navigating Germany.';
-    const image = post.coverImage || 'https://ranaadeem.de/og-banner.jpg';
+    // Transform Cloudinary URL to proper OG dimensions (1200x630)
+    let image = post.coverImage || 'https://ranaadeem.de/og-banner.jpg';
+    if (image.includes('cloudinary.com') && image.includes('/upload/')) {
+      image = image.replace('/upload/', '/upload/c_fill,w_1200,h_630,f_jpg,q_auto/');
+    }
     const author = post.authorName || 'Dr. Adeem Ghaffar Rana';
     const postUrl = `https://ranaadeem.de/blog/post.html?id=${id}`;
 
