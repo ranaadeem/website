@@ -24,10 +24,16 @@ export default async function handler(req, res) {
 
     const post = doc.data();
     const title = post.title || 'The Lab Notebook';
-    const description = post.subtitle || post.content?.replace(/<[^>]+>/g, ' ').slice(0, 160).trim() || 'Read on The Lab Notebook';
+    const rawDesc = post.subtitle || (post.content || '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 200);
+    const description = rawDesc || 'Read the latest from The Lab Notebook — research, academic life, and navigating Germany.';
     const image = post.coverImage || 'https://ranaadeem.de/og-banner.jpg';
     const author = post.authorName || 'Dr. Adeem Ghaffar Rana';
     const postUrl = `https://ranaadeem.de/blog/post.html?id=${id}`;
+
+    // Detect if request is from a human or a bot
+    const ua = (req.headers['user-agent'] || '').toLowerCase();
+    const isBot = /linkedin|twitterbot|facebookexternalhit|whatsapp|telegrambot|slackbot|discordbot|googlebot|bingbot|crawler|spider|preview/.test(ua);
+    const isHuman = !isBot;
 
     // Return HTML with OG tags + instant redirect for humans
     res.setHeader('Content-Type', 'text/html');
@@ -58,13 +64,14 @@ export default async function handler(req, res) {
   <!-- WhatsApp uses OG tags -->
   <meta property="og:image:type" content="image/jpeg">
 
-  <!-- Instant redirect for humans (bots ignore this) -->
-  <meta http-equiv="refresh" content="0;url=${postUrl}">
   <link rel="canonical" href="${postUrl}">
+  <meta property="article:author" content="${escHtml(author)}">
+  <meta property="article:published_time" content="${post.publishedAt ? new Date(post.publishedAt._seconds * 1000).toISOString() : new Date().toISOString()}">
+  ${isHuman ? '<meta http-equiv="refresh" content="0;url=' + postUrl + '">' : ''}
 </head>
 <body>
   <p>Redirecting to <a href="${postUrl}">${escHtml(title)}</a>...</p>
-  <script>window.location.replace('${postUrl}');</script>
+  ${isHuman ? '<script>window.location.replace("' + postUrl + '");</script>' : ''}
 </body>
 </html>`);
 
