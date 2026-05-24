@@ -626,20 +626,33 @@ function renderPostCard(p) {
 
 
 // ── Upload image to Cloudinary ──
+function base64ToBlob(base64) {
+  const parts = base64.split(';base64,');
+  const contentType = parts[0].split(':')[1];
+  const raw = atob(parts[1]);
+  const arr = new Uint8Array(raw.length);
+  for (let i = 0; i < raw.length; i++) arr[i] = raw.charCodeAt(i);
+  return new Blob([arr], { type: contentType });
+}
+
 async function uploadToCloudinary(base64Data) {
-  if (!base64Data) return '';
+  if (!base64Data || !base64Data.startsWith('data:')) return base64Data;
   try {
-    const res = await fetch(base64Data);
-    const blob = await res.blob();
+    const blob = base64ToBlob(base64Data);
     const formData = new FormData();
-    formData.append('file', blob);
+    formData.append('file', blob, 'cover.jpg');
     formData.append('upload_preset', 'ranaadeem_blog');
     const response = await fetch('https://api.cloudinary.com/v1_1/duetiv9rm/image/upload', {
       method: 'POST',
       body: formData
     });
     const data = await response.json();
-    return data.secure_url || base64Data;
+    if (data.secure_url) {
+      console.log('Cloudinary upload success:', data.secure_url);
+      return data.secure_url;
+    }
+    console.error('Cloudinary response:', data);
+    return base64Data;
   } catch(e) {
     console.error('Cloudinary error:', e);
     return base64Data;
