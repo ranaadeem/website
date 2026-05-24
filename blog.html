@@ -673,7 +673,10 @@ window.publishPost = async function() {
   const btn = document.getElementById('admin-publish-btn');
   btn.disabled=true; btn.textContent='Publishing...';
   try {
+    console.log('Cover base64 length:', adminCoverBase64?.length || 0);
+    console.log('Starting Cloudinary upload...');
     const coverUrl = await uploadToCloudinary(adminCoverBase64);
+    console.log('Cover URL result:', coverUrl?.slice(0,80));
     const ref = await addDoc(collection(db,'posts'), {
       title,
       subtitle: document.getElementById('admin-subtitle').value.trim(),
