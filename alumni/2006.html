@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Session 2006–2010 — Alumni · ICET Punjab University</title>
+<title>Session 2006–2010 — Chemical Engineering Alumni · ICET Punjab University</title>
 <link rel="icon" type="image/png" href="/favicon.png">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
@@ -306,6 +306,7 @@
   }
 
 
+
 .stats-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:2rem;}
 .stat-box{background:white;border:1px solid var(--border);border-radius:10px;padding:1rem;text-align:center;}
 .stat-num{font-family:"Playfair Display",serif;font-size:1.6rem;font-weight:700;color:var(--navy);}
@@ -313,6 +314,7 @@
 .member-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;}
 .member-card{background:white;border:1px solid var(--border);border-radius:12px;padding:1.1rem;text-align:center;transition:box-shadow 0.2s;}
 .member-card:hover{box-shadow:0 4px 16px rgba(0,0,0,0.08);}
+.member-card.unregistered{opacity:0.75;}
 .member-avatar{width:54px;height:54px;border-radius:50%;background:var(--navy);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--gold);font-size:0.95rem;margin:0 auto 0.6rem;overflow:hidden;border:2px solid var(--gold);}
 .member-avatar img{width:100%;height:100%;object-fit:cover;}
 .member-name{font-size:13px;font-weight:600;color:var(--navy);line-height:1.3;margin-bottom:2px;}
@@ -324,12 +326,15 @@
 .filter-bar{display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:1.25rem;align-items:center;}
 .filter-chip{padding:5px 14px;border-radius:20px;font-size:12px;font-weight:500;border:1.5px solid var(--border);background:white;cursor:pointer;color:var(--muted);transition:all 0.2s;}
 .filter-chip.active{background:var(--navy);color:white;border-color:var(--navy);}
-.search-box{flex:1;min-width:200px;padding:8px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit;outline:none;}
+.search-box{flex:1;min-width:180px;padding:8px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit;outline:none;}
 .search-box:focus{border-color:var(--navy);}
 .cta-banner{background:linear-gradient(135deg,var(--navy),#2048a8);border-radius:12px;padding:1.5rem;text-align:center;margin-top:2.5rem;}
+.alumni-header{width:100%;border-radius:12px;overflow:hidden;margin-bottom:2rem;box-shadow:0 4px 20px rgba(0,0,0,0.15);}
+.alumni-header img{width:100%;height:auto;display:block;}
 @media(max-width:900px){.stats-bar{grid-template-columns:repeat(2,1fr);}}
 @media(max-width:768px){.member-grid{grid-template-columns:repeat(2,1fr);}}
 @media(max-width:480px){.member-grid{grid-template-columns:1fr;}.stats-bar{grid-template-columns:repeat(2,1fr);}}
+
 </style>
 </head>
 <body>
@@ -384,80 +389,77 @@
 
 <div style="max-width:1100px;margin:0 auto;padding:2.5rem 2rem 4rem;">
 
+  <!-- ALUMNI NETWORK HEADER BANNER -->
+  <div class="alumni-header">
+    <img src="/alumni-header.png" alt="Chemical Engineering Alumni Network — ICET Punjab University">
+  </div>
+
   <!-- Memory page link -->
   <div style="background:linear-gradient(135deg,var(--navy),#2048a8);border-radius:12px;padding:1.25rem 1.5rem;margin-bottom:2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;">
     <div>
       <div style="font-weight:600;color:white;font-size:14px;">📸 Full Session Memory Page</div>
-      <div style="font-size:13px;color:rgba(255,255,255,0.7);margin-top:2px;">Group photo, batch memories, and more.</div>
+      <div style="font-size:13px;color:rgba(255,255,255,0.7);margin-top:2px;">Group photo, batch memories and more.</div>
     </div>
     <a href="/session2006.html" style="background:var(--gold);color:var(--navy);padding:9px 20px;border-radius:8px;font-size:13px;font-weight:700;text-decoration:none;white-space:nowrap;">View Memory Page →</a>
   </div>
 
   <!-- STATS BAR -->
   <div class="stats-bar">
-    <div class="stat-box">
-      <div class="stat-num" id="stat-registered">—</div>
-      <div class="stat-lbl">Registered</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-num" id="stat-countries">—</div>
-      <div class="stat-lbl">Countries</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-num" id="stat-industries">—</div>
-      <div class="stat-lbl">Industries</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-num">2006</div>
-      <div class="stat-lbl">Session Year</div>
-    </div>
+    <div class="stat-box"><div class="stat-num">187</div><div class="stat-lbl">Total Graduates</div></div>
+    <div class="stat-box"><div class="stat-num" id="stat-registered">—</div><div class="stat-lbl">Registered</div></div>
+    <div class="stat-box"><div class="stat-num" id="stat-countries">—</div><div class="stat-lbl">Countries</div></div>
+    <div class="stat-box"><div class="stat-num">124/63</div><div class="stat-lbl">Morning / Evening</div></div>
   </div>
 
   <div class="main-wrap" style="align-items:start;">
     <div class="main-content">
 
       <div class="filter-bar">
-        <input type="text" class="search-box" id="search-box" placeholder="🔍 Search by name..." oninput="renderGrid()">
-        <button class="filter-chip active" onclick="setFilter('all',this)">All</button>
-        <button class="filter-chip" onclick="setFilter('Morning',this)">🌅 Morning</button>
-        <button class="filter-chip" onclick="setFilter('Evening',this)">🌆 Evening</button>
+        <input type="text" class="search-box" id="search-box" placeholder="🔍 Search by name or roll number..." oninput="renderGrid()">
+        <button class="filter-chip active" onclick="setFilter('all',this)">All (187)</button>
+        <button class="filter-chip" onclick="setFilter('Morning',this)">🌅 Morning (124)</button>
+        <button class="filter-chip" onclick="setFilter('Evening',this)">🌆 Evening (63)</button>
+        <button class="filter-chip" onclick="setFilter('registered',this)">✅ Registered <span id="reg-count">(0)</span></button>
       </div>
 
       <div class="member-grid" id="member-grid">
-        <div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--muted);">Loading registered members...</div>
+        <div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--muted);">Loading...</div>
       </div>
 
       <div class="cta-banner">
-        <p style="color:rgba(255,255,255,0.8);font-size:14px;margin-bottom:0.75rem;">Are you from Session 2006–2010? Register to appear on this page.</p>
+        <p style="color:rgba(255,255,255,0.8);font-size:14px;margin-bottom:0.75rem;">Are you from Session 2006–2010? Register to add your photo, job title, and location.</p>
         <a href="/alumni.html" style="display:inline-block;background:var(--gold);color:var(--navy);padding:9px 24px;border-radius:8px;font-size:13px;font-weight:700;text-decoration:none;">Register Now →</a>
       </div>
 
     </div>
 
+    <!-- SIDEBAR -->
     <div class="sidebar">
       <div class="sidebar-card">
         <div class="sidebar-card-header">📊 Session Info</div>
         <div class="sidebar-card-body">
           <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px;"><span style="color:var(--muted);">Session</span><span style="font-weight:700;color:var(--navy);">2006–2010</span></div>
-          <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px;"><span style="color:var(--muted);">Registered</span><span style="font-weight:700;color:var(--gold);" id="sidebar-reg">—</span></div>
-          <div style="display:flex;justify-content:space-between;padding:6px 0;font-size:13px;"><span style="color:var(--muted);">Countries</span><span style="font-weight:700;color:var(--navy);" id="sidebar-countries">—</span></div>
+          <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px;"><span style="color:var(--muted);">Total</span><span style="font-weight:700;color:var(--navy);">187</span></div>
+          <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px;"><span style="color:var(--muted);">Morning</span><span style="font-weight:700;color:var(--navy);">124</span></div>
+          <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px;"><span style="color:var(--muted);">Evening</span><span style="font-weight:700;color:var(--navy);">63</span></div>
+          <div style="display:flex;justify-content:space-between;padding:6px 0;font-size:13px;"><span style="color:var(--muted);">Registered</span><span style="font-weight:700;color:var(--gold);" id="sidebar-reg">—</span></div>
         </div>
       </div>
       <div class="sidebar-card">
         <div class="sidebar-card-header">🌍 Countries</div>
         <div class="sidebar-card-body" id="country-list">
-          <div style="color:var(--muted);font-size:13px;text-align:center;padding:0.5rem;">Waiting for members</div>
+          <div style="color:var(--muted);font-size:12px;text-align:center;padding:0.5rem;">Waiting for members</div>
         </div>
       </div>
       <div class="sidebar-card">
         <div class="sidebar-card-header">💼 Industries</div>
         <div class="sidebar-card-body" id="industry-list">
-          <div style="color:var(--muted);font-size:13px;text-align:center;padding:0.5rem;">Waiting for members</div>
+          <div style="color:var(--muted);font-size:12px;text-align:center;padding:0.5rem;">Waiting for members</div>
         </div>
       </div>
       <div class="sidebar-card">
         <div class="sidebar-card-header">🔗 Other Sessions</div>
-        <div class="sidebar-card-body"><a href="/alumni/2006.html" style="display:block;padding:7px 0;font-size:13px;color:var(--navy);text-decoration:none;border-bottom:1px solid var(--border);font-weight:600;">Session 2006–2010 ←</a>
+        <div class="sidebar-card-body"><a href="/alumni/2006.html" style="display:block;padding:7px 0;font-size:13px;color:var(--navy);font-weight:600;text-decoration:none;border-bottom:1px solid var(--border);">Session 2006–2010 ←</a>
           <a href="/alumni/2009.html" style="display:block;padding:7px 0;font-size:13px;color:var(--navy);text-decoration:none;border-bottom:1px solid var(--border);">Session 2009–2013</a>
           <a href="/alumni/2016.html" style="display:block;padding:7px 0;font-size:13px;color:var(--navy);text-decoration:none;">Session 2016–2020</a></div>
       </div>
@@ -472,9 +474,7 @@
   </div>
 </div>
 
-<footer class="footer">
-  <p>&copy; 2026 Dr. Adeem Ghaffar Rana · <a href="/">ranaadeem.de</a></p>
-</footer>
+<footer class="footer"><p>&copy; 2026 Dr. Adeem Ghaffar Rana · <a href="/">ranaadeem.de</a></p></footer>
 
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js';
@@ -487,66 +487,83 @@ const app = initializeApp({apiKey:"AIzaSyAgUl22Cln6QtY3-HIvI6lE8Zu7n9OblbI",
   appId:"1:707390888790:web:57e6be62e4d11e22c214f7"});
 const db = getFirestore(app);
 
-let members = [];
+const CLASS_LIST = [{"roll": "BC-M6-301", "name": "SAEED AKRAM SHEIKH", "shift": "Morning"}, {"roll": "BC-M6-302", "name": "IMRAN YOUSAF", "shift": "Morning"}, {"roll": "BC-M6-303", "name": "MUHAMMAD ADNAN SADIQ", "shift": "Morning"}, {"roll": "BC-M6-304", "name": "MUHAMMAD IRFAN", "shift": "Morning"}, {"roll": "BC-M6-305", "name": "IMRAN RIAZ", "shift": "Morning"}, {"roll": "BC-M6-306", "name": "NASIR MEHMOOD", "shift": "Morning"}, {"roll": "BC-M6-307", "name": "SHAMSHAD-UL-HAQ", "shift": "Morning"}, {"roll": "BC-M6-308", "name": "AWAIS ABDULLAH", "shift": "Morning"}, {"roll": "BC-M6-309", "name": "UMAIR AZAD", "shift": "Morning"}, {"roll": "BC-M6-310", "name": "ALI ZULQARNAIN", "shift": "Morning"}, {"roll": "BC-M6-311", "name": "MUHAMMAD RIZWAN AZHAR", "shift": "Morning"}, {"roll": "BC-M6-312", "name": "MUHAMMAD ASAD MASOOD", "shift": "Morning"}, {"roll": "BC-M6-313", "name": "HAFIZ SHAFIQ", "shift": "Morning"}, {"roll": "BC-M6-314", "name": "HAFIZ ZUBAIR", "shift": "Morning"}, {"roll": "BC-M6-315", "name": "MUHAMMAD NAEEM", "shift": "Morning"}, {"roll": "BC-M6-316", "name": "GHUFRAN AHMAD", "shift": "Morning"}, {"roll": "BC-M6-317", "name": "ABDUL LATIF", "shift": "Morning"}, {"roll": "CE-M6-101", "name": "ABDUL WAHAB KHAN", "shift": "Morning"}, {"roll": "CE-M6-102", "name": "ZAHID ANJUM", "shift": "Morning"}, {"roll": "CE-M6-103", "name": "USMAN RAFIQ", "shift": "Morning"}, {"roll": "CE-M6-104", "name": "MEESAM ALI", "shift": "Morning"}, {"roll": "CE-M6-105", "name": "IRFAN IQBAL", "shift": "Morning"}, {"roll": "CE-M6-106", "name": "WASEEM SAFDAR", "shift": "Morning"}, {"roll": "CE-M6-107", "name": "NASEER AHMAD", "shift": "Morning"}, {"roll": "CE-M6-108", "name": "RIZWAN HAIDER", "shift": "Morning"}, {"roll": "CE-M6-109", "name": "UMAR FAROOQ", "shift": "Morning"}, {"roll": "CE-M6-110", "name": "MUHAMMAD FIAZ", "shift": "Morning"}, {"roll": "CE-M6-111", "name": "FAROOQ KHAN", "shift": "Morning"}, {"roll": "CE-M6-112", "name": "SALMAN SIDIQUE", "shift": "Morning"}, {"roll": "CE-M6-113", "name": "HAFIZ AAMIR", "shift": "Morning"}, {"roll": "CE-M6-114", "name": "MOHSIN ALI RAZA", "shift": "Morning"}, {"roll": "CE-M6-115", "name": "MUHAMMAD KASHIF", "shift": "Morning"}, {"roll": "CE-M6-116", "name": "RIZWAN GHULAM NABI", "shift": "Morning"}, {"roll": "CE-M6-117", "name": "AYAZ KARIM", "shift": "Morning"}, {"roll": "CE-M6-118", "name": "ADEEM GHAFFAR RANA", "shift": "Morning"}, {"roll": "CE-M6-119", "name": "KHIZAR HAYAT", "shift": "Morning"}, {"roll": "CE-M6-120", "name": "AWAIS NADEEM", "shift": "Morning"}, {"roll": "CE-M6-121", "name": "SAQIB WAHEED", "shift": "Morning"}, {"roll": "CE-M6-122", "name": "RAO SHAFIQ", "shift": "Morning"}, {"roll": "CE-M6-123", "name": "FAYYAZ AHMAD", "shift": "Morning"}, {"roll": "CE-M6-124", "name": "KHUBAIB HASAN", "shift": "Morning"}, {"roll": "CE-M6-125", "name": "TAHIR NAZIR", "shift": "Morning"}, {"roll": "CE-M6-126", "name": "MANSAB ALI", "shift": "Morning"}, {"roll": "CE-M6-127", "name": "ZAHID RASOOL", "shift": "Morning"}, {"roll": "CE-M6-128", "name": "UMAIR ISLAM", "shift": "Morning"}, {"roll": "CE-M6-129", "name": "ZOHAIB ZAIDI", "shift": "Morning"}, {"roll": "CE-M6-130", "name": "ASAD ABBAS", "shift": "Morning"}, {"roll": "CE-M6-131", "name": "AJMAL JAVAID", "shift": "Morning"}, {"roll": "CE-M6-132", "name": "KHALIL AHMAD", "shift": "Morning"}, {"roll": "CE-M6-133", "name": "WAQAS AZIZ HASHMI", "shift": "Morning"}, {"roll": "CE-M6-134", "name": "AFZAL CAUDHRY", "shift": "Morning"}, {"roll": "CE-M6-135", "name": "MUJEEB UR REHMAN", "shift": "Morning"}, {"roll": "CE-M6-136", "name": "ALI BUKHARI", "shift": "Morning"}, {"roll": "CE-M6-137", "name": "AWAIS NAEEM", "shift": "Morning"}, {"roll": "CE-M6-138", "name": "SAAD TOOR", "shift": "Morning"}, {"roll": "CE-M6-139", "name": "KASHIF YOUNIS", "shift": "Morning"}, {"roll": "CE-M6-140", "name": "AFFAN KHALID", "shift": "Morning"}, {"roll": "CE-M6-141", "name": "JAHENZAIB KHAN", "shift": "Morning"}, {"roll": "CE-M6-142", "name": "AHSAN BILAL", "shift": "Morning"}, {"roll": "CE-M6-143", "name": "SAQIB RIZVI", "shift": "Morning"}, {"roll": "CE-M6-144", "name": "SYED MUHAMMAD QAISER KHAN", "shift": "Morning"}, {"roll": "CE-M6-145", "name": "UMAIR RASHEED", "shift": "Morning"}, {"roll": "CE-M6-146", "name": "ALI NADEEM", "shift": "Morning"}, {"roll": "CE-M6-147", "name": "FAWAD FURRUKH", "shift": "Morning"}, {"roll": "CE-M6-148", "name": "AFNAN HAMEED", "shift": "Morning"}, {"roll": "CE-M6-149", "name": "ABDUL REHMAN", "shift": "Morning"}, {"roll": "CE-M6-150", "name": "IBRAHIM SAEED", "shift": "Morning"}, {"roll": "CE-M6-151", "name": "MUHAMMA ARIF KHAN", "shift": "Morning"}, {"roll": "CE-M6-152", "name": "HARIS SHAJAR", "shift": "Morning"}, {"roll": "CE-M6-153", "name": "IMRAN KHAN", "shift": "Morning"}, {"roll": "CE-M6-154", "name": "NOUMAN AHMAD", "shift": "Morning"}, {"roll": "CE-M6-155", "name": "IMRAN KHAN", "shift": "Morning"}, {"roll": "CE-M6-156", "name": "JAMSHAID IQBAL", "shift": "Morning"}, {"roll": "CE-M6-157", "name": "FAISAL MEHMOOD", "shift": "Morning"}, {"roll": "CE-M6-158", "name": "SHERAZ AFZAL", "shift": "Morning"}, {"roll": "CE-M6-159", "name": "ADNAN SHOAIB", "shift": "Morning"}, {"roll": "CE-M6-160", "name": "KARIM BUKSH", "shift": "Morning"}, {"roll": "CE-M6-161", "name": "UMAIR DANISH", "shift": "Morning"}, {"roll": "CE-M6-162", "name": "AAMIR SHAMAS", "shift": "Morning"}, {"roll": "CE-M6-163", "name": "WAZIR ALI", "shift": "Morning"}, {"roll": "CE-M6-164", "name": "JAMA AHMAD HERSI", "shift": "Morning"}, {"roll": "EE-M6-401", "name": "AMBREEN GHALIB", "shift": "Morning"}, {"roll": "EE-M6-402", "name": "MUHAMMAD SHAHZAD ALI", "shift": "Morning"}, {"roll": "EE-M6-403", "name": "MUHAMMAD ILYAS", "shift": "Morning"}, {"roll": "EE-M6-404", "name": "YASIR SHARIF AWAN", "shift": "Morning"}, {"roll": "EE-M6-405", "name": "RAO MUNEER ALI", "shift": "Morning"}, {"roll": "EE-M6-406", "name": "SAJID MAHMOOD", "shift": "Morning"}, {"roll": "EE-M6-407", "name": "ALI MURAD", "shift": "Morning"}, {"roll": "EE-M6-408", "name": "USMAN ALI", "shift": "Morning"}, {"roll": "EE-M6-409", "name": "MUHAMMAD AWAIS", "shift": "Morning"}, {"roll": "EE-M6-410", "name": "AMBREEN GULZAR", "shift": "Morning"}, {"roll": "EE-M6-411", "name": "FAHIM AHMAD ZAFAR", "shift": "Morning"}, {"roll": "EE-M6-412", "name": "ANWAAR AHMAD", "shift": "Morning"}, {"roll": "EE-M6-413", "name": "USMAN RASHEED", "shift": "Morning"}, {"roll": "EE-M6-414", "name": "KHUBAIB AHMAD", "shift": "Morning"}, {"roll": "EE-M6-415", "name": "SALMAN MANSOOR", "shift": "Morning"}, {"roll": "EE-M6-416", "name": "USMAN SAEED", "shift": "Morning"}, {"roll": "EE-M6-417", "name": "SADIA NAUREEN", "shift": "Morning"}, {"roll": "PG-M6-201", "name": "TAYAB SAEED", "shift": "Morning"}, {"roll": "PG-M6-202", "name": "ATIF ASHRAF", "shift": "Morning"}, {"roll": "PG-M6-203", "name": "ASAD ALI", "shift": "Morning"}, {"roll": "PG-M6-204", "name": "NAVEED AKHTAR", "shift": "Morning"}, {"roll": "PG-M6-205", "name": "MUNZOOR AHMAD", "shift": "Morning"}, {"roll": "PG-M6-206", "name": "FARAZ BUTT", "shift": "Morning"}, {"roll": "PG-M6-207", "name": "SANA ULLAH", "shift": "Morning"}, {"roll": "PG-M6-208", "name": "BABER ALI", "shift": "Morning"}, {"roll": "PG-M6-209", "name": "AAMIR RIAZ", "shift": "Morning"}, {"roll": "PG-M6-210", "name": "GHULAM ABBAS", "shift": "Morning"}, {"roll": "PG-M6-211", "name": "MUHAMMAD BASIT ALI", "shift": "Morning"}, {"roll": "PG-M6-212", "name": "ZEESHAN SHOAIB", "shift": "Morning"}, {"roll": "PG-M6-213", "name": "MUHAMMAD KALEEM ULLAH", "shift": "Morning"}, {"roll": "PG-M6-214", "name": "HAFIZ KHALIL UR REHMAN", "shift": "Morning"}, {"roll": "PG-M6-215", "name": "FAISAL JOYIA", "shift": "Morning"}, {"roll": "PG-M6-216", "name": "FAISAL KHALIL", "shift": "Morning"}, {"roll": "PG-M6-217", "name": "MUHAMMAD ZEESHAN SALEEM", "shift": "Morning"}, {"roll": "PG-M6-218", "name": "AHSAN NOOR KHAN", "shift": "Morning"}, {"roll": "PG-M6-219", "name": "WAQAS SHEHRYAR", "shift": "Morning"}, {"roll": "PG-M6-220", "name": "AFTAB AHMAD", "shift": "Morning"}, {"roll": "PG-M6-221", "name": "TANVIR AHMAD", "shift": "Morning"}, {"roll": "PG-M6-222", "name": "FAKHAR ABBAS", "shift": "Morning"}, {"roll": "PG-M6-223", "name": "MUHAMMAD  HASNAT ALI", "shift": "Morning"}, {"roll": "PG-M6-224", "name": "YASIR ARAFAT", "shift": "Morning"}, {"roll": "PG-M6-225", "name": "TAHIR WASIM", "shift": "Morning"}, {"roll": "PG-M6-226", "name": "MOHSIN SAEED", "shift": "Morning"}, {"roll": "CE-E6-102", "name": "FAHAD MASOOD", "shift": "Evening"}, {"roll": "CE-E6-103", "name": "NOMAN LIAQAT", "shift": "Evening"}, {"roll": "CE-E6-104", "name": "YASEEN AKRAM", "shift": "Evening"}, {"roll": "CE-E6-105", "name": "ADNAN NAWAZ", "shift": "Evening"}, {"roll": "CE-E6-106", "name": "AHSEN HAFEEZ", "shift": "Evening"}, {"roll": "CE-E6-107", "name": "RAZA MUDASIR ALVI", "shift": "Evening"}, {"roll": "CE-E6-108", "name": "GULZEB KHAN", "shift": "Evening"}, {"roll": "CE-E6-109", "name": "USMAN SADIQUE", "shift": "Evening"}, {"roll": "CE-E6-110", "name": "ABDUL QAYYUM", "shift": "Evening"}, {"roll": "CE-E6-111", "name": "IMRAN MALIK", "shift": "Evening"}, {"roll": "CE-E6-112", "name": "SHAHID NADEEM", "shift": "Evening"}, {"roll": "CE-E6-113", "name": "UMAIR FURQAN", "shift": "Evening"}, {"roll": "CE-E6-114", "name": "NAUMAN ASHRAF", "shift": "Evening"}, {"roll": "CE-E6-115", "name": "WAQAS BUKHARI", "shift": "Evening"}, {"roll": "CE-E6-116", "name": "SANA ULLAH", "shift": "Evening"}, {"roll": "CE-E6-117", "name": "NAEEM YOUNIS", "shift": "Evening"}, {"roll": "CE-E6-118", "name": "MASOOD HAIDER", "shift": "Evening"}, {"roll": "CE-E6-119", "name": "MUHAMMAD ASIF KHAN", "shift": "Evening"}, {"roll": "CE-E6-120", "name": "MOHSIN MOBEEN", "shift": "Evening"}, {"roll": "CE-E6-121", "name": "FAHEEM RIAZ", "shift": "Evening"}, {"roll": "CE-E6-122", "name": "FAHAD MIR", "shift": "Evening"}, {"roll": "CE-E6-123", "name": "ADNAN REHMAT", "shift": "Evening"}, {"roll": "CE-E6-124", "name": "YASIR AKRAM AWAN", "shift": "Evening"}, {"roll": "CE-E6-125", "name": "SHAROOZ KHAN", "shift": "Evening"}, {"roll": "CE-E6-126", "name": "RANA MUHAMMAD IMRAN", "shift": "Evening"}, {"roll": "CE-E6-127", "name": "RIZWAN MALIK", "shift": "Evening"}, {"roll": "CE-E6-128", "name": "UMER TAHIR MIR", "shift": "Evening"}, {"roll": "CE-E6-129", "name": "MUHAMMAD NAEEM IQBAL", "shift": "Evening"}, {"roll": "CE-E6-130", "name": "MUHAMMAD UMAIR DANISH", "shift": "Evening"}, {"roll": "CE-E6-131", "name": "ABID ALI", "shift": "Evening"}, {"roll": "CE-E6-132", "name": "FARHAN CHEEMA", "shift": "Evening"}, {"roll": "CE-E6-133", "name": "MUHAMMAD ARSHAD", "shift": "Evening"}, {"roll": "CE-E6-134", "name": "ZUBAIR SHAHID", "shift": "Evening"}, {"roll": "CE-E6-135", "name": "WAQAR AHMED", "shift": "Evening"}, {"roll": "CE-E6-136", "name": "AFFAN AHMAD", "shift": "Evening"}, {"roll": "CE-E6-137", "name": "UMAIR SHOAIB", "shift": "Evening"}, {"roll": "CE-E6-138", "name": "ARSALAN AWAN", "shift": "Evening"}, {"roll": "CE-E6-139", "name": "MUHAMMAD IMRAN", "shift": "Evening"}, {"roll": "CE-E6-140", "name": "ASIF IQBAL", "shift": "Evening"}, {"roll": "CE-E6-141", "name": "HAKIM ALI HAIDER", "shift": "Evening"}, {"roll": "CE-E6-142", "name": "GHULAM MURTAZA", "shift": "Evening"}, {"roll": "CE-E6-143", "name": "ADNAN SALEEM", "shift": "Evening"}, {"roll": "CE-E6-144", "name": "ASIF ALI SHAHZAD", "shift": "Evening"}, {"roll": "PG-E6-201", "name": "MUHAMMAD ZAMAN", "shift": "Evening"}, {"roll": "PG-E6-202", "name": "IMRAN NIAZ", "shift": "Evening"}, {"roll": "PG-E6-203", "name": "SHAHID SAEED", "shift": "Evening"}, {"roll": "PG-E6-204", "name": "KHURRAM JAVED", "shift": "Evening"}, {"roll": "PG-E6-205", "name": "SAQIB RAZA", "shift": "Evening"}, {"roll": "PG-E6-206", "name": "AAMIR KARIM", "shift": "Evening"}, {"roll": "PG-E6-207", "name": "MUHAMMAD UMAR FAROOQ", "shift": "Evening"}, {"roll": "PG-E6-208", "name": "ALI AHMAD", "shift": "Evening"}, {"roll": "PG-E6-209", "name": "ABDUL BASIT", "shift": "Evening"}, {"roll": "PG-E6-210", "name": "FARHAN RASOOL", "shift": "Evening"}, {"roll": "PG-E6-211", "name": "NASEER AHMAD", "shift": "Evening"}, {"roll": "PG-E6-212", "name": "MUHAMMAD USMAN", "shift": "Evening"}, {"roll": "PG-E6-213", "name": "AQEEL MANSOOR CHISHTI", "shift": "Evening"}, {"roll": "PG-E6-214", "name": "RIZWAN AHMED SHAH", "shift": "Evening"}, {"roll": "PG-E6-215", "name": "MUAMMAD ZAIN", "shift": "Evening"}, {"roll": "PG-E6-216", "name": "USMAN ANWAR DAR", "shift": "Evening"}, {"roll": "PG-E6-217", "name": "OMER SHUJAT", "shift": "Evening"}, {"roll": "PG-E6-218", "name": "IMRAN RAFIQUE", "shift": "Evening"}, {"roll": "PG-E6-219", "name": "NAEEM BHATTI", "shift": "Evening"}, {"roll": "PG-E6-220", "name": "ASIF SANI", "shift": "Evening"}];
+
+let registeredMap = {};
 let activeFilter = 'all';
 
-async function loadMembers() {
+async function loadRegistered() {
   try {
-    const snap = await getDocs(query(collection(db,'alumni'), where('session','in',['2006-Morning','2006-Evening'])));
-    members = [];
+    const snap = await getDocs(query(collection(db,'alumni'),
+      where('session','in',['2006-Morning','2006-Evening'])
+    ));
+    registeredMap = {};
     const countries = {}, industries = {};
     snap.forEach(d => {
-      const a = d.data(); members.push(a);
+      const a = d.data();
+      registeredMap[a.rollNumber] = a;
       if (a.country) countries[a.country] = (countries[a.country]||0)+1;
       if (a.industry) industries[a.industry] = (industries[a.industry]||0)+1;
     });
-    document.getElementById('stat-registered').textContent = members.length;
-    document.getElementById('sidebar-reg').textContent = members.length;
+    const count = snap.size;
+    document.getElementById('stat-registered').textContent = count || '0';
+    document.getElementById('sidebar-reg').textContent = count || '0';
+    document.getElementById('reg-count').textContent = '(' + count + ')';
     const cLen = Object.keys(countries).length;
-    document.getElementById('stat-countries').textContent = cLen || '—';
-    document.getElementById('sidebar-countries').textContent = cLen || '—';
-    document.getElementById('stat-industries').textContent = Object.keys(industries).length || '—';
-    const cl = document.getElementById('country-list');
-    cl.innerHTML = cLen ? Object.entries(countries).sort((a,b)=>b[1]-a[1]).map(([c,n])=>`<div style="display:flex;justify-content:space-between;padding:5px 0;font-size:12px;border-bottom:1px solid var(--border);"><span>${c}</span><span style="color:var(--gold);font-weight:600;">${n}</span></div>`).join('') : '<div style="color:var(--muted);font-size:12px;text-align:center;padding:0.5rem;">No data yet</div>';
-    const il = document.getElementById('industry-list');
-    il.innerHTML = Object.keys(industries).length ? Object.entries(industries).sort((a,b)=>b[1]-a[1]).map(([i,n])=>`<div style="display:flex;justify-content:space-between;padding:5px 0;font-size:12px;border-bottom:1px solid var(--border);"><span>${i}</span><span style="color:var(--gold);font-weight:600;">${n}</span></div>`).join('') : '<div style="color:var(--muted);font-size:12px;text-align:center;padding:0.5rem;">No data yet</div>';
+    document.getElementById('stat-countries').textContent = cLen || '0';
+    document.getElementById('country-list').innerHTML = cLen
+      ? Object.entries(countries).sort((a,b)=>b[1]-a[1]).map(([c,n])=>`<div style="display:flex;justify-content:space-between;padding:5px 0;font-size:12px;border-bottom:1px solid var(--border);"><span>${c}</span><span style="color:var(--gold);font-weight:600;">${n}</span></div>`).join('')
+      : '<div style="color:var(--muted);font-size:12px;text-align:center;padding:0.5rem;">No data yet</div>';
+    const iLen = Object.keys(industries).length;
+    document.getElementById('industry-list').innerHTML = iLen
+      ? Object.entries(industries).sort((a,b)=>b[1]-a[1]).map(([i,n])=>`<div style="display:flex;justify-content:space-between;padding:5px 0;font-size:12px;border-bottom:1px solid var(--border);"><span>${i}</span><span style="color:var(--gold);font-weight:600;">${n}</span></div>`).join('')
+      : '<div style="color:var(--muted);font-size:12px;text-align:center;padding:0.5rem;">No data yet</div>';
     renderGrid();
-  } catch(e) { console.error(e); }
+  } catch(e) { console.error('Firebase error:', e); renderGrid(); }
 }
 
 function renderGrid() {
   const grid = document.getElementById('member-grid');
   const search = (document.getElementById('search-box').value||'').toLowerCase();
-  const filtered = members.filter(m => {
-    if (activeFilter==='Morning' && !(m.session||'').includes('Morning')) return false;
-    if (activeFilter==='Evening' && !(m.session||'').includes('Evening')) return false;
-    if (search && !(m.name||'').toLowerCase().includes(search) && !(m.rollNumber||'').toLowerCase().includes(search)) return false;
+  const filtered = CLASS_LIST.filter(m => {
+    if (activeFilter==='registered' && !registeredMap[m.roll]) return false;
+    if (activeFilter==='Morning' && m.shift!=='Morning') return false;
+    if (activeFilter==='Evening' && m.shift!=='Evening') return false;
+    if (search && !m.name.toLowerCase().includes(search) && !m.roll.toLowerCase().includes(search)) return false;
     return true;
   });
   if (!filtered.length) {
-    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--muted);">No registered members yet. <a href="/alumni.html" style="color:var(--navy);">Be the first →</a></div>';
+    grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--muted);">No members found.</div>';
     return;
   }
-  grid.innerHTML = '';
+  grid.innerHTML='';
   filtered.forEach(m => {
-    const initials = (m.name||'?').split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase();
-    const shift = (m.session||'').includes('Morning') ? 'Morning' : 'Evening';
+    const reg = registeredMap[m.roll];
+    const initials = m.name.split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase();
     const el = document.createElement('div');
-    el.className = 'member-card';
+    el.className = 'member-card'+(reg?'':' unregistered');
     el.innerHTML = `
-      <div class="member-avatar">${m.photoBase64?`<img src="${m.photoBase64}" alt="${m.name}">`:initials}</div>
-      <div class="member-name">${m.name||''}</div>
-      <div class="member-roll">${m.rollNumber||''}</div>
-      <span class="shift-badge shift-${shift.toLowerCase()}">${shift}</span>
-      ${m.jobTitle?`<div class="member-detail">💼 ${m.jobTitle}</div>`:''}
-      ${m.employer?`<div class="member-detail">🏢 ${m.employer}</div>`:''}
-      ${m.country?`<div class="member-detail">📍 ${m.city?m.city+', ':''}${m.country}</div>`:''}
+      <div class="member-avatar">${reg?.photoBase64?`<img src="${reg.photoBase64}" alt="${m.name}">`:initials}</div>
+      <div class="member-name">${reg?.name||m.name}</div>
+      <div class="member-roll">${m.roll}</div>
+      <span class="shift-badge shift-${m.shift.toLowerCase()}">${m.shift}</span>
+      ${reg?.jobTitle?`<div class="member-detail">💼 ${reg.jobTitle}</div>`:''}
+      ${reg?.employer?`<div class="member-detail">🏢 ${reg.employer}</div>`:''}
+      ${reg?.country?`<div class="member-detail">📍 ${reg.city?reg.city+', ':''}${reg.country}</div>`:''}
+      ${!reg?'<div style="font-size:11px;color:var(--muted);margin-top:5px;">Not registered yet</div>':''}
     `;
     grid.appendChild(el);
   });
 }
-window.setFilter = function(f,btn){ activeFilter=f; document.querySelectorAll('.filter-chip').forEach(t=>t.classList.remove('active')); btn.classList.add('active'); renderGrid(); };
-loadMembers();
+
+window.setFilter = function(f,btn){
+  activeFilter=f;
+  document.querySelectorAll('.filter-chip').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  renderGrid();
+};
+
+loadRegistered();
 </script>
 <script>
 document.getElementById('nav-hamburger').addEventListener('click', function() {

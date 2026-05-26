@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Session 2016–2020 — Alumni · ICET Punjab University</title>
+<title>Session 2016–2020 — Chemical Engineering Alumni · ICET Punjab University</title>
 <link rel="icon" type="image/png" href="/favicon.png">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
@@ -306,15 +306,15 @@
   }
 
 
-/* Session page extras */
+
 .stats-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:2rem;}
 .stat-box{background:white;border:1px solid var(--border);border-radius:10px;padding:1rem;text-align:center;}
 .stat-num{font-family:"Playfair Display",serif;font-size:1.6rem;font-weight:700;color:var(--navy);}
 .stat-lbl{font-size:11px;color:var(--muted);margin-top:2px;}
 .member-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;}
-.member-card{background:white;border:1px solid var(--border);border-radius:12px;padding:1.1rem;text-align:center;transition:box-shadow 0.2s;position:relative;}
+.member-card{background:white;border:1px solid var(--border);border-radius:12px;padding:1.1rem;text-align:center;transition:box-shadow 0.2s;}
 .member-card:hover{box-shadow:0 4px 16px rgba(0,0,0,0.08);}
-.member-card.unregistered{opacity:0.7;}
+.member-card.unregistered{opacity:0.75;}
 .member-avatar{width:54px;height:54px;border-radius:50%;background:var(--navy);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--gold);font-size:0.95rem;margin:0 auto 0.6rem;overflow:hidden;border:2px solid var(--gold);}
 .member-avatar img{width:100%;height:100%;object-fit:cover;}
 .member-name{font-size:13px;font-weight:600;color:var(--navy);line-height:1.3;margin-bottom:2px;}
@@ -326,13 +326,15 @@
 .filter-bar{display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:1.25rem;align-items:center;}
 .filter-chip{padding:5px 14px;border-radius:20px;font-size:12px;font-weight:500;border:1.5px solid var(--border);background:white;cursor:pointer;color:var(--muted);transition:all 0.2s;}
 .filter-chip.active{background:var(--navy);color:white;border-color:var(--navy);}
-.search-box{flex:1;min-width:200px;padding:8px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit;outline:none;}
+.search-box{flex:1;min-width:180px;padding:8px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit;outline:none;}
 .search-box:focus{border-color:var(--navy);}
-.placeholder-banner{background:linear-gradient(135deg,var(--navy) 0%,#1e3fa0 100%);border-radius:14px;height:180px;display:flex;align-items:center;justify-content:center;margin-bottom:2rem;position:relative;overflow:hidden;}
 .cta-banner{background:linear-gradient(135deg,var(--navy),#2048a8);border-radius:12px;padding:1.5rem;text-align:center;margin-top:2.5rem;}
+.alumni-header{width:100%;border-radius:12px;overflow:hidden;margin-bottom:2rem;box-shadow:0 4px 20px rgba(0,0,0,0.15);}
+.alumni-header img{width:100%;height:auto;display:block;}
 @media(max-width:900px){.stats-bar{grid-template-columns:repeat(2,1fr);}}
 @media(max-width:768px){.member-grid{grid-template-columns:repeat(2,1fr);}}
 @media(max-width:480px){.member-grid{grid-template-columns:1fr;}.stats-bar{grid-template-columns:repeat(2,1fr);}}
+
 </style>
 </head>
 <body>
@@ -376,54 +378,35 @@
 </nav>
 <div class="toast" id="toast"></div>
 
-<!-- PAGE HEADER -->
 <div class="page-header">
   <div class="header-inner">
     <span class="page-tag">Alumni Network · ICET Punjab University</span>
     <h1>Session <span>2016–2020</span></h1>
     <p style="font-size:13px;color:rgba(255,255,255,0.55);margin-top:4px;">Institute of Chemical Engineering &amp; Technology · University of the Punjab, Lahore</p>
-    <p class="header-sub">Chemical Engineering Batch — reconnecting graduates across the globe. Register to update your profile and appear on this page.</p>
+    <p class="header-sub">Chemical Engineering Batch — reconnecting graduates across the globe.</p>
   </div>
 </div>
 
 <div style="max-width:1100px;margin:0 auto;padding:2.5rem 2rem 4rem;">
 
-  <!-- GROUP PHOTO PLACEHOLDER -->
-  <div class="placeholder-banner">
-    <div style="text-align:center;z-index:1;">
-      <div style="font-size:3rem;margin-bottom:0.5rem;">📸</div>
-      <div style="font-family:'Playfair Display',serif;font-size:1.1rem;color:white;font-weight:600;">Class Photo — Session 2016–2020</div>
-      <div style="font-size:13px;color:rgba(255,255,255,0.6);margin-top:4px;">Have a group photo? <a href="mailto:ranaadeem@hotmail.com" style="color:var(--gold);text-decoration:none;">Send it to us →</a></div>
-    </div>
-    <!-- decorative circles -->
-    <div style="position:absolute;width:300px;height:300px;border-radius:50%;border:1px solid rgba(255,255,255,0.06);top:-100px;right:-100px;"></div>
-    <div style="position:absolute;width:200px;height:200px;border-radius:50%;border:1px solid rgba(255,255,255,0.06);bottom:-80px;left:-50px;"></div>
+  <!-- ALUMNI NETWORK HEADER BANNER -->
+  <div class="alumni-header">
+    <img src="/alumni-header.png" alt="Chemical Engineering Alumni Network — ICET Punjab University">
   </div>
+
+  
 
   <!-- STATS BAR -->
   <div class="stats-bar">
-    <div class="stat-box">
-      <div class="stat-num">107</div>
-      <div class="stat-lbl">Total Graduates</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-num" id="stat-registered">—</div>
-      <div class="stat-lbl">Registered</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-num" id="stat-countries">—</div>
-      <div class="stat-lbl">Countries</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-num">61/46</div>
-      <div class="stat-lbl">Morning / Evening</div>
-    </div>
+    <div class="stat-box"><div class="stat-num">107</div><div class="stat-lbl">Total Graduates</div></div>
+    <div class="stat-box"><div class="stat-num" id="stat-registered">—</div><div class="stat-lbl">Registered</div></div>
+    <div class="stat-box"><div class="stat-num" id="stat-countries">—</div><div class="stat-lbl">Countries</div></div>
+    <div class="stat-box"><div class="stat-num">61/46</div><div class="stat-lbl">Morning / Evening</div></div>
   </div>
 
   <div class="main-wrap" style="align-items:start;">
     <div class="main-content">
 
-      <!-- FILTER & SEARCH -->
       <div class="filter-bar">
         <input type="text" class="search-box" id="search-box" placeholder="🔍 Search by name or roll number..." oninput="renderGrid()">
         <button class="filter-chip active" onclick="setFilter('all',this)">All (107)</button>
@@ -432,22 +415,18 @@
         <button class="filter-chip" onclick="setFilter('registered',this)">✅ Registered <span id="reg-count">(0)</span></button>
       </div>
 
-      <!-- MEMBER GRID -->
       <div class="member-grid" id="member-grid">
         <div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--muted);">Loading...</div>
       </div>
 
-      <!-- CTA BANNER -->
       <div class="cta-banner">
         <p style="color:rgba(255,255,255,0.8);font-size:14px;margin-bottom:0.75rem;">Are you from Session 2016–2020? Register to add your photo, job title, and location.</p>
         <a href="/alumni.html" style="display:inline-block;background:var(--gold);color:var(--navy);padding:9px 24px;border-radius:8px;font-size:13px;font-weight:700;text-decoration:none;">Register Now →</a>
       </div>
 
-    </div><!-- /main-content -->
-
-    <!-- SIDEBAR -->
+    </div>
+    
     <div class="sidebar">
-
       <div class="sidebar-card">
         <div class="sidebar-card-header">📊 Session Info</div>
         <div class="sidebar-card-body">
@@ -458,30 +437,20 @@
           <div style="display:flex;justify-content:space-between;padding:6px 0;font-size:13px;"><span style="color:var(--muted);">Registered</span><span style="font-weight:700;color:var(--gold);" id="sidebar-reg">—</span></div>
         </div>
       </div>
-
       <div class="sidebar-card">
         <div class="sidebar-card-header">🌍 Countries</div>
-        <div class="sidebar-card-body" id="country-list">
-          <div style="color:var(--muted);font-size:13px;text-align:center;padding:0.5rem;">Waiting for members to register</div>
-        </div>
+        <div class="sidebar-card-body" id="country-list"><div style="color:var(--muted);font-size:12px;text-align:center;padding:0.5rem;">Waiting for members</div></div>
       </div>
-
       <div class="sidebar-card">
         <div class="sidebar-card-header">💼 Industries</div>
-        <div class="sidebar-card-body" id="industry-list">
-          <div style="color:var(--muted);font-size:13px;text-align:center;padding:0.5rem;">Waiting for members to register</div>
-        </div>
+        <div class="sidebar-card-body" id="industry-list"><div style="color:var(--muted);font-size:12px;text-align:center;padding:0.5rem;">Waiting for members</div></div>
       </div>
-
       <div class="sidebar-card">
         <div class="sidebar-card-header">🔗 Other Sessions</div>
-        <div class="sidebar-card-body">
-          <a href="/alumni/2006.html" style="display:block;padding:7px 0;font-size:13px;color:var(--navy);text-decoration:none;border-bottom:1px solid var(--border);font-weight:400;">2006–2010</a>
+        <div class="sidebar-card-body"><a href="/alumni/2006.html" style="display:block;padding:7px 0;font-size:13px;color:var(--navy);text-decoration:none;border-bottom:1px solid var(--border);font-weight:400;">2006–2010</a>
 <a href="/alumni/2009.html" style="display:block;padding:7px 0;font-size:13px;color:var(--navy);text-decoration:none;border-bottom:1px solid var(--border);font-weight:400;">2009–2013</a>
-<a href="/alumni/2016.html" style="display:block;padding:7px 0;font-size:13px;color:var(--navy);text-decoration:none;border-bottom:1px solid var(--border);font-weight:600;">2016–2020 ←</a>
-        </div>
+<a href="/alumni/2016.html" style="display:block;padding:7px 0;font-size:13px;color:var(--navy);text-decoration:none;font-weight:600;">2016–2020 ←</a></div>
       </div>
-
       <div class="sidebar-card">
         <div class="sidebar-card-header">📬 Join the Network</div>
         <div class="sidebar-card-body">
@@ -489,20 +458,14 @@
           <a href="/alumni.html" style="display:block;text-align:center;background:var(--navy);color:var(--gold);padding:9px 16px;border-radius:8px;text-decoration:none;font-size:13px;font-weight:600;">Register Now →</a>
         </div>
       </div>
+    </div>
+  </div>
+</div>
 
-    </div><!-- /sidebar -->
-  </div><!-- /main-wrap -->
-
-</div><!-- /container -->
-
-<footer class="footer">
-  <p>&copy; 2026 Dr. Adeem Ghaffar Rana · <a href="/">ranaadeem.de</a></p>
-</footer>
-
+<footer class="footer"><p>&copy; 2026 Dr. Adeem Ghaffar Rana · <a href="/">ranaadeem.de</a></p></footer>
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js';
 import { getFirestore, collection, getDocs, query, where } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js';
-
 const app = initializeApp({apiKey:"AIzaSyAgUl22Cln6QtY3-HIvI6lE8Zu7n9OblbI",
   authDomain:"icet-alumni.firebaseapp.com",
   projectId:"icet-alumni",
@@ -518,13 +481,11 @@ let activeFilter = 'all';
 
 async function loadRegistered() {
   try {
-    const snap = await getDocs(query(
-      collection(db,'alumni'),
+    const snap = await getDocs(query(collection(db,'alumni'),
       where('session','in',['2016-Morning','2016-Evening'])
     ));
     registeredMap = {};
-    const countries = {};
-    const industries = {};
+    const countries = {}, industries = {};
     snap.forEach(d => {
       const a = d.data();
       registeredMap[a.rollNumber] = a;
@@ -532,86 +493,64 @@ async function loadRegistered() {
       if (a.industry) industries[a.industry] = (industries[a.industry]||0)+1;
     });
     const count = snap.size;
-    document.getElementById('stat-registered').textContent = count;
-    document.getElementById('sidebar-reg').textContent = count;
+    ['stat-registered','sidebar-reg'].forEach(id => {
+      const el = document.getElementById(id);
+      if(el) el.textContent = count;
+    });
+    const cLen = Object.keys(countries).length;
+    const cEl = document.getElementById('stat-countries');
+    if(cEl) cEl.textContent = cLen || '—';
+    document.getElementById('country-list').innerHTML = cLen
+      ? Object.entries(countries).sort((a,b)=>b[1]-a[1]).map(([c,n])=>`<div style="display:flex;justify-content:space-between;padding:5px 0;font-size:12px;border-bottom:1px solid var(--border);"><span>${c}</span><span style="color:var(--gold);font-weight:600;">${n}</span></div>`).join('')
+      : '<div style="color:var(--muted);font-size:12px;text-align:center;padding:0.5rem;">No data yet</div>';
+    const iLen = Object.keys(industries).length;
+    document.getElementById('industry-list').innerHTML = iLen
+      ? Object.entries(industries).sort((a,b)=>b[1]-a[1]).map(([i,n])=>`<div style="display:flex;justify-content:space-between;padding:5px 0;font-size:12px;border-bottom:1px solid var(--border);"><span>${i}</span><span style="color:var(--gold);font-weight:600;">${n}</span></div>`).join('')
+      : '<div style="color:var(--muted);font-size:12px;text-align:center;padding:0.5rem;">No data yet</div>';
     document.getElementById('reg-count').textContent = '(' + count + ')';
-    
-    // Countries count
-    const cKeys = Object.keys(countries);
-    document.getElementById('stat-countries').textContent = cKeys.length || '—';
-    
-    // Country list
-    const cl = document.getElementById('country-list');
-    if (cKeys.length) {
-      cl.innerHTML = Object.entries(countries).sort((a,b)=>b[1]-a[1])
-        .map(([c,n]) => `<div style="display:flex;justify-content:space-between;padding:5px 0;font-size:12px;border-bottom:1px solid var(--border);"><span>${c}</span><span style="color:var(--gold);font-weight:600;">${n}</span></div>`).join('');
-    } else {
-      cl.innerHTML = '<div style="color:var(--muted);font-size:12px;text-align:center;padding:0.5rem;">No data yet</div>';
-    }
-    
-    // Industry list
-    const il = document.getElementById('industry-list');
-    const iKeys = Object.keys(industries);
-    if (iKeys.length) {
-      il.innerHTML = Object.entries(industries).sort((a,b)=>b[1]-a[1])
-        .map(([i,n]) => `<div style="display:flex;justify-content:space-between;padding:5px 0;font-size:12px;border-bottom:1px solid var(--border);"><span>${i}</span><span style="color:var(--gold);font-weight:600;">${n}</span></div>`).join('');
-    } else {
-      il.innerHTML = '<div style="color:var(--muted);font-size:12px;text-align:center;padding:0.5rem;">No data yet</div>';
-    }
-    
     renderGrid();
-  } catch(e) {
-    console.error('Firebase error:', e);
-    renderGrid();
-  }
+  } catch(e) { console.error(e); renderGrid(); }
 }
 
 function renderGrid() {
   const grid = document.getElementById('member-grid');
-  const search = (document.getElementById('search-box').value || '').toLowerCase();
-  
+  const search = (document.getElementById('search-box').value||'').toLowerCase();
   const filtered = CLASS_LIST.filter(m => {
-    if (activeFilter === 'registered' && !registeredMap[m.roll]) return false;
-    if (activeFilter === 'Morning' && m.shift !== 'Morning') return false;
-    if (activeFilter === 'Evening' && m.shift !== 'Evening') return false;
+    if (activeFilter==='registered' && !registeredMap[m.roll]) return false;
+    if (activeFilter==='Morning' && m.shift!=='Morning') return false;
+    if (activeFilter==='Evening' && m.shift!=='Evening') return false;
     if (search && !m.name.toLowerCase().includes(search) && !m.roll.toLowerCase().includes(search)) return false;
     return true;
   });
-  
   if (!filtered.length) {
-    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--muted);">No members found.</div>';
+    grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--muted);">No members found.</div>';
     return;
   }
-  
-  grid.innerHTML = '';
+  grid.innerHTML='';
   filtered.forEach(m => {
     const reg = registeredMap[m.roll];
     const initials = m.name.split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase();
     const el = document.createElement('div');
-    el.className = 'member-card' + (reg ? '' : ' unregistered');
+    el.className = 'member-card'+(reg?'':' unregistered');
     el.innerHTML = `
-      <div class="member-avatar">
-        ${reg?.photoBase64 ? `<img src="${reg.photoBase64}" alt="${m.name}">` : initials}
-      </div>
-      <div class="member-name">${reg?.name || m.name}</div>
+      <div class="member-avatar">${reg?.photoBase64?`<img src="${reg.photoBase64}" alt="${m.name}">`:initials}</div>
+      <div class="member-name">${reg?.name||m.name}</div>
       <div class="member-roll">${m.roll}</div>
       <span class="shift-badge shift-${m.shift.toLowerCase()}">${m.shift}</span>
-      ${reg?.jobTitle ? `<div class="member-detail">💼 ${reg.jobTitle}</div>` : ''}
-      ${reg?.employer ? `<div class="member-detail">🏢 ${reg.employer}</div>` : ''}
-      ${reg?.country ? `<div class="member-detail">📍 ${reg.city ? reg.city+', ' : ''}${reg.country}</div>` : ''}
-      ${!reg ? '<div style="font-size:11px;color:var(--muted);margin-top:5px;">Not registered yet</div>' : ''}
+      ${reg?.jobTitle?`<div class="member-detail">💼 ${reg.jobTitle}</div>`:''}
+      ${reg?.employer?`<div class="member-detail">🏢 ${reg.employer}</div>`:''}
+      ${reg?.country?`<div class="member-detail">📍 ${reg.city?reg.city+', ':''}${reg.country}</div>`:''}
+      ${!reg?'<div style="font-size:11px;color:var(--muted);margin-top:5px;">Not registered yet</div>':''}
     `;
     grid.appendChild(el);
   });
 }
-
-window.setFilter = function(f, btn) {
-  activeFilter = f;
-  document.querySelectorAll('.filter-chip').forEach(t => t.classList.remove('active'));
+window.setFilter = function(f,btn){
+  activeFilter=f;
+  document.querySelectorAll('.filter-chip').forEach(t=>t.classList.remove('active'));
   btn.classList.add('active');
   renderGrid();
 };
-
 loadRegistered();
 </script>
 <script>
