@@ -132,6 +132,14 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
 @media(max-width:768px){.member-grid{grid-template-columns:repeat(2,1fr);}.session-title-bar{flex-direction:column;align-items:flex-start;}}
 @media(max-width:480px){.member-grid{grid-template-columns:1fr;}.stats-bar{grid-template-columns:repeat(2,1fr);}}
 
+
+/* Gallery strip */
+#photo-strip-wrap{cursor:grab;}
+#photo-strip-wrap:active{cursor:grabbing;}
+.gallery-photo{height:160px;width:auto;min-width:220px;max-width:300px;border-radius:8px;object-fit:cover;cursor:pointer;flex-shrink:0;transition:transform 0.2s,box-shadow 0.2s;border:2px solid transparent;}
+.gallery-photo:hover{transform:scale(1.03);box-shadow:0 4px 20px rgba(0,0,0,0.4);border-color:var(--gold);}
+/* Admin pending badge */
+.admin-approve-btn{position:absolute;top:4px;right:4px;background:var(--gold);color:var(--navy);border:none;padding:3px 8px;border-radius:4px;font-size:10px;font-weight:700;cursor:pointer;display:none;}
 </style>
 </head>
 <body>
@@ -191,11 +199,69 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
     <a href="/session2006.html" style="background:var(--gold);color:var(--navy);padding:7px 18px;border-radius:7px;font-size:13px;font-weight:700;text-decoration:none;white-space:nowrap;">📸 Memory Page →</a>
   </div>
 
-  <!-- 3. CLASS PHOTO PLACEHOLDER -->
-  <div class="photo-placeholder">
-    <div style="font-size:2rem;margin-bottom:0.5rem;">📸</div>
-    <div style="font-size:14px;font-weight:600;color:var(--navy);margin-bottom:4px;">Class Photo — Session 2006–2010</div>
-    <div style="font-size:13px;color:var(--muted);">Have the batch photo? <a href="mailto:ranaadeem@hotmail.com" style="color:var(--gold);text-decoration:none;font-weight:600;">Send it to us →</a></div>
+  <!-- 3. PHOTO GALLERY -->
+  <div id="gallery-section" style="margin-bottom:2rem;">
+
+    <!-- Slideshow strip -->
+    <div style="position:relative;margin-bottom:0.75rem;">
+      <div id="photo-strip-wrap" style="overflow:hidden;border-radius:12px;background:#1a1a2e;min-height:180px;display:flex;align-items:center;justify-content:center;">
+        <div id="photo-strip" style="display:flex;gap:8px;padding:8px;transition:none;will-change:transform;">
+          <!-- Photos injected by JS -->
+        </div>
+        <div id="gallery-empty" style="display:none;text-align:center;padding:2.5rem;color:rgba(255,255,255,0.5);">
+          <div style="font-size:2rem;margin-bottom:0.5rem;">📸</div>
+          <div style="font-size:14px;font-weight:600;color:rgba(255,255,255,0.7);">No photos yet</div>
+          <div style="font-size:13px;margin-top:4px;">Be the first to share a batch memory!</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Gallery actions -->
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.75rem;">
+      <div style="font-size:13px;color:var(--muted);">Batch photos, lab memories, trips &amp; events — <span id="photo-count" style="color:var(--navy);font-weight:600;">0</span> photos shared</div>
+      <button onclick="document.getElementById('upload-modal').style.display='flex'" style="background:var(--gold);color:var(--navy);border:none;padding:8px 18px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;">📤 Share a Photo</button>
+    </div>
+  </div>
+
+  <!-- UPLOAD MODAL -->
+  <div id="upload-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:3000;align-items:center;justify-content:center;padding:1rem;">
+    <div style="background:white;border-radius:16px;padding:2rem;max-width:480px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.3);">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;">
+        <h3 style="font-family:'Playfair Display',serif;color:var(--navy);margin:0;font-size:1.2rem;">Share a Batch Photo</h3>
+        <button onclick="closeUploadModal()" style="background:none;border:none;font-size:1.3rem;cursor:pointer;color:var(--muted);">✕</button>
+      </div>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:1.25rem;line-height:1.6;">Group photos, lab memories, trips, events — anything from your time at ICET. Photos will be reviewed before appearing on this page.</p>
+      <div id="upload-preview-wrap" style="display:none;margin-bottom:1rem;">
+        <img id="upload-preview" style="width:100%;border-radius:8px;max-height:200px;object-fit:cover;">
+      </div>
+      <div id="upload-drop" onclick="document.getElementById('photo-file-input').click()" style="border:2px dashed var(--border);border-radius:10px;padding:2rem;text-align:center;cursor:pointer;margin-bottom:1rem;transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--navy)'" onmouseout="this.style.borderColor='var(--border)'">
+        <div style="font-size:2rem;margin-bottom:0.5rem;">🖼️</div>
+        <div style="font-size:14px;color:var(--navy);font-weight:600;">Click to select photo</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:4px;">JPG, PNG — max 5MB</div>
+      </div>
+      <input type="file" id="photo-file-input" accept="image/*" style="display:none" onchange="handlePhotoSelect(this)">
+      <div class="form-group" style="margin-bottom:0.75rem;">
+        <label style="font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;display:block;margin-bottom:4px;">Caption <span style="font-weight:400;text-transform:none;">(optional)</span></label>
+        <input type="text" id="photo-caption" placeholder="e.g. Lab farewell 2010, Annual trip to Murree..." style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit;outline:none;box-sizing:border-box;">
+      </div>
+      <div class="form-group" style="margin-bottom:1.25rem;">
+        <label style="font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;display:block;margin-bottom:4px;">Your Name <span style="color:var(--red);">*</span></label>
+        <input type="text" id="photo-uploader" placeholder="Your name" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit;outline:none;box-sizing:border-box;">
+      </div>
+      <div id="upload-error" style="display:none;background:#fef2f2;color:#dc2626;padding:8px 12px;border-radius:6px;font-size:13px;margin-bottom:0.75rem;"></div>
+      <div id="upload-success" style="display:none;background:#f0fdf4;color:#059669;padding:8px 12px;border-radius:6px;font-size:13px;margin-bottom:0.75rem;"></div>
+      <button id="upload-btn" onclick="submitPhoto()" style="width:100%;background:var(--navy);color:white;border:none;padding:11px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;">Submit for Review</button>
+    </div>
+  </div>
+
+  <!-- LIGHTBOX -->
+  <div id="lightbox" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:4000;align-items:center;justify-content:center;padding:1rem;" onclick="closeLightbox()">
+    <button onclick="closeLightbox()" style="position:absolute;top:1rem;right:1rem;background:rgba(255,255,255,0.15);border:none;color:white;width:40px;height:40px;border-radius:50%;font-size:1.2rem;cursor:pointer;">✕</button>
+    <div onclick="event.stopPropagation()" style="max-width:900px;width:100%;text-align:center;">
+      <img id="lightbox-img" style="max-width:100%;max-height:80vh;border-radius:10px;box-shadow:0 8px 40px rgba(0,0,0,0.5);">
+      <div id="lightbox-caption" style="color:rgba(255,255,255,0.8);font-size:14px;margin-top:0.75rem;"></div>
+      <div id="lightbox-uploader" style="color:rgba(255,255,255,0.5);font-size:12px;margin-top:4px;"></div>
+    </div>
   </div>
 
   <!-- 4. STATS BAR -->
@@ -276,7 +342,8 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
 
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js';
-import { getFirestore, collection, getDocs, query, where } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js';
+import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js';
+import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, query, where, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js';
 const app = initializeApp({apiKey:"AIzaSyAgUl22Cln6QtY3-HIvI6lE8Zu7n9OblbI",
   authDomain:"icet-alumni.firebaseapp.com",
   projectId:"icet-alumni",
@@ -284,11 +351,16 @@ const app = initializeApp({apiKey:"AIzaSyAgUl22Cln6QtY3-HIvI6lE8Zu7n9OblbI",
   messagingSenderId:"707390888790",
   appId:"1:707390888790:web:57e6be62e4d11e22c214f7"});
 const db = getFirestore(app);
+const auth = getAuth(app);
 
 const CLASS_LIST = [{"roll": "CE-M6-101", "name": "ABDUL WAHAB KHAN", "shift": "Morning"}, {"roll": "CE-M6-102", "name": "ZAHID ANJUM", "shift": "Morning"}, {"roll": "CE-M6-103", "name": "USMAN RAFIQ", "shift": "Morning"}, {"roll": "CE-M6-104", "name": "MEESAM ALI", "shift": "Morning"}, {"roll": "CE-M6-105", "name": "IRFAN IQBAL", "shift": "Morning"}, {"roll": "CE-M6-106", "name": "WASEEM SAFDAR", "shift": "Morning"}, {"roll": "CE-M6-107", "name": "NASEER AHMAD", "shift": "Morning"}, {"roll": "CE-M6-108", "name": "RIZWAN HAIDER", "shift": "Morning"}, {"roll": "CE-M6-109", "name": "UMAR FAROOQ", "shift": "Morning"}, {"roll": "CE-M6-110", "name": "MUHAMMAD FIAZ", "shift": "Morning"}, {"roll": "CE-M6-111", "name": "FAROOQ KHAN", "shift": "Morning"}, {"roll": "CE-M6-112", "name": "SALMAN SIDIQUE", "shift": "Morning"}, {"roll": "CE-M6-113", "name": "HAFIZ AAMIR", "shift": "Morning"}, {"roll": "CE-M6-114", "name": "MOHSIN ALI RAZA", "shift": "Morning"}, {"roll": "CE-M6-115", "name": "MUHAMMAD KASHIF", "shift": "Morning"}, {"roll": "CE-M6-116", "name": "RIZWAN GHULAM NABI", "shift": "Morning"}, {"roll": "CE-M6-117", "name": "AYAZ KARIM", "shift": "Morning"}, {"roll": "CE-M6-118", "name": "ADEEM GHAFFAR RANA", "shift": "Morning"}, {"roll": "CE-M6-119", "name": "KHIZAR HAYAT", "shift": "Morning"}, {"roll": "CE-M6-120", "name": "AWAIS NADEEM", "shift": "Morning"}, {"roll": "CE-M6-121", "name": "SAQIB WAHEED", "shift": "Morning"}, {"roll": "CE-M6-122", "name": "RAO SHAFIQ", "shift": "Morning"}, {"roll": "CE-M6-123", "name": "FAYYAZ AHMAD", "shift": "Morning"}, {"roll": "CE-M6-124", "name": "KHUBAIB HASAN", "shift": "Morning"}, {"roll": "CE-M6-125", "name": "TAHIR NAZIR", "shift": "Morning"}, {"roll": "CE-M6-126", "name": "MANSAB ALI", "shift": "Morning"}, {"roll": "CE-M6-127", "name": "ZAHID RASOOL", "shift": "Morning"}, {"roll": "CE-M6-128", "name": "UMAIR ISLAM", "shift": "Morning"}, {"roll": "CE-M6-129", "name": "ZOHAIB ZAIDI", "shift": "Morning"}, {"roll": "CE-M6-130", "name": "ASAD ABBAS", "shift": "Morning"}, {"roll": "CE-M6-131", "name": "AJMAL JAVAID", "shift": "Morning"}, {"roll": "CE-M6-132", "name": "KHALIL AHMAD", "shift": "Morning"}, {"roll": "CE-M6-133", "name": "WAQAS AZIZ HASHMI", "shift": "Morning"}, {"roll": "CE-M6-134", "name": "AFZAL CAUDHRY", "shift": "Morning"}, {"roll": "CE-M6-135", "name": "MUJEEB UR REHMAN", "shift": "Morning"}, {"roll": "CE-M6-136", "name": "ALI BUKHARI", "shift": "Morning"}, {"roll": "CE-M6-137", "name": "AWAIS NAEEM", "shift": "Morning"}, {"roll": "CE-M6-138", "name": "SAAD TOOR", "shift": "Morning"}, {"roll": "CE-M6-139", "name": "KASHIF YOUNIS", "shift": "Morning"}, {"roll": "CE-M6-140", "name": "AFFAN KHALID", "shift": "Morning"}, {"roll": "CE-M6-141", "name": "JAHENZAIB KHAN", "shift": "Morning"}, {"roll": "CE-M6-142", "name": "AHSAN BILAL", "shift": "Morning"}, {"roll": "CE-M6-143", "name": "SAQIB RIZVI", "shift": "Morning"}, {"roll": "CE-M6-144", "name": "SYED MUHAMMAD QAISER KHAN", "shift": "Morning"}, {"roll": "CE-M6-145", "name": "UMAIR RASHEED", "shift": "Morning"}, {"roll": "CE-M6-146", "name": "ALI NADEEM", "shift": "Morning"}, {"roll": "CE-M6-147", "name": "FAWAD FURRUKH", "shift": "Morning"}, {"roll": "CE-M6-148", "name": "AFNAN HAMEED", "shift": "Morning"}, {"roll": "CE-M6-149", "name": "ABDUL REHMAN", "shift": "Morning"}, {"roll": "CE-M6-150", "name": "IBRAHIM SAEED", "shift": "Morning"}, {"roll": "CE-M6-151", "name": "MUHAMMA ARIF KHAN", "shift": "Morning"}, {"roll": "CE-M6-152", "name": "HARIS SHAJAR", "shift": "Morning"}, {"roll": "CE-M6-153", "name": "IMRAN KHAN", "shift": "Morning"}, {"roll": "CE-M6-154", "name": "NOUMAN AHMAD", "shift": "Morning"}, {"roll": "CE-M6-155", "name": "IMRAN KHAN", "shift": "Morning"}, {"roll": "CE-M6-156", "name": "JAMSHAID IQBAL", "shift": "Morning"}, {"roll": "CE-M6-157", "name": "FAISAL MEHMOOD", "shift": "Morning"}, {"roll": "CE-M6-158", "name": "SHERAZ AFZAL", "shift": "Morning"}, {"roll": "CE-M6-159", "name": "ADNAN SHOAIB", "shift": "Morning"}, {"roll": "CE-M6-160", "name": "KARIM BUKSH", "shift": "Morning"}, {"roll": "CE-M6-161", "name": "UMAIR DANISH", "shift": "Morning"}, {"roll": "CE-M6-162", "name": "AAMIR SHAMAS", "shift": "Morning"}, {"roll": "CE-M6-163", "name": "WAZIR ALI", "shift": "Morning"}, {"roll": "CE-M6-164", "name": "JAMA AHMAD HERSI", "shift": "Morning"}, {"roll": "PG-M6-201", "name": "TAYAB SAEED", "shift": "Morning"}, {"roll": "PG-M6-202", "name": "ATIF ASHRAF", "shift": "Morning"}, {"roll": "PG-M6-203", "name": "ASAD ALI", "shift": "Morning"}, {"roll": "PG-M6-204", "name": "NAVEED AKHTAR", "shift": "Morning"}, {"roll": "PG-M6-205", "name": "MUNZOOR AHMAD", "shift": "Morning"}, {"roll": "PG-M6-206", "name": "FARAZ BUTT", "shift": "Morning"}, {"roll": "PG-M6-207", "name": "SANA ULLAH", "shift": "Morning"}, {"roll": "PG-M6-208", "name": "BABER ALI", "shift": "Morning"}, {"roll": "PG-M6-209", "name": "AAMIR RIAZ", "shift": "Morning"}, {"roll": "PG-M6-210", "name": "GHULAM ABBAS", "shift": "Morning"}, {"roll": "PG-M6-211", "name": "MUHAMMAD BASIT ALI", "shift": "Morning"}, {"roll": "PG-M6-212", "name": "ZEESHAN SHOAIB", "shift": "Morning"}, {"roll": "PG-M6-213", "name": "MUHAMMAD KALEEM ULLAH", "shift": "Morning"}, {"roll": "PG-M6-214", "name": "HAFIZ KHALIL UR REHMAN", "shift": "Morning"}, {"roll": "PG-M6-215", "name": "FAISAL JOYIA", "shift": "Morning"}, {"roll": "PG-M6-216", "name": "FAISAL KHALIL", "shift": "Morning"}, {"roll": "PG-M6-217", "name": "MUHAMMAD ZEESHAN SALEEM", "shift": "Morning"}, {"roll": "PG-M6-218", "name": "AHSAN NOOR KHAN", "shift": "Morning"}, {"roll": "PG-M6-219", "name": "WAQAS SHEHRYAR", "shift": "Morning"}, {"roll": "PG-M6-220", "name": "AFTAB AHMAD", "shift": "Morning"}, {"roll": "PG-M6-221", "name": "TANVIR AHMAD", "shift": "Morning"}, {"roll": "PG-M6-222", "name": "FAKHAR ABBAS", "shift": "Morning"}, {"roll": "PG-M6-223", "name": "MUHAMMAD  HASNAT ALI", "shift": "Morning"}, {"roll": "PG-M6-224", "name": "YASIR ARAFAT", "shift": "Morning"}, {"roll": "PG-M6-225", "name": "TAHIR WASIM", "shift": "Morning"}, {"roll": "PG-M6-226", "name": "MOHSIN SAEED", "shift": "Morning"}, {"roll": "BC-M6-301", "name": "SAEED AKRAM SHEIKH", "shift": "Morning"}, {"roll": "BC-M6-302", "name": "IMRAN YOUSAF", "shift": "Morning"}, {"roll": "BC-M6-303", "name": "MUHAMMAD ADNAN SADIQ", "shift": "Morning"}, {"roll": "BC-M6-304", "name": "MUHAMMAD IRFAN", "shift": "Morning"}, {"roll": "BC-M6-305", "name": "IMRAN RIAZ", "shift": "Morning"}, {"roll": "BC-M6-306", "name": "NASIR MEHMOOD", "shift": "Morning"}, {"roll": "BC-M6-307", "name": "SHAMSHAD-UL-HAQ", "shift": "Morning"}, {"roll": "BC-M6-308", "name": "AWAIS ABDULLAH", "shift": "Morning"}, {"roll": "BC-M6-309", "name": "UMAIR AZAD", "shift": "Morning"}, {"roll": "BC-M6-310", "name": "ALI ZULQARNAIN", "shift": "Morning"}, {"roll": "BC-M6-311", "name": "MUHAMMAD RIZWAN AZHAR", "shift": "Morning"}, {"roll": "BC-M6-312", "name": "MUHAMMAD ASAD MASOOD", "shift": "Morning"}, {"roll": "BC-M6-313", "name": "HAFIZ SHAFIQ", "shift": "Morning"}, {"roll": "BC-M6-314", "name": "HAFIZ ZUBAIR", "shift": "Morning"}, {"roll": "BC-M6-315", "name": "MUHAMMAD NAEEM", "shift": "Morning"}, {"roll": "BC-M6-316", "name": "GHUFRAN AHMAD", "shift": "Morning"}, {"roll": "BC-M6-317", "name": "ABDUL LATIF", "shift": "Morning"}, {"roll": "EE-M6-401", "name": "AMBREEN GHALIB", "shift": "Morning"}, {"roll": "EE-M6-402", "name": "MUHAMMAD SHAHZAD ALI", "shift": "Morning"}, {"roll": "EE-M6-403", "name": "MUHAMMAD ILYAS", "shift": "Morning"}, {"roll": "EE-M6-404", "name": "YASIR SHARIF AWAN", "shift": "Morning"}, {"roll": "EE-M6-405", "name": "RAO MUNEER ALI", "shift": "Morning"}, {"roll": "EE-M6-406", "name": "SAJID MAHMOOD", "shift": "Morning"}, {"roll": "EE-M6-407", "name": "ALI MURAD", "shift": "Morning"}, {"roll": "EE-M6-408", "name": "USMAN ALI", "shift": "Morning"}, {"roll": "EE-M6-409", "name": "MUHAMMAD AWAIS", "shift": "Morning"}, {"roll": "EE-M6-410", "name": "AMBREEN GULZAR", "shift": "Morning"}, {"roll": "EE-M6-411", "name": "FAHIM AHMAD ZAFAR", "shift": "Morning"}, {"roll": "EE-M6-412", "name": "ANWAAR AHMAD", "shift": "Morning"}, {"roll": "EE-M6-413", "name": "USMAN RASHEED", "shift": "Morning"}, {"roll": "EE-M6-414", "name": "KHUBAIB AHMAD", "shift": "Morning"}, {"roll": "EE-M6-415", "name": "SALMAN MANSOOR", "shift": "Morning"}, {"roll": "EE-M6-416", "name": "USMAN SAEED", "shift": "Morning"}, {"roll": "EE-M6-417", "name": "SADIA NAUREEN", "shift": "Morning"}, {"roll": "CE-E6-102", "name": "FAHAD MASOOD", "shift": "Evening"}, {"roll": "CE-E6-103", "name": "NOMAN LIAQAT", "shift": "Evening"}, {"roll": "CE-E6-104", "name": "YASEEN AKRAM", "shift": "Evening"}, {"roll": "CE-E6-105", "name": "ADNAN NAWAZ", "shift": "Evening"}, {"roll": "CE-E6-106", "name": "AHSEN HAFEEZ", "shift": "Evening"}, {"roll": "CE-E6-107", "name": "RAZA MUDASIR ALVI", "shift": "Evening"}, {"roll": "CE-E6-108", "name": "GULZEB KHAN", "shift": "Evening"}, {"roll": "CE-E6-109", "name": "USMAN SADIQUE", "shift": "Evening"}, {"roll": "CE-E6-110", "name": "ABDUL QAYYUM", "shift": "Evening"}, {"roll": "CE-E6-111", "name": "IMRAN MALIK", "shift": "Evening"}, {"roll": "CE-E6-112", "name": "SHAHID NADEEM", "shift": "Evening"}, {"roll": "CE-E6-113", "name": "UMAIR FURQAN", "shift": "Evening"}, {"roll": "CE-E6-114", "name": "NAUMAN ASHRAF", "shift": "Evening"}, {"roll": "CE-E6-115", "name": "WAQAS BUKHARI", "shift": "Evening"}, {"roll": "CE-E6-116", "name": "SANA ULLAH", "shift": "Evening"}, {"roll": "CE-E6-117", "name": "NAEEM YOUNIS", "shift": "Evening"}, {"roll": "CE-E6-118", "name": "MASOOD HAIDER", "shift": "Evening"}, {"roll": "CE-E6-119", "name": "MUHAMMAD ASIF KHAN", "shift": "Evening"}, {"roll": "CE-E6-120", "name": "MOHSIN MOBEEN", "shift": "Evening"}, {"roll": "CE-E6-121", "name": "FAHEEM RIAZ", "shift": "Evening"}, {"roll": "CE-E6-122", "name": "FAHAD MIR", "shift": "Evening"}, {"roll": "CE-E6-123", "name": "ADNAN REHMAT", "shift": "Evening"}, {"roll": "CE-E6-124", "name": "YASIR AKRAM AWAN", "shift": "Evening"}, {"roll": "CE-E6-125", "name": "SHAROOZ KHAN", "shift": "Evening"}, {"roll": "CE-E6-126", "name": "RANA MUHAMMAD IMRAN", "shift": "Evening"}, {"roll": "CE-E6-127", "name": "RIZWAN MALIK", "shift": "Evening"}, {"roll": "CE-E6-128", "name": "UMER TAHIR MIR", "shift": "Evening"}, {"roll": "CE-E6-129", "name": "MUHAMMAD NAEEM IQBAL", "shift": "Evening"}, {"roll": "CE-E6-130", "name": "MUHAMMAD UMAIR DANISH", "shift": "Evening"}, {"roll": "CE-E6-131", "name": "ABID ALI", "shift": "Evening"}, {"roll": "CE-E6-132", "name": "FARHAN CHEEMA", "shift": "Evening"}, {"roll": "CE-E6-133", "name": "MUHAMMAD ARSHAD", "shift": "Evening"}, {"roll": "CE-E6-134", "name": "ZUBAIR SHAHID", "shift": "Evening"}, {"roll": "CE-E6-135", "name": "WAQAR AHMED", "shift": "Evening"}, {"roll": "CE-E6-136", "name": "AFFAN AHMAD", "shift": "Evening"}, {"roll": "CE-E6-137", "name": "UMAIR SHOAIB", "shift": "Evening"}, {"roll": "CE-E6-138", "name": "ARSALAN AWAN", "shift": "Evening"}, {"roll": "CE-E6-139", "name": "MUHAMMAD IMRAN", "shift": "Evening"}, {"roll": "CE-E6-140", "name": "ASIF IQBAL", "shift": "Evening"}, {"roll": "CE-E6-141", "name": "HAKIM ALI HAIDER", "shift": "Evening"}, {"roll": "CE-E6-142", "name": "GHULAM MURTAZA", "shift": "Evening"}, {"roll": "CE-E6-143", "name": "ADNAN SALEEM", "shift": "Evening"}, {"roll": "CE-E6-144", "name": "ASIF ALI SHAHZAD", "shift": "Evening"}, {"roll": "PG-E6-201", "name": "MUHAMMAD ZAMAN", "shift": "Evening"}, {"roll": "PG-E6-202", "name": "IMRAN NIAZ", "shift": "Evening"}, {"roll": "PG-E6-203", "name": "SHAHID SAEED", "shift": "Evening"}, {"roll": "PG-E6-204", "name": "KHURRAM JAVED", "shift": "Evening"}, {"roll": "PG-E6-205", "name": "SAQIB RAZA", "shift": "Evening"}, {"roll": "PG-E6-206", "name": "AAMIR KARIM", "shift": "Evening"}, {"roll": "PG-E6-207", "name": "MUHAMMAD UMAR FAROOQ", "shift": "Evening"}, {"roll": "PG-E6-208", "name": "ALI AHMAD", "shift": "Evening"}, {"roll": "PG-E6-209", "name": "ABDUL BASIT", "shift": "Evening"}, {"roll": "PG-E6-210", "name": "FARHAN RASOOL", "shift": "Evening"}, {"roll": "PG-E6-211", "name": "NASEER AHMAD", "shift": "Evening"}, {"roll": "PG-E6-212", "name": "MUHAMMAD USMAN", "shift": "Evening"}, {"roll": "PG-E6-213", "name": "AQEEL MANSOOR CHISHTI", "shift": "Evening"}, {"roll": "PG-E6-214", "name": "RIZWAN AHMED SHAH", "shift": "Evening"}, {"roll": "PG-E6-215", "name": "MUAMMAD ZAIN", "shift": "Evening"}, {"roll": "PG-E6-216", "name": "USMAN ANWAR DAR", "shift": "Evening"}, {"roll": "PG-E6-217", "name": "OMER SHUJAT", "shift": "Evening"}, {"roll": "PG-E6-218", "name": "IMRAN RAFIQUE", "shift": "Evening"}, {"roll": "PG-E6-219", "name": "NAEEM BHATTI", "shift": "Evening"}, {"roll": "PG-E6-220", "name": "ASIF SANI", "shift": "Evening"}];
 
 let registeredMap = {};
+let currentUser = null;
 let activeFilter = 'all';
+
+// Track current user for admin features
+onAuthStateChanged(auth, user => { currentUser = user; if (user) loadPendingPhotos(); });
 
 async function loadRegistered() {
   try {
@@ -353,6 +425,217 @@ function renderGrid() {
     grid.appendChild(el);
   });
 }
+
+
+// ── Photo Gallery ──
+const CLOUDINARY_CLOUD = 'duetiv9rm';
+const CLOUDINARY_PRESET = 'ranaadeem_blog';
+const ADMIN_UID_CHECK = 'w2AtZbhUiyY5TxyvIecHzWqheaE2';
+let galleryPhotos = [];
+let stripAnimFrame = null;
+let stripPos = 0;
+let stripPaused = false;
+let selectedPhotoBase64 = '';
+
+async function loadGallery() {
+  try {
+    const snap = await getDocs(query(
+      collection(db,'session_photos'),
+      where('session','==','2006'),
+      where('status','==','approved')
+    ));
+    galleryPhotos = [];
+    snap.forEach(d => galleryPhotos.push({id:d.id,...d.data()}));
+    galleryPhotos.sort((a,b)=>(b.uploadedAt?.seconds||0)-(a.uploadedAt?.seconds||0));
+    renderStrip();
+  } catch(e) { console.error('Gallery error:', e); }
+}
+
+// Admin: load pending photos too
+async function loadPendingPhotos() {
+  if (!currentUser || currentUser.uid !== ADMIN_UID_CHECK) return;
+  const snap = await getDocs(query(
+    collection(db,'session_photos'),
+    where('session','==','2006'),
+    where('status','==','pending')
+  ));
+  if (snap.empty) return;
+  const pendingBar = document.createElement('div');
+  pendingBar.style.cssText = 'background:#fef9e7;border:1px solid #f59e0b;border-radius:10px;padding:1rem;margin-bottom:1rem;';
+  pendingBar.innerHTML = '<div style="font-size:13px;font-weight:600;color:#92400e;margin-bottom:0.75rem;">⏳ Pending Photos (' + snap.size + ')</div>';
+  const pendingGrid = document.createElement('div');
+  pendingGrid.style.cssText = 'display:flex;gap:0.5rem;flex-wrap:wrap;';
+  snap.forEach(d => {
+    const photo = {id:d.id,...d.data()};
+    const wrap = document.createElement('div');
+    wrap.style.cssText = 'position:relative;display:inline-block;';
+    wrap.innerHTML = `<img src="${photo.url}" style="width:100px;height:70px;object-fit:cover;border-radius:6px;border:2px solid #f59e0b;">
+      <div style="font-size:10px;color:#92400e;margin-top:2px;max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${photo.uploaderName||'Unknown'}</div>
+      <div style="display:flex;gap:4px;margin-top:3px;">
+        <button onclick="approvePhoto('${photo.id}')" style="background:#059669;color:white;border:none;padding:2px 8px;border-radius:4px;font-size:11px;cursor:pointer;font-family:inherit;">✅ Approve</button>
+        <button onclick="rejectPhoto('${photo.id}')" style="background:#dc2626;color:white;border:none;padding:2px 8px;border-radius:4px;font-size:11px;cursor:pointer;font-family:inherit;">🗑 Reject</button>
+      </div>`;
+    pendingGrid.appendChild(wrap);
+  });
+  pendingBar.appendChild(pendingGrid);
+  document.getElementById('gallery-section').prepend(pendingBar);
+}
+
+window.approvePhoto = async function(id) {
+  await updateDoc(doc(db,'session_photos',id),{status:'approved'});
+  showToast('Photo approved ✓');
+  location.reload();
+};
+window.rejectPhoto = async function(id) {
+  if (!confirm('Delete this photo submission?')) return;
+  await deleteDoc(doc(db,'session_photos',id));
+  showToast('Photo rejected.');
+  location.reload();
+};
+
+function renderStrip() {
+  const strip = document.getElementById('photo-strip');
+  const empty = document.getElementById('gallery-empty');
+  const countEl = document.getElementById('photo-count');
+  if (countEl) countEl.textContent = galleryPhotos.length;
+  if (!galleryPhotos.length) {
+    strip.style.display = 'none';
+    if (empty) empty.style.display = 'block';
+    return;
+  }
+  strip.style.display = 'flex';
+  if (empty) empty.style.display = 'none';
+  strip.innerHTML = '';
+  // Duplicate photos for seamless loop
+  const photos = galleryPhotos.length < 5 ? [...galleryPhotos,...galleryPhotos,...galleryPhotos] : [...galleryPhotos,...galleryPhotos];
+  photos.forEach((p,i) => {
+    const img = document.createElement('img');
+    img.src = p.url;
+    img.className = 'gallery-photo';
+    img.alt = p.caption || 'Batch photo';
+    img.title = p.caption || '';
+    img.addEventListener('click', () => openLightbox(p));
+    strip.appendChild(img);
+  });
+  startStrip();
+}
+
+function startStrip() {
+  cancelAnimationFrame(stripAnimFrame);
+  const strip = document.getElementById('photo-strip');
+  const wrap = document.getElementById('photo-strip-wrap');
+  if (!strip || !strip.children.length) return;
+  let lastTime = null;
+  const speed = 0.4; // px per ms
+  function animate(ts) {
+    if (!stripPaused) {
+      if (lastTime) stripPos += speed * (ts - lastTime);
+      lastTime = ts;
+      const totalW = strip.scrollWidth / 2;
+      if (stripPos >= totalW) stripPos = 0;
+      strip.style.transform = 'translateX(-' + stripPos + 'px)';
+    } else {
+      lastTime = null;
+    }
+    stripAnimFrame = requestAnimationFrame(animate);
+  }
+  stripAnimFrame = requestAnimationFrame(animate);
+  wrap.addEventListener('mouseenter', () => stripPaused = true);
+  wrap.addEventListener('mouseleave', () => stripPaused = false);
+}
+
+function openLightbox(photo) {
+  document.getElementById('lightbox-img').src = photo.url;
+  document.getElementById('lightbox-caption').textContent = photo.caption || '';
+  document.getElementById('lightbox-uploader').textContent = photo.uploaderName ? 'Shared by ' + photo.uploaderName : '';
+  document.getElementById('lightbox').style.display = 'flex';
+}
+window.closeLightbox = function() {
+  document.getElementById('lightbox').style.display = 'none';
+};
+window.closeUploadModal = function() {
+  document.getElementById('upload-modal').style.display = 'none';
+  document.getElementById('photo-caption').value = '';
+  document.getElementById('photo-uploader').value = '';
+  document.getElementById('upload-error').style.display = 'none';
+  document.getElementById('upload-success').style.display = 'none';
+  document.getElementById('upload-preview-wrap').style.display = 'none';
+  selectedPhotoBase64 = '';
+};
+
+window.handlePhotoSelect = function(input) {
+  const file = input.files[0];
+  if (!file) return;
+  if (file.size > 5 * 1024 * 1024) {
+    document.getElementById('upload-error').textContent = 'File too large. Max 5MB.';
+    document.getElementById('upload-error').style.display = 'block';
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = e => {
+    selectedPhotoBase64 = e.target.result;
+    const preview = document.getElementById('upload-preview');
+    preview.src = selectedPhotoBase64;
+    document.getElementById('upload-preview-wrap').style.display = 'block';
+    document.getElementById('upload-drop').style.display = 'none';
+  };
+  reader.readAsDataURL(file);
+};
+
+window.submitPhoto = async function() {
+  const name = document.getElementById('photo-uploader').value.trim();
+  const caption = document.getElementById('photo-caption').value.trim();
+  const errEl = document.getElementById('upload-error');
+  const sucEl = document.getElementById('upload-success');
+  errEl.style.display = 'none';
+  if (!selectedPhotoBase64) { errEl.textContent = 'Please select a photo.'; errEl.style.display = 'block'; return; }
+  if (!name) { errEl.textContent = 'Please enter your name.'; errEl.style.display = 'block'; return; }
+  const btn = document.getElementById('upload-btn');
+  btn.disabled = true; btn.textContent = 'Uploading...';
+  try {
+    // Upload to Cloudinary
+    const res = await fetch(selectedPhotoBase64);
+    const blob = await res.blob();
+    const formData = new FormData();
+    formData.append('file', blob, 'batch-photo.jpg');
+    formData.append('upload_preset', CLOUDINARY_PRESET);
+    const cdRes = await fetch('https://api.cloudinary.com/v1_1/' + CLOUDINARY_CLOUD + '/image/upload', {method:'POST',body:formData});
+    const cdData = await cdRes.json();
+    if (!cdData.secure_url) throw new Error('Upload failed');
+    // Save to Firestore as pending
+    await addDoc(collection(db,'session_photos'), {
+      session: '2006',
+      url: cdData.secure_url,
+      caption: caption,
+      uploaderName: name,
+      status: 'pending',
+      uploadedAt: serverTimestamp()
+    });
+    sucEl.textContent = '✅ Photo submitted! It will appear after review.';
+    sucEl.style.display = 'block';
+    btn.textContent = 'Submitted ✓';
+    // Notify admin via email
+    fetch('/api/send-email', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({type:'new-submission', data:{
+        postTitle: 'New batch photo submitted',
+        authorName: name,
+        authorEmail: 'alumni',
+        postCategory: 'Session 2006 Gallery'
+      }})
+    }).catch(()=>{});
+  } catch(e) {
+    errEl.textContent = 'Error: ' + e.message;
+    errEl.style.display = 'block';
+    btn.disabled = false;
+    btn.textContent = 'Submit for Review';
+  }
+};
+
+// Load gallery on start
+loadGallery();
+setTimeout(loadPendingPhotos, 1000);
 
 window.setFilter = function(f,btn){
   activeFilter=f;
