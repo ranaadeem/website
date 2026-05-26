@@ -618,12 +618,14 @@ window.submitPhoto = async function() {
     fetch('/api/send-email', {
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({type:'new-submission', data:{
-        postTitle: 'New batch photo submitted',
-        authorName: name,
-        authorEmail: 'alumni',
-        postCategory: 'Session 2006 Gallery'
-      }})
+      body: JSON.stringify({
+        type:'photo-submission',
+        data:{
+          session: '2006',
+          uploaderName: name,
+          caption: caption
+        }
+      })
     }).catch(()=>{});
   } catch(e) {
     errEl.textContent = 'Error: ' + e.message;

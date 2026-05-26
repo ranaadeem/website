@@ -84,6 +84,27 @@ export default async function handler(req, res) {
           <a href="${data.postUrl}" style="display:inline-block;background:#c9a84c;color:#1a3a8a;padding:10px 24px;border-radius:8px;text-decoration:none;font-weight:700;font-size:14px;">View Post →</a>
         </div>
       </div>`;
+  } else if (type === 'photo-submission') {
+    subject = `New batch photo submitted — Session ${data.session || ''}`;
+    html = `
+      <div style="font-family:'DM Sans',sans-serif;max-width:560px;margin:0 auto;padding:2rem;">
+        <div style="background:#1a3a8a;padding:1.5rem 2rem;border-radius:10px 10px 0 0;">
+          <h1 style="font-family:Georgia,serif;color:#c9a84c;margin:0;font-size:1.2rem;">Alumni Network</h1>
+          <p style="color:rgba(255,255,255,0.7);margin:4px 0 0;font-size:13px;">ICET Punjab University · Session ${data.session || ''}</p>
+        </div>
+        <div style="background:#faf8f4;padding:2rem;border-radius:0 0 10px 10px;border:1px solid #e5e7eb;border-top:none;">
+          <h2 style="font-family:Georgia,serif;color:#1a3a8a;margin-bottom:1rem;">📸 New Batch Photo Submitted</h2>
+          <table style="width:100%;border-collapse:collapse;font-size:14px;margin:1rem 0;">
+            <tr><td style="padding:6px 0;color:#6b7280;width:120px;">Submitted by</td><td style="padding:6px 0;color:#1a1a2e;font-weight:600;">${data.uploaderName || 'Unknown'}</td></tr>
+            <tr><td style="padding:6px 0;color:#6b7280;">Session</td><td style="padding:6px 0;color:#1a1a2e;">Session ${data.session || ''}</td></tr>
+            <tr><td style="padding:6px 0;color:#6b7280;">Caption</td><td style="padding:6px 0;color:#1a1a2e;">${data.caption || '(no caption)'}</td></tr>
+          </table>
+          <a href="https://ranaadeem.de/alumni/${data.session || '2006'}.html" style="display:inline-block;background:#c9a84c;color:#1a3a8a;padding:10px 24px;border-radius:8px;text-decoration:none;font-weight:700;font-size:14px;">Review Photo →</a>
+          <hr style="border:none;border-top:1px solid #e5e7eb;margin:1.5rem 0;">
+          <p style="color:#6b7280;font-size:12px;">Sign in to <a href="https://ranaadeem.de/alumni/${data.session || '2006'}.html" style="color:#1a3a8a;">the session page</a> to approve or reject.</p>
+        </div>
+      </div>`;
+
   } else {
     return res.status(400).json({ error: 'Unknown email type' });
   }
