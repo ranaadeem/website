@@ -219,7 +219,10 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
     <!-- Gallery actions -->
     <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.75rem;">
       <div style="font-size:13px;color:var(--muted);">Batch photos, lab memories, trips &amp; events — <span id="photo-count" style="color:var(--navy);font-weight:600;">0</span> photos shared</div>
-      <button onclick="document.getElementById('upload-modal').style.display='flex'" style="background:var(--gold);color:var(--navy);border:none;padding:8px 18px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;">📤 Share a Photo</button>
+      <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+        <button id="view-all-btn" onclick="openPhotoGrid()" style="display:none;background:white;color:var(--navy);border:1.5px solid var(--border);padding:8px 18px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">View All Photos →</button>
+        <button onclick="document.getElementById('upload-modal').style.display='flex'" style="background:var(--gold);color:var(--navy);border:none;padding:8px 18px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;">📤 Share a Photo</button>
+      </div>
     </div>
   </div>
 
@@ -251,6 +254,17 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
       <div id="upload-error" style="display:none;background:#fef2f2;color:#dc2626;padding:8px 12px;border-radius:6px;font-size:13px;margin-bottom:0.75rem;"></div>
       <div id="upload-success" style="display:none;background:#f0fdf4;color:#059669;padding:8px 12px;border-radius:6px;font-size:13px;margin-bottom:0.75rem;"></div>
       <button id="upload-btn" onclick="submitPhoto()" style="width:100%;background:var(--navy);color:white;border:none;padding:11px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;">Submit for Review</button>
+    </div>
+  </div>
+
+  <!-- PHOTO GRID MODAL -->
+  <div id="photo-grid-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:3500;overflow-y:auto;padding:2rem 1rem;">
+    <div style="max-width:960px;margin:0 auto;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;">
+        <h2 style="font-family:'Playfair Display',serif;color:white;margin:0;font-size:1.4rem;">All Batch Photos <span id="grid-count" style="color:var(--gold);font-size:1rem;font-weight:400;"></span></h2>
+        <button onclick="closePhotoGrid()" style="background:rgba(255,255,255,0.15);border:none;color:white;width:40px;height:40px;border-radius:50%;font-size:1.2rem;cursor:pointer;">✕</button>
+      </div>
+      <div id="photo-grid-inner" style="display:grid;grid-template-columns:repeat(4,1fr);gap:0.75rem;"></div>
     </div>
   </div>
 
@@ -510,7 +524,16 @@ function renderStrip() {
   const strip = document.getElementById('photo-strip');
   const empty = document.getElementById('gallery-empty');
   const countEl = document.getElementById('photo-count');
+  const viewAllBtn = document.getElementById('view-all-btn');
   if (countEl) countEl.textContent = galleryPhotos.length;
+  if (viewAllBtn) {
+    if (galleryPhotos.length > 10) {
+      viewAllBtn.style.display = 'inline-block';
+      viewAllBtn.textContent = 'View All ' + galleryPhotos.length + ' Photos →';
+    } else {
+      viewAllBtn.style.display = 'none';
+    }
+  }
   if (!galleryPhotos.length) {
     strip.style.display = 'none';
     if (empty) empty.style.display = 'block';
@@ -519,9 +542,13 @@ function renderStrip() {
   strip.style.display = 'flex';
   if (empty) empty.style.display = 'none';
   strip.innerHTML = '';
-  // Duplicate photos for seamless loop
-  const photos = galleryPhotos.length < 5 ? [...galleryPhotos,...galleryPhotos,...galleryPhotos] : [...galleryPhotos,...galleryPhotos];
-  photos.forEach((p,i) => {
+  // Show latest 10 only in strip
+  const stripPhotos = galleryPhotos.slice(0, 10);
+  // Duplicate for seamless loop
+  const photos = stripPhotos.length < 5
+    ? [...stripPhotos,...stripPhotos,...stripPhotos]
+    : [...stripPhotos,...stripPhotos];
+  photos.forEach(p => {
     const img = document.createElement('img');
     img.src = p.url;
     img.className = 'gallery-photo';
@@ -539,7 +566,7 @@ function startStrip() {
   const wrap = document.getElementById('photo-strip-wrap');
   if (!strip || !strip.children.length) return;
   let lastTime = null;
-  const speed = 0.4; // px per ms
+  const speed = 0.2; // px per ms
   function animate(ts) {
     if (!stripPaused) {
       if (lastTime) stripPos += speed * (ts - lastTime);
@@ -580,6 +607,41 @@ window.deleteApprovedPhoto = async function() {
 };
 window.closeLightbox = function() {
   document.getElementById('lightbox').style.display = 'none';
+};
+
+window.openPhotoGrid = function() {
+  const modal = document.getElementById('photo-grid-modal');
+  const grid = document.getElementById('photo-grid-inner');
+  const count = document.getElementById('grid-count');
+  if (count) count.textContent = '(' + galleryPhotos.length + ')';
+  grid.innerHTML = '';
+  galleryPhotos.forEach(p => {
+    const wrap = document.createElement('div');
+    wrap.style.cssText = 'position:relative;cursor:pointer;border-radius:8px;overflow:hidden;aspect-ratio:4/3;';
+    const img = document.createElement('img');
+    img.src = p.url;
+    img.style.cssText = 'width:100%;height:100%;object-fit:cover;transition:transform 0.2s;';
+    img.alt = p.caption || 'Batch photo';
+    wrap.addEventListener('mouseenter', () => img.style.transform = 'scale(1.05)');
+    wrap.addEventListener('mouseleave', () => img.style.transform = 'scale(1)');
+    wrap.addEventListener('click', () => {
+      closePhotoGrid();
+      setTimeout(() => openLightbox(p), 100);
+    });
+    if (p.caption) {
+      const cap = document.createElement('div');
+      cap.style.cssText = 'position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,0.7));padding:0.5rem;font-size:11px;color:white;';
+      cap.textContent = p.caption;
+      wrap.appendChild(cap);
+    }
+    wrap.appendChild(img);
+    grid.appendChild(wrap);
+  });
+  modal.style.display = 'block';
+};
+
+window.closePhotoGrid = function() {
+  document.getElementById('photo-grid-modal').style.display = 'none';
 };
 window.closeUploadModal = function() {
   document.getElementById('upload-modal').style.display = 'none';
