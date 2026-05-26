@@ -261,6 +261,9 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
       <img id="lightbox-img" style="max-width:100%;max-height:80vh;border-radius:10px;box-shadow:0 8px 40px rgba(0,0,0,0.5);">
       <div id="lightbox-caption" style="color:rgba(255,255,255,0.8);font-size:14px;margin-top:0.75rem;"></div>
       <div id="lightbox-uploader" style="color:rgba(255,255,255,0.5);font-size:12px;margin-top:4px;"></div>
+      <div id="lightbox-admin-actions" style="display:none;margin-top:1rem;">
+        <button onclick="deleteApprovedPhoto()" style="background:#dc2626;color:white;border:none;padding:8px 20px;border-radius:8px;font-size:13px;cursor:pointer;font-family:inherit;">🗑 Delete Photo</button>
+      </div>
     </div>
   </div>
 
@@ -454,6 +457,8 @@ async function loadGallery() {
 // Admin: load pending photos too
 async function loadPendingPhotos() {
   if (!currentUser || currentUser.uid !== ADMIN_UID_CHECK) return;
+  // Prevent double render
+  if (document.getElementById('pending-photos-bar')) return;
   const snap = await getDocs(query(
     collection(db,'session_photos'),
     where('session','==','2006'),
@@ -461,6 +466,7 @@ async function loadPendingPhotos() {
   ));
   if (snap.empty) return;
   const pendingBar = document.createElement('div');
+  pendingBar.id = 'pending-photos-bar';
   pendingBar.style.cssText = 'background:#fef9e7;border:1px solid #f59e0b;border-radius:10px;padding:1rem;margin-bottom:1rem;';
   pendingBar.innerHTML = '<div style="font-size:13px;font-weight:600;color:#92400e;margin-bottom:0.75rem;">⏳ Pending Photos (' + snap.size + ')</div>';
   const pendingGrid = document.createElement('div');
@@ -544,12 +550,27 @@ function startStrip() {
   wrap.addEventListener('mouseleave', () => stripPaused = false);
 }
 
+let currentLightboxPhotoId = null;
 function openLightbox(photo) {
+  currentLightboxPhotoId = photo.id;
   document.getElementById('lightbox-img').src = photo.url;
   document.getElementById('lightbox-caption').textContent = photo.caption || '';
   document.getElementById('lightbox-uploader').textContent = photo.uploaderName ? 'Shared by ' + photo.uploaderName : '';
+  const adminActions = document.getElementById('lightbox-admin-actions');
+  if (adminActions) adminActions.style.display = (currentUser && currentUser.uid === ADMIN_UID_CHECK) ? 'block' : 'none';
   document.getElementById('lightbox').style.display = 'flex';
 }
+
+window.deleteApprovedPhoto = async function() {
+  if (!currentLightboxPhotoId) return;
+  if (!confirm('Delete this photo permanently?')) return;
+  try {
+    await deleteDoc(doc(db,'session_photos',currentLightboxPhotoId));
+    closeLightbox();
+    showToast('Photo deleted ✓');
+    loadGallery();
+  } catch(e) { showToast('Error: '+e.message); }
+};
 window.closeLightbox = function() {
   document.getElementById('lightbox').style.display = 'none';
 };
@@ -637,7 +658,6 @@ window.submitPhoto = async function() {
 
 // Load gallery on start
 loadGallery();
-setTimeout(loadPendingPhotos, 1000);
 
 window.setFilter = function(f,btn){
   activeFilter=f;
