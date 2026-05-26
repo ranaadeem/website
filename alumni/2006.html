@@ -186,8 +186,8 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
 <div class="toast" id="toast"></div>
 
 <!-- 1. ALUMNI NETWORK BANNER - full width, outside container -->
-<div style="width:100%;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.12);margin-bottom:0;">
-  <img src="/alumni-header.png" alt="Chemical Engineering Alumni Network" style="width:100%;height:auto;display:block;max-width:100%;">
+<div style="width:100vw;position:relative;left:50%;right:50%;margin-left:-50vw;margin-right:-50vw;margin-bottom:0;overflow:hidden;">
+  <img src="/alumni-header.png" alt="Chemical Engineering Alumni Network" style="width:100%;height:auto;display:block;">
 </div>
 
 <div class="session-page-wrap">
@@ -284,7 +284,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
   </div>
 
   <!-- 4. STATS BAR -->
-  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:2rem;">
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:2rem;width:100%;max-width:100%;box-sizing:border-box;">
     <div style="background:var(--navy);border-radius:10px;padding:1.1rem;text-align:center;">
       <div style="font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:700;color:var(--gold);">187</div>
       <div style="font-size:11px;color:rgba(255,255,255,0.7);margin-top:3px;">Total Graduates</div>
