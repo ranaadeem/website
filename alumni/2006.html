@@ -488,15 +488,22 @@ async function loadPendingPhotos() {
 }
 
 window.approvePhoto = async function(id) {
-  await updateDoc(doc(db,'session_photos',id),{status:'approved'});
-  showToast('Photo approved ✓');
-  location.reload();
+  try {
+    await updateDoc(doc(db,'session_photos',id),{status:'approved'});
+    const t=document.getElementById('toast');if(t){t.textContent='Photo approved ✓';t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
+    location.reload();
+  } catch(e) {
+    console.error('Approve error:', e);
+    alert('Error: ' + e.message);
+  }
 };
 window.rejectPhoto = async function(id) {
   if (!confirm('Delete this photo submission?')) return;
-  await deleteDoc(doc(db,'session_photos',id));
-  showToast('Photo rejected.');
-  location.reload();
+  try {
+    await deleteDoc(doc(db,'session_photos',id));
+    const t=document.getElementById('toast');if(t){t.textContent='Photo rejected.';t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
+    location.reload();
+  } catch(e) { alert('Error: ' + e.message); }
 };
 
 function renderStrip() {
