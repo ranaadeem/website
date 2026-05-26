@@ -99,14 +99,13 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
 
 
 
-.session-page-wrap{max-width:1100px;margin:0 auto;padding:2rem 2rem 4rem;box-sizing:border-box;}
-.alumni-banner{width:100%;max-width:100%;border-radius:14px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.12);display:block;}
-.session-title-bar{background:var(--navy);border-radius:0 0 12px 12px;padding:1rem 1.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.75rem;margin-bottom:2rem;}
+/* Session 2006 extras */
+.alumni-banner-img{width:100%;height:auto;display:block;border-bottom:3px solid var(--gold);}
+.session-title-bar{background:var(--navy);padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.75rem;}
 .session-title-bar h1{font-family:"Playfair Display",serif;font-size:2rem;color:white;margin:0;}
 .session-title-bar h1 span{color:var(--gold);}
-.session-title-bar p{font-size:12px;color:rgba(255,255,255,0.6);margin:0;}
-.photo-placeholder{background:linear-gradient(135deg,#e8e4dc,#f0ece4);border:2px dashed var(--border);border-radius:12px;padding:2rem;text-align:center;margin-bottom:2rem;}
-.stats-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:2rem;} /* overridden inline */
+.session-title-bar p{font-size:12px;color:rgba(255,255,255,0.6);margin:2px 0 0;}
+.stats-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:2rem;}
 .stat-box{background:var(--navy);border-radius:10px;padding:1.1rem;text-align:center;}
 .stat-num{font-family:"Playfair Display",serif;font-size:1.6rem;font-weight:700;color:var(--gold);}
 .stat-lbl{font-size:11px;color:rgba(255,255,255,0.7);margin-top:3px;}
@@ -128,22 +127,15 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
 .search-box{flex:1;min-width:180px;padding:8px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit;outline:none;}
 .search-box:focus{border-color:var(--navy);}
 .cta-banner{background:linear-gradient(135deg,var(--navy),#2048a8);border-radius:12px;padding:1.5rem;text-align:center;margin-top:2.5rem;}
-@media(max-width:900px){.stats-bar{grid-template-columns:repeat(2,1fr);} [style*="repeat(4,1fr)"]{grid-template-columns:repeat(2,1fr)!important;}}
+.gallery-photo{height:160px;width:auto;min-width:220px;max-width:300px;border-radius:8px;object-fit:cover;cursor:pointer;flex-shrink:0;transition:transform 0.2s,box-shadow 0.2s;border:2px solid transparent;}
+.gallery-photo:hover{transform:scale(1.03);box-shadow:0 4px 20px rgba(0,0,0,0.4);border-color:var(--gold);}
+@media(max-width:900px){.stats-bar{grid-template-columns:repeat(2,1fr);}.main-wrap{grid-template-columns:1fr!important;}}
 @media(max-width:768px){.member-grid{grid-template-columns:repeat(2,1fr);}.session-title-bar{flex-direction:column;align-items:flex-start;}}
 @media(max-width:480px){.member-grid{grid-template-columns:1fr;}.stats-bar{grid-template-columns:repeat(2,1fr);}}
 
-
-/* Gallery strip */
-#photo-strip-wrap{cursor:grab;}
-#photo-strip-wrap:active{cursor:grabbing;}
-.gallery-photo{height:160px;width:auto;min-width:220px;max-width:300px;border-radius:8px;object-fit:cover;cursor:pointer;flex-shrink:0;transition:transform 0.2s,box-shadow 0.2s;border:2px solid transparent;}
-.gallery-photo:hover{transform:scale(1.03);box-shadow:0 4px 20px rgba(0,0,0,0.4);border-color:var(--gold);}
-/* Admin pending badge */
-.admin-approve-btn{position:absolute;top:4px;right:4px;background:var(--gold);color:var(--navy);border:none;padding:3px 8px;border-radius:4px;font-size:10px;font-weight:700;cursor:pointer;display:none;}
 </style>
 </head>
 <body>
-
 <nav id="main-nav">
   <div class="nav-inner">
     <a href="/" class="nav-logo">
@@ -182,53 +174,22 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
     </ul>
   </div>
 </nav>
-
 <div class="toast" id="toast"></div>
 
-<!-- 1. ALUMNI NETWORK BANNER - full width, outside container -->
-<div style="width:100vw;position:relative;left:50%;right:50%;margin-left:-50vw;margin-right:-50vw;margin-bottom:0;overflow:hidden;">
-  <img src="/alumni-header.png" alt="Chemical Engineering Alumni Network" style="width:100%;height:auto;display:block;">
+<!-- ALUMNI NETWORK BANNER -->
+<img src="/alumni-header.png" alt="Chemical Engineering Alumni Network" class="alumni-banner-img">
+
+<!-- SESSION TITLE BAR -->
+<div class="session-title-bar">
+  <div>
+    <h1>Session <span>2006–2010</span></h1>
+    <p>Institute of Chemical Engineering &amp; Technology · University of the Punjab, Lahore</p>
+  </div>
+  <a href="/session2006.html" style="background:var(--gold);color:var(--navy);padding:7px 18px;border-radius:7px;font-size:13px;font-weight:700;text-decoration:none;white-space:nowrap;">📸 Memory Page →</a>
 </div>
 
-<div class="session-page-wrap">
-
-  <!-- 2. SESSION TITLE BAR -->
-  <div class="session-title-bar">
-    <div>
-      <h1>Session <span>2006–2010</span></h1>
-      <p>Institute of Chemical Engineering &amp; Technology · University of the Punjab, Lahore</p>
-    </div>
-    <a href="/session2006.html" style="background:var(--gold);color:var(--navy);padding:7px 18px;border-radius:7px;font-size:13px;font-weight:700;text-decoration:none;white-space:nowrap;">📸 Memory Page →</a>
-  </div>
-
-  <!-- 3. PHOTO GALLERY -->
-  <div id="gallery-section" style="margin-bottom:2rem;">
-
-    <!-- Slideshow strip -->
-    <div style="position:relative;margin-bottom:0.75rem;">
-      <div id="photo-strip-wrap" style="overflow:hidden;border-radius:12px;background:#1a1a2e;min-height:180px;display:flex;align-items:center;justify-content:center;">
-        <div id="photo-strip" style="display:flex;gap:8px;padding:8px;transition:none;will-change:transform;">
-          <!-- Photos injected by JS -->
-        </div>
-        <div id="gallery-empty" style="display:none;text-align:center;padding:2.5rem;color:rgba(255,255,255,0.5);">
-          <div style="font-size:2rem;margin-bottom:0.5rem;">📸</div>
-          <div style="font-size:14px;font-weight:600;color:rgba(255,255,255,0.7);">No photos yet</div>
-          <div style="font-size:13px;margin-top:4px;">Be the first to share a batch memory!</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Gallery actions -->
-    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.75rem;">
-      <div style="font-size:13px;color:var(--muted);">Batch photos, lab memories, trips &amp; events — <span id="photo-count" style="color:var(--navy);font-weight:600;">0</span> photos shared</div>
-      <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
-        <button id="view-all-btn" onclick="openPhotoGrid()" style="display:none;background:white;color:var(--navy);border:1.5px solid var(--border);padding:8px 18px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">View All Photos →</button>
-        <button onclick="document.getElementById('upload-modal').style.display='flex'" style="background:var(--gold);color:var(--navy);border:none;padding:8px 18px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;">📤 Share a Photo</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- UPLOAD MODAL -->
+<!-- MODALS (fixed position, outside layout flow) -->
+<!-- UPLOAD MODAL -->
   <div id="upload-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:3000;align-items:center;justify-content:center;padding:1rem;">
     <div style="background:white;border-radius:16px;padding:2rem;max-width:480px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.3);">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;">
@@ -260,6 +221,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
   </div>
 
   <!-- PHOTO GRID MODAL -->
+<!-- PHOTO GRID MODAL -->
   <div id="photo-grid-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:3500;overflow-y:auto;padding:2rem 1rem;">
     <div style="max-width:960px;margin:0 auto;">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;">
@@ -271,6 +233,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
   </div>
 
   <!-- LIGHTBOX -->
+<!-- LIGHTBOX -->
   <div id="lightbox" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:4000;align-items:center;justify-content:center;padding:1rem;" onclick="closeLightbox()">
     <button onclick="closeLightbox()" style="position:absolute;top:1rem;right:1rem;background:rgba(255,255,255,0.15);border:none;color:white;width:40px;height:40px;border-radius:50%;font-size:1.2rem;cursor:pointer;">✕</button>
     <div onclick="event.stopPropagation()" style="max-width:900px;width:100%;text-align:center;">
@@ -283,89 +246,110 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
     </div>
   </div>
 
-  <!-- 4. STATS BAR -->
-  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:2rem;width:100%;max-width:100%;box-sizing:border-box;">
-    <div style="background:var(--navy);border-radius:10px;padding:1.1rem;text-align:center;">
-      <div style="font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:700;color:var(--gold);">187</div>
-      <div style="font-size:11px;color:rgba(255,255,255,0.7);margin-top:3px;">Total Graduates</div>
+  
+
+<!-- MAIN LAYOUT -->
+<div class="main-wrap">
+  <div class="main-content">
+
+    <!-- Photo Gallery -->
+    <!-- 3. PHOTO GALLERY -->
+  <div id="gallery-section" style="margin-bottom:2rem;">
+
+    <!-- Slideshow strip -->
+    <div style="position:relative;margin-bottom:0.75rem;">
+      <div id="photo-strip-wrap" style="overflow:hidden;border-radius:12px;background:#1a1a2e;min-height:180px;display:flex;align-items:center;justify-content:center;">
+        <div id="photo-strip" style="display:flex;gap:8px;padding:8px;transition:none;will-change:transform;">
+          <!-- Photos injected by JS -->
+        </div>
+        <div id="gallery-empty" style="display:none;text-align:center;padding:2.5rem;color:rgba(255,255,255,0.5);">
+          <div style="font-size:2rem;margin-bottom:0.5rem;">📸</div>
+          <div style="font-size:14px;font-weight:600;color:rgba(255,255,255,0.7);">No photos yet</div>
+          <div style="font-size:13px;margin-top:4px;">Be the first to share a batch memory!</div>
+        </div>
+      </div>
     </div>
-    <div style="background:var(--navy);border-radius:10px;padding:1.1rem;text-align:center;">
-      <div style="font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:700;color:var(--gold);" id="stat-registered">—</div>
-      <div style="font-size:11px;color:rgba(255,255,255,0.7);margin-top:3px;">Registered</div>
-    </div>
-    <div style="background:var(--navy);border-radius:10px;padding:1.1rem;text-align:center;">
-      <div style="font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:700;color:var(--gold);" id="stat-countries">—</div>
-      <div style="font-size:11px;color:rgba(255,255,255,0.7);margin-top:3px;">Countries</div>
-    </div>
-    <div style="background:var(--navy);border-radius:10px;padding:1.1rem;text-align:center;">
-      <div style="font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:700;color:var(--gold);">124/63</div>
-      <div style="font-size:11px;color:rgba(255,255,255,0.7);margin-top:3px;">Morning / Evening</div>
+
+    <!-- Gallery actions -->
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.75rem;">
+      <div style="font-size:13px;color:var(--muted);">Batch photos, lab memories, trips &amp; events — <span id="photo-count" style="color:var(--navy);font-weight:600;">0</span> photos shared</div>
+      <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+        <button id="view-all-btn" onclick="openPhotoGrid()" style="display:none;background:white;color:var(--navy);border:1.5px solid var(--border);padding:8px 18px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">View All Photos →</button>
+        <button onclick="document.getElementById('upload-modal').style.display='flex'" style="background:var(--gold);color:var(--navy);border:none;padding:8px 18px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;">📤 Share a Photo</button>
+      </div>
     </div>
   </div>
 
+  <!-- UPLOAD MODAL -->
 
-  <!-- 5. MAIN CONTENT + SIDEBAR -->
-  <div class="main-wrap" style="align-items:start;">
-    <div class="main-content">
-
-      <div class="filter-bar">
-        <input type="text" class="search-box" id="search-box" placeholder="🔍 Search by name or roll number..." oninput="renderGrid()">
-        <button class="filter-chip active" onclick="setFilter('all',this)">All (187)</button>
-        <button class="filter-chip" onclick="setFilter('Morning',this)">🌅 Morning (124)</button>
-        <button class="filter-chip" onclick="setFilter('Evening',this)">🌆 Evening (63)</button>
-        <button class="filter-chip" onclick="setFilter('registered',this)">✅ Registered <span id="reg-count">(0)</span></button>
-      </div>
-
-      <div class="member-grid" id="member-grid">
-        <div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--muted);">Loading...</div>
-      </div>
-
-      <div class="cta-banner">
-        <p style="color:rgba(255,255,255,0.8);font-size:14px;margin-bottom:0.75rem;">Are you from Session 2006–2010? Register to add your photo, job title, and location.</p>
-        <a href="/alumni.html" style="display:inline-block;background:var(--gold);color:var(--navy);padding:9px 24px;border-radius:8px;font-size:13px;font-weight:700;text-decoration:none;">Register Now →</a>
-      </div>
-
+    <!-- Stats Bar -->
+    <div class="stats-bar">
+      <div class="stat-box"><div class="stat-num">187</div><div class="stat-lbl">Total Graduates</div></div>
+      <div class="stat-box"><div class="stat-num" id="stat-registered">—</div><div class="stat-lbl">Registered</div></div>
+      <div class="stat-box"><div class="stat-num" id="stat-countries">—</div><div class="stat-lbl">Countries</div></div>
+      <div class="stat-box"><div class="stat-num">124/63</div><div class="stat-lbl">Morning / Evening</div></div>
     </div>
 
-    <div class="sidebar">
-      <div class="sidebar-card">
-        <div class="sidebar-card-header">📊 Session Info</div>
-        <div class="sidebar-card-body">
-          <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px;"><span style="color:var(--muted);">Session</span><span style="font-weight:700;color:var(--navy);">2006–2010</span></div>
-          <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px;"><span style="color:var(--muted);">Total</span><span style="font-weight:700;color:var(--navy);">187</span></div>
-          <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px;"><span style="color:var(--muted);">Morning</span><span style="font-weight:700;color:var(--navy);">124</span></div>
-          <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px;"><span style="color:var(--muted);">Evening</span><span style="font-weight:700;color:var(--navy);">63</span></div>
-          <div style="display:flex;justify-content:space-between;padding:6px 0;font-size:13px;"><span style="color:var(--muted);">Registered</span><span style="font-weight:700;color:var(--gold);" id="sidebar-reg">—</span></div>
-        </div>
+    <!-- Filter & Search -->
+    <div class="filter-bar">
+      <input type="text" class="search-box" id="search-box" placeholder="🔍 Search by name or roll number..." oninput="renderGrid()">
+      <button class="filter-chip active" onclick="setFilter('all',this)">All (187)</button>
+      <button class="filter-chip" onclick="setFilter('Morning',this)">🌅 Morning (124)</button>
+      <button class="filter-chip" onclick="setFilter('Evening',this)">🌆 Evening (63)</button>
+      <button class="filter-chip" onclick="setFilter('registered',this)">✅ Registered <span id="reg-count">(0)</span></button>
+    </div>
+
+    <!-- Member Grid -->
+    <div class="member-grid" id="member-grid">
+      <div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--muted);">Loading...</div>
+    </div>
+
+    <!-- CTA -->
+    <div class="cta-banner">
+      <p style="color:rgba(255,255,255,0.8);font-size:14px;margin-bottom:0.75rem;">Are you from Session 2006–2010? Register to add your photo, job title, and location.</p>
+      <a href="/alumni.html" style="display:inline-block;background:var(--gold);color:var(--navy);padding:9px 24px;border-radius:8px;font-size:13px;font-weight:700;text-decoration:none;">Register Now →</a>
+    </div>
+
+  </div>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sidebar-card">
+      <div class="sidebar-card-header">📊 Session Info</div>
+      <div class="sidebar-card-body">
+        <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px;"><span style="color:var(--muted);">Session</span><span style="font-weight:700;color:var(--navy);">2006–2010</span></div>
+        <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px;"><span style="color:var(--muted);">Total</span><span style="font-weight:700;color:var(--navy);">187</span></div>
+        <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px;"><span style="color:var(--muted);">Morning</span><span style="font-weight:700;color:var(--navy);">124</span></div>
+        <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px;"><span style="color:var(--muted);">Evening</span><span style="font-weight:700;color:var(--navy);">63</span></div>
+        <div style="display:flex;justify-content:space-between;padding:6px 0;font-size:13px;"><span style="color:var(--muted);">Registered</span><span style="font-weight:700;color:var(--gold);" id="sidebar-reg">—</span></div>
       </div>
-      <div class="sidebar-card">
-        <div class="sidebar-card-header">🌍 Countries</div>
-        <div class="sidebar-card-body" id="country-list">
-          <div style="color:var(--muted);font-size:12px;text-align:center;padding:0.5rem;">Waiting for members</div>
-        </div>
+    </div>
+    <div class="sidebar-card">
+      <div class="sidebar-card-header">🌍 Countries</div>
+      <div class="sidebar-card-body" id="country-list">
+        <div style="color:var(--muted);font-size:12px;text-align:center;padding:0.5rem;">Waiting for members</div>
       </div>
-      <div class="sidebar-card">
-        <div class="sidebar-card-header">💼 Industries</div>
-        <div class="sidebar-card-body" id="industry-list">
-          <div style="color:var(--muted);font-size:12px;text-align:center;padding:0.5rem;">Waiting for members</div>
-        </div>
+    </div>
+    <div class="sidebar-card">
+      <div class="sidebar-card-header">💼 Industries</div>
+      <div class="sidebar-card-body" id="industry-list">
+        <div style="color:var(--muted);font-size:12px;text-align:center;padding:0.5rem;">Waiting for members</div>
       </div>
-      <div class="sidebar-card">
-        <div class="sidebar-card-header">🔗 Other Sessions</div>
-        <div class="sidebar-card-body"><a href="/alumni/2006.html" style="display:block;padding:7px 0;font-size:13px;color:var(--navy);font-weight:600;text-decoration:none;border-bottom:1px solid var(--border);">Session 2006–2010 ←</a>
+    </div>
+    <div class="sidebar-card">
+      <div class="sidebar-card-header">🔗 Other Sessions</div>
+      <div class="sidebar-card-body"><a href="/alumni/2006.html" style="display:block;padding:7px 0;font-size:13px;color:var(--navy);font-weight:600;text-decoration:none;border-bottom:1px solid var(--border);">Session 2006–2010 ←</a>
           <a href="/alumni/2009.html" style="display:block;padding:7px 0;font-size:13px;color:var(--navy);text-decoration:none;border-bottom:1px solid var(--border);">Session 2009–2013</a>
           <a href="/alumni/2016.html" style="display:block;padding:7px 0;font-size:13px;color:var(--navy);text-decoration:none;">Session 2016–2020</a></div>
-      </div>
-      <div class="sidebar-card">
-        <div class="sidebar-card-header">📬 Join the Network</div>
-        <div class="sidebar-card-body">
-          <p style="font-size:12px;color:var(--muted);margin-bottom:0.75rem;">Register to connect with your batchmates.</p>
-          <a href="/alumni.html" style="display:block;text-align:center;background:var(--navy);color:var(--gold);padding:9px 16px;border-radius:8px;text-decoration:none;font-size:13px;font-weight:600;">Register Now →</a>
-        </div>
+    </div>
+    <div class="sidebar-card">
+      <div class="sidebar-card-header">📬 Join the Network</div>
+      <div class="sidebar-card-body">
+        <p style="font-size:12px;color:var(--muted);margin-bottom:0.75rem;">Register to connect with your batchmates.</p>
+        <a href="/alumni.html" style="display:block;text-align:center;background:var(--navy);color:var(--gold);padding:9px 16px;border-radius:8px;text-decoration:none;font-size:13px;font-weight:600;">Register Now →</a>
       </div>
     </div>
   </div>
-
 </div>
 
 <footer class="footer">
@@ -373,6 +357,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
 </footer>
 
 <script type="module">
+
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js';
 import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js';
 import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, query, where, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js';
@@ -751,8 +736,8 @@ window.setFilter = function(f,btn){
 };
 
 loadRegistered();
-</script>
 
+</script>
 <script>
 document.getElementById('nav-hamburger').addEventListener('click', function() {
   document.getElementById('nav-links').classList.toggle('open');
