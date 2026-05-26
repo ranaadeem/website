@@ -99,7 +99,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
 
 
 
-.session-page-wrap{max-width:1100px;margin:0 auto;padding:2.5rem 2rem 4rem;box-sizing:border-box;overflow-x:hidden;}
+.session-page-wrap{max-width:1100px;margin:0 auto;padding:2rem 2rem 4rem;box-sizing:border-box;}
 .alumni-banner{width:100%;max-width:100%;border-radius:14px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.12);display:block;}
 .session-title-bar{background:var(--navy);border-radius:0 0 12px 12px;padding:1rem 1.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.75rem;margin-bottom:2rem;}
 .session-title-bar h1{font-family:"Playfair Display",serif;font-size:2rem;color:white;margin:0;}
@@ -185,10 +185,12 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
 
 <div class="toast" id="toast"></div>
 
-<div class="session-page-wrap">
+<!-- 1. ALUMNI NETWORK BANNER - full width, outside container -->
+<div style="width:100%;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.12);margin-bottom:0;">
+  <img src="/alumni-header.png" alt="Chemical Engineering Alumni Network" style="width:100%;height:auto;display:block;max-width:100%;">
+</div>
 
-  <!-- 1. ALUMNI NETWORK BANNER -->
-  <div style="width:100%;overflow:hidden;border-radius:14px;box-shadow:0 4px 20px rgba(0,0,0,0.12);margin-bottom:0;"><img src="/alumni-header.png" alt="Chemical Engineering Alumni Network" style="width:100%;height:auto;display:block;"></div>
+<div class="session-page-wrap">
 
   <!-- 2. SESSION TITLE BAR -->
   <div class="session-title-bar">
@@ -300,6 +302,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
       <div style="font-size:11px;color:rgba(255,255,255,0.7);margin-top:3px;">Morning / Evening</div>
     </div>
   </div>
+
 
   <!-- 5. MAIN CONTENT + SIDEBAR -->
   <div class="main-wrap" style="align-items:start;">
