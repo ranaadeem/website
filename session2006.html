@@ -514,7 +514,7 @@
     <div class="header-stats">
       <div><span class="hstat-num" id="total-registered">–</span><span class="hstat-lbl">Registered Alumni</span></div>
       <div><span class="hstat-num" id="total-countries">–</span><span class="hstat-lbl">Countries Represented</span></div>
-      <div><span class="hstat-num">245</span><span class="hstat-lbl">Total Batch Size</span></div>
+      <div><span class="hstat-num">187</span><span class="hstat-lbl">Total Batch Size</span></div>
       <div><span class="hstat-num">2010</span><span class="hstat-lbl">Graduation Year</span></div>
     </div>
   </div>
@@ -689,7 +689,7 @@
     <div class="reg-counter">
       <span class="reg-num" id="counter-num">–</span>
       <div class="reg-label">Alumni Registered</div>
-      <div class="reg-sub">out of 245 total batch members</div>
+      <div class="reg-sub">out of 187 total batch members</div>
       <div class="reg-bar-wrap">
         <div class="reg-bar-bg"><div class="reg-bar-fill" id="reg-bar"></div></div>
         <div class="reg-bar-label"><span>0%</span><span id="reg-pct">0% complete</span></div>
@@ -703,9 +703,9 @@
         <p>Morning & Evening sessions</p>
       </div>
       <div class="side-card-body">
-        <div class="session-row"><span class="session-label">🌅 Morning Session</span><span class="session-count">181 students</span></div>
+        <div class="session-row"><span class="session-label">🌅 Morning Session</span><span class="session-count">124 students</span></div>
         <div class="session-row"><span class="session-label">🌆 Evening Session</span><span class="session-count">64 students</span></div>
-        <div class="session-row"><span class="session-label">👥 Total Batch</span><span class="session-count">245 students</span></div>
+        <div class="session-row"><span class="session-label">👥 Total Batch</span><span class="session-count">187 students</span></div>
         <div class="session-row"><span class="session-label">🎓 Graduated</span><span class="session-count">2010</span></div>
         <div class="session-row"><span class="session-label">📅 Session Start</span><span class="session-count">2006</span></div>
       </div>
@@ -745,7 +745,7 @@
           <div class="ms-dot">🎓</div>
           <div>
             <div class="ms-year">2010</div>
-            <div class="ms-text">Graduation — 245 Chemical Engineers step into the professional world.</div>
+            <div class="ms-text">Graduation — 187 Chemical Engineers step into the professional world.</div>
           </div>
         </div>
         <div class="milestone">
@@ -905,7 +905,7 @@
   };
 
   const SHEETS_URL = "https://script.google.com/macros/s/AKfycby-vhhVUANxbgLL2r2k3S7sgCBi5G2yjx8VXiyPG-GwgfnkVXBN9qJ5dKnIz77KbiDmEA/exec";
-  const TOTAL_BATCH = 245;
+  const TOTAL_BATCH = 187;
 
   const countryFlags = {
     "Pakistan":"🇵🇰","Saudi Arabia":"🇸🇦","United Arab Emirates":"🇦🇪","United Kingdom":"🇬🇧",
@@ -1113,7 +1113,7 @@ async function loadFirebaseStats() {
     set('total-registered', total);
     set('total-countries', countries.size);
 
-    const pct=Math.round((total/245)*100);
+    const pct=Math.round((total/187)*100);
     const bar=document.getElementById('reg-bar');
     const pctEl=document.getElementById('reg-pct');
     const numEl=document.getElementById('counter-num');
