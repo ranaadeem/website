@@ -106,10 +106,10 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
 .session-title-bar h1 span{color:var(--gold);}
 .session-title-bar p{font-size:12px;color:rgba(255,255,255,0.6);margin:0;}
 .photo-placeholder{background:linear-gradient(135deg,#e8e4dc,#f0ece4);border:2px dashed var(--border);border-radius:12px;padding:2rem;text-align:center;margin-bottom:2rem;}
-.stats-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:2rem;}
-.stat-box{background:white;border:1px solid var(--border);border-radius:10px;padding:1rem;text-align:center;}
-.stat-num{font-family:"Playfair Display",serif;font-size:1.6rem;font-weight:700;color:var(--navy);}
-.stat-lbl{font-size:11px;color:var(--muted);margin-top:2px;}
+.stats-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:2rem;} /* overridden inline */
+.stat-box{background:var(--navy);border-radius:10px;padding:1.1rem;text-align:center;}
+.stat-num{font-family:"Playfair Display",serif;font-size:1.6rem;font-weight:700;color:var(--gold);}
+.stat-lbl{font-size:11px;color:rgba(255,255,255,0.7);margin-top:3px;}
 .member-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;}
 .member-card{background:white;border:1px solid var(--border);border-radius:12px;padding:1.1rem;text-align:center;transition:box-shadow 0.2s;}
 .member-card:hover{box-shadow:0 4px 16px rgba(0,0,0,0.08);}
@@ -128,7 +128,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
 .search-box{flex:1;min-width:180px;padding:8px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit;outline:none;}
 .search-box:focus{border-color:var(--navy);}
 .cta-banner{background:linear-gradient(135deg,var(--navy),#2048a8);border-radius:12px;padding:1.5rem;text-align:center;margin-top:2.5rem;}
-@media(max-width:900px){.stats-bar{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:900px){.stats-bar{grid-template-columns:repeat(2,1fr);} [style*="repeat(4,1fr)"]{grid-template-columns:repeat(2,1fr)!important;}}
 @media(max-width:768px){.member-grid{grid-template-columns:repeat(2,1fr);}.session-title-bar{flex-direction:column;align-items:flex-start;}}
 @media(max-width:480px){.member-grid{grid-template-columns:1fr;}.stats-bar{grid-template-columns:repeat(2,1fr);}}
 
@@ -188,7 +188,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
 <div class="session-page-wrap">
 
   <!-- 1. ALUMNI NETWORK BANNER -->
-  <img src="/alumni-header.png" alt="Chemical Engineering Alumni Network" class="alumni-banner" style="max-width:100%;height:auto;">
+  <div style="width:100%;overflow:hidden;border-radius:14px;box-shadow:0 4px 20px rgba(0,0,0,0.12);margin-bottom:0;"><img src="/alumni-header.png" alt="Chemical Engineering Alumni Network" style="width:100%;height:auto;display:block;"></div>
 
   <!-- 2. SESSION TITLE BAR -->
   <div class="session-title-bar">
@@ -282,11 +282,23 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
   </div>
 
   <!-- 4. STATS BAR -->
-  <div class="stats-bar">
-    <div class="stat-box"><div class="stat-num">187</div><div class="stat-lbl">Total Graduates</div></div>
-    <div class="stat-box"><div class="stat-num" id="stat-registered">—</div><div class="stat-lbl">Registered</div></div>
-    <div class="stat-box"><div class="stat-num" id="stat-countries">—</div><div class="stat-lbl">Countries</div></div>
-    <div class="stat-box"><div class="stat-num">124/63</div><div class="stat-lbl">Morning / Evening</div></div>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:2rem;">
+    <div style="background:var(--navy);border-radius:10px;padding:1.1rem;text-align:center;">
+      <div style="font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:700;color:var(--gold);">187</div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.7);margin-top:3px;">Total Graduates</div>
+    </div>
+    <div style="background:var(--navy);border-radius:10px;padding:1.1rem;text-align:center;">
+      <div style="font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:700;color:var(--gold);" id="stat-registered">—</div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.7);margin-top:3px;">Registered</div>
+    </div>
+    <div style="background:var(--navy);border-radius:10px;padding:1.1rem;text-align:center;">
+      <div style="font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:700;color:var(--gold);" id="stat-countries">—</div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.7);margin-top:3px;">Countries</div>
+    </div>
+    <div style="background:var(--navy);border-radius:10px;padding:1.1rem;text-align:center;">
+      <div style="font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:700;color:var(--gold);">124/63</div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.7);margin-top:3px;">Morning / Evening</div>
+    </div>
   </div>
 
   <!-- 5. MAIN CONTENT + SIDEBAR -->
