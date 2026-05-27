@@ -41,8 +41,8 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
 .header-sub{font-size:15px;color:rgba(255,255,255,0.75);line-height:1.6;max-width:520px;}
 
 /* MAIN */
-.main-wrap{max-width:1100px;margin:0 auto;padding:3rem 2rem;display:grid;grid-template-columns:1fr 320px;gap:3rem;align-items:start;}
-@media(max-width:900px){.main-wrap{grid-template-columns:1fr;}}
+.main-wrap{max-width:1100px;margin:0 auto;padding:2rem;display:grid;grid-template-columns:1fr 300px;gap:2rem;align-items:start;box-sizing:border-box;}
+@media(max-width:1024px){.main-wrap{grid-template-columns:1fr;}}@media(max-width:900px){.main-wrap{grid-template-columns:1fr;}}
 
 /* CARDS */
 .teach-section{margin-bottom:2.5rem;}
@@ -98,12 +98,12 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
 
 
 
-.alumni-page-header{width:100%;overflow:hidden;border-bottom:3px solid var(--gold);}
-.alumni-page-header img{width:100%;height:auto;display:block;}
-.session-bar{background:var(--navy);padding:0.9rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.5rem;}
-.session-bar h1{font-family:"Playfair Display",serif;font-size:1.9rem;color:white;margin:0;}
-.session-bar h1 span{color:var(--gold);}
-.session-bar p{font-size:12px;color:rgba(255,255,255,0.6);margin:0;}
+
+
+
+
+
+
 .stats-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:2rem;}
 .stat-box{background:var(--navy);border-radius:10px;padding:1rem;text-align:center;}
 .stat-num{font-family:"Playfair Display",serif;font-size:1.5rem;font-weight:700;color:var(--gold);}
@@ -129,7 +129,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
 .gallery-photo{height:160px;width:auto;min-width:220px;max-width:300px;border-radius:8px;object-fit:cover;cursor:pointer;flex-shrink:0;transition:transform 0.2s,box-shadow 0.2s;border:2px solid transparent;}
 .gallery-photo:hover{transform:scale(1.03);box-shadow:0 4px 20px rgba(0,0,0,0.4);border-color:var(--gold);}
 @media(max-width:900px){.stats-bar{grid-template-columns:repeat(2,1fr);}}
-@media(max-width:768px){.member-grid{grid-template-columns:repeat(2,1fr);}.session-bar{flex-direction:column;align-items:flex-start;}}
+@media(max-width:768px){.member-grid{grid-template-columns:repeat(2,1fr);}}
 @media(max-width:480px){.member-grid{grid-template-columns:1fr;}.stats-bar{grid-template-columns:repeat(2,1fr);}}
 
 </style>
@@ -229,15 +229,14 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
   </div>
 </div>
 
-<!-- FULL WIDTH HEADER -->
-<div class="alumni-page-header">
-  <img src="/alumni-header.png" alt="Chemical Engineering Alumni Network">
-  <div class="session-bar">
+<!-- FULL WIDTH HEADER — same class as teaching.html -->
+<div class="page-header" style="background-image:url('/alumni-header.png');height:auto;min-height:200px;">
+  <div class="page-header-inner" style="position:relative;z-index:2;padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.5rem;max-width:none;width:100%;">
     <div>
-      <h1>Session <span>2006–2010</span></h1>
-      <p>Institute of Chemical Engineering &amp; Technology · University of the Punjab, Lahore</p>
+      <h1 style="font-family:'Playfair Display',serif;font-size:1.9rem;color:white;margin:0;">Session <span style="color:var(--gold);">2006–2010</span></h1>
+      <p style="font-size:12px;color:rgba(255,255,255,0.7);margin:4px 0 0;">Institute of Chemical Engineering &amp; Technology · University of the Punjab, Lahore</p>
     </div>
-    <a href="/session2006.html" style="background:var(--gold);color:var(--navy);padding:7px 18px;border-radius:7px;font-size:13px;font-weight:700;text-decoration:none;white-space:nowrap;flex-shrink:0;">📸 Memory Page →</a>
+    <a href="/session2006.html" style="background:var(--gold);color:var(--navy);padding:7px 18px;border-radius:7px;font-size:13px;font-weight:700;text-decoration:none;white-space:nowrap;flex-shrink:0;position:relative;z-index:3;">📸 Memory Page →</a>
   </div>
 </div>
 
