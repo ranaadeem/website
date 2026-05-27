@@ -402,13 +402,14 @@ html,body{margin:0;padding:0;}body{font-family:"DM Sans",sans-serif;background:v
 
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js';
-import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js';
 import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, signOut } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js';
 import { getFirestore, collection, addDoc, getDocs, doc, getDoc, updateDoc, deleteDoc, query, where, orderBy, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js';
 
 const app = initializeApp({apiKey:"AIzaSyAgUl22Cln6QtY3-HIvI6lE8Zu7n9OblbI",authDomain:"icet-alumni.firebaseapp.com",projectId:"icet-alumni",storageBucket:"icet-alumni.firebasestorage.app",messagingSenderId:"707390888790",appId:"1:707390888790:web:57e6be62e4d11e22c214f7"});
 const db = getFirestore(app);
 const auth = getAuth(app);
+const auth2 = auth; // same instance
+const provider2 = new GoogleAuthProvider();
 const ADMIN = 'w2AtZbhUiyY5TxyvIecHzWqheaE2';
 const CL_CLOUD = 'duetiv9rm', CL_PRESET = 'ranaadeem_blog';
 
