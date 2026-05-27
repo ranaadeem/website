@@ -310,7 +310,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
         <h2 class="section-title" style="margin-bottom:0;">Sessions &amp; Batches</h2>
       </div>
       <div style="font-size:12px;color:var(--muted);">
-        <span id="batch-count-visible">23</span> batches &middot; <span style="color:var(--green);font-weight:600;">1 active</span>
+        <span id="batch-count-visible">23</span> batches &middot; <span style="color:var(--green);font-weight:600;">3 active</span>
       </div>
     </div>
     <div class="sessions-layout">
@@ -517,7 +517,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
           <div class="stat-card-body">
             <div class="stat-row"><span class="stat-row-label">Total Registered</span><span class="stat-row-val" id="sb-total" title="Total alumni who have registered on the portal across all active sessions" style="cursor:help;">&ndash;</span></div>
             <div class="stat-row"><span class="stat-row-label">Countries</span><span class="stat-row-val" id="sb-countries" title="Number of unique countries where registered alumni currently live" style="cursor:help;">&ndash;</span></div>
-            <div class="stat-row"><span class="stat-row-label">Active Sessions</span><span class="stat-row-val">1</span></div>
+            <div class="stat-row"><span class="stat-row-label">Active Sessions</span><span class="stat-row-val">3</span></div>
             <div class="stat-row"><span class="stat-row-label">Total Batches</span><span class="stat-row-val">23</span></div>
             <div class="stat-row"><span class="stat-row-label">Network Since</span><span class="stat-row-val">2006</span></div>
           </div>
@@ -663,7 +663,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
         <div style="font-size:13px;color:rgba(255,255,255,0.55);margin-bottom:1.5rem;">Chemical Engineering &middot; ICET, University of the Punjab, Lahore</div>
         <div style="display:flex;gap:12px;flex-wrap:wrap;">
           <div style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);border-radius:10px;padding:12px 18px;text-align:center;min-width:80px;"><span id="dir-registered" style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;color:#c9a84c;display:block;line-height:1;">&ndash;</span><span style="font-size:11px;color:rgba(255,255,255,0.5);display:block;margin-top:3px;">Registered</span></div>
-          <div style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);border-radius:10px;padding:12px 18px;text-align:center;min-width:80px;"><span style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;color:#c9a84c;display:block;line-height:1;">245</span><span style="font-size:11px;color:rgba(255,255,255,0.5);display:block;margin-top:3px;">Total Batch</span></div>
+          <div style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);border-radius:10px;padding:12px 18px;text-align:center;min-width:80px;"><span style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;color:#c9a84c;display:block;line-height:1;" id="dir-total-batch">187</span><span style="font-size:11px;color:rgba(255,255,255,0.5);display:block;margin-top:3px;">Total Batch</span></div>
           <div style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);border-radius:10px;padding:12px 18px;text-align:center;min-width:80px;"><span id="dir-countries" style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;color:#c9a84c;display:block;line-height:1;">&ndash;</span><span style="font-size:11px;color:rgba(255,255,255,0.5);display:block;margin-top:3px;">Countries</span></div>
           <div style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);border-radius:10px;padding:12px 18px;text-align:center;min-width:80px;"><span id="dir-morning" style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;color:#c9a84c;display:block;line-height:1;">&ndash;</span><span style="font-size:11px;color:rgba(255,255,255,0.5);display:block;margin-top:3px;">Morning</span></div>
           <div style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);border-radius:10px;padding:12px 18px;text-align:center;min-width:80px;"><span id="dir-evening" style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;color:#c9a84c;display:block;line-height:1;">&ndash;</span><span style="font-size:11px;color:rgba(255,255,255,0.5);display:block;margin-top:3px;">Evening</span></div>
@@ -830,7 +830,7 @@ function showPage(page) {
 }
 
 // Set hero background
-document.getElementById('landing-hero').style.backgroundImage = "url('/icet-header.jpg')";
+document.getElementById('landing-hero').style.backgroundImage = "url('/alumni-header.png')";
 
 onAuthStateChanged(auth, async (user) => {
   currentUser = user;
@@ -1523,11 +1523,6 @@ document.querySelectorAll('.nav-dropdown-trigger').forEach(function(trigger) {
   });
 });
 document.addEventListener('click', function(e) {
-  if (!e.target.closest('.nav-dropdown')) {
-    document.querySelectorAll('.nav-dropdown').forEach(d => d.classList.remove('open'));
-  }
-});
-cument.addEventListener('click', function(e) {
   if (!e.target.closest('.nav-dropdown')) {
     document.querySelectorAll('.nav-dropdown').forEach(d => d.classList.remove('open'));
   }
