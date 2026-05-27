@@ -104,11 +104,11 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
 
 
 
-.stats-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:2rem;}
+.stats-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:2rem;width:100%;box-sizing:border-box;}
 .stat-box{background:var(--navy);border-radius:10px;padding:1rem;text-align:center;}
 .stat-num{font-family:"Playfair Display",serif;font-size:1.5rem;font-weight:700;color:var(--gold);}
 .stat-lbl{font-size:11px;color:rgba(255,255,255,0.7);margin-top:3px;}
-.member-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;}
+.member-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;width:100%;box-sizing:border-box;}
 .member-card{background:white;border:1px solid var(--border);border-radius:12px;padding:1.1rem;text-align:center;transition:box-shadow 0.2s;}
 .member-card:hover{box-shadow:0 4px 16px rgba(0,0,0,0.08);}
 .member-card.unregistered{opacity:0.72;}
@@ -229,15 +229,16 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
   </div>
 </div>
 
-<!-- FULL WIDTH HEADER — same class as teaching.html -->
-<div class="page-header" style="background-image:url('/alumni-header.png');height:auto;min-height:200px;">
-  <div class="page-header-inner" style="position:relative;z-index:2;padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.5rem;max-width:none;width:100%;">
-    <div>
-      <h1 style="font-family:'Playfair Display',serif;font-size:1.9rem;color:white;margin:0;">Session <span style="color:var(--gold);">2006–2010</span></h1>
-      <p style="font-size:12px;color:rgba(255,255,255,0.7);margin:4px 0 0;">Institute of Chemical Engineering &amp; Technology · University of the Punjab, Lahore</p>
-    </div>
-    <a href="/session2006.html" style="background:var(--gold);color:var(--navy);padding:7px 18px;border-radius:7px;font-size:13px;font-weight:700;text-decoration:none;white-space:nowrap;flex-shrink:0;position:relative;z-index:3;">📸 Memory Page →</a>
+<!-- FULL WIDTH HEADER -->
+<div style="width:100%;line-height:0;">
+  <img src="/alumni-header.png" alt="Chemical Engineering Alumni Network" style="width:100%;height:auto;display:block;">
+</div>
+<div style="width:100%;background:var(--navy);border-bottom:3px solid var(--gold);padding:0.85rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.5rem;box-sizing:border-box;">
+  <div>
+    <h1 style="font-family:'Playfair Display',serif;font-size:1.9rem;color:white;margin:0;line-height:1.2;">Session <span style="color:var(--gold);">2006–2010</span></h1>
+    <p style="font-size:12px;color:rgba(255,255,255,0.6);margin:3px 0 0;">Institute of Chemical Engineering &amp; Technology · University of the Punjab, Lahore</p>
   </div>
+  <a href="/session2006.html" style="background:var(--gold);color:var(--navy);padding:7px 18px;border-radius:7px;font-size:13px;font-weight:700;text-decoration:none;white-space:nowrap;flex-shrink:0;">📸 Memory Page →</a>
 </div>
 
 <!-- MAIN CONTENT — same as teaching.html -->
