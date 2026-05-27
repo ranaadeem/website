@@ -299,6 +299,43 @@ html,body{margin:0;padding:0;}body{font-family:"DM Sans",sans-serif;background:v
           <a href="/alumni.html" style="display:block;text-align:center;background:var(--navy);color:var(--gold);padding:9px 14px;border-radius:8px;text-decoration:none;font-size:13px;font-weight:600;">Register Now →</a>
         </div>
       </div>
+
+      <div class="sidebar-card">
+        <div class="sidebar-card-header">🚩 Report an Issue</div>
+        <div class="sidebar-card-body">
+          <div id="report-form">
+            <div style="margin-bottom:0.6rem;">
+              <label style="font-size:11px;font-weight:600;color:var(--muted);display:block;margin-bottom:3px;">Issue Type *</label>
+              <select id="report-type" style="width:100%;padding:7px 10px;border:1.5px solid var(--border);border-radius:7px;font-size:12px;font-family:inherit;outline:none;background:white;">
+                <option value="">Select issue...</option>
+                <option value="deceased">Person has passed away</option>
+                <option value="wrong-name">Wrong name</option>
+                <option value="spelling">Spelling mistake</option>
+                <option value="wrong-profile">Wrong profile information</option>
+                <option value="duplicate">Duplicate entry</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <div style="margin-bottom:0.6rem;">
+              <label style="font-size:11px;font-weight:600;color:var(--muted);display:block;margin-bottom:3px;">Roll Number *</label>
+              <input type="text" id="report-roll" placeholder="e.g. CE-M6-101" style="width:100%;padding:7px 10px;border:1.5px solid var(--border);border-radius:7px;font-size:12px;font-family:inherit;outline:none;box-sizing:border-box;" oninput="this.value=this.value.toUpperCase()">
+            </div>
+            <div style="margin-bottom:0.75rem;">
+              <label style="font-size:11px;font-weight:600;color:var(--muted);display:block;margin-bottom:3px;">Details</label>
+              <textarea id="report-details" placeholder="Describe the issue briefly..." rows="3" style="width:100%;padding:7px 10px;border:1.5px solid var(--border);border-radius:7px;font-size:12px;font-family:inherit;outline:none;resize:none;box-sizing:border-box;"></textarea>
+            </div>
+            <div id="report-error" style="display:none;font-size:11px;color:#dc2626;margin-bottom:0.5rem;"></div>
+            <button onclick="submitReport()" style="width:100%;background:var(--navy);color:white;border:none;padding:8px;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;">Submit Report</button>
+          </div>
+          <div id="report-success" style="display:none;text-align:center;padding:0.75rem 0;">
+            <div style="font-size:1.5rem;margin-bottom:0.4rem;">✅</div>
+            <div style="font-size:13px;font-weight:600;color:var(--navy);">Report submitted</div>
+            <div style="font-size:12px;color:var(--muted);margin-top:3px;">We'll review and update shortly.</div>
+            <button onclick="resetReport()" style="margin-top:0.75rem;background:none;border:1px solid var(--border);padding:5px 14px;border-radius:6px;font-size:12px;cursor:pointer;font-family:inherit;color:var(--muted);">Report another</button>
+          </div>
+        </div>
+      </div>
+
     </div>
 
   </div><!-- /main-grid -->
@@ -465,6 +502,30 @@ window.submitPhoto=async function(){
   }catch(e){err.textContent='Error: '+e.message;err.style.display='block';btn.disabled=false;btn.textContent='Submit for Review';}
 };
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closePhotoGrid();closeLightbox();}});
+window.submitReport = async function() {
+  const type = document.getElementById('report-type').value;
+  const roll = document.getElementById('report-roll').value.trim();
+  const details = document.getElementById('report-details').value.trim();
+  const errEl = document.getElementById('report-error');
+  errEl.style.display = 'none';
+  if (!type) { errEl.textContent = 'Please select an issue type.'; errEl.style.display = 'block'; return; }
+  if (!roll) { errEl.textContent = 'Please enter the roll number.'; errEl.style.display = 'block'; return; }
+  try {
+    await addDoc(collection(db,'reports'), { session:'2006', type, roll, details, status:'pending', submittedAt:serverTimestamp() });
+    document.getElementById('report-form').style.display = 'none';
+    document.getElementById('report-success').style.display = 'block';
+  } catch(e) { errEl.textContent = 'Error submitting. Please try again.'; errEl.style.display = 'block'; }
+};
+
+window.resetReport = function() {
+  document.getElementById('report-type').value = '';
+  document.getElementById('report-roll').value = '';
+  document.getElementById('report-details').value = '';
+  document.getElementById('report-error').style.display = 'none';
+  document.getElementById('report-form').style.display = 'block';
+  document.getElementById('report-success').style.display = 'none';
+};
+
 loadRegistered();
 loadGallery();
 </script>
