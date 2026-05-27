@@ -1,0 +1,348 @@
+<!-- ============================================================
+  LOGIN GATE — paste this auth block into alumni/2006.html,
+  alumni/2009.html, alumni/2016.html
+  Replace SESSION_YEAR with: 2006 / 2009 / 2016
+  ============================================================ -->
+
+<!-- ── Auth CSS (add inside your <style> block) ──────────────────────────── -->
+<style>
+  /* Auth gate overlay */
+  .auth-gate {
+    background: #fff;
+    border: 1px solid #ddd5c8;
+    border-radius: 8px;
+    padding: 2.5rem;
+    max-width: 440px;
+    margin: 3rem auto;
+    text-align: center;
+    box-shadow: 0 2px 16px rgba(13,27,42,.07);
+    font-family: 'Source Sans 3', sans-serif;
+  }
+  .auth-gate-icon {
+    width: 60px; height: 60px;
+    background: #fdf8ee;
+    border: 2px solid #c9a84c;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 1.25rem;
+    font-size: 1.6rem;
+  }
+  .auth-gate h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    color: #0d1b2a;
+    margin-bottom: 0.5rem;
+  }
+  .auth-gate p { color: #5a6a7a; font-size: 0.92rem; line-height: 1.6; margin-bottom: 1.5rem; }
+
+  .auth-gate .btn-join {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    background: #0d1b2a; color: #fff;
+    padding: 12px 28px; border-radius: 5px;
+    font-size: 0.95rem; font-weight: 600;
+    text-decoration: none; border: none; cursor: pointer;
+    width: 100%; margin-bottom: 10px;
+    font-family: 'Source Sans 3', sans-serif;
+    transition: background .2s;
+  }
+  .auth-gate .btn-join:hover { background: #1a2e42; }
+  .auth-gate .btn-signin {
+    display: inline-flex; align-items: center; justify-content: center;
+    background: #f0ebe4; color: #0d1b2a;
+    padding: 11px 28px; border-radius: 5px;
+    font-size: 0.95rem; font-weight: 600;
+    text-decoration: none; border: none; cursor: pointer;
+    width: 100%; font-family: 'Source Sans 3', sans-serif;
+    transition: background .2s;
+  }
+  .auth-gate .btn-signin:hover { background: #e8dfd4; }
+
+  /* Pending gate */
+  .auth-gate .pending-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: #fffbea; border: 1px solid #f0d060;
+    border-radius: 4px; padding: 10px 14px;
+    font-size: 0.88rem; color: #7a5a00; margin-bottom: 1.25rem;
+    font-weight: 500;
+  }
+
+  /* Inline sign-in form inside gate */
+  .gate-signin-form { text-align: left; margin-top: 1rem; }
+  .gate-signin-form input {
+    width: 100%; border: 1.5px solid #ddd5c8; border-radius: 5px;
+    padding: 10px 14px; font-family: 'Source Sans 3', sans-serif;
+    font-size: 0.92rem; color: #0d1b2a; background: #fff;
+    outline: none; margin-bottom: 10px;
+    transition: border-color .2s;
+  }
+  .gate-signin-form input:focus { border-color: #c9a84c; }
+  .gate-alert {
+    background: #fdf2f2; border: 1px solid #f5c6c6; color: #7a1a1a;
+    border-radius: 4px; padding: 10px 14px;
+    font-size: 0.86rem; margin-bottom: 10px; display: none;
+  }
+  .gate-alert.show { display: block; }
+  .gate-alert-success {
+    background: #f0faf5; border: 1px solid #aadfc4; color: #0e4f2c;
+  }
+  .gate-forgot {
+    font-size: 0.82rem; color: #5a6a7a; text-align: right;
+    display: block; margin-bottom: 10px; cursor: pointer;
+    border: none; background: none; text-decoration: underline;
+  }
+  #gate-signin-toggle {
+    font-size: 0.85rem; color: #5a6a7a;
+    margin-top: 0.75rem; cursor: pointer;
+    background: none; border: none;
+    text-decoration: underline;
+  }
+</style>
+
+<!-- ── Auth gate HTML (place where content should appear gated) ────────────
+  The JS below will inject this dynamically based on auth state.
+  Just add this placeholder div in the right spot in your page:
+-->
+<div id="auth-gate-container"></div>
+
+<!-- ── Auth JS (add at bottom of body, before </body>) ─────────────────────
+  Change SESSION_YEAR to match the page: '2006', '2009', or '2016'
+-->
+<script type="module">
+  // ▼▼▼ CHANGE THIS to match your page ▼▼▼
+  const THIS_SESSION = '2006';
+  // ▲▲▲
+
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import {
+    getAuth, signInWithEmailAndPassword, signOut,
+    onAuthStateChanged, sendPasswordResetEmail
+  } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import {
+    getFirestore, doc, getDoc
+  } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  const app = initializeApp({
+    apiKey: "AIzaSyAgUl22Cln6QtY3-HIvI6lE8Zu7n9OblbI",
+    authDomain: "icet-alumni.firebaseapp.com",
+    projectId: "icet-alumni"
+  });
+  const auth = getAuth(app);
+  const db   = getFirestore(app);
+  const ADMIN_UID = "w2AtZbhUiyY5TxyvIecHzWqheaE2";
+
+  // ── Elements that should only show when approved ──────────────────────────
+  // Add class="members-only" to any section you want to gate
+  function showMembersContent(show) {
+    document.querySelectorAll('.members-only').forEach(el => {
+      el.style.display = show ? '' : 'none';
+    });
+  }
+
+  // ── Render gate UI ────────────────────────────────────────────────────────
+  function renderGate(type, data = {}) {
+    const container = document.getElementById('auth-gate-container');
+    showMembersContent(false);
+
+    if (type === 'hidden') {
+      container.innerHTML = '';
+      showMembersContent(true);
+      return;
+    }
+
+    if (type === 'not-signed-in') {
+      container.innerHTML = `
+        <div class="auth-gate">
+          <div class="auth-gate-icon">🎓</div>
+          <h3>Members-Only Area</h3>
+          <p>The alumni directory, notice board, and announcements are visible to registered members of Session ${THIS_SESSION} only.</p>
+          <a href="/alumni/register.html?session=${THIS_SESSION}" class="btn-join">Join the Network</a>
+          <button class="btn-signin" onclick="showSignInForm()">Already a member? Sign In</button>
+          <div class="gate-signin-form" id="gate-signin-form" style="display:none">
+            <div class="gate-alert" id="gate-alert"></div>
+            <input type="email" id="gate-email" placeholder="Email address" />
+            <input type="password" id="gate-pw" placeholder="Password" onkeydown="if(event.key==='Enter')doGateSignIn()" />
+            <button class="gate-forgot" onclick="doForgotPw()">Forgot password?</button>
+            <button class="btn-join" onclick="doGateSignIn()">Sign In</button>
+          </div>
+        </div>`;
+    }
+
+    if (type === 'pending') {
+      container.innerHTML = `
+        <div class="auth-gate">
+          <div class="auth-gate-icon">⏳</div>
+          <h3>Registration Under Review</h3>
+          <div class="pending-badge">⏳ Your profile is pending admin approval</div>
+          <p>Hi <strong>${data.name || 'there'}</strong> — your registration has been received. You'll get an email once it's approved.</p>
+          <button class="btn-signin" onclick="doSignOut()">Sign Out</button>
+        </div>`;
+    }
+
+    if (type === 'wrong-session') {
+      container.innerHTML = `
+        <div class="auth-gate">
+          <div class="auth-gate-icon">🔒</div>
+          <h3>Different Session</h3>
+          <p>Your registration is for <strong>Session ${data.session}</strong>. This page is for Session ${THIS_SESSION}.</p>
+          <a href="/alumni/${data.session}.html" class="btn-join">Go to My Session →</a>
+          <button class="btn-signin" onclick="doSignOut()" style="margin-top:8px">Sign Out</button>
+        </div>`;
+    }
+  }
+
+  // ── Auth state ────────────────────────────────────────────────────────────
+  onAuthStateChanged(auth, async user => {
+    if (!user) {
+      renderGate('not-signed-in');
+      updateNavBar(false);
+      return;
+    }
+
+    // Admin — full access
+    if (user.uid === ADMIN_UID) {
+      renderGate('hidden');
+      updateNavBar(true, { name: 'Admin', isAdmin: true });
+      return;
+    }
+
+    // Look up profile
+    const mapSnap = await getDoc(doc(db, 'alumni_uid_map', user.uid));
+    if (!mapSnap.exists()) {
+      renderGate('not-signed-in');
+      updateNavBar(false);
+      return;
+    }
+    const { roll } = mapSnap.data();
+    const profSnap = await getDoc(doc(db, 'alumni', roll));
+    if (!profSnap.exists()) { renderGate('not-signed-in'); return; }
+    const profile = profSnap.data();
+
+    if (profile.status === 'pending') {
+      renderGate('pending', profile);
+      updateNavBar(true, profile);
+      return;
+    }
+
+    // Approved — check session matches
+    if (profile.session !== THIS_SESSION) {
+      renderGate('wrong-session', profile);
+      updateNavBar(true, profile);
+      return;
+    }
+
+    // All good — show content
+    renderGate('hidden');
+    updateNavBar(true, profile);
+
+    // Dispatch event so rest of page can react
+    window.dispatchEvent(new CustomEvent('alumni-auth', { detail: { user, profile } }));
+  });
+
+  // ── Inline sign-in ────────────────────────────────────────────────────────
+  window.showSignInForm = function() {
+    const f = document.getElementById('gate-signin-form');
+    if (f) f.style.display = f.style.display === 'none' ? 'block' : 'none';
+  };
+
+  window.doGateSignIn = async function() {
+    const email = document.getElementById('gate-email').value.trim().toLowerCase();
+    const pw    = document.getElementById('gate-pw').value;
+    const alertEl = document.getElementById('gate-alert');
+    const show = (msg, ok) => {
+      alertEl.className = 'gate-alert show' + (ok ? ' gate-alert-success' : '');
+      alertEl.textContent = msg;
+    };
+    if (!email || !pw) return show('Please enter email and password.');
+    try {
+      const cred = await signInWithEmailAndPassword(auth, email, pw);
+      if (!cred.user.emailVerified) {
+        await signOut(auth);
+        show('Please verify your email first — check your inbox.');
+        return;
+      }
+      // onAuthStateChanged fires automatically
+    } catch(e) {
+      let msg = 'Sign in failed.';
+      if (e.code === 'auth/invalid-credential' || e.code === 'auth/wrong-password' || e.code === 'auth/user-not-found') {
+        msg = 'Email or password is incorrect.';
+      }
+      show(msg);
+    }
+  };
+
+  window.doForgotPw = async function() {
+    const email = document.getElementById('gate-email').value.trim();
+    const alertEl = document.getElementById('gate-alert');
+    if (!email) {
+      alertEl.className = 'gate-alert show';
+      alertEl.textContent = 'Enter your email above first.';
+      return;
+    }
+    try {
+      await sendPasswordResetEmail(auth, email);
+      alertEl.className = 'gate-alert show gate-alert-success';
+      alertEl.textContent = 'Password reset email sent!';
+    } catch(e) {
+      alertEl.className = 'gate-alert show';
+      alertEl.textContent = 'Could not send reset email.';
+    }
+  };
+
+  window.doSignOut = async function() {
+    await signOut(auth);
+    location.reload();
+  };
+
+  // ── Nav bar: show signed-in state ─────────────────────────────────────────
+  function updateNavBar(signedIn, profile = {}) {
+    const navAuthEl = document.getElementById('nav-auth-area');
+    if (!navAuthEl) return;
+    if (!signedIn) {
+      navAuthEl.innerHTML = `<a href="/alumni/register.html?session=${THIS_SESSION}" class="nav-auth-btn">Join / Sign In</a>`;
+      return;
+    }
+    navAuthEl.innerHTML = `
+      <span class="nav-user-name">${profile.isAdmin ? '⭐ Admin' : (profile.name || 'Member')}</span>
+      <button class="nav-signout-btn" onclick="doSignOut()">Sign Out</button>`;
+  }
+</script>
+
+<!-- ── Nav bar HTML addition ──────────────────────────────────────────────
+  Add this inside your session page's top navigation bar element,
+  wherever the old "Sign In" button was:
+-->
+<div id="nav-auth-area">
+  <!-- Filled by JS above -->
+</div>
+
+<!-- ── Nav bar CSS ────────────────────────────────────────────────────────── -->
+<style>
+  .nav-auth-btn {
+    background: #c9a84c;
+    color: #0d1b2a;
+    padding: 8px 18px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-decoration: none;
+    letter-spacing: 0.04em;
+  }
+  .nav-user-name {
+    color: #e8c97a;
+    font-size: 0.88rem;
+    font-weight: 500;
+    margin-right: 10px;
+  }
+  .nav-signout-btn {
+    background: none;
+    border: 1px solid rgba(201,168,76,.4);
+    color: #aab4be;
+    padding: 6px 14px;
+    border-radius: 4px;
+    font-size: 0.82rem;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all .2s;
+  }
+  .nav-signout-btn:hover { border-color: #c9a84c; color: #e8c97a; }
+</style>
