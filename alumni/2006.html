@@ -246,6 +246,15 @@ html,body{margin:0;padding:0;}body{font-family:"DM Sans",sans-serif;background:v
         </div>
       </div>
 
+      <!-- Tabs -->
+      <div style="display:flex;gap:4px;background:white;border:1px solid var(--border);border-radius:8px;padding:4px;margin-bottom:1.5rem;width:fit-content;">
+        <button id="tab-directory" onclick="switchTab('directory')" style="padding:7px 16px;border-radius:5px;font-size:13px;font-weight:500;cursor:pointer;border:none;background:var(--navy);color:white;font-family:inherit;">&#128101; Directory</button>
+        <button id="tab-noticeboard" onclick="switchTab('noticeboard')" style="padding:7px 16px;border-radius:5px;font-size:13px;font-weight:500;cursor:pointer;border:none;background:transparent;color:#6b7280;font-family:inherit;">&#128204; Notice Board</button>
+        <button id="tab-announcements" onclick="switchTab('announcements')" style="padding:7px 16px;border-radius:5px;font-size:13px;font-weight:500;cursor:pointer;border:none;background:transparent;color:#6b7280;font-family:inherit;">&#128226; Announcements</button>
+      </div>
+
+      <!-- DIRECTORY TAB -->
+      <div id="tab-content-directory">
       <!-- Filter -->
       <div class="filter-bar">
         <input type="text" class="search-box" id="search-box" placeholder="🔍 Search by name or roll number..." oninput="renderGrid()">
@@ -261,56 +270,6 @@ html,body{margin:0;padding:0;}body{font-family:"DM Sans",sans-serif;background:v
       </div>
 
       </div><!-- /tab-content-directory -->
-
-      <!-- NOTICE BOARD TAB -->
-      <div id="tab-content-noticeboard" style="display:none;">
-        <div style="display:grid;grid-template-columns:1fr 280px;gap:1.5rem;align-items:start;">
-          <div>
-            <div style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:1rem;">Recent Posts</div>
-            <div id="notices-container"><div style="text-align:center;padding:2rem;color:var(--muted);font-size:13px;">Sign in to view posts</div></div>
-          </div>
-          <div id="notice-post-form" style="display:none;background:white;border:1px solid var(--border);border-radius:12px;padding:1.25rem;position:sticky;top:80px;">
-            <div style="font-size:14px;font-weight:600;color:var(--navy);margin-bottom:4px;">📌 Post to Notice Board</div>
-            <div style="font-size:12px;color:var(--muted);margin-bottom:0.75rem;line-height:1.5;">Share a message. Appears after admin approval.</div>
-            <textarea id="notice-text" rows="4" placeholder="What's on your mind?" maxlength="500" style="width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:inherit;outline:none;resize:vertical;margin-bottom:6px;box-sizing:border-box;"></textarea>
-            <div style="display:flex;justify-content:space-between;align-items:center;">
-              <span style="font-size:11px;color:#9ca3af;" id="notice-char">0/500</span>
-              <button id="btn-post-notice" style="background:var(--gold);color:var(--navy);border:none;padding:8px 16px;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">Post →</button>
-            </div>
-          </div>
-          <div id="notice-signin-prompt" style="background:white;border:1px solid var(--border);border-radius:12px;padding:1.25rem;text-align:center;">
-            <div style="font-size:13px;color:var(--muted);margin-bottom:0.75rem;">Sign in to post on the notice board</div>
-            <button onclick="signInWithPopup(auth2,provider2).catch(()=>{})" style="background:var(--navy);color:white;border:none;padding:8px 18px;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">Sign In →</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- ANNOUNCEMENTS TAB -->
-      <div id="tab-content-announcements" style="display:none;">
-        <div style="display:grid;grid-template-columns:1fr 280px;gap:1.5rem;align-items:start;">
-          <div>
-            <div style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:1rem;">Recent Announcements</div>
-            <div id="announcements-container"><div style="text-align:center;padding:2rem;color:var(--muted);font-size:13px;">Sign in to view announcements</div></div>
-          </div>
-          <div id="ann-post-form" style="display:none;background:white;border:1px solid var(--border);border-radius:12px;padding:1.25rem;position:sticky;top:80px;">
-            <div style="font-size:14px;font-weight:600;color:var(--navy);margin-bottom:4px;">📢 Submit Announcement</div>
-            <div style="font-size:12px;color:var(--muted);margin-bottom:0.75rem;">New job, award, news? Appears after approval.</div>
-            <select id="ann-type" style="width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:inherit;outline:none;margin-bottom:6px;box-sizing:border-box;">
-              <option value="job">Job Change / New Position</option>
-              <option value="achievement">Achievement / Award</option>
-              <option value="news">News / Update</option>
-              <option value="other">Other</option>
-            </select>
-            <input type="text" id="ann-title" placeholder="Headline *" style="width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:inherit;outline:none;margin-bottom:6px;box-sizing:border-box;">
-            <textarea id="ann-body" rows="3" placeholder="Details (optional)" style="width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:inherit;outline:none;resize:vertical;margin-bottom:6px;box-sizing:border-box;"></textarea>
-            <button id="btn-post-ann" style="width:100%;padding:9px;background:var(--gold);color:var(--navy);border:none;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">Submit for Approval →</button>
-          </div>
-          <div id="ann-signin-prompt" style="background:white;border:1px solid var(--border);border-radius:12px;padding:1.25rem;text-align:center;">
-            <div style="font-size:13px;color:var(--muted);margin-bottom:0.75rem;">Sign in to post announcements</div>
-            <button onclick="signInWithPopup(auth2,provider2).catch(()=>{})" style="background:var(--navy);color:white;border:none;padding:8px 18px;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">Sign In →</button>
-          </div>
-        </div>
-      </div>
 
       <div class="cta-banner">
         <p style="color:rgba(255,255,255,0.8);font-size:14px;margin-bottom:0.75rem;">Are you from Session 2006–2010? Register to add your photo, job title, and location.</p>
@@ -396,6 +355,56 @@ html,body{margin:0;padding:0;}body{font-family:"DM Sans",sans-serif;background:v
   </div><!-- /main-grid -->
 </div><!-- /page-wrap -->
 
+<!-- NOTICE BOARD TAB -->
+      <div id="tab-content-noticeboard" style="display:none;">
+        <div style="display:grid;grid-template-columns:1fr 280px;gap:1.5rem;align-items:start;">
+          <div>
+            <div style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:1rem;">Recent Posts</div>
+            <div id="notices-container"><div style="text-align:center;padding:2rem;color:var(--muted);font-size:13px;">Sign in to view posts</div></div>
+          </div>
+          <div id="notice-post-form" style="display:none;background:white;border:1px solid var(--border);border-radius:12px;padding:1.25rem;position:sticky;top:80px;">
+            <div style="font-size:14px;font-weight:600;color:var(--navy);margin-bottom:4px;">📌 Post to Notice Board</div>
+            <div style="font-size:12px;color:var(--muted);margin-bottom:0.75rem;line-height:1.5;">Share a message. Appears after admin approval.</div>
+            <textarea id="notice-text" rows="4" placeholder="What's on your mind?" maxlength="500" style="width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:inherit;outline:none;resize:vertical;margin-bottom:6px;box-sizing:border-box;"></textarea>
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <span style="font-size:11px;color:#9ca3af;" id="notice-char">0/500</span>
+              <button id="btn-post-notice" style="background:var(--gold);color:var(--navy);border:none;padding:8px 16px;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">Post →</button>
+            </div>
+          </div>
+          <div id="notice-signin-prompt" style="background:white;border:1px solid var(--border);border-radius:12px;padding:1.25rem;text-align:center;">
+            <div style="font-size:13px;color:var(--muted);margin-bottom:0.75rem;">Sign in to post on the notice board</div>
+            <button onclick="signInWithPopup(auth2,provider2).catch(()=>{})" style="background:var(--navy);color:white;border:none;padding:8px 18px;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">Sign In →</button>
+          </div>
+        </div>
+      </div>
+
+<!-- ANNOUNCEMENTS TAB -->
+      <div id="tab-content-announcements" style="display:none;">
+        <div style="display:grid;grid-template-columns:1fr 280px;gap:1.5rem;align-items:start;">
+          <div>
+            <div style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:1rem;">Recent Announcements</div>
+            <div id="announcements-container"><div style="text-align:center;padding:2rem;color:var(--muted);font-size:13px;">Sign in to view announcements</div></div>
+          </div>
+          <div id="ann-post-form" style="display:none;background:white;border:1px solid var(--border);border-radius:12px;padding:1.25rem;position:sticky;top:80px;">
+            <div style="font-size:14px;font-weight:600;color:var(--navy);margin-bottom:4px;">📢 Submit Announcement</div>
+            <div style="font-size:12px;color:var(--muted);margin-bottom:0.75rem;">New job, award, news? Appears after approval.</div>
+            <select id="ann-type" style="width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:inherit;outline:none;margin-bottom:6px;box-sizing:border-box;">
+              <option value="job">Job Change / New Position</option>
+              <option value="achievement">Achievement / Award</option>
+              <option value="news">News / Update</option>
+              <option value="other">Other</option>
+            </select>
+            <input type="text" id="ann-title" placeholder="Headline *" style="width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:inherit;outline:none;margin-bottom:6px;box-sizing:border-box;">
+            <textarea id="ann-body" rows="3" placeholder="Details (optional)" style="width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:inherit;outline:none;resize:vertical;margin-bottom:6px;box-sizing:border-box;"></textarea>
+            <button id="btn-post-ann" style="width:100%;padding:9px;background:var(--gold);color:var(--navy);border:none;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">Submit for Approval →</button>
+          </div>
+          <div id="ann-signin-prompt" style="background:white;border:1px solid var(--border);border-radius:12px;padding:1.25rem;text-align:center;">
+            <div style="font-size:13px;color:var(--muted);margin-bottom:0.75rem;">Sign in to post announcements</div>
+            <button onclick="signInWithPopup(auth2,provider2).catch(()=>{})" style="background:var(--navy);color:white;border:none;padding:8px 18px;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">Sign In →</button>
+          </div>
+        </div>
+      </div>
+
 <footer class="footer">
   <p>&copy; 2026 Dr. Adeem Ghaffar Rana · <a href="/">ranaadeem.de</a></p>
 </footer>
@@ -410,6 +419,7 @@ const db = getFirestore(app);
 const auth = getAuth(app);
 const auth2 = auth; // same instance
 const provider2 = new GoogleAuthProvider();
+let currentUser2 = null, currentUserProfile2 = null;
 const ADMIN = 'w2AtZbhUiyY5TxyvIecHzWqheaE2';
 const CL_CLOUD = 'duetiv9rm', CL_PRESET = 'ranaadeem_blog';
 
