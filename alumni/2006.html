@@ -638,8 +638,8 @@ async function loadPendingRegistrations() {
         + '<div style="font-size:11px;color:var(--muted);margin-top:2px;">' + p.roll + ' · ' + p.session + '</div>'
         + '<div style="font-size:11px;color:var(--muted);">' + p.city + ', ' + p.country + '</div>'
         + '<div style="display:flex;gap:4px;margin-top:8px;">'
-        + '<button onclick="approveRegistration('' + p.id + '')" style="background:#059669;color:white;border:none;padding:4px 10px;border-radius:5px;font-size:11px;cursor:pointer;font-family:inherit;">✅ Approve</button>'
-        + '<button onclick="rejectRegistration('' + p.id + '')" style="background:#dc2626;color:white;border:none;padding:4px 10px;border-radius:5px;font-size:11px;cursor:pointer;font-family:inherit;">🗑 Reject</button>'
+        + '<button onclick="approveRegistration(\'' + p.id + '\')" style="background:#059669;color:white;border:none;padding:4px 10px;border-radius:5px;font-size:11px;cursor:pointer;font-family:inherit;">✅ Approve</button>'
+        + '<button onclick="rejectRegistration(\'' + p.id + '\')" style="background:#dc2626;color:white;border:none;padding:4px 10px;border-radius:5px;font-size:11px;cursor:pointer;font-family:inherit;">🗑 Reject</button>'
         + '</div>';
       grid.appendChild(w);
     });
