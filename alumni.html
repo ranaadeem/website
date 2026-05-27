@@ -1241,7 +1241,7 @@ async function submitProfile(){
   if(!session||!roll||!city||!country||!job||!company||!email){err.textContent='Please fill all required fields including city.';err.style.display='block';return;}
   if(!selectedPhotoBase64){err.textContent='Please upload a profile photo.';err.style.display='block';return;}
   // LinkedIn is optional — no validation needed
-  const db2=session.includes('Morning')?morningStudents:eveningStudents, name=db2[roll];
+const db2 = SESSION_ROLLS[session] || {}, name=db2[roll];
   if(!name){err.textContent='Invalid roll number.';err.style.display='block';return;}
   const btn=document.getElementById('setup-submit-btn'); btn.disabled=true; btn.textContent='Checking...';
 
@@ -1352,7 +1352,7 @@ function renderDirectory(){
     const showJob=userSess===a.session||a.jobVisibility==='public'||!a.jobVisibility;
     const card=document.createElement('div');card.className='alumni-card'+(a.deceased?' deceased':'');
     card.addEventListener('click',()=>viewProfile(a.uid));
-    const badge=document.createElement('span');badge.className='alumni-session-badge';badge.textContent=st+' · '+a.roll;card.appendChild(badge);
+    const badge=document.createElement('span');badge.className='alumni-session-badge';badge.textContent=a.roll;card.appendChild(badge);
     if(a.deceased){const db3=document.createElement('span');db3.className='deceased-badge';db3.textContent='In Memoriam';card.appendChild(db3);}
     const photoDiv=document.createElement('div');photoDiv.className='alumni-photo';
     if(a.photoBase64){const img=document.createElement('img');img.src=a.photoBase64;img.alt=a.name;photoDiv.appendChild(img);}else{photoDiv.textContent=init;}
