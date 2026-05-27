@@ -43,16 +43,16 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
 }
 
 /* BANNER */
-.alumni-banner-wrap{width:100%;line-height:0;border-bottom:3px solid var(--gold);}
-.alumni-banner-wrap img{width:100%;height:auto;display:block;}
-.session-title-bar{width:100%;background:var(--navy);padding:0.9rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.5rem;}
+.alumni-banner-wrap{width:100%;line-height:0;border-bottom:3px solid var(--gold);display:block;margin:0;padding:0;}
+.alumni-banner-wrap img{width:100%;height:auto;display:block;margin:0;padding:0;}
+.session-title-bar{width:100%;background:var(--navy);padding:0.9rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.5rem;margin:0;}
 .session-title-bar h1{font-family:"Playfair Display",serif;font-size:1.9rem;color:white;margin:0;}
 .session-title-bar h1 span{color:var(--gold);}
 .session-title-bar p{font-size:12px;color:rgba(255,255,255,0.6);margin:3px 0 0;}
 
 /* LAYOUT */
-.page-wrap{max-width:1100px;margin:0 auto;padding:2rem;}
-.main-grid{display:grid;grid-template-columns:1fr 280px;gap:2rem;align-items:start;margin-top:2rem;}
+.page-wrap{max-width:1100px;margin:0 auto;padding:2rem;width:100%;box-sizing:border-box;}
+.main-grid{display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:2rem;align-items:start;margin-top:2rem;}
 
 /* STATS */
 .stats-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:2rem;}
@@ -61,7 +61,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
 .stat-lbl{font-size:11px;color:rgba(255,255,255,0.7);margin-top:3px;}
 
 /* MEMBER GRID */
-.member-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;}
+.member-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0.75rem;min-width:0;}
 .member-card{background:white;border:1px solid var(--border);border-radius:12px;padding:1rem;text-align:center;transition:box-shadow 0.2s;}
 .member-card:hover{box-shadow:0 4px 16px rgba(0,0,0,0.08);}
 .member-card.unregistered{opacity:0.72;}
@@ -214,12 +214,6 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
 
 <!-- PAGE WRAP -->
 <div class="page-wrap">
-
-  <!-- Memory page banner -->
-  <div style="background:linear-gradient(135deg,var(--navy),#2048a8);border-radius:10px;padding:1rem 1.5rem;margin-bottom:1.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.75rem;">
-    <div><div style="font-weight:600;color:white;font-size:13px;">📸 Full Session Memory Page</div><div style="font-size:12px;color:rgba(255,255,255,0.7);margin-top:2px;">Group photo, batch memories and more.</div></div>
-    <a href="/session2006.html" style="background:var(--gold);color:var(--navy);padding:7px 16px;border-radius:7px;font-size:13px;font-weight:700;text-decoration:none;white-space:nowrap;">View Memory Page →</a>
-  </div>
 
   <!-- Stats -->
   <div class="stats-bar">
