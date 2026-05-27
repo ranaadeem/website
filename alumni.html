@@ -289,7 +289,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
     <!-- Global search bar -->
     <div style="max-width:600px;margin:1rem auto 0;position:relative;">
       <input id="global-search-input" type="text"
-        placeholder="&#128269; Search alumni by name across all sessions — e.g. Qasim, Ahmed..."
+        placeholder="&#128269; Search alumni by name, city or country — e.g. Adeem, Lahore, Germany..."
         style="width:100%;padding:10px 16px 10px 42px;border:1.5px solid var(--border);border-radius:10px;font-size:14px;font-family:inherit;outline:none;background:white;color:var(--text);box-shadow:0 2px 8px rgba(0,0,0,0.06);">
       <svg style="position:absolute;left:14px;top:50%;transform:translateY(-50%);pointer-events:none;" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
       <div id="global-search-hint" style="font-size:11px;color:var(--muted);text-align:center;margin-top:5px;">Type at least 3 characters to search across all registered alumni</div>
@@ -823,7 +823,7 @@ function showPage(page) {
     const gi = document.getElementById('global-search-input');
     if (gi) gi.value = '';
     const gh = document.getElementById('global-search-hint');
-    if (gh) gh.textContent = 'Type at least 3 characters to search across all registered alumni';
+    if (gh) gh.textContent = 'Type at least 3 characters to search by name, city or country';
   }
 }
 
@@ -1062,8 +1062,11 @@ document.getElementById('global-search-input').addEventListener('input', functio
     if (!currentUser) { hint.textContent = 'Please sign in to search alumni.'; return; }
     const all = await fetchAllAlumni();
     const results = all.filter(a =>
-      a.name && a.name.toLowerCase().includes(q)
-    );
+  (a.name && a.name.toLowerCase().includes(q)) ||
+  (a.city && a.city.toLowerCase().includes(q)) ||
+  (a.country && a.country.toLowerCase().includes(q)) ||
+  (a.employer && a.employer.toLowerCase().includes(q))
+);
 
     const container = document.getElementById('global-search-results');
     container.innerHTML = '';
