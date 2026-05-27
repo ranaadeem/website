@@ -201,12 +201,15 @@ html,body{margin:0;padding:0;}body{font-family:"DM Sans",sans-serif;background:v
 
 <!-- BANNER -->
 <div class="alumni-banner-wrap"></div>
-<div class="session-title-bar">
+<div class="session-title-bar" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.5rem;">
   <div>
     <h1>Session <span>2006–2010</span></h1>
     <p>Institute of Chemical Engineering &amp; Technology · University of the Punjab, Lahore</p>
   </div>
-  <a href="/session2006.html" style="background:var(--gold);color:var(--navy);padding:7px 16px;border-radius:7px;font-size:13px;font-weight:700;text-decoration:none;white-space:nowrap;flex-shrink:0;">📸 Memory Page →</a>
+  <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
+    <a href="/session2006.html" style="background:var(--gold);color:var(--navy);padding:7px 16px;border-radius:7px;font-size:13px;font-weight:700;text-decoration:none;white-space:nowrap;">📸 Memory Page →</a>
+    <div id="session-user-area"></div>
+  </div>
 </div>
 
 <!-- PAGE WRAP -->
@@ -255,6 +258,58 @@ html,body{margin:0;padding:0;}body{font-family:"DM Sans",sans-serif;background:v
       <!-- Members -->
       <div class="member-grid" id="member-grid">
         <div style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--muted);">Loading...</div>
+      </div>
+
+      </div><!-- /tab-content-directory -->
+
+      <!-- NOTICE BOARD TAB -->
+      <div id="tab-content-noticeboard" style="display:none;">
+        <div style="display:grid;grid-template-columns:1fr 280px;gap:1.5rem;align-items:start;">
+          <div>
+            <div style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:1rem;">Recent Posts</div>
+            <div id="notices-container"><div style="text-align:center;padding:2rem;color:var(--muted);font-size:13px;">Sign in to view posts</div></div>
+          </div>
+          <div id="notice-post-form" style="display:none;background:white;border:1px solid var(--border);border-radius:12px;padding:1.25rem;position:sticky;top:80px;">
+            <div style="font-size:14px;font-weight:600;color:var(--navy);margin-bottom:4px;">📌 Post to Notice Board</div>
+            <div style="font-size:12px;color:var(--muted);margin-bottom:0.75rem;line-height:1.5;">Share a message. Appears after admin approval.</div>
+            <textarea id="notice-text" rows="4" placeholder="What's on your mind?" maxlength="500" style="width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:inherit;outline:none;resize:vertical;margin-bottom:6px;box-sizing:border-box;"></textarea>
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <span style="font-size:11px;color:#9ca3af;" id="notice-char">0/500</span>
+              <button id="btn-post-notice" style="background:var(--gold);color:var(--navy);border:none;padding:8px 16px;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">Post →</button>
+            </div>
+          </div>
+          <div id="notice-signin-prompt" style="background:white;border:1px solid var(--border);border-radius:12px;padding:1.25rem;text-align:center;">
+            <div style="font-size:13px;color:var(--muted);margin-bottom:0.75rem;">Sign in to post on the notice board</div>
+            <button onclick="signInWithPopup(auth2,provider2).catch(()=>{})" style="background:var(--navy);color:white;border:none;padding:8px 18px;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">Sign In →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ANNOUNCEMENTS TAB -->
+      <div id="tab-content-announcements" style="display:none;">
+        <div style="display:grid;grid-template-columns:1fr 280px;gap:1.5rem;align-items:start;">
+          <div>
+            <div style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:1rem;">Recent Announcements</div>
+            <div id="announcements-container"><div style="text-align:center;padding:2rem;color:var(--muted);font-size:13px;">Sign in to view announcements</div></div>
+          </div>
+          <div id="ann-post-form" style="display:none;background:white;border:1px solid var(--border);border-radius:12px;padding:1.25rem;position:sticky;top:80px;">
+            <div style="font-size:14px;font-weight:600;color:var(--navy);margin-bottom:4px;">📢 Submit Announcement</div>
+            <div style="font-size:12px;color:var(--muted);margin-bottom:0.75rem;">New job, award, news? Appears after approval.</div>
+            <select id="ann-type" style="width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:inherit;outline:none;margin-bottom:6px;box-sizing:border-box;">
+              <option value="job">Job Change / New Position</option>
+              <option value="achievement">Achievement / Award</option>
+              <option value="news">News / Update</option>
+              <option value="other">Other</option>
+            </select>
+            <input type="text" id="ann-title" placeholder="Headline *" style="width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:inherit;outline:none;margin-bottom:6px;box-sizing:border-box;">
+            <textarea id="ann-body" rows="3" placeholder="Details (optional)" style="width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:inherit;outline:none;resize:vertical;margin-bottom:6px;box-sizing:border-box;"></textarea>
+            <button id="btn-post-ann" style="width:100%;padding:9px;background:var(--gold);color:var(--navy);border:none;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">Submit for Approval →</button>
+          </div>
+          <div id="ann-signin-prompt" style="background:white;border:1px solid var(--border);border-radius:12px;padding:1.25rem;text-align:center;">
+            <div style="font-size:13px;color:var(--muted);margin-bottom:0.75rem;">Sign in to post announcements</div>
+            <button onclick="signInWithPopup(auth2,provider2).catch(()=>{})" style="background:var(--navy);color:white;border:none;padding:8px 18px;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">Sign In →</button>
+          </div>
+        </div>
       </div>
 
       <div class="cta-banner">
@@ -348,7 +403,8 @@ html,body{margin:0;padding:0;}body{font-family:"DM Sans",sans-serif;background:v
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js';
 import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js';
-import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, query, where, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js';
+import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, signOut } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js';
+import { getFirestore, collection, addDoc, getDocs, doc, getDoc, updateDoc, deleteDoc, query, where, orderBy, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js';
 
 const app = initializeApp({apiKey:"AIzaSyAgUl22Cln6QtY3-HIvI6lE8Zu7n9OblbI",authDomain:"icet-alumni.firebaseapp.com",projectId:"icet-alumni",storageBucket:"icet-alumni.firebasestorage.app",messagingSenderId:"707390888790",appId:"1:707390888790:web:57e6be62e4d11e22c214f7"});
 const db = getFirestore(app);
@@ -366,7 +422,7 @@ onAuthStateChanged(auth, u=>{ currentUser=u; if(u) loadPending(); });
 
 async function loadRegistered(){
   try{
-    const snap=await getDocs(query(collection(db,'alumni'),where('session','in',['2006-Morning','2006-Evening'])));
+    const snap=await getDocs(query(collection(db,'alumni'),where('session','in',['2006-Morning','2006-Evening']),where('status','==','approved')));
     registeredMap={};const countries={},industries={};
     snap.forEach(d=>{const a=d.data();registeredMap[a.rollNumber]=a;if(a.country)countries[a.country]=(countries[a.country]||0)+1;if(a.industry)industries[a.industry]=(industries[a.industry]||0)+1;});
     const n=snap.size;
@@ -525,6 +581,203 @@ window.resetReport = function() {
   document.getElementById('report-form').style.display = 'block';
   document.getElementById('report-success').style.display = 'none';
 };
+
+// ── Auth state ──
+onAuthStateChanged(auth2, async user => {
+  currentUser2 = user;
+  buildSessionNav(user);
+  if (user) {
+    const snap = await getDoc(doc(db2,'alumni',user.uid));
+    currentUserProfile2 = snap.exists() ? snap.data() : null;
+    if (currentUserProfile2?.status === 'approved') {
+      loadNoticeBoard();
+      loadAnnouncements();
+      if (currentUserProfile2.uid === ADMIN_UID || currentUserProfile2.role === 'moderator') {
+        loadPendingRegistrations();
+      }
+    }
+  }
+});
+
+function buildSessionNav(user) {
+  const area = document.getElementById('session-user-area');
+  if (!area) return;
+  area.innerHTML = '';
+  if (!user) {
+    const b = document.createElement('button');
+    b.style.cssText = 'background:var(--gold);color:var(--navy);border:none;padding:6px 14px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;';
+    b.textContent = 'Sign In';
+    b.addEventListener('click', () => signInWithPopup(auth2, provider2).catch(()=>{}));
+    area.appendChild(b);
+  } else {
+    const wrap = document.createElement('div'); wrap.style.cssText = 'display:flex;align-items:center;gap:6px;';
+    if (user.photoURL) { const img=document.createElement('img'); img.src=user.photoURL; img.style.cssText='width:28px;height:28px;border-radius:50%;border:2px solid var(--gold);'; wrap.appendChild(img); }
+    const nm=document.createElement('span'); nm.style.cssText='font-size:12px;color:rgba(255,255,255,0.8);'; nm.textContent=(user.displayName||'').split(' ')[0]; wrap.appendChild(nm);
+    const ob=document.createElement('button'); ob.style.cssText='background:transparent;color:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.25);padding:4px 10px;border-radius:5px;font-size:11px;cursor:pointer;font-family:inherit;';
+    ob.textContent='Sign Out'; ob.addEventListener('click',()=>signOut(auth2)); wrap.appendChild(ob);
+    area.appendChild(wrap);
+  }
+}
+
+async function loadPendingRegistrations() {
+  try {
+    const snap = await getDocs(query(collection(db2,'alumni'),
+      where('session','in',['2006-Morning','2006-Evening']),
+      where('status','==','pending')
+    ));
+    if (snap.empty) return;
+    const bar = document.createElement('div');
+    bar.style.cssText = 'background:#fef9e7;border:1px solid #f59e0b;border-radius:10px;padding:1rem;margin-bottom:1rem;';
+    bar.innerHTML = '<div style="font-size:13px;font-weight:600;color:#92400e;margin-bottom:0.75rem;">⏳ Pending Registrations (' + snap.size + ')</div>';
+    const grid = document.createElement('div'); grid.style.cssText = 'display:flex;gap:0.5rem;flex-wrap:wrap;';
+    snap.forEach(d => {
+      const p = {id:d.id,...d.data()};
+      const w = document.createElement('div'); w.style.cssText = 'background:white;border:1px solid #f59e0b;border-radius:8px;padding:0.75rem;min-width:180px;';
+      w.innerHTML = '<div style="font-size:13px;font-weight:600;color:var(--navy);">' + p.name + '</div>'
+        + '<div style="font-size:11px;color:var(--muted);margin-top:2px;">' + p.roll + ' · ' + p.session + '</div>'
+        + '<div style="font-size:11px;color:var(--muted);">' + p.city + ', ' + p.country + '</div>'
+        + '<div style="display:flex;gap:4px;margin-top:8px;">'
+        + '<button onclick="approveRegistration('' + p.id + '')" style="background:#059669;color:white;border:none;padding:4px 10px;border-radius:5px;font-size:11px;cursor:pointer;font-family:inherit;">✅ Approve</button>'
+        + '<button onclick="rejectRegistration('' + p.id + '')" style="background:#dc2626;color:white;border:none;padding:4px 10px;border-radius:5px;font-size:11px;cursor:pointer;font-family:inherit;">🗑 Reject</button>'
+        + '</div>';
+      grid.appendChild(w);
+    });
+    bar.appendChild(grid);
+    const ms = document.querySelector('.main-content'); if (ms) ms.prepend(bar);
+  } catch(e) { console.error(e); }
+}
+
+window.approveRegistration = async function(uid) {
+  try {
+    await updateDoc(doc(db2,'alumni',uid), {status:'approved', approvedBy: currentUser2.uid, approvedAt: serverTimestamp()});
+    showToast('Registration approved ✓');
+    location.reload();
+  } catch(e) { alert('Error: '+e.message); }
+};
+window.rejectRegistration = async function(uid) {
+  if (!confirm('Reject and delete this registration?')) return;
+  try {
+    await deleteDoc(doc(db2,'alumni',uid));
+    showToast('Registration rejected.');
+    location.reload();
+  } catch(e) { alert('Error: '+e.message); }
+};
+
+async function loadNoticeBoard() {
+  const container = document.getElementById('notices-container');
+  if (!container) return;
+  try {
+    const snap = await getDocs(query(collection(db2,'notices'),
+      where('session','==','2006'), where('approved','==',true)
+    ));
+    const items = []; snap.forEach(d => items.push({id:d.id,...d.data()}));
+    items.sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
+    if (!items.length) { container.innerHTML = '<div style="text-align:center;padding:2rem;color:var(--muted);font-size:13px;">No posts yet. Be the first!</div>'; return; }
+    container.innerHTML = '';
+    items.forEach(n => {
+      const date = n.createdAt ? new Date(n.createdAt.seconds*1000).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}) : '';
+      const init = (n.authorName||'?').split(' ').map(w=>w[0]).slice(0,2).join('');
+      const card = document.createElement('div');
+      card.style.cssText = 'background:white;border:1px solid var(--border);border-radius:10px;padding:1rem;margin-bottom:0.75rem;';
+      card.innerHTML = '<div style="display:flex;align-items:center;gap:10px;margin-bottom:0.5rem;">'
+        + '<div style="width:36px;height:36px;border-radius:50%;background:var(--navy);border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--gold);overflow:hidden;flex-shrink:0;">'
+        + (n.authorPhoto ? '<img src="'+n.authorPhoto+'" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">' : init) + '</div>'
+        + '<div><div style="font-size:13px;font-weight:600;color:var(--navy);">'+n.authorName+'</div><div style="font-size:11px;color:#9ca3af;">'+date+'</div></div>'
+        + (currentUser2?.uid === ADMIN_UID ? '<button onclick="deleteNotice(\''+n.id+'\',this)" style="margin-left:auto;background:none;border:none;color:#dc2626;cursor:pointer;font-size:12px;">🗑</button>' : '')
+        + '</div>'
+        + '<div style="font-size:14px;color:var(--text);line-height:1.65;">'+n.text+'</div>';
+      container.appendChild(card);
+    });
+  } catch(e) { console.error(e); }
+}
+
+window.deleteNotice = async function(id, btn) {
+  if (!confirm('Delete this post?')) return;
+  try { await deleteDoc(doc(db2,'notices',id)); btn.closest('[style]').remove(); showToast('Deleted.'); } catch(e) { alert(e.message); }
+};
+
+async function loadAnnouncements() {
+  const container = document.getElementById('announcements-container');
+  if (!container) return;
+  try {
+    const snap = await getDocs(query(collection(db2,'announcements'),
+      where('session','==','2006'), where('approved','==',true)
+    ));
+    const items = []; snap.forEach(d => items.push({id:d.id,...d.data()}));
+    items.sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
+    if (!items.length) { container.innerHTML = '<div style="text-align:center;padding:2rem;color:var(--muted);font-size:13px;">No announcements yet.</div>'; return; }
+    const tl={job:'Job Update',achievement:'Achievement',news:'News',other:'Update'};
+    const tc={job:'background:#eff6ff;color:#1d4ed8',achievement:'background:#f0fdf4;color:#166534',news:'background:#fff7ed;color:#9a3412',other:'background:#f3f4f6;color:#6b7280'};
+    container.innerHTML = '';
+    items.forEach(a => {
+      const date = a.createdAt ? new Date(a.createdAt.seconds*1000).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}) : '';
+      const card = document.createElement('div');
+      card.style.cssText = 'background:white;border:1px solid var(--border);border-radius:10px;padding:1rem;margin-bottom:0.75rem;';
+      card.innerHTML = '<span style="font-size:11px;font-weight:600;padding:3px 10px;border-radius:12px;display:inline-block;margin-bottom:6px;'+(tc[a.type]||tc.other)+'">'+((tl[a.type]||'Update'))+'</span>'
+        + '<div style="font-size:14px;font-weight:600;color:var(--navy);margin-bottom:4px;">'+a.title+'</div>'
+        + (a.body ? '<div style="font-size:13px;color:#6b7280;line-height:1.6;">'+a.body+'</div>' : '')
+        + '<div style="font-size:11px;color:#9ca3af;margin-top:6px;">By '+a.authorName+' &middot; '+date+'</div>';
+      container.appendChild(card);
+    });
+  } catch(e) { console.error(e); }
+}
+
+window.switchTab = function(tab) {
+  ['directory','noticeboard','announcements'].forEach(t => {
+    const content = document.getElementById('tab-content-'+t);
+    const btn = document.getElementById('tab-'+t);
+    if (content) content.style.display = t===tab ? 'block' : 'none';
+    if (btn) { btn.style.background = t===tab ? 'var(--navy)' : 'transparent'; btn.style.color = t===tab ? 'white' : '#6b7280'; }
+  });
+  // Show/hide notice/ann forms based on auth
+  if (tab === 'noticeboard') {
+    const isAuth = currentUser2 && currentUserProfile2?.status === 'approved';
+    document.getElementById('notice-post-form').style.display = isAuth ? 'block' : 'none';
+    document.getElementById('notice-signin-prompt').style.display = isAuth ? 'none' : 'block';
+  }
+  if (tab === 'announcements') {
+    const isAuth = currentUser2 && currentUserProfile2?.status === 'approved';
+    document.getElementById('ann-post-form').style.display = isAuth ? 'block' : 'none';
+    document.getElementById('ann-signin-prompt').style.display = isAuth ? 'none' : 'block';
+  }
+};
+
+document.getElementById('notice-text')?.addEventListener('input', function(){
+  document.getElementById('notice-char').textContent = this.value.length+'/500';
+});
+
+document.getElementById('btn-post-notice')?.addEventListener('click', async () => {
+  if (!currentUser2 || !currentUserProfile2) return;
+  const text = document.getElementById('notice-text').value.trim();
+  if (!text) { showToast('Please write something.'); return; }
+  try {
+    await addDoc(collection(db2,'notices'), {
+      text, session:'2006', approved:false,
+      authorUid: currentUser2.uid, authorName: currentUserProfile2.name,
+      authorPhoto: currentUser2.photoURL||'', createdAt: serverTimestamp()
+    });
+    document.getElementById('notice-text').value = '';
+    document.getElementById('notice-char').textContent = '0/500';
+    showToast('Posted! Visible once approved.');
+  } catch(e) { showToast('Error: '+e.message); }
+});
+
+document.getElementById('btn-post-ann')?.addEventListener('click', async () => {
+  if (!currentUser2 || !currentUserProfile2) return;
+  const type = document.getElementById('ann-type').value;
+  const title = document.getElementById('ann-title').value.trim();
+  const body = document.getElementById('ann-body').value.trim();
+  if (!title) { showToast('Please add a headline.'); return; }
+  try {
+    await addDoc(collection(db2,'announcements'), {
+      type, title, body, session:'2006', approved:false,
+      authorUid: currentUser2.uid, authorName: currentUserProfile2.name, createdAt: serverTimestamp()
+    });
+    document.getElementById('ann-title').value = '';
+    document.getElementById('ann-body').value = '';
+    showToast('Submitted for approval!');
+  } catch(e) { showToast('Error: '+e.message); }
+});
 
 loadRegistered();
 loadGallery();
