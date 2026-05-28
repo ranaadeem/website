@@ -448,7 +448,7 @@
 <body>
 
   <nav class="topbar">
-    <a class="topbar-logo" href="/alumni.html">ICET Alumni Network</a>
+    <a class="topbar-logo" href="/alumni.html">ICET Chemical Engineering Alumni Network</a>
     <a class="topbar-link" href="/alumni.html">← Back to Portal</a>
   </nav>
 
@@ -458,7 +458,7 @@
     <div class="page-header">
       <div class="badge">Alumni Registration</div>
       <h1>Join the Network</h1>
-      <p>Connect with fellow ICET graduates. Your profile will be reviewed by the admin before activation.</p>
+      <p>Connect with fellow ICET Chemical Engineering graduates. Your profile will be reviewed by the admin before activation.</p>
     </div>
 
     <!-- ── REGISTRATION CARD ── -->
@@ -549,8 +549,19 @@
         </div>
 
         <div class="form-row">
-          <label>Employer / Organization</label>
+          <label>Current Position / Job Title <span class="req">*</span></label>
+          <input type="text" id="position" placeholder="e.g. Process Engineer at PARCO" />
+        </div>
+
+        <div class="form-row">
+          <label>Employer / Organization <span class="req">*</span></label>
           <input type="text" id="employer" placeholder="Where do you currently work?" />
+        </div>
+
+        <div class="form-row">
+          <label>Phone Number <span class="req">*</span></label>
+          <input type="tel" id="phone" placeholder="+92 300 1234567" />
+          <div style="font-size:0.78rem;color:var(--mid);margin-top:5px;">&#x1F512; Visible to you and admin only</div>
         </div>
 
         <div class="form-row">
@@ -834,7 +845,9 @@ let nameValidated  = false; // true once name passes check // hold Firebase user
       const shift    = document.getElementById('shift').value.trim();
       const city     = document.getElementById('city').value.trim();
       const country  = document.getElementById('country').value.trim();
-      const employer = document.getElementById('employer').value.trim();
+      const position = document.getElementById('position')?.value.trim() || '';
+      const employer  = document.getElementById('employer').value.trim();
+      const phone     = document.getElementById('phone')?.value.trim() || '';
       const linkedin = document.getElementById('linkedin').value.trim();
       const email    = document.getElementById('email').value.trim().toLowerCase();
       const pw       = document.getElementById('password').value;
@@ -856,6 +869,8 @@ let nameValidated  = false; // true once name passes check // hold Firebase user
         }
       }
       if (!window._photoUrl) return showErr('Please upload a profile photo.');
+      if (!position) return showErr('Please enter your current position / job title.');
+      if (!phone)    return showErr('Please enter your phone number.');
       if (!email)   return showErr('Please enter your email address.');
       if (pw.length < 8) return showErr('Password must be at least 8 characters.');
       if (pw !== pw2) return showErr('Passwords do not match.');
@@ -878,7 +893,8 @@ let nameValidated  = false; // true once name passes check // hold Firebase user
         // Save to Firestore — emailVerified:false until code confirmed
         await setDoc(doc(db, 'alumni', roll), {
           uid: cred.user.uid,
-          roll, name, session, shift, city, country, employer, linkedin,
+          roll, name, session, shift,
+          city, country, position, employer, phone, linkedin,
           email, photoUrl: window._photoUrl || '',
           status: 'pending', emailVerified: false,
           verifyCode, registeredAt: serverTimestamp()
@@ -965,6 +981,8 @@ let nameValidated  = false; // true once name passes check // hold Firebase user
               email:    currentNewUser.email,
               city:     document.getElementById('city').value.trim(),
               country:  document.getElementById('country').value.trim(),
+              position: document.getElementById('position')?.value.trim() || '',
+              employer: document.getElementById('employer').value.trim(),
               position: document.getElementById('position').value.trim(),
               employer: document.getElementById('employer').value.trim()
             }
