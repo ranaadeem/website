@@ -651,14 +651,23 @@ function renderGrid() {
     const ini = m.name.split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase();
     const el  = document.createElement('div');
     el.className = 'member-card' + (reg ? '' : ' unregistered');
-    el.innerHTML = `<div class="member-avatar">${reg?.photoBase64 ? `<img src="${reg.photoBase64}" alt="${m.name}">` : ini}</div>
+    const photoHtml = reg?.photoUrl
+      ? `<img src="${reg.photoUrl}" alt="${m.name}" style="width:100%;height:100%;object-fit:cover;">`
+      : (reg?.photoBase64
+        ? `<img src="${reg.photoBase64}" alt="${m.name}" style="width:100%;height:100%;object-fit:cover;">`
+        : ini);
+    el.innerHTML = `<div class="member-avatar">${photoHtml}</div>
       <div class="member-name">${reg?.name||m.name}</div>
       <div class="member-roll">${m.roll}</div>
       <span class="shift-badge shift-${m.shift.toLowerCase()}">${m.shift}</span>
-      ${reg?.jobTitle  ? `<div class="member-detail">💼 ${reg.jobTitle}</div>`  : ''}
+      ${reg?.position  ? `<div class="member-detail">💼 ${reg.position}</div>`  : (reg?.jobTitle ? `<div class="member-detail">💼 ${reg.jobTitle}</div>` : '')}
       ${reg?.employer  ? `<div class="member-detail">🏢 ${reg.employer}</div>`  : ''}
       ${reg?.country   ? `<div class="member-detail">📍 ${reg.city?reg.city+', ':''}${reg.country}</div>` : ''}
-      ${!reg ? '<div style="font-size:10px;color:var(--muted);margin-top:4px;">Not registered yet</div>' : ''}`;
+      ${reg ? `<div style="font-size:10px;color:var(--navy);margin-top:5px;font-weight:600;">View Profile →</div>` : '<div style="font-size:10px;color:var(--muted);margin-top:4px;">Not registered yet</div>'}`;
+    if (reg) {
+      el.style.cursor = 'pointer';
+      el.addEventListener('click', () => window.location.href = '/alumni/profile.html?roll=' + m.roll);
+    }
     grid.appendChild(el);
   });
 }

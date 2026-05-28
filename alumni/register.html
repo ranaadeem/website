@@ -404,6 +404,29 @@
     .session-context.show { display: block; }
     .session-context strong { color: var(--gold); }
 
+    /* Photo upload */
+    .photo-upload-wrap { text-align: center; margin-bottom: 1.5rem; }
+    .photo-circle {
+      width: 96px; height: 96px; border-radius: 50%;
+      border: 3px dashed var(--border);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 0.6rem; cursor: pointer; overflow: hidden;
+      background: #f8f4ec; transition: border-color .2s;
+      position: relative;
+    }
+    .photo-circle:hover { border-color: var(--gold); }
+    .photo-circle img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+    .photo-circle .photo-placeholder { font-size: 2rem; color: var(--border); }
+    .photo-circle .photo-overlay {
+      position: absolute; inset: 0; border-radius: 50%;
+      background: rgba(13,27,42,.45); display: none;
+      align-items: center; justify-content: center;
+      font-size: 0.7rem; color: white; font-weight: 600;
+    }
+    .photo-circle:hover .photo-overlay { display: flex; }
+    .photo-hint { font-size: 0.78rem; color: var(--mid); }
+    .photo-hint span.req { color: var(--gold); }
+
     @media (max-width: 540px) {
       .card { padding: 1.75rem 1.25rem; }
       .form-row-2 { grid-template-columns: 1fr; }
@@ -457,6 +480,18 @@
 
       <!-- ── STEP 1: Registration form ── -->
       <div class="form-section active" id="reg-form">
+
+        <!-- Photo upload -->
+        <div class="photo-upload-wrap">
+          <div class="photo-circle" id="photo-circle" onclick="document.getElementById('photo-file').click()" title="Click to upload photo">
+            <div class="photo-placeholder" id="photo-placeholder">📷</div>
+            <img id="photo-preview" style="display:none;width:100%;height:100%;object-fit:cover;border-radius:50%;" alt="Profile photo" />
+            <div class="photo-overlay">Change</div>
+          </div>
+          <input type="file" id="photo-file" accept="image/*" style="display:none" onchange="handlePhotoUpload(this)" />
+          <div class="photo-hint">Profile photo <span class="req">*</span> — click to upload (JPG/PNG, max 3MB)</div>
+          <div id="photo-error" style="display:none;font-size:0.78rem;color:var(--red);margin-top:4px;"></div>
+        </div>
 
         <!-- Roll Number with autocomplete -->
         <div class="form-row">
@@ -784,6 +819,7 @@ let verifyCode     = null;  // 6-digit code sent via Resend // hold Firebase use
       if (!roll)    return showErr('Please enter or select your roll number.');
       if (!name)    return showErr('Please enter your full name.');
       if (!session) return showErr('Session not detected — please select your roll number from the suggestions.');
+      if (!window._photoUrl) return showErr('Please upload a profile photo.');
       if (!email)   return showErr('Please enter your email address.');
       if (pw.length < 8) return showErr('Password must be at least 8 characters.');
       if (pw !== pw2) return showErr('Passwords do not match.');
@@ -807,7 +843,8 @@ let verifyCode     = null;  // 6-digit code sent via Resend // hold Firebase use
         await setDoc(doc(db, 'alumni', roll), {
           uid: cred.user.uid,
           roll, name, session, shift, city, country, employer, linkedin,
-          email, status: 'pending', emailVerified: false,
+          email, photoUrl: window._photoUrl || '',
+          status: 'pending', emailVerified: false,
           verifyCode, registeredAt: serverTimestamp()
         });
         await setDoc(doc(db, 'alumni_uid_map', cred.user.uid), { roll });
@@ -1031,6 +1068,75 @@ let verifyCode     = null;  // 6-digit code sent via Resend // hold Firebase use
       if (e.key === 'Enter') window.handleRegister();
     });
 
+
+
+// ── Photo upload ───────────────────────────────────────────────────────────
+window._photoUrl = null;
+
+window.handlePhotoUpload = function(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const errEl = document.getElementById('photo-error');
+  errEl.style.display = 'none';
+
+  if (file.size > 3 * 1024 * 1024) {
+    errEl.textContent = 'Photo must be under 3MB.';
+    errEl.style.display = 'block';
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = e => {
+    // Resize to max 600px before uploading
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      const MAX = 600;
+      let w = img.width, h = img.height;
+      if (w > MAX) { h = Math.round(h * MAX / w); w = MAX; }
+      if (h > MAX) { w = Math.round(w * MAX / h); h = MAX; }
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      const resized = canvas.toDataURL('image/jpeg', 0.85);
+
+      // Show circular preview
+      const preview = document.getElementById('photo-preview');
+      const placeholder = document.getElementById('photo-placeholder');
+      preview.src = resized;
+      preview.style.display = 'block';
+      placeholder.style.display = 'none';
+      document.getElementById('photo-circle').style.borderColor = 'var(--green)';
+      document.getElementById('photo-circle').style.borderStyle = 'solid';
+
+      // Upload to Cloudinary
+      uploadPhotoToCloudinary(resized);
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+};
+
+async function uploadPhotoToCloudinary(base64Data) {
+  const errEl = document.getElementById('photo-error');
+  try {
+    const blob = await (await fetch(base64Data)).blob();
+    const fd = new FormData();
+    fd.append('file', blob, 'avatar.jpg');
+    fd.append('upload_preset', 'ranaadeem_blog');
+    const res  = await fetch('https://api.cloudinary.com/v1_1/duetiv9rm/image/upload', { method: 'POST', body: fd });
+    const data = await res.json();
+    if (data.secure_url) {
+      window._photoUrl = data.secure_url;
+      document.getElementById('photo-error').style.display = 'none';
+    } else {
+      throw new Error('Upload failed');
+    }
+  } catch(e) {
+    errEl.textContent = 'Photo upload failed — please try again.';
+    errEl.style.display = 'block';
+    window._photoUrl = null;
+  }
+}
 
 // City autocomplete
 let cityTimer = null;
