@@ -160,6 +160,54 @@ export default async function handler(req, res) {
         </div>
       </div>`;
 
+  } else if (type === 'alumni-pending') {
+    // Sent to user after email verification — profile pending approval
+    subject = 'ICET Alumni — Registration received, pending approval';
+    html = `
+      <div style="font-family:'DM Sans',sans-serif;max-width:560px;margin:0 auto;padding:2rem;">
+        <div style="background:#1a3a8a;padding:1.5rem 2rem;border-radius:10px 10px 0 0;border-bottom:3px solid #c9a84c;">
+          <h1 style="font-family:Georgia,serif;color:#c9a84c;margin:0;font-size:1.3rem;">ICET Alumni Network</h1>
+          <p style="color:rgba(255,255,255,0.65);margin:4px 0 0;font-size:12px;">Institute of Chemical Engineering &amp; Technology · University of the Punjab, Lahore</p>
+        </div>
+        <div style="background:#faf8f4;padding:2rem;border-radius:0 0 10px 10px;border:1px solid #e5e7eb;border-top:none;">
+          <h2 style="font-family:Georgia,serif;color:#1a3a8a;margin-bottom:0.5rem;">Registration received ✓</h2>
+          <p style="color:#374151;line-height:1.7;">Hi ${toName || 'there'},</p>
+          <p style="color:#374151;line-height:1.7;">Your email has been verified and your ICET Alumni profile has been submitted for review. You'll receive another email once an admin approves your profile.</p>
+          <div style="background:white;border:1px solid #e5e7eb;border-left:3px solid #c9a84c;border-radius:0 8px 8px 0;padding:1rem 1.25rem;margin:1.5rem 0;">
+            <p style="color:#1a3a8a;font-weight:600;margin:0 0 4px;">Your details</p>
+            <p style="color:#6b7280;font-size:13px;margin:0;">Roll: ${data.roll || ''} &nbsp;·&nbsp; Session ${data.session || ''}</p>
+          </div>
+          <p style="color:#374151;line-height:1.7;font-size:13px;">This usually takes 24–48 hours. Thank you for your patience.</p>
+          <hr style="border:none;border-top:1px solid #e5e7eb;margin:1.5rem 0;">
+          <p style="color:#6b7280;font-size:12px;">ICET Chemical Engineering Alumni Network · <a href="https://ranaadeem.de/alumni.html" style="color:#1a3a8a;">ranaadeem.de/alumni.html</a></p>
+        </div>
+      </div>`;
+
+  } else if (type === 'alumni-registration-notify') {
+    // Admin notification — new registration pending approval
+    subject = `New alumni registration: ${data.name} (${data.roll})`;
+    html = `
+      <div style="font-family:'DM Sans',sans-serif;max-width:560px;margin:0 auto;padding:2rem;">
+        <div style="background:#1a3a8a;padding:1.5rem 2rem;border-radius:10px 10px 0 0;border-bottom:3px solid #c9a84c;">
+          <h1 style="font-family:Georgia,serif;color:#c9a84c;margin:0;font-size:1.3rem;">Admin Alert</h1>
+          <p style="color:rgba(255,255,255,0.65);margin:4px 0 0;font-size:12px;">ICET Alumni Network</p>
+        </div>
+        <div style="background:#faf8f4;padding:2rem;border-radius:0 0 10px 10px;border:1px solid #e5e7eb;border-top:none;">
+          <h2 style="font-family:Georgia,serif;color:#1a3a8a;margin-bottom:1rem;">New registration pending approval</h2>
+          <table style="width:100%;border-collapse:collapse;font-size:14px;margin:1rem 0;">
+            <tr><td style="padding:6px 0;color:#6b7280;width:110px;">Name</td><td style="padding:6px 0;color:#1a1a2e;font-weight:600;">${data.name}</td></tr>
+            <tr><td style="padding:6px 0;color:#6b7280;">Roll</td><td style="padding:6px 0;color:#1a1a2e;">${data.roll}</td></tr>
+            <tr><td style="padding:6px 0;color:#6b7280;">Session</td><td style="padding:6px 0;color:#1a1a2e;">Session ${data.session}</td></tr>
+            <tr><td style="padding:6px 0;color:#6b7280;">Email</td><td style="padding:6px 0;color:#1a1a2e;">${data.email}</td></tr>
+            <tr><td style="padding:6px 0;color:#6b7280;">Location</td><td style="padding:6px 0;color:#1a1a2e;">${data.city || ''}${data.city && data.country ? ', ' : ''}${data.country || ''}</td></tr>
+            <tr><td style="padding:6px 0;color:#6b7280;">Position</td><td style="padding:6px 0;color:#1a1a2e;">${data.position || ''} at ${data.employer || ''}</td></tr>
+          </table>
+          <a href="https://ranaadeem.de/alumni/admin.html" style="display:inline-block;background:#c9a84c;color:#1a3a8a;padding:10px 24px;border-radius:8px;text-decoration:none;font-weight:700;font-size:14px;">Review in Admin Panel →</a>
+          <hr style="border:none;border-top:1px solid #e5e7eb;margin:1.5rem 0;">
+          <p style="color:#6b7280;font-size:12px;">ICET Alumni Admin · <a href="https://ranaadeem.de/alumni/admin.html" style="color:#1a3a8a;">ranaadeem.de/alumni/admin.html</a></p>
+        </div>
+      </div>`;
+
   } else {
     return res.status(400).json({ error: 'Unknown email type' });
   }
@@ -185,6 +233,8 @@ export default async function handler(req, res) {
         from: `${fromName} <noreply@ranaadeem.de>`,
         to: type === 'new-submission'
           ? ['ranaadeem@hotmail.com']
+          : type === 'alumni-registration-notify'
+          ? ['ranaadeem@gmail.com']
           : type === 'comment'
           ? (data.authorEmail && data.authorEmail !== 'ranaadeem@hotmail.com'
               ? [data.authorEmail, 'ranaadeem@hotmail.com']

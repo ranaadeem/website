@@ -900,6 +900,41 @@ let verifyCode     = null;  // 6-digit code sent via Resend // hold Firebase use
           });
         }
         alertEl.className = 'alert';
+
+        // Email 1: tell user their profile is pending
+        fetch('/api/send-email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            type: 'alumni-pending',
+            to: currentNewUser.email,
+            toName: document.getElementById('full-name').value.trim(),
+            data: {
+              roll: document.getElementById('roll-input').value.trim(),
+              session: document.getElementById('session-year').value.trim()
+            }
+          })
+        }).catch(() => {});
+
+        // Email 2: notify admin of new pending registration
+        fetch('/api/send-email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            type: 'alumni-registration-notify',
+            data: {
+              name:     document.getElementById('full-name').value.trim(),
+              roll:     document.getElementById('roll-input').value.trim(),
+              session:  document.getElementById('session-year').value.trim(),
+              email:    currentNewUser.email,
+              city:     document.getElementById('city').value.trim(),
+              country:  document.getElementById('country').value.trim(),
+              position: document.getElementById('position').value.trim(),
+              employer: document.getElementById('employer').value.trim()
+            }
+          })
+        }).catch(() => {});
+
         setStep(3);
       } catch(e) {
         alertEl.className = 'alert alert-error show';
