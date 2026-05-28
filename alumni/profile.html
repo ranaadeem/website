@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Alumni Profile — ICET</title>
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy: #1a3a8a; --gold: #c9a84c; --cream: #faf8f4;
+      --text: #1a1a2e; --muted: #6b7280; --border: #e5e7eb;
+      --green: #059669; --red: #dc2626;
+    }
+    body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--text); min-height: 100vh; }
+
+    /* NAV */
+    #main-nav { position: sticky; top: 0; z-index: 100; background: var(--navy); border-bottom: 2px solid var(--gold); box-shadow: 0 2px 12px rgba(0,0,0,.25); }
+    .nav-inner { max-width: 900px; margin: 0 auto; padding: 0 1.5rem; display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-logo { font-family: 'Playfair Display', serif; color: var(--gold); font-size: 1.05rem; text-decoration: none; }
+    .nav-right { display: flex; align-items: center; gap: 1rem; }
+    .nav-back { color: rgba(255,255,255,.7); font-size: 13px; text-decoration: none; }
+    .nav-back:hover { color: var(--gold); }
+    .nav-signout { background: none; border: 1px solid rgba(255,255,255,.25); color: rgba(255,255,255,.6); padding: 5px 12px; border-radius: 5px; font-size: 12px; cursor: pointer; font-family: inherit; display: none; }
+    .nav-signout:hover { border-color: var(--gold); color: var(--gold); }
+
+    /* PAGE */
+    .page { max-width: 900px; margin: 0 auto; padding: 2rem 1.5rem 5rem; }
+
+    /* STATE BOXES */
+    .state-box { text-align: center; padding: 5rem 2rem; }
+    .state-box .s-icon { font-size: 3.5rem; margin-bottom: 1rem; }
+    .state-box h2 { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--navy); margin-bottom: 0.5rem; }
+    .state-box p { color: var(--muted); font-size: 0.9rem; line-height: 1.6; }
+    .state-box a { display: inline-block; margin-top: 1.25rem; background: var(--navy); color: var(--gold); padding: 9px 22px; border-radius: 8px; font-size: 13px; font-weight: 600; text-decoration: none; }
+
+    /* PROFILE LAYOUT */
+    .profile-grid { display: grid; grid-template-columns: 260px 1fr; gap: 1.75rem; align-items: start; }
+
+    /* ── LEFT PANEL ── */
+    .left-panel { background: white; border: 1px solid var(--border); border-radius: 14px; overflow: hidden; position: sticky; top: 76px; }
+    .left-hero { background: var(--navy); padding: 2rem 1.25rem 1.5rem; text-align: center; }
+    .avatar-circle { width: 84px; height: 84px; border-radius: 50%; border: 3px solid var(--gold); background: rgba(201,168,76,.15); display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; font-size: 1.8rem; color: var(--gold); margin: 0 auto 0.9rem; overflow: hidden; }
+    .avatar-circle img { width: 100%; height: 100%; object-fit: cover; }
+    .lh-name { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: white; margin-bottom: 3px; line-height: 1.3; }
+    .lh-roll { font-size: 11px; color: rgba(255,255,255,.55); }
+    .left-meta { padding: 1rem 1.25rem; }
+    .lm-row { display: flex; align-items: flex-start; gap: 9px; padding: 7px 0; border-bottom: 1px solid var(--border); }
+    .lm-row:last-child { border-bottom: none; }
+    .lm-icon { font-size: 13px; flex-shrink: 0; margin-top: 2px; }
+    .lm-lbl { font-size: 10px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; display: block; margin-bottom: 2px; }
+    .lm-val { font-size: 13px; color: var(--text); font-weight: 500; }
+    .lm-val a { color: var(--navy); text-decoration: none; font-size: 12px; border-bottom: 1px solid var(--gold); word-break: break-all; }
+    .lm-val a:hover { color: var(--gold); }
+    .shift-pill { display: inline-block; font-size: 10px; font-weight: 700; padding: 3px 9px; border-radius: 20px; }
+    .pill-morning { background: rgba(201,168,76,.15); color: #9a6e00; }
+    .pill-evening { background: rgba(26,58,138,.1); color: var(--navy); }
+
+    /* Visibility notice inside left panel */
+    .vis-notice { margin: 0 1rem 1rem; background: #f0f6ff; border: 1px solid #c3d8f5; border-radius: 7px; padding: 9px 11px; font-size: 11.5px; color: #1a3a6a; line-height: 1.55; }
+    .vis-notice strong { display: block; font-size: 10px; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 3px; color: #2a4a8a; }
+    .vis-notice a { color: var(--navy); font-weight: 600; }
+
+    /* ── RIGHT PANEL ── */
+    .section-card { background: white; border: 1px solid var(--border); border-radius: 12px; padding: 1.4rem; margin-bottom: 1.1rem; }
+    .sc-title { font-size: 10.5px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .1em; margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
+    .sc-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+    .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .info-item .il { font-size: 10.5px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 4px; }
+    .info-item .iv { font-size: 14px; color: var(--text); font-weight: 500; word-break: break-word; }
+    .info-item .iv a { color: var(--navy); text-decoration: none; border-bottom: 1px solid var(--gold); font-size: 13px; }
+    .info-item .iv a:hover { color: var(--gold); }
+    .info-item.span2 { grid-column: 1 / -1; }
+    .gated-msg { color: var(--muted); font-style: italic; font-size: 13px; }
+    .private-note { font-size: 11px; color: var(--muted); margin-top: 4px; }
+
+    /* Edit controls */
+    .edit-bar { margin-bottom: 1.1rem; }
+    .save-alert { border-radius: 6px; padding: 9px 13px; font-size: 13px; margin-bottom: 0.75rem; display: none; line-height: 1.5; }
+    .save-alert.show { display: block; }
+    .sa-ok  { background: #f0fdf4; border: 1px solid #86efac; color: #166534; }
+    .sa-err { background: #fef2f2; border: 1px solid #fca5a5; color: #7f1d1d; }
+    .btn-row { display: flex; gap: 8px; flex-wrap: wrap; }
+    .btn { padding: 9px 18px; border-radius: 7px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; border: none; transition: all .2s; display: inline-flex; align-items: center; gap: 6px; }
+    .btn-navy  { background: var(--navy); color: white; }
+    .btn-navy:hover { background: #142d6e; }
+    .btn-green { background: var(--green); color: white; display: none; }
+    .btn-green:hover { background: #047857; }
+    .btn-green:disabled { opacity: .5; cursor: not-allowed; }
+    .btn-ghost { background: white; color: var(--muted); border: 1.5px solid var(--border); display: none; }
+    .btn-ghost:hover { border-color: var(--navy); color: var(--navy); }
+
+    /* Edit inputs — hidden by default, shown in edit mode */
+    .edit-inp { width: 100%; border: 1.5px solid var(--border); border-radius: 5px; padding: 8px 11px; font-family: inherit; font-size: 14px; color: var(--text); background: white; outline: none; transition: border-color .2s; display: none; margin-top: 5px; }
+    .edit-inp:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201,168,76,.1); }
+    .editing .edit-inp { display: block; }
+    .editing .iv { display: none; }
+
+    /* Back crumb */
+    .crumb { display: inline-flex; align-items: center; gap: 6px; color: var(--navy); font-size: 13px; font-weight: 600; text-decoration: none; border-bottom: 1px solid var(--gold); margin-bottom: 1.5rem; }
+
+    @media (max-width: 720px) {
+      .profile-grid { grid-template-columns: 1fr; }
+      .left-panel { position: static; }
+      .info-grid { grid-template-columns: 1fr; }
+      .info-item.span2 { grid-column: 1; }
+    }
+  </style>
+</head>
+<body>
+
+<nav id="main-nav">
+  <div class="nav-inner">
+    <a class="nav-logo" href="/alumni.html">ICET Alumni Network</a>
+    <div class="nav-right">
+      <span id="nav-user" style="font-size:12px;color:rgba(255,255,255,.7);"></span>
+      <button class="nav-signout" id="nav-signout-btn" onclick="doSignOut()">Sign Out</button>
+      <a class="nav-back" id="nav-back" href="/alumni.html">← Session Page</a>
+    </div>
+  </div>
+</nav>
+
+<div class="page">
+
+  <!-- Loading -->
+  <div id="st-loading" class="state-box">
+    <div class="s-icon">⏳</div>
+    <h2>Loading profile…</h2>
+    <p>Please wait a moment.</p>
+  </div>
+
+  <!-- Not found / error -->
+  <div id="st-error" class="state-box" style="display:none">
+    <div class="s-icon">🔍</div>
+    <h2>Profile not found</h2>
+    <p id="st-error-msg">This profile doesn't exist or hasn't been approved yet.</p>
+    <a href="/alumni.html">← Back to Alumni Portal</a>
+  </div>
+
+  <!-- Profile -->
+  <div id="st-profile" style="display:none">
+
+    <a class="crumb" id="crumb-link" href="#">← Back to Session Page</a>
+
+    <div class="profile-grid">
+
+      <!-- ── LEFT PANEL ── -->
+      <div class="left-panel">
+        <div class="left-hero">
+          <div class="avatar-circle" id="p-avatar">?</div>
+          <div class="lh-name" id="p-name">—</div>
+          <div class="lh-roll" id="p-roll">—</div>
+        </div>
+        <div class="left-meta">
+          <div class="lm-row">
+            <span class="lm-icon">🎓</span>
+            <div><span class="lm-lbl">Session</span><span class="lm-val" id="lm-session">—</span></div>
+          </div>
+          <div class="lm-row">
+            <span class="lm-icon">🕐</span>
+            <div><span class="lm-lbl">Shift</span><span class="lm-val" id="lm-shift">—</span></div>
+          </div>
+          <div class="lm-row">
+            <span class="lm-icon">📍</span>
+            <div><span class="lm-lbl">Location</span><span class="lm-val" id="lm-location">—</span></div>
+          </div>
+          <div class="lm-row" id="lm-linkedin-row" style="display:none">
+            <span class="lm-icon">🔗</span>
+            <div><span class="lm-lbl">LinkedIn</span><span class="lm-val"><a id="lm-linkedin-a" href="#" target="_blank">View Profile →</a></span></div>
+          </div>
+          <div class="lm-row">
+            <span class="lm-icon">💼</span>
+            <div><span class="lm-lbl">Position</span><span class="lm-val" id="lm-position">—</span></div>
+          </div>
+        </div>
+        <div class="vis-notice" id="vis-notice" style="display:none"></div>
+      </div>
+
+      <!-- ── RIGHT PANEL ── -->
+      <div>
+
+        <!-- Edit controls — own profile only -->
+        <div class="edit-bar" id="edit-bar" style="display:none">
+          <div class="save-alert" id="save-alert"></div>
+          <div class="btn-row">
+            <button class="btn btn-navy" id="btn-edit" onclick="startEdit()">✏️ Edit Profile</button>
+            <button class="btn btn-green" id="btn-save" onclick="saveProfile()">💾 Save Changes</button>
+            <button class="btn btn-ghost" id="btn-cancel" onclick="cancelEdit()">Cancel</button>
+          </div>
+        </div>
+
+        <!-- Professional -->
+        <div class="section-card">
+          <div class="sc-title">Professional</div>
+          <div class="info-grid">
+            <div class="info-item span2" id="fi-position">
+              <div class="il">Current Position / Job Title</div>
+              <div class="iv" id="v-position">—</div>
+              <input class="edit-inp" id="i-position" type="text" placeholder="Current position / job title" />
+            </div>
+            <div class="info-item span2" id="fi-employer">
+              <div class="il">Employer / Organization</div>
+              <div class="iv" id="v-employer">—</div>
+              <input class="edit-inp" id="i-employer" type="text" placeholder="Company or institution" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Contact — same session + self + admin -->
+        <div class="section-card" id="sec-contact" style="display:none">
+          <div class="sc-title">Contact &amp; Location</div>
+          <div class="info-grid">
+            <div class="info-item" id="fi-city">
+              <div class="il">City</div>
+              <div class="iv" id="v-city">—</div>
+              <input class="edit-inp" id="i-city" type="text" placeholder="City" />
+            </div>
+            <div class="info-item" id="fi-country">
+              <div class="il">Country</div>
+              <div class="iv" id="v-country">—</div>
+              <input class="edit-inp" id="i-country" type="text" placeholder="Country" />
+            </div>
+            <div class="info-item span2" id="fi-linkedin">
+              <div class="il">LinkedIn Profile</div>
+              <div class="iv" id="v-linkedin">—</div>
+              <input class="edit-inp" id="i-linkedin" type="url" placeholder="https://linkedin.com/in/..." />
+            </div>
+          </div>
+        </div>
+
+        <!-- Private — self + admin only -->
+        <div class="section-card" id="sec-private" style="display:none">
+          <div class="sc-title">🔒 Private Contact</div>
+          <div class="info-grid">
+            <div class="info-item" id="fi-phone">
+              <div class="il">Phone Number</div>
+              <div class="iv" id="v-phone">—</div>
+              <input class="edit-inp" id="i-phone" type="tel" placeholder="+92 300 1234567" />
+              <div class="private-note">Only visible to you and admin</div>
+            </div>
+            <div class="info-item" id="fi-email">
+              <div class="il">Email Address</div>
+              <div class="iv" id="v-email">—</div>
+              <div class="private-note">Only visible to you and admin</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Network info — always visible -->
+        <div class="section-card">
+          <div class="sc-title">Network Info</div>
+          <div class="info-grid">
+            <div class="info-item">
+              <div class="il">Roll Number</div>
+              <div class="iv" id="v-roll">—</div>
+            </div>
+            <div class="info-item">
+              <div class="il">Shift</div>
+              <div class="iv" id="v-shift">—</div>
+            </div>
+            <div class="info-item">
+              <div class="il">Session</div>
+              <div class="iv" id="v-session">—</div>
+            </div>
+            <div class="info-item">
+              <div class="il">Member Since</div>
+              <div class="iv" id="v-since">—</div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /right -->
+    </div><!-- /profile-grid -->
+  </div><!-- /st-profile -->
+
+</div><!-- /page -->
+
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import { getFirestore, doc, getDoc, updateDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+const app  = initializeApp({ apiKey:"AIzaSyAgUl22Cln6QtY3-HIvI6lE8Zu7n9OblbI", authDomain:"icet-alumni.firebaseapp.com", projectId:"icet-alumni" });
+const auth = getAuth(app);
+const db   = getFirestore(app);
+const ADMIN = 'w2AtZbhUiyY5TxyvIecHzWqheaE2';
+
+// ── State ─────────────────────────────────────────────────────────────────
+const urlRoll     = new URLSearchParams(location.search).get('roll');
+let profileData   = null;   // Firestore data of the profile being viewed
+let viewerRole    = 'public'; // 'public' | 'other' | 'same' | 'self' | 'admin'
+let viewerSession = null;   // session of the logged-in user
+
+// ── Helpers ───────────────────────────────────────────────────────────────
+function tc(s) { // title case
+  return (s||'').split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ');
+}
+function showErr(msg) {
+  document.getElementById('st-loading').style.display = 'none';
+  document.getElementById('st-error').style.display   = 'block';
+  document.getElementById('st-error-msg').textContent = msg;
+}
+function set(id, val) { const el = document.getElementById(id); if (el) el.textContent = val || '—'; }
+
+// ── Render ────────────────────────────────────────────────────────────────
+function render(p) {
+  document.getElementById('st-loading').style.display  = 'none';
+  document.getElementById('st-profile').style.display  = 'block';
+  document.title = tc(p.name) + ' — ICET Alumni';
+
+  // Crumb + nav back
+  const sessionUrl = `/alumni/${p.session}.html`;
+  document.getElementById('crumb-link').href        = sessionUrl;
+  document.getElementById('crumb-link').textContent = `← Back to Session ${p.session}`;
+  document.getElementById('nav-back').href          = sessionUrl;
+  document.getElementById('nav-back').textContent   = `← Session ${p.session}`;
+
+  // Avatar initials
+  const av = document.getElementById('p-avatar');
+  av.textContent = p.name.split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase();
+
+  set('p-name',  tc(p.name));
+  set('p-roll',  p.roll);
+  set('lm-session', `Session ${p.session}–${parseInt(p.session)+4}`);
+  set('lm-shift',   p.shift);
+  set('lm-position', p.position || '—');
+
+  // Location in sidebar (city + country visible to all)
+  const loc = [p.city, p.country].filter(Boolean).join(', ');
+  set('lm-location', loc || '—');
+
+  // LinkedIn in sidebar (visible to all if set)
+  if (p.linkedin) {
+    document.getElementById('lm-linkedin-row').style.display = 'flex';
+    document.getElementById('lm-linkedin-a').href = p.linkedin;
+  }
+
+  // ── Visibility rules ──────────────────────────────────────────────────
+  //
+  //  Tier             | Name Roll Session Shift | City Country Position | Employer LinkedIn | Phone Email
+  //  Public           |  ✅  ✅     ✅      ✅   |   ✅    ✅       ✅    |    ❌      ❌      |   ❌    ❌
+  //  Other session    |  ✅  ✅     ✅      ✅   |   ✅    ✅       ✅    |    ❌      ✅      |   ❌    ❌
+  //  Same session     |  ✅  ✅     ✅      ✅   |   ✅    ✅       ✅    |    ✅      ✅      |   ❌    ❌
+  //  Self / Admin     |  ✅  ✅     ✅      ✅   |   ✅    ✅       ✅    |    ✅      ✅      |   ✅    ✅
+
+  const canSeeFull    = ['same','self','admin'].includes(viewerRole);
+  const canSeePrivate = ['self','admin'].includes(viewerRole);
+
+  // Professional section
+  set('v-position', p.position);
+  if (canSeeFull) {
+    set('v-employer', p.employer);
+    document.getElementById('i-employer').value = p.employer || '';
+  } else {
+    document.getElementById('v-employer').innerHTML = '<span class="gated-msg">Visible to same-session members</span>';
+  }
+  document.getElementById('i-position').value = p.position || '';
+
+  // Contact section (same session + self + admin)
+  if (canSeeFull) {
+    document.getElementById('sec-contact').style.display = 'block';
+    set('v-city',    p.city);
+    set('v-country', p.country);
+    document.getElementById('i-city').value    = p.city    || '';
+    document.getElementById('i-country').value = p.country || '';
+    if (p.linkedin) {
+      document.getElementById('v-linkedin').innerHTML = `<a href="${p.linkedin}" target="_blank">${p.linkedin}</a>`;
+    } else {
+      set('v-linkedin', 'Not provided');
+    }
+    document.getElementById('i-linkedin').value = p.linkedin || '';
+  }
+
+  // Private section (self + admin)
+  if (canSeePrivate) {
+    document.getElementById('sec-private').style.display = 'block';
+    set('v-phone', p.phone);
+    set('v-email', p.email);
+    document.getElementById('i-phone').value = p.phone || '';
+  }
+
+  // Network info (always)
+  set('v-roll',    p.roll);
+  set('v-shift',   p.shift);
+  set('v-session', `${p.session}–${parseInt(p.session)+4}`);
+  if (p.registeredAt?.seconds) {
+    set('v-since', new Date(p.registeredAt.seconds * 1000).toLocaleDateString('en-GB', { month:'short', year:'numeric' }));
+  }
+
+  // Edit bar (self + admin)
+  if (canSeePrivate) {
+    document.getElementById('edit-bar').style.display = 'block';
+    document.getElementById('btn-edit').style.display = 'inline-flex';
+  }
+
+  // Visibility notice (public & other session)
+  const vn = document.getElementById('vis-notice');
+  if (viewerRole === 'public') {
+    vn.style.display = 'block';
+    vn.innerHTML = `<strong>Public View</strong><a href="/alumni/register.html?session=${p.session}">Join the network</a> to see full contact &amp; employer details.`;
+  } else if (viewerRole === 'other') {
+    vn.style.display = 'block';
+    vn.innerHTML = `<strong>Limited View</strong>Full employer and contact details are visible to Session ${p.session} members only.`;
+  }
+}
+
+// ── Edit / Save ───────────────────────────────────────────────────────────
+window.startEdit = function() {
+  ['sec-contact','sec-private'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = 'block'; // ensure visible during edit
+  });
+  document.querySelectorAll('.section-card').forEach(c => c.classList.add('editing'));
+  document.getElementById('btn-edit').style.display   = 'none';
+  document.getElementById('btn-save').style.display   = 'inline-flex';
+  document.getElementById('btn-cancel').style.display = 'inline-flex';
+  document.getElementById('save-alert').className     = 'save-alert';
+};
+
+window.cancelEdit = function() {
+  document.querySelectorAll('.section-card').forEach(c => c.classList.remove('editing'));
+  document.getElementById('btn-edit').style.display   = 'inline-flex';
+  document.getElementById('btn-save').style.display   = 'none';
+  document.getElementById('btn-cancel').style.display = 'none';
+  // Restore inputs from cached profile data
+  document.getElementById('i-position').value = profileData.position || '';
+  document.getElementById('i-employer').value  = profileData.employer  || '';
+  document.getElementById('i-city').value      = profileData.city      || '';
+  document.getElementById('i-country').value   = profileData.country   || '';
+  document.getElementById('i-linkedin').value  = profileData.linkedin  || '';
+  document.getElementById('i-phone').value     = profileData.phone     || '';
+};
+
+window.saveProfile = async function() {
+  const saveBtn = document.getElementById('btn-save');
+  const alertEl = document.getElementById('save-alert');
+  const showErr = msg => { alertEl.className = 'save-alert sa-err show'; alertEl.textContent = msg; };
+
+  const updates = {
+    position: document.getElementById('i-position').value.trim(),
+    employer:  document.getElementById('i-employer').value.trim(),
+    city:      document.getElementById('i-city').value.trim(),
+    country:   document.getElementById('i-country').value.trim(),
+    linkedin:  document.getElementById('i-linkedin').value.trim(),
+    phone:     document.getElementById('i-phone').value.trim(),
+    updatedAt: serverTimestamp()
+  };
+
+  if (!updates.position) return showErr('Current position cannot be empty.');
+  if (!updates.employer)  return showErr('Employer cannot be empty.');
+  if (!updates.city)      return showErr('City cannot be empty.');
+  if (!updates.country)   return showErr('Country cannot be empty.');
+  if (!updates.phone)     return showErr('Phone number cannot be empty.');
+
+  saveBtn.disabled = true; saveBtn.textContent = 'Saving…';
+
+  try {
+    await updateDoc(doc(db, 'alumni', urlRoll), updates);
+
+    // Update local cache + display values
+    Object.assign(profileData, updates);
+    set('v-position', updates.position);
+    set('v-employer',  updates.employer);
+    set('v-city',      updates.city);
+    set('v-country',   updates.country);
+    set('v-phone',     updates.phone);
+    set('lm-position', updates.position);
+    set('lm-location', [updates.city, updates.country].filter(Boolean).join(', ') || '—');
+
+    if (updates.linkedin) {
+      document.getElementById('v-linkedin').innerHTML = `<a href="${updates.linkedin}" target="_blank">${updates.linkedin}</a>`;
+      document.getElementById('lm-linkedin-row').style.display = 'flex';
+      document.getElementById('lm-linkedin-a').href = updates.linkedin;
+    } else {
+      set('v-linkedin', 'Not provided');
+    }
+
+    alertEl.className = 'save-alert sa-ok show';
+    alertEl.textContent = '✓ Profile updated successfully!';
+    setTimeout(() => cancelEdit(), 1600);
+
+  } catch(e) {
+    showErr('Error saving changes: ' + e.message);
+  } finally {
+    saveBtn.disabled = false; saveBtn.textContent = '💾 Save Changes';
+  }
+};
+
+// ── Sign out ──────────────────────────────────────────────────────────────
+window.doSignOut = async function() {
+  await signOut(auth);
+  location.reload();
+};
+
+// ── Auth state → determine role → load profile ────────────────────────────
+if (!urlRoll) {
+  showErr('No roll number in URL. Use ?roll=CE-M6-101 format.');
+} else {
+  onAuthStateChanged(auth, async user => {
+    // Step 1: determine viewer role
+    if (!user) {
+      viewerRole = 'public';
+    } else if (user.uid === ADMIN) {
+      viewerRole = 'admin';
+      document.getElementById('nav-user').textContent = '⭐ Admin';
+      document.getElementById('nav-signout-btn').style.display = 'inline-block';
+    } else {
+      // Look up viewer's own registration
+      const mapSnap = await getDoc(doc(db, 'alumni_uid_map', user.uid));
+      if (mapSnap.exists()) {
+        const { roll: vRoll } = mapSnap.data();
+        const vSnap = await getDoc(doc(db, 'alumni', vRoll));
+        if (vSnap.exists() && vSnap.data().status === 'approved') {
+          const vData = vSnap.data();
+          viewerSession = vData.session;
+          document.getElementById('nav-user').textContent = vData.name?.split(' ')[0] || '';
+          document.getElementById('nav-signout-btn').style.display = 'inline-block';
+          // Role determined after profile loads (need profile session)
+          viewerRole = (vRoll === urlRoll) ? 'self' : 'pending-check';
+        }
+      }
+    }
+
+    // Step 2: load the profile
+    try {
+      const snap = await getDoc(doc(db, 'alumni', urlRoll));
+      if (!snap.exists()) { showErr('This profile does not exist.'); return; }
+      profileData = snap.data();
+      if (profileData.status !== 'approved' && viewerRole !== 'admin') {
+        showErr('This profile is pending admin approval and is not yet visible.'); return;
+      }
+
+      // Step 3: finalise role now we know profile session
+      if (viewerRole === 'pending-check') {
+        viewerRole = (viewerSession === profileData.session) ? 'same' : 'other';
+      }
+
+      render(profileData);
+
+    } catch(e) {
+      showErr('Error loading profile: ' + e.message);
+    }
+  });
+}
+</script>
+</body>
+</html>

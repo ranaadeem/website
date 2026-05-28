@@ -147,15 +147,24 @@
         <div><label>Shift</label><input type="text" id="shift" readonly placeholder="Auto-filled" style="background:#f8f4ec;color:var(--mid)" /></div>
       </div>
       <div class="form-row-2">
-        <div><label>City</label><input type="text" id="city" placeholder="Current city" /></div>
-        <div><label>Country</label><input type="text" id="country" placeholder="e.g. Pakistan" /></div>
+        <div><label>City <span class="req">*</span></label><input type="text" id="city" placeholder="Current city" /></div>
+        <div><label>Country <span class="req">*</span></label><input type="text" id="country" placeholder="e.g. Pakistan" /></div>
       </div>
       <div class="form-row">
-        <label>Employer / Organization</label>
-        <input type="text" id="employer" placeholder="Where do you currently work?" />
+        <label>Current Position / Job Title <span class="req">*</span></label>
+        <input type="text" id="position" placeholder="e.g. Process Engineer at PARCO" />
       </div>
       <div class="form-row">
-        <label>LinkedIn Profile URL</label>
+        <label>Employer / Organization <span class="req">*</span></label>
+        <input type="text" id="employer" placeholder="Company or institution name" />
+      </div>
+      <div class="form-row">
+        <label>Phone Number <span class="req">*</span></label>
+        <input type="tel" id="phone" placeholder="+92 300 1234567" />
+        <div class="field-hint">&#x1F512; Visible to you and admin only — not shared with other alumni</div>
+      </div>
+      <div class="form-row">
+        <label>LinkedIn Profile URL <span style="font-size:0.7rem;color:var(--mid);font-weight:400;text-transform:none;letter-spacing:0">(optional)</span></label>
         <input type="url" id="linkedin" placeholder="https://linkedin.com/in/..." />
       </div>
       <div class="divider">Account Credentials</div>
@@ -569,22 +578,30 @@ window.handleRegister = async function() {
   const roll=rollInput.value.trim(), name=document.getElementById('full-name').value.trim(),
     session=document.getElementById('session-year').value.trim(), shift=document.getElementById('shift').value.trim(),
     city=document.getElementById('city').value.trim(), country=document.getElementById('country').value.trim(),
-    employer=document.getElementById('employer').value.trim(), linkedin=document.getElementById('linkedin').value.trim(),
+    position=document.getElementById('position').value.trim(),
+    employer=document.getElementById('employer').value.trim(),
+    phone=document.getElementById('phone').value.trim(),
+    linkedin=document.getElementById('linkedin').value.trim(),
     email=document.getElementById('email').value.trim().toLowerCase(),
     pw=document.getElementById('password').value, pw2=document.getElementById('confirm-password').value;
   const ae=document.getElementById('reg-alert');
   const showErr=msg=>{ ae.className='alert alert-error show'; ae.textContent=msg; window.scrollTo({top:0,behavior:'smooth'}); };
   if(!roll) return showErr('Please enter or select your roll number.');
   if(!name) return showErr('Please enter your full name.');
-  if(!session) return showErr('Session not detected \u2014 please select your roll number from the dropdown.');
+  if(!session) return showErr('Session not detected — please select your roll number from the dropdown.');
   // Name gate
   if(selectedRoll && selectedRoll.name) {
     if(!nameValidated) {
       const r=validateName(name,selectedRoll.name); renderFeedback(r,name);
-      if(!r.pass) return showErr("Name doesn\u2019t match our records for this roll number. Please check and try again.");
+      if(!r.pass) return showErr("Name doesn't match our records for this roll number. Please check and try again.");
     }
   }
-  if(!email) return showErr('Please enter your email address.');
+  if(!city)     return showErr('Please enter your current city.');
+  if(!country)  return showErr('Please enter your country.');
+  if(!position) return showErr('Please enter your current position or job title.');
+  if(!employer) return showErr('Please enter your employer or organization.');
+  if(!phone)    return showErr('Please enter your phone number.');
+  if(!email)    return showErr('Please enter your email address.');
   if(pw.length<8) return showErr('Password must be at least 8 characters.');
   if(pw!==pw2) return showErr('Passwords do not match.');
   const btn=document.getElementById('register-btn');
@@ -595,7 +612,7 @@ window.handleRegister = async function() {
     const cred=await createUserWithEmailAndPassword(auth,email,pw);
     currentNewUser=cred.user;
     await sendEmailVerification(cred.user);
-    await setDoc(doc(db,'alumni',roll),{uid:cred.user.uid,roll,name,session,shift,city,country,employer,linkedin,email,status:'pending',registeredAt:serverTimestamp()});
+    await setDoc(doc(db,'alumni',roll),{uid:cred.user.uid,roll,name,session,shift,city,country,position,employer,phone,linkedin,email,status:'pending',registeredAt:serverTimestamp()});
     await setDoc(doc(db,'alumni_uid_map',cred.user.uid),{roll});
     document.getElementById('sent-email-display').textContent=email;
     setStep(2);
