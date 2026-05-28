@@ -404,6 +404,16 @@
     .session-context.show { display: block; }
     .session-context strong { color: var(--gold); }
 
+    /* Name validation feedback */
+    .name-feedback { margin-top: 7px; font-size: 0.82rem; display: none; align-items: flex-start; gap: 8px; padding: 10px 13px; border-radius: 5px; line-height: 1.5; }
+    .name-feedback.show { display: flex; }
+    .name-feedback.nf-ok   { background: #f0faf5; border: 1px solid #aadfc4; color: #0e4f2c; }
+    .name-feedback.nf-err  { background: #fdf2f2; border: 1px solid #f5c6c6; color: #7a1a1a; }
+    .name-feedback.nf-warn { background: #fffbea; border: 1px solid #f0d060; color: #7a5a00; }
+    .name-fb-icon { font-size: 1rem; flex-shrink: 0; line-height: 1.5; }
+    input.field-error { border-color: var(--red) !important; box-shadow: none !important; }
+    input.field-ok    { border-color: var(--green) !important; box-shadow: none !important; }
+
     /* Photo upload */
     .photo-upload-wrap { text-align: center; margin-bottom: 1.5rem; }
     .photo-circle {
@@ -507,6 +517,10 @@
         <div class="form-row">
           <label>Full Name <span class="req">*</span></label>
           <input type="text" id="full-name" placeholder="As on your degree" />
+          <div class="name-feedback" id="name-feedback">
+            <span class="name-fb-icon" id="nf-icon"></span>
+            <span id="nf-text"></span>
+          </div>
         </div>
 
         <!-- Session auto-populated but editable if needed -->
@@ -678,7 +692,9 @@
 
     // ── Expose functions to window for onclick handlers ──────────────────────
     let currentNewUser = null;
-let verifyCode     = null;  // 6-digit code sent via Resend // hold Firebase user after creation
+let verifyCode     = null;  // 6-digit code sent via Resend
+let selectedRoll   = null;  // ROLLS entry chosen from autocomplete
+let nameValidated  = false; // true once name passes check // hold Firebase user after creation
 
     // ── Roll number database ─────────────────────────────────────────────────
     // Format: { roll, name, session, shift }
@@ -754,7 +770,10 @@ let verifyCode     = null;  // 6-digit code sent via Resend // hold Firebase use
     rollInput.addEventListener('input', () => {
       const val = rollInput.value.trim().toUpperCase();
       rollSugg.innerHTML = '';
-      if (val.length < 2) { rollSugg.classList.remove('open'); return; }
+      selectedRoll = null; nameValidated = false;
+  document.getElementById('name-feedback').className = 'name-feedback';
+  document.getElementById('full-name').classList.remove('field-error','field-ok');
+  if (val.length < 2) { rollSugg.classList.remove('open'); return; }
 
       const matches = ROLLS.filter(r => r.roll.toUpperCase().includes(val)).slice(0, 12);
       if (!matches.length) { rollSugg.classList.remove('open'); return; }
@@ -765,10 +784,19 @@ let verifyCode     = null;  // 6-digit code sent via Resend // hold Firebase use
         div.innerHTML = `<strong>${r.roll}</strong> — ${r.dept} · ${r.shift} · Session ${r.session}`;
         div.addEventListener('click', () => {
           rollInput.value = r.roll;
+          selectedRoll = r;
           document.getElementById('session-year').value = r.session;
           document.getElementById('shift').value = r.shift;
           rollSugg.classList.remove('open');
+          // Reset + re-validate name when roll changes
+          document.getElementById('name-feedback').className = 'name-feedback';
+          document.getElementById('full-name').classList.remove('field-error','field-ok');
+          nameValidated = false;
+          const _tn = document.getElementById('full-name').value.trim();
+          if (_tn) renderFeedback(validateName(_tn, r.name), _tn);
+          else document.getElementById('full-name').focus();
           // Show autofill badge
+          
           document.getElementById('autofill-info').innerHTML =
             `<div class="autofill-badge"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Session ${r.session} · ${r.shift} · ${r.dept}</div>`;
         });
@@ -819,6 +847,14 @@ let verifyCode     = null;  // 6-digit code sent via Resend // hold Firebase use
       if (!roll)    return showErr('Please enter or select your roll number.');
       if (!name)    return showErr('Please enter your full name.');
       if (!session) return showErr('Session not detected — please select your roll number from the suggestions.');
+      // Name validation gate (2006 only — skipped for 2009/2016 where names are empty)
+      if (selectedRoll && selectedRoll.name) {
+        if (!nameValidated) {
+          const _r = validateName(name, selectedRoll.name);
+          renderFeedback(_r, name);
+          if (!_r.pass) return showErr("Name doesn't match our records for this roll number. Please check and try again.");
+        }
+      }
       if (!window._photoUrl) return showErr('Please upload a profile photo.');
       if (!email)   return showErr('Please enter your email address.');
       if (pw.length < 8) return showErr('Password must be at least 8 characters.');
@@ -1172,6 +1208,79 @@ async function uploadPhotoToCloudinary(base64Data) {
     window._photoUrl = null;
   }
 }
+
+
+// -- Name validation against roll number ----------------------------------
+function norm(s) {
+  return s.toUpperCase().replace(/[^A-Z\s]/g, ' ').replace(/\s+/g, ' ').trim();
+}
+
+function validateName(typed, officialRaw) {
+  if (!officialRaw) return { pass: true, skip: true };  // 2009/2016 no names
+  const t = norm(typed), o = norm(officialRaw);
+  if (!t) return { pass: false, reason: 'empty' };
+  const tW = t.split(' ').filter(Boolean);
+  const oW = o.split(' ').filter(Boolean);
+  if (tW.length < 2) return { pass: false, reason: 'short', msg: 'Please enter at least your first and last name.' };
+  const unmatched = tW.filter(w => !oW.includes(w));
+  if (unmatched.length === 0) {
+    const official = officialRaw.trim().split(' ')
+      .map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ');
+    return { pass: true, official };
+  }
+  return { pass: false, reason: 'mismatch', unmatched };
+}
+
+function renderFeedback(result, typed) {
+  const fb  = document.getElementById('name-feedback');
+  const ico = document.getElementById('nf-icon');
+  const txt = document.getElementById('nf-text');
+  const inp = document.getElementById('full-name');
+  fb.className = 'name-feedback';
+  inp.classList.remove('field-error', 'field-ok');
+  nameValidated = false;
+  if (result.skip) { nameValidated = true; return; }
+  if (!typed.trim()) return;
+  if (result.pass) {
+    fb.className = 'name-feedback nf-ok show';
+    ico.textContent = '\u2713';
+    txt.textContent = 'Name matched \u2014 welcome!';
+    inp.classList.add('field-ok');
+    inp.value = result.official;
+    nameValidated = true;
+  } else if (result.reason === 'short') {
+    fb.className = 'name-feedback nf-warn show';
+    ico.textContent = '\u26A0';
+    txt.textContent = result.msg;
+  } else {
+    fb.className = 'name-feedback nf-err show';
+    ico.textContent = '\u2715';
+    txt.innerHTML = "Name doesn't match our records for this roll number.<br>"
+      + '<span style="font-size:0.78rem;opacity:0.85">Try your full name as on your degree, or select a different roll number.</span>';
+    inp.classList.add('field-error');
+  }
+}
+
+// Name field: validate on blur
+document.getElementById('full-name').addEventListener('blur', () => {
+  if (!selectedRoll) return;
+  const t = document.getElementById('full-name').value.trim();
+  if (t) renderFeedback(validateName(t, selectedRoll.name), t);
+});
+
+// Debounced live validation (800ms)
+let nameTimer;
+document.getElementById('full-name').addEventListener('input', () => {
+  clearTimeout(nameTimer);
+  document.getElementById('name-feedback').className = 'name-feedback';
+  document.getElementById('full-name').classList.remove('field-error', 'field-ok');
+  nameValidated = false;
+  nameTimer = setTimeout(() => {
+    if (!selectedRoll) return;
+    const t = document.getElementById('full-name').value.trim();
+    if (t.length >= 4) renderFeedback(validateName(t, selectedRoll.name), t);
+  }, 800);
+});
 
 // City autocomplete
 let cityTimer = null;
