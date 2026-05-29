@@ -1,581 +1,999 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin Panel – ICET Alumni</title>
-<link rel="icon" type="image/png" href="/favicon.png">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-<style>
-:root{--navy:#1a3a8a;--gold:#c9a84c;--gold-light:#e8d5a3;--cream:#faf8f4;--white:#fff;--text:#1a1a2e;--muted:#6b7280;--border:#e5e7eb;--green:#059669;--red:#dc2626;}
-*{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);min-height:100vh;}
-/* NAV */
-nav{background:var(--navy);border-bottom:2px solid var(--gold);padding:0 1.5rem;height:64px;display:flex;align-items:center;justify-content:space-between;}
-.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
-.nav-logo-agr{font-family:Georgia,serif;font-size:22px;font-weight:700;color:var(--gold);letter-spacing:2px;border:2px solid var(--gold);padding:2px 8px;border-radius:4px;}
-.nav-logo-name{font-size:13px;color:rgba(255,255,255,0.75);}
-.nav-right{display:flex;gap:10px;align-items:center;}
-.nav-btn{font-size:13px;font-weight:500;padding:7px 14px;border-radius:6px;cursor:pointer;border:none;font-family:inherit;transition:all 0.2s;}
-.btn-gold{background:var(--gold);color:var(--navy);}
-.btn-outline{background:transparent;color:rgba(255,255,255,0.75);border:1px solid rgba(255,255,255,0.3);}
-.btn-outline:hover{border-color:var(--gold);color:var(--gold);}
-/* LAYOUT */
-.admin-wrap{max-width:1100px;margin:0 auto;padding:2rem;}
-.admin-header{margin-bottom:2rem;}
-.admin-header h1{font-family:'Playfair Display',serif;font-size:2rem;color:var(--navy);}
-.admin-header p{font-size:14px;color:var(--muted);margin-top:4px;}
-/* STATS ROW */
-.admin-stats{display:grid;grid-template-columns:repeat(5,1fr);gap:1rem;margin-bottom:2rem;}
-.admin-stat{background:white;border:1px solid var(--border);border-radius:10px;padding:1.25rem;text-align:center;}
-.admin-stat .num{font-family:'Playfair Display',serif;font-size:28px;font-weight:700;color:var(--navy);}
-.admin-stat .lbl{font-size:12px;color:var(--muted);margin-top:2px;}
-/* TABS */
-.admin-tabs{display:flex;gap:4px;background:white;border:1px solid var(--border);border-radius:8px;padding:4px;margin-bottom:1.5rem;width:fit-content;}
-.admin-tab{padding:8px 18px;border-radius:5px;font-size:13px;font-weight:500;cursor:pointer;border:none;background:transparent;color:var(--muted);font-family:inherit;transition:all 0.2s;}
-.admin-tab.active{background:var(--navy);color:white;}
-/* TABLES */
-.admin-section{display:none;}
-.admin-section.active{display:block;}
-.section-controls{display:flex;gap:1rem;align-items:center;margin-bottom:1rem;flex-wrap:wrap;}
-.search-input{padding:8px 12px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:inherit;outline:none;width:240px;}
-.search-input:focus{border-color:var(--gold);}
-.export-btn{background:var(--green);color:white;padding:8px 16px;border:none;border-radius:6px;font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;}
-.add-btn{background:var(--navy);color:var(--gold);padding:8px 16px;border:none;border-radius:6px;font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;}
-table{width:100%;border-collapse:collapse;background:white;border-radius:10px;overflow:hidden;border:1px solid var(--border);}
-th{background:var(--navy);color:white;text-align:left;padding:10px 14px;font-size:12px;font-weight:500;text-transform:uppercase;letter-spacing:0.06em;}
-td{padding:10px 14px;font-size:13px;border-bottom:1px solid var(--border);vertical-align:middle;}
-tr:last-child td{border-bottom:none;}
-tr:hover td{background:#f9f8f6;}
-.td-photo{width:40px;height:40px;border-radius:50%;background:var(--navy);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--gold);overflow:hidden;}
-.td-photo img{width:100%;height:100%;object-fit:cover;}
-.badge{font-size:10px;padding:2px 8px;border-radius:10px;font-weight:600;}
-.badge-morning{background:#eff6ff;color:#1d4ed8;}
-.badge-evening{background:#f0fdf4;color:#166534;}
-.badge-pending{background:#fff7ed;color:#9a3412;}
-.badge-approved{background:#f0fdf4;color:#166534;}
-.badge-deceased{background:#f3f4f6;color:var(--muted);}
-.action-btn{font-size:12px;padding:4px 10px;border-radius:4px;cursor:pointer;border:none;font-family:inherit;transition:all 0.2s;margin-right:4px;}
-.btn-approve{background:var(--green);color:white;}
-.btn-reject{background:var(--red);color:white;}
-.btn-delete{background:#fef2f2;color:var(--red);border:1px solid #fee2e2;}
-.btn-deceased{background:#f3f4f6;color:var(--muted);border:1px solid var(--border);}
-.btn-edit-admin{background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe;}
-/* ADD FORM */
-.add-form{background:white;border:1px solid var(--border);border-radius:10px;padding:1.5rem;margin-bottom:1.5rem;display:none;}
-.add-form.open{display:block;}
-.add-form h3{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--navy);margin-bottom:1rem;}
-.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;}
-.form-field label{display:block;font-size:11px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px;}
-.form-field input,.form-field select,.form-field textarea{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:inherit;outline:none;}
-.form-field input:focus,.form-field select:focus{border-color:var(--gold);}
-.form-row-full{grid-column:1/-1;}
-/* MODAL */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:1000;display:none;align-items:center;justify-content:center;}
-.modal-overlay.open{display:flex;}
-.modal{background:white;border-radius:12px;padding:2rem;max-width:480px;width:90%;max-height:80vh;overflow-y:auto;}
-.modal h3{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--navy);margin-bottom:1rem;}
-.modal-btns{display:flex;gap:8px;margin-top:1.5rem;justify-content:flex-end;}
-.modal-btn{padding:9px 20px;border-radius:6px;font-size:13px;font-weight:500;cursor:pointer;border:none;font-family:inherit;}
-.modal-cancel{background:#f3f4f6;color:var(--muted);}
-.modal-confirm{background:var(--red);color:white;}
-/* TOAST */
-.toast{position:fixed;bottom:1.5rem;right:1.5rem;background:var(--navy);color:white;padding:12px 20px;border-radius:8px;font-size:13px;z-index:9999;opacity:0;transform:translateY(10px);transition:all 0.3s;pointer-events:none;}
-.toast.show{opacity:1;transform:translateY(0);}
-/* ACCESS DENIED */
-.access-denied{text-align:center;padding:5rem 2rem;}
-.access-denied h2{font-family:'Playfair Display',serif;font-size:1.75rem;color:var(--navy);margin-bottom:0.75rem;}
-.access-denied p{color:var(--muted);font-size:15px;}
-@media(max-width:768px){
-  .admin-stats{grid-template-columns:1fr 1fr;}
-  .form-grid{grid-template-columns:1fr;}
-  table{font-size:12px;}
-  th,td{padding:8px 10px;}
-}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Panel — ranaadeem.de</title>
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy:#1a3a8a; --navy-deep:#0f2260; --gold:#c9a84c; --gold-light:#e8d5a3;
+      --cream:#faf8f4; --white:#fff; --text:#1a1a2e; --muted:#6b7280; --border:#e5e7eb;
+      --green:#059669; --red:#dc2626; --amber:#d97706;
+    }
+    body { font-family:"DM Sans",sans-serif; background:var(--cream); color:var(--text); min-height:100vh; }
+
+    /* ── NAV ── */
+    #main-nav { position:sticky; top:0; z-index:200; background:var(--navy); border-bottom:2px solid var(--gold); }
+    .nav-inner { max-width:1200px; margin:0 auto; padding:0 1.5rem; display:flex; align-items:center; justify-content:space-between; height:60px; }
+    .nav-logo { font-family:"Playfair Display",serif; color:var(--gold); font-size:1.05rem; text-decoration:none; letter-spacing:.03em; }
+    .nav-logo span { font-size:11px; color:rgba(255,255,255,.5); margin-left:8px; font-family:"DM Sans",sans-serif; font-weight:300; letter-spacing:0; }
+    .nav-right { display:flex; align-items:center; gap:1rem; }
+    .nav-user { font-size:12px; color:rgba(255,255,255,.8); font-weight:500; }
+    .nav-btn { background:none; border:1px solid rgba(255,255,255,.25); color:rgba(255,255,255,.65); padding:5px 14px; border-radius:20px; font-size:12px; cursor:pointer; font-family:inherit; transition:all .2s; text-decoration:none; display:inline-block; }
+    .nav-btn:hover { border-color:var(--gold); color:var(--gold); }
+
+    /* ── SIGN IN ── */
+    .signin-wrap { max-width:420px; margin:5rem auto; padding:0 1.5rem; }
+    .signin-card { background:white; border:1px solid var(--border); border-radius:16px; padding:2.5rem; text-align:center; box-shadow:0 4px 24px rgba(0,0,0,.08); }
+    .signin-icon { font-size:2.5rem; margin-bottom:1rem; }
+    .signin-card h2 { font-family:"Playfair Display",serif; font-size:1.5rem; color:var(--navy); margin-bottom:.35rem; }
+    .signin-card p { font-size:13px; color:var(--muted); margin-bottom:1.75rem; }
+    .form-inp { width:100%; padding:10px 13px; border:1.5px solid var(--border); border-radius:7px; font-size:14px; font-family:inherit; outline:none; margin-bottom:10px; transition:border-color .2s; }
+    .form-inp:focus { border-color:var(--navy); }
+    .btn-primary { width:100%; padding:12px; background:var(--navy); color:white; border:none; border-radius:8px; font-size:14px; font-weight:600; cursor:pointer; font-family:inherit; transition:all .2s; margin-bottom:10px; }
+    .btn-primary:hover { background:var(--navy-deep); }
+    .btn-primary:disabled { opacity:.5; cursor:not-allowed; }
+    .btn-google { width:100%; padding:11px; background:white; color:var(--text); border:1.5px solid var(--border); border-radius:8px; font-size:13px; font-weight:500; cursor:pointer; font-family:inherit; transition:all .2s; display:flex; align-items:center; justify-content:center; gap:8px; }
+    .btn-google:hover { border-color:var(--navy); }
+    .signin-divider { text-align:center; font-size:12px; color:var(--muted); margin:10px 0; }
+    .signin-alert { background:#fef2f2; border:1px solid #fca5a5; color:var(--red); padding:9px 12px; border-radius:7px; font-size:13px; margin-bottom:1rem; display:none; text-align:left; }
+
+    /* ── PAGE ── */
+    .page { max-width:1200px; margin:0 auto; padding:2rem 1.5rem 6rem; display:none; }
+    .page.active { display:block; }
+
+    /* ── SECTION SWITCHER ── */
+    .section-switcher { display:flex; gap:8px; margin-bottom:2rem; }
+    .section-btn { padding:10px 24px; border-radius:8px; font-size:14px; font-weight:600; cursor:pointer; font-family:inherit; border:2px solid var(--border); background:white; color:var(--muted); transition:all .2s; display:flex; align-items:center; gap:8px; }
+    .section-btn.active { background:var(--navy); border-color:var(--navy); color:white; }
+    .section-btn .s-badge { background:var(--red); color:white; font-size:10px; font-weight:700; padding:1px 6px; border-radius:10px; }
+    .section-btn.active .s-badge { background:rgba(255,255,255,.3); }
+
+    /* ── STATS ROW ── */
+    .stats-row { display:grid; grid-template-columns:repeat(5,1fr); gap:1rem; margin-bottom:2rem; }
+    .stat-box { background:white; border:1px solid var(--border); border-radius:10px; padding:1rem; text-align:center; }
+    .stat-num { font-family:"Playfair Display",serif; font-size:1.8rem; font-weight:700; color:var(--navy); }
+    .stat-lbl { font-size:11px; color:var(--muted); margin-top:3px; }
+    .stat-box.urgent .stat-num { color:var(--red); }
+    @media(max-width:900px){ .stats-row { grid-template-columns:repeat(3,1fr); } }
+    @media(max-width:600px){ .stats-row { grid-template-columns:repeat(2,1fr); } }
+
+    /* ── TABS ── */
+    .tabs { display:flex; gap:4px; background:white; border:1px solid var(--border); border-radius:8px; padding:4px; margin-bottom:1.5rem; flex-wrap:wrap; }
+    .tab-btn { padding:8px 16px; border-radius:5px; font-size:13px; font-weight:500; cursor:pointer; border:none; background:transparent; color:var(--muted); font-family:inherit; transition:all .2s; display:flex; align-items:center; gap:6px; }
+    .tab-btn.active { background:var(--navy); color:white; }
+    .tab-btn .badge { background:var(--red); color:white; font-size:10px; font-weight:700; padding:1px 6px; border-radius:10px; }
+    .tab-btn.active .badge { background:rgba(255,255,255,.3); }
+    .tab-panel { display:none; }
+    .tab-panel.active { display:block; }
+
+    /* ── ITEM CARDS ── */
+    .item-card { background:white; border:1px solid var(--border); border-radius:12px; padding:1.25rem; margin-bottom:.85rem; display:grid; gap:.75rem; }
+    .item-card.reg-card   { grid-template-columns:64px 1fr auto; align-items:start; }
+    .item-card.photo-card { grid-template-columns:90px 1fr auto; align-items:start; }
+    .item-card.text-card  { grid-template-columns:1fr auto; align-items:start; }
+    .reg-avatar { width:56px; height:56px; border-radius:50%; border:2px solid var(--gold); background:var(--navy); display:flex; align-items:center; justify-content:center; font-weight:700; color:var(--gold); font-size:14px; overflow:hidden; flex-shrink:0; }
+    .reg-avatar img { width:100%; height:100%; object-fit:cover; }
+    .photo-thumb { width:80px; height:60px; border-radius:6px; object-fit:cover; border:1px solid var(--border); cursor:pointer; }
+    .item-name { font-size:14px; font-weight:600; color:var(--navy); margin-bottom:2px; }
+    .item-meta { font-size:12px; color:var(--muted); line-height:1.6; }
+    .item-meta strong { color:var(--text); }
+    .item-preview { font-size:13px; color:var(--text); line-height:1.6; margin-top:6px; background:#f8f7f4; border-radius:6px; padding:8px 10px; max-height:80px; overflow:hidden; }
+
+    /* ── BUTTONS ── */
+    .actions { display:flex; gap:6px; flex-wrap:wrap; align-items:flex-start; flex-shrink:0; }
+    .btn { padding:7px 14px; border-radius:6px; font-size:12px; font-weight:600; cursor:pointer; font-family:inherit; border:none; transition:all .2s; white-space:nowrap; }
+    .btn-approve { background:var(--green); color:white; }
+    .btn-approve:hover { background:#047857; }
+    .btn-reject  { background:white; color:var(--red); border:1.5px solid var(--red); }
+    .btn-reject:hover  { background:#fef2f2; }
+    .btn-navy    { background:var(--navy); color:white; }
+    .btn-navy:hover { background:var(--navy-deep); }
+    .btn-gold    { background:var(--gold); color:var(--navy); }
+    .btn-mod     { background:rgba(201,168,76,.15); color:#7a5a00; border:1px solid rgba(201,168,76,.4); }
+    .btn-mod:hover { background:rgba(201,168,76,.25); }
+    .btn-unmod   { background:#f3f4f6; color:var(--muted); border:1px solid var(--border); }
+    .btn-view    { background:var(--navy); color:white; text-decoration:none; }
+    .btn:disabled { opacity:.5; cursor:not-allowed; }
+
+    /* ── MEMBERS ── */
+    .members-filter { display:flex; gap:.75rem; margin-bottom:1rem; flex-wrap:wrap; }
+    .members-filter input,.members-filter select { padding:8px 12px; border:1.5px solid var(--border); border-radius:7px; font-size:13px; font-family:inherit; outline:none; background:white; }
+    .members-filter input { flex:1; min-width:200px; }
+    .members-filter input:focus { border-color:var(--navy); }
+    .member-row { background:white; border:1px solid var(--border); border-radius:10px; padding:1rem 1.25rem; margin-bottom:.6rem; display:flex; align-items:center; gap:1rem; flex-wrap:wrap; }
+    .member-row-avatar { width:40px; height:40px; border-radius:50%; border:2px solid var(--gold); background:var(--navy); display:flex; align-items:center; justify-content:center; font-weight:700; color:var(--gold); font-size:12px; overflow:hidden; flex-shrink:0; }
+    .member-row-avatar img { width:100%; height:100%; object-fit:cover; }
+    .member-row-info { flex:1; min-width:180px; }
+    .member-row-name { font-size:13px; font-weight:600; color:var(--navy); }
+    .member-row-meta { font-size:11px; color:var(--muted); margin-top:1px; }
+    .mod-badge { display:inline-flex; align-items:center; gap:4px; background:rgba(201,168,76,.15); color:#7a5a00; border:1px solid rgba(201,168,76,.3); font-size:10px; font-weight:700; padding:1px 7px; border-radius:10px; margin-left:6px; }
+
+    /* ── BLOG WRITE ── */
+    .form-group { margin-bottom:1rem; }
+    .form-group label { display:block; font-size:11px; font-weight:600; color:var(--muted); text-transform:uppercase; letter-spacing:.06em; margin-bottom:5px; }
+    .form-group input,.form-group textarea,.form-group select { width:100%; padding:9px 12px; border:1px solid var(--border); border-radius:6px; font-size:14px; font-family:inherit; outline:none; color:var(--text); transition:border-color .2s; }
+    .form-group input:focus,.form-group textarea:focus { border-color:var(--gold); }
+    .form-row-2 { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+    .req { color:var(--red); }
+    .cover-preview { width:100%; height:160px; object-fit:cover; border-radius:8px; margin-top:8px; display:none; }
+    .editor-tabs { display:flex; gap:4px; background:#f3f4f6; border-radius:8px; padding:4px; margin-bottom:.75rem; width:fit-content; }
+    .editor-tab { padding:6px 16px; border-radius:5px; font-size:13px; font-weight:500; cursor:pointer; border:none; background:transparent; color:var(--muted); font-family:inherit; transition:all .2s; }
+    .editor-tab.active { background:var(--navy); color:white; }
+    .toolbar { display:flex; flex-wrap:wrap; gap:4px; padding:8px; background:#f8f7f4; border:1px solid var(--border); border-radius:8px 8px 0 0; border-bottom:none; }
+    .tb-btn { background:white; border:1px solid var(--border); border-radius:4px; padding:4px 8px; font-size:13px; cursor:pointer; font-family:inherit; color:var(--text); transition:all .15s; min-width:30px; text-align:center; }
+    .tb-btn:hover { background:var(--navy); color:white; border-color:var(--navy); }
+    .tb-sep { width:1px; background:var(--border); margin:0 2px; }
+    .editor-area { width:100%; min-height:280px; padding:12px; border:1px solid var(--border); border-radius:0 0 8px 8px; font-size:14px; font-family:inherit; outline:none; resize:vertical; line-height:1.7; }
+    .editor-area:focus { border-color:var(--gold); }
+    .md-drop-area { border:2px dashed var(--border); border-radius:8px; padding:2rem; text-align:center; cursor:pointer; transition:all .2s; color:var(--muted); font-size:14px; }
+    .md-drop-area:hover { border-color:var(--gold); background:rgba(201,168,76,.04); }
+    .preview-area { background:white; border:1px solid var(--border); border-radius:8px; padding:1.5rem; min-height:200px; font-size:15px; line-height:1.85; color:var(--text); }
+    .preview-area h1,.preview-area h2,.preview-area h3 { font-family:"Playfair Display",serif; color:var(--navy); margin:1.5rem 0 .75rem; }
+    .preview-area p { margin-bottom:1rem; }
+    .preview-area blockquote { border-left:3px solid var(--gold); background:rgba(201,168,76,.06); padding:.75rem 1.25rem; margin:1rem 0; border-radius:0 8px 8px 0; font-style:italic; }
+    .preview-area img { max-width:100%; border-radius:8px; }
+    .preview-area pre { background:#f3f4f6; padding:1rem; border-radius:8px; overflow-x:auto; font-size:13px; }
+    .submit-btn { width:100%; padding:12px; background:var(--gold); color:var(--navy); border:none; border-radius:8px; font-size:15px; font-weight:600; cursor:pointer; font-family:inherit; margin-top:.5rem; transition:all .2s; }
+    .submit-btn:hover { background:var(--gold-light); }
+    .alert-box { border-radius:6px; padding:10px 14px; font-size:13px; margin-bottom:1rem; display:none; }
+    .alert-box.show { display:block; }
+    .alert-err { background:#fef2f2; border:1px solid #fca5a5; color:var(--red); }
+    .alert-ok  { background:#f0fdf4; border:1px solid #86efac; color:var(--green); }
+    .pending-item { background:#f8f7f4; border:1px solid var(--border); border-radius:10px; padding:1.25rem; margin-bottom:.75rem; }
+    .pending-item-title { font-weight:600; color:var(--navy); margin-bottom:4px; }
+    .pending-item-meta  { font-size:12px; color:var(--muted); margin-bottom:.6rem; }
+    .pending-item-preview { font-size:13px; color:var(--text); line-height:1.6; margin-bottom:.75rem; max-height:80px; overflow:hidden; }
+    .pending-actions { display:flex; gap:.5rem; }
+
+    /* ── MISC ── */
+    .empty { text-align:center; padding:3rem 2rem; color:var(--muted); font-size:14px; }
+    .empty .e-icon { font-size:2.5rem; margin-bottom:.75rem; }
+    .loading { text-align:center; padding:2.5rem; color:var(--muted); font-size:13px; }
+    .toast { position:fixed; bottom:1.5rem; right:1.5rem; background:var(--navy); color:white; padding:11px 18px; border-radius:8px; font-size:13px; z-index:9999; opacity:0; transform:translateY(8px); transition:all .3s; pointer-events:none; border-left:3px solid var(--gold); }
+    .toast.show { opacity:1; transform:translateY(0); }
+    .lb { display:none; position:fixed; inset:0; background:rgba(0,0,0,.9); z-index:5000; align-items:center; justify-content:center; }
+    .lb.open { display:flex; }
+    .lb img { max-width:90vw; max-height:88vh; border-radius:10px; }
+    .lb-close { position:absolute; top:1rem; right:1rem; background:rgba(255,255,255,.15); border:none; color:white; width:40px; height:40px; border-radius:50%; font-size:1.1rem; cursor:pointer; }
+    .confirm-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:6000; align-items:center; justify-content:center; padding:1rem; }
+    .confirm-overlay.open { display:flex; }
+    .confirm-box { background:white; border-radius:12px; padding:2rem; max-width:400px; width:100%; text-align:center; }
+    .confirm-box h3 { font-family:"Playfair Display",serif; color:var(--navy); margin-bottom:.75rem; }
+    .confirm-box p { color:var(--muted); font-size:13px; margin-bottom:1.5rem; line-height:1.6; }
+    .confirm-btns { display:flex; gap:.75rem; justify-content:center; }
+    @media(max-width:700px){ .form-row-2{grid-template-columns:1fr;} }
+  </style>
 </head>
 <body>
 
-<nav>
-  <a href="/" class="nav-logo">
-    <span class="nav-logo-agr">AGR</span>
-    <span class="nav-logo-name">Admin Panel</span>
-  </a>
-  <div class="nav-right">
-    <span id="admin-user-name" style="font-size:13px;color:rgba(255,255,255,0.7);"></span>
-    <a href="/alumni.html" class="nav-btn btn-outline">← Portal</a>
-    <button class="nav-btn btn-gold" id="sign-out-btn" onclick="doSignOut()" style="display:none">Sign Out</button>
+<nav id="main-nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">AGR <span>Dr. Adeem Ghaffar Rana</span></a>
+    <div class="nav-right">
+      <span class="nav-user" id="nav-user"></span>
+      <a href="/blog.html" class="nav-btn">Blog</a>
+      <a href="/alumni.html" class="nav-btn">Alumni Portal</a>
+      <button class="nav-btn" id="btn-signout" onclick="doSignOut()" style="display:none">Sign Out</button>
+    </div>
   </div>
 </nav>
 
-<div id="toast" class="toast"></div>
+<div class="toast" id="toast"></div>
 
-<!-- ACCESS DENIED (shown if not admin) -->
-<div id="access-denied" class="access-denied" style="display:none">
-  <h2>Access Denied</h2>
-  <p>This page is only accessible to the portal administrator.</p>
-  <p style="margin-top:1rem;font-size:13px;color:var(--muted);">If you're the admin, make sure you're signed in with the correct Google account and your UID is set in admin.html.</p>
-  <a href="/alumni.html" style="display:inline-block;margin-top:1.5rem;color:var(--gold);text-decoration:none;font-size:14px;">← Return to Portal</a>
+<!-- Lightbox -->
+<div class="lb" id="lb" onclick="this.classList.remove('open')">
+  <button class="lb-close" onclick="document.getElementById('lb').classList.remove('open')">✕</button>
+  <img id="lb-img" src="" onclick="event.stopPropagation()" />
 </div>
 
-<!-- LOADING -->
-<div id="loading-state" style="text-align:center;padding:5rem;color:var(--muted);">Verifying access...</div>
-
-<!-- ADMIN CONTENT (hidden until verified) -->
-<div id="admin-content" style="display:none">
-  <div class="admin-wrap">
-    <div class="admin-header">
-      <h1>⚙ Admin Panel</h1>
-      <p>ICET Chemical Engineering Alumni Portal — Management Dashboard</p>
-    </div>
-
-    <!-- Stats -->
-    <div class="admin-stats">
-      <div class="admin-stat"><div class="num" id="as-total">–</div><div class="lbl">Total Alumni</div></div>
-      <div class="admin-stat"><div class="num" id="as-morning">–</div><div class="lbl">Morning</div></div>
-      <div class="admin-stat"><div class="num" id="as-evening">–</div><div class="lbl">Evening</div></div>
-      <div class="admin-stat"><div class="num" id="as-pending-notices">–</div><div class="lbl">Pending Notices</div></div>
-      <div class="admin-stat"><div class="num" id="as-pending-ann">–</div><div class="lbl">Pending Announcements</div></div>
-    </div>
-
-    <!-- Tabs -->
-    <div class="admin-tabs">
-      <button class="admin-tab active" onclick="switchAdminTab('alumni',this)">👥 Alumni</button>
-      <button class="admin-tab" onclick="switchAdminTab('notices',this)">📌 Notices</button>
-      <button class="admin-tab" onclick="switchAdminTab('announcements',this)">📢 Announcements</button>
-      <button class="admin-tab" onclick="switchAdminTab('add',this)">➕ Add Alumni</button>
-    </div>
-
-    <!-- ── ALUMNI TAB ── -->
-    <div id="tab-alumni" class="admin-section active">
-      <div class="section-controls">
-        <input class="search-input" id="alumni-search" placeholder="Search name, roll, email..." oninput="renderAlumniTable()">
-        <button class="export-btn" onclick="exportCSV()">📥 Export CSV</button>
-      </div>
-      <table>
-        <thead>
-          <tr><th>Photo</th><th>Name</th><th>Roll</th><th>Session</th><th>Location</th><th>Job</th><th>Email</th><th>Registered</th><th>Actions</th></tr>
-        </thead>
-        <tbody id="alumni-tbody"><tr><td colspan="9" style="text-align:center;color:var(--muted);padding:2rem">Loading...</td></tr></tbody>
-      </table>
-    </div>
-
-    <!-- ── NOTICES TAB ── -->
-    <div id="tab-notices" class="admin-section">
-      <div class="section-controls">
-        <span style="font-size:13px;color:var(--muted);">Posts pending approval appear first.</span>
-      </div>
-      <table>
-        <thead><tr><th>Author</th><th>Message</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead>
-        <tbody id="notices-tbody"><tr><td colspan="5" style="text-align:center;color:var(--muted);padding:2rem">Loading...</td></tr></tbody>
-      </table>
-    </div>
-
-    <!-- ── ANNOUNCEMENTS TAB ── -->
-    <div id="tab-announcements" class="admin-section">
-      <table>
-        <thead><tr><th>Type</th><th>Author</th><th>Title</th><th>Details</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead>
-        <tbody id="ann-tbody"><tr><td colspan="7" style="text-align:center;color:var(--muted);padding:2rem">Loading...</td></tr></tbody>
-      </table>
-    </div>
-
-    <!-- ── ADD ALUMNI TAB ── -->
-    <div id="tab-add" class="admin-section">
-      <div style="background:white;border:1px solid var(--border);border-radius:10px;padding:1.75rem;max-width:700px;">
-        <h3 style="font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--navy);margin-bottom:0.5rem;">Add Alumni Manually</h3>
-        <p style="font-size:13px;color:var(--muted);margin-bottom:1.5rem;">Use this to add alumni who can't register themselves, or to record a deceased member. All fields marked * are required.</p>
-        <div id="add-error" style="background:#fef2f2;border:1px solid #fee2e2;color:var(--red);padding:10px;border-radius:6px;font-size:13px;margin-bottom:1rem;display:none;"></div>
-        <div id="add-success" style="background:#f0fdf4;border:1px solid #bbf7d0;color:var(--green);padding:10px;border-radius:6px;font-size:13px;margin-bottom:1rem;display:none;"></div>
-        <div class="form-grid">
-          <div class="form-field">
-            <label>Session *</label>
-            <select id="add-session" onchange="onAddSessionChange()">
-              <option value="">Select</option>
-              <option value="2006-Morning">2006 Morning</option>
-              <option value="2006-Evening">2006 Evening</option>
-            </select>
-          </div>
-          <div class="form-field">
-            <label>Roll Number *</label>
-            <select id="add-roll" disabled onchange="onAddRollChange()"><option value="">Select session first</option></select>
-          </div>
-          <div class="form-field form-row-full">
-            <label>Full Name (auto-filled)</label>
-            <input type="text" id="add-name" readonly style="background:#f9f8f6;">
-          </div>
-          <div class="form-field">
-            <label>Country *</label>
-            <input type="text" id="add-country" placeholder="e.g. Pakistan">
-          </div>
-          <div class="form-field">
-            <label>City *</label>
-            <input type="text" id="add-city" placeholder="e.g. Lahore">
-          </div>
-          <div class="form-field">
-            <label>Job Title *</label>
-            <input type="text" id="add-job" placeholder="e.g. Engineer">
-          </div>
-          <div class="form-field">
-            <label>Company *</label>
-            <input type="text" id="add-company" placeholder="e.g. WAPDA">
-          </div>
-          <div class="form-field">
-            <label>Email *</label>
-            <input type="email" id="add-email" placeholder="email@example.com">
-          </div>
-          <div class="form-field">
-            <label>Phone</label>
-            <input type="tel" id="add-phone" placeholder="+92 300 ...">
-          </div>
-          <div class="form-field">
-            <label>LinkedIn</label>
-            <input type="url" id="add-linkedin" placeholder="https://linkedin.com/in/...">
-          </div>
-          <div class="form-field">
-            <label>Status</label>
-            <select id="add-deceased">
-              <option value="false">Active</option>
-              <option value="true">Deceased (In Memoriam)</option>
-            </select>
-          </div>
-          <div class="form-field form-row-full">
-            <label>Notes / Bio</label>
-            <textarea id="add-bio" rows="3" placeholder="Optional notes about this alumni..."></textarea>
-          </div>
-        </div>
-        <button onclick="addAlumniManually()" style="margin-top:1.25rem;width:100%;padding:12px;background:var(--gold);color:var(--navy);border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;">Save Alumni Record</button>
-      </div>
+<!-- Confirm dialog -->
+<div class="confirm-overlay" id="confirm-overlay">
+  <div class="confirm-box">
+    <h3 id="confirm-title">Are you sure?</h3>
+    <p id="confirm-msg"></p>
+    <div class="confirm-btns">
+      <button class="btn btn-reject" onclick="closeConfirm()">Cancel</button>
+      <button class="btn btn-approve" id="confirm-ok">Confirm</button>
     </div>
   </div>
 </div>
 
-<!-- CONFIRM MODAL -->
-<div class="modal-overlay" id="confirm-modal">
-  <div class="modal">
-    <h3 id="modal-title">Confirm Action</h3>
-    <p id="modal-message" style="font-size:14px;color:var(--muted);line-height:1.6;"></p>
-    <div class="modal-btns">
-      <button class="modal-btn modal-cancel" onclick="closeModal()">Cancel</button>
-      <button class="modal-btn modal-confirm" id="modal-confirm-btn">Confirm</button>
+<!-- ── SIGN IN PAGE ── -->
+<div id="page-signin" class="page active" style="display:block;">
+  <div class="signin-wrap">
+    <div class="signin-card">
+      <div class="signin-icon">⭐</div>
+      <h2>Admin Panel</h2>
+      <p>ranaadeem.de — Blog &amp; Alumni Management</p>
+      <div class="signin-alert" id="signin-alert"></div>
+      <input type="email" id="signin-email" class="form-inp" placeholder="Email address"
+        onkeydown="if(event.key==='Enter')document.getElementById('signin-pw').focus()" />
+      <input type="password" id="signin-pw" class="form-inp" placeholder="Password"
+        onkeydown="if(event.key==='Enter')doEmailSignIn()" />
+      <button class="btn-primary" id="signin-btn" onclick="doEmailSignIn()">Sign In</button>
+      <div class="signin-divider">— or —</div>
+      <button class="btn-google" onclick="doGoogleSignIn()">
+        <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M16.51 8H8.98v3h4.3c-.18 1-.74 1.48-1.6 2.04v2.01h2.6a7.8 7.8 0 0 0 2.38-5.88c0-.57-.05-.66-.15-1.18z"/><path fill="#34A853" d="M8.98 17c2.16 0 3.97-.72 5.3-1.94l-2.6-2a4.8 4.8 0 0 1-7.18-2.54H1.83v2.07A8 8 0 0 0 8.98 17z"/><path fill="#FBBC05" d="M4.5 10.52a4.8 4.8 0 0 1 0-3.04V5.41H1.83a8 8 0 0 0 0 7.18l2.67-2.07z"/><path fill="#EA4335" d="M8.98 4.18c1.17 0 2.23.4 3.06 1.2l2.3-2.3A8 8 0 0 0 1.83 5.4L4.5 7.49a4.77 4.77 0 0 1 4.48-3.31z"/></svg>
+        Continue with Google
+      </button>
+      <p style="font-size:11px;color:var(--muted);margin-top:1rem;">Press A+G+R to sign in with Google</p>
     </div>
+  </div>
+</div>
+
+<!-- ── MAIN ADMIN PAGE ── -->
+<div id="page-admin" class="page">
+  <div class="page" style="display:block;padding-top:1.5rem;">
+
+    <!-- Stats -->
+    <div class="stats-row">
+      <div class="stat-box urgent"><div class="stat-num" id="stat-pending-posts">—</div><div class="stat-lbl">Pending Posts</div></div>
+      <div class="stat-box urgent"><div class="stat-num" id="stat-pending-regs">—</div><div class="stat-lbl">Pending Members</div></div>
+      <div class="stat-box urgent"><div class="stat-num" id="stat-pending-photos">—</div><div class="stat-lbl">Pending Photos</div></div>
+      <div class="stat-box"><div class="stat-num" id="stat-published">—</div><div class="stat-lbl">Published Posts</div></div>
+      <div class="stat-box"><div class="stat-num" id="stat-members">—</div><div class="stat-lbl">Alumni Members</div></div>
+    </div>
+
+    <!-- Section switcher -->
+    <div class="section-switcher">
+      <button class="section-btn active" id="secbtn-blog" onclick="switchSection('blog')">
+        ✍️ Blog <span class="s-badge" id="sbadge-blog">0</span>
+      </button>
+      <button class="section-btn" id="secbtn-alumni" onclick="switchSection('alumni')">
+        🎓 Alumni <span class="s-badge" id="sbadge-alumni">0</span>
+      </button>
+    </div>
+
+    <!-- ══ BLOG SECTION ══ -->
+    <div id="section-blog">
+      <div class="tabs">
+        <button class="tab-btn active" id="btab-write-btn"   onclick="switchBlogTab('write')">✍️ Write</button>
+        <button class="tab-btn"        id="btab-pending-btn" onclick="switchBlogTab('pending')">📬 Pending <span class="badge" id="badge-pending">0</span></button>
+        <button class="tab-btn"        id="btab-posts-btn"   onclick="switchBlogTab('posts')">📋 Posts</button>
+        <button class="tab-btn"        id="btab-authors-btn" onclick="switchBlogTab('authors')">👥 Authors</button>
+      </div>
+
+      <!-- Write -->
+      <div class="tab-panel active" id="btab-write">
+        <div class="alert-box" id="blog-err"></div>
+        <div class="alert-box" id="blog-ok"></div>
+        <div class="form-row-2">
+          <div class="form-group"><label>Title <span class="req">*</span></label><input type="text" id="b-title" placeholder="Post title" /></div>
+          <div class="form-group"><label>Subtitle</label><input type="text" id="b-subtitle" placeholder="Optional" /></div>
+        </div>
+        <div class="form-row-2">
+          <div class="form-group"><label>Category <span class="req">*</span></label>
+            <select id="b-category">
+              <option value="">Select…</option>
+              <option>Life in Germany</option><option>Life in Pakistan</option>
+              <option>Science &amp; Research</option><option>Academic Career</option>
+              <option>Travel</option><option>Opinion &amp; Personal</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Tags</label><input type="text" id="b-tags" placeholder="catalysis, germany" /></div>
+        </div>
+        <div class="form-group"><label>Cover Image</label><input type="file" id="b-cover" accept="image/*" /><img id="b-cover-preview" class="cover-preview" /></div>
+        <div class="form-group">
+          <label>Content <span class="req">*</span></label>
+          <div class="editor-tabs">
+            <button class="editor-tab active" onclick="switchEditorTab('b','write')">✏️ Write</button>
+            <button class="editor-tab" onclick="switchEditorTab('b','md')">📄 .md</button>
+            <button class="editor-tab" onclick="switchEditorTab('b','preview')">👁 Preview</button>
+          </div>
+          <div id="b-write-tab">
+            <div class="toolbar">
+              <button class="tb-btn" onclick="fmt('b','bold')"><b>B</b></button>
+              <button class="tb-btn" onclick="fmt('b','italic')"><i>I</i></button>
+              <button class="tb-btn" onclick="fmt('b','underline')"><u>U</u></button>
+              <div class="tb-sep"></div>
+              <button class="tb-btn" onclick="fmtBlock('b','h1')">H1</button>
+              <button class="tb-btn" onclick="fmtBlock('b','h2')">H2</button>
+              <button class="tb-btn" onclick="fmtBlock('b','h3')">H3</button>
+              <div class="tb-sep"></div>
+              <button class="tb-btn" onclick="fmtAlign('b','left')">⬅</button>
+              <button class="tb-btn" onclick="fmtAlign('b','center')">⬌</button>
+              <button class="tb-btn" onclick="fmtAlign('b','right')">➡</button>
+              <button class="tb-btn" onclick="fmtAlign('b','justify')">≡</button>
+              <div class="tb-sep"></div>
+              <button class="tb-btn" onclick="fmt('b','insertUnorderedList')">• List</button>
+              <button class="tb-btn" onclick="fmt('b','insertOrderedList')">1. List</button>
+              <button class="tb-btn" onclick="fmtBlock('b','blockquote')">❝</button>
+              <div class="tb-sep"></div>
+              <button class="tb-btn" onclick="insertLink('b')">🔗</button>
+              <button class="tb-btn" onclick="document.getElementById('b-img-upload').click()">🖼</button>
+              <input type="file" id="b-img-upload" accept="image/*" style="display:none" onchange="insertImage('b',this)" />
+              <div class="tb-sep"></div>
+              <button class="tb-btn" style="position:relative;">🎨<input type="color" value="#1a1a2e" onchange="document.getElementById('b-editor').focus();fmt('b','foreColor',this.value)" style="position:absolute;opacity:0;width:100%;height:100%;top:0;left:0;cursor:pointer;" /></button>
+              <button class="tb-btn" style="position:relative;">🖊<input type="color" value="#ffff00" onchange="document.getElementById('b-editor').focus();fmt('b','backColor',this.value)" style="position:absolute;opacity:0;width:100%;height:100%;top:0;left:0;cursor:pointer;" /></button>
+            </div>
+            <div id="b-editor" class="editor-area" contenteditable="true"></div>
+          </div>
+          <div id="b-md-tab" style="display:none;">
+            <div class="md-drop-area" onclick="document.getElementById('b-md-file').click()">
+              <div style="font-size:2rem;margin-bottom:.4rem;">📄</div>
+              <div>Click to upload <strong>.md</strong> file or drag and drop</div>
+            </div>
+            <input type="file" id="b-md-file" accept=".md,.markdown" style="display:none" />
+          </div>
+          <div id="b-preview-tab" style="display:none;"><div class="preview-area" id="b-preview-content"></div></div>
+        </div>
+        <button class="submit-btn" id="b-publish-btn" onclick="publishPost()">🚀 Publish Post</button>
+      </div>
+
+      <!-- Pending -->
+      <div class="tab-panel" id="btab-pending">
+        <div id="pending-list"><div class="loading">Loading…</div></div>
+      </div>
+
+      <!-- Posts -->
+      <div class="tab-panel" id="btab-posts">
+        <div id="posts-list"><div class="loading">Loading…</div></div>
+      </div>
+
+      <!-- Authors -->
+      <div class="tab-panel" id="btab-authors">
+        <div id="authors-list"><div class="loading">Loading…</div></div>
+      </div>
+    </div>
+
+    <!-- ══ ALUMNI SECTION ══ -->
+    <div id="section-alumni" style="display:none;">
+      <div class="tabs">
+        <button class="tab-btn active" id="atab-regs-btn"    onclick="switchAlumniTab('regs')">📋 Registrations <span class="badge" id="badge-regs">0</span></button>
+        <button class="tab-btn"        id="atab-photos-btn"  onclick="switchAlumniTab('photos')">📸 Photos <span class="badge" id="badge-photos">0</span></button>
+        <button class="tab-btn"        id="atab-notices-btn" onclick="switchAlumniTab('notices')">📌 Notices <span class="badge" id="badge-notices">0</span></button>
+        <button class="tab-btn"        id="atab-anns-btn"    onclick="switchAlumniTab('anns')">📢 Announcements <span class="badge" id="badge-anns">0</span></button>
+        <button class="tab-btn"        id="atab-members-btn" onclick="switchAlumniTab('members')">👥 Members</button>
+        <button class="tab-btn"        id="atab-manual-btn"  onclick="switchAlumniTab('manual')">➕ Add Manually</button>
+      </div>
+
+      <div class="tab-panel active" id="atab-regs"><div id="regs-list"><div class="loading">Loading…</div></div></div>
+      <div class="tab-panel"        id="atab-photos"><div id="photos-list"><div class="loading">Loading…</div></div></div>
+      <div class="tab-panel"        id="atab-notices"><div id="notices-list"><div class="loading">Loading…</div></div></div>
+      <div class="tab-panel"        id="atab-anns"><div id="anns-list"><div class="loading">Loading…</div></div></div>
+
+      <!-- Members -->
+      <div class="tab-panel" id="atab-members">
+        <div class="members-filter">
+          <input type="text" id="members-search" placeholder="Search by name, roll or city…" oninput="renderMembers()" />
+          <select id="members-session" onchange="renderMembers()">
+            <option value="all">All Sessions</option>
+            <option value="2006">Session 2006</option>
+            <option value="2009">Session 2009</option>
+            <option value="2016">Session 2016</option>
+          </select>
+          <select id="members-role" onchange="renderMembers()">
+            <option value="all">All Members</option>
+            <option value="moderator">Moderators only</option>
+          </select>
+        </div>
+        <div id="members-list"><div class="loading">Loading…</div></div>
+      </div>
+
+      <!-- Add Manually -->
+      <div class="tab-panel" id="atab-manual">
+        <div style="max-width:640px;">
+          <p style="font-size:13px;color:var(--muted);margin-bottom:1.5rem;line-height:1.6;">Add a graduate manually — for deceased members, those who cannot self-register, or corrections. Profile is immediately <strong>approved and active</strong>.</p>
+          <div class="alert-box" id="manual-err"></div>
+          <div class="alert-box" id="manual-ok"></div>
+          <div class="form-row-2" style="margin-bottom:1rem;">
+            <div>
+              <label style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:4px;">Roll Number <span style="color:var(--red)">*</span></label>
+              <input type="text" id="m-roll" placeholder="e.g. CE-M6-145" oninput="this.value=this.value.toUpperCase();manualAutoFill()" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:7px;font-size:13px;font-family:inherit;outline:none;" />
+              <div id="m-roll-hint" style="font-size:11px;color:var(--muted);margin-top:4px;"></div>
+            </div>
+            <div>
+              <label style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:4px;">Full Name <span style="color:var(--red)">*</span></label>
+              <input type="text" id="m-name" placeholder="As on degree" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:7px;font-size:13px;font-family:inherit;outline:none;" />
+            </div>
+            <div>
+              <label style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:4px;">Session</label>
+              <input type="text" id="m-session" readonly style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:7px;font-size:13px;font-family:inherit;outline:none;background:#f8f7f4;" />
+            </div>
+            <div>
+              <label style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:4px;">Shift</label>
+              <input type="text" id="m-shift" readonly style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:7px;font-size:13px;font-family:inherit;outline:none;background:#f8f7f4;" />
+            </div>
+            <div>
+              <label style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:4px;">Position</label>
+              <input type="text" id="m-position" placeholder="e.g. Retired Engineer" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:7px;font-size:13px;font-family:inherit;outline:none;" />
+            </div>
+            <div>
+              <label style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:4px;">Employer</label>
+              <input type="text" id="m-employer" placeholder="Company or institution" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:7px;font-size:13px;font-family:inherit;outline:none;" />
+            </div>
+            <div>
+              <label style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:4px;">City</label>
+              <input type="text" id="m-city" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:7px;font-size:13px;font-family:inherit;outline:none;" />
+            </div>
+            <div>
+              <label style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:4px;">Country</label>
+              <input type="text" id="m-country" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:7px;font-size:13px;font-family:inherit;outline:none;" />
+            </div>
+            <div>
+              <label style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:4px;">Email</label>
+              <input type="email" id="m-email" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:7px;font-size:13px;font-family:inherit;outline:none;" />
+            </div>
+            <div>
+              <label style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:4px;">Phone</label>
+              <input type="tel" id="m-phone" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:7px;font-size:13px;font-family:inherit;outline:none;" />
+            </div>
+            <div>
+              <label style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:4px;">LinkedIn</label>
+              <input type="url" id="m-linkedin" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:7px;font-size:13px;font-family:inherit;outline:none;" />
+            </div>
+            <div>
+              <label style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:4px;">Photo URL</label>
+              <input type="url" id="m-photo" placeholder="https://... (Cloudinary)" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:7px;font-size:13px;font-family:inherit;outline:none;" />
+            </div>
+          </div>
+          <div style="background:#f8f7f4;border:1px solid var(--border);border-radius:8px;padding:1rem;margin-bottom:1rem;">
+            <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer;">
+              <input type="checkbox" id="m-deceased" style="width:16px;height:16px;accent-color:var(--red);" />
+              <span>Mark as <strong style="color:var(--red);">Deceased</strong></span>
+            </label>
+          </div>
+          <button class="btn btn-navy" style="padding:11px 28px;font-size:14px;" onclick="submitManual()">➕ Add to Alumni Network</button>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
 
 <script type="module">
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js';
-import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged }
-  from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js';
-import { getFirestore, doc, setDoc, getDoc, collection, getDocs, addDoc,
-         query, where, orderBy, updateDoc, deleteDoc, serverTimestamp }
-  from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js';
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import {
+  getAuth, onAuthStateChanged, signOut,
+  signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import {
+  getFirestore, collection, doc, addDoc, getDocs, getDoc,
+  setDoc, updateDoc, deleteDoc, query, where, serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyAgUl22Cln6QtY3-HIvI6lE8Zu7n9OblbI",
-  authDomain: "icet-alumni.firebaseapp.com",
-  projectId: "icet-alumni",
-  storageBucket: "icet-alumni.firebasestorage.app",
-  messagingSenderId: "707390888790",
-  appId: "1:707390888790:web:57e6be62e4d11e22c214f7"
+const app  = initializeApp({ apiKey:"AIzaSyAgUl22Cln6QtY3-HIvI6lE8Zu7n9OblbI", authDomain:"icet-alumni.firebaseapp.com", projectId:"icet-alumni", storageBucket:"icet-alumni.firebasestorage.app", messagingSenderId:"707390888790", appId:"1:707390888790:web:57e6be62e4d11e22c214f7" });
+const auth = getAuth(app);
+const db   = getFirestore(app);
+const provider = new GoogleAuthProvider();
+const ADMIN_UID = "w2AtZbhUiyY5TxyvIecHzWqheaE2";
+const CL_CLOUD  = "duetiv9rm", CL_PRESET = "ranaadeem_blog";
+
+let allPosts = [], allMembers = [], adminCoverBase64 = "";
+let currentSection = "blog", currentBlogTab = "write", currentAlumniTab = "regs";
+
+// ── Helpers ────────────────────────────────────────────────────────────────
+function toast(msg) { const t=document.getElementById("toast"); t.textContent=msg; t.classList.add("show"); setTimeout(()=>t.classList.remove("show"),3000); }
+function tc(s) { return (s||"").split(" ").map(w=>w.charAt(0).toUpperCase()+w.slice(1).toLowerCase()).join(" "); }
+function ini(name) { return (name||"?").split(" ").map(w=>w[0]).slice(0,2).join("").toUpperCase(); }
+function sessionLabel(s) { const yr=parseInt(s); return isNaN(yr)?s:`${yr}\u20134`; }
+function emptyHtml(icon,msg) { return `<div class="empty"><div class="e-icon">${icon}</div>${msg}</div>`; }
+function showBlogAlert(id,msg,ok) { const el=document.getElementById(id); el.className="alert-box "+(ok?"alert-ok":"alert-err")+" show"; el.innerHTML=msg; }
+
+let _cr=null;
+function confirm(title,msg) {
+  return new Promise(resolve => {
+    _cr=resolve;
+    document.getElementById("confirm-title").textContent=title;
+    document.getElementById("confirm-msg").textContent=msg;
+    document.getElementById("confirm-overlay").classList.add("open");
+    document.getElementById("confirm-ok").onclick=()=>{ closeConfirm(); resolve(true); };
+  });
+}
+window.closeConfirm=()=>{ document.getElementById("confirm-overlay").classList.remove("open"); if(_cr){_cr(false);_cr=null;} };
+window.openLb=url=>{ document.getElementById("lb-img").src=url; document.getElementById("lb").classList.add("open"); };
+document.addEventListener("keydown",e=>{ if(e.key==="Escape"){ document.getElementById("confirm-overlay").classList.remove("open"); document.getElementById("lb").classList.remove("open"); } });
+
+// ── Auth ───────────────────────────────────────────────────────────────────
+window.doEmailSignIn = async function() {
+  const email=document.getElementById("signin-email").value.trim();
+  const pw=document.getElementById("signin-pw").value;
+  const alertEl=document.getElementById("signin-alert");
+  const btn=document.getElementById("signin-btn");
+  alertEl.style.display="none";
+  if(!email||!pw){alertEl.textContent="Please enter email and password.";alertEl.style.display="block";return;}
+  btn.disabled=true; btn.textContent="Signing in\u2026";
+  try { await signInWithEmailAndPassword(auth,email,pw); }
+  catch(e) {
+    let msg="Sign in failed.";
+    if(e.code==="auth/invalid-credential"||e.code==="auth/wrong-password"||e.code==="auth/user-not-found") msg="Incorrect email or password.";
+    if(e.code==="auth/too-many-requests") msg="Too many attempts. Please wait.";
+    alertEl.textContent=msg; alertEl.style.display="block";
+    btn.disabled=false; btn.textContent="Sign In";
+  }
 };
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
+window.doGoogleSignIn = async function() {
+  try { await signInWithPopup(auth,provider); }
+  catch(e) { const a=document.getElementById("signin-alert"); a.textContent="Google sign-in failed: "+e.message; a.style.display="block"; }
+};
 
-// ⚠️ SET THIS TO YOUR GOOGLE ACCOUNT UID
-// To find your UID: sign in to the alumni portal, open browser console, type:
-// firebase.auth().currentUser.uid
-// Then paste it here and upload to GitHub
-const ADMIN_UID = 'w2AtZbhUiyY5TxyvIecHzWqheaE2';
+window.doSignOut = async function() { await signOut(auth); };
 
-const morningStudents = {"M101":"ABDUL WAHAB KHAN","M102":"ZAHID ANJUM","M103":"USMAN RAFIQ","M104":"MEESAM ALI","M105":"IRFAN IQBAL","M106":"WASEEM SAFDAR","M107":"NASEER AHMAD","M108":"RIZWAN HAIDER","M109":"UMAR FAROOQ","M110":"MUHAMMAD FIAZ","M111":"FAROOQ KHAN","M112":"SALMAN SIDIQUE","M113":"HAFIZ AAMIR","M114":"MOHSIN ALI RAZA","M115":"MUHAMMAD KASHIF","M116":"RIZWAN GHULAM NABI","M117":"AYAZ KARIM","M118":"ADEEM GHAFFAR RANA","M119":"KHIZAR HAYAT","M120":"AWAIS NADEEM","M121":"SAQIB WAHEED","M122":"RAO SHAFIQ","M123":"FAYYAZ AHMAD","M124":"KHUBAIB HASAN","M125":"TAHIR NAZIR","M126":"MANSAB ALI","M127":"ZAHID RASOOL","M128":"UMAIR ISLAM","M129":"ZOHAIB ZAIDI","M130":"ASAD ABBAS","M131":"AJMAL JAVAID","M132":"KHALIL AHMAD","M133":"WAQAS AZIZ HASHMI","M134":"AFZAL CHAUDHRY","M135":"MUJEEB UR REHMAN","M136":"ALI BUKHARI","M137":"AWAIS NAEEM","M138":"SAAD TOOR","M139":"KASHIF YOUNIS","M140":"AFFAN KHALID","M141":"JAHENZAIB KHAN","M142":"AHSAN BILAL","M143":"SAQIB RIZVI","M144":"QAISER KHAN","M145":"UMAIR RASHEED","M146":"ALI NADEEM","M147":"FAWAD FURRUKH","M148":"AFNAN HAMEED","M149":"ABDUL REHMAN","M150":"IBRAHIM SAEED","M151":"MUHAMMAD ARIF KHAN","M152":"HARIS SHAJAR","M153":"IMRAN KHAN (I)","M154":"NOUMAN AHMAD","M155":"IMRAN KHAN (II)","M156":"JAMSHAID IQBAL","M157":"FAISAL MEHMOOD","M158":"SHERAZ AFZAL","M159":"ADNAN SHOAIB","M160":"KARIM BUKSH","M161":"UMAIR DANISH","M162":"AAMIR SHAMAS","M163":"WAZIR ALI","M164":"JAMA AHMAD HERSI","M201":"TAYAB SAEED","M202":"ATIF ASHRAF","M203":"ASAD ALI","M204":"NAVEED AKHTAR","M205":"MUNZOOR AHMAD","M206":"FARAZ BUTT","M207":"SANA ULLAH","M208":"BABER ALI","M209":"AAMIR RIAZ","M210":"GHULAM ABBAS","M211":"MUHAMMAD BASIT ALI","M212":"ZEESHAN SHOAIB","M213":"MUHAMMAD KALEEM ULLAH","M214":"HAFIZ KHALIL UR REHMAN","M215":"FAISAL JOYIA","M216":"FAISAL KHALIL","M217":"MUHAMMAD ZEESHAN SALEEM","M218":"AHSAN NOOR KHAN","M219":"WAQAS SHEHRYAR","M220":"AFTAB AHMAD","M221":"TANVIR AHMAD","M222":"FAKHAR ABBAS","M223":"MUHAMMAD HASNAT ALI","M224":"YASIR ARAFAT","M225":"TAHIR WASIM","M226":"MOHSIN SAEED","M301":"SAEED AKRAM SHEIKH","M302":"IMRAN YOUSAF","M303":"MUHAMMAD ADNAN SADIQ","M304":"MUHAMMAD IRFAN","M305":"IMRAN RIAZ","M306":"NASIR MEHMOOD","M307":"SHAMSHAD-UL-HAQ","M308":"AWAIS ABDULLAH","M309":"UMAIR AZAD","M310":"ALI ZULQARNAIN","M311":"MUHAMMAD RIZWAN AZHAR","M312":"MUHAMMAD ASAD MASOOD","M313":"HAFIZ SHAFIQ","M314":"HAFIZ ZUBAIR","M315":"MUHAMMAD NAEEM","M316":"GHUFRAN AHMAD","M317":"ABDUL LATIF","M401":"AMBREEN GHALIB","M402":"MUHAMMAD SHAHZAD ALI","M403":"MUHAMMAD ILYAS","M404":"YASIR SHARIF AWAN","M405":"RAO MUNEER ALI","M406":"SAJID MAHMOOD","M407":"ALI MURAD","M408":"USMAN ALI","M409":"MUHAMMAD AWAIS","M410":"AMBREEN GULZAR","M411":"FAHIM AHMAD ZAFAR","M412":"ANWAAR AHMAD","M413":"USMAN RASHEED","M414":"KHUBAIB AHMAD","M415":"SALMAN MANSOOR","M416":"USMAN SAEED","M417":"SADIA NAUREEN"};
-const eveningStudents = {"E102":"FAHAD MASOOD","E103":"NOMAN LIAQAT","E104":"YASEEN AKRAM","E105":"ADNAN NAWAZ","E106":"AHSEN HAFEEZ","E107":"RAZA MUDASIR ALVI","E108":"GULZEB KHAN","E109":"USMAN SADIQUE","E110":"ABDUL QAYYUM","E111":"IMRAN MALIK","E112":"SHAHID NADEEM","E113":"UMAIR FURQAN","E114":"NAUMAN ASHRAF","E115":"WAQAS BUKHARI","E116":"SANA ULLAH","E117":"NAEEM YOUNIS","E118":"MASOOD HAIDER","E119":"MUHAMMAD ASIF KHAN","E120":"MOHSIN MOBEEN","E121":"FAHEEM RIAZ","E122":"FAHAD MIR","E123":"ADNAN REHMAT","E124":"YASIR AKRAM AWAN","E125":"SHAROOZ KHAN","E126":"RANA MUHAMMAD IMRAN","E127":"RIZWAN MALIK","E128":"UMER TAHIR MIR","E129":"MUHAMMAD NAEEM IQBAL","E130":"MUHAMMAD UMAIR DANISH","E131":"ABID ALI","E132":"FARHAN CHEEMA","E133":"MUHAMMAD ARSHAD","E134":"ZUBAIR SHAHID","E135":"WAQAR AHMED","E136":"AFFAN AHMAD","E137":"UMAIR SHOAIB","E138":"ARSALAN AWAN","E139":"MUHAMMAD IMRAN","E140":"ASIF IQBAL","E141":"HAKIM ALI HAIDER","E142":"GHULAM MURTAZA","E143":"ADNAN SALEEM","E144":"ASIF ALI SHAHZAD","E201":"MUHAMMAD ZAMAN","E202":"IMRAN NIAZ","E203":"SHAHID SAEED","E204":"KHURRAM JAVED","E205":"SAQIB RAZA","E206":"AAMIR KARIM","E207":"MUHAMMAD UMAR FAROOQ","E208":"ALI AHMAD","E209":"ABDUL BASIT","E210":"FARHAN RASOOL","E211":"NASEER AHMAD","E212":"MUHAMMAD USMAN","E213":"AQEEL MANSOOR CHISHTI","E214":"RIZWAN AHMED SHAH","E215":"MUHAMMAD ZAIN","E216":"USMAN ANWAR DAR","E217":"OMER SHUJAT","E218":"IMRAN RAFIQUE","E219":"NAEEM BHATTI","E220":"ASIF SANI"};
+// AGR keyboard shortcut
+const _kh=new Set();
+document.addEventListener("keydown",e=>{ _kh.add(e.key.toLowerCase()); if(_kh.has("a")&&_kh.has("g")&&_kh.has("r")){ _kh.clear(); window.doGoogleSignIn(); }});
+document.addEventListener("keyup",e=>_kh.delete(e.key.toLowerCase()));
 
-let allAlumniData = [];
-let allNoticesData = [];
-let allAnnData = [];
-let pendingAction = null;
-
-// ── Auth check ──
-onAuthStateChanged(auth, async (user) => {
-  document.getElementById('loading-state').style.display = 'none';
-  if (!user || user.uid !== ADMIN_UID) {
-    // If UID is still placeholder, show setup instructions
-    if (false) { // Setup complete — UID is configured
-      document.getElementById('access-denied').innerHTML = `
-        <h2>⚙ Setup Required</h2>
-        <p>To activate the admin panel, you need to set your UID.</p>
-        <div style="margin:2rem auto;max-width:500px;background:#f9f8f6;border:1px solid #e5e7eb;border-radius:8px;padding:1.5rem;text-align:left">
-          <p style="font-size:14px;margin-bottom:1rem;font-weight:600;color:#1a3a8a;">Steps:</p>
-          <ol style="font-size:13px;color:#374151;padding-left:1.25rem;line-height:2">
-            <li>Sign in to <a href="/alumni.html" style="color:#c9a84c">alumni.html</a> with your Google account</li>
-            <li>Open browser DevTools (F12) → Console tab</li>
-            <li>Your UID appears in the page as a toast — or type <code>document.querySelector('[data-uid]')?.dataset.uid</code></li>
-            <li>Open admin.html on GitHub, find <code>REPLACE_WITH_YOUR_UID</code></li>
-            <li>Replace it with your actual UID and commit</li>
-          </ol>
-        </div>`;
-    }
-    document.getElementById('access-denied').style.display = 'block';
+onAuthStateChanged(auth, user => {
+  const signinPage=document.getElementById("page-signin");
+  const adminPage =document.getElementById("page-admin");
+  if(!user || user.uid!==ADMIN_UID) {
+    signinPage.style.display="block"; adminPage.style.display="none";
+    document.getElementById("btn-signout").style.display="none";
+    document.getElementById("nav-user").textContent="";
     return;
   }
-  document.getElementById('admin-user-name').textContent = user.displayName || user.email;
-  document.getElementById('sign-out-btn').style.display = 'block';
-  document.getElementById('admin-content').style.display = 'block';
-  loadAllData();
+  signinPage.style.display="none"; adminPage.style.display="block";
+  document.getElementById("btn-signout").style.display="inline-block";
+  document.getElementById("nav-user").textContent="⭐ Admin";
+  loadStats(); loadPending(); loadPosts(); loadMembers();
 });
 
-window.doSignOut = async () => { await signOut(auth); window.location = '/alumni.html'; };
-
-async function loadAllData() {
-  // Alumni
-  const alumSnap = await getDocs(collection(db, 'alumni'));
-  allAlumniData = [];
-  let morning=0, evening=0;
-  alumSnap.forEach(d => {
-    allAlumniData.push({id:d.id, ...d.data()});
-    if (d.data().session?.includes('Morning')) morning++; else if (d.data().session?.includes('Evening')) evening++;
+// ── Section & Tab switch ───────────────────────────────────────────────────
+window.switchSection = function(sec) {
+  currentSection = sec;
+  ["blog","alumni"].forEach(s => {
+    document.getElementById("section-"+s).style.display = s===sec ? "block" : "none";
+    document.getElementById("secbtn-"+s).classList.toggle("active", s===sec);
   });
-  allAlumniData.sort((a,b) => a.roll?.localeCompare(b.roll||''));
-  document.getElementById('as-total').textContent = allAlumniData.length;
-  document.getElementById('as-morning').textContent = morning;
-  document.getElementById('as-evening').textContent = evening;
-  renderAlumniTable();
+};
 
-  // Notices
-  const notSnap = await getDocs(collection(db, 'notices'));
-  allNoticesData = [];
-  notSnap.forEach(d => allNoticesData.push({id:d.id, ...d.data()}));
-  allNoticesData.sort((a,b) => (a.approved===b.approved ? (b.createdAt?.seconds||0)-(a.createdAt?.seconds||0) : a.approved?1:-1));
-  const pendingN = allNoticesData.filter(n => !n.approved).length;
-  document.getElementById('as-pending-notices').textContent = pendingN;
-  renderNoticesTable();
+window.switchBlogTab = function(tab) {
+  currentBlogTab = tab;
+  ["write","pending","posts","authors"].forEach(t => {
+    document.getElementById("btab-"+t)?.classList.toggle("active", t===tab);
+    document.getElementById("btab-"+t+"-btn")?.classList.toggle("active", t===tab);
+  });
+  if(tab==="pending") loadPending();
+  if(tab==="posts")   loadManagePosts();
+  if(tab==="authors") loadAuthors();
+};
 
-  // Announcements
-  const annSnap = await getDocs(collection(db, 'announcements'));
-  allAnnData = [];
-  annSnap.forEach(d => allAnnData.push({id:d.id, ...d.data()}));
-  allAnnData.sort((a,b) => (a.approved===b.approved ? (b.createdAt?.seconds||0)-(a.createdAt?.seconds||0) : a.approved?1:-1));
-  const pendingA = allAnnData.filter(a => !a.approved).length;
-  document.getElementById('as-pending-ann').textContent = pendingA;
-  renderAnnTable();
+window.switchAlumniTab = function(tab) {
+  currentAlumniTab = tab;
+  ["regs","photos","notices","anns","members","manual"].forEach(t => {
+    document.getElementById("atab-"+t)?.classList.toggle("active", t===tab);
+    document.getElementById("atab-"+t+"-btn")?.classList.toggle("active", t===tab);
+  });
+};
+
+// ── Stats ──────────────────────────────────────────────────────────────────
+async function loadStats() {
+  try {
+    const [pp,pr,ph,pub,mem] = await Promise.all([
+      getDocs(query(collection(db,"posts"),    where("status","==","pending"))),
+      getDocs(query(collection(db,"alumni"),   where("status","==","pending"))),
+      getDocs(query(collection(db,"session_photos"), where("status","==","pending"))),
+      getDocs(query(collection(db,"posts"),    where("status","==","published"))),
+      getDocs(query(collection(db,"alumni"),   where("status","==","approved"))),
+    ]);
+    document.getElementById("stat-pending-posts").textContent  = pp.size;
+    document.getElementById("stat-pending-regs").textContent   = pr.size;
+    document.getElementById("stat-pending-photos").textContent = ph.size;
+    document.getElementById("stat-published").textContent      = pub.size;
+    document.getElementById("stat-members").textContent        = mem.size;
+    document.getElementById("badge-pending").textContent       = pp.size;
+    document.getElementById("badge-regs").textContent          = pr.size;
+    document.getElementById("badge-photos").textContent        = ph.size;
+    const blogPending  = pp.size;
+    const alumniPending = pr.size + ph.size;
+    document.getElementById("sbadge-blog").textContent   = blogPending  || "0";
+    document.getElementById("sbadge-alumni").textContent = alumniPending || "0";
+    // Also load alumni pending for notices/anns badges
+    const [pn,pa] = await Promise.all([
+      getDocs(query(collection(db,"notices"),       where("approved","==",false))),
+      getDocs(query(collection(db,"announcements"), where("approved","==",false))),
+    ]);
+    document.getElementById("badge-notices").textContent = pn.size;
+    document.getElementById("badge-anns").textContent    = pa.size;
+    // Load alumni lists
+    loadRegs(); loadPhotos(); loadNotices(); loadAnns();
+  } catch(e) { console.error(e); }
 }
 
-// ── Alumni table ──
-window.renderAlumniTable = () => {
-  const search = document.getElementById('alumni-search').value.toLowerCase();
-  const filtered = allAlumniData.filter(a =>
-    !search || a.name?.toLowerCase().includes(search) || a.roll?.toLowerCase().includes(search) || a.email?.toLowerCase().includes(search)
-  );
-  const tbody = document.getElementById('alumni-tbody');
-  if (!filtered.length) { tbody.innerHTML='<tr><td colspan="9" style="text-align:center;color:var(--muted);padding:2rem">No records found.</td></tr>'; return; }
-  const sessionBadge = s => s?.includes('Morning') ? '<span class="badge badge-morning">Morning</span>' : '<span class="badge badge-evening">Evening</span>';
-  tbody.innerHTML = filtered.map(a => {
-    const initials = (a.name||'?').split(' ').map(w=>w[0]).slice(0,2).join('');
-    const photoEl = a.photoBase64 ? `<div class="td-photo"><img src="${a.photoBase64}" alt=""></div>` : `<div class="td-photo">${initials}</div>`;
-    const date = a.registeredAt ? new Date(a.registeredAt).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'2-digit'}) : '–';
-    const decBadge = a.deceased ? ' <span class="badge badge-deceased">✝</span>' : '';
-    return `<tr>
-      <td>${photoEl}</td>
-      <td><strong>${a.name||'–'}</strong>${decBadge}</td>
-      <td>${a.roll||'–'}</td>
-      <td>${sessionBadge(a.session)}</td>
-      <td>${a.city||'–'}, ${a.country||'–'}</td>
-      <td style="max-width:140px;word-wrap:break-word">${a.job||'–'}<br><span style="font-size:11px;color:var(--muted)">${a.company||''}</span></td>
-      <td><a href="mailto:${a.email}" style="color:var(--navy);text-decoration:none">${a.email||'–'}</a></td>
-      <td style="white-space:nowrap">${date}</td>
-      <td style="white-space:nowrap">
-        <button class="action-btn btn-deceased" onclick="toggleDeceased('${a.id}',${!a.deceased})">${a.deceased?'✓ Active':'✝ Deceased'}</button>
-        <button class="action-btn btn-delete" onclick="confirmDelete('alumni','${a.id}','${a.name}')">Delete</button>
-      </td>
-    </tr>`;
-  }).join('');
-};
+// ══ BLOG FUNCTIONS ══════════════════════════════════════════════════════════
 
-// ── Notices table ──
-function renderNoticesTable() {
-  const tbody = document.getElementById('notices-tbody');
-  if (!allNoticesData.length) { tbody.innerHTML='<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:2rem">No notices.</td></tr>'; return; }
-  tbody.innerHTML = allNoticesData.map(n => {
-    const date = n.createdAt ? new Date(n.createdAt.seconds*1000).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'2-digit'}) : '–';
-    const statusBadge = n.approved ? '<span class="badge badge-approved">Approved</span>' : '<span class="badge badge-pending">Pending</span>';
-    const approveBtn = !n.approved ? `<button class="action-btn btn-approve" onclick="approveItem('notices','${n.id}')">Approve</button>` : '';
-    return `<tr>
-      <td>${n.authorName||'–'}</td>
-      <td style="max-width:300px">${n.text||'–'}</td>
-      <td style="white-space:nowrap">${date}</td>
-      <td>${statusBadge}</td>
-      <td style="white-space:nowrap">${approveBtn}<button class="action-btn btn-delete" onclick="confirmDelete('notices','${n.id}','this post')">Delete</button></td>
-    </tr>`;
-  }).join('');
+// Upload to Cloudinary
+async function uploadToCloudinary(base64) {
+  if(!base64||!base64.startsWith("data:")) return base64;
+  try {
+    const blob = await (await fetch(base64)).blob();
+    const fd = new FormData(); fd.append("file",blob,"cover.jpg"); fd.append("upload_preset",CL_PRESET);
+    const res = await fetch("https://api.cloudinary.com/v1_1/"+CL_CLOUD+"/image/upload",{method:"POST",body:fd});
+    const data = await res.json();
+    return data.secure_url || base64;
+  } catch(e) { return base64; }
 }
 
-// ── Announcements table ──
-function renderAnnTable() {
-  const tbody = document.getElementById('ann-tbody');
-  if (!allAnnData.length) { tbody.innerHTML='<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:2rem">No announcements.</td></tr>'; return; }
-  const typeLabels = {job:'Job',achievement:'Achievement',news:'News',other:'Other'};
-  tbody.innerHTML = allAnnData.map(a => {
-    const date = a.createdAt ? new Date(a.createdAt.seconds*1000).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'2-digit'}) : '–';
-    const statusBadge = a.approved ? '<span class="badge badge-approved">Approved</span>' : '<span class="badge badge-pending">Pending</span>';
-    const approveBtn = !a.approved ? `<button class="action-btn btn-approve" onclick="approveItem('announcements','${a.id}')">Approve</button>` : '';
-    return `<tr>
-      <td><span class="badge ann-type-${a.type||'other'}">${typeLabels[a.type]||'–'}</span></td>
-      <td>${a.authorName||'–'}</td>
-      <td>${a.title||'–'}</td>
-      <td style="max-width:200px;font-size:12px">${a.body||'–'}</td>
-      <td style="white-space:nowrap">${date}</td>
-      <td>${statusBadge}</td>
-      <td style="white-space:nowrap">${approveBtn}<button class="action-btn btn-delete" onclick="confirmDelete('announcements','${a.id}','this announcement')">Delete</button></td>
-    </tr>`;
-  }).join('');
-}
-
-// ── Actions ──
-window.approveItem = async (collection_name, id) => {
+// Publish post
+window.publishPost = async function() {
+  const title=document.getElementById("b-title").value.trim();
+  const category=document.getElementById("b-category").value;
+  const content=document.getElementById("b-editor").innerHTML;
+  if(!title) { showBlogAlert("blog-err","Title is required."); return; }
+  if(!category) { showBlogAlert("blog-err","Please select a category."); return; }
+  if(document.getElementById("b-editor").innerText.trim().length<10) { showBlogAlert("blog-err","Content too short."); return; }
+  const btn=document.getElementById("b-publish-btn"); btn.disabled=true; btn.textContent="Publishing\u2026";
   try {
-    await updateDoc(doc(db, collection_name, id), { approved: true });
-    showToast('✅ Approved!');
-    loadAllData();
-  } catch(e) { showToast('Error: '+e.message); }
-};
-
-window.toggleDeceased = async (id, isDeceased) => {
-  try {
-    await updateDoc(doc(db, 'alumni', id), { deceased: isDeceased });
-    showToast(isDeceased ? '✝ Marked as deceased.' : '✅ Marked as active.');
-    loadAllData();
-  } catch(e) { showToast('Error: '+e.message); }
-};
-
-window.confirmDelete = (collectionName, id, label) => {
-  document.getElementById('modal-title').textContent = 'Delete Record';
-  document.getElementById('modal-message').textContent = `Are you sure you want to permanently delete "${label}"? This cannot be undone.`;
-  pendingAction = async () => {
-    try {
-      await deleteDoc(doc(db, collectionName, id));
-      showToast('🗑 Deleted successfully.');
-      loadAllData();
-    } catch(e) {
-      console.error('Delete error:', e);
-      showToast('❌ Delete failed: ' + e.message);
-    }
-  };
-  document.getElementById('modal-confirm-btn').onclick = async () => {
-    const action = pendingAction;  // save before closeModal nulls it
-    closeModal();
-    if (action) { await action(); }
-  };
-  document.getElementById('confirm-modal').classList.add('open');
-};
-
-window.closeModal = () => {
-  document.getElementById('confirm-modal').classList.remove('open');
-  pendingAction = null;  // only nulled if Cancel is pressed; confirm nulls via action
-};
-
-// ── Add manually ──
-window.onAddSessionChange = () => {
-  const session = document.getElementById('add-session').value;
-  const rollSelect = document.getElementById('add-roll');
-  rollSelect.innerHTML = '<option value="">Select roll</option>';
-  document.getElementById('add-name').value = '';
-  if (!session) { rollSelect.disabled=true; return; }
-  const db2 = session==='2006-Morning' ? morningStudents : eveningStudents;
-  Object.keys(db2).sort().forEach(r => { const o=document.createElement('option'); o.value=r; o.textContent=r; rollSelect.appendChild(o); });
-  rollSelect.disabled = false;
-};
-window.onAddRollChange = () => {
-  const session = document.getElementById('add-session').value;
-  const roll = document.getElementById('add-roll').value;
-  const db2 = session==='2006-Morning' ? morningStudents : eveningStudents;
-  document.getElementById('add-name').value = (roll && db2[roll]) ? db2[roll] : '';
-};
-
-window.addAlumniManually = async () => {
-  const session = document.getElementById('add-session').value;
-  const roll = document.getElementById('add-roll').value;
-  const country = document.getElementById('add-country').value.trim();
-  const city = document.getElementById('add-city').value.trim();
-  const job = document.getElementById('add-job').value.trim();
-  const company = document.getElementById('add-company').value.trim();
-  const email = document.getElementById('add-email').value.trim();
-  const phone = document.getElementById('add-phone').value.trim();
-  const linkedin = document.getElementById('add-linkedin').value.trim();
-  const bio = document.getElementById('add-bio').value.trim();
-  const deceased = document.getElementById('add-deceased').value === 'true';
-  const errBox = document.getElementById('add-error');
-  const sucBox = document.getElementById('add-success');
-  errBox.style.display='none'; sucBox.style.display='none';
-
-  if (!session||!roll||!country||!city||!job||!company||!email) {
-    errBox.textContent='⚠️ Please fill all required fields.'; errBox.style.display='block'; return;
-  }
-  const db2 = session==='2006-Morning' ? morningStudents : eveningStudents;
-  const name = db2[roll];
-  if (!name) { errBox.textContent='⚠️ Invalid roll number.'; errBox.style.display='block'; return; }
-
-  // Check if roll already exists
-  const existing = await getDocs(query(collection(db,'alumni'), where('roll','==',roll)));
-  if (!existing.empty) { errBox.textContent='⚠️ This roll number already has a registered profile.'; errBox.style.display='block'; return; }
-
-  try {
-    const uid = 'admin_' + roll.replace(/[^A-Za-z0-9]/g,'_') + '_' + Date.now();
-    await setDoc(doc(db,'alumni',uid), {
-      uid, name, roll, session, country, city, job, company, email, phone,
-      linkedin, bio, photoBase64:'', deceased,
-      registeredAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      addedByAdmin: true, googleName:'', googlePhoto:''
+    const coverUrl = await uploadToCloudinary(adminCoverBase64);
+    const ref = await addDoc(collection(db,"posts"),{
+      title, subtitle:document.getElementById("b-subtitle").value.trim(),
+      category, tags:document.getElementById("b-tags").value.trim(),
+      content, coverImage:coverUrl,
+      authorName:"Dr. Adeem Ghaffar Rana", authorUsername:"ranaadeem", authorUid:ADMIN_UID,
+      status:"published", publishedAt:serverTimestamp(), createdAt:serverTimestamp()
     });
-    sucBox.textContent = `✅ ${name} (${roll}) added successfully!`;
-    sucBox.style.display='block';
-    document.getElementById('add-session').value='';
-    document.getElementById('add-roll').innerHTML='<option value="">Select session first</option>';
-    document.getElementById('add-roll').disabled=true;
-    document.getElementById('add-name').value='';
-    ['add-country','add-city','add-job','add-company','add-email','add-phone','add-linkedin','add-bio'].forEach(id => { document.getElementById(id).value=''; });
-    loadAllData();
-  } catch(e) { errBox.textContent='⚠️ Error: '+e.message; errBox.style.display='block'; }
+    showBlogAlert("blog-ok",`\u2705 Published! <button onclick="window.notifySubscribers('${title.replace(/'/g,"\\'")}','https://ranaadeem.de/blog/post.html?id=${ref.id}','Dr. Adeem Ghaffar Rana')" style="background:var(--gold);color:var(--navy);border:none;padding:3px 10px;border-radius:5px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;margin-left:8px;">\u{1F4EC} Notify Subscribers</button>`,true);
+    ["b-title","b-subtitle","b-tags"].forEach(id=>document.getElementById(id).value="");
+    document.getElementById("b-editor").innerHTML="";
+    adminCoverBase64=""; document.getElementById("b-cover-preview").style.display="none";
+    loadStats();
+  } catch(e) { showBlogAlert("blog-err","Error: "+e.message); }
+  finally { btn.disabled=false; btn.textContent="\u{1F680} Publish Post"; }
 };
 
-// ── Export CSV ──
-window.exportCSV = () => {
-  const headers = ['Name','Roll','Session','Country','City','Job','Company','Email','Phone','LinkedIn','Registered','Status'];
-  const rows = allAlumniData.map(a => [
-    a.name||'', a.roll||'', a.session||'', a.country||'', a.city||'',
-    a.job||'', a.company||'', a.email||'', a.phone||'', a.linkedin||'',
-    a.registeredAt ? new Date(a.registeredAt).toLocaleDateString('en-GB') : '',
-    a.deceased ? 'Deceased' : 'Active'
-  ].map(v => `"${String(v).replace(/"/g,'""')}"`).join(','));
-  const csv = [headers.join(','), ...rows].join('\n');
-  const blob = new Blob([csv], {type:'text/csv'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href=url; a.download=`ICET_Alumni_${new Date().toISOString().slice(0,10)}.csv`;
-  a.click(); URL.revokeObjectURL(url);
-  showToast('✅ CSV exported!');
+// Notify subscribers
+window.notifySubscribers = async function(title,url,author) {
+  try {
+    const snap = await getDocs(collection(db,"subscribers"));
+    const sends = [];
+    snap.forEach(d => {
+      const sub=d.data();
+      sends.push(fetch("/api/send-email",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({type:"new-post",to:sub.email,toName:sub.name||"Reader",data:{postTitle:title,postAuthor:author,postUrl:url}})}));
+    });
+    await Promise.allSettled(sends);
+    toast("Notified "+sends.length+" subscriber(s) \u2713");
+  } catch(e) { toast("Error: "+e.message); }
 };
 
-// ── Tab switching ──
-window.switchAdminTab = (tab, btn) => {
-  document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
-  document.getElementById('tab-'+tab).classList.add('active');
-  document.querySelectorAll('.admin-tab').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
+// Load pending posts
+async function loadPending() {
+  const list=document.getElementById("pending-list"); if(!list) return;
+  try {
+    const snap=await getDocs(query(collection(db,"posts"),where("status","==","pending")));
+    if(snap.empty){list.innerHTML=emptyHtml("\u{1F4EC}","No pending submissions.");return;}
+    const items=[]; snap.forEach(d=>items.push({id:d.id,...d.data()}));
+    items.sort((a,b)=>(b.submittedAt?.seconds||0)-(a.submittedAt?.seconds||0));
+    list.innerHTML="";
+    items.forEach(p=>{
+      const date=p.submittedAt?new Date(p.submittedAt.seconds*1000).toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"}):"";
+      const el=document.createElement("div"); el.className="pending-item";
+      el.innerHTML=`<div class="pending-item-title">${p.title}</div>
+        <div class="pending-item-meta">By ${p.authorName||""} (${p.authorEmail||""}) \u00b7 ${date} \u00b7 ${p.category||""}</div>
+        <div class="pending-item-preview">${p.content.replace(/<[^>]+>/g," ").slice(0,120)}\u2026</div>
+        <div class="pending-actions">
+          <button class="btn btn-approve" onclick="approvePost('${p.id}',this)">\u2705 Approve</button>
+          <button class="btn btn-reject"  onclick="rejectPost('${p.id}',this)">\u{1F5D1} Reject</button>
+        </div>`;
+      list.appendChild(el);
+    });
+  } catch(e){list.innerHTML=`<div style="color:var(--red);padding:1rem;">Error: ${e.message}</div>`;}
+}
+
+window.approvePost = async function(id,btn) {
+  btn.disabled=true; btn.textContent="Approving\u2026";
+  try { await updateDoc(doc(db,"posts",id),{status:"published",publishedAt:serverTimestamp()}); btn.closest(".pending-item").remove(); toast("Post approved \u2713"); loadStats(); }
+  catch(e){toast("Error: "+e.message); btn.disabled=false; btn.textContent="\u2705 Approve";}
+};
+window.rejectPost = async function(id,btn) {
+  const ok=await confirm("Delete submission?","This cannot be undone."); if(!ok)return;
+  btn.disabled=true;
+  try { await deleteDoc(doc(db,"posts",id)); btn.closest(".pending-item").remove(); toast("Deleted."); loadStats(); }
+  catch(e){toast("Error: "+e.message); btn.disabled=false;}
 };
 
-// ── Toast ──
-window.showToast = (msg) => {
-  const t = document.getElementById('toast');
-  t.textContent=msg; t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 3000);
+// Manage posts
+async function loadManagePosts() {
+  const list=document.getElementById("posts-list"); if(!list)return;
+  list.innerHTML="<div class=\"loading\">Loading\u2026</div>";
+  try {
+    const snap=await getDocs(query(collection(db,"posts"),where("status","==","published")));
+    if(snap.empty){list.innerHTML=emptyHtml("\u{1F4CB}","No published posts.");return;}
+    const posts=[]; snap.forEach(d=>posts.push({id:d.id,...d.data()}));
+    posts.sort((a,b)=>(b.publishedAt?.seconds||0)-(a.publishedAt?.seconds||0));
+    list.innerHTML="";
+    posts.forEach(p=>{
+      const date=p.publishedAt?new Date(p.publishedAt.seconds*1000).toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"}):"";
+      const el=document.createElement("div"); el.id="mp-"+p.id;
+      el.style.cssText="background:#f8f7f4;border:1px solid var(--border);border-radius:10px;padding:1rem;margin-bottom:.75rem;";
+      el.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;">
+        <div><div style="font-weight:600;color:var(--navy);font-size:14px;">${p.title}</div><div style="font-size:12px;color:var(--muted);">By ${p.authorName||"Adeem"} \u00b7 ${date}</div></div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;">
+          <a href="/blog/post.html?id=${p.id}" target="_blank" class="btn" style="background:#f3f4f6;color:var(--text);border:1px solid var(--border);text-decoration:none;">\u{1F441} View</a>
+          <button class="btn btn-navy" onclick="window.notifySubscribers('${p.title.replace(/'/g,"\\'")}','https://ranaadeem.de/blog/post.html?id=${p.id}','${(p.authorName||"Dr. Adeem Ghaffar Rana").replace(/'/g,"\\'")}')">\u{1F4EC} Notify</button>
+          <button class="btn btn-reject" onclick="adminDeletePost('${p.id}',this)">\u{1F5D1} Delete</button>
+        </div>
+      </div>`;
+      list.appendChild(el);
+    });
+  } catch(e){list.innerHTML=`<div style="color:var(--red);padding:1rem;">Error: ${e.message}</div>`;}
+}
+window.adminDeletePost = async function(id,btn) {
+  const ok=await confirm("Delete post?","This cannot be undone."); if(!ok)return;
+  btn.disabled=true;
+  try { await deleteDoc(doc(db,"posts",id)); document.getElementById("mp-"+id)?.remove(); toast("Post deleted."); loadStats(); }
+  catch(e){toast("Error: "+e.message); btn.disabled=false;}
 };
 
-// ann-type badge colours (reuse from alumni portal CSS)
-const style = document.createElement('style');
-style.textContent = '.ann-type-job{background:#eff6ff;color:#1d4ed8}.ann-type-achievement{background:#f0fdf4;color:#166534}.ann-type-news{background:#fff7ed;color:#9a3412}.ann-type-other{background:#f3f4f6;color:#6b7280}';
-document.head.appendChild(style);
+// Authors
+async function loadAuthors() {
+  const list=document.getElementById("authors-list"); if(!list)return;
+  list.innerHTML="<div class=\"loading\">Loading\u2026</div>";
+  try {
+    const snap=await getDocs(collection(db,"authors"));
+    if(snap.empty){list.innerHTML=emptyHtml("\u{1F465}","No registered authors.");return;}
+    const authors=[]; snap.forEach(d=>authors.push({id:d.id,...d.data()}));
+    list.innerHTML="";
+    authors.forEach(a=>{
+      const date=a.registeredAt?new Date(a.registeredAt.seconds*1000).toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"}):"";
+      const el=document.createElement("div");
+      el.style.cssText="background:#f8f7f4;border:1px solid var(--border);border-radius:10px;padding:1rem;margin-bottom:.75rem;display:flex;align-items:center;gap:1rem;flex-wrap:wrap;";
+      el.innerHTML=`<div style="width:40px;height:40px;border-radius:50%;background:var(--navy);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--gold);font-size:13px;overflow:hidden;flex-shrink:0;">${a.photoBase64?`<img src="${a.photoBase64}" style="width:100%;height:100%;object-fit:cover;">`:ini(a.name)}</div>
+        <div style="flex:1;min-width:150px;"><div style="font-weight:600;color:var(--navy);font-size:14px;">${a.name}</div><div style="font-size:12px;color:var(--muted);">@${a.username} \u00b7 ${a.email} \u00b7 Joined ${date}</div></div>
+        <div style="display:flex;gap:6px;">
+          <a href="/blog/author.html?u=${a.username}" target="_blank" class="btn" style="background:#f3f4f6;color:var(--text);border:1px solid var(--border);text-decoration:none;">\u{1F441} Profile</a>
+          <button class="btn btn-reject" onclick="adminDeleteAuthor('${a.id}',this)">\u{1F5D1} Delete</button>
+        </div>`;
+      list.appendChild(el);
+    });
+  } catch(e){list.innerHTML=`<div style="color:var(--red);padding:1rem;">Error: ${e.message}</div>`;}
+}
+window.adminDeleteAuthor=async function(docId,btn){
+  const ok=await confirm("Delete author?","Their posts remain but show as anonymous."); if(!ok)return;
+  btn.disabled=true;
+  try{await deleteDoc(doc(db,"authors",docId));btn.closest("div[style]").remove();toast("Author deleted.");}
+  catch(e){toast("Error: "+e.message);btn.disabled=false;}
+};
+
+// ══ ALUMNI FUNCTIONS ════════════════════════════════════════════════════════
+
+async function loadRegs() {
+  const list=document.getElementById("regs-list"); if(!list)return;
+  try {
+    const snap=await getDocs(query(collection(db,"alumni"),where("status","==","pending")));
+    if(snap.empty){list.innerHTML=emptyHtml("\u{1F4CB}","No pending registrations");return;}
+    const items=[]; snap.forEach(d=>items.push({id:d.id,...d.data()}));
+    items.sort((a,b)=>(a.registeredAt?.seconds||0)-(b.registeredAt?.seconds||0));
+    list.innerHTML="";
+    items.forEach(p=>{
+      const card=document.createElement("div"); card.className="item-card reg-card"; card.id="reg-"+p.roll;
+      const date=p.registeredAt?.seconds?new Date(p.registeredAt.seconds*1000).toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"}):"Not set";
+      card.innerHTML=`
+        <div class="reg-avatar">${p.photoUrl?`<img src="${p.photoUrl}" onclick="openLb('${p.photoUrl}')" style="cursor:pointer;">`:ini(p.name)}</div>
+        <div>
+          <div class="item-name">${tc(p.name)}</div>
+          <div class="item-meta"><strong>${p.roll}</strong> \u00b7 Session ${p.session||""} \u00b7 ${p.shift||""}<br>${p.position||""}${p.employer?" at "+p.employer:""}<br>${p.city||""}${p.country?", "+p.country:""}<br>${p.email||""} \u00b7 ${p.phone||""}<br><span style="color:#9ca3af;font-size:11px;">Registered ${date}</span></div>
+          ${p.linkedin?`<a href="${p.linkedin}" target="_blank" style="font-size:12px;color:var(--navy);text-decoration:none;border-bottom:1px solid var(--gold);">LinkedIn \u2192</a>`:""}
+        </div>
+        <div class="actions">
+          <button class="btn btn-approve" onclick="approveReg('${p.roll}','${(p.email||"").replace(/'/g,"\\'")}','${tc(p.name).replace(/'/g,"\\'")}','${p.session||""}',this)">\u2705 Approve</button>
+          <button class="btn btn-reject"  onclick="rejectReg('${p.roll}',this)">\u{1F5D1} Reject</button>
+          ${p.photoUrl?`<button class="btn btn-navy" onclick="openLb('${p.photoUrl}')">\u{1F5BC} Photo</button>`:""}
+        </div>`;
+      list.appendChild(card);
+    });
+  } catch(e){list.innerHTML=`<div class="empty"><p style="color:var(--red)">Error: ${e.message}</p></div>`;}
+}
+
+window.approveReg=async function(roll,email,name,session,btn){
+  btn.disabled=true; btn.textContent="Approving\u2026";
+  try {
+    await updateDoc(doc(db,"alumni",roll),{status:"approved",approvedAt:serverTimestamp(),approvedBy:ADMIN_UID});
+    fetch("/api/send-email",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({type:"alumni-approved",to:email,toName:name,data:{roll,session}})}).catch(()=>{});
+    document.getElementById("reg-"+roll)?.remove();
+    toast(name+" approved \u2713 \u2014 email sent");
+    loadStats();
+  } catch(e){toast("Error: "+e.message);btn.disabled=false;btn.textContent="\u2705 Approve";}
+};
+
+window.rejectReg=async function(roll,btn){
+  const ok=await confirm("Reject registration?","This will permanently delete the registration for "+roll+". The user will not be notified.");
+  if(!ok)return; btn.disabled=true;
+  try {
+    const profSnap=await getDoc(doc(db,"alumni",roll));
+    if(profSnap.exists()){const uid=profSnap.data().uid; await deleteDoc(doc(db,"alumni",roll)); if(uid)await deleteDoc(doc(db,"alumni_uid_map",uid));}
+    document.getElementById("reg-"+roll)?.remove();
+    toast("Registration rejected and deleted."); loadStats();
+  } catch(e){toast("Error: "+e.message);btn.disabled=false;}
+};
+
+async function loadPhotos() {
+  const list=document.getElementById("photos-list"); if(!list)return;
+  try {
+    const snap=await getDocs(query(collection(db,"session_photos"),where("status","==","pending")));
+    if(snap.empty){list.innerHTML=emptyHtml("\u{1F4F8}","No pending photos");return;}
+    const items=[]; snap.forEach(d=>items.push({id:d.id,...d.data()}));
+    list.innerHTML="";
+    items.forEach(p=>{
+      const card=document.createElement("div"); card.className="item-card photo-card"; card.id="photo-"+p.id;
+      card.innerHTML=`<img class="photo-thumb" src="${p.url}" onclick="openLb('${p.url}')" /><div><div class="item-name">${p.caption||"(no caption)"}</div><div class="item-meta">By <strong>${p.uploaderName||"Unknown"}</strong> \u00b7 Session ${p.session||""}</div></div><div class="actions"><button class="btn btn-approve" onclick="approvePhoto('${p.id}',this)">\u2705 Approve</button><button class="btn btn-reject" onclick="rejectPhoto('${p.id}',this)">\u{1F5D1} Reject</button></div>`;
+      list.appendChild(card);
+    });
+  } catch(e){list.innerHTML=`<div class="empty"><p style="color:var(--red)">Error: ${e.message}</p></div>`;}
+}
+window.approvePhoto=async function(id,btn){btn.disabled=true;btn.textContent="\u2026";try{await updateDoc(doc(db,"session_photos",id),{status:"approved"});document.getElementById("photo-"+id)?.remove();toast("Photo approved \u2713");loadStats();}catch(e){toast("Error: "+e.message);btn.disabled=false;btn.textContent="\u2705 Approve";}};
+window.rejectPhoto=async function(id,btn){const ok=await confirm("Delete photo?","Permanently deleted.");if(!ok)return;btn.disabled=true;try{await deleteDoc(doc(db,"session_photos",id));document.getElementById("photo-"+id)?.remove();toast("Photo deleted.");loadStats();}catch(e){toast("Error: "+e.message);btn.disabled=false;}};
+
+async function loadNotices() {
+  const list=document.getElementById("notices-list"); if(!list)return;
+  try {
+    const snap=await getDocs(query(collection(db,"notices"),where("approved","==",false)));
+    if(snap.empty){list.innerHTML=emptyHtml("\u{1F4CC}","No pending notices");return;}
+    const items=[]; snap.forEach(d=>items.push({id:d.id,...d.data()}));
+    list.innerHTML="";
+    items.forEach(n=>{
+      const card=document.createElement("div"); card.className="item-card text-card"; card.id="notice-"+n.id;
+      card.innerHTML=`<div><div class="item-meta">By <strong>${n.authorName||"Unknown"}</strong> \u00b7 Session ${n.session||""}</div><div class="item-preview">${n.text||""}</div></div><div class="actions"><button class="btn btn-approve" onclick="approveNotice('${n.id}',this)">\u2705 Approve</button><button class="btn btn-reject" onclick="deleteNotice('${n.id}',this)">\u{1F5D1} Delete</button></div>`;
+      list.appendChild(card);
+    });
+  } catch(e){list.innerHTML=`<div class="empty"><p style="color:var(--red)">Error: ${e.message}</p></div>`;}
+}
+window.approveNotice=async function(id,btn){btn.disabled=true;btn.textContent="\u2026";try{await updateDoc(doc(db,"notices",id),{approved:true});document.getElementById("notice-"+id)?.remove();toast("Notice approved \u2713");const b=document.getElementById("badge-notices");b.textContent=Math.max(0,parseInt(b.textContent)-1);}catch(e){toast("Error: "+e.message);btn.disabled=false;btn.textContent="\u2705 Approve";}};
+window.deleteNotice=async function(id,btn){const ok=await confirm("Delete notice?","Permanently deleted.");if(!ok)return;btn.disabled=true;try{await deleteDoc(doc(db,"notices",id));document.getElementById("notice-"+id)?.remove();toast("Deleted.");}catch(e){toast("Error: "+e.message);btn.disabled=false;}};
+
+async function loadAnns() {
+  const list=document.getElementById("anns-list"); if(!list)return;
+  try {
+    const snap=await getDocs(query(collection(db,"announcements"),where("approved","==",false)));
+    if(snap.empty){list.innerHTML=emptyHtml("\u{1F4E2}","No pending announcements");return;}
+    const items=[]; snap.forEach(d=>items.push({id:d.id,...d.data()}));
+    list.innerHTML="";
+    items.forEach(a=>{
+      const card=document.createElement("div"); card.className="item-card text-card"; card.id="ann-"+a.id;
+      const typeLbl={job:"Job Update",achievement:"Achievement",news:"News",other:"Update"}[a.type]||"Update";
+      card.innerHTML=`<div><div class="item-meta" style="margin-bottom:4px;"><span style="background:#eff6ff;color:#1d4ed8;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;">${typeLbl}</span> \u00b7 By <strong>${a.authorName||"Unknown"}</strong> \u00b7 Session ${a.session||""}</div><div class="item-name">${a.title||""}</div>${a.body?`<div class="item-preview">${a.body}</div>`:""}</div><div class="actions"><button class="btn btn-approve" onclick="approveAnn('${a.id}',this)">\u2705 Approve</button><button class="btn btn-reject" onclick="deleteAnn('${a.id}',this)">\u{1F5D1} Delete</button></div>`;
+      list.appendChild(card);
+    });
+  } catch(e){list.innerHTML=`<div class="empty"><p style="color:var(--red)">Error: ${e.message}</p></div>`;}
+}
+window.approveAnn=async function(id,btn){btn.disabled=true;btn.textContent="\u2026";try{await updateDoc(doc(db,"announcements",id),{approved:true});document.getElementById("ann-"+id)?.remove();toast("Announcement approved \u2713");const b=document.getElementById("badge-anns");b.textContent=Math.max(0,parseInt(b.textContent)-1);}catch(e){toast("Error: "+e.message);btn.disabled=false;btn.textContent="\u2705 Approve";}};
+window.deleteAnn=async function(id,btn){const ok=await confirm("Delete announcement?","Permanently deleted.");if(!ok)return;btn.disabled=true;try{await deleteDoc(doc(db,"announcements",id));document.getElementById("ann-"+id)?.remove();toast("Deleted.");}catch(e){toast("Error: "+e.message);btn.disabled=false;}};
+
+async function loadMembers() {
+  try {
+    const snap=await getDocs(query(collection(db,"alumni"),where("status","==","approved")));
+    allMembers=[];
+    snap.forEach(d=>allMembers.push({id:d.id,...d.data()}));
+    allMembers.sort((a,b)=>(a.name||"").localeCompare(b.name||""));
+    renderMembers();
+  } catch(e){document.getElementById("members-list").innerHTML=`<div class="empty"><p style="color:var(--red)">Error: ${e.message}</p></div>`;}
+}
+
+window.renderMembers=function(){
+  const list=document.getElementById("members-list");
+  const search=document.getElementById("members-search").value.trim().toLowerCase();
+  const session=document.getElementById("members-session").value;
+  const role=document.getElementById("members-role").value;
+  const filtered=allMembers.filter(m=>{
+    const ms=!search||(m.name||"").toLowerCase().includes(search)||(m.roll||"").toLowerCase().includes(search)||(m.city||"").toLowerCase().includes(search);
+    const ss=session==="all"||(m.session||"").startsWith(session);
+    const rs=role==="all"||m.role===role;
+    return ms&&ss&&rs;
+  });
+  if(!filtered.length){list.innerHTML=emptyHtml("\u{1F465}","No members found");return;}
+  list.innerHTML="";
+  filtered.forEach(m=>{
+    const row=document.createElement("div"); row.className="member-row"; row.id="mrow-"+m.roll;
+    const isMod=m.role==="moderator";
+    const yr=parseInt(m.session||""); const sl=isNaN(yr)?m.session:`${yr}\u20134`;
+    row.innerHTML=`<div class="member-row-avatar">${m.photoUrl?`<img src="${m.photoUrl}">`:(m.photoBase64?`<img src="${m.photoBase64}">`:ini(m.name))}</div>
+      <div class="member-row-info">
+        <div class="member-row-name">${tc(m.name)}${isMod?`<span class="mod-badge">\u{1F6E1} Mod \u00b7 ${sl}</span>`:""}</div>
+        <div class="member-row-meta">${m.roll} \u00b7 Session ${sl} \u00b7 ${m.shift||""} \u00b7 ${m.city||""}${m.country?", "+m.country:""}</div>
+        <div class="member-row-meta">${m.position||""}${m.employer?" @ "+m.employer:""}</div>
+      </div>
+      <div class="actions">
+        <a href="/alumni/profile.html?roll=${m.roll}" target="_blank" class="btn btn-view" style="text-decoration:none;">View</a>
+        ${isMod?`<button class="btn btn-unmod" onclick="removeMod('${m.roll}','${tc(m.name).replace(/'/g,"\\'")}',this)">Remove Mod</button>`:`<button class="btn btn-mod" onclick="makeMod('${m.roll}','${tc(m.name).replace(/'/g,"\\'")}','${m.session}',this)">\u{1F6E1} Make Moderator</button>`}
+      </div>`;
+    list.appendChild(row);
+  });
+};
+
+window.makeMod=async function(roll,name,session,btn){
+  const yr=parseInt(session||""); const sl=isNaN(yr)?session:`${yr}\u20134`;
+  const ok=await confirm(`Make ${name} a moderator?`,`They can approve photos, notices and announcements for Session ${sl} only.`);
+  if(!ok)return; btn.disabled=true; btn.textContent="\u2026";
+  try{await updateDoc(doc(db,"alumni",roll),{role:"moderator",moderatorSession:session,moderatorAssignedAt:serverTimestamp()});const m=allMembers.find(m=>m.roll===roll);if(m){m.role="moderator";m.moderatorSession=session;}renderMembers();toast(name+" is now a moderator \u2713");}
+  catch(e){toast("Error: "+e.message);btn.disabled=false;btn.textContent="\u{1F6E1} Make Moderator";}
+};
+window.removeMod=async function(roll,name,btn){
+  const ok=await confirm(`Remove moderator from ${name}?`,"They return to regular member status.");
+  if(!ok)return; btn.disabled=true; btn.textContent="\u2026";
+  try{await updateDoc(doc(db,"alumni",roll),{role:null,moderatorSession:null});const m=allMembers.find(m=>m.roll===roll);if(m){m.role=null;m.moderatorSession=null;}renderMembers();toast("Moderator role removed.");}
+  catch(e){toast("Error: "+e.message);btn.disabled=false;btn.textContent="Remove Mod";}
+};
+
+// ── Add Manually ───────────────────────────────────────────────────────────
+function getRollInfo(roll){
+  roll=roll.trim().toUpperCase();
+  if(/^(CE|PG|EE|BC)-M6-/.test(roll))return{session:"2006",shift:"Morning"};
+  if(/^(CE|PG)-E6-/.test(roll))return{session:"2006",shift:"Evening"};
+  if(/^M09-/.test(roll))return{session:"2009",shift:"Morning"};
+  if(/^E09-/.test(roll))return{session:"2009",shift:"Evening"};
+  if(/^RP16-/.test(roll))return{session:"2016",shift:"Morning"};
+  if(/^SSP16-/.test(roll))return{session:"2016",shift:"Evening"};
+  return null;
+}
+window.manualAutoFill=function(){
+  const roll=document.getElementById("m-roll").value.trim().toUpperCase();
+  const info=getRollInfo(roll); const hint=document.getElementById("m-roll-hint");
+  if(info){document.getElementById("m-session").value=info.session;document.getElementById("m-shift").value=info.shift;hint.textContent="\u2713 Session "+info.session+" \u00b7 "+info.shift;hint.style.color="var(--green)";}
+  else if(roll.length>3){hint.textContent="Roll format not recognised";hint.style.color="var(--red)";document.getElementById("m-session").value="";document.getElementById("m-shift").value="";}
+  else{hint.textContent="";}
+};
+window.submitManual=async function(){
+  const errEl=document.getElementById("manual-err"),sucEl=document.getElementById("manual-ok");
+  errEl.style.display="none"; sucEl.style.display="none";
+  const roll=document.getElementById("m-roll").value.trim().toUpperCase();
+  const name=document.getElementById("m-name").value.trim();
+  const session=document.getElementById("m-session").value.trim();
+  const shift=document.getElementById("m-shift").value.trim();
+  if(!roll){errEl.textContent="Roll number required.";errEl.style.display="block";return;}
+  if(!name){errEl.textContent="Full name required.";errEl.style.display="block";return;}
+  if(!session){errEl.textContent="Could not determine session from roll number.";errEl.style.display="block";return;}
+  const existing=await getDoc(doc(db,"alumni",roll));
+  if(existing.exists()){errEl.textContent="Profile for "+roll+" already exists.";errEl.style.display="block";return;}
+  const btn=event.target; btn.disabled=true; btn.textContent="Adding\u2026";
+  try{
+    await setDoc(doc(db,"alumni",roll),{
+      roll,name,session,shift,
+      position:document.getElementById("m-position").value.trim(),
+      employer:document.getElementById("m-employer").value.trim(),
+      city:document.getElementById("m-city").value.trim(),
+      country:document.getElementById("m-country").value.trim(),
+      email:document.getElementById("m-email").value.trim(),
+      phone:document.getElementById("m-phone").value.trim(),
+      linkedin:document.getElementById("m-linkedin").value.trim(),
+      photoUrl:document.getElementById("m-photo").value.trim()||"",
+      deceased:document.getElementById("m-deceased").checked||false,
+      status:"approved",emailVerified:true,addedManually:true,addedBy:ADMIN_UID,
+      registeredAt:serverTimestamp(),approvedAt:serverTimestamp(),approvedBy:ADMIN_UID,
+    });
+    sucEl.innerHTML="\u2713 <strong>"+tc(name)+"</strong> ("+roll+") added \u2014 now active on Session "+session+" page.";
+    sucEl.style.display="block";
+    ["m-roll","m-name","m-session","m-shift","m-position","m-employer","m-city","m-country","m-email","m-phone","m-linkedin","m-photo"].forEach(id=>document.getElementById(id).value="");
+    document.getElementById("m-deceased").checked=false;
+    document.getElementById("m-roll-hint").textContent="";
+    loadStats(); allMembers=[];
+  }catch(e){errEl.textContent="Error: "+e.message;errEl.style.display="block";}
+  finally{btn.disabled=false;btn.textContent="\u2795 Add to Alumni Network";}
+};
+
+// ── Cover image ────────────────────────────────────────────────────────────
+document.getElementById("b-cover").addEventListener("change",e=>{
+  const file=e.target.files[0]; if(!file)return;
+  const r=new FileReader(); r.onload=e=>{const img=new Image();img.onload=()=>{const c=document.createElement("canvas");const M=1200;let w=img.width,h=img.height;if(w>M){h=h*(M/w);w=M;}c.width=w;c.height=h;c.getContext("2d").drawImage(img,0,0,w,h);adminCoverBase64=c.toDataURL("image/jpeg",.82);const p=document.getElementById("b-cover-preview");p.src=adminCoverBase64;p.style.display="block";};img.src=e.target.result;};r.readAsDataURL(file);
+});
+
+// ── MD upload ──────────────────────────────────────────────────────────────
+document.getElementById("b-md-file").addEventListener("change",e=>{
+  const file=e.target.files[0];if(!file)return;
+  const r=new FileReader();r.onload=e=>{document.getElementById("b-editor").innerHTML=marked.parse(e.target.result);switchEditorTab("b","write");toast("Markdown loaded \u2713");};r.readAsText(file);
+});
+</script>
+
+<script>
+// Editor helpers
+function switchEditorTab(p,tab){
+  ["write","md","preview"].forEach(t=>{const el=document.getElementById(p+"-"+t+"-tab");if(el)el.style.display=t===tab?"block":"none";});
+  if(tab==="preview"){const c=document.getElementById(p+"-preview-content");if(c)c.innerHTML=document.getElementById(p+"-editor").innerHTML||"<em style=\"color:var(--muted)\">Nothing yet.</em>";}
+}
+function fmt(p,cmd,val){document.getElementById(p+"-editor").focus();document.execCommand(cmd,false,val||null);}
+function fmtBlock(p,tag){document.getElementById(p+"-editor").focus();document.execCommand("formatBlock",false,tag);}
+function fmtAlign(p,a){document.getElementById(p+"-editor").focus();const c={left:"justifyLeft",center:"justifyCenter",right:"justifyRight",justify:"justifyFull"};document.execCommand(c[a],false,null);}
+function insertLink(p){const u=prompt("Enter URL:");if(u){document.getElementById(p+"-editor").focus();document.execCommand("createLink",false,u);}}
+function insertImage(p,input){
+  const f=input.files[0];if(!f)return;
+  const r=new FileReader();r.onload=e=>{const img=new Image();img.onload=()=>{const c=document.createElement("canvas");const M=900;let w=img.width,h=img.height;if(w>M){h=h*(M/w);w=M;}c.width=w;c.height=h;c.getContext("2d").drawImage(img,0,0,w,h);document.getElementById(p+"-editor").focus();document.execCommand("insertImage",false,c.toDataURL("image/jpeg",.82));};img.src=e.target.result;};
+  r.readAsDataURL(f);input.value="";
+}
 </script>
 </body>
 </html>
