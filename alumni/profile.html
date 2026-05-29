@@ -319,8 +319,10 @@ const db   = getFirestore(app);
 const ADMIN = 'w2AtZbhUiyY5TxyvIecHzWqheaE2';
 
 // ── State ─────────────────────────────────────────────────────────────────
+let _currentPhotoUrl = null;   // URL of currently displayed photo
 const urlRoll     = new URLSearchParams(location.search).get('roll');
 let profileData   = null;   // Firestore data of the profile being viewed
+let profileRoll   = null;   // actual Firestore doc ID (may differ from urlRoll for old docs)
 let viewerRole    = 'public'; // 'public' | 'other' | 'same' | 'self' | 'admin'
 let viewerSession = null;   // session of the logged-in user
 
@@ -341,19 +343,21 @@ function render(p) {
   document.getElementById('st-profile').style.display  = 'block';
   document.title = tc(p.name) + ' — ICET Alumni';
 
-  // Crumb + nav back
-  // Support both old format '2006-Morning' and new '2006'
+  // Support old field names: job→position, company→employer, photoBase64→photoUrl
+  const _position = p.position || p.job || '';
+  const _employer  = p.employer  || p.company || '';
+  const _photo     = p.photoUrl  || p.photoBase64 || null;
+
+  // Session — support both '2006-Morning' (old) and '2006' (new)
   const sessionYear = (p.session || '').split('-')[0];
-  const sessionUrl = `/alumni/${sessionYear}.html`;
+  const sessionUrl  = `/alumni/${sessionYear}.html`;
   document.getElementById('crumb-link').href        = sessionUrl;
   document.getElementById('crumb-link').textContent = `← Back to Session ${sessionYear}`;
   document.getElementById('nav-back').href          = sessionUrl;
   document.getElementById('nav-back').textContent   = `← Session ${sessionYear}`;
-  document.getElementById('nav-back').href          = sessionUrl;
-  document.getElementById('nav-back').textContent   = `← Session ${p.session}`;
 
-  // Avatar initials
-  const av = document.getElementById('p-avatar');
+  // Avatar — show photo or initials
+  const av       = document.getElementById('p-avatar');
   const initials = p.name.split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase();
   if (_photo) {
     av.innerHTML = `<img src="${_photo}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" alt="${p.name}">`;
@@ -363,14 +367,10 @@ function render(p) {
     _currentPhotoUrl = null;
   }
 
-  set('p-name',  tc(p.name));
-  set('p-roll',  p.roll);
+  set('p-name',     tc(p.name));
+  set('p-roll',     p.roll);
   set('lm-session', `Session ${sessionYear}–${parseInt(sessionYear)+4}`);
   set('lm-shift',   p.shift);
-  // Support old field names: job→position, company→employer, photoBase64→photoUrl
-  const _position = p.position || p.job || '';
-  const _employer  = p.employer  || p.company || '';
-  const _photo     = p.photoUrl  || p.photoBase64 || null;
   set('lm-position', _position || '—');
 
   // Location in sidebar (city + country visible to all)
@@ -506,7 +506,7 @@ window.saveProfile = async function() {
   saveBtn.disabled = true; saveBtn.textContent = 'Saving…';
 
   try {
-    await updateDoc(doc(db, 'alumni', urlRoll), updates);
+    await updateDoc(doc(db, 'alumni', profileRoll || urlRoll), updates);
 
     // Update local cache + display values
     Object.assign(profileData, updates);
@@ -595,6 +595,8 @@ if (!urlRoll) {
 
       profileData = snap.data ? snap.data() : snap.data;
       if (!profileData) { showErr('Could not load profile data.'); return; }
+      // profileRoll = the actual Firestore doc ID (may differ from urlRoll for old docs)
+      profileRoll = snap.id || urlRoll;
 
       if (profileData.status !== 'approved' && viewerRole !== 'admin') {
         showErr('This profile is pending admin approval and is not yet visible.'); return;
@@ -671,5 +673,6 @@ window.handlePhotoEdit = async function(input) {
   <button class="photo-lb-close" onclick="document.getElementById('photo-lb').classList.remove('open')">✕</button>
   <img id="photo-lb-img" src="" alt="Profile photo" onclick="event.stopPropagation()" />
 </div>
+
 </body>
 </html>
