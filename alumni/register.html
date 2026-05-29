@@ -3,1759 +3,875 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Join the Alumni Network — ICET</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet" />
-
+  <title>Alumni Profile — ICET</title>
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --navy:   #0d1b2a;
-      --gold:   #c9a84c;
-      --gold-light: #e8c97a;
-      --cream:  #faf7f2;
-      --mid:    #5a6a7a;
-      --border: #ddd5c8;
-      --red:    #c0392b;
-      --green:  #1a7a4a;
+      --navy: #1a3a8a; --navy-deep: #0f2260; --navy-mid: #1e3f8f;
+      --gold: #c9a84c; --gold-light: #e8d5a3; --gold-pale: rgba(201,168,76,.12);
+      --cream: #faf8f4; --white: #fff;
+      --text: #1a1a2e; --muted: #6b7280; --border: #e5e7eb;
+      --green: #059669; --red: #dc2626;
     }
+    html { scroll-behavior: smooth; }
+    body { font-family: "DM Sans", sans-serif; background: var(--cream); color: var(--text); min-height: 100vh; overflow-x: hidden; }
 
-    body {
-      font-family: 'Source Sans 3', sans-serif;
-      background: var(--cream);
-      color: var(--navy);
-      min-height: 100vh;
+    /* ── NAV ── */
+    #main-nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      height: 60px;
+      background: rgba(15,34,96,.92);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(201,168,76,.3);
     }
+    .nav-inner { max-width: 1000px; margin: 0 auto; padding: 0 1.5rem; display: flex; align-items: center; justify-content: space-between; height: 100%; }
+    .nav-logo { font-family: "Playfair Display", serif; color: var(--gold); font-size: 1rem; text-decoration: none; letter-spacing: .03em; }
+    .nav-right { display: flex; align-items: center; gap: 1rem; }
+    .nav-back { color: rgba(255,255,255,.6); font-size: 12px; text-decoration: none; border-bottom: 1px solid rgba(201,168,76,.3); padding-bottom: 1px; transition: color .2s; }
+    .nav-back:hover { color: var(--gold); }
+    .nav-user { font-size: 12px; color: rgba(255,255,255,.7); }
+    .nav-signout { background: none; border: 1px solid rgba(255,255,255,.2); color: rgba(255,255,255,.55); padding: 4px 12px; border-radius: 20px; font-size: 11px; cursor: pointer; font-family: inherit; display: none; transition: all .2s; }
+    .nav-signout:hover { border-color: var(--gold); color: var(--gold); }
 
-    /* ── Top bar ── */
-    .topbar {
-      background: var(--navy);
-      padding: 0 2rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      height: 56px;
+    /* ── HERO BANNER ── */
+    .hero {
+      min-height: 340px;
+      background: linear-gradient(135deg, var(--navy-deep) 0%, var(--navy-mid) 50%, #2048a8 100%);
+      position: relative; overflow: hidden;
+      display: flex; align-items: flex-end;
+      padding: 0 0 0;
     }
-    .topbar-logo {
-      font-family: 'Playfair Display', serif;
-      color: var(--gold);
-      font-size: 1.1rem;
-      text-decoration: none;
-      letter-spacing: 0.03em;
+    /* Animated geometric bg */
+    .hero::before {
+      content: "";
+      position: absolute; inset: 0;
+      background-image:
+        radial-gradient(circle at 20% 50%, rgba(201,168,76,.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(201,168,76,.08) 0%, transparent 40%),
+        radial-gradient(circle at 60% 80%, rgba(32,72,168,.4) 0%, transparent 50%);
+      animation: heroPulse 8s ease-in-out infinite alternate;
     }
-    .topbar-link {
-      color: #aab4be;
-      font-size: 0.85rem;
-      text-decoration: none;
-      transition: color .2s;
+    @keyframes heroPulse {
+      from { opacity: .7; transform: scale(1); }
+      to   { opacity: 1;  transform: scale(1.04); }
     }
-    .topbar-link:hover { color: var(--gold-light); }
-
-    /* ── Layout ── */
-    .page-wrap {
-      max-width: 520px;
-      margin: 0 auto;
-      padding: 3rem 1.5rem 5rem;
-    }
-
-    /* ── Header ── */
-    .page-header {
-      text-align: center;
-      margin-bottom: 2.5rem;
-    }
-    .page-header .badge {
-      display: inline-block;
-      background: var(--gold);
-      color: var(--navy);
-      font-size: 0.7rem;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      padding: 4px 12px;
-      border-radius: 2px;
-      margin-bottom: 1rem;
-    }
-    .page-header h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: 2.1rem;
-      color: var(--navy);
-      line-height: 1.2;
-      margin-bottom: 0.75rem;
-    }
-    .page-header p {
-      color: var(--mid);
-      font-size: 0.95rem;
-      line-height: 1.6;
-    }
-
-    /* ── Card ── */
-    .card {
-      background: #fff;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 2.5rem;
-      box-shadow: 0 2px 16px rgba(13,27,42,.06);
-    }
-
-    /* ── Steps indicator ── */
-    .steps {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0;
-      margin-bottom: 2.5rem;
-    }
-    .step {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 6px;
-      flex: 1;
-    }
-    .step-dot {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.8rem;
-      font-weight: 700;
-      border: 2px solid var(--border);
-      background: #fff;
-      color: var(--mid);
-      position: relative;
-      z-index: 1;
-      transition: all .3s;
-    }
-    .step.active .step-dot {
-      border-color: var(--gold);
-      background: var(--gold);
-      color: var(--navy);
-    }
-    .step.done .step-dot {
-      border-color: var(--green);
-      background: var(--green);
-      color: #fff;
-    }
-    .step-label {
-      font-size: 0.7rem;
-      color: var(--mid);
-      font-weight: 500;
-      letter-spacing: 0.04em;
-      white-space: nowrap;
-    }
-    .step.active .step-label { color: var(--navy); font-weight: 600; }
-    .step-line {
-      height: 2px;
-      flex: 1;
-      background: var(--border);
-      margin-top: -22px;
-      position: relative;
-      z-index: 0;
-    }
-    .step-line.done { background: var(--green); }
-
-    /* ── Forms ── */
-    .form-section { display: none; }
-    .form-section.active { display: block; }
-
-    .form-row { margin-bottom: 1.25rem; }
-    .form-row-2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-      margin-bottom: 1.25rem;
-    }
-    label {
-      display: block;
-      font-size: 0.8rem;
-      font-weight: 600;
-      color: var(--navy);
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      margin-bottom: 6px;
-    }
-    label span.req { color: var(--gold); }
-
-    input, select, textarea {
-      width: 100%;
-      border: 1.5px solid var(--border);
-      border-radius: 5px;
-      padding: 10px 14px;
-      font-family: 'Source Sans 3', sans-serif;
-      font-size: 0.95rem;
-      color: var(--navy);
-      background: #fff;
-      outline: none;
-      transition: border-color .2s;
-      appearance: none;
-    }
-    input:focus, select:focus, textarea:focus {
-      border-color: var(--gold);
-      box-shadow: 0 0 0 3px rgba(201,168,76,.12);
-    }
-    input.error, select.error { border-color: var(--red); }
-
-    .field-hint {
-      font-size: 0.78rem;
-      color: var(--mid);
-      margin-top: 5px;
-    }
-
-    /* Roll number autocomplete */
-    .roll-wrap { position: relative; }
-    .roll-suggestions {
-      position: absolute;
-      top: 100%;
-      left: 0; right: 0;
-      background: #fff;
-      border: 1.5px solid var(--gold);
-      border-top: none;
-      border-radius: 0 0 5px 5px;
-      max-height: 200px;
-      overflow-y: auto;
-      z-index: 100;
-      display: none;
-    }
-    .roll-suggestions.open { display: block; }
-    .roll-option {
-      padding: 9px 14px;
-      cursor: pointer;
-      font-size: 0.9rem;
-      border-bottom: 1px solid #f0ebe4;
-      transition: background .15s;
-    }
-    .roll-option:hover { background: #fdf8ee; }
-    .roll-option strong { color: var(--gold); }
-    .roll-option .roll-name { font-size: 0.8rem; color: var(--mid); }
-
-    /* Password strength */
-    .pw-strength { margin-top: 6px; }
-    .pw-bar {
+    /* Gold decorative line */
+    .hero::after {
+      content: "";
+      position: absolute; bottom: 0; left: 0; right: 0;
       height: 3px;
-      border-radius: 2px;
-      background: var(--border);
-      overflow: hidden;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
     }
-    .pw-fill {
-      height: 100%;
-      width: 0%;
-      border-radius: 2px;
-      transition: width .3s, background .3s;
-    }
-    .pw-label { font-size: 0.75rem; color: var(--mid); margin-top: 4px; }
-
-    /* Session info auto-fill */
-    .autofill-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: #f0faf5;
-      border: 1px solid #aadfc4;
-      border-radius: 4px;
-      padding: 8px 12px;
-      font-size: 0.85rem;
-      color: var(--green);
-      margin-top: 8px;
-      font-weight: 500;
-    }
-    .autofill-badge svg { flex-shrink: 0; }
-
-    /* Buttons */
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      padding: 12px 28px;
-      border-radius: 5px;
-      font-family: 'Source Sans 3', sans-serif;
-      font-size: 0.95rem;
-      font-weight: 600;
-      cursor: pointer;
-      border: none;
-      transition: all .2s;
-      letter-spacing: 0.02em;
-    }
-    .btn-primary {
-      background: var(--navy);
-      color: #fff;
-      width: 100%;
-      margin-top: 0.5rem;
-    }
-    .btn-primary:hover:not(:disabled) { background: #1a2e42; }
-    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
-    .btn-gold {
-      background: var(--gold);
-      color: var(--navy);
-      width: 100%;
-      margin-top: 0.5rem;
-    }
-    .btn-gold:hover:not(:disabled) { background: var(--gold-light); }
-
-    /* Alert boxes */
-    .alert {
-      display: none;
-      border-radius: 5px;
-      padding: 12px 16px;
-      font-size: 0.9rem;
-      margin-bottom: 1.25rem;
-      line-height: 1.5;
-    }
-    .alert.show { display: block; }
-    .alert-error { background: #fdf2f2; border: 1px solid #f5c6c6; color: #7a1a1a; }
-    .alert-success { background: #f0faf5; border: 1px solid #aadfc4; color: #0e4f2c; }
-    .alert-info { background: #f0f6ff; border: 1px solid #b3cfee; color: #1a3a6a; }
-
-    /* Divider */
-    .divider {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin: 1.5rem 0;
-      color: var(--mid);
-      font-size: 0.8rem;
-    }
-    .divider::before, .divider::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: var(--border);
+    /* Subtle grid texture */
+    .hero-grid {
+      position: absolute; inset: 0; pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+      background-size: 40px 40px;
     }
 
-    /* Switch to sign-in */
-    .switch-link {
-      text-align: center;
-      margin-top: 1.5rem;
-      font-size: 0.9rem;
-      color: var(--mid);
+    .hero-content {
+      position: relative; z-index: 2;
+      width: 100%; max-width: 1000px; margin: 0 auto;
+      padding: 100px 1.5rem 2.5rem;
+      display: flex; align-items: flex-end; gap: 2rem; flex-wrap: wrap;
     }
-    .switch-link a {
-      color: var(--navy);
-      font-weight: 600;
-      text-decoration: none;
-      border-bottom: 1px solid var(--gold);
-    }
-    .switch-link a:hover { color: var(--gold); }
 
-    /* ── Verification sent state ── */
-    .verify-state {
-      text-align: center;
-      padding: 1rem 0;
-    }
-    .verify-icon {
-      width: 72px;
-      height: 72px;
-      background: #fdf8ee;
-      border: 2px solid var(--gold);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 1.5rem;
-      font-size: 2rem;
-    }
-    .verify-state h2 {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.5rem;
-      margin-bottom: 0.75rem;
-    }
-    .verify-state p {
-      color: var(--mid);
-      font-size: 0.95rem;
-      line-height: 1.7;
-      margin-bottom: 1.5rem;
-    }
-    .verify-state p strong { color: var(--navy); }
-
-    /* ── Sign-in panel ── */
-    #signin-panel { display: none; }
-
-    /* Loading spinner */
-    .spinner {
-      width: 18px;
-      height: 18px;
-      border: 2px solid rgba(255,255,255,.3);
-      border-top-color: #fff;
-      border-radius: 50%;
-      animation: spin .7s linear infinite;
-      display: none;
-    }
-    .spinner.dark {
-      border-color: rgba(13,27,42,.2);
-      border-top-color: var(--navy);
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    /* Session from URL param */
-    .session-context {
-      background: #f8f4ec;
-      border-left: 3px solid var(--gold);
-      border-radius: 0 4px 4px 0;
-      padding: 10px 14px;
-      font-size: 0.875rem;
-      color: var(--navy);
-      margin-bottom: 1.5rem;
-      display: none;
-    }
-    .session-context.show { display: block; }
-    .session-context strong { color: var(--gold); }
-
-    /* Name validation feedback */
-    .name-feedback { margin-top: 7px; font-size: 0.82rem; display: none; align-items: flex-start; gap: 8px; padding: 10px 13px; border-radius: 5px; line-height: 1.5; }
-    .name-feedback.show { display: flex; }
-    .name-feedback.nf-ok   { background: #f0faf5; border: 1px solid #aadfc4; color: #0e4f2c; }
-    .name-feedback.nf-err  { background: #fdf2f2; border: 1px solid #f5c6c6; color: #7a1a1a; }
-    .name-feedback.nf-warn { background: #fffbea; border: 1px solid #f0d060; color: #7a5a00; }
-    .name-fb-icon { font-size: 1rem; flex-shrink: 0; line-height: 1.5; }
-    input.field-error { border-color: var(--red) !important; box-shadow: none !important; }
-    input.field-ok    { border-color: var(--green) !important; box-shadow: none !important; }
-
-    /* Photo upload */
-    .photo-upload-wrap { text-align: center; margin-bottom: 1.5rem; }
-    .photo-circle {
-      width: 96px; height: 96px; border-radius: 50%;
-      border: 3px dashed var(--border);
+    /* Avatar */
+    .hero-avatar-wrap { position: relative; flex-shrink: 0; }
+    .hero-avatar {
+      width: 110px; height: 110px; border-radius: 50%;
+      border: 3px solid var(--gold);
+      box-shadow: 0 0 0 6px rgba(201,168,76,.2), 0 8px 32px rgba(0,0,0,.4);
+      overflow: hidden; cursor: pointer;
+      background: var(--navy-deep);
       display: flex; align-items: center; justify-content: center;
-      margin: 0 auto 0.6rem; cursor: pointer; overflow: hidden;
-      background: #f8f4ec; transition: border-color .2s;
-      position: relative;
+      font-family: "Playfair Display", serif; font-size: 2rem; color: var(--gold);
+      transition: transform .3s, box-shadow .3s;
+      animation: avatarIn .6s cubic-bezier(.34,1.56,.64,1) both;
     }
-    .photo-circle:hover { border-color: var(--gold); }
-    .photo-circle img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
-    .photo-circle .photo-placeholder { font-size: 2rem; color: var(--border); }
-    .photo-circle .photo-overlay {
-      position: absolute; inset: 0; border-radius: 50%;
-      background: rgba(13,27,42,.45); display: none;
-      align-items: center; justify-content: center;
-      font-size: 0.7rem; color: white; font-weight: 600;
+    @keyframes avatarIn { from { transform: scale(0.6) translateY(20px); opacity:0; } to { transform: scale(1) translateY(0); opacity:1; } }
+    .hero-avatar:hover { transform: scale(1.05); box-shadow: 0 0 0 8px rgba(201,168,76,.3), 0 12px 40px rgba(0,0,0,.5); }
+    .hero-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .hero-avatar-badge {
+      position: absolute; bottom: 4px; right: 4px;
+      width: 22px; height: 22px; border-radius: 50%;
+      background: var(--green); border: 2px solid white;
+      display: none;
     }
-    .photo-circle:hover .photo-overlay { display: flex; }
-    .photo-hint { font-size: 0.78rem; color: var(--mid); }
-    .photo-hint span.req { color: var(--gold); }
+    .hero-avatar-badge.show { display: block; }
 
-    @media (max-width: 540px) {
-      .card { padding: 1.75rem 1.25rem; }
-      .form-row-2 { grid-template-columns: 1fr; }
-      .page-header h1 { font-size: 1.7rem; }
+    /* Photo change button */
+    .btn-change-photo {
+      position: absolute; inset: 0; border-radius: 50%;
+      background: rgba(0,0,0,.5); border: none; color: white;
+      font-size: 11px; font-weight: 600; cursor: pointer; font-family: inherit;
+      opacity: 0; transition: opacity .2s; display: none;
+      align-items: center; justify-content: center; flex-direction: column; gap: 3px;
+    }
+    .hero-avatar-wrap:hover .btn-change-photo.visible { opacity: 1; display: flex; }
+
+    /* Hero text */
+    .hero-text { flex: 1; min-width: 200px; }
+    .hero-name {
+      font-family: "Playfair Display", serif;
+      font-size: clamp(1.6rem, 4vw, 2.2rem);
+      color: white; line-height: 1.15; margin-bottom: 6px;
+      animation: slideUp .5s .1s both;
+    }
+    .hero-roll {
+      font-size: 12px; color: var(--gold-light); letter-spacing: .1em;
+      text-transform: uppercase; margin-bottom: 10px;
+      animation: slideUp .5s .2s both;
+    }
+    .hero-badges {
+      display: flex; gap: 8px; flex-wrap: wrap;
+      animation: slideUp .5s .3s both;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      background: rgba(255,255,255,.1); backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,.15);
+      color: rgba(255,255,255,.9); font-size: 12px; font-weight: 500;
+      padding: 5px 12px; border-radius: 20px;
+    }
+    .hero-badge.gold { background: rgba(201,168,76,.2); border-color: rgba(201,168,76,.4); color: var(--gold-light); }
+    @keyframes slideUp { from { transform: translateY(18px); opacity:0; } to { transform: translateY(0); opacity:1; } }
+
+    /* ── PAGE BODY ── */
+    .page { max-width: 1000px; margin: 0 auto; padding: 2.5rem 1.5rem 6rem; }
+
+    /* ── EDIT BAR ── */
+    .edit-bar { margin-bottom: 1.5rem; animation: fadeIn .4s .4s both; }
+    .save-alert { border-radius: 8px; padding: 10px 14px; font-size: 13px; margin-bottom: 0.75rem; display: none; line-height: 1.5; }
+    .save-alert.show { display: block; }
+    .sa-ok  { background: #f0fdf4; border: 1px solid #86efac; color: #166534; }
+    .sa-err { background: #fef2f2; border: 1px solid #fca5a5; color: #7f1d1d; }
+    .btn-row { display: flex; gap: 8px; flex-wrap: wrap; }
+    .btn { padding: 9px 20px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; border: none; transition: all .2s; display: inline-flex; align-items: center; gap: 6px; }
+    .btn-navy  { background: var(--navy); color: white; }
+    .btn-navy:hover { background: var(--navy-deep); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(26,58,138,.3); }
+    .btn-green { background: var(--green); color: white; display: none; }
+    .btn-green:hover { background: #047857; }
+    .btn-green:disabled { opacity:.5; cursor:not-allowed; }
+    .btn-ghost { background: white; color: var(--muted); border: 1.5px solid var(--border); display: none; }
+    .btn-ghost:hover { border-color: var(--navy); color: var(--navy); }
+
+    /* ── GRID ── */
+    .profile-grid { display: grid; grid-template-columns: 280px 1fr; gap: 1.5rem; align-items: start; }
+
+    /* ── SIDEBAR ── */
+    .sidebar { display: flex; flex-direction: column; gap: 1rem; position: sticky; top: 76px; animation: fadeIn .5s .2s both; }
+
+    .s-card {
+      background: white; border: 1px solid var(--border); border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 2px 12px rgba(0,0,0,.05);
+      transition: box-shadow .25s;
+    }
+    .s-card:hover { box-shadow: 0 6px 24px rgba(0,0,0,.09); }
+    .s-card-header {
+      background: var(--navy); padding: .75rem 1rem;
+      font-size: 10.5px; font-weight: 700; color: var(--gold-light);
+      text-transform: uppercase; letter-spacing: .12em;
+    }
+    .s-card-body { padding: 1rem; }
+
+    .lm-row { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; border-bottom: 1px solid #f3f4f6; }
+    .lm-row:last-child { border-bottom: none; }
+    .lm-icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; width: 20px; text-align: center; }
+    .lm-lbl { font-size: 10px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; display: block; margin-bottom: 2px; }
+    .lm-val { font-size: 13px; color: var(--text); font-weight: 500; line-height: 1.4; }
+    .lm-val a { color: var(--navy); text-decoration: none; font-size: 12px; border-bottom: 1px solid rgba(201,168,76,.5); }
+    .lm-val a:hover { color: var(--gold); }
+
+    .shift-pill { display: inline-block; font-size: 10px; font-weight: 700; padding: 3px 10px; border-radius: 20px; }
+    .pill-morning { background: rgba(201,168,76,.15); color: #9a6e00; }
+    .pill-evening { background: rgba(26,58,138,.1); color: var(--navy); }
+
+    .vis-notice { padding: 10px 12px; background: #f0f6ff; border-top: 1px solid #c3d8f5; font-size: 11.5px; color: #1a3a6a; line-height: 1.55; display: none; }
+    .vis-notice strong { display: block; font-size: 10px; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 3px; }
+    .vis-notice a { color: var(--navy); font-weight: 600; }
+
+    /* ── MAIN CONTENT ── */
+    .main-col { display: flex; flex-direction: column; gap: 1.25rem; animation: fadeIn .5s .3s both; }
+
+    /* Section cards */
+    .section-card {
+      background: white; border: 1px solid var(--border); border-radius: 14px;
+      overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,.05);
+      transition: box-shadow .25s, transform .25s;
+    }
+    .section-card:hover { box-shadow: 0 6px 24px rgba(0,0,0,.09); }
+    .sc-header {
+      padding: 1rem 1.25rem .85rem;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .sc-header-icon {
+      width: 32px; height: 32px; border-radius: 8px;
+      background: var(--gold-pale); display: flex; align-items: center; justify-content: center;
+      font-size: 15px; flex-shrink: 0;
+    }
+    .sc-title { font-size: 13px; font-weight: 700; color: var(--navy); }
+    .sc-sub   { font-size: 11px; color: var(--muted); margin-top: 1px; }
+    .sc-body  { padding: 1.25rem; }
+
+    .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+    .info-item .il { font-size: 10px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .07em; margin-bottom: 5px; }
+    .info-item .iv {
+      font-size: 14px; color: var(--text); font-weight: 500;
+      word-break: break-word; line-height: 1.4;
+    }
+    .info-item .iv a { color: var(--navy); text-decoration: none; border-bottom: 1px solid rgba(201,168,76,.5); font-size: 13px; }
+    .info-item .iv a:hover { color: var(--gold); }
+    .info-item.span2 { grid-column: 1 / -1; }
+    .gated-msg { color: var(--muted); font-style: italic; font-size: 13px; }
+    .private-note { font-size: 11px; color: var(--muted); margin-top: 4px; display: flex; align-items: center; gap: 4px; }
+
+    /* Edit inputs */
+    .edit-inp {
+      width: 100%; border: 1.5px solid var(--border); border-radius: 7px;
+      padding: 9px 12px; font-family: inherit; font-size: 13px;
+      color: var(--text); background: white; outline: none;
+      transition: border-color .2s, box-shadow .2s;
+      display: none; margin-top: 6px;
+    }
+    .edit-inp:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201,168,76,.12); }
+    .editing .edit-inp { display: block; }
+    .editing .iv { display: none; }
+
+    /* Photo edit status */
+    #photo-edit-status { font-size: 11px; color: rgba(255,255,255,.65); min-height: 16px; text-align: center; margin-top: 4px; }
+    #btn-change-photo {
+      width: 100%; background: rgba(201,168,76,.15); color: var(--gold-light);
+      border: 1px solid rgba(201,168,76,.3); padding: 6px 0; border-radius: 6px;
+      font-size: 11px; font-weight: 600; cursor: pointer; font-family: inherit;
+      margin-top: 8px; display: none; transition: background .2s;
+    }
+    #btn-change-photo:hover { background: rgba(201,168,76,.25); }
+
+    /* State boxes */
+    .state-box { text-align: center; padding: 8rem 2rem; }
+    .state-box .s-icon { font-size: 3.5rem; margin-bottom: 1rem; }
+    .state-box h2 { font-family: "Playfair Display", serif; font-size: 1.5rem; color: var(--navy); margin-bottom: .5rem; }
+    .state-box p { color: var(--muted); font-size: .9rem; line-height: 1.6; }
+    .state-box a { display: inline-block; margin-top: 1.25rem; background: var(--navy); color: var(--gold); padding: 9px 22px; border-radius: 8px; font-size: 13px; font-weight: 600; text-decoration: none; }
+
+    /* Photo lightbox */
+    .photo-lb { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.93); z-index: 5000; align-items: center; justify-content: center; }
+    .photo-lb.open { display: flex; animation: lbIn .25s ease; }
+    @keyframes lbIn { from { opacity:0; } to { opacity:1; } }
+    .photo-lb img { max-width: 90vw; max-height: 88vh; border-radius: 14px; box-shadow: 0 20px 80px rgba(0,0,0,.7); }
+    .lb-close { position: absolute; top: 1.25rem; right: 1.25rem; background: rgba(255,255,255,.15); backdrop-filter: blur(8px); border: none; color: white; width: 42px; height: 42px; border-radius: 50%; font-size: 1.1rem; cursor: pointer; transition: background .2s; }
+    .lb-close:hover { background: rgba(255,255,255,.25); }
+
+    /* Crumb */
+    .crumb { display: inline-flex; align-items: center; gap: 6px; color: var(--navy); font-size: 13px; font-weight: 600; text-decoration: none; padding-bottom: 2px; border-bottom: 1px solid var(--gold); margin-bottom: 1.5rem; transition: color .2s; }
+    .crumb:hover { color: var(--gold); }
+
+    /* Animations */
+    @keyframes fadeIn { from { opacity:0; transform: translateY(12px); } to { opacity:1; transform: translateY(0); } }
+
+    /* Responsive */
+    @media (max-width: 760px) {
+      .profile-grid { grid-template-columns: 1fr; }
+      .sidebar { position: static; }
+      .info-grid { grid-template-columns: 1fr; }
+      .info-item.span2 { grid-column: 1; }
+      .hero-avatar { width: 84px; height: 84px; font-size: 1.6rem; }
     }
   </style>
 </head>
-
 <body>
 
-  <nav class="topbar">
-    <a class="topbar-logo" href="/alumni.html">ICET Chemical Engineering Alumni Network</a>
-    <a class="topbar-link" href="/alumni.html">← Back to Portal</a>
-  </nav>
+<nav id="main-nav">
+  <div class="nav-inner">
+    <a class="nav-logo" href="/alumni.html">ICET Chemical Engineering Alumni</a>
+    <div class="nav-right">
+      <span id="nav-user" class="nav-user"></span>
+      <button class="nav-signout" id="nav-signout-btn" onclick="doSignOut()">Sign Out</button>
+      <a class="nav-back" id="nav-back" href="/alumni.html">← Portal</a>
+    </div>
+  </div>
+</nav>
 
-  <div class="page-wrap">
+<!-- Loading -->
+<div id="st-loading" class="state-box" style="padding-top:10rem;">
+  <div class="s-icon">⏳</div>
+  <h2>Loading profile…</h2>
+  <p>Just a moment.</p>
+</div>
 
-    <!-- Header -->
-    <div class="page-header">
-      <div class="badge">Alumni Registration</div>
-      <h1>Join the Network</h1>
-      <p>Connect with fellow ICET Chemical Engineering graduates. Your profile will be reviewed by the admin before activation.</p>
+<!-- Error -->
+<div id="st-error" class="state-box" style="display:none;padding-top:10rem;">
+  <div class="s-icon">🔍</div>
+  <h2>Profile not found</h2>
+  <p id="st-error-msg">This profile doesn't exist or hasn't been approved yet.</p>
+  <a href="/alumni.html">← Back to Alumni Portal</a>
+</div>
+
+<!-- Profile -->
+<div id="st-profile" style="display:none">
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero-grid"></div>
+    <div class="hero-content">
+      <div class="hero-avatar-wrap">
+        <div class="hero-avatar" id="p-avatar" onclick="openPhotoLb()" title="Click to view full photo">?</div>
+        <div class="hero-avatar-badge" id="hero-badge"></div>
+      </div>
+      <div class="hero-text">
+        <div class="hero-name" id="p-name">—</div>
+        <div class="hero-roll" id="p-roll">—</div>
+        <div class="hero-badges" id="hero-badges"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page">
+    <a class="crumb" id="crumb-link" href="#">← Back to Session</a>
+
+    <!-- Edit bar (own profile / admin) -->
+    <div class="edit-bar" id="edit-bar" style="display:none">
+      <div class="save-alert" id="save-alert"></div>
+      <div class="btn-row">
+        <button class="btn btn-navy"  id="btn-edit"   onclick="startEdit()">✏️ Edit Profile</button>
+        <button class="btn btn-green" id="btn-save"   onclick="saveProfile()">💾 Save Changes</button>
+        <button class="btn btn-ghost" id="btn-cancel" onclick="cancelEdit()">Cancel</button>
+      </div>
     </div>
 
-    <!-- ── REGISTRATION CARD ── -->
-    <div class="card" id="register-card">
+    <div class="profile-grid">
 
-      <!-- Steps -->
-      <div class="steps" id="steps-indicator">
-        <div class="step active" id="step-1">
-          <div class="step-dot">1</div>
-          <div class="step-label">Your Details</div>
+      <!-- ── SIDEBAR ── -->
+      <div class="sidebar">
+
+        <!-- Quick Info -->
+        <div class="s-card">
+          <div class="s-card-header">Quick Info</div>
+          <div class="s-card-body">
+            <div class="lm-row">
+              <span class="lm-icon">🎓</span>
+              <div><span class="lm-lbl">Session</span><span class="lm-val" id="lm-session">—</span></div>
+            </div>
+            <div class="lm-row">
+              <span class="lm-icon">🕐</span>
+              <div><span class="lm-lbl">Shift</span><span class="lm-val" id="lm-shift">—</span></div>
+            </div>
+            <div class="lm-row">
+              <span class="lm-icon">📍</span>
+              <div><span class="lm-lbl">Location</span><span class="lm-val" id="lm-location">—</span></div>
+            </div>
+            <div class="lm-row">
+              <span class="lm-icon">💼</span>
+              <div><span class="lm-lbl">Position</span><span class="lm-val" id="lm-position">—</span></div>
+            </div>
+            <div class="lm-row" id="lm-linkedin-row" style="display:none">
+              <span class="lm-icon">🔗</span>
+              <div><span class="lm-lbl">LinkedIn</span><span class="lm-val"><a id="lm-linkedin-a" href="#" target="_blank">View Profile →</a></span></div>
+            </div>
+          </div>
+          <div class="vis-notice" id="vis-notice"></div>
         </div>
-        <div class="step-line" id="line-1-2"></div>
-        <div class="step active" id="step-2">
-          <div class="step-dot">2</div>
-          <div class="step-label">Verify Email</div>
+
+        <!-- Change photo (own/admin only) -->
+        <div class="s-card" id="photo-card" style="display:none">
+          <div class="s-card-header">Profile Photo</div>
+          <div class="s-card-body" style="text-align:center;">
+            <p style="font-size:12px;color:var(--muted);margin-bottom:.75rem;">Click your photo above to view full size, or change it here.</p>
+            <button id="btn-change-photo" onclick="document.getElementById('photo-file-edit').click()">📷 Change Photo</button>
+            <input type="file" id="photo-file-edit" accept="image/*" style="display:none" onchange="handlePhotoEdit(this)" />
+            <div id="photo-edit-status"></div>
+          </div>
         </div>
-        <div class="step-line" id="line-2-3"></div>
-        <div class="step" id="step-3">
-          <div class="step-dot">3</div>
-          <div class="step-label">Approval</div>
-        </div>
+
       </div>
 
-      <!-- Alert box -->
-      <div class="alert" id="reg-alert"></div>
+      <!-- ── MAIN COLUMN ── -->
+      <div class="main-col">
 
-      <!-- Session context (if ?session= param present) -->
-      <div class="session-context" id="session-context-bar"></div>
-
-      <!-- ── STEP 1: Registration form ── -->
-      <div class="form-section active" id="reg-form">
-
-        <!-- Photo upload -->
-        <div class="photo-upload-wrap">
-          <div class="photo-circle" id="photo-circle" onclick="document.getElementById('photo-file').click()" title="Click to upload photo">
-            <div class="photo-placeholder" id="photo-placeholder">📷</div>
-            <img id="photo-preview" style="display:none;width:100%;height:100%;object-fit:cover;border-radius:50%;" alt="Profile photo" />
-            <div class="photo-overlay">Change</div>
+        <!-- Professional -->
+        <div class="section-card">
+          <div class="sc-header">
+            <div class="sc-header-icon">💼</div>
+            <div><div class="sc-title">Professional</div><div class="sc-sub">Current role &amp; employer</div></div>
           </div>
-          <input type="file" id="photo-file" accept="image/*" style="display:none" onchange="handlePhotoUpload(this)" />
-          <div class="photo-hint">Profile photo <span class="req">*</span> — click to upload (JPG/PNG, max 3MB)</div>
-          <div id="photo-error" style="display:none;font-size:0.78rem;color:var(--red);margin-top:4px;"></div>
-        </div>
-
-        <!-- Roll Number with autocomplete -->
-        <div class="form-row">
-          <label>Roll Number <span class="req">*</span></label>
-          <div class="roll-wrap">
-            <input type="text" id="roll-input" placeholder="e.g. CE-M6-101" autocomplete="off" />
-            <div class="roll-suggestions" id="roll-suggestions"></div>
-          </div>
-          <div class="field-hint">Start typing — matching students will appear</div>
-          <div id="autofill-info"></div>
-        </div>
-
-        <div class="form-row">
-          <label>Full Name <span class="req">*</span></label>
-          <input type="text" id="full-name" placeholder="As on your degree" />
-          <div class="name-feedback" id="name-feedback">
-            <span class="name-fb-icon" id="nf-icon"></span>
-            <span id="nf-text"></span>
+          <div class="sc-body">
+            <div class="info-grid">
+              <div class="info-item span2" id="fi-position">
+                <div class="il">Current Position / Job Title</div>
+                <div class="iv" id="v-position">—</div>
+                <input class="edit-inp" id="i-position" type="text" placeholder="e.g. Research Scientist" />
+              </div>
+              <div class="info-item span2" id="fi-employer">
+                <div class="il">Employer / Organization</div>
+                <div class="iv" id="v-employer">—</div>
+                <input class="edit-inp" id="i-employer" type="text" placeholder="Company or institution" />
+              </div>
+            </div>
           </div>
         </div>
 
-        <!-- Session auto-populated but editable if needed -->
-        <div class="form-row-2">
-          <div>
-            <label>Session</label>
-            <input type="text" id="session-year" readonly placeholder="Auto-filled" style="background:#f8f4ec; color:var(--mid)" />
+        <!-- Contact & Location (same session + self + admin) -->
+        <div class="section-card" id="sec-contact" style="display:none">
+          <div class="sc-header">
+            <div class="sc-header-icon">📍</div>
+            <div><div class="sc-title">Contact &amp; Location</div><div class="sc-sub">City, country and online presence</div></div>
           </div>
-          <div>
-            <label>Shift</label>
-            <input type="text" id="shift" readonly placeholder="Auto-filled" style="background:#f8f4ec; color:var(--mid)" />
-          </div>
-        </div>
-
-        <div class="form-group" style="margin-bottom:1.25rem;">
-          <label>City <span class="req">*</span></label>
-          <div style="position:relative;">
-            <input type="text" id="city-input" placeholder="Start typing your city..." autocomplete="off"
-              style="width:100%;border:1.5px solid var(--border);border-radius:5px;padding:10px 14px;font-family:inherit;font-size:0.95rem;color:var(--navy);outline:none;" />
-            <div id="city-suggestions" style="position:absolute;top:100%;left:0;right:0;background:#fff;border:1.5px solid var(--gold);border-top:none;border-radius:0 0 5px 5px;max-height:220px;overflow-y:auto;z-index:200;display:none;box-shadow:0 4px 16px rgba(0,0,0,.1);"></div>
-          </div>
-          <input type="hidden" id="city" />
-          <input type="hidden" id="country" />
-          <div id="city-selected" style="display:none;font-size:0.78rem;color:var(--green);margin-top:5px;font-weight:500;"></div>
-          <div style="font-size:0.78rem;color:var(--mid);margin-top:5px;">Type at least 3 characters and select from the list</div>
-        </div>
-
-        <div class="form-row">
-          <label>Current Position / Job Title <span class="req">*</span></label>
-          <input type="text" id="position" placeholder="e.g. Process Engineer at PARCO" />
-        </div>
-
-        <div class="form-row">
-          <label>Employer / Organization <span class="req">*</span></label>
-          <input type="text" id="employer" placeholder="Where do you currently work?" />
-        </div>
-
-        <div class="form-row">
-          <label>Phone Number <span class="req">*</span></label>
-          <input type="tel" id="phone" placeholder="+92 300 1234567" />
-          <div style="font-size:0.78rem;color:var(--mid);margin-top:5px;">&#x1F512; Visible to you and admin only</div>
-        </div>
-
-        <div class="form-row">
-          <label>LinkedIn Profile URL</label>
-          <input type="url" id="linkedin" placeholder="https://linkedin.com/in/..." />
-        </div>
-
-        <div class="divider">Account Credentials</div>
-
-        <div class="form-row">
-          <label>Email Address <span class="req">*</span></label>
-          <input type="email" id="email" placeholder="you@example.com" />
-        </div>
-
-        <div class="form-row">
-          <label>Password <span class="req">*</span></label>
-          <input type="password" id="password" placeholder="Min 8 characters" />
-          <div class="pw-strength">
-            <div class="pw-bar"><div class="pw-fill" id="pw-fill"></div></div>
-            <div class="pw-label" id="pw-label"></div>
+          <div class="sc-body">
+            <div class="info-grid">
+              <div class="info-item">
+                <div class="il">City</div>
+                <div class="iv" id="v-city">—</div>
+                <input class="edit-inp" id="i-city" type="text" placeholder="City" />
+              </div>
+              <div class="info-item">
+                <div class="il">Country</div>
+                <div class="iv" id="v-country">—</div>
+                <input class="edit-inp" id="i-country" type="text" placeholder="Country" />
+              </div>
+              <div class="info-item span2">
+                <div class="il">LinkedIn Profile</div>
+                <div class="iv" id="v-linkedin">—</div>
+                <input class="edit-inp" id="i-linkedin" type="url" placeholder="https://linkedin.com/in/..." />
+              </div>
+            </div>
           </div>
         </div>
 
-        <div class="form-row">
-          <label>Confirm Password <span class="req">*</span></label>
-          <input type="password" id="confirm-password" placeholder="Repeat password" />
-        </div>
-
-        <button class="btn btn-primary" id="register-btn" onclick="handleRegister()">
-          <span id="reg-btn-text">Create Account & Verify Email</span>
-          <div class="spinner" id="reg-spinner"></div>
-        </button>
-
-      </div><!-- /reg-form -->
-
-      <!-- ── STEP 2: Email verification sent ── -->
-      <div class="form-section" id="verify-sent">
-        <div class="verify-state">
-          <div class="verify-icon">✉️</div>
-          <h2>Check Your Email</h2>
-          <p>We've sent a <strong>6-digit verification code</strong> to<br><strong id="sent-email-display"></strong></p>
-          <p>Enter the code below to confirm your email address.</p>
-          <div class="alert alert-info show" style="text-align:left;margin-bottom:1.25rem">
-            <strong>Didn't get it?</strong> Check your spam folder. The code expires in 30 minutes.
+        <!-- Private (self + admin + same session for email) -->
+        <div class="section-card" id="sec-private" style="display:none">
+          <div class="sc-header">
+            <div class="sc-header-icon">🔒</div>
+            <div><div class="sc-title">Private Contact</div><div class="sc-sub" id="sec-private-sub">Visible to you and admin only</div></div>
           </div>
-          <div style="margin-bottom:1rem;">
-            <input type="text" id="verify-code-input" placeholder="Enter 6-digit code" maxlength="6"
-              style="width:100%;text-align:center;font-size:1.8rem;font-weight:700;letter-spacing:0.5em;padding:14px;border:2px solid var(--border);border-radius:8px;font-family:monospace;outline:none;color:var(--navy);"
-              oninput="this.value=this.value.replace(/[^0-9]/g,'');this.style.borderColor=this.value.length===6?'var(--green)':'var(--border)';"
-              onkeydown="if(event.key==='Enter')checkVerified()" />
+          <div class="sc-body">
+            <div class="info-grid">
+              <div class="info-item" id="fi-phone" style="display:none">
+                <div class="il">Phone Number</div>
+                <div class="iv" id="v-phone">—</div>
+                <input class="edit-inp" id="i-phone" type="tel" placeholder="+92 300 1234567" />
+                <div class="private-note">🔒 Only visible to you and admin</div>
+              </div>
+              <div class="info-item" id="fi-email">
+                <div class="il">Email Address</div>
+                <div class="iv" id="v-email">—</div>
+                <div class="private-note" id="email-note">🔒 Only visible to you and admin</div>
+              </div>
+            </div>
           </div>
-          <button class="btn btn-primary" onclick="checkVerified()" style="margin-bottom:0.75rem">
-            <span>Verify &amp; Continue →</span>
-          </button>
-          <button class="btn" onclick="resendVerificationEmail()" style="background:#f0ebe4;color:var(--navy);width:100%">
-            Resend Code
-          </button>
-          <div class="alert" id="verify-alert" style="margin-top:1rem"></div>
         </div>
-      </div>
 
-      <!-- ── STEP 3: Pending approval ── -->
-      <div class="form-section" id="pending-state">
-        <div class="verify-state">
-          <div class="verify-icon">⏳</div>
-          <h2>Registration Submitted</h2>
-          <p>Your email is verified. Your profile is now <strong>pending admin approval</strong>. You'll receive an email once approved.</p>
-          <a href="/alumni.html" class="btn btn-gold" style="text-decoration:none; display:flex">
-            Back to Alumni Portal
-          </a>
+        <!-- Network Info -->
+        <div class="section-card">
+          <div class="sc-header">
+            <div class="sc-header-icon">🎓</div>
+            <div><div class="sc-title">Network Info</div><div class="sc-sub">Academic record details</div></div>
+          </div>
+          <div class="sc-body">
+            <div class="info-grid">
+              <div class="info-item">
+                <div class="il">Roll Number</div>
+                <div class="iv" id="v-roll">—</div>
+              </div>
+              <div class="info-item">
+                <div class="il">Shift</div>
+                <div class="iv" id="v-shift">—</div>
+              </div>
+              <div class="info-item">
+                <div class="il">Session</div>
+                <div class="iv" id="v-session">—</div>
+              </div>
+              <div class="info-item">
+                <div class="il">Member Since</div>
+                <div class="iv" id="v-since">—</div>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
 
-    </div><!-- /register-card -->
+      </div><!-- /main-col -->
+    </div><!-- /profile-grid -->
+  </div><!-- /page -->
+</div><!-- /st-profile -->
 
-    <!-- ── SIGN IN CARD ── -->
-    <div class="card" id="signin-panel" style="display:none">
+<!-- Photo lightbox -->
+<div class="photo-lb" id="photo-lb" onclick="closeLb(event)">
+  <button class="lb-close" onclick="document.getElementById('photo-lb').classList.remove('open')">✕</button>
+  <img id="photo-lb-img" src="" alt="Profile photo" onclick="event.stopPropagation()" />
+</div>
 
-      <div class="steps" style="margin-bottom:2rem">
-        <div style="text-align:center; width:100%">
-          <h2 style="font-family:'Playfair Display',serif; font-size:1.5rem; margin-bottom:0.4rem">Welcome Back</h2>
-          <p style="color:var(--mid); font-size:0.9rem">Sign in to your alumni account</p>
-        </div>
-      </div>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore, doc, getDoc, getDocs, updateDoc, collection, query, where, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-      <div class="alert" id="signin-alert"></div>
+const app   = initializeApp({ apiKey:"AIzaSyAgUl22Cln6QtY3-HIvI6lE8Zu7n9OblbI", authDomain:"icet-alumni.firebaseapp.com", projectId:"icet-alumni" });
+const auth  = getAuth(app);
+const db    = getFirestore(app);
+const ADMIN = "eOAyXx3uQzMPJItS8aPLvHgWTQv1";
 
-      <div class="form-row">
-        <label>Email Address</label>
-        <input type="email" id="signin-email" placeholder="you@example.com" />
-      </div>
+const urlRoll = new URLSearchParams(location.search).get("roll");
+let profileData   = null;
+let profileRoll   = null;   // actual Firestore doc ID
+let viewerRole    = "public";
+let viewerSession = null;
+let _currentPhotoUrl = null;
 
-      <div class="form-row">
-        <label>Password</label>
-        <input type="password" id="signin-password" placeholder="Your password" />
-      </div>
+function tc(s) { return (s||"").split(" ").map(w=>w.charAt(0).toUpperCase()+w.slice(1).toLowerCase()).join(" "); }
+function set(id, val) { const el=document.getElementById(id); if(el) el.textContent=val||"—"; }
+function showErr(msg) {
+  document.getElementById("st-loading").style.display = "none";
+  document.getElementById("st-error").style.display   = "block";
+  document.getElementById("st-error-msg").textContent = msg;
+}
 
-      <div style="text-align:right; margin-bottom:1rem">
-        <a href="#" onclick="handleForgotPassword()" style="font-size:0.85rem; color:var(--mid); text-decoration:none; border-bottom:1px solid var(--border)">
-          Forgot password?
-        </a>
-      </div>
+// ── RENDER ────────────────────────────────────────────────────────────────
+function render(p) {
+  document.getElementById("st-loading").style.display = "none";
+  document.getElementById("st-profile").style.display = "block";
+  document.title = tc(p.name) + " — ICET Alumni";
 
-      <button class="btn btn-primary" onclick="handleSignIn()">
-        <span id="si-btn-text">Sign In</span>
-        <div class="spinner" id="si-spinner"></div>
-      </button>
+  // Field aliases: support old (job/company/photoBase64) and new (position/employer/photoUrl)
+  const _position = p.position || p.job || "";
+  const _employer  = p.employer  || p.company || "";
+  const _photo     = p.photoUrl  || p.photoBase64 || null;
 
-      <div class="alert" id="forgot-alert" style="margin-top:1rem"></div>
+  // Session year (handle "2006-Morning" → "2006")
+  const sessionYear = (p.session || "").split("-")[0];
+  const sessionUrl  = `/alumni/${sessionYear}.html`;
 
-    </div><!-- /signin-panel -->
+  // Nav + crumb
+  document.getElementById("crumb-link").href        = sessionUrl;
+  document.getElementById("crumb-link").textContent = `← Back to Session ${sessionYear}`;
+  document.getElementById("nav-back").href          = sessionUrl;
+  document.getElementById("nav-back").textContent   = `← Session ${sessionYear}`;
 
-    <!-- Toggle registration / sign-in -->
-    <div class="switch-link" id="toggle-link">
-      Already registered? <a href="#" onclick="togglePanel()">Sign In</a>
-    </div>
-
-  </div><!-- /page-wrap -->
-
-  <!-- ── Firebase + roll number data ── -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import {
-      getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,
-      signOut, sendPasswordResetEmail, onAuthStateChanged
-    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-    import {
-      getFirestore, doc, setDoc, getDoc, serverTimestamp
-    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-    const app = initializeApp({
-      apiKey: "AIzaSyAgUl22Cln6QtY3-HIvI6lE8Zu7n9OblbI",
-      authDomain: "icet-alumni.firebaseapp.com",
-      projectId: "icet-alumni"
-    });
-    const auth = getAuth(app);
-    const db   = getFirestore(app);
-    const ADMIN_UID = "w2AtZbhUiyY5TxyvIecHzWqheaE2";
-
-    // ── Expose functions to window for onclick handlers ──────────────────────
-    let currentNewUser = null;
-let verifyCode     = null;  // 6-digit code sent via Resend
-let selectedRoll   = null;  // ROLLS entry chosen from autocomplete
-let nameValidated  = false; // true once name passes check // hold Firebase user after creation
-
-    // ── Roll number database ─────────────────────────────────────────────────
-    // Format: { roll, name, session, shift }
-    // In your real site, replace this with a Firestore query or a JSON import
-    const ROLLS = [
-      // ── Session 2006 ─────────────────────────────────────────
-      {roll:'CE-M6-101',name:'ABDUL WAHAB KHAN',session:'2006',shift:'Morning'},
-      {roll:'CE-M6-102',name:'ZAHID ANJUM',session:'2006',shift:'Morning'},
-      {roll:'CE-M6-103',name:'USMAN RAFIQ',session:'2006',shift:'Morning'},
-      {roll:'CE-M6-104',name:'MEESAM ALI',session:'2006',shift:'Morning'},
-      {roll:'CE-M6-105',name:'IRFAN IQBAL',session:'2006',shift:'Morning'},
-      {roll:'CE-M6-106',name:'WASEEM SAFDAR',session:'2006',shift:'Morning'},
-      {roll:'CE-M6-107',name:'NASEER AHMAD',session:'2006',shift:'Morning'},
-      {roll:'CE-M6-108',name:'RIZWAN HAIDER',session:'2006',shift:'Morning'},
-      {roll:'CE-M6-109',name:'UMAR FAROOQ',session:'2006',shift:'Morning'},
-      {roll:'CE-M6-110',name:'MUHAMMAD FIAZ',session:'2006',shift:'Morning'},
-      {roll:'CE-M6-111',name:'FAROOQ KHAN',session:'2006',shift:'Morning'},
-      {roll:'CE-M6-112',name:'SALMAN SIDIQUE',session:'2006',shift:'Morning'},
-      {roll:'CE-M6-113',name:'HAFIZ AAMIR',session:'2006',shift:'Morning'},
-      {roll:'CE-M6-114',name:'MOHSIN ALI RAZA',session:'2006',shift:'Morning'},
-      {roll:'CE-M6-115',name:'MUHAMMAD KASHIF',session:'2006',shift:'Morning'},
-      {roll:'CE-M6-116',name:'RIZWAN GHULAM NABI',session:'2006',shift:'Morning'},
-      {roll:'CE-M6-117',name:'AYAZ KARIM',session:'2006',shift:'Morning'},
-      {roll:'CE-M6-118',name:'ADEEM GHAFFAR RANA',session:'2006',shift:'Morning'},
-      {roll:'CE-M6-119',name:'KHIZAR HAYAT',session:'2006',shift:'Morning'},
-      {roll:'CE-M6-120',name:'AWAIS NADEEM',session:'2006',shift:'Morning'},
-      {roll:'CE-M6-121',name:'SAQIB WAHEED',session:'2006',shift:'Morning'},
-      {roll:'CE-M6-122',name:'RAO SHAFIQ',session:'2006',shift:'Morning'},
-      {roll:'CE-M6-123',name:'FAYYAZ AHMAD',session:'2006',shift:'Morning'},
-      {roll:'CE-M6-124',name:'KHUBAIB HASAN',session:'2006',shift:'Morning'},
-      {roll:'CE-M6-125',name:'TAHIR NAZIR',session:'2006',shift:'Morning'},
-      {roll:'CE-M6-126',name:'MANSAB ALI',session:'2006',shift:'Morning'},
-      {roll:'CE-M6-127',name:'ZAHID RASOOL',session:'2006',shift:'Morning'},
-      {roll:'CE-M6-128',name:'UMAIR ISLAM',session:'2006',shift:'Morning'},
-      {roll:'CE-M6-129',name:'ZOHAIB ZAIDI',session:'2006',shift:'Morning'},
-      {roll:'CE-M6-130',name:'ASAD ABBAS',session:'2006',shift:'Morning'},
-      {roll:'CE-M6-131',name:'AJMAL JAVAID',session:'2006',shift:'Morning'},
-      {roll:'CE-M6-132',name:'KHALIL AHMAD',session:'2006',shift:'Morning'},
-      {roll:'CE-M6-133',name:'WAQAS AZIZ HASHMI',session:'2006',shift:'Morning'},
-      {roll:'CE-M6-134',name:'AFZAL CAUDHRY',session:'2006',shift:'Morning'},
-      {roll:'CE-M6-135',name:'MUJEEB UR REHMAN',session:'2006',shift:'Morning'},
-      {roll:'CE-M6-136',name:'ALI BUKHARI',session:'2006',shift:'Morning'},
-      {roll:'CE-M6-137',name:'AWAIS NAEEM',session:'2006',shift:'Morning'},
-      {roll:'CE-M6-138',name:'SAAD TOOR',session:'2006',shift:'Morning'},
-      {roll:'CE-M6-139',name:'KASHIF YOUNIS',session:'2006',shift:'Morning'},
-      {roll:'CE-M6-140',name:'AFFAN KHALID',session:'2006',shift:'Morning'},
-      {roll:'CE-M6-141',name:'JAHENZAIB KHAN',session:'2006',shift:'Morning'},
-      {roll:'CE-M6-142',name:'AHSAN BILAL',session:'2006',shift:'Morning'},
-      {roll:'CE-M6-143',name:'SAQIB RIZVI',session:'2006',shift:'Morning'},
-      {roll:'CE-M6-144',name:'SYED MUHAMMAD QAISER KHAN',session:'2006',shift:'Morning'},
-      {roll:'CE-M6-145',name:'UMAIR RASHEED',session:'2006',shift:'Morning'},
-      {roll:'CE-M6-146',name:'ALI NADEEM',session:'2006',shift:'Morning'},
-      {roll:'CE-M6-147',name:'FAWAD FURRUKH',session:'2006',shift:'Morning'},
-      {roll:'CE-M6-148',name:'AFNAN HAMEED',session:'2006',shift:'Morning'},
-      {roll:'CE-M6-149',name:'ABDUL REHMAN',session:'2006',shift:'Morning'},
-      {roll:'CE-M6-150',name:'IBRAHIM SAEED',session:'2006',shift:'Morning'},
-      {roll:'CE-M6-151',name:'MUHAMMA ARIF KHAN',session:'2006',shift:'Morning'},
-      {roll:'CE-M6-152',name:'HARIS SHAJAR',session:'2006',shift:'Morning'},
-      {roll:'CE-M6-153',name:'IMRAN KHAN',session:'2006',shift:'Morning'},
-      {roll:'CE-M6-154',name:'NOUMAN AHMAD',session:'2006',shift:'Morning'},
-      {roll:'CE-M6-155',name:'IMRAN KHAN',session:'2006',shift:'Morning'},
-      {roll:'CE-M6-156',name:'JAMSHAID IQBAL',session:'2006',shift:'Morning'},
-      {roll:'CE-M6-157',name:'FAISAL MEHMOOD',session:'2006',shift:'Morning'},
-      {roll:'CE-M6-158',name:'SHERAZ AFZAL',session:'2006',shift:'Morning'},
-      {roll:'CE-M6-159',name:'ADNAN SHOAIB',session:'2006',shift:'Morning'},
-      {roll:'CE-M6-160',name:'KARIM BUKSH',session:'2006',shift:'Morning'},
-      {roll:'CE-M6-161',name:'UMAIR DANISH',session:'2006',shift:'Morning'},
-      {roll:'CE-M6-162',name:'AAMIR SHAMAS',session:'2006',shift:'Morning'},
-      {roll:'CE-M6-163',name:'WAZIR ALI',session:'2006',shift:'Morning'},
-      {roll:'CE-M6-164',name:'JAMA AHMAD HERSI',session:'2006',shift:'Morning'},
-      {roll:'PG-M6-201',name:'TAYAB SAEED',session:'2006',shift:'Morning'},
-      {roll:'PG-M6-202',name:'ATIF ASHRAF',session:'2006',shift:'Morning'},
-      {roll:'PG-M6-203',name:'ASAD ALI',session:'2006',shift:'Morning'},
-      {roll:'PG-M6-204',name:'NAVEED AKHTAR',session:'2006',shift:'Morning'},
-      {roll:'PG-M6-205',name:'MUNZOOR AHMAD',session:'2006',shift:'Morning'},
-      {roll:'PG-M6-206',name:'FARAZ BUTT',session:'2006',shift:'Morning'},
-      {roll:'PG-M6-207',name:'SANA ULLAH',session:'2006',shift:'Morning'},
-      {roll:'PG-M6-208',name:'BABER ALI',session:'2006',shift:'Morning'},
-      {roll:'PG-M6-209',name:'AAMIR RIAZ',session:'2006',shift:'Morning'},
-      {roll:'PG-M6-210',name:'GHULAM ABBAS',session:'2006',shift:'Morning'},
-      {roll:'PG-M6-211',name:'MUHAMMAD BASIT ALI',session:'2006',shift:'Morning'},
-      {roll:'PG-M6-212',name:'ZEESHAN SHOAIB',session:'2006',shift:'Morning'},
-      {roll:'PG-M6-213',name:'MUHAMMAD KALEEM ULLAH',session:'2006',shift:'Morning'},
-      {roll:'PG-M6-214',name:'HAFIZ KHALIL UR REHMAN',session:'2006',shift:'Morning'},
-      {roll:'PG-M6-215',name:'FAISAL JOYIA',session:'2006',shift:'Morning'},
-      {roll:'PG-M6-216',name:'FAISAL KHALIL',session:'2006',shift:'Morning'},
-      {roll:'PG-M6-217',name:'MUHAMMAD ZEESHAN SALEEM',session:'2006',shift:'Morning'},
-      {roll:'PG-M6-218',name:'AHSAN NOOR KHAN',session:'2006',shift:'Morning'},
-      {roll:'PG-M6-219',name:'WAQAS SHEHRYAR',session:'2006',shift:'Morning'},
-      {roll:'PG-M6-220',name:'AFTAB AHMAD',session:'2006',shift:'Morning'},
-      {roll:'PG-M6-221',name:'TANVIR AHMAD',session:'2006',shift:'Morning'},
-      {roll:'PG-M6-222',name:'FAKHAR ABBAS',session:'2006',shift:'Morning'},
-      {roll:'PG-M6-223',name:'MUHAMMAD  HASNAT ALI',session:'2006',shift:'Morning'},
-      {roll:'PG-M6-224',name:'YASIR ARAFAT',session:'2006',shift:'Morning'},
-      {roll:'PG-M6-225',name:'TAHIR WASIM',session:'2006',shift:'Morning'},
-      {roll:'PG-M6-226',name:'MOHSIN SAEED',session:'2006',shift:'Morning'},
-      {roll:'BC-M6-301',name:'SAEED AKRAM SHEIKH',session:'2006',shift:'Morning'},
-      {roll:'BC-M6-302',name:'IMRAN YOUSAF',session:'2006',shift:'Morning'},
-      {roll:'BC-M6-303',name:'MUHAMMAD ADNAN SADIQ',session:'2006',shift:'Morning'},
-      {roll:'BC-M6-304',name:'MUHAMMAD IRFAN',session:'2006',shift:'Morning'},
-      {roll:'BC-M6-305',name:'IMRAN RIAZ',session:'2006',shift:'Morning'},
-      {roll:'BC-M6-306',name:'NASIR MEHMOOD',session:'2006',shift:'Morning'},
-      {roll:'BC-M6-307',name:'SHAMSHAD-UL-HAQ',session:'2006',shift:'Morning'},
-      {roll:'BC-M6-308',name:'AWAIS ABDULLAH',session:'2006',shift:'Morning'},
-      {roll:'BC-M6-309',name:'UMAIR AZAD',session:'2006',shift:'Morning'},
-      {roll:'BC-M6-310',name:'ALI ZULQARNAIN',session:'2006',shift:'Morning'},
-      {roll:'BC-M6-311',name:'MUHAMMAD RIZWAN AZHAR',session:'2006',shift:'Morning'},
-      {roll:'BC-M6-312',name:'MUHAMMAD ASAD MASOOD',session:'2006',shift:'Morning'},
-      {roll:'BC-M6-313',name:'HAFIZ SHAFIQ',session:'2006',shift:'Morning'},
-      {roll:'BC-M6-314',name:'HAFIZ ZUBAIR',session:'2006',shift:'Morning'},
-      {roll:'BC-M6-315',name:'MUHAMMAD NAEEM',session:'2006',shift:'Morning'},
-      {roll:'BC-M6-316',name:'GHUFRAN AHMAD',session:'2006',shift:'Morning'},
-      {roll:'BC-M6-317',name:'ABDUL LATIF',session:'2006',shift:'Morning'},
-      {roll:'EE-M6-401',name:'AMBREEN GHALIB',session:'2006',shift:'Morning'},
-      {roll:'EE-M6-402',name:'MUHAMMAD SHAHZAD ALI',session:'2006',shift:'Morning'},
-      {roll:'EE-M6-403',name:'MUHAMMAD ILYAS',session:'2006',shift:'Morning'},
-      {roll:'EE-M6-404',name:'YASIR SHARIF AWAN',session:'2006',shift:'Morning'},
-      {roll:'EE-M6-405',name:'RAO MUNEER ALI',session:'2006',shift:'Morning'},
-      {roll:'EE-M6-406',name:'SAJID MAHMOOD',session:'2006',shift:'Morning'},
-      {roll:'EE-M6-407',name:'ALI MURAD',session:'2006',shift:'Morning'},
-      {roll:'EE-M6-408',name:'USMAN ALI',session:'2006',shift:'Morning'},
-      {roll:'EE-M6-409',name:'MUHAMMAD AWAIS',session:'2006',shift:'Morning'},
-      {roll:'EE-M6-410',name:'AMBREEN GULZAR',session:'2006',shift:'Morning'},
-      {roll:'EE-M6-411',name:'FAHIM AHMAD ZAFAR',session:'2006',shift:'Morning'},
-      {roll:'EE-M6-412',name:'ANWAAR AHMAD',session:'2006',shift:'Morning'},
-      {roll:'EE-M6-413',name:'USMAN RASHEED',session:'2006',shift:'Morning'},
-      {roll:'EE-M6-414',name:'KHUBAIB AHMAD',session:'2006',shift:'Morning'},
-      {roll:'EE-M6-415',name:'SALMAN MANSOOR',session:'2006',shift:'Morning'},
-      {roll:'EE-M6-416',name:'USMAN SAEED',session:'2006',shift:'Morning'},
-      {roll:'EE-M6-417',name:'SADIA NAUREEN',session:'2006',shift:'Morning'},
-      {roll:'CE-E6-102',name:'FAHAD MASOOD',session:'2006',shift:'Evening'},
-      {roll:'CE-E6-103',name:'NOMAN LIAQAT',session:'2006',shift:'Evening'},
-      {roll:'CE-E6-104',name:'YASEEN AKRAM',session:'2006',shift:'Evening'},
-      {roll:'CE-E6-105',name:'ADNAN NAWAZ',session:'2006',shift:'Evening'},
-      {roll:'CE-E6-106',name:'AHSEN HAFEEZ',session:'2006',shift:'Evening'},
-      {roll:'CE-E6-107',name:'RAZA MUDASIR ALVI',session:'2006',shift:'Evening'},
-      {roll:'CE-E6-108',name:'GULZEB KHAN',session:'2006',shift:'Evening'},
-      {roll:'CE-E6-109',name:'USMAN SADIQUE',session:'2006',shift:'Evening'},
-      {roll:'CE-E6-110',name:'ABDUL QAYYUM',session:'2006',shift:'Evening'},
-      {roll:'CE-E6-111',name:'IMRAN MALIK',session:'2006',shift:'Evening'},
-      {roll:'CE-E6-112',name:'SHAHID NADEEM',session:'2006',shift:'Evening'},
-      {roll:'CE-E6-113',name:'UMAIR FURQAN',session:'2006',shift:'Evening'},
-      {roll:'CE-E6-114',name:'NAUMAN ASHRAF',session:'2006',shift:'Evening'},
-      {roll:'CE-E6-115',name:'WAQAS BUKHARI',session:'2006',shift:'Evening'},
-      {roll:'CE-E6-116',name:'SANA ULLAH',session:'2006',shift:'Evening'},
-      {roll:'CE-E6-117',name:'NAEEM YOUNIS',session:'2006',shift:'Evening'},
-      {roll:'CE-E6-118',name:'MASOOD HAIDER',session:'2006',shift:'Evening'},
-      {roll:'CE-E6-119',name:'MUHAMMAD ASIF KHAN',session:'2006',shift:'Evening'},
-      {roll:'CE-E6-120',name:'MOHSIN MOBEEN',session:'2006',shift:'Evening'},
-      {roll:'CE-E6-121',name:'FAHEEM RIAZ',session:'2006',shift:'Evening'},
-      {roll:'CE-E6-122',name:'FAHAD MIR',session:'2006',shift:'Evening'},
-      {roll:'CE-E6-123',name:'ADNAN REHMAT',session:'2006',shift:'Evening'},
-      {roll:'CE-E6-124',name:'YASIR AKRAM AWAN',session:'2006',shift:'Evening'},
-      {roll:'CE-E6-125',name:'SHAROOZ KHAN',session:'2006',shift:'Evening'},
-      {roll:'CE-E6-126',name:'RANA MUHAMMAD IMRAN',session:'2006',shift:'Evening'},
-      {roll:'CE-E6-127',name:'RIZWAN MALIK',session:'2006',shift:'Evening'},
-      {roll:'CE-E6-128',name:'UMER TAHIR MIR',session:'2006',shift:'Evening'},
-      {roll:'CE-E6-129',name:'MUHAMMAD NAEEM IQBAL',session:'2006',shift:'Evening'},
-      {roll:'CE-E6-130',name:'MUHAMMAD UMAIR DANISH',session:'2006',shift:'Evening'},
-      {roll:'CE-E6-131',name:'ABID ALI',session:'2006',shift:'Evening'},
-      {roll:'CE-E6-132',name:'FARHAN CHEEMA',session:'2006',shift:'Evening'},
-      {roll:'CE-E6-133',name:'MUHAMMAD ARSHAD',session:'2006',shift:'Evening'},
-      {roll:'CE-E6-134',name:'ZUBAIR SHAHID',session:'2006',shift:'Evening'},
-      {roll:'CE-E6-135',name:'WAQAR AHMED',session:'2006',shift:'Evening'},
-      {roll:'CE-E6-136',name:'AFFAN AHMAD',session:'2006',shift:'Evening'},
-      {roll:'CE-E6-137',name:'UMAIR SHOAIB',session:'2006',shift:'Evening'},
-      {roll:'CE-E6-138',name:'ARSALAN AWAN',session:'2006',shift:'Evening'},
-      {roll:'CE-E6-139',name:'MUHAMMAD IMRAN',session:'2006',shift:'Evening'},
-      {roll:'CE-E6-140',name:'ASIF IQBAL',session:'2006',shift:'Evening'},
-      {roll:'CE-E6-141',name:'HAKIM ALI HAIDER',session:'2006',shift:'Evening'},
-      {roll:'CE-E6-142',name:'GHULAM MURTAZA',session:'2006',shift:'Evening'},
-      {roll:'CE-E6-143',name:'ADNAN SALEEM',session:'2006',shift:'Evening'},
-      {roll:'CE-E6-144',name:'ASIF ALI SHAHZAD',session:'2006',shift:'Evening'},
-      {roll:'PG-E6-201',name:'MUHAMMAD ZAMAN',session:'2006',shift:'Evening'},
-      {roll:'PG-E6-202',name:'IMRAN NIAZ',session:'2006',shift:'Evening'},
-      {roll:'PG-E6-203',name:'SHAHID SAEED',session:'2006',shift:'Evening'},
-      {roll:'PG-E6-204',name:'KHURRAM JAVED',session:'2006',shift:'Evening'},
-      {roll:'PG-E6-205',name:'SAQIB RAZA',session:'2006',shift:'Evening'},
-      {roll:'PG-E6-206',name:'AAMIR KARIM',session:'2006',shift:'Evening'},
-      {roll:'PG-E6-207',name:'MUHAMMAD UMAR FAROOQ',session:'2006',shift:'Evening'},
-      {roll:'PG-E6-208',name:'ALI AHMAD',session:'2006',shift:'Evening'},
-      {roll:'PG-E6-209',name:'ABDUL BASIT',session:'2006',shift:'Evening'},
-      {roll:'PG-E6-210',name:'FARHAN RASOOL',session:'2006',shift:'Evening'},
-      {roll:'PG-E6-211',name:'NASEER AHMAD',session:'2006',shift:'Evening'},
-      {roll:'PG-E6-212',name:'MUHAMMAD USMAN',session:'2006',shift:'Evening'},
-      {roll:'PG-E6-213',name:'AQEEL MANSOOR CHISHTI',session:'2006',shift:'Evening'},
-      {roll:'PG-E6-214',name:'RIZWAN AHMED SHAH',session:'2006',shift:'Evening'},
-      {roll:'PG-E6-215',name:'MUAMMAD ZAIN',session:'2006',shift:'Evening'},
-      {roll:'PG-E6-216',name:'USMAN ANWAR DAR',session:'2006',shift:'Evening'},
-      {roll:'PG-E6-217',name:'OMER SHUJAT',session:'2006',shift:'Evening'},
-      {roll:'PG-E6-218',name:'IMRAN RAFIQUE',session:'2006',shift:'Evening'},
-      {roll:'PG-E6-219',name:'NAEEM BHATTI',session:'2006',shift:'Evening'},
-      {roll:'PG-E6-220',name:'ASIF SANI',session:'2006',shift:'Evening'},
-      // ── Session 2009 ─────────────────────────────────────────
-      {roll:'M09-10CE01',name:'KASHIF YASIN',session:'2009',shift:'Morning'},
-      {roll:'M09-10CE02',name:'SAJJAD HUSSAIN',session:'2009',shift:'Morning'},
-      {roll:'M09-10CE03',name:'ASIM GHAFOOR',session:'2009',shift:'Morning'},
-      {roll:'M09-10CE04',name:'ABDUL REHMAN',session:'2009',shift:'Morning'},
-      {roll:'M09-10CE05',name:'IMRAN SARWER',session:'2009',shift:'Morning'},
-      {roll:'M09-10CE06',name:'ADNAN ZUBAIR KHALID',session:'2009',shift:'Morning'},
-      {roll:'M09-10CE07',name:'MUHAMMAD SHAHID AMIN',session:'2009',shift:'Morning'},
-      {roll:'M09-10CE08',name:'WAQAS IQBAL',session:'2009',shift:'Morning'},
-      {roll:'M09-10CE09',name:'FAHID GHULAM RASOOL',session:'2009',shift:'Morning'},
-      {roll:'M09-10CE10',name:'NOMAN AHMAD',session:'2009',shift:'Morning'},
-      {roll:'M09-10CE11',name:'ARSALAN YASIN',session:'2009',shift:'Morning'},
-      {roll:'M09-10CE12',name:'MUHAMMAD WAQAS',session:'2009',shift:'Morning'},
-      {roll:'M09-10CE13',name:'SHEHROZE ALI',session:'2009',shift:'Morning'},
-      {roll:'M09-10CE14',name:'RAMEEZ ANWAR ANSARI',session:'2009',shift:'Morning'},
-      {roll:'M09-10CE15',name:'QAMMAR-U-DIN',session:'2009',shift:'Morning'},
-      {roll:'M09-10CE16',name:'SHABBIR RAZA ALI',session:'2009',shift:'Morning'},
-      {roll:'M09-10CE17',name:'BILAL HASSAN',session:'2009',shift:'Morning'},
-      {roll:'M09-10CE18',name:'SYED ALI MUSA KAZMI',session:'2009',shift:'Morning'},
-      {roll:'M09-10CE19',name:'ABUBAKAR SOHAIL',session:'2009',shift:'Morning'},
-      {roll:'M09-10CE20',name:'SOHAIB REHMAN',session:'2009',shift:'Morning'},
-      {roll:'M09-10CE21',name:'ABDUL SALAM',session:'2009',shift:'Morning'},
-      {roll:'M09-10CE22',name:'MUHAMMAD NADEEM',session:'2009',shift:'Morning'},
-      {roll:'M09-10CE23',name:'MUHAMMAD REHAN KHAN',session:'2009',shift:'Morning'},
-      {roll:'M09-10CE24',name:'AWAIS YOUNAS',session:'2009',shift:'Morning'},
-      {roll:'M09-10CE25',name:'UMAR SHEHZAD',session:'2009',shift:'Morning'},
-      {roll:'M09-10CE26',name:'MUHAMMAD USMAN LATIF',session:'2009',shift:'Morning'},
-      {roll:'M09-10CE27',name:'SUHAIL AHMED SHAH',session:'2009',shift:'Morning'},
-      {roll:'M09-10CE28',name:'MUHAMMAD AAMIR SHAHID',session:'2009',shift:'Morning'},
-      {roll:'M09-10CE29',name:'ADEEL SHAHZAD',session:'2009',shift:'Morning'},
-      {roll:'M09-10CE30',name:'MUHAMMAD AWAIS AKRAM',session:'2009',shift:'Morning'},
-      {roll:'M09-10CE31',name:'HAFIZ MUHAMMAD AWAIS',session:'2009',shift:'Morning'},
-      {roll:'M09-10CE32',name:'MUHAMMAD UMAR FAROOQ',session:'2009',shift:'Morning'},
-      {roll:'M09-10CE33',name:'ZAID KHALID',session:'2009',shift:'Morning'},
-      {roll:'M09-10CE34',name:'HAROON SAEED',session:'2009',shift:'Morning'},
-      {roll:'M09-10CE35',name:'MUHAMMAD USMAN TARIQ',session:'2009',shift:'Morning'},
-      {roll:'M09-10CE36',name:'SAJID JAMEEL JUT',session:'2009',shift:'Morning'},
-      {roll:'M09-10CE37',name:'MUHAMMAD SALEEM',session:'2009',shift:'Morning'},
-      {roll:'M09-10CE38',name:'SAMEE ULLAH',session:'2009',shift:'Morning'},
-      {roll:'M09-10CE39',name:'MUHAMMAD AMJAD MAJEED',session:'2009',shift:'Morning'},
-      {roll:'M09-10CE40',name:'NAZIM HASSAN RIZVI',session:'2009',shift:'Morning'},
-      {roll:'M09-10CE41',name:'SYED AHMAD WAQAS',session:'2009',shift:'Morning'},
-      {roll:'M09-10CE42',name:'HASSAN ABDUR REHMAN',session:'2009',shift:'Morning'},
-      {roll:'M09-10CE43',name:'ANEES UR REHMAN',session:'2009',shift:'Morning'},
-      {roll:'M09-10CE44',name:'ABID MEHMOOD',session:'2009',shift:'Morning'},
-      {roll:'M09-10CE45',name:'WAQAS AHMAD',session:'2009',shift:'Morning'},
-      {roll:'M09-10CE46',name:'USMAN NADEEM',session:'2009',shift:'Morning'},
-      {roll:'M09-10CE47',name:'MUHAMMAD WAQAR',session:'2009',shift:'Morning'},
-      {roll:'M09-10CE48',name:'ARIF JAN',session:'2009',shift:'Morning'},
-      {roll:'M09-10CE49',name:'NAYYER MEHMOOD',session:'2009',shift:'Morning'},
-      {roll:'M09-10CE50',name:'SIDRA ZAHOOR',session:'2009',shift:'Morning'},
-      {roll:'M09-10CE51',name:'QASIM ALI',session:'2009',shift:'Morning'},
-      {roll:'M09-10CE52',name:'MUHAMMAD ZAHID',session:'2009',shift:'Morning'},
-      {roll:'M09-10CE53',name:'JUNAID KHAN',session:'2009',shift:'Morning'},
-      {roll:'M09-10CE54',name:'TAUHID UL HAQ',session:'2009',shift:'Morning'},
-      {roll:'M09-10CE55',name:'QUYYUM FURQAN',session:'2009',shift:'Morning'},
-      {roll:'M09-10CE56',name:'EHTISHAM ALI',session:'2009',shift:'Morning'},
-      {roll:'M09-10PG01',name:'HAFIZ M. SAIF ULLAH SALEEM',session:'2009',shift:'Morning'},
-      {roll:'M09-10PG02',name:'MUHAMMAD AFRAZ',session:'2009',shift:'Morning'},
-      {roll:'M09-10PG03',name:'REHAN ASHRAF',session:'2009',shift:'Morning'},
-      {roll:'M09-10PG04',name:'AFTAB AHMED',session:'2009',shift:'Morning'},
-      {roll:'M09-10PG05',name:'AHMED RIAZ KHAN',session:'2009',shift:'Morning'},
-      {roll:'M09-10PG06',name:'MUHAMMAD ALEEM',session:'2009',shift:'Morning'},
-      {roll:'M09-10PG07',name:'ASMAT ULLAH QAISRANI',session:'2009',shift:'Morning'},
-      {roll:'M09-10PG08',name:'ADEEL HASNAIN',session:'2009',shift:'Morning'},
-      {roll:'M09-10PG09',name:'ILYAS RAZA',session:'2009',shift:'Morning'},
-      {roll:'M09-10PG10',name:'HAFIZ WAQAS WAQAR',session:'2009',shift:'Morning'},
-      {roll:'M09-10PG11',name:'HASSAN QADER',session:'2009',shift:'Morning'},
-      {roll:'M09-10PG12',name:'FARHAN AKHTAR',session:'2009',shift:'Morning'},
-      {roll:'M09-10PG13',name:'GHULAM MURTAZA',session:'2009',shift:'Morning'},
-      {roll:'M09-10PG14',name:'HAFIZ ASAD UR REHMAN',session:'2009',shift:'Morning'},
-      {roll:'M09-10PG15',name:'RIZWAN ASHRAF',session:'2009',shift:'Morning'},
-      {roll:'M09-10PG16',name:'ZUBAIR AHMED KHOKHAR',session:'2009',shift:'Morning'},
-      {roll:'M09-10PG17',name:'AHSAN JALEEL',session:'2009',shift:'Morning'},
-      {roll:'M09-10PG18',name:'MUHAMMAD AYYAZ AMJAD',session:'2009',shift:'Morning'},
-      {roll:'M09-10PG19',name:'MUHAMMAD HABIB SABIR',session:'2009',shift:'Morning'},
-      {roll:'M09-10PG20',name:'MUHAMMAD YOUSAF',session:'2009',shift:'Morning'},
-      {roll:'M09-10PG21',name:'MUHAMMAD MUNEEB SULTAN',session:'2009',shift:'Morning'},
-      {roll:'M09-10PG22',name:'MUHAMMAD SALMAN IJAZ',session:'2009',shift:'Morning'},
-      {roll:'M09-10PG23',name:'ALI AYUB',session:'2009',shift:'Morning'},
-      {roll:'E09-10CE01',name:'MUHAMMAD ARSLAN SARWAR',session:'2009',shift:'Evening'},
-      {roll:'E09-10CE02',name:'MUHAMMAD QASIM',session:'2009',shift:'Evening'},
-      {roll:'E09-10CE03',name:'MUHAMMAD UMAR',session:'2009',shift:'Evening'},
-      {roll:'E09-10CE04',name:'MUHAMMAD ADIL',session:'2009',shift:'Evening'},
-      {roll:'E09-10CE05',name:'MUHAMMAD ABU BAKAR NASIM',session:'2009',shift:'Evening'},
-      {roll:'E09-10CE06',name:'HAMZA AMJAD BUTT',session:'2009',shift:'Evening'},
-      {roll:'E09-10CE07',name:'MUHAMMAD ASIF',session:'2009',shift:'Evening'},
-      {roll:'E09-10CE08',name:'HAFIZ ATA MUHAY-UD DIN',session:'2009',shift:'Evening'},
-      {roll:'E09-10CE09',name:'',session:'2009',shift:'Evening'},
-      {roll:'E09-10CE10',name:'MUHAMMAD IBRAHEEM SHAH',session:'2009',shift:'Evening'},
-      {roll:'E09-10CE11',name:'MUHAMMAD ANS RIAZ',session:'2009',shift:'Evening'},
-      {roll:'E09-10CE12',name:'MUHAMMAD HARIS',session:'2009',shift:'Evening'},
-      {roll:'E09-10CE13',name:'HAFIZ MUHAMMAD JUNAID KHAN',session:'2009',shift:'Evening'},
-      {roll:'E09-10CE14',name:'KAZAM HUSSAIN GURMANI',session:'2009',shift:'Evening'},
-      {roll:'E09-10CE15',name:'MUHAMMAD UMAIR FAROOQ',session:'2009',shift:'Evening'},
-      {roll:'E09-10CE16',name:'MUHAMMAD ARSHAD KHAN',session:'2009',shift:'Evening'},
-      {roll:'E09-10CE17',name:'MUHAMMAD WAQAS AJMAL',session:'2009',shift:'Evening'},
-      {roll:'E09-10CE18',name:'AIZA NASAR',session:'2009',shift:'Evening'},
-      {roll:'E09-10CE19',name:'RANA MUHAMMAD AQLEEM ULLAH',session:'2009',shift:'Evening'},
-      {roll:'E09-10CE20',name:'FAIZAN AHMED',session:'2009',shift:'Evening'},
-      {roll:'E09-10CE21',name:'ADIL ABBAS',session:'2009',shift:'Evening'},
-      {roll:'E09-10CE22',name:'MUHAMMAD IHSAN UL HAQ',session:'2009',shift:'Evening'},
-      {roll:'E09-10CE23',name:'SIBTAIN KHALID',session:'2009',shift:'Evening'},
-      {roll:'E09-10CE24',name:'MUHAMMAD UBAID HAROON',session:'2009',shift:'Evening'},
-      {roll:'E09-10CE25',name:'ALI WAQAS',session:'2009',shift:'Evening'},
-      {roll:'E09-10CE26',name:'SHAHZEB HASSAN',session:'2009',shift:'Evening'},
-      {roll:'E09-10CE27',name:'',session:'2009',shift:'Evening'},
-      {roll:'E09-10CE28',name:'MUHAMMAD HASSAN SALEEM',session:'2009',shift:'Evening'},
-      {roll:'E09-10CE29',name:'WAHEED UR REHMAN',session:'2009',shift:'Evening'},
-      {roll:'E09-10CE30',name:'ANAS NADEEM',session:'2009',shift:'Evening'},
-      {roll:'E09-10CE31',name:'UMAIR MAHMOOD',session:'2009',shift:'Evening'},
-      {roll:'E09-10CE32',name:'SHAHID SARFRAZ',session:'2009',shift:'Evening'},
-      {roll:'E09-10CE33',name:'ZIAD AKRAM',session:'2009',shift:'Evening'},
-      {roll:'E09-10CE34',name:'HAFIZ USMAN SAEED',session:'2009',shift:'Evening'},
-      {roll:'E09-10CE35',name:'UMAR FAROOQ',session:'2009',shift:'Evening'},
-      {roll:'E09-10CE36',name:'ABID ALI',session:'2009',shift:'Evening'},
-      {roll:'E09-10CE37',name:'RASHID NAWAZ',session:'2009',shift:'Evening'},
-      {roll:'E09-10CE38',name:'MOHSIN EHSAN BAIG',session:'2009',shift:'Evening'},
-      {roll:'E09-10CE39',name:'MUHAMMAD NASIR',session:'2009',shift:'Evening'},
-      {roll:'E09-10CE40',name:'MUHAMMAD AZEEM SHAUKAT',session:'2009',shift:'Evening'},
-      {roll:'E09-10CE41',name:'ABU BAKAR EJAZ',session:'2009',shift:'Evening'},
-      {roll:'E09-10CE42',name:'UMAIR MAHMOOD BHATTI',session:'2009',shift:'Evening'},
-      {roll:'E09-10CE43',name:'MUHAMMAD IMRAN SAEED',session:'2009',shift:'Evening'},
-      {roll:'E09-10CE44',name:'HAFIZ ABUZAR AHSAN',session:'2009',shift:'Evening'},
-      {roll:'E09-10CE45',name:'M. MOHSIN ANWAR',session:'2009',shift:'Evening'},
-      {roll:'E09-10CE46',name:'SHUJA UR REHMAN',session:'2009',shift:'Evening'},
-      {roll:'E09-10CE47',name:'MUHAMMAD SABTAIN',session:'2009',shift:'Evening'},
-      {roll:'E09-10PG01',name:'HASSAN BIN WAHEED',session:'2009',shift:'Evening'},
-      {roll:'E09-10PG02',name:'MUHAMMAD SAJID QAMAR',session:'2009',shift:'Evening'},
-      {roll:'E09-10PG03',name:'MUHAMMAD KAMRAN HAIDER',session:'2009',shift:'Evening'},
-      {roll:'E09-10PG04',name:'SOHAIB MUSHTAQ',session:'2009',shift:'Evening'},
-      {roll:'E09-10PG05',name:'MUHAMMAD ASIM BABAR',session:'2009',shift:'Evening'},
-      {roll:'E09-10PG06',name:'YASHIB YOUSAF KAMRAN SAROIA',session:'2009',shift:'Evening'},
-      {roll:'E09-10PG07',name:'IRFAN YOUSAF',session:'2009',shift:'Evening'},
-      {roll:'E09-10PG08',name:'SYED ALI AQDUS SHAH',session:'2009',shift:'Evening'},
-      {roll:'E09-10PG09',name:'HAFIZ MUHAMMAD FAHAD ILYAS',session:'2009',shift:'Evening'},
-      {roll:'E09-10PG10',name:'MUHAMMAD JAWAD',session:'2009',shift:'Evening'},
-      {roll:'E09-10PG11',name:'AQSA HASSAN',session:'2009',shift:'Evening'},
-      {roll:'E09-10PG12',name:'MUHAMMAD ATIF ILYAS',session:'2009',shift:'Evening'},
-      {roll:'E09-10PG13',name:'SAIF UR REHMAN',session:'2009',shift:'Evening'},
-      // ── Session 2016 ─────────────────────────────────────────
-      {roll:'RP16-CE01',name:'MUHAMMAD QASIM RIAZ',session:'2016',shift:'Morning'},
-      {roll:'RP16-CE02',name:'ARBAB NOOR',session:'2016',shift:'Morning'},
-      {roll:'RP16-CE03',name:'ZILL E HUMA SALEEM',session:'2016',shift:'Morning'},
-      {roll:'RP16-CE04',name:'REEBAHA ASHRAF',session:'2016',shift:'Morning'},
-      {roll:'RP16-CE05',name:'HAMZA TAHIR',session:'2016',shift:'Morning'},
-      {roll:'RP16-CE06',name:'HAFIZ ABDUL REHMAN',session:'2016',shift:'Morning'},
-      {roll:'RP16-CE07',name:'HAMNA SHAHID',session:'2016',shift:'Morning'},
-      {roll:'RP16-CE08',name:'WANIA NOUREEN',session:'2016',shift:'Morning'},
-      {roll:'RP16-CE09',name:'FAISAL MEHMOOD',session:'2016',shift:'Morning'},
-      {roll:'RP16-CE10',name:'MUHAMMAD AHMAD NASEEM',session:'2016',shift:'Morning'},
-      {roll:'RP16-CE11',name:'MUHAMMAD ADNAN',session:'2016',shift:'Morning'},
-      {roll:'RP16-CE12',name:'HAFIZ MUHAMMAD HASSAN ABID',session:'2016',shift:'Morning'},
-      {roll:'RP16-CE13',name:'WAQAR AHMAD ALI',session:'2016',shift:'Morning'},
-      {roll:'RP16-CE14',name:'UMBREEN ZOHRA',session:'2016',shift:'Morning'},
-      {roll:'RP16-CE15',name:'EEMAN NAVEED',session:'2016',shift:'Morning'},
-      {roll:'RP16-CE16',name:'MUHAMMAD IMTIAZ',session:'2016',shift:'Morning'},
-      {roll:'RP16-CE17',name:'AHMAD SALEEM',session:'2016',shift:'Morning'},
-      {roll:'RP16-CE18',name:'MUHAMMAD MINHAJ QADRI',session:'2016',shift:'Morning'},
-      {roll:'RP16-CE19',name:'MUHAMAD EHSAN ELAHI',session:'2016',shift:'Morning'},
-      {roll:'RP16-CE20',name:'MUHAMMAD USAMA',session:'2016',shift:'Morning'},
-      {roll:'RP16-CE21',name:'AYESHA SHAHBAZ',session:'2016',shift:'Morning'},
-      {roll:'RP16-CE22',name:'AHSAN ALI',session:'2016',shift:'Morning'},
-      {roll:'RP16-CE23',name:'HAMZA BIN AZAM',session:'2016',shift:'Morning'},
-      {roll:'RP16-CE24',name:'MUHAMMAD AHMAD HASSAN',session:'2016',shift:'Morning'},
-      {roll:'RP16-CE25',name:'MUHAMMAD IQBAL',session:'2016',shift:'Morning'},
-      {roll:'RP16-CE26',name:'MUHAMMAD TALHA FAROOQ',session:'2016',shift:'Morning'},
-      {roll:'RP16-CE27',name:'MAHNOOR RIAZ',session:'2016',shift:'Morning'},
-      {roll:'RP16-CE28',name:'AMINA IQBAL',session:'2016',shift:'Morning'},
-      {roll:'RP16-CE29',name:'RANA BILAL HAKEEM',session:'2016',shift:'Morning'},
-      {roll:'RP16-CE30',name:'TALHA AHMAD',session:'2016',shift:'Morning'},
-      {roll:'RP16-CE31',name:'MUHAMMAD ASIF',session:'2016',shift:'Morning'},
-      {roll:'RP16-CE32',name:'SHAHZEB FAROOQ',session:'2016',shift:'Morning'},
-      {roll:'RP16-CE33',name:'MUHAMMAD USAMA',session:'2016',shift:'Morning'},
-      {roll:'RP16-CE34',name:'RAJA MUHAMMAD MURTAZA',session:'2016',shift:'Morning'},
-      {roll:'RP16-CE35',name:'ZAINAB DAWOOD',session:'2016',shift:'Morning'},
-      {roll:'RP16-CE36',name:'MUHAMMAD OLYAN',session:'2016',shift:'Morning'},
-      {roll:'RP16-CE37',name:'MUHAMMAD ALI ASHRAF',session:'2016',shift:'Morning'},
-      {roll:'RP16-CE38',name:'QURBAN ALI',session:'2016',shift:'Morning'},
-      {roll:'RP16-CE39',name:'SUNDAS ALI',session:'2016',shift:'Morning'},
-      {roll:'RP16-CE40',name:'SHAH FAISAL',session:'2016',shift:'Morning'},
-      {roll:'RP16-CE41',name:'MUHAMMAD ILYAS KHAN',session:'2016',shift:'Morning'},
-      {roll:'RP16-CE42',name:'DANIYAL',session:'2016',shift:'Morning'},
-      {roll:'RP16-CE43',name:'MUHAMMAD RIZWAN',session:'2016',shift:'Morning'},
-      {roll:'RP16-CE44',name:'HOSAM ELDEIN TARIQ OSMAN ADAM',session:'2016',shift:'Morning'},
-      {roll:'RP16-CE45',name:'ARSAL AFTAB KHAN',session:'2016',shift:'Morning'},
-      {roll:'RP16-PG01',name:'MUHAMMAD SALMAN',session:'2016',shift:'Morning'},
-      {roll:'RP16-PG02',name:'MUHAMMAD ABID',session:'2016',shift:'Morning'},
-      {roll:'RP16-PG03',name:'MIAN MUHAMMAD MAHAD NASIR',session:'2016',shift:'Morning'},
-      {roll:'RP16-PG04',name:'TABEDAR MUSTAFA',session:'2016',shift:'Morning'},
-      {roll:'RP16-PG05',name:'MUHAMMAD BILAL',session:'2016',shift:'Morning'},
-      {roll:'RP16-PG06',name:'MUHAMMAD SUFYAN BUTT',session:'2016',shift:'Morning'},
-      {roll:'RP16-PG07',name:'MUHAMMAD RIZWAN',session:'2016',shift:'Morning'},
-      {roll:'RP16-PG08',name:'MUHAMMAD ZAMAN',session:'2016',shift:'Morning'},
-      {roll:'RP16-PG09',name:'JAZAB YASEEN',session:'2016',shift:'Morning'},
-      {roll:'RP16-PG10',name:'MUZAMMIL AHMAD',session:'2016',shift:'Morning'},
-      {roll:'RP16-PG11',name:'BILAL ISLAM',session:'2016',shift:'Morning'},
-      {roll:'RP16-PG12',name:'MUHAMMAD KHURRAM NAWAZ',session:'2016',shift:'Morning'},
-      {roll:'RP16-PG13',name:'HAFIZ MUHAMMAD ESSA',session:'2016',shift:'Morning'},
-      {roll:'RP16-PG14',name:'MUHAMMAD FARHAN SHAHID',session:'2016',shift:'Morning'},
-      {roll:'RP16-PG15',name:'EHTISHAM ALI AZAD',session:'2016',shift:'Morning'},
-      {roll:'RP16-PG16',name:'WAJI UL HASSAN KIANI',session:'2016',shift:'Morning'},
-      {roll:'SSP16-CE01',name:'SUBIYAL MIRZA',session:'2016',shift:'Evening'},
-      {roll:'SSP16-CE02',name:'UMER BIN UBAID',session:'2016',shift:'Evening'},
-      {roll:'SSP16-CE03',name:'MAHNOOR SYED',session:'2016',shift:'Evening'},
-      {roll:'SSP16-CE04',name:'MUHAMMAD HUZAIFA',session:'2016',shift:'Evening'},
-      {roll:'SSP16-CE05',name:'MUHAMMAD AJMAL ROUF',session:'2016',shift:'Evening'},
-      {roll:'SSP16-CE06',name:'MUHAMMAD HUZAIFA SOHAIL',session:'2016',shift:'Evening'},
-      {roll:'SSP16-CE07',name:'MUHAMMAD TAHIR JUNAID',session:'2016',shift:'Evening'},
-      {roll:'SSP16-CE08',name:'AMEER HAMZA',session:'2016',shift:'Evening'},
-      {roll:'SSP16-CE09',name:'ARSLAN KHAN',session:'2016',shift:'Evening'},
-      {roll:'SSP16-CE10',name:'AYESHA ZULFIQAR',session:'2016',shift:'Evening'},
-      {roll:'SSP16-CE11',name:'URWA AQUEEL',session:'2016',shift:'Evening'},
-      {roll:'SSP16-CE12',name:'AHMED ALI',session:'2016',shift:'Evening'},
-      {roll:'SSP16-CE13',name:'UMER FAROOQ',session:'2016',shift:'Evening'},
-      {roll:'SSP16-CE14',name:'MISRA TAHIR',session:'2016',shift:'Evening'},
-      {roll:'SSP16-CE15',name:'SHABBIR AHMAD',session:'2016',shift:'Evening'},
-      {roll:'SSP16-CE16',name:'TALHA BIN SHAKEEL',session:'2016',shift:'Evening'},
-      {roll:'SSP16-CE17',name:'SIBGHAT ULLAH',session:'2016',shift:'Evening'},
-      {roll:'SSP16-CE18',name:'KIRAN ASGHER',session:'2016',shift:'Evening'},
-      {roll:'SSP16-CE19',name:'HAFIZ MUHAMMAD FARHAN YASIN',session:'2016',shift:'Evening'},
-      {roll:'SSP16-CE20',name:'HAMMAD KHALID',session:'2016',shift:'Evening'},
-      {roll:'SSP16-CE21',name:'HASIN KHALID',session:'2016',shift:'Evening'},
-      {roll:'SSP16-CE22',name:'HAFIZ MUHAMMAD HARIS',session:'2016',shift:'Evening'},
-      {roll:'SSP16-CE23',name:'SANA ARBAB',session:'2016',shift:'Evening'},
-      {roll:'SSP16-CE24',name:'MUHAMMAD TAHA KHAN',session:'2016',shift:'Evening'},
-      {roll:'SSP16-CE25',name:'SYED GHAZANFAR ALI',session:'2016',shift:'Evening'},
-      {roll:'SSP16-CE26',name:'SYED MUHAMMAD ALI BAQIR',session:'2016',shift:'Evening'},
-      {roll:'SSP16-CE27',name:'MUHAMMAD MUNEEB',session:'2016',shift:'Evening'},
-      {roll:'SSP16-CE28',name:'MUHAMMAD UMER',session:'2016',shift:'Evening'},
-      {roll:'SSP16-CE29',name:'KHALIL AHMAD',session:'2016',shift:'Evening'},
-      {roll:'SSP16-CE30',name:'MAKHDOOM JAWAD ULLAH',session:'2016',shift:'Evening'},
-      {roll:'SSP16-CE31',name:'SUFYAN AHMED',session:'2016',shift:'Evening'},
-      {roll:'SSP16-PG01',name:'MUDASSAR ARSHAD',session:'2016',shift:'Evening'},
-      {roll:'SSP16-PG02',name:'SADAQAT ALI',session:'2016',shift:'Evening'},
-      {roll:'SSP16-PG03',name:'ANS IRSHAD',session:'2016',shift:'Evening'},
-      {roll:'SSP16-PG04',name:'MUHAMMAD OSSAMA',session:'2016',shift:'Evening'},
-      {roll:'SSP16-PG05',name:'SYED MUHAMMAD HASSAN YOUSUF',session:'2016',shift:'Evening'},
-      {roll:'SSP16-PG06',name:'MUHAMMAD ANS BIN AQEEL',session:'2016',shift:'Evening'},
-      {roll:'SSP16-PG07',name:'SARDAR MUHAMMAD ASAD HAYAT',session:'2016',shift:'Evening'},
-      {roll:'SSP16-PG08',name:'ASFAR HUSSAIN KHAN',session:'2016',shift:'Evening'},
-      {roll:'SSP16-PG09',name:'ALI RASHID',session:'2016',shift:'Evening'},
-      {roll:'SSP16-PG10',name:'MOBEEN IRFAN',session:'2016',shift:'Evening'},
-      {roll:'SSP16-PG11',name:'MUNEEB UR REHMAN',session:'2016',shift:'Evening'},
-      {roll:'SSP16-PG12',name:'MUHAMMAD UMER RANA',session:'2016',shift:'Evening'},
-      {roll:'SSP16-PG13',name:'AMNA SAEED',session:'2016',shift:'Evening'},
-      {roll:'SSP16-PG14',name:'HASSAM QAISER',session:'2016',shift:'Evening'},
-      {roll:'SSP16-PG15',name:'RASHEED AHMAD',session:'2016',shift:'Evening'},
-    ];
-
-    // ── URL param: prefill session ───────────────────────────────────────────
-    const params = new URLSearchParams(location.search);
-    const paramSession = params.get('session');
-    if (paramSession) {
-      const bar = document.getElementById('session-context-bar');
-      bar.innerHTML = `Registering for <strong>Session ${paramSession}</strong>`;
-      bar.classList.add('show');
-    }
-
-    // ── Roll autocomplete ────────────────────────────────────────────────────
-    const rollInput = document.getElementById('roll-input');
-    const rollSugg  = document.getElementById('roll-suggestions');
-
-    rollInput.addEventListener('input', () => {
-      const val = rollInput.value.trim().toUpperCase();
-      rollSugg.innerHTML = '';
-      selectedRoll = null; nameValidated = false;
-  document.getElementById('name-feedback').className = 'name-feedback';
-  document.getElementById('full-name').classList.remove('field-error','field-ok');
-  if (val.length < 2) { rollSugg.classList.remove('open'); return; }
-
-      const matches = ROLLS.filter(r => r.roll.toUpperCase().includes(val)).slice(0, 12);
-      if (!matches.length) { rollSugg.classList.remove('open'); return; }
-
-      matches.forEach(r => {
-        const div = document.createElement('div');
-        div.className = 'roll-option';
-        const _dept1 = r.roll.includes('PG') ? 'Polymer' : r.roll.includes('EE') ? 'Energy' : r.roll.includes('BC') ? 'Biochem' : 'Chemical';
-        div.innerHTML = `<strong>${r.roll}</strong> — ${_dept1} · ${r.shift} · Session ${r.session}`;
-        div.addEventListener('click', () => {
-          rollInput.value = r.roll;
-          selectedRoll = r;
-          document.getElementById('session-year').value = r.session;
-          document.getElementById('shift').value = r.shift;
-          rollSugg.classList.remove('open');
-          // Reset + re-validate name when roll changes
-          document.getElementById('name-feedback').className = 'name-feedback';
-          document.getElementById('full-name').classList.remove('field-error','field-ok');
-          nameValidated = false;
-          const _tn = document.getElementById('full-name').value.trim();
-          if (_tn) renderFeedback(validateName(_tn, r.name), _tn);
-          else document.getElementById('full-name').focus();
-          // Show autofill badge
-          
-          document.getElementById('autofill-info').innerHTML =
-            `<div class="autofill-badge"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Session ${r.session} · ${r.shift} · ${r.roll.includes('PG')?'Polymer':r.roll.includes('EE')?'Energy':r.roll.includes('BC')?'Biochem':'Chemical'} Engg.</div>`;
-        });
-        rollSugg.appendChild(div);
-      });
-      rollSugg.classList.add('open');
-    });
-
-    document.addEventListener('click', e => {
-      if (!e.target.closest('.roll-wrap')) rollSugg.classList.remove('open');
-    });
-
-    // ── Password strength ────────────────────────────────────────────────────
-    document.getElementById('password').addEventListener('input', function() {
-      const v = this.value;
-      const fill = document.getElementById('pw-fill');
-      const lbl  = document.getElementById('pw-label');
-      let score = 0;
-      if (v.length >= 8) score++;
-      if (/[A-Z]/.test(v)) score++;
-      if (/[0-9]/.test(v)) score++;
-      if (/[^A-Za-z0-9]/.test(v)) score++;
-      const colors = ['#e74c3c','#e67e22','#f1c40f','#2ecc71'];
-      const labels = ['Weak','Fair','Good','Strong'];
-      fill.style.width  = (score * 25) + '%';
-      fill.style.background = colors[score-1] || '#e1ddd5';
-      lbl.textContent = v.length ? labels[score-1] || '' : '';
-    });
-
-    // ── REGISTER ─────────────────────────────────────────────────────────────
-    window.handleRegister = async function() {
-      const roll     = document.getElementById('roll-input').value.trim();
-      const name     = document.getElementById('full-name').value.trim();
-      const session  = document.getElementById('session-year').value.trim();
-      const shift    = document.getElementById('shift').value.trim();
-      const city     = document.getElementById('city').value.trim();
-      const country  = document.getElementById('country').value.trim();
-      const position = document.getElementById('position')?.value.trim() || '';
-      const employer  = document.getElementById('employer').value.trim();
-      const phone     = document.getElementById('phone')?.value.trim() || '';
-      const linkedin = document.getElementById('linkedin').value.trim();
-      const email    = document.getElementById('email').value.trim().toLowerCase();
-      const pw       = document.getElementById('password').value;
-      const pw2      = document.getElementById('confirm-password').value;
-
-      const alert = document.getElementById('reg-alert');
-      const showErr = msg => { alert.className = 'alert alert-error show'; alert.textContent = msg; };
-
-      // Validate
-      if (!roll)    return showErr('Please enter or select your roll number.');
-      if (!name)    return showErr('Please enter your full name.');
-      if (!session) return showErr('Session not detected — please select your roll number from the suggestions.');
-      // Name validation gate (2006 only — skipped for 2009/2016 where names are empty)
-      if (selectedRoll && selectedRoll.name) {
-        if (!nameValidated) {
-          const _r = validateName(name, selectedRoll.name);
-          renderFeedback(_r, name);
-          if (!_r.pass) return showErr("Name doesn't match our records for this roll number. Please check and try again.");
-        }
-      }
-      if (!window._photoUrl) return showErr('Please upload a profile photo.');
-      if (!position) return showErr('Please enter your current position / job title.');
-      if (!phone)    return showErr('Please enter your phone number.');
-      if (!email)   return showErr('Please enter your email address.');
-      if (pw.length < 8) return showErr('Password must be at least 8 characters.');
-      if (pw !== pw2) return showErr('Passwords do not match.');
-
-      // Loading state
-      const btn = document.getElementById('register-btn');
-      document.getElementById('reg-btn-text').textContent = 'Creating account…';
-      document.getElementById('reg-spinner').style.display = 'block';
-      btn.disabled = true;
-      alert.className = 'alert';
-
-      try {
-        // Create Firebase account
-        const cred = await createUserWithEmailAndPassword(auth, email, pw);
-        currentNewUser = cred.user;
-
-        // Generate 6-digit code
-        verifyCode = String(Math.floor(100000 + Math.random() * 900000));
-
-        // Save to Firestore — emailVerified:false until code confirmed
-        await setDoc(doc(db, 'alumni', roll), {
-          uid: cred.user.uid,
-          roll, name, session, shift,
-          city, country, position, employer, phone, linkedin,
-          email, photoUrl: window._photoUrl || '',
-          status: 'pending', emailVerified: false,
-          verifyCode, registeredAt: serverTimestamp()
-        });
-        await setDoc(doc(db, 'alumni_uid_map', cred.user.uid), { roll });
-
-        // Send branded email via Resend (noreply@ranaadeem.de)
-        await fetch('/api/send-email', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            type: 'alumni-verify',
-            to: email, toName: name,
-            data: { code: verifyCode, name, session }
-          })
-        });
-
-        document.getElementById('sent-email-display').textContent = email;
-        setStep(2);
-
-            } catch(err) {
-        let msg = 'Registration failed. Please try again.';
-        if (err.code === 'auth/email-already-in-use') msg = 'This email is already registered. Try signing in instead.';
-        if (err.code === 'auth/invalid-email') msg = 'Please enter a valid email address.';
-        if (err.code === 'auth/weak-password') msg = 'Password is too weak. Use at least 8 characters.';
-        showErr(msg);
-      } finally {
-        document.getElementById('reg-btn-text').textContent = 'Create Account & Verify Email';
-        document.getElementById('reg-spinner').style.display = 'none';
-        btn.disabled = false;
-      }
-    };
-
-    // ── CHECK CODE ────────────────────────────────────────────────────────────
-    window.checkVerified = async function() {
-      const alertEl = document.getElementById('verify-alert');
-      const entered = (document.getElementById('verify-code-input')?.value || '').trim();
-      if (!entered) {
-        alertEl.className = 'alert alert-error show';
-        alertEl.textContent = 'Please enter the 6-digit code from your email.';
-        return;
-      }
-      if (entered !== verifyCode) {
-        alertEl.className = 'alert alert-error show';
-        alertEl.textContent = 'Incorrect code — please check your email and try again.';
-        return;
-      }
-      // Code matches — mark emailVerified:true in Firestore
-      try {
-        const mapSnap = await getDoc(doc(db, 'alumni_uid_map', currentNewUser.uid));
-        if (mapSnap.exists()) {
-          const { updateDoc } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
-          await updateDoc(doc(db, 'alumni', mapSnap.data().roll), {
-            emailVerified: true, verifyCode: null
-          });
-        }
-        alertEl.className = 'alert';
-
-        // Email 1: tell user their profile is pending
-        fetch('/api/send-email', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            type: 'alumni-pending',
-            to: currentNewUser.email,
-            toName: document.getElementById('full-name').value.trim(),
-            data: {
-              roll: document.getElementById('roll-input').value.trim(),
-              session: document.getElementById('session-year').value.trim()
-            }
-          })
-        }).catch(() => {});
-
-        // Email 2: notify admin of new pending registration
-        fetch('/api/send-email', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            type: 'alumni-registration-notify',
-            data: {
-              name:     document.getElementById('full-name').value.trim(),
-              roll:     document.getElementById('roll-input').value.trim(),
-              session:  document.getElementById('session-year').value.trim(),
-              email:    currentNewUser.email,
-              city:     document.getElementById('city').value.trim(),
-              country:  document.getElementById('country').value.trim(),
-              position: document.getElementById('position')?.value.trim() || '',
-              employer: document.getElementById('employer').value.trim(),
-              position: document.getElementById('position').value.trim(),
-              employer: document.getElementById('employer').value.trim()
-            }
-          })
-        }).catch(() => {});
-
-        setStep(3);
-      } catch(e) {
-        alertEl.className = 'alert alert-error show';
-        alertEl.textContent = 'Error confirming code. Please try again.';
-      }
-    };
-
-    // ── RESEND CODE ────────────────────────────────────────────────────────────
-    window.resendVerificationEmail = async function() {
-      const alertEl = document.getElementById('verify-alert');
-      if (!currentNewUser || !verifyCode) return;
-      try {
-        await fetch('/api/send-email', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            type: 'alumni-verify',
-            to: currentNewUser.email,
-            toName: document.getElementById('full-name').value.trim(),
-            data: { code: verifyCode, session: document.getElementById('session-year').value }
-          })
-        });
-        alertEl.className = 'alert alert-success show';
-        alertEl.textContent = 'Code resent! Check your inbox.';
-      } catch(e) {
-        alertEl.className = 'alert alert-error show';
-        alertEl.textContent = 'Could not resend. Please try again shortly.';
-      }
-    };
-
-    // ── SIGN IN ──────────────────────────────────────────────────────────────
-    window.handleSignIn = async function() {
-      const email = document.getElementById('signin-email').value.trim().toLowerCase();
-      const pw    = document.getElementById('signin-password').value;
-      const alertEl = document.getElementById('signin-alert');
-      const showErr = msg => { alertEl.className = 'alert alert-error show'; alertEl.textContent = msg; };
-
-      if (!email || !pw) return showErr('Please enter your email and password.');
-
-      document.getElementById('si-btn-text').textContent = 'Signing in…';
-      document.getElementById('si-spinner').style.display = 'block';
-
-      try {
-        const cred = await signInWithEmailAndPassword(auth, email, pw);
-        const user = cred.user;
-
-        // Check emailVerified from Firestore (custom code verification)
-        const _map = await getDoc(doc(db, 'alumni_uid_map', cred.user.uid));
-        if (_map.exists()) {
-          const _prof = await getDoc(doc(db, 'alumni', _map.data().roll));
-          if (_prof.exists() && _prof.data().emailVerified === false) {
-            await signOut(auth);
-            showErr('Please verify your email first — enter the 6-digit code we sent you.');
-            return;
-          }
-        }
-
-        // Look up their roll via uid map
-        const mapSnap = await getDoc(doc(db, 'alumni_uid_map', user.uid));
-        if (!mapSnap.exists()) {
-          alertEl.className = 'alert alert-info show';
-          alertEl.innerHTML = 'No registration found. <a href="#" onclick="togglePanel()" style="color:var(--navy);font-weight:600">Register here</a>.';
-          await signOut(auth);
-          return;
-        }
-        const { roll } = mapSnap.data();
-        const profSnap = await getDoc(doc(db, 'alumni', roll));
-        const profile  = profSnap.data();
-
-        if (profile.status === 'pending') {
-          alertEl.className = 'alert alert-info show';
-          alertEl.textContent = 'Your registration is under review. You\'ll be notified once approved.';
-          await signOut(auth);
-          return;
-        }
-
-        // Approved — redirect to their session page
-        window.location.href = `/alumni/${profile.session}.html`;
-
-      } catch(err) {
-        let msg = 'Sign in failed. Please check your credentials.';
-        if (err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') {
-          msg = 'Email or password is incorrect.';
-        }
-        showErr(msg);
-      } finally {
-        document.getElementById('si-btn-text').textContent = 'Sign In';
-        document.getElementById('si-spinner').style.display = 'none';
-      }
-    };
-
-    // ── FORGOT PASSWORD ──────────────────────────────────────────────────────
-    window.handleForgotPassword = async function() {
-      const email = document.getElementById('signin-email').value.trim();
-      const alertEl = document.getElementById('forgot-alert');
-      if (!email) {
-        alertEl.className = 'alert alert-error show';
-        alertEl.textContent = 'Enter your email address above first, then click Forgot password.';
-        return;
-      }
-      try {
-        await sendPasswordResetEmail(auth, email);
-        alertEl.className = 'alert alert-success show';
-        alertEl.textContent = 'Password reset email sent! Check your inbox.';
-      } catch(e) {
-        alertEl.className = 'alert alert-error show';
-        alertEl.textContent = 'Could not send reset email. Check the address is correct.';
-      }
-    };
-
-    // ── Toggle register/signin ───────────────────────────────────────────────
-    let showingSignIn = false;
-    window.togglePanel = function() {
-      showingSignIn = !showingSignIn;
-      document.getElementById('register-card').style.display  = showingSignIn ? 'none' : 'block';
-      document.getElementById('signin-panel').style.display   = showingSignIn ? 'block' : 'none';
-      document.getElementById('toggle-link').innerHTML = showingSignIn
-        ? `New here? <a href="#" onclick="togglePanel()">Register</a>`
-        : `Already registered? <a href="#" onclick="togglePanel()">Sign In</a>`;
-      document.getElementById('reg-alert').className = 'alert';
-      document.getElementById('signin-alert').className = 'alert';
-    };
-
-    // ── Step navigation ──────────────────────────────────────────────────────
-    window.setStep = function(n) {
-      document.querySelectorAll('.form-section').forEach(s => s.classList.remove('active'));
-      if (n === 1) document.getElementById('reg-form').classList.add('active');
-      if (n === 2) document.getElementById('verify-sent').classList.add('active');
-      if (n === 3) document.getElementById('pending-state').classList.add('active');
-
-      // Update step dots
-      ['step-1','step-2','step-3'].forEach((id, i) => {
-        const el = document.getElementById(id);
-        el.classList.remove('active','done');
-        if (i + 1 < n) el.classList.add('done');
-        if (i + 1 === n) el.classList.add('active');
-      });
-      ['line-1-2','line-2-3'].forEach((id, i) => {
-        document.getElementById(id).classList.toggle('done', i + 1 < n);
-      });
-    };
-
-    // ── If already signed in, redirect ──────────────────────────────────────
-    onAuthStateChanged(auth, async user => {
-      if (!user) return;
-      if (user.uid === ADMIN_UID) {
-        window.location.href = '/alumni.html'; return;
-      }
-      // emailVerified now tracked in Firestore, not Firebase Auth
-      const mapSnap = await getDoc(doc(db, 'alumni_uid_map', user.uid));
-      if (!mapSnap.exists()) return;
-      const { roll } = mapSnap.data();
-      const profSnap = await getDoc(doc(db, 'alumni', roll));
-      if (!profSnap.exists()) return;
-      const profile = profSnap.data();
-      if (profile.status === 'approved') {
-        window.location.href = `/alumni/${profile.session}.html`;
-      }
-    });
-
-    // Allow Enter key on sign-in fields
-    document.getElementById('signin-password').addEventListener('keydown', e => {
-      if (e.key === 'Enter') window.handleSignIn();
-    });
-    document.getElementById('confirm-password').addEventListener('keydown', e => {
-      if (e.key === 'Enter') window.handleRegister();
-    });
-
-
-
-// ── Photo upload ───────────────────────────────────────────────────────────
-window._photoUrl = null;
-
-window.handlePhotoUpload = function(input) {
-  const file = input.files[0];
-  if (!file) return;
-  const errEl = document.getElementById('photo-error');
-  errEl.style.display = 'none';
-
-  if (file.size > 3 * 1024 * 1024) {
-    errEl.textContent = 'Photo must be under 3MB.';
-    errEl.style.display = 'block';
-    return;
+  // Hero avatar
+  const av = document.getElementById("p-avatar");
+  const initials = (p.name||"?").split(" ").map(w=>w[0]).slice(0,2).join("").toUpperCase();
+  if (_photo) {
+    av.innerHTML = `<img src="${_photo}" alt="${p.name}">`;
+    _currentPhotoUrl = _photo;
+    document.getElementById("hero-badge").classList.add("show");
+  } else {
+    av.textContent = initials;
+    _currentPhotoUrl = null;
   }
 
+  // Hero text
+  set("p-name", tc(p.name));
+  set("p-roll", p.roll);
+
+  // Hero badges
+  const badges = document.getElementById("hero-badges");
+  const shift  = p.shift || "";
+  badges.innerHTML =
+    `<span class="hero-badge gold">Session ${sessionYear}–${parseInt(sessionYear)+4}</span>` +
+    (shift ? `<span class="hero-badge">${shift}</span>` : "") +
+    (_position ? `<span class="hero-badge">💼 ${_position}</span>` : "") +
+    (p.city ? `<span class="hero-badge">📍 ${p.city}${p.country ? ", "+p.country : ""}</span>` : "");
+
+  // Sidebar quick info
+  set("lm-session",  `Session ${sessionYear}–${parseInt(sessionYear)+4}`);
+  set("lm-shift",    shift);
+  set("lm-location", [p.city, p.country].filter(Boolean).join(", ") || "—");
+  set("lm-position", _position || "—");
+  if (p.linkedin) {
+    document.getElementById("lm-linkedin-row").style.display = "flex";
+    document.getElementById("lm-linkedin-a").href = p.linkedin;
+  }
+
+  // Visibility
+  const canSeeFull    = ["same","self","admin"].includes(viewerRole);
+  const canSeePrivate = ["self","admin"].includes(viewerRole);
+
+  // Professional
+  set("v-position", _position || "Not provided");
+  if (canSeeFull) {
+    set("v-employer", _employer || "Not provided");
+    document.getElementById("i-employer").value = _employer || "";
+  } else {
+    document.getElementById("v-employer").innerHTML = '<span class="gated-msg">Visible to same-session members</span>';
+  }
+  document.getElementById("i-position").value = _position || "";
+
+  // Contact (same session+)
+  if (canSeeFull) {
+    document.getElementById("sec-contact").style.display = "block";
+    set("v-city",    p.city    || "Not provided");
+    set("v-country", p.country || "Not provided");
+    document.getElementById("i-city").value    = p.city    || "";
+    document.getElementById("i-country").value = p.country || "";
+    if (p.linkedin) {
+      document.getElementById("v-linkedin").innerHTML = `<a href="${p.linkedin}" target="_blank">${p.linkedin}</a>`;
+    } else {
+      set("v-linkedin", "Not provided");
+    }
+    document.getElementById("i-linkedin").value = p.linkedin || "";
+  }
+
+  // Private section — phone for self/admin, email for same session+
+  if (canSeeFull) {
+    document.getElementById("sec-private").style.display = "block";
+    // Email: visible to same-session + self + admin
+    document.getElementById("fi-email").style.display = "block";
+    set("v-email", p.email || "Not provided");
+    if (canSeePrivate) {
+      document.getElementById("email-note").textContent = "🔒 Only visible to you and admin";
+    } else {
+      document.getElementById("email-note").textContent = "Visible to same-session members";
+    }
+  }
+  if (canSeePrivate) {
+    // Phone: self + admin only
+    document.getElementById("fi-phone").style.display = "block";
+    set("v-phone", p.phone || "Not provided");
+    document.getElementById("i-phone").value = p.phone || "";
+    document.getElementById("sec-private-sub").textContent = "Phone visible to you and admin · Email visible to session members";
+  }
+
+  // Network info
+  set("v-roll",    p.roll);
+  set("v-shift",   shift);
+  set("v-session", `${sessionYear}–${parseInt(sessionYear)+4}`);
+  if (p.registeredAt?.seconds) {
+    set("v-since", new Date(p.registeredAt.seconds*1000).toLocaleDateString("en-GB",{month:"short",year:"numeric"}));
+  }
+
+  // Edit bar (self + admin)
+  if (canSeePrivate) {
+    document.getElementById("edit-bar").style.display   = "block";
+    document.getElementById("btn-edit").style.display   = "inline-flex";
+    document.getElementById("photo-card").style.display = "block";
+    document.getElementById("btn-change-photo").style.display = "block";
+  }
+
+  // Vis notice
+  const vn = document.getElementById("vis-notice");
+  if (viewerRole === "public") {
+    vn.style.display = "block";
+    vn.innerHTML = `<strong>Public View</strong><a href="/alumni/register.html">Join the network</a> to see full contact details.`;
+  } else if (viewerRole === "other") {
+    vn.style.display = "block";
+    vn.innerHTML = `<strong>Limited View</strong>Full details visible to Session ${sessionYear} members.`;
+  }
+}
+
+// ── EDIT / SAVE ───────────────────────────────────────────────────────────
+window.startEdit = function() {
+  ["sec-contact","sec-private"].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = "block";
+  });
+  document.querySelectorAll(".section-card").forEach(c => c.classList.add("editing"));
+  document.getElementById("btn-edit").style.display   = "none";
+  document.getElementById("btn-save").style.display   = "inline-flex";
+  document.getElementById("btn-cancel").style.display = "inline-flex";
+  document.getElementById("save-alert").className     = "save-alert";
+};
+
+window.cancelEdit = function() {
+  document.querySelectorAll(".section-card").forEach(c => c.classList.remove("editing"));
+  document.getElementById("btn-edit").style.display   = "inline-flex";
+  document.getElementById("btn-save").style.display   = "none";
+  document.getElementById("btn-cancel").style.display = "none";
+  document.getElementById("i-position").value = profileData.position || profileData.job || "";
+  document.getElementById("i-employer").value  = profileData.employer  || profileData.company || "";
+  document.getElementById("i-city").value      = profileData.city      || "";
+  document.getElementById("i-country").value   = profileData.country   || "";
+  document.getElementById("i-linkedin").value  = profileData.linkedin  || "";
+  document.getElementById("i-phone").value     = profileData.phone     || "";
+};
+
+window.saveProfile = async function() {
+  const saveBtn = document.getElementById("btn-save");
+  const alertEl = document.getElementById("save-alert");
+  const showE   = msg => { alertEl.className = "save-alert sa-err show"; alertEl.textContent = msg; };
+  const updates = {
+    position: document.getElementById("i-position").value.trim(),
+    employer:  document.getElementById("i-employer").value.trim(),
+    city:      document.getElementById("i-city").value.trim(),
+    country:   document.getElementById("i-country").value.trim(),
+    linkedin:  document.getElementById("i-linkedin").value.trim(),
+    phone:     document.getElementById("i-phone").value.trim(),
+    updatedAt: serverTimestamp()
+  };
+  if (!updates.position) return showE("Current position cannot be empty.");
+  if (!updates.employer)  return showE("Employer cannot be empty.");
+  saveBtn.disabled = true; saveBtn.textContent = "Saving…";
+  try {
+    await updateDoc(doc(db,"alumni", profileRoll || urlRoll), updates);
+    Object.assign(profileData, updates);
+    set("v-position", updates.position);
+    set("v-employer",  updates.employer);
+    set("v-city",      updates.city);
+    set("v-country",   updates.country);
+    set("v-phone",     updates.phone);
+    set("lm-position", updates.position);
+    set("lm-location", [updates.city, updates.country].filter(Boolean).join(", ") || "—");
+    if (updates.linkedin) {
+      document.getElementById("v-linkedin").innerHTML = `<a href="${updates.linkedin}" target="_blank">${updates.linkedin}</a>`;
+      document.getElementById("lm-linkedin-row").style.display = "flex";
+      document.getElementById("lm-linkedin-a").href = updates.linkedin;
+    } else {
+      set("v-linkedin", "Not provided");
+    }
+    alertEl.className = "save-alert sa-ok show";
+    alertEl.textContent = "✓ Profile updated successfully!";
+    setTimeout(() => window.cancelEdit(), 1600);
+  } catch(e) { showE("Error: " + e.message); }
+  finally { saveBtn.disabled = false; saveBtn.textContent = "💾 Save Changes"; }
+};
+
+window.doSignOut = async function() { await signOut(auth); location.reload(); };
+
+// ── LOAD ──────────────────────────────────────────────────────────────────
+// Safety timeout — never stay stuck on loading
+const _loadTimeout = setTimeout(() => {
+  if (document.getElementById("st-loading").style.display !== "none") {
+    showErr("Loading timed out. Please check your connection and try again.");
+  }
+}, 8000);
+
+if (!urlRoll) {
+  showErr("No roll number in URL. Use ?roll=CE-M6-101");
+} else {
+  onAuthStateChanged(auth, async user => {
+    if (!user) {
+      viewerRole = "public";
+    } else if (user.uid === ADMIN) {
+      viewerRole = "admin";
+      document.getElementById("nav-user").textContent = "⭐ Admin";
+      document.getElementById("nav-signout-btn").style.display = "inline-block";
+    } else {
+      const mapSnap = await getDoc(doc(db,"alumni_uid_map", user.uid));
+      if (mapSnap.exists()) {
+        const { roll: vRoll } = mapSnap.data();
+        const vSnap = await getDoc(doc(db,"alumni", vRoll));
+        if (vSnap.exists() && vSnap.data().status === "approved") {
+          const vData = vSnap.data();
+          viewerSession = vData.session;
+          document.getElementById("nav-user").textContent = vData.name?.split(" ")[0] || "";
+          document.getElementById("nav-signout-btn").style.display = "inline-block";
+          viewerRole = (vRoll === urlRoll) ? "self" : "pending-check";
+        }
+      }
+    }
+
+    try {
+      console.log("[profile] Step 1 — urlRoll:", urlRoll, "viewerRole:", viewerRole);
+
+      // Try direct doc ID lookup first (new system: roll as doc ID)
+      let snap = await getDoc(doc(db,"alumni", urlRoll));
+      console.log("[profile] Step 2 — direct lookup exists:", snap.exists());
+
+      if (!snap.exists()) {
+        // Fallback: query by roll field (old system: UID as doc ID)
+        console.log("[profile] Step 3 — trying query by roll field");
+        const qSnap = await getDocs(query(collection(db,"alumni"), where("roll","==",urlRoll)));
+        console.log("[profile] Step 4 — query by roll field results:", qSnap.size);
+
+        if (!qSnap.empty) {
+          snap = qSnap.docs[0];
+        } else {
+          // Very old: rollNumber field
+          console.log("[profile] Step 5 — trying rollNumber field");
+          const qSnap2 = await getDocs(query(collection(db,"alumni"), where("rollNumber","==",urlRoll)));
+          console.log("[profile] Step 6 — query by rollNumber results:", qSnap2.size);
+          if (qSnap2.empty) {
+            showErr("Profile not found. Roll number: " + urlRoll);
+            return;
+          }
+          snap = qSnap2.docs[0];
+        }
+      }
+
+      profileData = snap.data();
+      profileRoll = snap.id;
+      console.log("[profile] Step 7 — profileData loaded, id:", profileRoll, "status:", profileData?.status);
+
+      if (!profileData) { showErr("Could not read profile data."); return; }
+
+      if (profileData.status !== "approved" && viewerRole !== "admin") {
+        showErr("Profile is pending admin approval. Status: " + profileData.status);
+        return;
+      }
+
+      if (viewerRole === "pending-check") {
+        viewerRole = ((viewerSession||"").split("-")[0] === (profileData.session||"").split("-")[0]) ? "same" : "other";
+      }
+
+      console.log("[profile] Step 8 — rendering, final viewerRole:", viewerRole);
+      clearTimeout(_loadTimeout);
+      render(profileData);
+
+    } catch(e) {
+      clearTimeout(_loadTimeout);
+      console.error("[profile] FATAL ERROR:", e);
+      showErr("Error: " + e.message + " (check browser console for details)");
+    }
+  });
+}
+
+// ── PHOTO LIGHTBOX ────────────────────────────────────────────────────────
+window.openPhotoLb = function() {
+  if (!_currentPhotoUrl) return;
+  document.getElementById("photo-lb-img").src = _currentPhotoUrl;
+  document.getElementById("photo-lb").classList.add("open");
+};
+window.closeLb = function(e) {
+  if (e.target === document.getElementById("photo-lb"))
+    document.getElementById("photo-lb").classList.remove("open");
+};
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape") document.getElementById("photo-lb").classList.remove("open");
+});
+
+// ── PHOTO EDIT ────────────────────────────────────────────────────────────
+window.handlePhotoEdit = async function(input) {
+  const file = input.files[0]; if (!file) return;
+  const status = document.getElementById("photo-edit-status");
+  const av     = document.getElementById("p-avatar");
+  if (file.size > 3*1024*1024) { status.textContent = "Max 3MB."; return; }
+  status.textContent = "Uploading…";
   const reader = new FileReader();
-  reader.onload = e => {
-    // Resize to max 600px before uploading
+  reader.onload = async e => {
     const img = new Image();
-    img.onload = () => {
-      const canvas = document.createElement('canvas');
-      const MAX = 600;
-      let w = img.width, h = img.height;
-      if (w > MAX) { h = Math.round(h * MAX / w); w = MAX; }
-      if (h > MAX) { w = Math.round(w * MAX / h); h = MAX; }
-      canvas.width = w; canvas.height = h;
-      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-      const resized = canvas.toDataURL('image/jpeg', 0.85);
-
-      // Show circular preview
-      const preview = document.getElementById('photo-preview');
-      const placeholder = document.getElementById('photo-placeholder');
-      preview.src = resized;
-      preview.style.display = 'block';
-      placeholder.style.display = 'none';
-      document.getElementById('photo-circle').style.borderColor = 'var(--green)';
-      document.getElementById('photo-circle').style.borderStyle = 'solid';
-
-      // Upload to Cloudinary
-      uploadPhotoToCloudinary(resized);
+    img.onload = async () => {
+      const canvas = document.createElement("canvas");
+      const MAX = 600; let w=img.width, h=img.height;
+      if (w>MAX) { h=Math.round(h*MAX/w); w=MAX; }
+      if (h>MAX) { w=Math.round(w*MAX/h); h=MAX; }
+      canvas.width=w; canvas.height=h;
+      canvas.getContext("2d").drawImage(img,0,0,w,h);
+      const resized = canvas.toDataURL("image/jpeg",.85);
+      av.innerHTML = `<img src="${resized}" alt="photo">`;
+      try {
+        const blob = await (await fetch(resized)).blob();
+        const fd = new FormData();
+        fd.append("file", blob, "avatar.jpg");
+        fd.append("upload_preset","ranaadeem_blog");
+        const res  = await fetch("https://api.cloudinary.com/v1_1/duetiv9rm/image/upload",{method:"POST",body:fd});
+        const data = await res.json();
+        if (!data.secure_url) throw new Error("Upload failed");
+        await updateDoc(doc(db,"alumni", profileRoll||urlRoll),{photoUrl:data.secure_url, updatedAt:serverTimestamp()});
+        _currentPhotoUrl = data.secure_url;
+        profileData.photoUrl = data.secure_url;
+        status.textContent = "Photo updated ✓";
+        document.getElementById("hero-badge").classList.add("show");
+        setTimeout(()=>status.textContent="",3000);
+      } catch(err) { status.textContent = "Upload failed. Try again."; }
     };
     img.src = e.target.result;
   };
   reader.readAsDataURL(file);
 };
-
-async function uploadPhotoToCloudinary(base64Data) {
-  const errEl = document.getElementById('photo-error');
-  try {
-    const blob = await (await fetch(base64Data)).blob();
-    const fd = new FormData();
-    fd.append('file', blob, 'avatar.jpg');
-    fd.append('upload_preset', 'ranaadeem_blog');
-    const res  = await fetch('https://api.cloudinary.com/v1_1/duetiv9rm/image/upload', { method: 'POST', body: fd });
-    const data = await res.json();
-    if (data.secure_url) {
-      window._photoUrl = data.secure_url;
-      document.getElementById('photo-error').style.display = 'none';
-    } else {
-      throw new Error('Upload failed');
-    }
-  } catch(e) {
-    errEl.textContent = 'Photo upload failed — please try again.';
-    errEl.style.display = 'block';
-    window._photoUrl = null;
-  }
-}
-
-
-// -- Name validation against roll number ----------------------------------
-function norm(s) {
-  return s.toUpperCase().replace(/[^A-Z\s]/g, ' ').replace(/\s+/g, ' ').trim();
-}
-
-function validateName(typed, officialRaw) {
-  if (!officialRaw) return { pass: true, skip: true };  // 2009/2016 no names
-  const t = norm(typed), o = norm(officialRaw);
-  if (!t) return { pass: false, reason: 'empty' };
-  const tW = t.split(' ').filter(Boolean);
-  const oW = o.split(' ').filter(Boolean);
-  if (tW.length < 2) return { pass: false, reason: 'short', msg: 'Please enter at least your first and last name.' };
-  const unmatched = tW.filter(w => !oW.includes(w));
-  if (unmatched.length === 0) {
-    const official = officialRaw.trim().split(' ')
-      .map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ');
-    return { pass: true, official };
-  }
-  return { pass: false, reason: 'mismatch', unmatched };
-}
-
-function renderFeedback(result, typed) {
-  const fb  = document.getElementById('name-feedback');
-  const ico = document.getElementById('nf-icon');
-  const txt = document.getElementById('nf-text');
-  const inp = document.getElementById('full-name');
-  fb.className = 'name-feedback';
-  inp.classList.remove('field-error', 'field-ok');
-  nameValidated = false;
-  if (result.skip) { nameValidated = true; return; }
-  if (!typed.trim()) return;
-  if (result.pass) {
-    fb.className = 'name-feedback nf-ok show';
-    ico.textContent = '\u2713';
-    txt.textContent = 'Name matched \u2014 welcome!';
-    inp.classList.add('field-ok');
-    inp.value = result.official;
-    nameValidated = true;
-  } else if (result.reason === 'short') {
-    fb.className = 'name-feedback nf-warn show';
-    ico.textContent = '\u26A0';
-    txt.textContent = result.msg;
-  } else {
-    fb.className = 'name-feedback nf-err show';
-    ico.textContent = '\u2715';
-    txt.innerHTML = "Name doesn't match our records for this roll number.<br>"
-      + '<span style="font-size:0.78rem;opacity:0.85">Try your full name as on your degree, or select a different roll number.</span>';
-    inp.classList.add('field-error');
-  }
-}
-
-// Name field: validate on blur
-document.getElementById('full-name').addEventListener('blur', () => {
-  if (!selectedRoll) return;
-  const t = document.getElementById('full-name').value.trim();
-  if (t) renderFeedback(validateName(t, selectedRoll.name), t);
-});
-
-// Debounced live validation (800ms)
-let nameTimer;
-document.getElementById('full-name').addEventListener('input', () => {
-  clearTimeout(nameTimer);
-  document.getElementById('name-feedback').className = 'name-feedback';
-  document.getElementById('full-name').classList.remove('field-error', 'field-ok');
-  nameValidated = false;
-  nameTimer = setTimeout(() => {
-    if (!selectedRoll) return;
-    const t = document.getElementById('full-name').value.trim();
-    if (t.length >= 4) renderFeedback(validateName(t, selectedRoll.name), t);
-  }, 800);
-});
-
-// City autocomplete
-let cityTimer = null;
-document.getElementById('city-input').addEventListener('input', function() {
-  const val = this.value.trim();
-  const sugg = document.getElementById('city-suggestions');
-  const sel  = document.getElementById('city-selected');
-  document.getElementById('city').value = '';
-  document.getElementById('country').value = '';
-  sel.style.display = 'none';
-  clearTimeout(cityTimer);
-  if (val.length < 3) { sugg.style.display = 'none'; return; }
-  cityTimer = setTimeout(async () => {
-    try {
-      const res = await fetch('https://geocoding-api.open-meteo.com/v1/search?name='+encodeURIComponent(val)+'&count=10&language=en&format=json',{signal:AbortSignal.timeout(8000)});
-      const data = await res.json();
-      const seen = new Set(), cities = [];
-      for (const r of (data.results||[])) {
-        const city=(r.name||'').trim(),country=(r.country||'').trim(),state=(r.admin1||r.admin2||'').trim();
-        if(!city||!country)continue;
-        const key=city+'|'+country;
-        if(seen.has(key))continue;
-        seen.add(key);cities.push({city,country,state});
-        if(cities.length>=8)break;
-      }
-      sugg.innerHTML='';
-      if(!cities.length){
-        const d=document.createElement('div');d.style.cssText='padding:10px 14px;font-size:13px;color:var(--mid),';
-        d.innerHTML='No cities found. <span style="color:var(--navy);font-weight:600;cursor:pointer;" onclick="useManualCity()">Enter manually</span>';
-        sugg.appendChild(d);
-      } else {
-        cities.forEach(({city,country,state})=>{
-          const display=state?city+', '+state+', '+country:city+', '+country;
-          const d=document.createElement('div');
-          d.style.cssText='padding:9px 14px;font-size:13px;cursor:pointer;border-bottom:1px solid #f0ebe4;transition:background .15s;';
-          d.textContent='>> '+display;
-          d.addEventListener('mouseenter',()=>d.style.background='#fdf8ee');
-          d.addEventListener('mouseleave',()=>d.style.background='');
-          d.addEventListener('click',()=>{
-            document.getElementById('city-input').value=display;
-            document.getElementById('city').value=city;
-            document.getElementById('country').value=country;
-            sel.textContent='Selected: '+city+', '+country;
-            sel.style.display='block';
-            sugg.style.display='none';
-          });
-          sugg.appendChild(d);
-        });
-      }
-      sugg.style.display='block';
-    } catch(e){
-      sugg.innerHTML='<div style="padding:9px 14px;font-size:13px;color:var(--mid);">Search unavailable. Enter city manually.</div>';
-      sugg.style.display='block';
-    }
-  },400);
-});
-document.addEventListener('click',e=>{
-  if(!e.target.closest('#city-input')&&!e.target.closest('#city-suggestions'))
-    document.getElementById('city-suggestions').style.display='none';
-});
-window.useManualCity=function(){
-  const raw=document.getElementById('city-input').value.trim();
-  const parts=raw.split(',').map(s=>s.trim());
-  const city=parts[0]||raw, country=parts.length>1?parts[parts.length-1]:'';
-  document.getElementById('city').value=city;
-  document.getElementById('country').value=country;
-  const sel=document.getElementById('city-selected');
-  sel.textContent='Selected: '+city+(country?', '+country:'');
-  sel.style.display='block';
-  document.getElementById('city-suggestions').style.display='none';
-};
-  </script>
-
+</script>
 </body>
 </html>
