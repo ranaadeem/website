@@ -573,10 +573,29 @@ if (!urlRoll) {
     }
 
     // Step 2: load the profile
+    // Try roll number as doc ID first (new system), then query by roll field (old system)
     try {
-      const snap = await getDoc(doc(db, 'alumni', urlRoll));
-      if (!snap.exists()) { showErr('This profile does not exist.'); return; }
-      profileData = snap.data();
+      let snap = await getDoc(doc(db, 'alumni', urlRoll));
+
+      if (!snap.exists()) {
+        // Old system stored docs by UID — query by roll field
+        const { getDocs, query, collection, where } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+        const q = query(collection(db, 'alumni'), where('roll', '==', urlRoll));
+        const qSnap = await getDocs(q);
+        if (qSnap.empty) {
+          // Also try rollNumber field (very old registrations)
+          const q2 = query(collection(db, 'alumni'), where('rollNumber', '==', urlRoll));
+          const qSnap2 = await getDocs(q2);
+          if (qSnap2.empty) { showErr('This profile does not exist or has not been registered yet.'); return; }
+          snap = qSnap2.docs[0];
+        } else {
+          snap = qSnap.docs[0];
+        }
+      }
+
+      profileData = snap.data ? snap.data() : snap.data;
+      if (!profileData) { showErr('Could not load profile data.'); return; }
+
       if (profileData.status !== 'approved' && viewerRole !== 'admin') {
         showErr('This profile is pending admin approval and is not yet visible.'); return;
       }
@@ -652,6 +671,5 @@ window.handlePhotoEdit = async function(input) {
   <button class="photo-lb-close" onclick="document.getElementById('photo-lb').classList.remove('open')">✕</button>
   <img id="photo-lb-img" src="" alt="Profile photo" onclick="event.stopPropagation()" />
 </div>
-
 </body>
 </html>
