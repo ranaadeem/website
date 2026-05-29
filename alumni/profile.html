@@ -597,7 +597,7 @@ function render(p) {
     set("v-employer", _employer || "Not provided");
     document.getElementById("i-employer").value = _employer || "";
   } else {
-    document.getElementById("v-employer").innerHTML = "<span class="gated-msg">Visible to same-session members</span>";
+    document.getElementById("v-employer").innerHTML = '<span class="gated-msg">Visible to same-session members</span>';
   }
   document.getElementById("i-position").value = _position || "";
 
