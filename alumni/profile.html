@@ -342,18 +342,22 @@ function render(p) {
   document.title = tc(p.name) + ' — ICET Alumni';
 
   // Crumb + nav back
-  const sessionUrl = `/alumni/${p.session}.html`;
+  // Support both old format '2006-Morning' and new '2006'
+  const sessionYear = (p.session || '').split('-')[0];
+  const sessionUrl = `/alumni/${sessionYear}.html`;
   document.getElementById('crumb-link').href        = sessionUrl;
-  document.getElementById('crumb-link').textContent = `← Back to Session ${p.session}`;
+  document.getElementById('crumb-link').textContent = `← Back to Session ${sessionYear}`;
+  document.getElementById('nav-back').href          = sessionUrl;
+  document.getElementById('nav-back').textContent   = `← Session ${sessionYear}`;
   document.getElementById('nav-back').href          = sessionUrl;
   document.getElementById('nav-back').textContent   = `← Session ${p.session}`;
 
   // Avatar initials
   const av = document.getElementById('p-avatar');
   const initials = p.name.split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase();
-  if (p.photoUrl) {
-    av.innerHTML = `<img src="${p.photoUrl}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" alt="${p.name}">`;
-    _currentPhotoUrl = p.photoUrl;
+  if (_photo) {
+    av.innerHTML = `<img src="${_photo}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" alt="${p.name}">`;
+    _currentPhotoUrl = _photo;
   } else {
     av.textContent = initials;
     _currentPhotoUrl = null;
@@ -361,9 +365,13 @@ function render(p) {
 
   set('p-name',  tc(p.name));
   set('p-roll',  p.roll);
-  set('lm-session', `Session ${p.session}–${parseInt(p.session)+4}`);
+  set('lm-session', `Session ${sessionYear}–${parseInt(sessionYear)+4}`);
   set('lm-shift',   p.shift);
-  set('lm-position', p.position || '—');
+  // Support old field names: job→position, company→employer, photoBase64→photoUrl
+  const _position = p.position || p.job || '';
+  const _employer  = p.employer  || p.company || '';
+  const _photo     = p.photoUrl  || p.photoBase64 || null;
+  set('lm-position', _position || '—');
 
   // Location in sidebar (city + country visible to all)
   const loc = [p.city, p.country].filter(Boolean).join(', ');
@@ -387,10 +395,10 @@ function render(p) {
   const canSeePrivate = ['self','admin'].includes(viewerRole);
 
   // Professional section
-  set('v-position', p.position);
+  set('v-position', _position);
   if (canSeeFull) {
-    set('v-employer', p.employer);
-    document.getElementById('i-employer').value = p.employer || '';
+    set('v-employer', _employer);
+    document.getElementById('i-employer').value = _employer || '';
   } else {
     document.getElementById('v-employer').innerHTML = '<span class="gated-msg">Visible to same-session members</span>';
   }
@@ -422,7 +430,7 @@ function render(p) {
   // Network info (always)
   set('v-roll',    p.roll);
   set('v-shift',   p.shift);
-  set('v-session', `${p.session}–${parseInt(p.session)+4}`);
+  set('v-session', `${sessionYear}–${parseInt(sessionYear)+4}`);
   if (p.registeredAt?.seconds) {
     set('v-since', new Date(p.registeredAt.seconds * 1000).toLocaleDateString('en-GB', { month:'short', year:'numeric' }));
   }
@@ -575,7 +583,7 @@ if (!urlRoll) {
 
       // Step 3: finalise role now we know profile session
       if (viewerRole === 'pending-check') {
-        viewerRole = (viewerSession === profileData.session) ? 'same' : 'other';
+        viewerRole = (viewerSession.split('-')[0] === (profileData.session||'').split('-')[0]) ? 'same' : 'other';
       }
 
       render(profileData);
