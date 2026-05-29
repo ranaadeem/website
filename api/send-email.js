@@ -220,7 +220,7 @@ export default async function handler(req, res) {
 
   try {
     // Determine from name based on email type
-    const isAlumniEmail = type === 'alumni-verify' || type === 'alumni-approved';
+    const isAlumniEmail = ['alumni-verify','alumni-approved','alumni-pending','alumni-registration-notify'].includes(type);
     const fromName = isAlumniEmail ? 'ICET Alumni Network' : 'The Lab Notebook';
 
     const response = await fetch('https://api.resend.com/emails', {
