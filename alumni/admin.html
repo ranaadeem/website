@@ -195,7 +195,8 @@
     <button class="tab-btn"        id="tab-photos-btn"  onclick="switchTab('photos')">📸 Photos <span class="badge" id="badge-photos">0</span></button>
     <button class="tab-btn"        id="tab-notices-btn" onclick="switchTab('notices')">📌 Notices <span class="badge" id="badge-notices">0</span></button>
     <button class="tab-btn"        id="tab-anns-btn"    onclick="switchTab('anns')">📢 Announcements <span class="badge" id="badge-anns">0</span></button>
-    <button class="tab-btn"        id="tab-members-btn" onclick="switchTab('members')" id="tab-members-btn">👥 Members</button>
+    <button class="tab-btn"        id="tab-members-btn" onclick="switchTab('members')">👥 Members</button>
+    <button class="tab-btn"        id="tab-manual-btn"  onclick="switchTab('manual')">➕ Add Manually</button>
   </div>
 
   <!-- REGISTRATIONS -->
@@ -216,6 +217,96 @@
   <!-- ANNOUNCEMENTS -->
   <div class="tab-panel" id="panel-anns">
     <div id="anns-list"><div class="loading">Loading…</div></div>
+  </div>
+
+  <!-- ADD MANUALLY -->
+  <div class="tab-panel" id="panel-manual">
+    <div style="max-width:640px;">
+      <p style="font-size:13px;color:var(--muted);margin-bottom:1.5rem;line-height:1.6;">
+        Add a graduate manually — for deceased members, those who cannot self-register, or corrections.
+        The profile will be immediately <strong>approved and active</strong> on the session page.
+      </p>
+      <div id="manual-error" style="display:none;background:#fef2f2;color:var(--red);border:1px solid #fca5a5;border-radius:8px;padding:10px 14px;font-size:13px;margin-bottom:1rem;"></div>
+      <div id="manual-success" style="display:none;background:#f0fdf4;color:var(--green);border:1px solid #86efac;border-radius:8px;padding:10px 14px;font-size:13px;margin-bottom:1rem;"></div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;">
+        <div>
+          <label style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:4px;">Roll Number <span style="color:var(--red)">*</span></label>
+          <input type="text" id="m-roll" placeholder="e.g. CE-M6-145" oninput="this.value=this.value.toUpperCase();manualAutoFill()"
+            style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:7px;font-size:13px;font-family:inherit;outline:none;" />
+          <div id="m-roll-hint" style="font-size:11px;color:var(--muted);margin-top:4px;"></div>
+        </div>
+        <div>
+          <label style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:4px;">Full Name <span style="color:var(--red)">*</span></label>
+          <input type="text" id="m-name" placeholder="As on degree"
+            style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:7px;font-size:13px;font-family:inherit;outline:none;" />
+        </div>
+        <div>
+          <label style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:4px;">Session</label>
+          <input type="text" id="m-session" placeholder="e.g. 2006" readonly
+            style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:7px;font-size:13px;font-family:inherit;outline:none;background:#f8f7f4;" />
+        </div>
+        <div>
+          <label style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:4px;">Shift</label>
+          <input type="text" id="m-shift" placeholder="Morning / Evening" readonly
+            style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:7px;font-size:13px;font-family:inherit;outline:none;background:#f8f7f4;" />
+        </div>
+        <div>
+          <label style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:4px;">Position / Job Title</label>
+          <input type="text" id="m-position" placeholder="e.g. Retired Engineer"
+            style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:7px;font-size:13px;font-family:inherit;outline:none;" />
+        </div>
+        <div>
+          <label style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:4px;">Employer</label>
+          <input type="text" id="m-employer" placeholder="Company or institution"
+            style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:7px;font-size:13px;font-family:inherit;outline:none;" />
+        </div>
+        <div>
+          <label style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:4px;">City</label>
+          <input type="text" id="m-city" placeholder="Current city"
+            style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:7px;font-size:13px;font-family:inherit;outline:none;" />
+        </div>
+        <div>
+          <label style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:4px;">Country</label>
+          <input type="text" id="m-country" placeholder="e.g. Pakistan"
+            style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:7px;font-size:13px;font-family:inherit;outline:none;" />
+        </div>
+        <div>
+          <label style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:4px;">Email</label>
+          <input type="email" id="m-email" placeholder="email@example.com"
+            style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:7px;font-size:13px;font-family:inherit;outline:none;" />
+        </div>
+        <div>
+          <label style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:4px;">Phone</label>
+          <input type="tel" id="m-phone" placeholder="+92 300 1234567"
+            style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:7px;font-size:13px;font-family:inherit;outline:none;" />
+        </div>
+        <div>
+          <label style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:4px;">LinkedIn</label>
+          <input type="url" id="m-linkedin" placeholder="https://linkedin.com/in/..."
+            style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:7px;font-size:13px;font-family:inherit;outline:none;" />
+        </div>
+        <div>
+          <label style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:4px;">Profile Photo URL</label>
+          <input type="url" id="m-photo" placeholder="https://... (Cloudinary URL)"
+            style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:7px;font-size:13px;font-family:inherit;outline:none;" />
+        </div>
+      </div>
+
+      <!-- Status flags -->
+      <div style="background:#f8f7f4;border:1px solid var(--border);border-radius:8px;padding:1rem;margin-bottom:1rem;">
+        <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;margin-bottom:0.6rem;">Profile Flags</div>
+        <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer;">
+          <input type="checkbox" id="m-deceased" style="width:16px;height:16px;accent-color:var(--red);" />
+          <span>Mark as <strong style="color:var(--red);">Deceased</strong> — profile will be visible but marked with ✝</span>
+        </label>
+      </div>
+
+      <button onclick="submitManual()" style="background:var(--navy);color:white;border:none;padding:11px 28px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .2s;"
+        onmouseover="this.style.background='#142d6e'" onmouseout="this.style.background='var(--navy)'">
+        ➕ Add to Alumni Network
+      </button>
+    </div>
   </div>
 
   <!-- MEMBERS -->
@@ -247,7 +338,7 @@ import {
 } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 import {
   getFirestore, collection, doc,
-  getDocs, getDoc, updateDoc, deleteDoc,
+  getDocs, getDoc, setDoc, updateDoc, deleteDoc,
   query, where, orderBy, serverTimestamp
 } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
@@ -359,7 +450,7 @@ window.doSignOut = async () => { await signOut(auth); window.location.href = '/a
 // ── Tab switch ─────────────────────────────────────────────────────────────
 window.switchTab = function(tab) {
   currentTab = tab;
-  ['regs','photos','notices','anns','members'].forEach(t => {
+  ['regs','photos','notices','anns','members','manual'].forEach(t => {
     document.getElementById('panel-'+t)?.classList.toggle('active', t===tab);
     document.getElementById('tab-'+t+'-btn')?.classList.toggle('active', t===tab);
   });
@@ -406,7 +497,7 @@ async function loadRegs() {
       card.className = 'item-card reg-card';
       card.id = 'reg-' + p.roll;
       const ini = initials(p.name);
-      const date = p.registeredAt ? new Date(p.registeredAt.seconds*1000).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}) : '';
+      const date = p.registeredAt?.seconds ? new Date(p.registeredAt.seconds*1000).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}) : (p.registeredAt ? 'Date unknown' : 'Not set');
       card.innerHTML = `
         <div class="reg-avatar" id="av-${p.roll}">
           ${p.photoUrl ? `<img src="${p.photoUrl}" alt="${p.name}" onclick="openLb('${p.photoUrl}')" style="cursor:pointer;">` : ini}
@@ -727,6 +818,115 @@ window.removeMod = async function(roll, name, btn) {
 function emptyHtml(icon, msg) {
   return `<div class="empty"><div class="e-icon">${icon}</div>${msg}</div>`;
 }
+
+// ── ROLLS lookup for manual add (same data as register.html) ──────────────
+// Derive session/shift from roll number pattern
+function getRollInfo(roll) {
+  roll = roll.trim().toUpperCase();
+  // 2006: CE-M6-101, PG-M6-201, EE-M6-401, BC-M6-301
+  //       CE-E6-102, PG-E6-201
+  if (/^(CE|PG|EE|BC)-M6-/.test(roll)) return { session: '2006', shift: 'Morning' };
+  if (/^(CE|PG)-E6-/.test(roll))        return { session: '2006', shift: 'Evening' };
+  // 2009: M09-10CE, M09-10PG, E09-10CE, E09-10PG
+  if (/^M09-/.test(roll)) return { session: '2009', shift: 'Morning' };
+  if (/^E09-/.test(roll)) return { session: '2009', shift: 'Evening' };
+  // 2016: RP16- (Morning), SSP16- (Evening)
+  if (/^RP16-/.test(roll))  return { session: '2016', shift: 'Morning' };
+  if (/^SSP16-/.test(roll)) return { session: '2016', shift: 'Evening' };
+  return null;
+}
+
+window.manualAutoFill = function() {
+  const roll = document.getElementById('m-roll').value.trim().toUpperCase();
+  const info = getRollInfo(roll);
+  const hint = document.getElementById('m-roll-hint');
+  if (info) {
+    document.getElementById('m-session').value = info.session;
+    document.getElementById('m-shift').value   = info.shift;
+    hint.textContent = '✓ Session ' + info.session + ' · ' + info.shift;
+    hint.style.color = 'var(--green)';
+  } else if (roll.length > 3) {
+    hint.textContent = 'Roll format not recognised';
+    hint.style.color = 'var(--red)';
+    document.getElementById('m-session').value = '';
+    document.getElementById('m-shift').value   = '';
+  } else {
+    hint.textContent = '';
+  }
+};
+
+window.submitManual = async function() {
+  const errEl = document.getElementById('manual-error');
+  const sucEl = document.getElementById('manual-success');
+  errEl.style.display = 'none';
+  sucEl.style.display = 'none';
+
+  const roll     = document.getElementById('m-roll').value.trim().toUpperCase();
+  const name     = document.getElementById('m-name').value.trim();
+  const session  = document.getElementById('m-session').value.trim();
+  const shift    = document.getElementById('m-shift').value.trim();
+  const position = document.getElementById('m-position').value.trim();
+  const employer = document.getElementById('m-employer').value.trim();
+  const city     = document.getElementById('m-city').value.trim();
+  const country  = document.getElementById('m-country').value.trim();
+  const email    = document.getElementById('m-email').value.trim();
+  const phone    = document.getElementById('m-phone').value.trim();
+  const linkedin = document.getElementById('m-linkedin').value.trim();
+  const photoUrl = document.getElementById('m-photo').value.trim();
+  const deceased = document.getElementById('m-deceased').checked;
+
+  const showErr = msg => { errEl.textContent = msg; errEl.style.display = 'block'; };
+
+  if (!roll)    return showErr('Roll number is required.');
+  if (!name)    return showErr('Full name is required.');
+  if (!session) return showErr('Could not determine session from roll number. Check the format.');
+
+  // Check if already exists
+  const existing = await getDoc(doc(db, 'alumni', roll));
+  if (existing.exists()) {
+    return showErr('A profile for ' + roll + ' already exists. Use the Members tab to edit it.');
+  }
+
+  const btn = event.target;
+  btn.disabled = true; btn.textContent = 'Adding…';
+
+  try {
+    await setDoc(doc(db, 'alumni', roll), {
+      roll, name, session, shift,
+      position, employer,
+      city, country, email, phone, linkedin,
+      photoUrl: photoUrl || '',
+      status: 'approved',
+      emailVerified: true,
+      deceased: deceased || false,
+      addedManually: true,
+      addedBy: viewer.uid,
+      registeredAt: serverTimestamp(),
+      approvedAt:   serverTimestamp(),
+      approvedBy:   viewer.uid,
+    });
+
+    sucEl.innerHTML = '✓ <strong>' + tc(name) + '</strong> (' + roll + ') added successfully — profile is now active on the Session ' + session + ' page.';
+    sucEl.style.display = 'block';
+
+    // Clear form
+    ['m-roll','m-name','m-session','m-shift','m-position','m-employer',
+     'm-city','m-country','m-email','m-phone','m-linkedin','m-photo'].forEach(id => {
+      document.getElementById(id).value = '';
+    });
+    document.getElementById('m-deceased').checked = false;
+    document.getElementById('m-roll-hint').textContent = '';
+
+    // Refresh stats and members
+    loadStats();
+    allMembers = []; // force reload on next members tab visit
+
+    btn.disabled = false; btn.textContent = '➕ Add to Alumni Network';
+  } catch(e) {
+    showErr('Error: ' + e.message);
+    btn.disabled = false; btn.textContent = '➕ Add to Alumni Network';
+  }
+};
 </script>
 </body>
 </html>
