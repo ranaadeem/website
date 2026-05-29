@@ -5,135 +5,284 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Alumni Profile — ICET</title>
   <link rel="icon" type="image/png" href="/favicon.png" />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --navy: #1a3a8a; --gold: #c9a84c; --cream: #faf8f4;
+      --navy: #1a3a8a; --navy-deep: #0f2260; --navy-mid: #1e3f8f;
+      --gold: #c9a84c; --gold-light: #e8d5a3; --gold-pale: rgba(201,168,76,.12);
+      --cream: #faf8f4; --white: #fff;
       --text: #1a1a2e; --muted: #6b7280; --border: #e5e7eb;
       --green: #059669; --red: #dc2626;
     }
-    body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--text); min-height: 100vh; }
+    html { scroll-behavior: smooth; }
+    body { font-family: "DM Sans", sans-serif; background: var(--cream); color: var(--text); min-height: 100vh; overflow-x: hidden; }
 
-    /* NAV */
-    #main-nav { position: sticky; top: 0; z-index: 100; background: var(--navy); border-bottom: 2px solid var(--gold); box-shadow: 0 2px 12px rgba(0,0,0,.25); }
-    .nav-inner { max-width: 900px; margin: 0 auto; padding: 0 1.5rem; display: flex; align-items: center; justify-content: space-between; height: 60px; }
-    .nav-logo { font-family: 'Playfair Display', serif; color: var(--gold); font-size: 1.05rem; text-decoration: none; }
+    /* ── NAV ── */
+    #main-nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      height: 60px;
+      background: rgba(15,34,96,.92);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(201,168,76,.3);
+    }
+    .nav-inner { max-width: 1000px; margin: 0 auto; padding: 0 1.5rem; display: flex; align-items: center; justify-content: space-between; height: 100%; }
+    .nav-logo { font-family: "Playfair Display", serif; color: var(--gold); font-size: 1rem; text-decoration: none; letter-spacing: .03em; }
     .nav-right { display: flex; align-items: center; gap: 1rem; }
-    .nav-back { color: rgba(255,255,255,.7); font-size: 13px; text-decoration: none; }
+    .nav-back { color: rgba(255,255,255,.6); font-size: 12px; text-decoration: none; border-bottom: 1px solid rgba(201,168,76,.3); padding-bottom: 1px; transition: color .2s; }
     .nav-back:hover { color: var(--gold); }
-    .nav-signout { background: none; border: 1px solid rgba(255,255,255,.25); color: rgba(255,255,255,.6); padding: 5px 12px; border-radius: 5px; font-size: 12px; cursor: pointer; font-family: inherit; display: none; }
+    .nav-user { font-size: 12px; color: rgba(255,255,255,.7); }
+    .nav-signout { background: none; border: 1px solid rgba(255,255,255,.2); color: rgba(255,255,255,.55); padding: 4px 12px; border-radius: 20px; font-size: 11px; cursor: pointer; font-family: inherit; display: none; transition: all .2s; }
     .nav-signout:hover { border-color: var(--gold); color: var(--gold); }
 
-    /* PAGE */
-    .page { max-width: 900px; margin: 0 auto; padding: 2rem 1.5rem 5rem; }
+    /* ── HERO BANNER ── */
+    .hero {
+      min-height: 340px;
+      background: linear-gradient(135deg, var(--navy-deep) 0%, var(--navy-mid) 50%, #2048a8 100%);
+      position: relative; overflow: hidden;
+      display: flex; align-items: flex-end;
+      padding: 0 0 0;
+    }
+    /* Animated geometric bg */
+    .hero::before {
+      content: "";
+      position: absolute; inset: 0;
+      background-image:
+        radial-gradient(circle at 20% 50%, rgba(201,168,76,.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(201,168,76,.08) 0%, transparent 40%),
+        radial-gradient(circle at 60% 80%, rgba(32,72,168,.4) 0%, transparent 50%);
+      animation: heroPulse 8s ease-in-out infinite alternate;
+    }
+    @keyframes heroPulse {
+      from { opacity: .7; transform: scale(1); }
+      to   { opacity: 1;  transform: scale(1.04); }
+    }
+    /* Gold decorative line */
+    .hero::after {
+      content: "";
+      position: absolute; bottom: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+    /* Subtle grid texture */
+    .hero-grid {
+      position: absolute; inset: 0; pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
 
-    /* STATE BOXES */
-    .state-box { text-align: center; padding: 5rem 2rem; }
-    .state-box .s-icon { font-size: 3.5rem; margin-bottom: 1rem; }
-    .state-box h2 { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--navy); margin-bottom: 0.5rem; }
-    .state-box p { color: var(--muted); font-size: 0.9rem; line-height: 1.6; }
-    .state-box a { display: inline-block; margin-top: 1.25rem; background: var(--navy); color: var(--gold); padding: 9px 22px; border-radius: 8px; font-size: 13px; font-weight: 600; text-decoration: none; }
+    .hero-content {
+      position: relative; z-index: 2;
+      width: 100%; max-width: 1000px; margin: 0 auto;
+      padding: 100px 1.5rem 2.5rem;
+      display: flex; align-items: flex-end; gap: 2rem; flex-wrap: wrap;
+    }
 
-    /* PROFILE LAYOUT */
-    .profile-grid { display: grid; grid-template-columns: 260px 1fr; gap: 1.75rem; align-items: start; }
+    /* Avatar */
+    .hero-avatar-wrap { position: relative; flex-shrink: 0; }
+    .hero-avatar {
+      width: 110px; height: 110px; border-radius: 50%;
+      border: 3px solid var(--gold);
+      box-shadow: 0 0 0 6px rgba(201,168,76,.2), 0 8px 32px rgba(0,0,0,.4);
+      overflow: hidden; cursor: pointer;
+      background: var(--navy-deep);
+      display: flex; align-items: center; justify-content: center;
+      font-family: "Playfair Display", serif; font-size: 2rem; color: var(--gold);
+      transition: transform .3s, box-shadow .3s;
+      animation: avatarIn .6s cubic-bezier(.34,1.56,.64,1) both;
+    }
+    @keyframes avatarIn { from { transform: scale(0.6) translateY(20px); opacity:0; } to { transform: scale(1) translateY(0); opacity:1; } }
+    .hero-avatar:hover { transform: scale(1.05); box-shadow: 0 0 0 8px rgba(201,168,76,.3), 0 12px 40px rgba(0,0,0,.5); }
+    .hero-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .hero-avatar-badge {
+      position: absolute; bottom: 4px; right: 4px;
+      width: 22px; height: 22px; border-radius: 50%;
+      background: var(--green); border: 2px solid white;
+      display: none;
+    }
+    .hero-avatar-badge.show { display: block; }
 
-    /* ── LEFT PANEL ── */
-    .left-panel { background: white; border: 1px solid var(--border); border-radius: 14px; overflow: hidden; position: sticky; top: 76px; }
-    .left-hero { background: var(--navy); padding: 2rem 1.25rem 1.5rem; text-align: center; }
-    .avatar-circle { width: 84px; height: 84px; border-radius: 50%; border: 3px solid var(--gold); background: rgba(201,168,76,.15); display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; font-size: 1.8rem; color: var(--gold); margin: 0 auto 0.9rem; overflow: hidden; }
-    .avatar-circle img { width: 100%; height: 100%; object-fit: cover; }
-    .lh-name { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: white; margin-bottom: 3px; line-height: 1.3; }
-    .lh-roll { font-size: 11px; color: rgba(255,255,255,.55); }
-    .left-meta { padding: 1rem 1.25rem; }
-    .lm-row { display: flex; align-items: flex-start; gap: 9px; padding: 7px 0; border-bottom: 1px solid var(--border); }
-    .lm-row:last-child { border-bottom: none; }
-    .lm-icon { font-size: 13px; flex-shrink: 0; margin-top: 2px; }
-    .lm-lbl { font-size: 10px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; display: block; margin-bottom: 2px; }
-    .lm-val { font-size: 13px; color: var(--text); font-weight: 500; }
-    .lm-val a { color: var(--navy); text-decoration: none; font-size: 12px; border-bottom: 1px solid var(--gold); word-break: break-all; }
-    .lm-val a:hover { color: var(--gold); }
-    .shift-pill { display: inline-block; font-size: 10px; font-weight: 700; padding: 3px 9px; border-radius: 20px; }
-    .pill-morning { background: rgba(201,168,76,.15); color: #9a6e00; }
-    .pill-evening { background: rgba(26,58,138,.1); color: var(--navy); }
+    /* Photo change button */
+    .btn-change-photo {
+      position: absolute; inset: 0; border-radius: 50%;
+      background: rgba(0,0,0,.5); border: none; color: white;
+      font-size: 11px; font-weight: 600; cursor: pointer; font-family: inherit;
+      opacity: 0; transition: opacity .2s; display: none;
+      align-items: center; justify-content: center; flex-direction: column; gap: 3px;
+    }
+    .hero-avatar-wrap:hover .btn-change-photo.visible { opacity: 1; display: flex; }
 
-    /* Visibility notice inside left panel */
-    .vis-notice { margin: 0 1rem 1rem; background: #f0f6ff; border: 1px solid #c3d8f5; border-radius: 7px; padding: 9px 11px; font-size: 11.5px; color: #1a3a6a; line-height: 1.55; }
-    .vis-notice strong { display: block; font-size: 10px; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 3px; color: #2a4a8a; }
-    .vis-notice a { color: var(--navy); font-weight: 600; }
+    /* Hero text */
+    .hero-text { flex: 1; min-width: 200px; }
+    .hero-name {
+      font-family: "Playfair Display", serif;
+      font-size: clamp(1.6rem, 4vw, 2.2rem);
+      color: white; line-height: 1.15; margin-bottom: 6px;
+      animation: slideUp .5s .1s both;
+    }
+    .hero-roll {
+      font-size: 12px; color: var(--gold-light); letter-spacing: .1em;
+      text-transform: uppercase; margin-bottom: 10px;
+      animation: slideUp .5s .2s both;
+    }
+    .hero-badges {
+      display: flex; gap: 8px; flex-wrap: wrap;
+      animation: slideUp .5s .3s both;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      background: rgba(255,255,255,.1); backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,.15);
+      color: rgba(255,255,255,.9); font-size: 12px; font-weight: 500;
+      padding: 5px 12px; border-radius: 20px;
+    }
+    .hero-badge.gold { background: rgba(201,168,76,.2); border-color: rgba(201,168,76,.4); color: var(--gold-light); }
+    @keyframes slideUp { from { transform: translateY(18px); opacity:0; } to { transform: translateY(0); opacity:1; } }
 
-    /* ── RIGHT PANEL ── */
-    .section-card { background: white; border: 1px solid var(--border); border-radius: 12px; padding: 1.4rem; margin-bottom: 1.1rem; }
-    .sc-title { font-size: 10.5px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .1em; margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
-    .sc-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    /* ── PAGE BODY ── */
+    .page { max-width: 1000px; margin: 0 auto; padding: 2.5rem 1.5rem 6rem; }
 
-    .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-    .info-item .il { font-size: 10.5px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 4px; }
-    .info-item .iv { font-size: 14px; color: var(--text); font-weight: 500; word-break: break-word; }
-    .info-item .iv a { color: var(--navy); text-decoration: none; border-bottom: 1px solid var(--gold); font-size: 13px; }
-    .info-item .iv a:hover { color: var(--gold); }
-    .info-item.span2 { grid-column: 1 / -1; }
-    .gated-msg { color: var(--muted); font-style: italic; font-size: 13px; }
-    .private-note { font-size: 11px; color: var(--muted); margin-top: 4px; }
-
-    /* Edit controls */
-    .edit-bar { margin-bottom: 1.1rem; }
-    .save-alert { border-radius: 6px; padding: 9px 13px; font-size: 13px; margin-bottom: 0.75rem; display: none; line-height: 1.5; }
+    /* ── EDIT BAR ── */
+    .edit-bar { margin-bottom: 1.5rem; animation: fadeIn .4s .4s both; }
+    .save-alert { border-radius: 8px; padding: 10px 14px; font-size: 13px; margin-bottom: 0.75rem; display: none; line-height: 1.5; }
     .save-alert.show { display: block; }
     .sa-ok  { background: #f0fdf4; border: 1px solid #86efac; color: #166534; }
     .sa-err { background: #fef2f2; border: 1px solid #fca5a5; color: #7f1d1d; }
     .btn-row { display: flex; gap: 8px; flex-wrap: wrap; }
-    .btn { padding: 9px 18px; border-radius: 7px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; border: none; transition: all .2s; display: inline-flex; align-items: center; gap: 6px; }
+    .btn { padding: 9px 20px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; border: none; transition: all .2s; display: inline-flex; align-items: center; gap: 6px; }
     .btn-navy  { background: var(--navy); color: white; }
-    .btn-navy:hover { background: #142d6e; }
+    .btn-navy:hover { background: var(--navy-deep); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(26,58,138,.3); }
     .btn-green { background: var(--green); color: white; display: none; }
     .btn-green:hover { background: #047857; }
-    .btn-green:disabled { opacity: .5; cursor: not-allowed; }
+    .btn-green:disabled { opacity:.5; cursor:not-allowed; }
     .btn-ghost { background: white; color: var(--muted); border: 1.5px solid var(--border); display: none; }
     .btn-ghost:hover { border-color: var(--navy); color: var(--navy); }
 
-    /* Edit inputs — hidden by default, shown in edit mode */
-    .edit-inp { width: 100%; border: 1.5px solid var(--border); border-radius: 5px; padding: 8px 11px; font-family: inherit; font-size: 14px; color: var(--text); background: white; outline: none; transition: border-color .2s; display: none; margin-top: 5px; }
-    .edit-inp:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201,168,76,.1); }
+    /* ── GRID ── */
+    .profile-grid { display: grid; grid-template-columns: 280px 1fr; gap: 1.5rem; align-items: start; }
+
+    /* ── SIDEBAR ── */
+    .sidebar { display: flex; flex-direction: column; gap: 1rem; position: sticky; top: 76px; animation: fadeIn .5s .2s both; }
+
+    .s-card {
+      background: white; border: 1px solid var(--border); border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 2px 12px rgba(0,0,0,.05);
+      transition: box-shadow .25s;
+    }
+    .s-card:hover { box-shadow: 0 6px 24px rgba(0,0,0,.09); }
+    .s-card-header {
+      background: var(--navy); padding: .75rem 1rem;
+      font-size: 10.5px; font-weight: 700; color: var(--gold-light);
+      text-transform: uppercase; letter-spacing: .12em;
+    }
+    .s-card-body { padding: 1rem; }
+
+    .lm-row { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; border-bottom: 1px solid #f3f4f6; }
+    .lm-row:last-child { border-bottom: none; }
+    .lm-icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; width: 20px; text-align: center; }
+    .lm-lbl { font-size: 10px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; display: block; margin-bottom: 2px; }
+    .lm-val { font-size: 13px; color: var(--text); font-weight: 500; line-height: 1.4; }
+    .lm-val a { color: var(--navy); text-decoration: none; font-size: 12px; border-bottom: 1px solid rgba(201,168,76,.5); }
+    .lm-val a:hover { color: var(--gold); }
+
+    .shift-pill { display: inline-block; font-size: 10px; font-weight: 700; padding: 3px 10px; border-radius: 20px; }
+    .pill-morning { background: rgba(201,168,76,.15); color: #9a6e00; }
+    .pill-evening { background: rgba(26,58,138,.1); color: var(--navy); }
+
+    .vis-notice { padding: 10px 12px; background: #f0f6ff; border-top: 1px solid #c3d8f5; font-size: 11.5px; color: #1a3a6a; line-height: 1.55; display: none; }
+    .vis-notice strong { display: block; font-size: 10px; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 3px; }
+    .vis-notice a { color: var(--navy); font-weight: 600; }
+
+    /* ── MAIN CONTENT ── */
+    .main-col { display: flex; flex-direction: column; gap: 1.25rem; animation: fadeIn .5s .3s both; }
+
+    /* Section cards */
+    .section-card {
+      background: white; border: 1px solid var(--border); border-radius: 14px;
+      overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,.05);
+      transition: box-shadow .25s, transform .25s;
+    }
+    .section-card:hover { box-shadow: 0 6px 24px rgba(0,0,0,.09); }
+    .sc-header {
+      padding: 1rem 1.25rem .85rem;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .sc-header-icon {
+      width: 32px; height: 32px; border-radius: 8px;
+      background: var(--gold-pale); display: flex; align-items: center; justify-content: center;
+      font-size: 15px; flex-shrink: 0;
+    }
+    .sc-title { font-size: 13px; font-weight: 700; color: var(--navy); }
+    .sc-sub   { font-size: 11px; color: var(--muted); margin-top: 1px; }
+    .sc-body  { padding: 1.25rem; }
+
+    .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+    .info-item .il { font-size: 10px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .07em; margin-bottom: 5px; }
+    .info-item .iv {
+      font-size: 14px; color: var(--text); font-weight: 500;
+      word-break: break-word; line-height: 1.4;
+    }
+    .info-item .iv a { color: var(--navy); text-decoration: none; border-bottom: 1px solid rgba(201,168,76,.5); font-size: 13px; }
+    .info-item .iv a:hover { color: var(--gold); }
+    .info-item.span2 { grid-column: 1 / -1; }
+    .gated-msg { color: var(--muted); font-style: italic; font-size: 13px; }
+    .private-note { font-size: 11px; color: var(--muted); margin-top: 4px; display: flex; align-items: center; gap: 4px; }
+
+    /* Edit inputs */
+    .edit-inp {
+      width: 100%; border: 1.5px solid var(--border); border-radius: 7px;
+      padding: 9px 12px; font-family: inherit; font-size: 13px;
+      color: var(--text); background: white; outline: none;
+      transition: border-color .2s, box-shadow .2s;
+      display: none; margin-top: 6px;
+    }
+    .edit-inp:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201,168,76,.12); }
     .editing .edit-inp { display: block; }
     .editing .iv { display: none; }
 
-    /* Back crumb */
-    .crumb { display: inline-flex; align-items: center; gap: 6px; color: var(--navy); font-size: 13px; font-weight: 600; text-decoration: none; border-bottom: 1px solid var(--gold); margin-bottom: 1.5rem; }
+    /* Photo edit status */
+    #photo-edit-status { font-size: 11px; color: rgba(255,255,255,.65); min-height: 16px; text-align: center; margin-top: 4px; }
+    #btn-change-photo {
+      width: 100%; background: rgba(201,168,76,.15); color: var(--gold-light);
+      border: 1px solid rgba(201,168,76,.3); padding: 6px 0; border-radius: 6px;
+      font-size: 11px; font-weight: 600; cursor: pointer; font-family: inherit;
+      margin-top: 8px; display: none; transition: background .2s;
+    }
+    #btn-change-photo:hover { background: rgba(201,168,76,.25); }
+
+    /* State boxes */
+    .state-box { text-align: center; padding: 8rem 2rem; }
+    .state-box .s-icon { font-size: 3.5rem; margin-bottom: 1rem; }
+    .state-box h2 { font-family: "Playfair Display", serif; font-size: 1.5rem; color: var(--navy); margin-bottom: .5rem; }
+    .state-box p { color: var(--muted); font-size: .9rem; line-height: 1.6; }
+    .state-box a { display: inline-block; margin-top: 1.25rem; background: var(--navy); color: var(--gold); padding: 9px 22px; border-radius: 8px; font-size: 13px; font-weight: 600; text-decoration: none; }
 
     /* Photo lightbox */
-    .photo-lb {
-      display: none; position: fixed; inset: 0;
-      background: rgba(0,0,0,.92); z-index: 5000;
-      align-items: center; justify-content: center;
-    }
-    .photo-lb.open { display: flex; }
-    .photo-lb img {
-      max-width: 90vw; max-height: 88vh;
-      border-radius: 12px; box-shadow: 0 8px 40px rgba(0,0,0,.6);
-      cursor: default;
-    }
-    .photo-lb-close {
-      position: absolute; top: 1rem; right: 1rem;
-      background: rgba(255,255,255,.15); border: none; color: white;
-      width: 40px; height: 40px; border-radius: 50%;
-      font-size: 1.1rem; cursor: pointer; display: flex;
-      align-items: center; justify-content: center;
-    }
+    .photo-lb { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.93); z-index: 5000; align-items: center; justify-content: center; }
+    .photo-lb.open { display: flex; animation: lbIn .25s ease; }
+    @keyframes lbIn { from { opacity:0; } to { opacity:1; } }
+    .photo-lb img { max-width: 90vw; max-height: 88vh; border-radius: 14px; box-shadow: 0 20px 80px rgba(0,0,0,.7); }
+    .lb-close { position: absolute; top: 1.25rem; right: 1.25rem; background: rgba(255,255,255,.15); backdrop-filter: blur(8px); border: none; color: white; width: 42px; height: 42px; border-radius: 50%; font-size: 1.1rem; cursor: pointer; transition: background .2s; }
+    .lb-close:hover { background: rgba(255,255,255,.25); }
 
-    /* Clickable avatar */
-    .avatar-circle { cursor: pointer; transition: opacity .2s; }
-    .avatar-circle:hover { opacity: 0.85; }
+    /* Crumb */
+    .crumb { display: inline-flex; align-items: center; gap: 6px; color: var(--navy); font-size: 13px; font-weight: 600; text-decoration: none; padding-bottom: 2px; border-bottom: 1px solid var(--gold); margin-bottom: 1.5rem; transition: color .2s; }
+    .crumb:hover { color: var(--gold); }
 
-    /* Photo edit button */
-    .btn-photo { background: rgba(201,168,76,.15); color: var(--gold); border: 1px solid rgba(201,168,76,.4); padding: 5px 12px; border-radius: 5px; font-size: 11px; cursor: pointer; font-family: inherit; margin-top: 6px; display: none; }
-    .btn-photo:hover { background: rgba(201,168,76,.25); }
+    /* Animations */
+    @keyframes fadeIn { from { opacity:0; transform: translateY(12px); } to { opacity:1; transform: translateY(0); } }
 
-    @media (max-width: 720px) {
+    /* Responsive */
+    @media (max-width: 760px) {
       .profile-grid { grid-template-columns: 1fr; }
-      .left-panel { position: static; }
+      .sidebar { position: static; }
       .info-grid { grid-template-columns: 1fr; }
       .info-item.span2 { grid-column: 1; }
+      .hero-avatar { width: 84px; height: 84px; font-size: 1.6rem; }
     }
   </style>
 </head>
@@ -141,538 +290,560 @@
 
 <nav id="main-nav">
   <div class="nav-inner">
-    <a class="nav-logo" href="/alumni.html">ICET Alumni Network</a>
+    <a class="nav-logo" href="/alumni.html">ICET Chemical Engineering Alumni</a>
     <div class="nav-right">
-      <span id="nav-user" style="font-size:12px;color:rgba(255,255,255,.7);"></span>
+      <span id="nav-user" class="nav-user"></span>
       <button class="nav-signout" id="nav-signout-btn" onclick="doSignOut()">Sign Out</button>
-      <a class="nav-back" id="nav-back" href="/alumni.html">← Session Page</a>
+      <a class="nav-back" id="nav-back" href="/alumni.html">← Portal</a>
     </div>
   </div>
 </nav>
 
-<div class="page">
+<!-- Loading -->
+<div id="st-loading" class="state-box" style="padding-top:10rem;">
+  <div class="s-icon">⏳</div>
+  <h2>Loading profile…</h2>
+  <p>Just a moment.</p>
+</div>
 
-  <!-- Loading -->
-  <div id="st-loading" class="state-box">
-    <div class="s-icon">⏳</div>
-    <h2>Loading profile…</h2>
-    <p>Please wait a moment.</p>
+<!-- Error -->
+<div id="st-error" class="state-box" style="display:none;padding-top:10rem;">
+  <div class="s-icon">🔍</div>
+  <h2>Profile not found</h2>
+  <p id="st-error-msg">This profile doesn't exist or hasn't been approved yet.</p>
+  <a href="/alumni.html">← Back to Alumni Portal</a>
+</div>
+
+<!-- Profile -->
+<div id="st-profile" style="display:none">
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero-grid"></div>
+    <div class="hero-content">
+      <div class="hero-avatar-wrap">
+        <div class="hero-avatar" id="p-avatar" onclick="openPhotoLb()" title="Click to view full photo">?</div>
+        <div class="hero-avatar-badge" id="hero-badge"></div>
+      </div>
+      <div class="hero-text">
+        <div class="hero-name" id="p-name">—</div>
+        <div class="hero-roll" id="p-roll">—</div>
+        <div class="hero-badges" id="hero-badges"></div>
+      </div>
+    </div>
   </div>
 
-  <!-- Not found / error -->
-  <div id="st-error" class="state-box" style="display:none">
-    <div class="s-icon">🔍</div>
-    <h2>Profile not found</h2>
-    <p id="st-error-msg">This profile doesn't exist or hasn't been approved yet.</p>
-    <a href="/alumni.html">← Back to Alumni Portal</a>
-  </div>
+  <div class="page">
+    <a class="crumb" id="crumb-link" href="#">← Back to Session</a>
 
-  <!-- Profile -->
-  <div id="st-profile" style="display:none">
-
-    <a class="crumb" id="crumb-link" href="#">← Back to Session Page</a>
+    <!-- Edit bar (own profile / admin) -->
+    <div class="edit-bar" id="edit-bar" style="display:none">
+      <div class="save-alert" id="save-alert"></div>
+      <div class="btn-row">
+        <button class="btn btn-navy"  id="btn-edit"   onclick="startEdit()">✏️ Edit Profile</button>
+        <button class="btn btn-green" id="btn-save"   onclick="saveProfile()">💾 Save Changes</button>
+        <button class="btn btn-ghost" id="btn-cancel" onclick="cancelEdit()">Cancel</button>
+      </div>
+    </div>
 
     <div class="profile-grid">
 
-      <!-- ── LEFT PANEL ── -->
-      <div class="left-panel">
-        <div class="left-hero">
-          <div class="avatar-circle" id="p-avatar" onclick="openPhotoLb()" title="Click to view photo">?</div>
-          <div class="lh-name" id="p-name">—</div>
-          <div class="lh-roll" id="p-roll">—</div>
-          <button class="btn-photo" id="btn-change-photo" onclick="document.getElementById('photo-file-edit').click()">📷 Change Photo</button>
-          <input type="file" id="photo-file-edit" accept="image/*" style="display:none" onchange="handlePhotoEdit(this)" />
-          <div id="photo-edit-status" style="font-size:11px;color:rgba(255,255,255,.6);margin-top:4px;min-height:16px;"></div>
+      <!-- ── SIDEBAR ── -->
+      <div class="sidebar">
+
+        <!-- Quick Info -->
+        <div class="s-card">
+          <div class="s-card-header">Quick Info</div>
+          <div class="s-card-body">
+            <div class="lm-row">
+              <span class="lm-icon">🎓</span>
+              <div><span class="lm-lbl">Session</span><span class="lm-val" id="lm-session">—</span></div>
+            </div>
+            <div class="lm-row">
+              <span class="lm-icon">🕐</span>
+              <div><span class="lm-lbl">Shift</span><span class="lm-val" id="lm-shift">—</span></div>
+            </div>
+            <div class="lm-row">
+              <span class="lm-icon">📍</span>
+              <div><span class="lm-lbl">Location</span><span class="lm-val" id="lm-location">—</span></div>
+            </div>
+            <div class="lm-row">
+              <span class="lm-icon">💼</span>
+              <div><span class="lm-lbl">Position</span><span class="lm-val" id="lm-position">—</span></div>
+            </div>
+            <div class="lm-row" id="lm-linkedin-row" style="display:none">
+              <span class="lm-icon">🔗</span>
+              <div><span class="lm-lbl">LinkedIn</span><span class="lm-val"><a id="lm-linkedin-a" href="#" target="_blank">View Profile →</a></span></div>
+            </div>
+          </div>
+          <div class="vis-notice" id="vis-notice"></div>
         </div>
-        <div class="left-meta">
-          <div class="lm-row">
-            <span class="lm-icon">🎓</span>
-            <div><span class="lm-lbl">Session</span><span class="lm-val" id="lm-session">—</span></div>
-          </div>
-          <div class="lm-row">
-            <span class="lm-icon">🕐</span>
-            <div><span class="lm-lbl">Shift</span><span class="lm-val" id="lm-shift">—</span></div>
-          </div>
-          <div class="lm-row">
-            <span class="lm-icon">📍</span>
-            <div><span class="lm-lbl">Location</span><span class="lm-val" id="lm-location">—</span></div>
-          </div>
-          <div class="lm-row" id="lm-linkedin-row" style="display:none">
-            <span class="lm-icon">🔗</span>
-            <div><span class="lm-lbl">LinkedIn</span><span class="lm-val"><a id="lm-linkedin-a" href="#" target="_blank">View Profile →</a></span></div>
-          </div>
-          <div class="lm-row">
-            <span class="lm-icon">💼</span>
-            <div><span class="lm-lbl">Position</span><span class="lm-val" id="lm-position">—</span></div>
+
+        <!-- Change photo (own/admin only) -->
+        <div class="s-card" id="photo-card" style="display:none">
+          <div class="s-card-header">Profile Photo</div>
+          <div class="s-card-body" style="text-align:center;">
+            <p style="font-size:12px;color:var(--muted);margin-bottom:.75rem;">Click your photo above to view full size, or change it here.</p>
+            <button id="btn-change-photo" onclick="document.getElementById('photo-file-edit').click()">📷 Change Photo</button>
+            <input type="file" id="photo-file-edit" accept="image/*" style="display:none" onchange="handlePhotoEdit(this)" />
+            <div id="photo-edit-status"></div>
           </div>
         </div>
-        <div class="vis-notice" id="vis-notice" style="display:none"></div>
+
       </div>
 
-      <!-- ── RIGHT PANEL ── -->
-      <div>
-
-        <!-- Edit controls — own profile only -->
-        <div class="edit-bar" id="edit-bar" style="display:none">
-          <div class="save-alert" id="save-alert"></div>
-          <div class="btn-row">
-            <button class="btn btn-navy" id="btn-edit" onclick="startEdit()">✏️ Edit Profile</button>
-            <button class="btn btn-green" id="btn-save" onclick="saveProfile()">💾 Save Changes</button>
-            <button class="btn btn-ghost" id="btn-cancel" onclick="cancelEdit()">Cancel</button>
-          </div>
-        </div>
+      <!-- ── MAIN COLUMN ── -->
+      <div class="main-col">
 
         <!-- Professional -->
         <div class="section-card">
-          <div class="sc-title">Professional</div>
-          <div class="info-grid">
-            <div class="info-item span2" id="fi-position">
-              <div class="il">Current Position / Job Title</div>
-              <div class="iv" id="v-position">—</div>
-              <input class="edit-inp" id="i-position" type="text" placeholder="Current position / job title" />
-            </div>
-            <div class="info-item span2" id="fi-employer">
-              <div class="il">Employer / Organization</div>
-              <div class="iv" id="v-employer">—</div>
-              <input class="edit-inp" id="i-employer" type="text" placeholder="Company or institution" />
+          <div class="sc-header">
+            <div class="sc-header-icon">💼</div>
+            <div><div class="sc-title">Professional</div><div class="sc-sub">Current role &amp; employer</div></div>
+          </div>
+          <div class="sc-body">
+            <div class="info-grid">
+              <div class="info-item span2" id="fi-position">
+                <div class="il">Current Position / Job Title</div>
+                <div class="iv" id="v-position">—</div>
+                <input class="edit-inp" id="i-position" type="text" placeholder="e.g. Research Scientist" />
+              </div>
+              <div class="info-item span2" id="fi-employer">
+                <div class="il">Employer / Organization</div>
+                <div class="iv" id="v-employer">—</div>
+                <input class="edit-inp" id="i-employer" type="text" placeholder="Company or institution" />
+              </div>
             </div>
           </div>
         </div>
 
-        <!-- Contact — same session + self + admin -->
+        <!-- Contact & Location (same session + self + admin) -->
         <div class="section-card" id="sec-contact" style="display:none">
-          <div class="sc-title">Contact &amp; Location</div>
-          <div class="info-grid">
-            <div class="info-item" id="fi-city">
-              <div class="il">City</div>
-              <div class="iv" id="v-city">—</div>
-              <input class="edit-inp" id="i-city" type="text" placeholder="City" />
-            </div>
-            <div class="info-item" id="fi-country">
-              <div class="il">Country</div>
-              <div class="iv" id="v-country">—</div>
-              <input class="edit-inp" id="i-country" type="text" placeholder="Country" />
-            </div>
-            <div class="info-item span2" id="fi-linkedin">
-              <div class="il">LinkedIn Profile</div>
-              <div class="iv" id="v-linkedin">—</div>
-              <input class="edit-inp" id="i-linkedin" type="url" placeholder="https://linkedin.com/in/..." />
+          <div class="sc-header">
+            <div class="sc-header-icon">📍</div>
+            <div><div class="sc-title">Contact &amp; Location</div><div class="sc-sub">City, country and online presence</div></div>
+          </div>
+          <div class="sc-body">
+            <div class="info-grid">
+              <div class="info-item">
+                <div class="il">City</div>
+                <div class="iv" id="v-city">—</div>
+                <input class="edit-inp" id="i-city" type="text" placeholder="City" />
+              </div>
+              <div class="info-item">
+                <div class="il">Country</div>
+                <div class="iv" id="v-country">—</div>
+                <input class="edit-inp" id="i-country" type="text" placeholder="Country" />
+              </div>
+              <div class="info-item span2">
+                <div class="il">LinkedIn Profile</div>
+                <div class="iv" id="v-linkedin">—</div>
+                <input class="edit-inp" id="i-linkedin" type="url" placeholder="https://linkedin.com/in/..." />
+              </div>
             </div>
           </div>
         </div>
 
-        <!-- Private — self + admin only -->
+        <!-- Private (self + admin + same session for email) -->
         <div class="section-card" id="sec-private" style="display:none">
-          <div class="sc-title">🔒 Private Contact</div>
-          <div class="info-grid">
-            <div class="info-item" id="fi-phone">
-              <div class="il">Phone Number</div>
-              <div class="iv" id="v-phone">—</div>
-              <input class="edit-inp" id="i-phone" type="tel" placeholder="+92 300 1234567" />
-              <div class="private-note">Only visible to you and admin</div>
-            </div>
-            <div class="info-item" id="fi-email">
-              <div class="il">Email Address</div>
-              <div class="iv" id="v-email">—</div>
-              <div class="private-note">Only visible to you and admin</div>
+          <div class="sc-header">
+            <div class="sc-header-icon">🔒</div>
+            <div><div class="sc-title">Private Contact</div><div class="sc-sub" id="sec-private-sub">Visible to you and admin only</div></div>
+          </div>
+          <div class="sc-body">
+            <div class="info-grid">
+              <div class="info-item" id="fi-phone" style="display:none">
+                <div class="il">Phone Number</div>
+                <div class="iv" id="v-phone">—</div>
+                <input class="edit-inp" id="i-phone" type="tel" placeholder="+92 300 1234567" />
+                <div class="private-note">🔒 Only visible to you and admin</div>
+              </div>
+              <div class="info-item" id="fi-email">
+                <div class="il">Email Address</div>
+                <div class="iv" id="v-email">—</div>
+                <div class="private-note" id="email-note">🔒 Only visible to you and admin</div>
+              </div>
             </div>
           </div>
         </div>
 
-        <!-- Network info — always visible -->
+        <!-- Network Info -->
         <div class="section-card">
-          <div class="sc-title">Network Info</div>
-          <div class="info-grid">
-            <div class="info-item">
-              <div class="il">Roll Number</div>
-              <div class="iv" id="v-roll">—</div>
-            </div>
-            <div class="info-item">
-              <div class="il">Shift</div>
-              <div class="iv" id="v-shift">—</div>
-            </div>
-            <div class="info-item">
-              <div class="il">Session</div>
-              <div class="iv" id="v-session">—</div>
-            </div>
-            <div class="info-item">
-              <div class="il">Member Since</div>
-              <div class="iv" id="v-since">—</div>
+          <div class="sc-header">
+            <div class="sc-header-icon">🎓</div>
+            <div><div class="sc-title">Network Info</div><div class="sc-sub">Academic record details</div></div>
+          </div>
+          <div class="sc-body">
+            <div class="info-grid">
+              <div class="info-item">
+                <div class="il">Roll Number</div>
+                <div class="iv" id="v-roll">—</div>
+              </div>
+              <div class="info-item">
+                <div class="il">Shift</div>
+                <div class="iv" id="v-shift">—</div>
+              </div>
+              <div class="info-item">
+                <div class="il">Session</div>
+                <div class="iv" id="v-session">—</div>
+              </div>
+              <div class="info-item">
+                <div class="il">Member Since</div>
+                <div class="iv" id="v-since">—</div>
+              </div>
             </div>
           </div>
         </div>
 
-      </div><!-- /right -->
+      </div><!-- /main-col -->
     </div><!-- /profile-grid -->
-  </div><!-- /st-profile -->
+  </div><!-- /page -->
+</div><!-- /st-profile -->
 
-</div><!-- /page -->
+<!-- Photo lightbox -->
+<div class="photo-lb" id="photo-lb" onclick="closeLb(event)">
+  <button class="lb-close" onclick="document.getElementById('photo-lb').classList.remove('open')">✕</button>
+  <img id="photo-lb-img" src="" alt="Profile photo" onclick="event.stopPropagation()" />
+</div>
 
 <script type="module">
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
-import { getFirestore, doc, getDoc, updateDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore, doc, getDoc, getDocs, updateDoc, collection, query, where, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-const app  = initializeApp({ apiKey:"AIzaSyAgUl22Cln6QtY3-HIvI6lE8Zu7n9OblbI", authDomain:"icet-alumni.firebaseapp.com", projectId:"icet-alumni" });
-const auth = getAuth(app);
-const db   = getFirestore(app);
-const ADMIN = 'w2AtZbhUiyY5TxyvIecHzWqheaE2';
+const app   = initializeApp({ apiKey:"AIzaSyAgUl22Cln6QtY3-HIvI6lE8Zu7n9OblbI", authDomain:"icet-alumni.firebaseapp.com", projectId:"icet-alumni" });
+const auth  = getAuth(app);
+const db    = getFirestore(app);
+const ADMIN = "w2AtZbhUiyY5TxyvIecHzWqheaE2";
 
-// ── State ─────────────────────────────────────────────────────────────────
-let _currentPhotoUrl = null;   // URL of currently displayed photo
-const urlRoll     = new URLSearchParams(location.search).get('roll');
-let profileData   = null;   // Firestore data of the profile being viewed
-let profileRoll   = null;   // actual Firestore doc ID (may differ from urlRoll for old docs)
-let viewerRole    = 'public'; // 'public' | 'other' | 'same' | 'self' | 'admin'
-let viewerSession = null;   // session of the logged-in user
+const urlRoll = new URLSearchParams(location.search).get("roll");
+let profileData   = null;
+let profileRoll   = null;   // actual Firestore doc ID
+let viewerRole    = "public";
+let viewerSession = null;
+let _currentPhotoUrl = null;
 
-// ── Helpers ───────────────────────────────────────────────────────────────
-function tc(s) { // title case
-  return (s||'').split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ');
-}
+function tc(s) { return (s||"").split(" ").map(w=>w.charAt(0).toUpperCase()+w.slice(1).toLowerCase()).join(" "); }
+function set(id, val) { const el=document.getElementById(id); if(el) el.textContent=val||"—"; }
 function showErr(msg) {
-  document.getElementById('st-loading').style.display = 'none';
-  document.getElementById('st-error').style.display   = 'block';
-  document.getElementById('st-error-msg').textContent = msg;
+  document.getElementById("st-loading").style.display = "none";
+  document.getElementById("st-error").style.display   = "block";
+  document.getElementById("st-error-msg").textContent = msg;
 }
-function set(id, val) { const el = document.getElementById(id); if (el) el.textContent = val || '—'; }
 
-// ── Render ────────────────────────────────────────────────────────────────
+// ── RENDER ────────────────────────────────────────────────────────────────
 function render(p) {
-  document.getElementById('st-loading').style.display  = 'none';
-  document.getElementById('st-profile').style.display  = 'block';
-  document.title = tc(p.name) + ' — ICET Alumni';
+  document.getElementById("st-loading").style.display = "none";
+  document.getElementById("st-profile").style.display = "block";
+  document.title = tc(p.name) + " — ICET Alumni";
 
-  // Support old field names: job→position, company→employer, photoBase64→photoUrl
-  const _position = p.position || p.job || '';
-  const _employer  = p.employer  || p.company || '';
+  // Field aliases: support old (job/company/photoBase64) and new (position/employer/photoUrl)
+  const _position = p.position || p.job || "";
+  const _employer  = p.employer  || p.company || "";
   const _photo     = p.photoUrl  || p.photoBase64 || null;
 
-  // Session — support both '2006-Morning' (old) and '2006' (new)
-  const sessionYear = (p.session || '').split('-')[0];
+  // Session year (handle "2006-Morning" → "2006")
+  const sessionYear = (p.session || "").split("-")[0];
   const sessionUrl  = `/alumni/${sessionYear}.html`;
-  document.getElementById('crumb-link').href        = sessionUrl;
-  document.getElementById('crumb-link').textContent = `← Back to Session ${sessionYear}`;
-  document.getElementById('nav-back').href          = sessionUrl;
-  document.getElementById('nav-back').textContent   = `← Session ${sessionYear}`;
 
-  // Avatar — show photo or initials
-  const av       = document.getElementById('p-avatar');
-  const initials = p.name.split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase();
+  // Nav + crumb
+  document.getElementById("crumb-link").href        = sessionUrl;
+  document.getElementById("crumb-link").textContent = `← Back to Session ${sessionYear}`;
+  document.getElementById("nav-back").href          = sessionUrl;
+  document.getElementById("nav-back").textContent   = `← Session ${sessionYear}`;
+
+  // Hero avatar
+  const av = document.getElementById("p-avatar");
+  const initials = (p.name||"?").split(" ").map(w=>w[0]).slice(0,2).join("").toUpperCase();
   if (_photo) {
-    av.innerHTML = `<img src="${_photo}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" alt="${p.name}">`;
+    av.innerHTML = `<img src="${_photo}" alt="${p.name}">`;
     _currentPhotoUrl = _photo;
+    document.getElementById("hero-badge").classList.add("show");
   } else {
     av.textContent = initials;
     _currentPhotoUrl = null;
   }
 
-  set('p-name',     tc(p.name));
-  set('p-roll',     p.roll);
-  set('lm-session', `Session ${sessionYear}–${parseInt(sessionYear)+4}`);
-  set('lm-shift',   p.shift);
-  set('lm-position', _position || '—');
+  // Hero text
+  set("p-name", tc(p.name));
+  set("p-roll", p.roll);
 
-  // Location in sidebar (city + country visible to all)
-  const loc = [p.city, p.country].filter(Boolean).join(', ');
-  set('lm-location', loc || '—');
+  // Hero badges
+  const badges = document.getElementById("hero-badges");
+  const shift  = p.shift || "";
+  badges.innerHTML =
+    `<span class="hero-badge gold">Session ${sessionYear}–${parseInt(sessionYear)+4}</span>` +
+    (shift ? `<span class="hero-badge">${shift}</span>` : "") +
+    (_position ? `<span class="hero-badge">💼 ${_position}</span>` : "") +
+    (p.city ? `<span class="hero-badge">📍 ${p.city}${p.country ? ", "+p.country : ""}</span>` : "");
 
-  // LinkedIn in sidebar (visible to all if set)
+  // Sidebar quick info
+  set("lm-session",  `Session ${sessionYear}–${parseInt(sessionYear)+4}`);
+  set("lm-shift",    shift);
+  set("lm-location", [p.city, p.country].filter(Boolean).join(", ") || "—");
+  set("lm-position", _position || "—");
   if (p.linkedin) {
-    document.getElementById('lm-linkedin-row').style.display = 'flex';
-    document.getElementById('lm-linkedin-a').href = p.linkedin;
+    document.getElementById("lm-linkedin-row").style.display = "flex";
+    document.getElementById("lm-linkedin-a").href = p.linkedin;
   }
 
-  // ── Visibility rules ──────────────────────────────────────────────────
-  //
-  //  Tier             | Name Roll Session Shift | City Country Position | Employer LinkedIn | Phone Email
-  //  Public           |  ✅  ✅     ✅      ✅   |   ✅    ✅       ✅    |    ❌      ❌      |   ❌    ❌
-  //  Other session    |  ✅  ✅     ✅      ✅   |   ✅    ✅       ✅    |    ❌      ✅      |   ❌    ❌
-  //  Same session     |  ✅  ✅     ✅      ✅   |   ✅    ✅       ✅    |    ✅      ✅      |   ❌    ❌
-  //  Self / Admin     |  ✅  ✅     ✅      ✅   |   ✅    ✅       ✅    |    ✅      ✅      |   ✅    ✅
+  // Visibility
+  const canSeeFull    = ["same","self","admin"].includes(viewerRole);
+  const canSeePrivate = ["self","admin"].includes(viewerRole);
 
-  const canSeeFull    = ['same','self','admin'].includes(viewerRole);
-  const canSeePrivate = ['self','admin'].includes(viewerRole);
-
-  // Professional section
-  set('v-position', _position);
+  // Professional
+  set("v-position", _position || "Not provided");
   if (canSeeFull) {
-    set('v-employer', _employer);
-    document.getElementById('i-employer').value = _employer || '';
+    set("v-employer", _employer || "Not provided");
+    document.getElementById("i-employer").value = _employer || "";
   } else {
-    document.getElementById('v-employer').innerHTML = '<span class="gated-msg">Visible to same-session members</span>';
+    document.getElementById("v-employer").innerHTML = "<span class="gated-msg">Visible to same-session members</span>";
   }
-  document.getElementById('i-position').value = p.position || '';
+  document.getElementById("i-position").value = _position || "";
 
-  // Contact section (same session + self + admin)
+  // Contact (same session+)
   if (canSeeFull) {
-    document.getElementById('sec-contact').style.display = 'block';
-    set('v-city',    p.city);
-    set('v-country', p.country);
-    document.getElementById('i-city').value    = p.city    || '';
-    document.getElementById('i-country').value = p.country || '';
+    document.getElementById("sec-contact").style.display = "block";
+    set("v-city",    p.city    || "Not provided");
+    set("v-country", p.country || "Not provided");
+    document.getElementById("i-city").value    = p.city    || "";
+    document.getElementById("i-country").value = p.country || "";
     if (p.linkedin) {
-      document.getElementById('v-linkedin').innerHTML = `<a href="${p.linkedin}" target="_blank">${p.linkedin}</a>`;
+      document.getElementById("v-linkedin").innerHTML = `<a href="${p.linkedin}" target="_blank">${p.linkedin}</a>`;
     } else {
-      set('v-linkedin', 'Not provided');
+      set("v-linkedin", "Not provided");
     }
-    document.getElementById('i-linkedin').value = p.linkedin || '';
+    document.getElementById("i-linkedin").value = p.linkedin || "";
   }
 
-  // Private section (self + admin)
+  // Private section — phone for self/admin, email for same session+
+  if (canSeeFull) {
+    document.getElementById("sec-private").style.display = "block";
+    // Email: visible to same-session + self + admin
+    document.getElementById("fi-email").style.display = "block";
+    set("v-email", p.email || "Not provided");
+    if (canSeePrivate) {
+      document.getElementById("email-note").textContent = "🔒 Only visible to you and admin";
+    } else {
+      document.getElementById("email-note").textContent = "Visible to same-session members";
+    }
+  }
   if (canSeePrivate) {
-    document.getElementById('sec-private').style.display = 'block';
-    set('v-phone', p.phone);
-    set('v-email', p.email);
-    document.getElementById('i-phone').value = p.phone || '';
+    // Phone: self + admin only
+    document.getElementById("fi-phone").style.display = "block";
+    set("v-phone", p.phone || "Not provided");
+    document.getElementById("i-phone").value = p.phone || "";
+    document.getElementById("sec-private-sub").textContent = "Phone visible to you and admin · Email visible to session members";
   }
 
-  // Network info (always)
-  set('v-roll',    p.roll);
-  set('v-shift',   p.shift);
-  set('v-session', `${sessionYear}–${parseInt(sessionYear)+4}`);
+  // Network info
+  set("v-roll",    p.roll);
+  set("v-shift",   shift);
+  set("v-session", `${sessionYear}–${parseInt(sessionYear)+4}`);
   if (p.registeredAt?.seconds) {
-    set('v-since', new Date(p.registeredAt.seconds * 1000).toLocaleDateString('en-GB', { month:'short', year:'numeric' }));
+    set("v-since", new Date(p.registeredAt.seconds*1000).toLocaleDateString("en-GB",{month:"short",year:"numeric"}));
   }
 
   // Edit bar (self + admin)
   if (canSeePrivate) {
-    document.getElementById('edit-bar').style.display = 'block';
-    document.getElementById('btn-edit').style.display = 'inline-flex';
-    // Show change photo button
-    const cpBtn = document.getElementById('btn-change-photo');
-    if (cpBtn) cpBtn.style.display = 'inline-block';
+    document.getElementById("edit-bar").style.display   = "block";
+    document.getElementById("btn-edit").style.display   = "inline-flex";
+    document.getElementById("photo-card").style.display = "block";
+    document.getElementById("btn-change-photo").style.display = "block";
   }
 
-  // Visibility notice (public & other session)
-  const vn = document.getElementById('vis-notice');
-  if (viewerRole === 'public') {
-    vn.style.display = 'block';
-    vn.innerHTML = `<strong>Public View</strong><a href="/alumni/register.html?session=${p.session}">Join the network</a> to see full contact &amp; employer details.`;
-  } else if (viewerRole === 'other') {
-    vn.style.display = 'block';
-    vn.innerHTML = `<strong>Limited View</strong>Full employer and contact details are visible to Session ${p.session} members only.`;
+  // Vis notice
+  const vn = document.getElementById("vis-notice");
+  if (viewerRole === "public") {
+    vn.style.display = "block";
+    vn.innerHTML = `<strong>Public View</strong><a href="/alumni/register.html">Join the network</a> to see full contact details.`;
+  } else if (viewerRole === "other") {
+    vn.style.display = "block";
+    vn.innerHTML = `<strong>Limited View</strong>Full details visible to Session ${sessionYear} members.`;
   }
 }
 
-// ── Edit / Save ───────────────────────────────────────────────────────────
+// ── EDIT / SAVE ───────────────────────────────────────────────────────────
 window.startEdit = function() {
-  ['sec-contact','sec-private'].forEach(id => {
+  ["sec-contact","sec-private"].forEach(id => {
     const el = document.getElementById(id);
-    if (el) el.style.display = 'block'; // ensure visible during edit
+    if (el) el.style.display = "block";
   });
-  document.querySelectorAll('.section-card').forEach(c => c.classList.add('editing'));
-  document.getElementById('btn-edit').style.display   = 'none';
-  document.getElementById('btn-save').style.display   = 'inline-flex';
-  document.getElementById('btn-cancel').style.display = 'inline-flex';
-  document.getElementById('save-alert').className     = 'save-alert';
+  document.querySelectorAll(".section-card").forEach(c => c.classList.add("editing"));
+  document.getElementById("btn-edit").style.display   = "none";
+  document.getElementById("btn-save").style.display   = "inline-flex";
+  document.getElementById("btn-cancel").style.display = "inline-flex";
+  document.getElementById("save-alert").className     = "save-alert";
 };
 
 window.cancelEdit = function() {
-  document.querySelectorAll('.section-card').forEach(c => c.classList.remove('editing'));
-  document.getElementById('btn-edit').style.display   = 'inline-flex';
-  document.getElementById('btn-save').style.display   = 'none';
-  document.getElementById('btn-cancel').style.display = 'none';
-  // Restore inputs from cached profile data
-  document.getElementById('i-position').value = profileData.position || '';
-  document.getElementById('i-employer').value  = profileData.employer  || '';
-  document.getElementById('i-city').value      = profileData.city      || '';
-  document.getElementById('i-country').value   = profileData.country   || '';
-  document.getElementById('i-linkedin').value  = profileData.linkedin  || '';
-  document.getElementById('i-phone').value     = profileData.phone     || '';
+  document.querySelectorAll(".section-card").forEach(c => c.classList.remove("editing"));
+  document.getElementById("btn-edit").style.display   = "inline-flex";
+  document.getElementById("btn-save").style.display   = "none";
+  document.getElementById("btn-cancel").style.display = "none";
+  document.getElementById("i-position").value = profileData.position || profileData.job || "";
+  document.getElementById("i-employer").value  = profileData.employer  || profileData.company || "";
+  document.getElementById("i-city").value      = profileData.city      || "";
+  document.getElementById("i-country").value   = profileData.country   || "";
+  document.getElementById("i-linkedin").value  = profileData.linkedin  || "";
+  document.getElementById("i-phone").value     = profileData.phone     || "";
 };
 
 window.saveProfile = async function() {
-  const saveBtn = document.getElementById('btn-save');
-  const alertEl = document.getElementById('save-alert');
-  const showErr = msg => { alertEl.className = 'save-alert sa-err show'; alertEl.textContent = msg; };
-
+  const saveBtn = document.getElementById("btn-save");
+  const alertEl = document.getElementById("save-alert");
+  const showE   = msg => { alertEl.className = "save-alert sa-err show"; alertEl.textContent = msg; };
   const updates = {
-    position: document.getElementById('i-position').value.trim(),
-    employer:  document.getElementById('i-employer').value.trim(),
-    city:      document.getElementById('i-city').value.trim(),
-    country:   document.getElementById('i-country').value.trim(),
-    linkedin:  document.getElementById('i-linkedin').value.trim(),
-    phone:     document.getElementById('i-phone').value.trim(),
+    position: document.getElementById("i-position").value.trim(),
+    employer:  document.getElementById("i-employer").value.trim(),
+    city:      document.getElementById("i-city").value.trim(),
+    country:   document.getElementById("i-country").value.trim(),
+    linkedin:  document.getElementById("i-linkedin").value.trim(),
+    phone:     document.getElementById("i-phone").value.trim(),
     updatedAt: serverTimestamp()
   };
-
-  if (!updates.position) return showErr('Current position cannot be empty.');
-  if (!updates.employer)  return showErr('Employer cannot be empty.');
-  if (!updates.city)      return showErr('City cannot be empty.');
-  if (!updates.country)   return showErr('Country cannot be empty.');
-  if (!updates.phone)     return showErr('Phone number cannot be empty.');
-
-  saveBtn.disabled = true; saveBtn.textContent = 'Saving…';
-
+  if (!updates.position) return showE("Current position cannot be empty.");
+  if (!updates.employer)  return showE("Employer cannot be empty.");
+  saveBtn.disabled = true; saveBtn.textContent = "Saving…";
   try {
-    await updateDoc(doc(db, 'alumni', profileRoll || urlRoll), updates);
-
-    // Update local cache + display values
+    await updateDoc(doc(db,"alumni", profileRoll || urlRoll), updates);
     Object.assign(profileData, updates);
-    set('v-position', updates.position);
-    set('v-employer',  updates.employer);
-    set('v-city',      updates.city);
-    set('v-country',   updates.country);
-    set('v-phone',     updates.phone);
-    set('lm-position', updates.position);
-    set('lm-location', [updates.city, updates.country].filter(Boolean).join(', ') || '—');
-
+    set("v-position", updates.position);
+    set("v-employer",  updates.employer);
+    set("v-city",      updates.city);
+    set("v-country",   updates.country);
+    set("v-phone",     updates.phone);
+    set("lm-position", updates.position);
+    set("lm-location", [updates.city, updates.country].filter(Boolean).join(", ") || "—");
     if (updates.linkedin) {
-      document.getElementById('v-linkedin').innerHTML = `<a href="${updates.linkedin}" target="_blank">${updates.linkedin}</a>`;
-      document.getElementById('lm-linkedin-row').style.display = 'flex';
-      document.getElementById('lm-linkedin-a').href = updates.linkedin;
+      document.getElementById("v-linkedin").innerHTML = `<a href="${updates.linkedin}" target="_blank">${updates.linkedin}</a>`;
+      document.getElementById("lm-linkedin-row").style.display = "flex";
+      document.getElementById("lm-linkedin-a").href = updates.linkedin;
     } else {
-      set('v-linkedin', 'Not provided');
+      set("v-linkedin", "Not provided");
     }
-
-    alertEl.className = 'save-alert sa-ok show';
-    alertEl.textContent = '✓ Profile updated successfully!';
-    setTimeout(() => cancelEdit(), 1600);
-
-  } catch(e) {
-    showErr('Error saving changes: ' + e.message);
-  } finally {
-    saveBtn.disabled = false; saveBtn.textContent = '💾 Save Changes';
-  }
+    alertEl.className = "save-alert sa-ok show";
+    alertEl.textContent = "✓ Profile updated successfully!";
+    setTimeout(() => window.cancelEdit(), 1600);
+  } catch(e) { showE("Error: " + e.message); }
+  finally { saveBtn.disabled = false; saveBtn.textContent = "💾 Save Changes"; }
 };
 
-// ── Sign out ──────────────────────────────────────────────────────────────
-window.doSignOut = async function() {
-  await signOut(auth);
-  location.reload();
-};
+window.doSignOut = async function() { await signOut(auth); location.reload(); };
 
-// ── Auth state → determine role → load profile ────────────────────────────
+// ── LOAD ──────────────────────────────────────────────────────────────────
 if (!urlRoll) {
-  showErr('No roll number in URL. Use ?roll=CE-M6-101 format.');
+  showErr("No roll number in URL. Use ?roll=CE-M6-101");
 } else {
   onAuthStateChanged(auth, async user => {
-    // Step 1: determine viewer role
     if (!user) {
-      viewerRole = 'public';
+      viewerRole = "public";
     } else if (user.uid === ADMIN) {
-      viewerRole = 'admin';
-      document.getElementById('nav-user').textContent = '⭐ Admin';
-      document.getElementById('nav-signout-btn').style.display = 'inline-block';
+      viewerRole = "admin";
+      document.getElementById("nav-user").textContent = "⭐ Admin";
+      document.getElementById("nav-signout-btn").style.display = "inline-block";
     } else {
-      // Look up viewer's own registration
-      const mapSnap = await getDoc(doc(db, 'alumni_uid_map', user.uid));
+      const mapSnap = await getDoc(doc(db,"alumni_uid_map", user.uid));
       if (mapSnap.exists()) {
         const { roll: vRoll } = mapSnap.data();
-        const vSnap = await getDoc(doc(db, 'alumni', vRoll));
-        if (vSnap.exists() && vSnap.data().status === 'approved') {
+        const vSnap = await getDoc(doc(db,"alumni", vRoll));
+        if (vSnap.exists() && vSnap.data().status === "approved") {
           const vData = vSnap.data();
           viewerSession = vData.session;
-          document.getElementById('nav-user').textContent = vData.name?.split(' ')[0] || '';
-          document.getElementById('nav-signout-btn').style.display = 'inline-block';
-          // Role determined after profile loads (need profile session)
-          viewerRole = (vRoll === urlRoll) ? 'self' : 'pending-check';
+          document.getElementById("nav-user").textContent = vData.name?.split(" ")[0] || "";
+          document.getElementById("nav-signout-btn").style.display = "inline-block";
+          viewerRole = (vRoll === urlRoll) ? "self" : "pending-check";
         }
       }
     }
 
-    // Step 2: load the profile
-    // Try roll number as doc ID first (new system), then query by roll field (old system)
     try {
-      let snap = await getDoc(doc(db, 'alumni', urlRoll));
-
+      // Try by roll number doc ID first (new), then query by field (old)
+      let snap = await getDoc(doc(db,"alumni", urlRoll));
       if (!snap.exists()) {
-        // Old system stored docs by UID — query by roll field
-        const { getDocs, query, collection, where } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
-        const q = query(collection(db, 'alumni'), where('roll', '==', urlRoll));
+        const q = query(collection(db,"alumni"), where("roll","==",urlRoll));
         const qSnap = await getDocs(q);
         if (qSnap.empty) {
-          // Also try rollNumber field (very old registrations)
-          const q2 = query(collection(db, 'alumni'), where('rollNumber', '==', urlRoll));
+          const q2 = query(collection(db,"alumni"), where("rollNumber","==",urlRoll));
           const qSnap2 = await getDocs(q2);
-          if (qSnap2.empty) { showErr('This profile does not exist or has not been registered yet.'); return; }
+          if (qSnap2.empty) { showErr("Profile not found or not yet registered."); return; }
           snap = qSnap2.docs[0];
         } else {
           snap = qSnap.docs[0];
         }
       }
 
-      profileData = snap.data ? snap.data() : snap.data;
-      if (!profileData) { showErr('Could not load profile data.'); return; }
-      // profileRoll = the actual Firestore doc ID (may differ from urlRoll for old docs)
+      profileData = snap.data();
       profileRoll = snap.id || urlRoll;
-
-      if (profileData.status !== 'approved' && viewerRole !== 'admin') {
-        showErr('This profile is pending admin approval and is not yet visible.'); return;
+      if (!profileData) { showErr("Could not load profile."); return; }
+      if (profileData.status !== "approved" && viewerRole !== "admin") {
+        showErr("This profile is pending admin approval."); return;
       }
 
-      // Step 3: finalise role now we know profile session
-      if (viewerRole === 'pending-check') {
-        viewerRole = (viewerSession.split('-')[0] === (profileData.session||'').split('-')[0]) ? 'same' : 'other';
+      if (viewerRole === "pending-check") {
+        viewerRole = ((viewerSession||"").split("-")[0] === (profileData.session||"").split("-")[0]) ? "same" : "other";
       }
 
       render(profileData);
-
     } catch(e) {
-      showErr('Error loading profile: ' + e.message);
+      showErr("Error loading profile: " + e.message);
     }
   });
 }
 
-// ── Photo lightbox ────────────────────────────────────────────────────────
+// ── PHOTO LIGHTBOX ────────────────────────────────────────────────────────
 window.openPhotoLb = function() {
   if (!_currentPhotoUrl) return;
-  document.getElementById('photo-lb-img').src = _currentPhotoUrl;
-  document.getElementById('photo-lb').classList.add('open');
+  document.getElementById("photo-lb-img").src = _currentPhotoUrl;
+  document.getElementById("photo-lb").classList.add("open");
 };
 window.closeLb = function(e) {
-  if (e.target === document.getElementById('photo-lb'))
-    document.getElementById('photo-lb').classList.remove('open');
+  if (e.target === document.getElementById("photo-lb"))
+    document.getElementById("photo-lb").classList.remove("open");
 };
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') document.getElementById('photo-lb').classList.remove('open');
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape") document.getElementById("photo-lb").classList.remove("open");
 });
 
-// ── Photo edit (own profile / admin) ─────────────────────────────────────
+// ── PHOTO EDIT ────────────────────────────────────────────────────────────
 window.handlePhotoEdit = async function(input) {
   const file = input.files[0]; if (!file) return;
-  const status = document.getElementById('photo-edit-status');
-  const av     = document.getElementById('p-avatar');
-  if (file.size > 3 * 1024 * 1024) { status.textContent = 'Max 3MB.'; return; }
-  status.textContent = 'Uploading...';
+  const status = document.getElementById("photo-edit-status");
+  const av     = document.getElementById("p-avatar");
+  if (file.size > 3*1024*1024) { status.textContent = "Max 3MB."; return; }
+  status.textContent = "Uploading…";
   const reader = new FileReader();
   reader.onload = async e => {
     const img = new Image();
     img.onload = async () => {
-      const canvas = document.createElement('canvas');
-      const MAX = 600; let w = img.width, h = img.height;
-      if (w > MAX) { h = Math.round(h * MAX / w); w = MAX; }
-      if (h > MAX) { w = Math.round(w * MAX / h); h = MAX; }
-      canvas.width = w; canvas.height = h;
-      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-      const resized = canvas.toDataURL('image/jpeg', 0.85);
-      av.innerHTML = '<img src="' + resized + '" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">';
+      const canvas = document.createElement("canvas");
+      const MAX = 600; let w=img.width, h=img.height;
+      if (w>MAX) { h=Math.round(h*MAX/w); w=MAX; }
+      if (h>MAX) { w=Math.round(w*MAX/h); h=MAX; }
+      canvas.width=w; canvas.height=h;
+      canvas.getContext("2d").drawImage(img,0,0,w,h);
+      const resized = canvas.toDataURL("image/jpeg",.85);
+      av.innerHTML = `<img src="${resized}" alt="photo">`;
       try {
         const blob = await (await fetch(resized)).blob();
         const fd = new FormData();
-        fd.append('file', blob, 'avatar.jpg');
-        fd.append('upload_preset', 'ranaadeem_blog');
-        const res  = await fetch('https://api.cloudinary.com/v1_1/duetiv9rm/image/upload',{method:'POST',body:fd});
+        fd.append("file", blob, "avatar.jpg");
+        fd.append("upload_preset","ranaadeem_blog");
+        const res  = await fetch("https://api.cloudinary.com/v1_1/duetiv9rm/image/upload",{method:"POST",body:fd});
         const data = await res.json();
-        if (!data.secure_url) throw new Error('Upload failed');
-        await updateDoc(doc(db,'alumni',profileRoll),{photoUrl:data.secure_url,updatedAt:serverTimestamp()});
+        if (!data.secure_url) throw new Error("Upload failed");
+        await updateDoc(doc(db,"alumni", profileRoll||urlRoll),{photoUrl:data.secure_url, updatedAt:serverTimestamp()});
         _currentPhotoUrl = data.secure_url;
         profileData.photoUrl = data.secure_url;
-        status.textContent = 'Photo updated!';
-        setTimeout(()=>status.textContent='',3000);
-      } catch(err) { status.textContent = 'Upload failed. Try again.'; }
+        status.textContent = "Photo updated ✓";
+        document.getElementById("hero-badge").classList.add("show");
+        setTimeout(()=>status.textContent="",3000);
+      } catch(err) { status.textContent = "Upload failed. Try again."; }
     };
     img.src = e.target.result;
   };
   reader.readAsDataURL(file);
 };
 </script>
-<!-- Photo lightbox -->
-<div class="photo-lb" id="photo-lb" onclick="closeLb(event)">
-  <button class="photo-lb-close" onclick="document.getElementById('photo-lb').classList.remove('open')">✕</button>
-  <img id="photo-lb-img" src="" alt="Profile photo" onclick="event.stopPropagation()" />
-</div>
-
 </body>
 </html>
