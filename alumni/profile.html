@@ -732,6 +732,13 @@ window.saveProfile = async function() {
 window.doSignOut = async function() { await signOut(auth); location.reload(); };
 
 // ── LOAD ──────────────────────────────────────────────────────────────────
+// Safety timeout — never stay stuck on loading
+const _loadTimeout = setTimeout(() => {
+  if (document.getElementById("st-loading").style.display !== "none") {
+    showErr("Loading timed out. Please check your connection and try again.");
+  }
+}, 8000);
+
 if (!urlRoll) {
   showErr("No roll number in URL. Use ?roll=CE-M6-101");
 } else {
@@ -758,35 +765,56 @@ if (!urlRoll) {
     }
 
     try {
-      // Try by roll number doc ID first (new), then query by field (old)
+      console.log("[profile] Step 1 — urlRoll:", urlRoll, "viewerRole:", viewerRole);
+
+      // Try direct doc ID lookup first (new system: roll as doc ID)
       let snap = await getDoc(doc(db,"alumni", urlRoll));
+      console.log("[profile] Step 2 — direct lookup exists:", snap.exists());
+
       if (!snap.exists()) {
-        const q = query(collection(db,"alumni"), where("roll","==",urlRoll));
-        const qSnap = await getDocs(q);
-        if (qSnap.empty) {
-          const q2 = query(collection(db,"alumni"), where("rollNumber","==",urlRoll));
-          const qSnap2 = await getDocs(q2);
-          if (qSnap2.empty) { showErr("Profile not found or not yet registered."); return; }
-          snap = qSnap2.docs[0];
-        } else {
+        // Fallback: query by roll field (old system: UID as doc ID)
+        console.log("[profile] Step 3 — trying query by roll field");
+        const qSnap = await getDocs(query(collection(db,"alumni"), where("roll","==",urlRoll)));
+        console.log("[profile] Step 4 — query by roll field results:", qSnap.size);
+
+        if (!qSnap.empty) {
           snap = qSnap.docs[0];
+        } else {
+          // Very old: rollNumber field
+          console.log("[profile] Step 5 — trying rollNumber field");
+          const qSnap2 = await getDocs(query(collection(db,"alumni"), where("rollNumber","==",urlRoll)));
+          console.log("[profile] Step 6 — query by rollNumber results:", qSnap2.size);
+          if (qSnap2.empty) {
+            showErr("Profile not found. Roll number: " + urlRoll);
+            return;
+          }
+          snap = qSnap2.docs[0];
         }
       }
 
       profileData = snap.data();
-      profileRoll = snap.id || urlRoll;
-      if (!profileData) { showErr("Could not load profile."); return; }
+      profileRoll = snap.id;
+      console.log("[profile] Step 7 — profileData loaded, id:", profileRoll, "status:", profileData?.status);
+
+      if (!profileData) { showErr("Could not read profile data."); return; }
+
       if (profileData.status !== "approved" && viewerRole !== "admin") {
-        showErr("This profile is pending admin approval."); return;
+        showErr("Profile is pending admin approval. Status: " + profileData.status);
+        return;
       }
 
       if (viewerRole === "pending-check") {
         viewerRole = ((viewerSession||"").split("-")[0] === (profileData.session||"").split("-")[0]) ? "same" : "other";
       }
 
+      console.log("[profile] Step 8 — rendering, final viewerRole:", viewerRole);
+      clearTimeout(_loadTimeout);
       render(profileData);
+
     } catch(e) {
-      showErr("Error loading profile: " + e.message);
+      clearTimeout(_loadTimeout);
+      console.error("[profile] FATAL ERROR:", e);
+      showErr("Error: " + e.message + " (check browser console for details)");
     }
   });
 }
