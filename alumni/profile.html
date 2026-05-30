@@ -622,11 +622,7 @@ function render(p) {
     // Email: visible to same-session + self + admin
     document.getElementById("fi-email").style.display = "block";
     set("v-email", p.email || "Not provided");
-    if (canSeePrivate) {
-      document.getElementById("email-note").textContent = "🔒 Only visible to you and admin";
-    } else {
-      document.getElementById("email-note").textContent = "Visible to same-session members";
-    }
+    document.getElementById("email-note").textContent = "Visible to you and your session fellows";
   }
   if (canSeePrivate) {
     // Phone: self + admin only
