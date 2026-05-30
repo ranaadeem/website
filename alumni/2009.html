@@ -93,6 +93,20 @@ html,body{margin:0;padding:0;}body{font-family:"DM Sans",sans-serif;background:v
 .gallery-photo{height:155px;width:auto;min-width:200px;max-width:280px;border-radius:8px;object-fit:cover;cursor:pointer;flex-shrink:0;border:2px solid transparent;transition:transform 0.2s,border-color 0.2s;}
 .gallery-photo:hover{transform:scale(1.03);border-color:var(--gold);}
 
+/* GATE */
+.gate-input{width:100%;padding:10px 13px;border:1.5px solid var(--border);border-radius:7px;font-size:14px;font-family:inherit;outline:none;margin-bottom:10px;box-sizing:border-box;color:var(--text);}
+.gate-input:focus{border-color:var(--navy);}
+.gate-btn-primary{width:100%;padding:12px;background:var(--navy);color:white;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;transition:background .2s;margin-bottom:8px;}
+.gate-btn-primary:hover:not(:disabled){background:#142d6e;}
+.gate-btn-primary:disabled{opacity:0.5;cursor:not-allowed;}
+.gate-btn-secondary{width:100%;padding:10px;background:white;color:var(--navy);border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;transition:all .2s;}
+.gate-btn-secondary:hover{border-color:var(--navy);}
+.gate-alert{border-radius:6px;padding:9px 12px;font-size:13px;margin-bottom:10px;display:none;line-height:1.5;}
+.gate-alert.show{display:block;}
+.gate-alert-error{background:#fef2f2;border:1px solid #fca5a5;color:#7f1d1d;}
+.gate-alert-success{background:#f0fdf4;border:1px solid #86efac;color:#14532d;}
+.gate-alert-info{background:#eff6ff;border:1px solid #93c5fd;color:#1e3a5f;}
+
 /* FOOTER */
 .footer{background:var(--navy);color:rgba(255,255,255,0.6);text-align:center;padding:1.5rem;font-size:13px;margin-top:3rem;}
 .footer a{color:var(--gold);text-decoration:none;}
@@ -157,7 +171,7 @@ html,body{margin:0;padding:0;}body{font-family:"DM Sans",sans-serif;background:v
     <input type="file" id="photo-file-input" accept="image/*" style="display:none" onchange="handlePhotoSelect(this)">
     <div style="margin-bottom:0.75rem;">
       <label style="font-size:12px;font-weight:600;color:var(--muted);display:block;margin-bottom:3px;">Caption (optional)</label>
-      <input type="text" id="photo-caption" placeholder="e.g. Lab farewell 2010, Murree trip..." style="width:100%;padding:8px 11px;border:1.5px solid var(--border);border-radius:7px;font-size:13px;font-family:inherit;outline:none;box-sizing:border-box;">
+      <input type="text" id="photo-caption" placeholder="e.g. Lab farewell 2013, Murree trip..." style="width:100%;padding:8px 11px;border:1.5px solid var(--border);border-radius:7px;font-size:13px;font-family:inherit;outline:none;box-sizing:border-box;">
     </div>
     <div style="margin-bottom:1rem;">
       <label style="font-size:12px;font-weight:600;color:var(--muted);display:block;margin-bottom:3px;">Your Name *</label>
@@ -200,10 +214,45 @@ html,body{margin:0;padding:0;}body{font-family:"DM Sans",sans-serif;background:v
     <h1>Session <span>2009–2013</span></h1>
     <p>Institute of Chemical Engineering &amp; Technology · University of the Punjab, Lahore</p>
   </div>
-
+  <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
+    <div id="session-user-area"></div>
+  </div>
 </div>
 
-<!-- PAGE WRAP -->
+<!-- ── LOGIN GATE ── -->
+<div id="login-gate" style="max-width:460px;margin:4rem auto;padding:0 2rem;display:none;">
+  <div style="background:white;border:1px solid var(--border);border-radius:14px;padding:2.5rem;text-align:center;box-shadow:0 4px 24px rgba(0,0,0,0.08);">
+    <div style="font-size:3rem;margin-bottom:1rem;">🎓</div>
+    <h2 style="font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--navy);margin-bottom:0.5rem;">Session 2009–2013</h2>
+    <p id="gate-message" style="font-size:14px;color:var(--muted);margin-bottom:1.5rem;line-height:1.6;">The alumni directory, notice board, and announcements are for registered members only.</p>
+
+    <!-- Sign-in form (default view) -->
+    <div id="gate-signin-panel">
+      <div class="gate-alert" id="gate-alert"></div>
+      <input type="email" id="gate-email" class="gate-input" placeholder="Email address" />
+      <input type="password" id="gate-password" class="gate-input" placeholder="Password" />
+      <div style="text-align:right;margin-bottom:10px;">
+        <button onclick="handleForgotPassword()" style="background:none;border:none;font-size:12px;color:var(--muted);cursor:pointer;text-decoration:underline;">Forgot password?</button>
+      </div>
+      <button class="gate-btn-primary" id="gate-signin-btn" onclick="handleGateSignIn()">Sign In</button>
+      <div style="margin:12px 0;font-size:12px;color:var(--muted);">— or —</div>
+      <a href="/alumni/register.html?session=2009" class="gate-btn-secondary" style="display:block;text-align:center;text-decoration:none;padding:10px;border-radius:8px;border:1.5px solid var(--border);color:var(--navy);font-size:13px;font-weight:600;transition:all .2s;">
+        New here? Join the Network →
+      </a>
+    </div>
+
+    <!-- Pending state (shown after sign-in if pending) -->
+    <div id="gate-pending-panel" style="display:none;">
+      <div style="background:#fffbea;border:1px solid #f0d060;border-radius:8px;padding:12px 16px;font-size:13px;color:#7a5a00;margin-bottom:1rem;line-height:1.6;">
+        ⏳ Your registration is <strong>pending admin approval</strong>. You'll receive an email once approved.
+      </div>
+      <button onclick="handleSignOut()" class="gate-btn-secondary">Sign Out</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── MAIN CONTENT (hidden until approved) ── -->
+<div id="main-content-gate" style="display:none;">
 <div class="page-wrap">
 
   <!-- Stats -->
@@ -221,13 +270,12 @@ html,body{margin:0;padding:0;}body{font-family:"DM Sans",sans-serif;background:v
       <!-- Gallery -->
       <div id="gallery-section" style="margin-bottom:1.5rem;">
         <div style="overflow:hidden;border-radius:10px;background:#1a1a2e;min-height:170px;display:flex;align-items:center;justify-content:center;margin-bottom:0.6rem;">
-          <div id="photo-strip" style="display:flex;gap:8px;padding:8px;transition:none;will-change:transform;" id="photo-strip-inner"></div>
+          <div id="photo-strip" style="display:flex;gap:8px;padding:8px;transition:none;will-change:transform;"></div>
           <div id="gallery-empty" style="display:none;text-align:center;padding:2rem;color:rgba(255,255,255,0.5);">
             <div style="font-size:1.8rem;margin-bottom:0.4rem;">📸</div>
             <div style="font-size:13px;font-weight:600;color:rgba(255,255,255,0.7);">No photos yet — be the first to share!</div>
           </div>
         </div>
-        <div id="photo-strip-wrap" style="overflow:hidden;display:none;"></div>
         <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.5rem;">
           <div style="font-size:13px;color:var(--muted);">Batch photos, lab memories, trips &amp; events — <span id="photo-count" style="color:var(--navy);font-weight:600;">0</span> photos shared</div>
           <div style="display:flex;gap:0.5rem;">
@@ -237,23 +285,72 @@ html,body{margin:0;padding:0;}body{font-family:"DM Sans",sans-serif;background:v
         </div>
       </div>
 
-      <!-- Filter -->
-      <div class="filter-bar">
-        <input type="text" class="search-box" id="search-box" placeholder="🔍 Search by name or roll number..." oninput="renderGrid()">
-        <button class="filter-chip active" onclick="setFilter('all',this)">All (139)</button>
-        <button class="filter-chip" onclick="setFilter('Morning',this)">🌅 Morning (M) (79)</button>
-        <button class="filter-chip" onclick="setFilter('Evening',this)">🌆 Evening (E) (60)</button>
-        <button class="filter-chip" onclick="setFilter('registered',this)">✅ Registered <span id="reg-count">(0)</span></button>
+      <!-- Tabs -->
+      <div style="display:flex;gap:4px;background:white;border:1px solid var(--border);border-radius:8px;padding:4px;margin-bottom:1.5rem;width:fit-content;">
+        <button id="tab-directory" onclick="switchTab('directory')" style="padding:7px 16px;border-radius:5px;font-size:13px;font-weight:500;cursor:pointer;border:none;background:var(--navy);color:white;font-family:inherit;">&#128101; Directory</button>
+        <button id="tab-noticeboard" onclick="switchTab('noticeboard')" style="padding:7px 16px;border-radius:5px;font-size:13px;font-weight:500;cursor:pointer;border:none;background:transparent;color:#6b7280;font-family:inherit;">&#128204; Notice Board</button>
+        <button id="tab-announcements" onclick="switchTab('announcements')" style="padding:7px 16px;border-radius:5px;font-size:13px;font-weight:500;cursor:pointer;border:none;background:transparent;color:#6b7280;font-family:inherit;">&#128226; Announcements</button>
       </div>
 
-      <!-- Members -->
-      <div class="member-grid" id="member-grid">
-        <div style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--muted);">Loading...</div>
+      <!-- DIRECTORY TAB -->
+      <div id="tab-content-directory">
+        <div class="filter-bar">
+          <input type="text" class="search-box" id="search-box" placeholder="🔍 Search by name or roll number..." oninput="renderGrid()">
+          <button class="filter-chip active" onclick="setFilter('all',this)">All (139)</button>
+          <button class="filter-chip" onclick="setFilter('Morning',this)">🌅 Morning (79)</button>
+          <button class="filter-chip" onclick="setFilter('Evening',this)">🌆 Evening (60)</button>
+          <button class="filter-chip" onclick="setFilter('registered',this)">✅ Registered <span id="reg-count">(0)</span></button>
+        </div>
+        <div class="member-grid" id="member-grid">
+          <div style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--muted);">Loading...</div>
+        </div>
+      </div>
+
+      <!-- NOTICE BOARD TAB -->
+      <div id="tab-content-noticeboard" style="display:none;">
+        <div style="display:grid;grid-template-columns:1fr 280px;gap:1.5rem;align-items:start;">
+          <div>
+            <div style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:1rem;">Recent Posts</div>
+            <div id="notices-container"><div style="text-align:center;padding:2rem;color:var(--muted);font-size:13px;">Loading...</div></div>
+          </div>
+          <div id="notice-post-form" style="background:white;border:1px solid var(--border);border-radius:12px;padding:1.25rem;position:sticky;top:80px;">
+            <div style="font-size:14px;font-weight:600;color:var(--navy);margin-bottom:4px;">📌 Post to Notice Board</div>
+            <div style="font-size:12px;color:var(--muted);margin-bottom:0.75rem;line-height:1.5;">Share a message. Appears after admin approval.</div>
+            <textarea id="notice-text" rows="4" placeholder="What's on your mind?" maxlength="500" style="width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:inherit;outline:none;resize:vertical;margin-bottom:6px;box-sizing:border-box;"></textarea>
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <span style="font-size:11px;color:#9ca3af;" id="notice-char">0/500</span>
+              <button id="btn-post-notice" style="background:var(--gold);color:var(--navy);border:none;padding:8px 16px;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">Post →</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ANNOUNCEMENTS TAB -->
+      <div id="tab-content-announcements" style="display:none;">
+        <div style="display:grid;grid-template-columns:1fr 280px;gap:1.5rem;align-items:start;">
+          <div>
+            <div style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:1rem;">Recent Announcements</div>
+            <div id="announcements-container"><div style="text-align:center;padding:2rem;color:var(--muted);font-size:13px;">Loading...</div></div>
+          </div>
+          <div id="ann-post-form" style="background:white;border:1px solid var(--border);border-radius:12px;padding:1.25rem;position:sticky;top:80px;">
+            <div style="font-size:14px;font-weight:600;color:var(--navy);margin-bottom:4px;">📢 Submit Announcement</div>
+            <div style="font-size:12px;color:var(--muted);margin-bottom:0.75rem;">New job, award, news? Appears after approval.</div>
+            <select id="ann-type" style="width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:inherit;outline:none;margin-bottom:6px;box-sizing:border-box;">
+              <option value="job">Job Change / New Position</option>
+              <option value="achievement">Achievement / Award</option>
+              <option value="news">News / Update</option>
+              <option value="other">Other</option>
+            </select>
+            <input type="text" id="ann-title" placeholder="Headline *" style="width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:inherit;outline:none;margin-bottom:6px;box-sizing:border-box;">
+            <textarea id="ann-body" rows="3" placeholder="Details (optional)" style="width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:inherit;outline:none;resize:vertical;margin-bottom:6px;box-sizing:border-box;"></textarea>
+            <button id="btn-post-ann" style="width:100%;padding:9px;background:var(--gold);color:var(--navy);border:none;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">Submit for Approval →</button>
+          </div>
+        </div>
       </div>
 
       <div class="cta-banner">
         <p style="color:rgba(255,255,255,0.8);font-size:14px;margin-bottom:0.75rem;">Are you from Session 2009–2013? Register to add your photo, job title, and location.</p>
-        <a href="/alumni.html" style="display:inline-block;background:var(--gold);color:var(--navy);padding:8px 22px;border-radius:8px;font-size:13px;font-weight:700;text-decoration:none;">Register Now →</a>
+        <a href="/alumni/register.html?session=2009" style="display:inline-block;background:var(--gold);color:var(--navy);padding:8px 22px;border-radius:8px;font-size:13px;font-weight:700;text-decoration:none;">Register Now →</a>
       </div>
 
     </div>
@@ -281,7 +378,7 @@ html,body{margin:0;padding:0;}body{font-family:"DM Sans",sans-serif;background:v
       <div class="sidebar-card">
         <div class="sidebar-card-header">🔗 Other Sessions</div>
         <div class="sidebar-card-body">
-          <a href="/alumni/2006.html" style="display:block;padding:6px 0;font-size:13px;color:var(--navy);font-weight:400;text-decoration:none;border-bottom:1px solid var(--border);">Session 2006–2010</a>
+          <a href="/alumni/2006.html" style="display:block;padding:6px 0;font-size:13px;color:var(--navy);text-decoration:none;border-bottom:1px solid var(--border);">Session 2006–2010</a>
           <a href="/alumni/2009.html" style="display:block;padding:6px 0;font-size:13px;color:var(--navy);font-weight:600;text-decoration:none;border-bottom:1px solid var(--border);">Session 2009–2013 ←</a>
           <a href="/alumni/2016.html" style="display:block;padding:6px 0;font-size:13px;color:var(--navy);text-decoration:none;">Session 2016–2020</a>
         </div>
@@ -290,10 +387,9 @@ html,body{margin:0;padding:0;}body{font-family:"DM Sans",sans-serif;background:v
         <div class="sidebar-card-header">📬 Join the Network</div>
         <div class="sidebar-card-body">
           <p style="font-size:12px;color:var(--muted);margin-bottom:0.75rem;">Register to connect with your batchmates.</p>
-          <a href="/alumni.html" style="display:block;text-align:center;background:var(--navy);color:var(--gold);padding:9px 14px;border-radius:8px;text-decoration:none;font-size:13px;font-weight:600;">Register Now →</a>
+          <a href="/alumni/register.html?session=2009" style="display:block;text-align:center;background:var(--navy);color:var(--gold);padding:9px 14px;border-radius:8px;text-decoration:none;font-size:13px;font-weight:600;">Register Now →</a>
         </div>
       </div>
-
       <div class="sidebar-card">
         <div class="sidebar-card-header">🚩 Report an Issue</div>
         <div class="sidebar-card-body">
@@ -312,7 +408,7 @@ html,body{margin:0;padding:0;}body{font-family:"DM Sans",sans-serif;background:v
             </div>
             <div style="margin-bottom:0.6rem;">
               <label style="font-size:11px;font-weight:600;color:var(--muted);display:block;margin-bottom:3px;">Roll Number *</label>
-              <input type="text" id="report-roll" placeholder="e.g. CE-M6-101" style="width:100%;padding:7px 10px;border:1.5px solid var(--border);border-radius:7px;font-size:12px;font-family:inherit;outline:none;box-sizing:border-box;" oninput="this.value=this.value.toUpperCase()">
+              <input type="text" id="report-roll" placeholder="e.g. M09-10CE01" style="width:100%;padding:7px 10px;border:1.5px solid var(--border);border-radius:7px;font-size:12px;font-family:inherit;outline:none;box-sizing:border-box;" oninput="this.value=this.value.toUpperCase()">
             </div>
             <div style="margin-bottom:0.75rem;">
               <label style="font-size:11px;font-weight:600;color:var(--muted);display:block;margin-bottom:3px;">Details</label>
@@ -329,206 +425,558 @@ html,body{margin:0;padding:0;}body{font-family:"DM Sans",sans-serif;background:v
           </div>
         </div>
       </div>
-
     </div>
-
   </div><!-- /main-grid -->
 </div><!-- /page-wrap -->
+</div><!-- /main-content-gate -->
 
 <footer class="footer">
   <p>&copy; 2026 Dr. Adeem Ghaffar Rana · <a href="/">ranaadeem.de</a></p>
 </footer>
 
 <script type="module">
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js';
-import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js';
-import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, query, where, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js';
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import {
+  getAuth, onAuthStateChanged,
+  signInWithEmailAndPassword, signOut,
+  sendPasswordResetEmail
+} from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import {
+  getFirestore, collection, addDoc, getDocs, doc, getDoc,
+  updateDoc, deleteDoc, query, where, orderBy, serverTimestamp
+} from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
-const app = initializeApp({apiKey:"AIzaSyAgUl22Cln6QtY3-HIvI6lE8Zu7n9OblbI",authDomain:"icet-alumni.firebaseapp.com",projectId:"icet-alumni",storageBucket:"icet-alumni.firebasestorage.app",messagingSenderId:"707390888790",appId:"1:707390888790:web:57e6be62e4d11e22c214f7"});
-const db = getFirestore(app);
+const app = initializeApp({
+  apiKey: "AIzaSyAgUl22Cln6QtY3-HIvI6lE8Zu7n9OblbI",
+  authDomain: "icet-alumni.firebaseapp.com",
+  projectId: "icet-alumni",
+  storageBucket: "icet-alumni.firebasestorage.app",
+  messagingSenderId: "707390888790",
+  appId: "1:707390888790:web:57e6be62e4d11e22c214f7"
+});
+const db   = getFirestore(app);
 const auth = getAuth(app);
-const ADMIN = 'eOAyXx3uQzMPJItS8aPLvHgWTQv1';
+const ADMIN    = 'eOAyXx3uQzMPJItS8aPLvHgWTQv1';
 const CL_CLOUD = 'duetiv9rm', CL_PRESET = 'ranaadeem_blog';
 
-const CLASS_LIST = [{"roll": "M09-10CE01", "name": "KASHIF YASIN", "shift": "Morning"}, {"roll": "M09-10CE02", "name": "SAJJAD HUSSAIN", "shift": "Morning"}, {"roll": "M09-10CE03", "name": "ASIM GHAFOOR", "shift": "Morning"}, {"roll": "M09-10CE04", "name": "ABDUL REHMAN", "shift": "Morning"}, {"roll": "M09-10CE05", "name": "IMRAN SARWER", "shift": "Morning"}, {"roll": "M09-10CE06", "name": "ADNAN ZUBAIR KHALID", "shift": "Morning"}, {"roll": "M09-10CE07", "name": "MUHAMMAD SHAHID AMIN", "shift": "Morning"}, {"roll": "M09-10CE08", "name": "WAQAS IQBAL", "shift": "Morning"}, {"roll": "M09-10CE09", "name": "FAHID GHULAM RASOOL", "shift": "Morning"}, {"roll": "M09-10CE10", "name": "NOMAN AHMAD", "shift": "Morning"}, {"roll": "M09-10CE11", "name": "ARSALAN YASIN", "shift": "Morning"}, {"roll": "M09-10CE12", "name": "MUHAMMAD WAQAS", "shift": "Morning"}, {"roll": "M09-10CE13", "name": "SHEHROZE ALI", "shift": "Morning"}, {"roll": "M09-10CE14", "name": "RAMEEZ ANWAR ANSARI", "shift": "Morning"}, {"roll": "M09-10CE15", "name": "QAMMAR-U-DIN", "shift": "Morning"}, {"roll": "M09-10CE16", "name": "SHABBIR RAZA ALI", "shift": "Morning"}, {"roll": "M09-10CE17", "name": "BILAL HASSAN", "shift": "Morning"}, {"roll": "M09-10CE18", "name": "SYED ALI MUSA KAZMI", "shift": "Morning"}, {"roll": "M09-10CE19", "name": "ABUBAKAR SOHAIL", "shift": "Morning"}, {"roll": "M09-10CE20", "name": "SOHAIB REHMAN", "shift": "Morning"}, {"roll": "M09-10CE21", "name": "ABDUL SALAM", "shift": "Morning"}, {"roll": "M09-10CE22", "name": "MUHAMMAD NADEEM", "shift": "Morning"}, {"roll": "M09-10CE23", "name": "MUHAMMAD REHAN KHAN", "shift": "Morning"}, {"roll": "M09-10CE24", "name": "AWAIS YOUNAS", "shift": "Morning"}, {"roll": "M09-10CE25", "name": "UMAR SHEHZAD", "shift": "Morning"}, {"roll": "M09-10CE26", "name": "MUHAMMAD USMAN LATIF", "shift": "Morning"}, {"roll": "M09-10CE27", "name": "SUHAIL AHMED SHAH", "shift": "Morning"}, {"roll": "M09-10CE28", "name": "MUHAMMAD AAMIR SHAHID", "shift": "Morning"}, {"roll": "M09-10CE29", "name": "ADEEL SHAHZAD", "shift": "Morning"}, {"roll": "M09-10CE30", "name": "MUHAMMAD AWAIS AKRAM", "shift": "Morning"}, {"roll": "M09-10CE31", "name": "HAFIZ MUHAMMAD AWAIS", "shift": "Morning"}, {"roll": "M09-10CE32", "name": "MUHAMMAD UMAR FAROOQ", "shift": "Morning"}, {"roll": "M09-10CE33", "name": "ZAID KHALID", "shift": "Morning"}, {"roll": "M09-10CE34", "name": "HAROON SAEED", "shift": "Morning"}, {"roll": "M09-10CE35", "name": "MUHAMMAD USMAN TARIQ", "shift": "Morning"}, {"roll": "M09-10CE36", "name": "SAJID JAMEEL JUT", "shift": "Morning"}, {"roll": "M09-10CE37", "name": "MUHAMMAD SALEEM", "shift": "Morning"}, {"roll": "M09-10CE38", "name": "SAMEE ULLAH", "shift": "Morning"}, {"roll": "M09-10CE39", "name": "MUHAMMAD AMJAD MAJEED", "shift": "Morning"}, {"roll": "M09-10CE40", "name": "NAZIM HASSAN RIZVI", "shift": "Morning"}, {"roll": "M09-10CE41", "name": "SYED AHMAD WAQAS", "shift": "Morning"}, {"roll": "M09-10CE42", "name": "HASSAN ABDUR REHMAN", "shift": "Morning"}, {"roll": "M09-10CE43", "name": "ANEES UR REHMAN", "shift": "Morning"}, {"roll": "M09-10CE44", "name": "ABID MEHMOOD", "shift": "Morning"}, {"roll": "M09-10CE45", "name": "WAQAS AHMAD", "shift": "Morning"}, {"roll": "M09-10CE46", "name": "USMAN NADEEM", "shift": "Morning"}, {"roll": "M09-10CE47", "name": "MUHAMMAD WAQAR", "shift": "Morning"}, {"roll": "M09-10CE48", "name": "ARIF JAN", "shift": "Morning"}, {"roll": "M09-10CE49", "name": "NAYYER MEHMOOD", "shift": "Morning"}, {"roll": "M09-10CE50", "name": "SIDRA ZAHOOR", "shift": "Morning"}, {"roll": "M09-10CE51", "name": "QASIM ALI", "shift": "Morning"}, {"roll": "M09-10CE52", "name": "MUHAMMAD ZAHID", "shift": "Morning"}, {"roll": "M09-10CE53", "name": "JUNAID KHAN", "shift": "Morning"}, {"roll": "M09-10CE54", "name": "TAUHID UL HAQ", "shift": "Morning"}, {"roll": "M09-10CE55", "name": "QUYYUM FURQAN", "shift": "Morning"}, {"roll": "M09-10CE56", "name": "EHTISHAM ALI", "shift": "Morning"}, {"roll": "M09-10PG01", "name": "HAFIZ M. SAIF ULLAH SALEEM", "shift": "Morning"}, {"roll": "M09-10PG02", "name": "MUHAMMAD AFRAZ", "shift": "Morning"}, {"roll": "M09-10PG03", "name": "REHAN ASHRAF", "shift": "Morning"}, {"roll": "M09-10PG04", "name": "AFTAB AHMED", "shift": "Morning"}, {"roll": "M09-10PG05", "name": "AHMED RIAZ KHAN", "shift": "Morning"}, {"roll": "M09-10PG06", "name": "MUHAMMAD ALEEM", "shift": "Morning"}, {"roll": "M09-10PG07", "name": "ASMAT ULLAH QAISRANI", "shift": "Morning"}, {"roll": "M09-10PG08", "name": "ADEEL HASNAIN", "shift": "Morning"}, {"roll": "M09-10PG09", "name": "ILYAS RAZA", "shift": "Morning"}, {"roll": "M09-10PG10", "name": "HAFIZ WAQAS WAQAR", "shift": "Morning"}, {"roll": "M09-10PG11", "name": "HASSAN QADER", "shift": "Morning"}, {"roll": "M09-10PG12", "name": "FARHAN AKHTAR", "shift": "Morning"}, {"roll": "M09-10PG13", "name": "GHULAM MURTAZA", "shift": "Morning"}, {"roll": "M09-10PG14", "name": "HAFIZ ASAD UR REHMAN", "shift": "Morning"}, {"roll": "M09-10PG15", "name": "RIZWAN ASHRAF", "shift": "Morning"}, {"roll": "M09-10PG16", "name": "ZUBAIR AHMED KHOKHAR", "shift": "Morning"}, {"roll": "M09-10PG17", "name": "AHSAN JALEEL", "shift": "Morning"}, {"roll": "M09-10PG18", "name": "MUHAMMAD AYYAZ AMJAD", "shift": "Morning"}, {"roll": "M09-10PG19", "name": "MUHAMMAD HABIB SABIR", "shift": "Morning"}, {"roll": "M09-10PG20", "name": "MUHAMMAD YOUSAF", "shift": "Morning"}, {"roll": "M09-10PG21", "name": "MUHAMMAD MUNEEB SULTAN", "shift": "Morning"}, {"roll": "M09-10PG22", "name": "MUHAMMAD SALMAN IJAZ", "shift": "Morning"}, {"roll": "M09-10PG23", "name": "ALI AYUB", "shift": "Morning"}, {"roll": "E09-10CE01", "name": "MUHAMMAD ARSLAN SARWAR", "shift": "Evening"}, {"roll": "E09-10CE02", "name": "MUHAMMAD QASIM", "shift": "Evening"}, {"roll": "E09-10CE03", "name": "MUHAMMAD UMAR", "shift": "Evening"}, {"roll": "E09-10CE04", "name": "MUHAMMAD ADIL", "shift": "Evening"}, {"roll": "E09-10CE05", "name": "MUHAMMAD ABU BAKAR NASIM", "shift": "Evening"}, {"roll": "E09-10CE06", "name": "HAMZA AMJAD BUTT", "shift": "Evening"}, {"roll": "E09-10CE07", "name": "MUHAMMAD ASIF", "shift": "Evening"}, {"roll": "E09-10CE08", "name": "HAFIZ ATA MUHAY-UD DIN", "shift": "Evening"}, {"roll": "E09-10CE09", "name": "\u2014", "shift": "Evening"}, {"roll": "E09-10CE10", "name": "MUHAMMAD IBRAHEEM SHAH", "shift": "Evening"}, {"roll": "E09-10CE11", "name": "MUHAMMAD ANS RIAZ", "shift": "Evening"}, {"roll": "E09-10CE12", "name": "MUHAMMAD HARIS", "shift": "Evening"}, {"roll": "E09-10CE13", "name": "HAFIZ MUHAMMAD JUNAID KHAN", "shift": "Evening"}, {"roll": "E09-10CE14", "name": "KAZAM HUSSAIN GURMANI", "shift": "Evening"}, {"roll": "E09-10CE15", "name": "MUHAMMAD UMAIR FAROOQ", "shift": "Evening"}, {"roll": "E09-10CE16", "name": "MUHAMMAD ARSHAD KHAN", "shift": "Evening"}, {"roll": "E09-10CE17", "name": "MUHAMMAD WAQAS AJMAL", "shift": "Evening"}, {"roll": "E09-10CE18", "name": "AIZA NASAR", "shift": "Evening"}, {"roll": "E09-10CE19", "name": "RANA MUHAMMAD AQLEEM ULLAH", "shift": "Evening"}, {"roll": "E09-10CE20", "name": "FAIZAN AHMED", "shift": "Evening"}, {"roll": "E09-10CE21", "name": "ADIL ABBAS", "shift": "Evening"}, {"roll": "E09-10CE22", "name": "MUHAMMAD IHSAN UL HAQ", "shift": "Evening"}, {"roll": "E09-10CE23", "name": "SIBTAIN KHALID", "shift": "Evening"}, {"roll": "E09-10CE24", "name": "MUHAMMAD UBAID HAROON", "shift": "Evening"}, {"roll": "E09-10CE25", "name": "ALI WAQAS", "shift": "Evening"}, {"roll": "E09-10CE26", "name": "SHAHZEB HASSAN", "shift": "Evening"}, {"roll": "E09-10CE27", "name": "\u2014", "shift": "Evening"}, {"roll": "E09-10CE28", "name": "MUHAMMAD HASSAN SALEEM", "shift": "Evening"}, {"roll": "E09-10CE29", "name": "WAHEED UR REHMAN", "shift": "Evening"}, {"roll": "E09-10CE30", "name": "ANAS NADEEM", "shift": "Evening"}, {"roll": "E09-10CE31", "name": "UMAIR MAHMOOD", "shift": "Evening"}, {"roll": "E09-10CE32", "name": "SHAHID SARFRAZ", "shift": "Evening"}, {"roll": "E09-10CE33", "name": "ZIAD AKRAM", "shift": "Evening"}, {"roll": "E09-10CE34", "name": "HAFIZ USMAN SAEED", "shift": "Evening"}, {"roll": "E09-10CE35", "name": "UMAR FAROOQ", "shift": "Evening"}, {"roll": "E09-10CE36", "name": "ABID ALI", "shift": "Evening"}, {"roll": "E09-10CE37", "name": "RASHID NAWAZ", "shift": "Evening"}, {"roll": "E09-10CE38", "name": "MOHSIN EHSAN BAIG", "shift": "Evening"}, {"roll": "E09-10CE39", "name": "MUHAMMAD NASIR", "shift": "Evening"}, {"roll": "E09-10CE40", "name": "MUHAMMAD AZEEM SHAUKAT", "shift": "Evening"}, {"roll": "E09-10CE41", "name": "ABU BAKAR EJAZ", "shift": "Evening"}, {"roll": "E09-10CE42", "name": "UMAIR MAHMOOD BHATTI", "shift": "Evening"}, {"roll": "E09-10CE43", "name": "MUHAMMAD IMRAN SAEED", "shift": "Evening"}, {"roll": "E09-10CE44", "name": "HAFIZ ABUZAR AHSAN", "shift": "Evening"}, {"roll": "E09-10CE45", "name": "M. MOHSIN ANWAR", "shift": "Evening"}, {"roll": "E09-10CE46", "name": "SHUJA UR REHMAN", "shift": "Evening"}, {"roll": "E09-10CE47", "name": "MUHAMMAD SABTAIN", "shift": "Evening"}, {"roll": "E09-10PG01", "name": "HASSAN BIN WAHEED", "shift": "Evening"}, {"roll": "E09-10PG02", "name": "MUHAMMAD SAJID QAMAR", "shift": "Evening"}, {"roll": "E09-10PG03", "name": "MUHAMMAD KAMRAN HAIDER", "shift": "Evening"}, {"roll": "E09-10PG04", "name": "SOHAIB MUSHTAQ", "shift": "Evening"}, {"roll": "E09-10PG05", "name": "MUHAMMAD ASIM BABAR", "shift": "Evening"}, {"roll": "E09-10PG06", "name": "YASHIB YOUSAF KAMRAN SAROIA", "shift": "Evening"}, {"roll": "E09-10PG07", "name": "IRFAN YOUSAF", "shift": "Evening"}, {"roll": "E09-10PG08", "name": "SYED ALI AQDUS SHAH", "shift": "Evening"}, {"roll": "E09-10PG09", "name": "HAFIZ MUHAMMAD FAHAD ILYAS", "shift": "Evening"}, {"roll": "E09-10PG10", "name": "MUHAMMAD JAWAD", "shift": "Evening"}, {"roll": "E09-10PG11", "name": "AQSA HASSAN", "shift": "Evening"}, {"roll": "E09-10PG12", "name": "MUHAMMAD ATIF ILYAS", "shift": "Evening"}, {"roll": "E09-10PG13", "name": "SAIF UR REHMAN", "shift": "Evening"}];
+let currentUser = null, currentProfile = null;
+let registeredMap = {}, activeFilter = 'all';
+let galleryPhotos = [], stripPos = 0, stripPaused = false, raf = null, lbPhotoId = null, selPhoto = '';
 
-let registeredMap={}, activeFilter='all', galleryPhotos=[], stripPos=0, stripPaused=false, raf=null, selPhoto='', lbPhotoId=null, currentUser=null;
+const CLASS_LIST = [{"roll": "M09-10CE01", "name": "KASHIF YASIN", "shift": "Morning"}, {"roll": "M09-10CE02", "name": "SAJJAD HUSSAIN", "shift": "Morning"}, {"roll": "M09-10CE03", "name": "ASIM GHAFOOR", "shift": "Morning"}, {"roll": "M09-10CE04", "name": "ABDUL REHMAN", "shift": "Morning"}, {"roll": "M09-10CE05", "name": "IMRAN SARWER", "shift": "Morning"}, {"roll": "M09-10CE06", "name": "ADNAN ZUBAIR KHALID", "shift": "Morning"}, {"roll": "M09-10CE07", "name": "MUHAMMAD SHAHID AMIN", "shift": "Morning"}, {"roll": "M09-10CE08", "name": "WAQAS IQBAL", "shift": "Morning"}, {"roll": "M09-10CE09", "name": "FAHID GHULAM RASOOL", "shift": "Morning"}, {"roll": "M09-10CE10", "name": "NOMAN AHMAD", "shift": "Morning"}, {"roll": "M09-10CE11", "name": "ARSALAN YASIN", "shift": "Morning"}, {"roll": "M09-10CE12", "name": "MUHAMMAD WAQAS", "shift": "Morning"}, {"roll": "M09-10CE13", "name": "SHEHROZE ALI", "shift": "Morning"}, {"roll": "M09-10CE14", "name": "RAMEEZ ANWAR ANSARI", "shift": "Morning"}, {"roll": "M09-10CE15", "name": "QAMMAR-U-DIN", "shift": "Morning"}, {"roll": "M09-10CE16", "name": "SHABBIR RAZA ALI", "shift": "Morning"}, {"roll": "M09-10CE17", "name": "BILAL HASSAN", "shift": "Morning"}, {"roll": "M09-10CE18", "name": "SYED ALI MUSA KAZMI", "shift": "Morning"}, {"roll": "M09-10CE19", "name": "ABUBAKAR SOHAIL", "shift": "Morning"}, {"roll": "M09-10CE20", "name": "SOHAIB REHMAN", "shift": "Morning"}, {"roll": "M09-10CE21", "name": "ABDUL SALAM", "shift": "Morning"}, {"roll": "M09-10CE22", "name": "MUHAMMAD NADEEM", "shift": "Morning"}, {"roll": "M09-10CE23", "name": "MUHAMMAD REHAN KHAN", "shift": "Morning"}, {"roll": "M09-10CE24", "name": "AWAIS YOUNAS", "shift": "Morning"}, {"roll": "M09-10CE25", "name": "UMAR SHEHZAD", "shift": "Morning"}, {"roll": "M09-10CE26", "name": "MUHAMMAD USMAN LATIF", "shift": "Morning"}, {"roll": "M09-10CE27", "name": "SUHAIL AHMED SHAH", "shift": "Morning"}, {"roll": "M09-10CE28", "name": "MUHAMMAD AAMIR SHAHID", "shift": "Morning"}, {"roll": "M09-10CE29", "name": "ADEEL SHAHZAD", "shift": "Morning"}, {"roll": "M09-10CE30", "name": "MUHAMMAD AWAIS AKRAM", "shift": "Morning"}, {"roll": "M09-10CE31", "name": "HAFIZ MUHAMMAD AWAIS", "shift": "Morning"}, {"roll": "M09-10CE32", "name": "MUHAMMAD UMAR FAROOQ", "shift": "Morning"}, {"roll": "M09-10CE33", "name": "ZAID KHALID", "shift": "Morning"}, {"roll": "M09-10CE34", "name": "HAROON SAEED", "shift": "Morning"}, {"roll": "M09-10CE35", "name": "MUHAMMAD USMAN TARIQ", "shift": "Morning"}, {"roll": "M09-10CE36", "name": "SAJID JAMEEL JUT", "shift": "Morning"}, {"roll": "M09-10CE37", "name": "MUHAMMAD SALEEM", "shift": "Morning"}, {"roll": "M09-10CE38", "name": "SAMEE ULLAH", "shift": "Morning"}, {"roll": "M09-10CE39", "name": "MUHAMMAD AMJAD MAJEED", "shift": "Morning"}, {"roll": "M09-10CE40", "name": "NAZIM HASSAN RIZVI", "shift": "Morning"}, {"roll": "M09-10CE41", "name": "SYED AHMAD WAQAS", "shift": "Morning"}, {"roll": "M09-10CE42", "name": "HASSAN ABDUR REHMAN", "shift": "Morning"}, {"roll": "M09-10CE43", "name": "ANEES UR REHMAN", "shift": "Morning"}, {"roll": "M09-10CE44", "name": "ABID MEHMOOD", "shift": "Morning"}, {"roll": "M09-10CE45", "name": "WAQAS AHMAD", "shift": "Morning"}, {"roll": "M09-10CE46", "name": "USMAN NADEEM", "shift": "Morning"}, {"roll": "M09-10CE47", "name": "MUHAMMAD WAQAR", "shift": "Morning"}, {"roll": "M09-10CE48", "name": "ARIF JAN", "shift": "Morning"}, {"roll": "M09-10CE49", "name": "NAYYER MEHMOOD", "shift": "Morning"}, {"roll": "M09-10CE50", "name": "SIDRA ZAHOOR", "shift": "Morning"}, {"roll": "M09-10CE51", "name": "QASIM ALI", "shift": "Morning"}, {"roll": "M09-10CE52", "name": "MUHAMMAD ZAHID", "shift": "Morning"}, {"roll": "M09-10CE53", "name": "JUNAID KHAN", "shift": "Morning"}, {"roll": "M09-10CE54", "name": "TAUHID UL HAQ", "shift": "Morning"}, {"roll": "M09-10CE55", "name": "QUYYUM FURQAN", "shift": "Morning"}, {"roll": "M09-10CE56", "name": "EHTISHAM ALI", "shift": "Morning"}, {"roll": "M09-10PG01", "name": "HAFIZ M. SAIF ULLAH SALEEM", "shift": "Morning"}, {"roll": "M09-10PG02", "name": "MUHAMMAD AFRAZ", "shift": "Morning"}, {"roll": "M09-10PG03", "name": "REHAN ASHRAF", "shift": "Morning"}, {"roll": "M09-10PG04", "name": "AFTAB AHMED", "shift": "Morning"}, {"roll": "M09-10PG05", "name": "AHMED RIAZ KHAN", "shift": "Morning"}, {"roll": "M09-10PG06", "name": "MUHAMMAD ALEEM", "shift": "Morning"}, {"roll": "M09-10PG07", "name": "ASMAT ULLAH QAISRANI", "shift": "Morning"}, {"roll": "M09-10PG08", "name": "ADEEL HASNAIN", "shift": "Morning"}, {"roll": "M09-10PG09", "name": "ILYAS RAZA", "shift": "Morning"}, {"roll": "M09-10PG10", "name": "HAFIZ WAQAS WAQAR", "shift": "Morning"}, {"roll": "M09-10PG11", "name": "HASSAN QADER", "shift": "Morning"}, {"roll": "M09-10PG12", "name": "FARHAN AKHTAR", "shift": "Morning"}, {"roll": "M09-10PG13", "name": "GHULAM MURTAZA", "shift": "Morning"}, {"roll": "M09-10PG14", "name": "HAFIZ ASAD UR REHMAN", "shift": "Morning"}, {"roll": "M09-10PG15", "name": "RIZWAN ASHRAF", "shift": "Morning"}, {"roll": "M09-10PG16", "name": "ZUBAIR AHMED KHOKHAR", "shift": "Morning"}, {"roll": "M09-10PG17", "name": "AHSAN JALEEL", "shift": "Morning"}, {"roll": "M09-10PG18", "name": "MUHAMMAD AYYAZ AMJAD", "shift": "Morning"}, {"roll": "M09-10PG19", "name": "MUHAMMAD HABIB SABIR", "shift": "Morning"}, {"roll": "M09-10PG20", "name": "MUHAMMAD YOUSAF", "shift": "Morning"}, {"roll": "M09-10PG21", "name": "MUHAMMAD MUNEEB SULTAN", "shift": "Morning"}, {"roll": "M09-10PG22", "name": "MUHAMMAD SALMAN IJAZ", "shift": "Morning"}, {"roll": "M09-10PG23", "name": "ALI AYUB", "shift": "Morning"}, {"roll": "E09-10CE01", "name": "MUHAMMAD ARSLAN SARWAR", "shift": "Evening"}, {"roll": "E09-10CE02", "name": "MUHAMMAD QASIM", "shift": "Evening"}, {"roll": "E09-10CE03", "name": "MUHAMMAD UMAR", "shift": "Evening"}, {"roll": "E09-10CE04", "name": "MUHAMMAD ADIL", "shift": "Evening"}, {"roll": "E09-10CE05", "name": "MUHAMMAD ABU BAKAR NASIM", "shift": "Evening"}, {"roll": "E09-10CE06", "name": "HAMZA AMJAD BUTT", "shift": "Evening"}, {"roll": "E09-10CE07", "name": "MUHAMMAD ASIF", "shift": "Evening"}, {"roll": "E09-10CE08", "name": "HAFIZ ATA MUHAY-UD DIN", "shift": "Evening"}, {"roll": "E09-10CE09", "name": "—", "shift": "Evening"}, {"roll": "E09-10CE10", "name": "MUHAMMAD IBRAHEEM SHAH", "shift": "Evening"}, {"roll": "E09-10CE11", "name": "MUHAMMAD ANS RIAZ", "shift": "Evening"}, {"roll": "E09-10CE12", "name": "MUHAMMAD HARIS", "shift": "Evening"}, {"roll": "E09-10CE13", "name": "HAFIZ MUHAMMAD JUNAID KHAN", "shift": "Evening"}, {"roll": "E09-10CE14", "name": "KAZAM HUSSAIN GURMANI", "shift": "Evening"}, {"roll": "E09-10CE15", "name": "MUHAMMAD UMAIR FAROOQ", "shift": "Evening"}, {"roll": "E09-10CE16", "name": "MUHAMMAD ARSHAD KHAN", "shift": "Evening"}, {"roll": "E09-10CE17", "name": "MUHAMMAD WAQAS AJMAL", "shift": "Evening"}, {"roll": "E09-10CE18", "name": "AIZA NASAR", "shift": "Evening"}, {"roll": "E09-10CE19", "name": "RANA MUHAMMAD AQLEEM ULLAH", "shift": "Evening"}, {"roll": "E09-10CE20", "name": "FAIZAN AHMED", "shift": "Evening"}, {"roll": "E09-10CE21", "name": "ADIL ABBAS", "shift": "Evening"}, {"roll": "E09-10CE22", "name": "MUHAMMAD IHSAN UL HAQ", "shift": "Evening"}, {"roll": "E09-10CE23", "name": "SIBTAIN KHALID", "shift": "Evening"}, {"roll": "E09-10CE24", "name": "MUHAMMAD UBAID HAROON", "shift": "Evening"}, {"roll": "E09-10CE25", "name": "ALI WAQAS", "shift": "Evening"}, {"roll": "E09-10CE26", "name": "SHAHZEB HASSAN", "shift": "Evening"}, {"roll": "E09-10CE27", "name": "—", "shift": "Evening"}, {"roll": "E09-10CE28", "name": "MUHAMMAD HASSAN SALEEM", "shift": "Evening"}, {"roll": "E09-10CE29", "name": "WAHEED UR REHMAN", "shift": "Evening"}, {"roll": "E09-10CE30", "name": "ANAS NADEEM", "shift": "Evening"}, {"roll": "E09-10CE31", "name": "UMAIR MAHMOOD", "shift": "Evening"}, {"roll": "E09-10CE32", "name": "SHAHID SARFRAZ", "shift": "Evening"}, {"roll": "E09-10CE33", "name": "ZIAD AKRAM", "shift": "Evening"}, {"roll": "E09-10CE34", "name": "HAFIZ USMAN SAEED", "shift": "Evening"}, {"roll": "E09-10CE35", "name": "UMAR FAROOQ", "shift": "Evening"}, {"roll": "E09-10CE36", "name": "ABID ALI", "shift": "Evening"}, {"roll": "E09-10CE37", "name": "RASHID NAWAZ", "shift": "Evening"}, {"roll": "E09-10CE38", "name": "MOHSIN EHSAN BAIG", "shift": "Evening"}, {"roll": "E09-10CE39", "name": "MUHAMMAD NASIR", "shift": "Evening"}, {"roll": "E09-10CE40", "name": "MUHAMMAD AZEEM SHAUKAT", "shift": "Evening"}, {"roll": "E09-10CE41", "name": "ABU BAKAR EJAZ", "shift": "Evening"}, {"roll": "E09-10CE42", "name": "UMAIR MAHMOOD BHATTI", "shift": "Evening"}, {"roll": "E09-10CE43", "name": "MUHAMMAD IMRAN SAEED", "shift": "Evening"}, {"roll": "E09-10CE44", "name": "HAFIZ ABUZAR AHSAN", "shift": "Evening"}, {"roll": "E09-10CE45", "name": "M. MOHSIN ANWAR", "shift": "Evening"}, {"roll": "E09-10CE46", "name": "SHUJA UR REHMAN", "shift": "Evening"}, {"roll": "E09-10CE47", "name": "MUHAMMAD SABTAIN", "shift": "Evening"}, {"roll": "E09-10PG01", "name": "HASSAN BIN WAHEED", "shift": "Evening"}, {"roll": "E09-10PG02", "name": "MUHAMMAD SAJID QAMAR", "shift": "Evening"}, {"roll": "E09-10PG03", "name": "MUHAMMAD KAMRAN HAIDER", "shift": "Evening"}, {"roll": "E09-10PG04", "name": "SOHAIB MUSHTAQ", "shift": "Evening"}, {"roll": "E09-10PG05", "name": "MUHAMMAD ASIM BABAR", "shift": "Evening"}, {"roll": "E09-10PG06", "name": "YASHIB YOUSAF KAMRAN SAROIA", "shift": "Evening"}, {"roll": "E09-10PG07", "name": "IRFAN YOUSAF", "shift": "Evening"}, {"roll": "E09-10PG08", "name": "SYED ALI AQDUS SHAH", "shift": "Evening"}, {"roll": "E09-10PG09", "name": "HAFIZ MUHAMMAD FAHAD ILYAS", "shift": "Evening"}, {"roll": "E09-10PG10", "name": "MUHAMMAD JAWAD", "shift": "Evening"}, {"roll": "E09-10PG11", "name": "AQSA HASSAN", "shift": "Evening"}, {"roll": "E09-10PG12", "name": "MUHAMMAD ATIF ILYAS", "shift": "Evening"}, {"roll": "E09-10PG13", "name": "SAIF UR REHMAN", "shift": "Evening"}];
 
+// ── Helpers ──────────────────────────────────────────────────────────────────
 function toast(msg){const t=document.getElementById('toast');if(t){t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}}
-
-onAuthStateChanged(auth, u=>{ currentUser=u; if(u) loadPending(); });
-
-async function loadRegistered(){
-  try{
-    const snap=await getDocs(query(collection(db,'alumni'),where('session','in',['2009-Morning','2009-Evening'])));
-    registeredMap={};const countries={},industries={};
-    snap.forEach(d=>{const a=d.data();registeredMap[a.rollNumber]=a;if(a.country)countries[a.country]=(countries[a.country]||0)+1;if(a.industry)industries[a.industry]=(industries[a.industry]||0)+1;});
-    const n=snap.size;
-    document.getElementById('stat-registered').textContent=n;
-    document.getElementById('sidebar-reg').textContent=n;
-    document.getElementById('reg-count').textContent='('+n+')';
-    const cl=Object.keys(countries).length;
-    document.getElementById('stat-countries').textContent=cl||0;
-    document.getElementById('country-list').innerHTML=cl?Object.entries(countries).sort((a,b)=>b[1]-a[1]).map(([c,n])=>`<div style="display:flex;justify-content:space-between;padding:4px 0;font-size:12px;border-bottom:1px solid var(--border);"><span>${c}</span><span style="color:var(--gold);font-weight:600;">${n}</span></div>`).join(''):'<div style="color:var(--muted);font-size:12px;text-align:center;">No data yet</div>';
-    const il=Object.keys(industries).length;
-    document.getElementById('industry-list').innerHTML=il?Object.entries(industries).sort((a,b)=>b[1]-a[1]).map(([i,n])=>`<div style="display:flex;justify-content:space-between;padding:4px 0;font-size:12px;border-bottom:1px solid var(--border);"><span>${i}</span><span style="color:var(--gold);font-weight:600;">${n}</span></div>`).join(''):'<div style="color:var(--muted);font-size:12px;text-align:center;">No data yet</div>';
-    renderGrid();
-  }catch(e){console.error(e);renderGrid();}
+function showGateAlert(msg, type='error') {
+  const el = document.getElementById('gate-alert');
+  el.className = 'gate-alert show gate-alert-' + type;
+  el.innerHTML = msg;
 }
 
-function renderGrid(){
-  const grid=document.getElementById('member-grid');
-  const search=(document.getElementById('search-box').value||'').toLowerCase();
-  const filtered=CLASS_LIST.filter(m=>{
-    if(activeFilter==='registered'&&!registeredMap[m.roll])return false;
-    if(activeFilter==='Morning'&&m.shift!=='Morning')return false;
-    if(activeFilter==='Evening'&&m.shift!=='Evening')return false;
-    if(search&&!m.name.toLowerCase().includes(search)&&!m.roll.toLowerCase().includes(search))return false;
+// ── Gate sign-in ──────────────────────────────────────────────────────────────
+window.handleGateSignIn = async function() {
+  const email = document.getElementById('gate-email').value.trim().toLowerCase();
+  const pw    = document.getElementById('gate-password').value;
+  const btn   = document.getElementById('gate-signin-btn');
+  if (!email || !pw) { showGateAlert('Please enter your email and password.'); return; }
+  btn.disabled = true; btn.textContent = 'Signing in…';
+  try {
+    const cred = await signInWithEmailAndPassword(auth, email, pw);
+    try {
+      const _mapCheck = await getDoc(doc(db, 'alumni_uid_map', cred.user.uid));
+      if (_mapCheck.exists()) {
+        const _profCheck = await getDoc(doc(db, 'alumni', _mapCheck.data().roll));
+        if (_profCheck.exists() && _profCheck.data().emailVerified === false && _profCheck.data().status !== 'approved') {
+          await signOut(auth);
+          showGateAlert('Please verify your email — enter the 6-digit code that was sent to you during registration.');
+          return;
+        }
+      }
+    } catch(_e) { /* allow sign-in if lookup fails */ }
+  } catch(e) {
+    let msg = 'Sign in failed. Please try again.';
+    if (e.code === 'auth/invalid-credential' || e.code === 'auth/wrong-password' || e.code === 'auth/user-not-found') msg = 'Incorrect email or password.';
+    if (e.code === 'auth/too-many-requests') msg = 'Too many attempts. Please wait a moment and try again.';
+    showGateAlert(msg);
+  } finally {
+    btn.disabled = false; btn.textContent = 'Sign In';
+  }
+};
+
+document.getElementById('gate-password').addEventListener('keydown', e => {
+  if (e.key === 'Enter') window.handleGateSignIn();
+});
+
+// ── Forgot password ───────────────────────────────────────────────────────────
+window.handleForgotPassword = async function() {
+  const email = document.getElementById('gate-email').value.trim();
+  if (!email) { showGateAlert('Enter your email address above first, then click Forgot password.'); return; }
+  try {
+    await sendPasswordResetEmail(auth, email);
+    showGateAlert('Password reset email sent! Check your inbox.', 'success');
+  } catch(e) {
+    showGateAlert('Could not send reset email. Check the address is correct.');
+  }
+};
+
+// ── Sign out ──────────────────────────────────────────────────────────────────
+window.handleSignOut = async function() {
+  await signOut(auth);
+};
+
+// ── Auth state ────────────────────────────────────────────────────────────────
+onAuthStateChanged(auth, async user => {
+  currentUser = user;
+  const gate    = document.getElementById('login-gate');
+  const content = document.getElementById('main-content-gate');
+  const signinPanel  = document.getElementById('gate-signin-panel');
+  const pendingPanel = document.getElementById('gate-pending-panel');
+
+  if (!user) {
+    window.location.href = '/alumni/register.html?session=2009';
+    return;
+  }
+
+  // Admin — instant full access
+  if (user.uid === ADMIN) {
+    gate.style.display = 'none';
+    content.style.display = 'block';
+    currentProfile = { name: 'Admin', status: 'approved', uid: ADMIN };
+    buildSessionNav(user);
+    loadRegistered(); loadGallery(); loadPendingPhotos();
+    loadPendingRegistrations(); loadNoticeBoard(); loadAnnouncements();
+    return;
+  }
+
+  // Look up profile via uid map
+  const mapSnap = await getDoc(doc(db, 'alumni_uid_map', user.uid));
+  if (!mapSnap.exists()) {
+    window.location.href = '/alumni/register.html?session=2009';
+    return;
+  }
+
+  const { roll } = mapSnap.data();
+  const profSnap = await getDoc(doc(db, 'alumni', roll));
+  currentProfile = profSnap.exists() ? profSnap.data() : null;
+
+  if (!currentProfile || currentProfile.status === 'pending') {
+    gate.style.display = 'block';
+    content.style.display = 'none';
+    signinPanel.style.display = 'none';
+    pendingPanel.style.display = 'block';
+    buildSessionNav(user);
+    return;
+  }
+
+  // Approved — show content
+  gate.style.display = 'none';
+  content.style.display = 'block';
+  buildSessionNav(user);
+  loadRegistered(); loadGallery(); loadPendingPhotos(); loadNoticeBoard(); loadAnnouncements();
+  if (currentProfile.role === 'moderator') loadPendingRegistrations();
+});
+
+// ── Session nav bar ───────────────────────────────────────────────────────────
+function buildSessionNav(user) {
+  const area = document.getElementById('session-user-area');
+  if (!area) return;
+  if (!user) { area.innerHTML = ''; return; }
+  const name = currentProfile?.name || user.email.split('@')[0];
+  const isAdminOrMod = (user.uid === ADMIN) || (currentProfile?.role === 'moderator');
+  area.innerHTML = `
+    <div style="display:flex;align-items:center;gap:8px;">
+      <div style="width:28px;height:28px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--navy);">${name.charAt(0).toUpperCase()}</div>
+      <span style="font-size:12px;color:rgba(255,255,255,0.85);">${name.split(' ')[0]}</span>
+      ${isAdminOrMod ? '<a href="/alumni/admin.html" style="background:rgba(201,168,76,.2);color:var(--gold);border:1px solid rgba(201,168,76,.4);padding:4px 10px;border-radius:5px;font-size:11px;font-weight:600;text-decoration:none;">⚙ Admin</a>' : ''}
+      <button onclick="handleSignOut()" style="background:transparent;color:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.25);padding:4px 10px;border-radius:5px;font-size:11px;cursor:pointer;font-family:inherit;">Sign Out</button>
+    </div>`;
+}
+
+// ── Load registered members ───────────────────────────────────────────────────
+async function loadRegistered() {
+  try {
+    const snap = await getDocs(query(collection(db,'alumni'), where('status','==','approved')));
+    registeredMap = {};
+    const countries = {}, industries = {};
+    snap.forEach(d => {
+      const a = d.data();
+      const sessionYear = (a.session||'').split('-')[0];
+      if (sessionYear !== '2009') return;
+      registeredMap[a.roll] = a;
+      if (a.country) countries[a.country] = (countries[a.country]||0) + 1;
+      if (a.industry) industries[a.industry] = (industries[a.industry]||0) + 1;
+    });
+    const n = Object.keys(registeredMap).length;
+    document.getElementById('stat-registered').textContent = n;
+    document.getElementById('sidebar-reg').textContent = n;
+    document.getElementById('reg-count').textContent = '(' + n + ')';
+    document.getElementById('stat-countries').textContent = Object.keys(countries).length || 0;
+    const cl = document.getElementById('country-list');
+    const il = document.getElementById('industry-list');
+    cl.innerHTML = Object.keys(countries).length
+      ? Object.entries(countries).sort((a,b)=>b[1]-a[1]).map(([c,n])=>`<div style="display:flex;justify-content:space-between;padding:4px 0;font-size:12px;border-bottom:1px solid var(--border);"><span>${c}</span><span style="color:var(--gold);font-weight:600;">${n}</span></div>`).join('')
+      : '<div style="color:var(--muted);font-size:12px;text-align:center;">No data yet</div>';
+    il.innerHTML = Object.keys(industries).length
+      ? Object.entries(industries).sort((a,b)=>b[1]-a[1]).map(([i,n])=>`<div style="display:flex;justify-content:space-between;padding:4px 0;font-size:12px;border-bottom:1px solid var(--border);"><span>${i}</span><span style="color:var(--gold);font-weight:600;">${n}</span></div>`).join('')
+      : '<div style="color:var(--muted);font-size:12px;text-align:center;">No data yet</div>';
+    renderGrid();
+  } catch(e) { console.error(e); renderGrid(); }
+}
+
+function renderGrid() {
+  const grid   = document.getElementById('member-grid');
+  const search = (document.getElementById('search-box').value||'').toLowerCase();
+  const filtered = CLASS_LIST.filter(m => {
+    if (activeFilter === 'registered' && !registeredMap[m.roll]) return false;
+    if (activeFilter === 'Morning'    && m.shift !== 'Morning')  return false;
+    if (activeFilter === 'Evening'    && m.shift !== 'Evening')  return false;
+    if (search && !m.name.toLowerCase().includes(search) && !m.roll.toLowerCase().includes(search)) return false;
     return true;
   });
-  if(!filtered.length){grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--muted);">No members found.</div>';return;}
-  grid.innerHTML='';
-  filtered.forEach(m=>{
-    const reg=registeredMap[m.roll];
-    const ini=m.name.split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase();
-    const el=document.createElement('div');el.className='member-card'+(reg?'':' unregistered');
-    el.innerHTML=`<div class="member-avatar">${reg?.photoBase64?`<img src="${reg.photoBase64}" alt="${m.name}">`:ini}</div><div class="member-name">${reg?.name||m.name}</div><div class="member-roll">${m.roll}</div><span class="shift-badge shift-${m.shift.toLowerCase()}">${m.shift}</span>${reg?.jobTitle?`<div class="member-detail">💼 ${reg.jobTitle}</div>`:''}${reg?.employer?`<div class="member-detail">🏢 ${reg.employer}</div>`:''}${reg?.country?`<div class="member-detail">📍 ${reg.city?reg.city+', ':''}${reg.country}</div>`:''}${!reg?'<div style="font-size:10px;color:var(--muted);margin-top:4px;">Not registered yet</div>':''}`;
+  if (!filtered.length) { grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--muted);">No members found.</div>'; return; }
+  grid.innerHTML = '';
+  filtered.forEach(m => {
+    const reg = registeredMap[m.roll];
+    const ini = m.name.split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase();
+    const el  = document.createElement('div');
+    el.className = 'member-card' + (reg ? '' : ' unregistered');
+    const photoHtml = reg?.photoUrl
+      ? `<img src="${reg.photoUrl}" alt="${m.name}" style="width:100%;height:100%;object-fit:cover;">`
+      : (reg?.photoBase64
+        ? `<img src="${reg.photoBase64}" alt="${m.name}" style="width:100%;height:100%;object-fit:cover;">`
+        : ini);
+    el.innerHTML = `<div class="member-avatar">${photoHtml}</div>
+      <div class="member-name">${reg?.name||m.name}</div>
+      <div class="member-roll">${m.roll}</div>
+      <span class="shift-badge shift-${m.shift.toLowerCase()}">${m.shift}</span>
+      ${reg?.position  ? `<div class="member-detail">💼 ${reg.position}</div>`  : (reg?.jobTitle ? `<div class="member-detail">💼 ${reg.jobTitle}</div>` : '')}
+      ${reg?.employer  ? `<div class="member-detail">🏢 ${reg.employer}</div>`  : ''}
+      ${reg?.country   ? `<div class="member-detail">📍 ${reg.city?reg.city+', ':''}${reg.country}</div>` : ''}
+      ${reg ? `<div style="font-size:10px;color:var(--navy);margin-top:5px;font-weight:600;">View Profile →</div>` : '<div style="font-size:10px;color:var(--muted);margin-top:4px;">Not registered yet</div>'}`;
+    if (reg) {
+      el.style.cursor = 'pointer';
+      el.addEventListener('click', () => window.location.href = '/alumni/profile.html?roll=' + m.roll);
+    }
     grid.appendChild(el);
   });
 }
 
-window.setFilter=function(f,btn){activeFilter=f;document.querySelectorAll('.filter-chip').forEach(t=>t.classList.remove('active'));btn.classList.add('active');renderGrid();};
+window.setFilter = function(f, btn) {
+  activeFilter = f;
+  document.querySelectorAll('.filter-chip').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  renderGrid();
+};
 
-async function loadGallery(){
-  try{
-    const snap=await getDocs(query(collection(db,'session_photos'),where('session','==','2009'),where('status','==','approved')));
-    galleryPhotos=[];snap.forEach(d=>galleryPhotos.push({id:d.id,...d.data()}));
-    galleryPhotos.sort((a,b)=>(b.uploadedAt?.seconds||0)-(a.uploadedAt?.seconds||0));
+// ── Gallery ───────────────────────────────────────────────────────────────────
+async function loadGallery() {
+  try {
+    const snap = await getDocs(query(collection(db,'session_photos'), where('session','==','2009'), where('status','==','approved')));
+    galleryPhotos = [];
+    snap.forEach(d => galleryPhotos.push({id:d.id,...d.data()}));
+    galleryPhotos.sort((a,b) => (b.uploadedAt?.seconds||0) - (a.uploadedAt?.seconds||0));
     renderStrip();
-  }catch(e){console.error(e);}
+  } catch(e) { console.error(e); }
 }
 
-async function loadPending(){
-  if(!currentUser||currentUser.uid!==ADMIN)return;
-  if(document.getElementById('pending-bar'))return;
-  const snap=await getDocs(query(collection(db,'session_photos'),where('session','==','2009'),where('status','==','pending')));
-  if(snap.empty)return;
-  const bar=document.createElement('div');bar.id='pending-bar';
-  bar.style.cssText='background:#fef9e7;border:1px solid #f59e0b;border-radius:10px;padding:1rem;margin-bottom:1rem;';
-  bar.innerHTML='<div style="font-size:13px;font-weight:600;color:#92400e;margin-bottom:0.5rem;">⏳ Pending Photos ('+snap.size+')</div>';
-  const pg=document.createElement('div');pg.style.cssText='display:flex;gap:0.5rem;flex-wrap:wrap;';
-  snap.forEach(d=>{const p={id:d.id,...d.data()};const w=document.createElement('div');
-    w.innerHTML=`<img src="${p.url}" style="width:90px;height:65px;object-fit:cover;border-radius:6px;border:2px solid #f59e0b;display:block;"><div style="font-size:10px;color:#92400e;margin-top:2px;max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${p.uploaderName||''}</div><div style="display:flex;gap:3px;margin-top:3px;"><button onclick="approvePhoto('${p.id}')" style="background:#059669;color:white;border:none;padding:2px 6px;border-radius:4px;font-size:11px;cursor:pointer;">✅</button><button onclick="rejectPhoto('${p.id}')" style="background:#dc2626;color:white;border:none;padding:2px 6px;border-radius:4px;font-size:11px;cursor:pointer;">🗑</button></div>`;
-    pg.appendChild(w);});
-  bar.appendChild(pg);const gs=document.getElementById('gallery-section');if(gs)gs.prepend(bar);
+async function loadPendingPhotos() {
+  if (!currentUser || currentUser.uid !== ADMIN) return;
+  if (document.getElementById('pending-photos-bar')) return;
+  const snap = await getDocs(query(collection(db,'session_photos'), where('session','==','2009'), where('status','==','pending')));
+  if (snap.empty) return;
+  const bar = document.createElement('div');
+  bar.id = 'pending-photos-bar';
+  bar.style.cssText = 'background:#fef9e7;border:1px solid #f59e0b;border-radius:10px;padding:1rem;margin-bottom:1rem;';
+  bar.innerHTML = '<div style="font-size:13px;font-weight:600;color:#92400e;margin-bottom:0.5rem;">⏳ Pending Photos (' + snap.size + ')</div>';
+  const pg = document.createElement('div'); pg.style.cssText = 'display:flex;gap:0.5rem;flex-wrap:wrap;';
+  snap.forEach(d => {
+    const p = {id:d.id,...d.data()};
+    const w = document.createElement('div');
+    w.innerHTML = `<img src="${p.url}" style="width:90px;height:65px;object-fit:cover;border-radius:6px;border:2px solid #f59e0b;display:block;">
+      <div style="font-size:10px;color:#92400e;margin-top:2px;max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${p.uploaderName||''}</div>
+      <div style="display:flex;gap:3px;margin-top:3px;">
+        <button onclick="approvePhoto('${p.id}')" style="background:#059669;color:white;border:none;padding:2px 6px;border-radius:4px;font-size:11px;cursor:pointer;">✅</button>
+        <button onclick="rejectPhoto('${p.id}')"  style="background:#dc2626;color:white;border:none;padding:2px 6px;border-radius:4px;font-size:11px;cursor:pointer;">🗑</button>
+      </div>`;
+    pg.appendChild(w);
+  });
+  bar.appendChild(pg);
+  const gs = document.getElementById('gallery-section');
+  if (gs) gs.prepend(bar);
 }
 
-window.approvePhoto=async function(id){try{await updateDoc(doc(db,'session_photos',id),{status:'approved'});toast('Approved ✓');location.reload();}catch(e){alert('Error: '+e.message);}};
-window.rejectPhoto=async function(id){if(!confirm('Delete?'))return;try{await deleteDoc(doc(db,'session_photos',id));toast('Rejected.');location.reload();}catch(e){alert('Error: '+e.message);}};
+window.approvePhoto = async function(id) { try { await updateDoc(doc(db,'session_photos',id),{status:'approved'}); toast('Approved ✓'); location.reload(); } catch(e) { alert(e.message); } };
+window.rejectPhoto  = async function(id) { if (!confirm('Delete?')) return; try { await deleteDoc(doc(db,'session_photos',id)); toast('Rejected.'); location.reload(); } catch(e) { alert(e.message); } };
 
-function renderStrip(){
-  const strip=document.getElementById('photo-strip');
-  const empty=document.getElementById('gallery-empty');
-  const btn=document.getElementById('view-all-btn');
-  const countEl=document.getElementById('photo-count');
-  if(countEl)countEl.textContent=galleryPhotos.length;
-  if(btn){btn.style.display=galleryPhotos.length>10?'inline-block':'none';if(galleryPhotos.length>10)btn.textContent='View All '+galleryPhotos.length+' Photos →';}
-  if(!galleryPhotos.length){strip.style.display='none';if(empty)empty.style.display='flex';return;}
-  strip.style.display='flex';if(empty)empty.style.display='none';
-  strip.innerHTML='';
-  const sp=galleryPhotos.slice(0,10);
-  const photos=sp.length<5?[...sp,...sp,...sp]:[...sp,...sp];
-  photos.forEach(p=>{const img=document.createElement('img');img.src=p.url;img.className='gallery-photo';img.alt=p.caption||'';img.title=p.caption||'';img.addEventListener('click',()=>openLb(p));strip.appendChild(img);});
+function renderStrip() {
+  const strip   = document.getElementById('photo-strip');
+  const empty   = document.getElementById('gallery-empty');
+  const btn     = document.getElementById('view-all-btn');
+  const countEl = document.getElementById('photo-count');
+  if (countEl) countEl.textContent = galleryPhotos.length;
+  if (btn) { btn.style.display = galleryPhotos.length > 10 ? 'inline-block' : 'none'; if (galleryPhotos.length > 10) btn.textContent = 'View All ' + galleryPhotos.length + ' Photos →'; }
+  if (!galleryPhotos.length) { strip.style.display = 'none'; if (empty) empty.style.display = 'flex'; return; }
+  strip.style.display = 'flex'; if (empty) empty.style.display = 'none';
+  strip.innerHTML = '';
+  const sp = galleryPhotos.slice(0,10);
+  const photos = sp.length < 5 ? [...sp,...sp,...sp] : [...sp,...sp];
+  photos.forEach(p => {
+    const img = document.createElement('img');
+    img.src = p.url; img.className = 'gallery-photo'; img.alt = p.caption||''; img.title = p.caption||'';
+    img.addEventListener('click', () => openLb(p));
+    strip.appendChild(img);
+  });
   startStrip(strip);
 }
 
-function startStrip(strip){
+function startStrip(strip) {
   cancelAnimationFrame(raf);
-  const wrap=strip.parentElement;
-  let lt=null;
-  function animate(ts){
-    if(!stripPaused){if(lt)stripPos+=0.2*(ts-lt);lt=ts;const tw=strip.scrollWidth/2;if(stripPos>=tw)stripPos=0;strip.style.transform='translateX(-'+stripPos+'px)';}else{lt=null;}
-    raf=requestAnimationFrame(animate);
+  let lt = null;
+  function animate(ts) {
+    if (!stripPaused) { if (lt) stripPos += 0.2*(ts-lt); lt = ts; const tw = strip.scrollWidth/2; if (stripPos >= tw) stripPos = 0; strip.style.transform = 'translateX(-'+stripPos+'px)'; } else { lt = null; }
+    raf = requestAnimationFrame(animate);
   }
-  raf=requestAnimationFrame(animate);
-  wrap.addEventListener('mouseenter',()=>stripPaused=true,{once:false});
-  wrap.addEventListener('mouseleave',()=>stripPaused=false,{once:false});
+  raf = requestAnimationFrame(animate);
+  strip.parentElement.addEventListener('mouseenter', () => stripPaused = true);
+  strip.parentElement.addEventListener('mouseleave', () => stripPaused = false);
 }
 
-function openLb(photo){
-  lbPhotoId=photo.id;
-  document.getElementById('lightbox-img').src=photo.url;
-  document.getElementById('lightbox-caption').textContent=photo.caption||'';
-  document.getElementById('lightbox-uploader').textContent=photo.uploaderName?'Shared by '+photo.uploaderName:'';
-  const aa=document.getElementById('lightbox-admin-actions');if(aa)aa.style.display=(currentUser&&currentUser.uid===ADMIN)?'block':'none';
-  document.getElementById('lightbox').style.display='flex';
+function openLb(photo) {
+  lbPhotoId = photo.id;
+  document.getElementById('lightbox-img').src = photo.url;
+  document.getElementById('lightbox-caption').textContent = photo.caption||'';
+  document.getElementById('lightbox-uploader').textContent = photo.uploaderName ? 'Shared by '+photo.uploaderName : '';
+  const aa = document.getElementById('lightbox-admin-actions');
+  if (aa) aa.style.display = (currentUser && currentUser.uid === ADMIN) ? 'block' : 'none';
+  document.getElementById('lightbox').style.display = 'flex';
 }
-window.closeLightbox=function(){document.getElementById('lightbox').style.display='none';};
-window.deleteApprovedPhoto=async function(){if(!lbPhotoId)return;if(!confirm('Delete permanently?'))return;try{await deleteDoc(doc(db,'session_photos',lbPhotoId));closeLightbox();toast('Deleted ✓');loadGallery();}catch(e){toast('Error: '+e.message);}};
-window.openPhotoGrid=function(){
-  const modal=document.getElementById('photo-grid-modal'),grid=document.getElementById('photo-grid-inner'),count=document.getElementById('grid-count');
-  if(count)count.textContent='('+galleryPhotos.length+')';grid.innerHTML='';
-  galleryPhotos.forEach(p=>{const w=document.createElement('div');w.style.cssText='position:relative;cursor:pointer;border-radius:8px;overflow:hidden;aspect-ratio:4/3;';
-    const img=document.createElement('img');img.src=p.url;img.style.cssText='width:100%;height:100%;object-fit:cover;transition:transform 0.2s;';
-    w.addEventListener('mouseenter',()=>img.style.transform='scale(1.05)');w.addEventListener('mouseleave',()=>img.style.transform='scale(1)');
-    w.addEventListener('click',()=>{closePhotoGrid();setTimeout(()=>openLb(p),100);});
-    if(p.caption){const cap=document.createElement('div');cap.style.cssText='position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,0.7));padding:0.4rem;font-size:11px;color:white;';cap.textContent=p.caption;w.appendChild(cap);}
-    w.appendChild(img);grid.appendChild(w);});
-  modal.style.display='block';
+window.closeLightbox    = function() { document.getElementById('lightbox').style.display = 'none'; };
+window.deleteApprovedPhoto = async function() { if (!lbPhotoId) return; if (!confirm('Delete permanently?')) return; try { await deleteDoc(doc(db,'session_photos',lbPhotoId)); closeLightbox(); toast('Deleted ✓'); loadGallery(); } catch(e) { toast('Error: '+e.message); } };
+window.openPhotoGrid    = function() {
+  const modal = document.getElementById('photo-grid-modal'), grid = document.getElementById('photo-grid-inner'), count = document.getElementById('grid-count');
+  if (count) count.textContent = '(' + galleryPhotos.length + ')';
+  grid.innerHTML = '';
+  galleryPhotos.forEach(p => {
+    const w = document.createElement('div'); w.style.cssText = 'position:relative;cursor:pointer;border-radius:8px;overflow:hidden;aspect-ratio:4/3;';
+    const img = document.createElement('img'); img.src = p.url; img.style.cssText = 'width:100%;height:100%;object-fit:cover;transition:transform 0.2s;';
+    w.addEventListener('mouseenter', () => img.style.transform = 'scale(1.05)');
+    w.addEventListener('mouseleave', () => img.style.transform = 'scale(1)');
+    w.addEventListener('click', () => { closePhotoGrid(); setTimeout(() => openLb(p), 100); });
+    if (p.caption) { const cap = document.createElement('div'); cap.style.cssText = 'position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,0.7));padding:0.4rem;font-size:11px;color:white;'; cap.textContent = p.caption; w.appendChild(cap); }
+    w.appendChild(img); grid.appendChild(w);
+  });
+  modal.style.display = 'block';
 };
-window.closePhotoGrid=function(){document.getElementById('photo-grid-modal').style.display='none';};
-window.closeUploadModal=function(){document.getElementById('upload-modal').style.display='none';['photo-caption','photo-uploader'].forEach(id=>document.getElementById(id).value='');['upload-error','upload-success','upload-preview-wrap'].forEach(id=>document.getElementById(id).style.display='none');selPhoto='';};
-window.handlePhotoSelect=function(input){const file=input.files[0];if(!file)return;if(file.size>5*1024*1024){document.getElementById('upload-error').textContent='Max 5MB.';document.getElementById('upload-error').style.display='block';return;}const r=new FileReader();r.onload=e=>{selPhoto=e.target.result;document.getElementById('upload-preview').src=selPhoto;document.getElementById('upload-preview-wrap').style.display='block';document.getElementById('upload-drop').style.display='none';};r.readAsDataURL(file);};
-window.submitPhoto=async function(){
-  const name=document.getElementById('photo-uploader').value.trim(),caption=document.getElementById('photo-caption').value.trim();
-  const err=document.getElementById('upload-error'),suc=document.getElementById('upload-success');err.style.display='none';
-  if(currentUser?.uid!==ADMIN&&!currentProfile?.session?.startsWith('2009')){err.textContent='Only Session 2009 members can share photos here.';err.style.display='block';return;}
-  if(!selPhoto){err.textContent='Please select a photo.';err.style.display='block';return;}
-  if(!name){err.textContent='Please enter your name.';err.style.display='block';return;}
-  const btn=document.getElementById('upload-btn');btn.disabled=true;btn.textContent='Uploading...';
-  try{
-    const res=await fetch(selPhoto);const blob=await res.blob();
-    const fd=new FormData();fd.append('file',blob,'photo.jpg');fd.append('upload_preset',CL_PRESET);
-    const cd=await(await fetch('https://api.cloudinary.com/v1_1/'+CL_CLOUD+'/image/upload',{method:'POST',body:fd})).json();
-    if(!cd.secure_url)throw new Error('Upload failed');
-    await addDoc(collection(db,'session_photos'),{session:'2009',url:cd.secure_url,caption,uploaderName:name,status:'pending',uploadedAt:serverTimestamp()});
-    suc.textContent='✅ Submitted! Will appear after review.';suc.style.display='block';btn.textContent='Submitted ✓';
-    fetch('/api/send-email',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({type:'photo-submission',data:{session:'2009',uploaderName:name,caption}})}). catch(()=>{});
-  }catch(e){err.textContent='Error: '+e.message;err.style.display='block';btn.disabled=false;btn.textContent='Submit for Review';}
+window.closePhotoGrid   = function() { document.getElementById('photo-grid-modal').style.display = 'none'; };
+window.closeUploadModal = function() {
+  document.getElementById('upload-modal').style.display = 'none';
+  ['photo-caption','photo-uploader'].forEach(id => document.getElementById(id).value = '');
+  ['upload-error','upload-success','upload-preview-wrap'].forEach(id => document.getElementById(id).style.display = 'none');
+  document.getElementById('upload-drop').style.display = 'block';
+  selPhoto = '';
 };
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){closePhotoGrid();closeLightbox();}});
-window.submitReport = async function() {
-  const type = document.getElementById('report-type').value;
-  const roll = document.getElementById('report-roll').value.trim();
-  const details = document.getElementById('report-details').value.trim();
-  const errEl = document.getElementById('report-error');
-  errEl.style.display = 'none';
-  if (!type) { errEl.textContent = 'Please select an issue type.'; errEl.style.display = 'block'; return; }
-  if (!roll) { errEl.textContent = 'Please enter the roll number.'; errEl.style.display = 'block'; return; }
+window.handlePhotoSelect = function(input) {
+  const file = input.files[0]; if (!file) return;
+  if (file.size > 5*1024*1024) { document.getElementById('upload-error').textContent = 'Max 5MB.'; document.getElementById('upload-error').style.display = 'block'; return; }
+  const r = new FileReader(); r.onload = e => { selPhoto = e.target.result; document.getElementById('upload-preview').src = selPhoto; document.getElementById('upload-preview-wrap').style.display = 'block'; document.getElementById('upload-drop').style.display = 'none'; }; r.readAsDataURL(file);
+};
+window.submitPhoto = async function() {
+  const name = document.getElementById('photo-uploader').value.trim(), caption = document.getElementById('photo-caption').value.trim();
+  const err = document.getElementById('upload-error'), suc = document.getElementById('upload-success'); err.style.display = 'none';
+  if (currentUser?.uid !== ADMIN && !currentProfile?.session?.startsWith('2009')) { err.textContent = 'Only Session 2009 members can share photos here.'; err.style.display = 'block'; return; }
+  if (!selPhoto) { err.textContent = 'Please select a photo.'; err.style.display = 'block'; return; }
+  if (!name)     { err.textContent = 'Please enter your name.'; err.style.display = 'block'; return; }
+  const btn = document.getElementById('upload-btn'); btn.disabled = true; btn.textContent = 'Uploading...';
   try {
-    await addDoc(collection(db,'reports'), { session:'2009', type, roll, details, status:'pending', submittedAt:serverTimestamp() });
-    document.getElementById('report-form').style.display = 'none';
+    const res = await fetch(selPhoto); const blob = await res.blob();
+    const fd = new FormData(); fd.append('file',blob,'photo.jpg'); fd.append('upload_preset',CL_PRESET);
+    const cd = await (await fetch('https://api.cloudinary.com/v1_1/'+CL_CLOUD+'/image/upload',{method:'POST',body:fd})).json();
+    if (!cd.secure_url) throw new Error('Upload failed');
+    await addDoc(collection(db,'session_photos'),{session:'2009',url:cd.secure_url,caption,uploaderName:name,status:'pending',uploadedAt:serverTimestamp()});
+    suc.textContent = '✅ Submitted! Will appear after review.'; suc.style.display = 'block'; btn.textContent = 'Submitted ✓';
+    fetch('/api/send-email',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({type:'photo-submission',data:{session:'2009',uploaderName:name,caption}})}).catch(()=>{});
+  } catch(e) { err.textContent = 'Error: '+e.message; err.style.display = 'block'; btn.disabled = false; btn.textContent = 'Submit for Review'; }
+};
+
+// ── Pending registrations (admin/moderator) ───────────────────────────────────
+async function loadPendingRegistrations() {
+  if (document.getElementById('pending-reg-bar')) return;
+  try {
+    const snap = await getDocs(query(collection(db,'alumni'), where('status','==','pending')));
+    const pending2009 = [];
+    snap.forEach(d => {
+      const a = d.data();
+      const sessionYear = (a.session||'').split('-')[0];
+      if (sessionYear === '2009') pending2009.push({id:d.id,...a});
+    });
+    if (!pending2009.length) return;
+    const bar = document.createElement('div'); bar.id = 'pending-reg-bar';
+    bar.style.cssText = 'background:#fef9e7;border:1px solid #f59e0b;border-radius:10px;padding:1rem;margin-bottom:1rem;';
+    bar.innerHTML = '<div style="font-size:13px;font-weight:600;color:#92400e;margin-bottom:0.75rem;">⏳ Pending Registrations (' + pending2009.length + ')</div>';
+    const grid = document.createElement('div'); grid.style.cssText = 'display:flex;gap:0.5rem;flex-wrap:wrap;';
+    pending2009.forEach(p => {
+      const w = document.createElement('div'); w.style.cssText = 'background:white;border:1px solid #f59e0b;border-radius:8px;padding:0.75rem;min-width:180px;';
+      w.innerHTML = `<div style="font-size:13px;font-weight:600;color:var(--navy);">${p.name}</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:2px;">${p.roll} · Session ${p.session}</div>
+        <div style="font-size:11px;color:var(--muted);">${p.city||''}${p.city&&p.country?', ':''}${p.country||''}</div>
+        <div style="display:flex;gap:4px;margin-top:8px;">
+          <button onclick="approveRegistration('${p.roll}')" style="background:#059669;color:white;border:none;padding:4px 10px;border-radius:5px;font-size:11px;cursor:pointer;font-family:inherit;">✅ Approve</button>
+          <button onclick="rejectRegistration('${p.roll}')"  style="background:#dc2626;color:white;border:none;padding:4px 10px;border-radius:5px;font-size:11px;cursor:pointer;font-family:inherit;">🗑 Reject</button>
+        </div>`;
+      grid.appendChild(w);
+    });
+    bar.appendChild(grid);
+    const wrap = document.querySelector('.page-wrap');
+    if (wrap) wrap.prepend(bar);
+  } catch(e) { console.error(e); }
+}
+
+window.approveRegistration = async function(roll) {
+  try {
+    await updateDoc(doc(db,'alumni',roll), {status:'approved', approvedAt: serverTimestamp()});
+    toast('Approved ✓'); location.reload();
+  } catch(e) { alert('Error: '+e.message); }
+};
+window.rejectRegistration = async function(roll) {
+  if (!confirm('Reject and delete this registration?')) return;
+  try { await deleteDoc(doc(db,'alumni',roll)); toast('Rejected.'); location.reload(); } catch(e) { alert(e.message); }
+};
+
+// ── Notice Board ──────────────────────────────────────────────────────────────
+async function loadNoticeBoard() {
+  const container = document.getElementById('notices-container'); if (!container) return;
+  try {
+    const snap = await getDocs(query(collection(db,'notices'), where('session','==','2009'), where('approved','==',true)));
+    const items = []; snap.forEach(d => items.push({id:d.id,...d.data()}));
+    items.sort((a,b) => (b.createdAt?.seconds||0) - (a.createdAt?.seconds||0));
+    if (!items.length) { container.innerHTML = '<div style="text-align:center;padding:2rem;color:var(--muted);font-size:13px;">No posts yet. Be the first!</div>'; return; }
+    container.innerHTML = '';
+    items.forEach(n => {
+      const date = n.createdAt ? new Date(n.createdAt.seconds*1000).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}) : '';
+      const init = (n.authorName||'?').split(' ').map(w=>w[0]).slice(0,2).join('');
+      const card = document.createElement('div');
+      card.style.cssText = 'background:white;border:1px solid var(--border);border-radius:10px;padding:1rem;margin-bottom:0.75rem;';
+      card.innerHTML = `<div style="display:flex;align-items:center;gap:10px;margin-bottom:0.5rem;">
+        <div style="width:36px;height:36px;border-radius:50%;background:var(--navy);border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--gold);flex-shrink:0;">${init}</div>
+        <div><div style="font-size:13px;font-weight:600;color:var(--navy);">${n.authorName}</div><div style="font-size:11px;color:#9ca3af;">${date}</div></div>
+        ${currentUser?.uid === ADMIN ? `<button onclick="deleteNotice('${n.id}',this)" style="margin-left:auto;background:none;border:none;color:#dc2626;cursor:pointer;font-size:12px;">🗑</button>` : ''}
+      </div><div style="font-size:14px;color:var(--text);line-height:1.65;">${n.text}</div>`;
+      container.appendChild(card);
+    });
+  } catch(e) { console.error(e); }
+}
+
+window.deleteNotice = async function(id, btn) {
+  if (!confirm('Delete this post?')) return;
+  try { await deleteDoc(doc(db,'notices',id)); btn.closest('div[style]').remove(); toast('Deleted.'); } catch(e) { alert(e.message); }
+};
+
+// ── Announcements ─────────────────────────────────────────────────────────────
+async function loadAnnouncements() {
+  const container = document.getElementById('announcements-container'); if (!container) return;
+  try {
+    const snap = await getDocs(query(collection(db,'announcements'), where('session','==','2009'), where('approved','==',true)));
+    const items = []; snap.forEach(d => items.push({id:d.id,...d.data()}));
+    items.sort((a,b) => (b.createdAt?.seconds||0) - (a.createdAt?.seconds||0));
+    if (!items.length) { container.innerHTML = '<div style="text-align:center;padding:2rem;color:var(--muted);font-size:13px;">No announcements yet.</div>'; return; }
+    const tl = {job:'Job Update',achievement:'Achievement',news:'News',other:'Update'};
+    const tc = {job:'background:#eff6ff;color:#1d4ed8',achievement:'background:#f0fdf4;color:#166534',news:'background:#fff7ed;color:#9a3412',other:'background:#f3f4f6;color:#6b7280'};
+    container.innerHTML = '';
+    items.forEach(a => {
+      const date = a.createdAt ? new Date(a.createdAt.seconds*1000).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}) : '';
+      const card = document.createElement('div');
+      card.style.cssText = 'background:white;border:1px solid var(--border);border-radius:10px;padding:1rem;margin-bottom:0.75rem;';
+      card.innerHTML = `<span style="font-size:11px;font-weight:600;padding:3px 10px;border-radius:12px;display:inline-block;margin-bottom:6px;${tc[a.type]||tc.other}">${tl[a.type]||'Update'}</span>
+        <div style="font-size:14px;font-weight:600;color:var(--navy);margin-bottom:4px;">${a.title}</div>
+        ${a.body ? `<div style="font-size:13px;color:#6b7280;line-height:1.6;">${a.body}</div>` : ''}
+        <div style="font-size:11px;color:#9ca3af;margin-top:6px;">By ${a.authorName} &middot; ${date}</div>`;
+      container.appendChild(card);
+    });
+  } catch(e) { console.error(e); }
+}
+
+// ── Tabs ──────────────────────────────────────────────────────────────────────
+window.switchTab = function(tab) {
+  ['directory','noticeboard','announcements'].forEach(t => {
+    const content = document.getElementById('tab-content-'+t);
+    const btn     = document.getElementById('tab-'+t);
+    if (content) content.style.display = t === tab ? 'block' : 'none';
+    if (btn) { btn.style.background = t === tab ? 'var(--navy)' : 'transparent'; btn.style.color = t === tab ? 'white' : '#6b7280'; }
+  });
+};
+
+document.getElementById('notice-text')?.addEventListener('input', function() {
+  document.getElementById('notice-char').textContent = this.value.length + '/500';
+});
+
+document.getElementById('btn-post-notice')?.addEventListener('click', async () => {
+  if (!currentUser || !currentProfile) return;
+  if (currentUser.uid !== ADMIN && !currentProfile.session?.startsWith('2009')) { toast('Only Session 2009 members can post here.'); return; }
+  const text = document.getElementById('notice-text').value.trim();
+  if (!text) { toast('Please write something.'); return; }
+  try {
+    await addDoc(collection(db,'notices'), {
+      text, session:'2009', approved: false,
+      authorUid: currentUser.uid, authorName: currentProfile.name, createdAt: serverTimestamp()
+    });
+    document.getElementById('notice-text').value = '';
+    document.getElementById('notice-char').textContent = '0/500';
+    toast('Posted! Visible once approved.');
+  } catch(e) { toast('Error: '+e.message); }
+});
+
+document.getElementById('btn-post-ann')?.addEventListener('click', async () => {
+  if (!currentUser || !currentProfile) return;
+  if (currentUser.uid !== ADMIN && !currentProfile.session?.startsWith('2009')) { toast('Only Session 2009 members can post here.'); return; }
+  const type  = document.getElementById('ann-type').value;
+  const title = document.getElementById('ann-title').value.trim();
+  const body  = document.getElementById('ann-body').value.trim();
+  if (!title) { toast('Please add a headline.'); return; }
+  try {
+    await addDoc(collection(db,'announcements'), {
+      type, title, body, session:'2009', approved: false,
+      authorUid: currentUser.uid, authorName: currentProfile.name, createdAt: serverTimestamp()
+    });
+    document.getElementById('ann-title').value = '';
+    document.getElementById('ann-body').value = '';
+    toast('Submitted for approval!');
+  } catch(e) { toast('Error: '+e.message); }
+});
+
+// ── Reports ───────────────────────────────────────────────────────────────────
+window.submitReport = async function() {
+  const type    = document.getElementById('report-type').value;
+  const roll    = document.getElementById('report-roll').value.trim();
+  const details = document.getElementById('report-details').value.trim();
+  const errEl   = document.getElementById('report-error'); errEl.style.display = 'none';
+  if (!type) { errEl.textContent = 'Please select an issue type.'; errEl.style.display = 'block'; return; }
+  if (!roll) { errEl.textContent = 'Please enter the roll number.';  errEl.style.display = 'block'; return; }
+  try {
+    await addDoc(collection(db,'reports'), {session:'2009', type, roll, details, status:'pending', submittedAt: serverTimestamp()});
+    document.getElementById('report-form').style.display    = 'none';
     document.getElementById('report-success').style.display = 'block';
   } catch(e) { errEl.textContent = 'Error submitting. Please try again.'; errEl.style.display = 'block'; }
 };
-
 window.resetReport = function() {
   document.getElementById('report-type').value = '';
   document.getElementById('report-roll').value = '';
   document.getElementById('report-details').value = '';
   document.getElementById('report-error').style.display = 'none';
-  document.getElementById('report-form').style.display = 'block';
+  document.getElementById('report-form').style.display    = 'block';
   document.getElementById('report-success').style.display = 'none';
 };
 
-loadRegistered();
-loadGallery();
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { closePhotoGrid(); closeLightbox(); } });
 </script>
 
 <script>
-document.getElementById('nav-hamburger').addEventListener('click',function(){document.getElementById('nav-links').classList.toggle('open');});
-document.querySelectorAll('.nav-dropdown-trigger').forEach(function(t){t.addEventListener('click',function(e){if(window.innerWidth<=768){e.preventDefault();this.closest('.nav-dropdown').classList.toggle('open');}})});
-document.addEventListener('click',function(e){if(!e.target.closest('.nav-dropdown'))document.querySelectorAll('.nav-dropdown').forEach(d=>d.classList.remove('open'));});
+document.getElementById('nav-hamburger').addEventListener('click', function() { document.getElementById('nav-links').classList.toggle('open'); });
+document.querySelectorAll('.nav-dropdown-trigger').forEach(function(t) {
+  t.addEventListener('click', function(e) { if (window.innerWidth <= 768) { e.preventDefault(); this.closest('.nav-dropdown').classList.toggle('open'); } });
+});
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.nav-dropdown')) document.querySelectorAll('.nav-dropdown').forEach(d => d.classList.remove('open'));
+});
 </script>
 <script>
 (function(){var k={};document.addEventListener("keydown",function(e){k[e.key.toLowerCase()]=true;if(k.a&&k.g&&k.r){window.location.href="/admin.html";}});document.addEventListener("keyup",function(e){delete k[e.key.toLowerCase()];});})();
