@@ -801,6 +801,7 @@ window.handlePhotoSelect = function(input) {
 window.submitPhoto = async function() {
   const name = document.getElementById('photo-uploader').value.trim(), caption = document.getElementById('photo-caption').value.trim();
   const err = document.getElementById('upload-error'), suc = document.getElementById('upload-success'); err.style.display = 'none';
+  if (currentUser?.uid !== ADMIN && !currentProfile?.session?.startsWith('2006')) { err.textContent = 'Only Session 2006 members can share photos here.'; err.style.display = 'block'; return; }
   if (!selPhoto) { err.textContent = 'Please select a photo.'; err.style.display = 'block'; return; }
   if (!name)     { err.textContent = 'Please enter your name.'; err.style.display = 'block'; return; }
   const btn = document.getElementById('upload-btn'); btn.disabled = true; btn.textContent = 'Uploading...';
@@ -923,6 +924,7 @@ document.getElementById('notice-text')?.addEventListener('input', function() {
 
 document.getElementById('btn-post-notice')?.addEventListener('click', async () => {
   if (!currentUser || !currentProfile) return;
+  if (currentUser.uid !== ADMIN && !currentProfile.session?.startsWith('2006')) { toast('Only Session 2006 members can post here.'); return; }
   const text = document.getElementById('notice-text').value.trim();
   if (!text) { toast('Please write something.'); return; }
   try {
@@ -938,6 +940,7 @@ document.getElementById('btn-post-notice')?.addEventListener('click', async () =
 
 document.getElementById('btn-post-ann')?.addEventListener('click', async () => {
   if (!currentUser || !currentProfile) return;
+  if (currentUser.uid !== ADMIN && !currentProfile.session?.startsWith('2006')) { toast('Only Session 2006 members can post here.'); return; }
   const type  = document.getElementById('ann-type').value;
   const title = document.getElementById('ann-title').value.trim();
   const body  = document.getElementById('ann-body').value.trim();

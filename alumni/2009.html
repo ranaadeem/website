@@ -482,6 +482,7 @@ window.handlePhotoSelect=function(input){const file=input.files[0];if(!file)retu
 window.submitPhoto=async function(){
   const name=document.getElementById('photo-uploader').value.trim(),caption=document.getElementById('photo-caption').value.trim();
   const err=document.getElementById('upload-error'),suc=document.getElementById('upload-success');err.style.display='none';
+  if(currentUser?.uid!==ADMIN&&!currentProfile?.session?.startsWith('2009')){err.textContent='Only Session 2009 members can share photos here.';err.style.display='block';return;}
   if(!selPhoto){err.textContent='Please select a photo.';err.style.display='block';return;}
   if(!name){err.textContent='Please enter your name.';err.style.display='block';return;}
   const btn=document.getElementById('upload-btn');btn.disabled=true;btn.textContent='Uploading...';

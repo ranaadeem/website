@@ -705,8 +705,7 @@ let searchTimer=null,allAlumniCache=null;
 document.getElementById('global-search-input').addEventListener('input',function(){
   const q=this.value.trim().toLowerCase();const section=document.getElementById('search-section');const hint=document.getElementById('global-search-hint');
   clearTimeout(searchTimer);
-  if(q.length<3){section.style.display='none';hint.textContent='Type a name, city or country to search';return;}
-  if(!currentUser){hint.textContent='Sign in to search alumni.';section.style.display='none';return;}
+  if(q.length<3){section.style.display='none';hint.textContent='Type at least 3 characters to search';return;}
   hint.textContent='Searching...';
   searchTimer=setTimeout(async()=>{
     if(!allAlumniCache){const snap=await getDocs(query(collection(db,'alumni'),where('status','==','approved')));allAlumniCache=[];snap.forEach(d=>allAlumniCache.push(d.data()));}
