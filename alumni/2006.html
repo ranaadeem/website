@@ -221,7 +221,7 @@ html,body{margin:0;padding:0;}body{font-family:"DM Sans",sans-serif;background:v
 </div>
 
 <!-- ── LOGIN GATE ── -->
-<div id="login-gate" style="max-width:460px;margin:4rem auto;padding:0 2rem;">
+<div id="login-gate" style="max-width:460px;margin:4rem auto;padding:0 2rem;display:none;">
   <div style="background:white;border:1px solid var(--border);border-radius:14px;padding:2.5rem;text-align:center;box-shadow:0 4px 24px rgba(0,0,0,0.08);">
     <div style="font-size:3rem;margin-bottom:1rem;">🎓</div>
     <h2 style="font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--navy);margin-bottom:0.5rem;">Session 2006–2010</h2>
@@ -537,11 +537,7 @@ onAuthStateChanged(auth, async user => {
   const pendingPanel = document.getElementById('gate-pending-panel');
 
   if (!user) {
-    gate.style.display = 'block';
-    content.style.display = 'none';
-    signinPanel.style.display = 'block';
-    pendingPanel.style.display = 'none';
-    buildSessionNav(null);
+    window.location.href = '/alumni/register.html?session=2006';
     return;
   }
 
@@ -559,13 +555,7 @@ onAuthStateChanged(auth, async user => {
   // Look up profile via uid map
   const mapSnap = await getDoc(doc(db, 'alumni_uid_map', user.uid));
   if (!mapSnap.exists()) {
-    // Signed in but no registration found
-    gate.style.display = 'block';
-    content.style.display = 'none';
-    signinPanel.style.display = 'block';
-    pendingPanel.style.display = 'none';
-    showGateAlert('No registration found for this account. <a href="/alumni/register.html?session=2006" style="color:var(--navy);font-weight:700;">Register here →</a>', 'info');
-    buildSessionNav(user);
+    window.location.href = '/alumni/register.html?session=2006';
     return;
   }
 
