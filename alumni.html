@@ -500,7 +500,7 @@ import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChang
 import { getFirestore, doc, setDoc, getDoc, collection, getDocs, query, where } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js';
 
 const app = initializeApp({apiKey:"AIzaSyAgUl22Cln6QtY3-HIvI6lE8Zu7n9OblbI",authDomain:"icet-alumni.firebaseapp.com",projectId:"icet-alumni",storageBucket:"icet-alumni.firebasestorage.app",messagingSenderId:"707390888790",appId:"1:707390888790:web:57e6be62e4d11e22c214f7"});
-const ADMIN_UID = 'w2AtZbhUiyY5TxyvIecHzWqheaE2';
+const ADMIN_UID = 'eOAyXx3uQzMPJItS8aPLvHgWTQv1';
 const auth = getAuth(app);
 const db = getFirestore(app);
 const provider = new GoogleAuthProvider();
@@ -514,17 +514,25 @@ function showPage(page){document.querySelectorAll('.page').forEach(p=>p.classLis
 
 document.getElementById('landing-hero').style.backgroundImage = "url('/alumni-header.png')";
 
+// Load stats immediately — no auth needed
+loadGlobalStats();
+
 onAuthStateChanged(auth, async (user) => {
   currentUser = user;
   buildNav(user);
   if (user) {
-    const snap = await getDoc(doc(db,'alumni',user.uid));
-    currentUserProfile = snap.exists() ? snap.data() : null;
-    if (currentUserProfile && document.querySelector('.page.active')?.id === 'page-login') {
+    // Look up profile via uid_map (alumni docs use roll as ID, not uid)
+    try {
+      const mapSnap = await getDoc(doc(db,'alumni_uid_map',user.uid));
+      if (mapSnap.exists()) {
+        const profSnap = await getDoc(doc(db,'alumni',mapSnap.data().roll));
+        currentUserProfile = profSnap.exists() ? profSnap.data() : null;
+      }
+    } catch(_e) {}
+    if (currentUserProfile?.status === 'approved' && document.querySelector('.page.active')?.id === 'page-login') {
       const session = currentUserProfile.session?.split('-')[0];
       window.location.href = '/alumni/' + session + '.html';
     }
-    loadGlobalStats();
   }
 });
 
@@ -698,7 +706,7 @@ document.getElementById('global-search-input').addEventListener('input',function
   const q=this.value.trim().toLowerCase();const section=document.getElementById('search-section');const hint=document.getElementById('global-search-hint');
   clearTimeout(searchTimer);
   if(q.length<3){section.style.display='none';hint.textContent='Type a name, city or country to search';return;}
-  if(!currentUser){hint.textContent='Please sign in to search alumni.';return;}
+  if(!currentUser){hint.textContent='Sign in to search alumni.';section.style.display='none';return;}
   hint.textContent='Searching...';
   searchTimer=setTimeout(async()=>{
     if(!allAlumniCache){const snap=await getDocs(query(collection(db,'alumni'),where('status','==','approved')));allAlumniCache=[];snap.forEach(d=>allAlumniCache.push(d.data()));}
