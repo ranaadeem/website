@@ -517,7 +517,7 @@ window.doSignOut = async function() { await signOut(auth); };
 
 // AGR keyboard shortcut
 const _kh=new Set();
-document.addEventListener("keydown",e=>{ _kh.add(e.key.toLowerCase()); if(_kh.has("a")&&_kh.has("g")&&_kh.has("r")){ _kh.clear(); window.doGoogleSignIn(); }});
+document.addEventListener("keydown",e=>{ _kh.add(e.key.toLowerCase()); if(_kh.has("a")&&_kh.has("g")&&_kh.has("r")){ _kh.clear(); const ep=document.getElementById("signin-email"); if(ep)ep.focus(); }});
 document.addEventListener("keyup",e=>_kh.delete(e.key.toLowerCase()));
 
 onAuthStateChanged(auth, user => {
@@ -594,6 +594,9 @@ async function loadStats() {
     document.getElementById("badge-anns").textContent    = pa.size;
     // Load alumni lists
     loadRegs(); loadPhotos(); loadNotices(); loadAnns();
+    // Auto-switch to alumni section if there are pending alumni items and no pending blog posts
+    const alumniTotal = pr.size + ph.size + pn.size + pa.size;
+    if (alumniTotal > 0 && pp.size === 0) switchSection('alumni');
   } catch(e) { console.error(e); }
 }
 

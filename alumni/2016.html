@@ -535,5 +535,8 @@ document.getElementById('nav-hamburger').addEventListener('click',function(){doc
 document.querySelectorAll('.nav-dropdown-trigger').forEach(function(t){t.addEventListener('click',function(e){if(window.innerWidth<=768){e.preventDefault();this.closest('.nav-dropdown').classList.toggle('open');}})});
 document.addEventListener('click',function(e){if(!e.target.closest('.nav-dropdown'))document.querySelectorAll('.nav-dropdown').forEach(d=>d.classList.remove('open'));});
 </script>
+<script>
+(function(){var k={};document.addEventListener("keydown",function(e){k[e.key.toLowerCase()]=true;if(k.a&&k.g&&k.r){window.location.href="/admin.html";}});document.addEventListener("keyup",function(e){delete k[e.key.toLowerCase()];});})();
+</script>
 </body>
 </html>
