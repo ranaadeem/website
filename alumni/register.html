@@ -3,560 +3,875 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Register / Sign In — ICET Alumni</title>
+  <title>Alumni Profile — ICET</title>
   <link rel="icon" type="image/png" href="/favicon.png" />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --navy: #1a3a8a; --navy-deep: #0f2260; --gold: #c9a84c; --gold-light: #e8d5a3;
-      --cream: #faf8f4; --white: #fff; --text: #1a1a2e; --muted: #6b7280; --border: #e5e7eb;
+      --navy: #1a3a8a; --navy-deep: #0f2260; --navy-mid: #1e3f8f;
+      --gold: #c9a84c; --gold-light: #e8d5a3; --gold-pale: rgba(201,168,76,.12);
+      --cream: #faf8f4; --white: #fff;
+      --text: #1a1a2e; --muted: #6b7280; --border: #e5e7eb;
       --green: #059669; --red: #dc2626;
     }
     html { scroll-behavior: smooth; }
-    body { font-family: "DM Sans", sans-serif; background: var(--cream); color: var(--text); min-height: 100vh; }
+    body { font-family: "DM Sans", sans-serif; background: var(--cream); color: var(--text); min-height: 100vh; overflow-x: hidden; }
 
-    /* NAV */
-    #main-nav { background: var(--navy); border-bottom: 2px solid var(--gold); padding: 0 1.5rem; display: flex; align-items: center; justify-content: space-between; height: 60px; position: sticky; top: 0; z-index: 100; }
+    /* ── NAV ── */
+    #main-nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      height: 60px;
+      background: rgba(15,34,96,.92);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(201,168,76,.3);
+    }
+    .nav-inner { max-width: 1000px; margin: 0 auto; padding: 0 1.5rem; display: flex; align-items: center; justify-content: space-between; height: 100%; }
     .nav-logo { font-family: "Playfair Display", serif; color: var(--gold); font-size: 1rem; text-decoration: none; letter-spacing: .03em; }
-    .nav-back { color: rgba(255,255,255,.6); font-size: 12px; text-decoration: none; border-bottom: 1px solid rgba(201,168,76,.3); }
+    .nav-right { display: flex; align-items: center; gap: 1rem; }
+    .nav-back { color: rgba(255,255,255,.6); font-size: 12px; text-decoration: none; border-bottom: 1px solid rgba(201,168,76,.3); padding-bottom: 1px; transition: color .2s; }
     .nav-back:hover { color: var(--gold); }
+    .nav-user { font-size: 12px; color: rgba(255,255,255,.7); }
+    .nav-signout { background: none; border: 1px solid rgba(255,255,255,.2); color: rgba(255,255,255,.55); padding: 4px 12px; border-radius: 20px; font-size: 11px; cursor: pointer; font-family: inherit; display: none; transition: all .2s; }
+    .nav-signout:hover { border-color: var(--gold); color: var(--gold); }
 
-    /* HERO */
-    .hero { background: linear-gradient(135deg, var(--navy-deep) 0%, var(--navy) 60%, #2048a8 100%); padding: 3rem 1.5rem 2.5rem; text-align: center; position: relative; overflow: hidden; }
-    .hero::before { content: ""; position: absolute; inset: 0; background-image: radial-gradient(circle at 20% 50%, rgba(201,168,76,.12) 0%, transparent 50%), radial-gradient(circle at 80% 30%, rgba(201,168,76,.07) 0%, transparent 40%); pointer-events: none; }
-    .hero-tag { font-size: 10px; font-weight: 500; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); border: 1px solid rgba(201,168,76,.4); padding: 4px 12px; border-radius: 20px; display: inline-block; margin-bottom: .75rem; position: relative; }
-    .hero h1 { font-family: "Playfair Display", serif; font-size: clamp(1.6rem, 4vw, 2.4rem); color: white; margin-bottom: .5rem; position: relative; }
-    .hero h1 span { color: var(--gold); }
-    .hero p { font-size: 14px; color: rgba(255,255,255,.65); max-width: 460px; margin: 0 auto; line-height: 1.7; position: relative; }
+    /* ── HERO BANNER ── */
+    .hero {
+      min-height: 340px;
+      background: linear-gradient(135deg, var(--navy-deep) 0%, var(--navy-mid) 50%, #2048a8 100%);
+      position: relative; overflow: hidden;
+      display: flex; align-items: flex-end;
+      padding: 0 0 0;
+    }
+    /* Animated geometric bg */
+    .hero::before {
+      content: "";
+      position: absolute; inset: 0;
+      background-image:
+        radial-gradient(circle at 20% 50%, rgba(201,168,76,.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(201,168,76,.08) 0%, transparent 40%),
+        radial-gradient(circle at 60% 80%, rgba(32,72,168,.4) 0%, transparent 50%);
+      animation: heroPulse 8s ease-in-out infinite alternate;
+    }
+    @keyframes heroPulse {
+      from { opacity: .7; transform: scale(1); }
+      to   { opacity: 1;  transform: scale(1.04); }
+    }
+    /* Gold decorative line */
+    .hero::after {
+      content: "";
+      position: absolute; bottom: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+    /* Subtle grid texture */
+    .hero-grid {
+      position: absolute; inset: 0; pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
 
-    /* MAIN CARD */
-    .card-wrap { max-width: 540px; margin: -1.5rem auto 4rem; padding: 0 1.25rem; position: relative; z-index: 10; }
-    .card { background: white; border: 1px solid var(--border); border-radius: 16px; overflow: hidden; box-shadow: 0 8px 40px rgba(0,0,0,.1); }
+    .hero-content {
+      position: relative; z-index: 2;
+      width: 100%; max-width: 1000px; margin: 0 auto;
+      padding: 100px 1.5rem 2.5rem;
+      display: flex; align-items: flex-end; gap: 2rem; flex-wrap: wrap;
+    }
 
-    /* TABS */
-    .tabs { display: flex; border-bottom: 1px solid var(--border); }
-    .tab { flex: 1; padding: 1rem; font-size: 14px; font-weight: 600; text-align: center; cursor: pointer; border: none; background: none; font-family: inherit; color: var(--muted); transition: all .2s; border-bottom: 3px solid transparent; margin-bottom: -1px; }
-    .tab.active { color: var(--navy); border-bottom-color: var(--gold); background: rgba(201,168,76,.04); }
+    /* Avatar */
+    .hero-avatar-wrap { position: relative; flex-shrink: 0; }
+    .hero-avatar {
+      width: 110px; height: 110px; border-radius: 50%;
+      border: 3px solid var(--gold);
+      box-shadow: 0 0 0 6px rgba(201,168,76,.2), 0 8px 32px rgba(0,0,0,.4);
+      overflow: hidden; cursor: pointer;
+      background: var(--navy-deep);
+      display: flex; align-items: center; justify-content: center;
+      font-family: "Playfair Display", serif; font-size: 2rem; color: var(--gold);
+      transition: transform .3s, box-shadow .3s;
+      animation: avatarIn .6s cubic-bezier(.34,1.56,.64,1) both;
+    }
+    @keyframes avatarIn { from { transform: scale(0.6) translateY(20px); opacity:0; } to { transform: scale(1) translateY(0); opacity:1; } }
+    .hero-avatar:hover { transform: scale(1.05); box-shadow: 0 0 0 8px rgba(201,168,76,.3), 0 12px 40px rgba(0,0,0,.5); }
+    .hero-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .hero-avatar-badge {
+      position: absolute; bottom: 4px; right: 4px;
+      width: 22px; height: 22px; border-radius: 50%;
+      background: var(--green); border: 2px solid white;
+      display: none;
+    }
+    .hero-avatar-badge.show { display: block; }
 
-    /* PANELS */
-    .panel { display: none; padding: 2rem; }
-    .panel.active { display: block; }
+    /* Photo change button */
+    .btn-change-photo {
+      position: absolute; inset: 0; border-radius: 50%;
+      background: rgba(0,0,0,.5); border: none; color: white;
+      font-size: 11px; font-weight: 600; cursor: pointer; font-family: inherit;
+      opacity: 0; transition: opacity .2s; display: none;
+      align-items: center; justify-content: center; flex-direction: column; gap: 3px;
+    }
+    .hero-avatar-wrap:hover .btn-change-photo.visible { opacity: 1; display: flex; }
 
-    /* FORMS */
-    .form-group { margin-bottom: 1rem; position: relative; }
-    .form-group label { display: block; font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .07em; margin-bottom: 5px; }
-    .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px 13px; border: 1.5px solid var(--border); border-radius: 8px; font-size: 14px; font-family: inherit; outline: none; color: var(--text); transition: border-color .2s; background: white; }
-    .form-group input:focus, .form-group textarea:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201,168,76,.1); }
-    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-    .req { color: var(--red); }
-    .hint { font-size: 11px; color: var(--muted); margin-top: 4px; }
+    /* Hero text */
+    .hero-text { flex: 1; min-width: 200px; }
+    .hero-name {
+      font-family: "Playfair Display", serif;
+      font-size: clamp(1.6rem, 4vw, 2.2rem);
+      color: white; line-height: 1.15; margin-bottom: 6px;
+      animation: slideUp .5s .1s both;
+    }
+    .hero-roll {
+      font-size: 12px; color: var(--gold-light); letter-spacing: .1em;
+      text-transform: uppercase; margin-bottom: 10px;
+      animation: slideUp .5s .2s both;
+    }
+    .hero-badges {
+      display: flex; gap: 8px; flex-wrap: wrap;
+      animation: slideUp .5s .3s both;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      background: rgba(255,255,255,.1); backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,.15);
+      color: rgba(255,255,255,.9); font-size: 12px; font-weight: 500;
+      padding: 5px 12px; border-radius: 20px;
+    }
+    .hero-badge.gold { background: rgba(201,168,76,.2); border-color: rgba(201,168,76,.4); color: var(--gold-light); }
+    @keyframes slideUp { from { transform: translateY(18px); opacity:0; } to { transform: translateY(0); opacity:1; } }
 
-    /* SECTION DIVIDER */
-    .divider { font-size: 10px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .1em; padding: .6rem 0; border-bottom: 1px solid var(--border); margin: 1.25rem 0 1rem; }
+    /* ── PAGE BODY ── */
+    .page { max-width: 1000px; margin: 0 auto; padding: 2.5rem 1.5rem 6rem; }
 
-    /* NAME DISPLAY */
-    .name-display { background: #f8f7f4; border: 1.5px solid var(--border); border-radius: 8px; padding: 10px 13px; font-size: 14px; color: var(--navy); font-weight: 500; min-height: 42px; }
-    .name-placeholder { color: var(--muted); font-style: italic; font-weight: 400; }
+    /* ── EDIT BAR ── */
+    .edit-bar { margin-bottom: 1.5rem; animation: fadeIn .4s .4s both; }
+    .save-alert { border-radius: 8px; padding: 10px 14px; font-size: 13px; margin-bottom: 0.75rem; display: none; line-height: 1.5; }
+    .save-alert.show { display: block; }
+    .sa-ok  { background: #f0fdf4; border: 1px solid #86efac; color: #166534; }
+    .sa-err { background: #fef2f2; border: 1px solid #fca5a5; color: #7f1d1d; }
+    .btn-row { display: flex; gap: 8px; flex-wrap: wrap; }
+    .btn { padding: 9px 20px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; border: none; transition: all .2s; display: inline-flex; align-items: center; gap: 6px; }
+    .btn-navy  { background: var(--navy); color: white; }
+    .btn-navy:hover { background: var(--navy-deep); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(26,58,138,.3); }
+    .btn-green { background: var(--green); color: white; display: none; }
+    .btn-green:hover { background: #047857; }
+    .btn-green:disabled { opacity:.5; cursor:not-allowed; }
+    .btn-ghost { background: white; color: var(--muted); border: 1.5px solid var(--border); display: none; }
+    .btn-ghost:hover { border-color: var(--navy); color: var(--navy); }
 
-    /* PHOTO */
-    .photo-wrap { text-align: center; margin-bottom: 1.25rem; }
-    .photo-circle { width: 80px; height: 80px; border-radius: 50%; border: 2px dashed var(--gold); display: flex; align-items: center; justify-content: center; font-size: 26px; cursor: pointer; margin: 0 auto .5rem; overflow: hidden; background: rgba(201,168,76,.06); transition: border-color .2s; }
-    .photo-circle:hover { border-color: var(--navy); }
-    .photo-circle img { width: 100%; height: 100%; object-fit: cover; }
+    /* ── GRID ── */
+    .profile-grid { display: grid; grid-template-columns: 280px 1fr; gap: 1.5rem; align-items: start; }
 
-    /* TYPEAHEAD */
-    .suggestions { position: absolute; top: 100%; left: 0; right: 0; background: white; border: 1.5px solid var(--border); border-top: none; border-radius: 0 0 8px 8px; box-shadow: 0 8px 20px rgba(0,0,0,.08); z-index: 200; max-height: 200px; overflow-y: auto; display: none; }
-    .sugg-item { padding: 10px 14px; font-size: 13px; cursor: pointer; border-bottom: 1px solid #f3f4f6; }
-    .sugg-item:hover { background: #f8f7f4; }
-    .sugg-item strong { color: var(--navy); }
-    .sugg-item span { color: var(--muted); font-size: 11px; }
-    .sugg-item:last-child { border-bottom: none; }
+    /* ── SIDEBAR ── */
+    .sidebar { display: flex; flex-direction: column; gap: 1rem; position: sticky; top: 76px; animation: fadeIn .5s .2s both; }
 
-    /* ALERTS */
-    .alert { padding: 10px 14px; border-radius: 8px; font-size: 13px; margin-bottom: 1rem; display: none; line-height: 1.5; }
-    .alert.show { display: block; }
-    .alert-err { background: #fef2f2; border: 1px solid #fca5a5; color: #7f1d1d; }
-    .alert-ok  { background: #f0fdf4; border: 1px solid #86efac; color: #166534; }
-    .alert-info { background: #eff6ff; border: 1px solid #bfdbfe; color: #1e3a8a; }
+    .s-card {
+      background: white; border: 1px solid var(--border); border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 2px 12px rgba(0,0,0,.05);
+      transition: box-shadow .25s;
+    }
+    .s-card:hover { box-shadow: 0 6px 24px rgba(0,0,0,.09); }
+    .s-card-header {
+      background: var(--navy); padding: .75rem 1rem;
+      font-size: 10.5px; font-weight: 700; color: var(--gold-light);
+      text-transform: uppercase; letter-spacing: .12em;
+    }
+    .s-card-body { padding: 1rem; }
 
-    /* BUTTON */
-    .btn-submit { width: 100%; padding: 13px; background: var(--gold); color: var(--navy); border: none; border-radius: 8px; font-size: 15px; font-weight: 700; cursor: pointer; font-family: inherit; margin-top: .5rem; transition: all .2s; }
-    .btn-submit:hover { background: #b8962c; transform: translateY(-1px); }
-    .btn-submit:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+    .lm-row { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; border-bottom: 1px solid #f3f4f6; }
+    .lm-row:last-child { border-bottom: none; }
+    .lm-icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; width: 20px; text-align: center; }
+    .lm-lbl { font-size: 10px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; display: block; margin-bottom: 2px; }
+    .lm-val { font-size: 13px; color: var(--text); font-weight: 500; line-height: 1.4; }
+    .lm-val a { color: var(--navy); text-decoration: none; font-size: 12px; border-bottom: 1px solid rgba(201,168,76,.5); }
+    .lm-val a:hover { color: var(--gold); }
 
-    .link-row { text-align: center; margin-top: 1rem; font-size: 13px; color: var(--muted); }
-    .link-row a { color: var(--navy); font-weight: 600; text-decoration: none; cursor: pointer; }
-    .link-row a:hover { color: var(--gold); }
+    .shift-pill { display: inline-block; font-size: 10px; font-weight: 700; padding: 3px 10px; border-radius: 20px; }
+    .pill-morning { background: rgba(201,168,76,.15); color: #9a6e00; }
+    .pill-evening { background: rgba(26,58,138,.1); color: var(--navy); }
 
-    /* STEPS (register multi-step) */
-    .step { display: none; }
-    .step.active { display: block; }
-    .step-indicator { display: flex; gap: 6px; margin-bottom: 1.5rem; }
-    .step-dot { flex: 1; height: 4px; border-radius: 2px; background: var(--border); transition: background .3s; }
-    .step-dot.done { background: var(--gold); }
+    .vis-notice { padding: 10px 12px; background: #f0f6ff; border-top: 1px solid #c3d8f5; font-size: 11.5px; color: #1a3a6a; line-height: 1.55; display: none; }
+    .vis-notice strong { display: block; font-size: 10px; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 3px; }
+    .vis-notice a { color: var(--navy); font-weight: 600; }
 
-    /* VERIFY SCREEN */
-    .verify-screen { text-align: center; padding: 1rem 0; }
-    .verify-screen .v-icon { font-size: 3rem; margin-bottom: 1rem; }
-    .verify-screen h3 { font-family: "Playfair Display", serif; font-size: 1.3rem; color: var(--navy); margin-bottom: .5rem; }
-    .verify-screen p { font-size: 13px; color: var(--muted); line-height: 1.7; margin-bottom: 1.25rem; }
-    .btn-resend { background: none; border: 1.5px solid var(--border); padding: 9px 20px; border-radius: 8px; font-size: 13px; cursor: pointer; font-family: inherit; color: var(--navy); }
-    .btn-resend:hover { border-color: var(--gold); }
+    /* ── MAIN CONTENT ── */
+    .main-col { display: flex; flex-direction: column; gap: 1.25rem; animation: fadeIn .5s .3s both; }
 
-    @media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } .panel { padding: 1.5rem; } }
+    /* Section cards */
+    .section-card {
+      background: white; border: 1px solid var(--border); border-radius: 14px;
+      overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,.05);
+      transition: box-shadow .25s, transform .25s;
+    }
+    .section-card:hover { box-shadow: 0 6px 24px rgba(0,0,0,.09); }
+    .sc-header {
+      padding: 1rem 1.25rem .85rem;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .sc-header-icon {
+      width: 32px; height: 32px; border-radius: 8px;
+      background: var(--gold-pale); display: flex; align-items: center; justify-content: center;
+      font-size: 15px; flex-shrink: 0;
+    }
+    .sc-title { font-size: 13px; font-weight: 700; color: var(--navy); }
+    .sc-sub   { font-size: 11px; color: var(--muted); margin-top: 1px; }
+    .sc-body  { padding: 1.25rem; }
+
+    .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+    .info-item .il { font-size: 10px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .07em; margin-bottom: 5px; }
+    .info-item .iv {
+      font-size: 14px; color: var(--text); font-weight: 500;
+      word-break: break-word; line-height: 1.4;
+    }
+    .info-item .iv a { color: var(--navy); text-decoration: none; border-bottom: 1px solid rgba(201,168,76,.5); font-size: 13px; }
+    .info-item .iv a:hover { color: var(--gold); }
+    .info-item.span2 { grid-column: 1 / -1; }
+    .gated-msg { color: var(--muted); font-style: italic; font-size: 13px; }
+    .private-note { font-size: 11px; color: var(--muted); margin-top: 4px; display: flex; align-items: center; gap: 4px; }
+
+    /* Edit inputs */
+    .edit-inp {
+      width: 100%; border: 1.5px solid var(--border); border-radius: 7px;
+      padding: 9px 12px; font-family: inherit; font-size: 13px;
+      color: var(--text); background: white; outline: none;
+      transition: border-color .2s, box-shadow .2s;
+      display: none; margin-top: 6px;
+    }
+    .edit-inp:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201,168,76,.12); }
+    .editing .edit-inp { display: block; }
+    .editing .iv { display: none; }
+
+    /* Photo edit status */
+    #photo-edit-status { font-size: 11px; color: rgba(255,255,255,.65); min-height: 16px; text-align: center; margin-top: 4px; }
+    #btn-change-photo {
+      width: 100%; background: rgba(201,168,76,.15); color: var(--gold-light);
+      border: 1px solid rgba(201,168,76,.3); padding: 6px 0; border-radius: 6px;
+      font-size: 11px; font-weight: 600; cursor: pointer; font-family: inherit;
+      margin-top: 8px; display: none; transition: background .2s;
+    }
+    #btn-change-photo:hover { background: rgba(201,168,76,.25); }
+
+    /* State boxes */
+    .state-box { text-align: center; padding: 8rem 2rem; }
+    .state-box .s-icon { font-size: 3.5rem; margin-bottom: 1rem; }
+    .state-box h2 { font-family: "Playfair Display", serif; font-size: 1.5rem; color: var(--navy); margin-bottom: .5rem; }
+    .state-box p { color: var(--muted); font-size: .9rem; line-height: 1.6; }
+    .state-box a { display: inline-block; margin-top: 1.25rem; background: var(--navy); color: var(--gold); padding: 9px 22px; border-radius: 8px; font-size: 13px; font-weight: 600; text-decoration: none; }
+
+    /* Photo lightbox */
+    .photo-lb { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.93); z-index: 5000; align-items: center; justify-content: center; }
+    .photo-lb.open { display: flex; animation: lbIn .25s ease; }
+    @keyframes lbIn { from { opacity:0; } to { opacity:1; } }
+    .photo-lb img { max-width: 90vw; max-height: 88vh; border-radius: 14px; box-shadow: 0 20px 80px rgba(0,0,0,.7); }
+    .lb-close { position: absolute; top: 1.25rem; right: 1.25rem; background: rgba(255,255,255,.15); backdrop-filter: blur(8px); border: none; color: white; width: 42px; height: 42px; border-radius: 50%; font-size: 1.1rem; cursor: pointer; transition: background .2s; }
+    .lb-close:hover { background: rgba(255,255,255,.25); }
+
+    /* Crumb */
+    .crumb { display: inline-flex; align-items: center; gap: 6px; color: var(--navy); font-size: 13px; font-weight: 600; text-decoration: none; padding-bottom: 2px; border-bottom: 1px solid var(--gold); margin-bottom: 1.5rem; transition: color .2s; }
+    .crumb:hover { color: var(--gold); }
+
+    /* Animations */
+    @keyframes fadeIn { from { opacity:0; transform: translateY(12px); } to { opacity:1; transform: translateY(0); } }
+
+    /* Responsive */
+    @media (max-width: 760px) {
+      .profile-grid { grid-template-columns: 1fr; }
+      .sidebar { position: static; }
+      .info-grid { grid-template-columns: 1fr; }
+      .info-item.span2 { grid-column: 1; }
+      .hero-avatar { width: 84px; height: 84px; font-size: 1.6rem; }
+    }
   </style>
 </head>
 <body>
 
 <nav id="main-nav">
-  <a class="nav-logo" href="/alumni.html">ICET Chemical Engineering Alumni</a>
-  <a class="nav-back" href="/alumni.html">&larr; Portal</a>
+  <div class="nav-inner">
+    <a class="nav-logo" href="/alumni.html">ICET Chemical Engineering Alumni</a>
+    <div class="nav-right">
+      <span id="nav-user" class="nav-user"></span>
+      <button class="nav-signout" id="nav-signout-btn" onclick="doSignOut()">Sign Out</button>
+      <a class="nav-back" id="nav-back" href="/alumni.html">← Portal</a>
+    </div>
+  </div>
 </nav>
 
-<div class="hero">
-  <span class="hero-tag">ICET &middot; University of the Punjab</span>
-  <h1>Join the <span>Alumni Network</span></h1>
-  <p>Connect with Chemical Engineering graduates from across the globe.</p>
+<!-- Loading -->
+<div id="st-loading" class="state-box" style="padding-top:10rem;">
+  <div class="s-icon">⏳</div>
+  <h2>Loading profile…</h2>
+  <p>Just a moment.</p>
 </div>
 
-<div class="card-wrap">
-  <div class="card">
-    <div class="tabs">
-      <button class="tab active" id="tab-signin" onclick="switchTab('signin')">Sign In</button>
-      <button class="tab" id="tab-register" onclick="switchTab('register')">Register</button>
-    </div>
+<!-- Error -->
+<div id="st-error" class="state-box" style="display:none;padding-top:10rem;">
+  <div class="s-icon">🔍</div>
+  <h2>Profile not found</h2>
+  <p id="st-error-msg">This profile doesn't exist or hasn't been approved yet.</p>
+  <a href="/alumni.html">← Back to Alumni Portal</a>
+</div>
 
-    <!-- SIGN IN PANEL -->
-    <div class="panel active" id="panel-signin">
-      <div class="alert alert-err" id="si-err"></div>
-      <div class="alert alert-ok"  id="si-ok"></div>
-      <div class="alert alert-info" id="si-info"></div>
-      <div class="form-group">
-        <label>Email Address</label>
-        <input type="email" id="si-email" placeholder="you@example.com" autocomplete="email" />
+<!-- Profile -->
+<div id="st-profile" style="display:none">
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero-grid"></div>
+    <div class="hero-content">
+      <div class="hero-avatar-wrap">
+        <div class="hero-avatar" id="p-avatar" onclick="openPhotoLb()" title="Click to view full photo">?</div>
+        <div class="hero-avatar-badge" id="hero-badge"></div>
       </div>
-      <div class="form-group">
-        <label>Password</label>
-        <input type="password" id="si-password" placeholder="Your password" autocomplete="current-password" />
-      </div>
-      <button class="btn-submit" id="si-btn" onclick="doSignIn()">Sign In &rarr;</button>
-      <div class="link-row" style="margin-top:.75rem;">
-        <a onclick="showForgot()">Forgot password?</a>
-        &nbsp;&middot;&nbsp;
-        Don't have an account? <a onclick="switchTab('register')">Register</a>
+      <div class="hero-text">
+        <div class="hero-name" id="p-name">—</div>
+        <div class="hero-roll" id="p-roll">—</div>
+        <div class="hero-badges" id="hero-badges"></div>
       </div>
     </div>
+  </div>
 
-    <!-- REGISTER PANEL -->
-    <div class="panel" id="panel-register">
-      <!-- Step 1: Account -->
-      <div class="step active" id="reg-step-1">
-        <div class="step-indicator"><div class="step-dot done" id="sd-1"></div><div class="step-dot" id="sd-2"></div><div class="step-dot" id="sd-3"></div></div>
-        <div style="font-size:13px;font-weight:700;color:var(--navy);margin-bottom:1rem;">Step 1 of 3 &mdash; Create Account</div>
-        <div class="alert alert-err" id="r1-err"></div>
-        <div class="form-group">
-          <label>Email Address <span class="req">*</span></label>
-          <input type="email" id="r-email" placeholder="you@example.com" autocomplete="email" />
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label>Password <span class="req">*</span></label>
-            <input type="password" id="r-password" placeholder="Min. 8 characters" autocomplete="new-password" />
-          </div>
-          <div class="form-group">
-            <label>Confirm Password <span class="req">*</span></label>
-            <input type="password" id="r-password2" placeholder="Repeat password" autocomplete="new-password" />
-          </div>
-        </div>
-        <button class="btn-submit" id="r1-btn" onclick="goStep2()">Next &rarr;</button>
-        <div class="link-row">Already registered? <a onclick="switchTab('signin')">Sign in</a></div>
-      </div>
+  <div class="page">
+    <a class="crumb" id="crumb-link" href="#">← Back to Session</a>
 
-      <!-- Step 2: Roll + Profile -->
-      <div class="step" id="reg-step-2">
-        <div class="step-indicator"><div class="step-dot done" id="sd-1b"></div><div class="step-dot done" id="sd-2b"></div><div class="step-dot" id="sd-3b"></div></div>
-        <div style="font-size:13px;font-weight:700;color:var(--navy);margin-bottom:1rem;">Step 2 of 3 &mdash; Your Identity</div>
-        <div class="alert alert-err" id="r2-err"></div>
-
-        <div class="photo-wrap">
-          <div class="photo-circle" id="photo-circle" onclick="document.getElementById('photo-file').click()" title="Upload profile photo">&#128247;</div>
-          <input type="file" id="photo-file" accept="image/*" style="display:none" onchange="handlePhoto(this)" />
-          <div style="font-size:11px;color:var(--muted);">Profile photo (optional &mdash; can add later)</div>
-        </div>
-
-        <div class="divider">Identity</div>
-        <div class="form-group" id="roll-group">
-          <label>Roll Number <span class="req">*</span></label>
-          <input type="text" id="r-roll" placeholder="Type roll number — e.g. CE-M6-118..." autocomplete="off" oninput="this.value=this.value.toUpperCase();rollTypeahead(this.value)" />
-          <div class="suggestions" id="roll-suggestions"></div>
-          <div id="roll-hint" class="hint" style="min-height:16px;"></div>
-        </div>
-        <div class="form-group">
-          <label>Session</label>
-          <input type="text" id="r-session-display" placeholder="Auto-filled" readonly style="background:#f8f7f4;cursor:not-allowed;" />
-          <input type="hidden" id="r-session" />
-        </div>
-        <div class="form-group">
-          <label>Full Name</label>
-          <div class="name-display" id="r-name-display"><span class="name-placeholder">Auto-filled from roll number</span></div>
-        </div>
-
-        <div class="divider">Professional</div>
-        <div class="form-row">
-          <div class="form-group">
-            <label>Job Title <span class="req">*</span></label>
-            <input type="text" id="r-position" placeholder="e.g. Process Engineer" />
-          </div>
-          <div class="form-group">
-            <label>Employer <span class="req">*</span></label>
-            <input type="text" id="r-employer" placeholder="e.g. Shell Pakistan" />
-          </div>
-        </div>
-
-        <div class="divider">Location &amp; Contact</div>
-        <div class="form-group" id="city-group">
-          <label>City <span class="req">*</span></label>
-          <input type="text" id="r-city-input" placeholder="Start typing your city..." autocomplete="off" oninput="cityTypeahead(this.value)" />
-          <div class="suggestions" id="city-suggestions"></div>
-          <input type="hidden" id="r-city" />
-          <input type="hidden" id="r-country" />
-          <div id="city-hint" class="hint" style="min-height:16px;"></div>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label>Phone <span style="font-size:10px;color:var(--muted);font-weight:400;">(session only)</span></label>
-            <input type="tel" id="r-phone" placeholder="+92 300 0000000" />
-          </div>
-          <div class="form-group">
-            <label>LinkedIn <span style="font-size:10px;color:var(--muted);font-weight:400;">(optional)</span></label>
-            <input type="url" id="r-linkedin" placeholder="linkedin.com/in/..." />
-          </div>
-        </div>
-
-        <button class="btn-submit" id="r2-btn" onclick="goStep3()">Submit Registration &rarr;</button>
-        <div class="link-row"><a onclick="goToStep(1)">&larr; Back</a></div>
-      </div>
-
-      <!-- Step 3: Verify email -->
-      <div class="step" id="reg-step-3">
-        <div class="step-indicator"><div class="step-dot done"></div><div class="step-dot done"></div><div class="step-dot done"></div></div>
-        <div class="verify-screen">
-          <div class="v-icon">&#128231;</div>
-          <h3>Check your email</h3>
-          <p>We've sent a verification link to <strong id="verify-email"></strong>.<br>Click the link to verify your account. Your profile will appear on the session page once an admin approves it.</p>
-          <div class="alert alert-ok show" style="text-align:left;">&#10003; Registration submitted! Awaiting admin approval.</div>
-          <button class="btn-resend" onclick="resendVerification()">Resend verification email</button>
-          <div class="link-row" style="margin-top:1rem;"><a href="/alumni.html">&larr; Back to Alumni Portal</a></div>
-        </div>
+    <!-- Edit bar (own profile / admin) -->
+    <div class="edit-bar" id="edit-bar" style="display:none">
+      <div class="save-alert" id="save-alert"></div>
+      <div class="btn-row">
+        <button class="btn btn-navy"  id="btn-edit"   onclick="startEdit()">✏️ Edit Profile</button>
+        <button class="btn btn-green" id="btn-save"   onclick="saveProfile()">💾 Save Changes</button>
+        <button class="btn btn-ghost" id="btn-cancel" onclick="cancelEdit()">Cancel</button>
       </div>
     </div>
 
-  </div><!-- /card -->
-</div><!-- /card-wrap -->
+    <div class="profile-grid">
+
+      <!-- ── SIDEBAR ── -->
+      <div class="sidebar">
+
+        <!-- Quick Info -->
+        <div class="s-card">
+          <div class="s-card-header">Quick Info</div>
+          <div class="s-card-body">
+            <div class="lm-row">
+              <span class="lm-icon">🎓</span>
+              <div><span class="lm-lbl">Session</span><span class="lm-val" id="lm-session">—</span></div>
+            </div>
+            <div class="lm-row">
+              <span class="lm-icon">🕐</span>
+              <div><span class="lm-lbl">Shift</span><span class="lm-val" id="lm-shift">—</span></div>
+            </div>
+            <div class="lm-row">
+              <span class="lm-icon">📍</span>
+              <div><span class="lm-lbl">Location</span><span class="lm-val" id="lm-location">—</span></div>
+            </div>
+            <div class="lm-row">
+              <span class="lm-icon">💼</span>
+              <div><span class="lm-lbl">Position</span><span class="lm-val" id="lm-position">—</span></div>
+            </div>
+            <div class="lm-row" id="lm-linkedin-row" style="display:none">
+              <span class="lm-icon">🔗</span>
+              <div><span class="lm-lbl">LinkedIn</span><span class="lm-val"><a id="lm-linkedin-a" href="#" target="_blank">View Profile →</a></span></div>
+            </div>
+          </div>
+          <div class="vis-notice" id="vis-notice"></div>
+        </div>
+
+        <!-- Change photo (own/admin only) -->
+        <div class="s-card" id="photo-card" style="display:none">
+          <div class="s-card-header">Profile Photo</div>
+          <div class="s-card-body" style="text-align:center;">
+            <p style="font-size:12px;color:var(--muted);margin-bottom:.75rem;">Click your photo above to view full size, or change it here.</p>
+            <button id="btn-change-photo" onclick="document.getElementById('photo-file-edit').click()">📷 Change Photo</button>
+            <input type="file" id="photo-file-edit" accept="image/*" style="display:none" onchange="handlePhotoEdit(this)" />
+            <div id="photo-edit-status"></div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ── MAIN COLUMN ── -->
+      <div class="main-col">
+
+        <!-- Professional -->
+        <div class="section-card">
+          <div class="sc-header">
+            <div class="sc-header-icon">💼</div>
+            <div><div class="sc-title">Professional</div><div class="sc-sub">Current role &amp; employer</div></div>
+          </div>
+          <div class="sc-body">
+            <div class="info-grid">
+              <div class="info-item span2" id="fi-position">
+                <div class="il">Current Position / Job Title</div>
+                <div class="iv" id="v-position">—</div>
+                <input class="edit-inp" id="i-position" type="text" placeholder="e.g. Research Scientist" />
+              </div>
+              <div class="info-item span2" id="fi-employer">
+                <div class="il">Employer / Organization</div>
+                <div class="iv" id="v-employer">—</div>
+                <input class="edit-inp" id="i-employer" type="text" placeholder="Company or institution" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Contact & Location (same session + self + admin) -->
+        <div class="section-card" id="sec-contact" style="display:none">
+          <div class="sc-header">
+            <div class="sc-header-icon">📍</div>
+            <div><div class="sc-title">Contact &amp; Location</div><div class="sc-sub">City, country and online presence</div></div>
+          </div>
+          <div class="sc-body">
+            <div class="info-grid">
+              <div class="info-item">
+                <div class="il">City</div>
+                <div class="iv" id="v-city">—</div>
+                <input class="edit-inp" id="i-city" type="text" placeholder="City" />
+              </div>
+              <div class="info-item">
+                <div class="il">Country</div>
+                <div class="iv" id="v-country">—</div>
+                <input class="edit-inp" id="i-country" type="text" placeholder="Country" />
+              </div>
+              <div class="info-item span2">
+                <div class="il">LinkedIn Profile</div>
+                <div class="iv" id="v-linkedin">—</div>
+                <input class="edit-inp" id="i-linkedin" type="url" placeholder="https://linkedin.com/in/..." />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Private (self + admin + same session for email) -->
+        <div class="section-card" id="sec-private" style="display:none">
+          <div class="sc-header">
+            <div class="sc-header-icon">🔒</div>
+            <div><div class="sc-title">Private Contact</div><div class="sc-sub" id="sec-private-sub">Visible to you and admin only</div></div>
+          </div>
+          <div class="sc-body">
+            <div class="info-grid">
+              <div class="info-item" id="fi-phone" style="display:none">
+                <div class="il">Phone Number</div>
+                <div class="iv" id="v-phone">—</div>
+                <input class="edit-inp" id="i-phone" type="tel" placeholder="+92 300 1234567" />
+                <div class="private-note">🔒 Only visible to you and admin</div>
+              </div>
+              <div class="info-item" id="fi-email">
+                <div class="il">Email Address</div>
+                <div class="iv" id="v-email">—</div>
+                <div class="private-note" id="email-note">🔒 Only visible to you and admin</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Network Info -->
+        <div class="section-card">
+          <div class="sc-header">
+            <div class="sc-header-icon">🎓</div>
+            <div><div class="sc-title">Network Info</div><div class="sc-sub">Academic record details</div></div>
+          </div>
+          <div class="sc-body">
+            <div class="info-grid">
+              <div class="info-item">
+                <div class="il">Roll Number</div>
+                <div class="iv" id="v-roll">—</div>
+              </div>
+              <div class="info-item">
+                <div class="il">Shift</div>
+                <div class="iv" id="v-shift">—</div>
+              </div>
+              <div class="info-item">
+                <div class="il">Session</div>
+                <div class="iv" id="v-session">—</div>
+              </div>
+              <div class="info-item">
+                <div class="il">Member Since</div>
+                <div class="iv" id="v-since">—</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /main-col -->
+    </div><!-- /profile-grid -->
+  </div><!-- /page -->
+</div><!-- /st-profile -->
+
+<!-- Photo lightbox -->
+<div class="photo-lb" id="photo-lb" onclick="closeLb(event)">
+  <button class="lb-close" onclick="document.getElementById('photo-lb').classList.remove('open')">✕</button>
+  <img id="photo-lb-img" src="" alt="Profile photo" onclick="event.stopPropagation()" />
+</div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendEmailVerification, sendPasswordResetEmail, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { getFirestore, doc, setDoc, getDoc, getDocs, collection, query, where, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore, doc, getDoc, getDocs, updateDoc, collection, query, where, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-const app  = initializeApp({ apiKey:"AIzaSyAgUl22Cln6QtY3-HIvI6lE8Zu7n9OblbI", authDomain:"icet-alumni.firebaseapp.com", projectId:"icet-alumni" });
-const auth = getAuth(app);
-const db   = getFirestore(app);
-const ADMIN = "w2AtZbhUiyY5TxyvIecHzWqheaE2";
+const app   = initializeApp({ apiKey:"AIzaSyAgUl22Cln6QtY3-HIvI6lE8Zu7n9OblbI", authDomain:"icet-alumni.firebaseapp.com", projectId:"icet-alumni" });
+const auth  = getAuth(app);
+const db    = getFirestore(app);
+const ADMIN = "eOAyXx3uQzMPJItS8aPLvHgWTQv1";
 
-const ALL_ROLLS = {"BC-M6-301": {"name": "SAEED AKRAM SHEIKH", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "BC-M6-302": {"name": "IMRAN YOUSAF", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "BC-M6-303": {"name": "MUHAMMAD ADNAN SADIQ", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "BC-M6-304": {"name": "MUHAMMAD IRFAN", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "BC-M6-305": {"name": "IMRAN RIAZ", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "BC-M6-306": {"name": "NASIR MEHMOOD", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "BC-M6-307": {"name": "SHAMSHAD-UL-HAQ", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "BC-M6-308": {"name": "AWAIS ABDULLAH", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "BC-M6-309": {"name": "UMAIR AZAD", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "BC-M6-310": {"name": "ALI ZULQARNAIN", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "BC-M6-311": {"name": "MUHAMMAD RIZWAN AZHAR", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "BC-M6-312": {"name": "MUHAMMAD ASAD MASOOD", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "BC-M6-313": {"name": "HAFIZ SHAFIQ", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "BC-M6-314": {"name": "HAFIZ ZUBAIR", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "BC-M6-315": {"name": "MUHAMMAD NAEEM", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "BC-M6-316": {"name": "GHUFRAN AHMAD", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "BC-M6-317": {"name": "ABDUL LATIF", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "CE-M6-101": {"name": "ABDUL WAHAB KHAN", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "CE-M6-102": {"name": "ZAHID ANJUM", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "CE-M6-103": {"name": "USMAN RAFIQ", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "CE-M6-104": {"name": "MEESAM ALI", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "CE-M6-105": {"name": "IRFAN IQBAL", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "CE-M6-106": {"name": "WASEEM SAFDAR", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "CE-M6-107": {"name": "NASEER AHMAD", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "CE-M6-108": {"name": "RIZWAN HAIDER", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "CE-M6-109": {"name": "UMAR FAROOQ", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "CE-M6-110": {"name": "MUHAMMAD FIAZ", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "CE-M6-111": {"name": "FAROOQ KHAN", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "CE-M6-112": {"name": "SALMAN SIDIQUE", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "CE-M6-113": {"name": "HAFIZ AAMIR", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "CE-M6-114": {"name": "MOHSIN ALI RAZA", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "CE-M6-115": {"name": "MUHAMMAD KASHIF", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "CE-M6-116": {"name": "RIZWAN GHULAM NABI", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "CE-M6-117": {"name": "AYAZ KARIM", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "CE-M6-118": {"name": "ADEEM GHAFFAR RANA", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "CE-M6-119": {"name": "KHIZAR HAYAT", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "CE-M6-120": {"name": "AWAIS NADEEM", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "CE-M6-121": {"name": "SAQIB WAHEED", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "CE-M6-122": {"name": "RAO SHAFIQ", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "CE-M6-123": {"name": "FAYYAZ AHMAD", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "CE-M6-124": {"name": "KHUBAIB HASAN", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "CE-M6-125": {"name": "TAHIR NAZIR", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "CE-M6-126": {"name": "MANSAB ALI", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "CE-M6-127": {"name": "ZAHID RASOOL", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "CE-M6-128": {"name": "UMAIR ISLAM", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "CE-M6-129": {"name": "ZOHAIB ZAIDI", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "CE-M6-130": {"name": "ASAD ABBAS", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "CE-M6-131": {"name": "AJMAL JAVAID", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "CE-M6-132": {"name": "KHALIL AHMAD", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "CE-M6-133": {"name": "WAQAS AZIZ HASHMI", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "CE-M6-134": {"name": "AFZAL CAUDHRY", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "CE-M6-135": {"name": "MUJEEB UR REHMAN", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "CE-M6-136": {"name": "ALI BUKHARI", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "CE-M6-137": {"name": "AWAIS NAEEM", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "CE-M6-138": {"name": "SAAD TOOR", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "CE-M6-139": {"name": "KASHIF YOUNIS", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "CE-M6-140": {"name": "AFFAN KHALID", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "CE-M6-141": {"name": "JAHENZAIB KHAN", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "CE-M6-142": {"name": "AHSAN BILAL", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "CE-M6-143": {"name": "SAQIB RIZVI", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "CE-M6-144": {"name": "SYED MUHAMMAD QAISER KHAN", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "CE-M6-145": {"name": "UMAIR RASHEED", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "CE-M6-146": {"name": "ALI NADEEM", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "CE-M6-147": {"name": "FAWAD FURRUKH", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "CE-M6-148": {"name": "AFNAN HAMEED", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "CE-M6-149": {"name": "ABDUL REHMAN", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "CE-M6-150": {"name": "IBRAHIM SAEED", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "CE-M6-151": {"name": "MUHAMMA ARIF KHAN", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "CE-M6-152": {"name": "HARIS SHAJAR", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "CE-M6-153": {"name": "IMRAN KHAN", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "CE-M6-154": {"name": "NOUMAN AHMAD", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "CE-M6-155": {"name": "IMRAN KHAN", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "CE-M6-156": {"name": "JAMSHAID IQBAL", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "CE-M6-157": {"name": "FAISAL MEHMOOD", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "CE-M6-158": {"name": "SHERAZ AFZAL", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "CE-M6-159": {"name": "ADNAN SHOAIB", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "CE-M6-160": {"name": "KARIM BUKSH", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "CE-M6-161": {"name": "UMAIR DANISH", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "CE-M6-162": {"name": "AAMIR SHAMAS", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "CE-M6-163": {"name": "WAZIR ALI", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "CE-M6-164": {"name": "JAMA AHMAD HERSI", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "EE-M6-401": {"name": "AMBREEN GHALIB", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "EE-M6-402": {"name": "MUHAMMAD SHAHZAD ALI", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "EE-M6-403": {"name": "MUHAMMAD ILYAS", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "EE-M6-404": {"name": "YASIR SHARIF AWAN", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "EE-M6-405": {"name": "RAO MUNEER ALI", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "EE-M6-406": {"name": "SAJID MAHMOOD", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "EE-M6-407": {"name": "ALI MURAD", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "EE-M6-408": {"name": "USMAN ALI", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "EE-M6-409": {"name": "MUHAMMAD AWAIS", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "EE-M6-410": {"name": "AMBREEN GULZAR", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "EE-M6-411": {"name": "FAHIM AHMAD ZAFAR", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "EE-M6-412": {"name": "ANWAAR AHMAD", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "EE-M6-413": {"name": "USMAN RASHEED", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "EE-M6-414": {"name": "KHUBAIB AHMAD", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "EE-M6-415": {"name": "SALMAN MANSOOR", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "EE-M6-416": {"name": "USMAN SAEED", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "EE-M6-417": {"name": "SADIA NAUREEN", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "PG-M6-201": {"name": "TAYAB SAEED", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "PG-M6-202": {"name": "ATIF ASHRAF", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "PG-M6-203": {"name": "ASAD ALI", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "PG-M6-204": {"name": "NAVEED AKHTAR", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "PG-M6-205": {"name": "MUNZOOR AHMAD", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "PG-M6-206": {"name": "FARAZ BUTT", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "PG-M6-207": {"name": "SANA ULLAH", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "PG-M6-208": {"name": "BABER ALI", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "PG-M6-209": {"name": "AAMIR RIAZ", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "PG-M6-210": {"name": "GHULAM ABBAS", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "PG-M6-211": {"name": "MUHAMMAD BASIT ALI", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "PG-M6-212": {"name": "ZEESHAN SHOAIB", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "PG-M6-213": {"name": "MUHAMMAD KALEEM ULLAH", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "PG-M6-214": {"name": "HAFIZ KHALIL UR REHMAN", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "PG-M6-215": {"name": "FAISAL JOYIA", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "PG-M6-216": {"name": "FAISAL KHALIL", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "PG-M6-217": {"name": "MUHAMMAD ZEESHAN SALEEM", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "PG-M6-218": {"name": "AHSAN NOOR KHAN", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "PG-M6-219": {"name": "WAQAS SHEHRYAR", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "PG-M6-220": {"name": "AFTAB AHMAD", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "PG-M6-221": {"name": "TANVIR AHMAD", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "PG-M6-222": {"name": "FAKHAR ABBAS", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "PG-M6-223": {"name": "MUHAMMAD  HASNAT ALI", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "PG-M6-224": {"name": "YASIR ARAFAT", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "PG-M6-225": {"name": "TAHIR WASIM", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "PG-M6-226": {"name": "MOHSIN SAEED", "session": "2006-Morning", "label": "2006–2010 · Morning"}, "CE-E6-102": {"name": "FAHAD MASOOD", "session": "2006-Evening", "label": "2006–2010 · Evening"}, "CE-E6-103": {"name": "NOMAN LIAQAT", "session": "2006-Evening", "label": "2006–2010 · Evening"}, "CE-E6-104": {"name": "YASEEN AKRAM", "session": "2006-Evening", "label": "2006–2010 · Evening"}, "CE-E6-105": {"name": "ADNAN NAWAZ", "session": "2006-Evening", "label": "2006–2010 · Evening"}, "CE-E6-106": {"name": "AHSEN HAFEEZ", "session": "2006-Evening", "label": "2006–2010 · Evening"}, "CE-E6-107": {"name": "RAZA MUDASIR ALVI", "session": "2006-Evening", "label": "2006–2010 · Evening"}, "CE-E6-108": {"name": "GULZEB KHAN", "session": "2006-Evening", "label": "2006–2010 · Evening"}, "CE-E6-109": {"name": "USMAN SADIQUE", "session": "2006-Evening", "label": "2006–2010 · Evening"}, "CE-E6-110": {"name": "ABDUL QAYYUM", "session": "2006-Evening", "label": "2006–2010 · Evening"}, "CE-E6-111": {"name": "IMRAN MALIK", "session": "2006-Evening", "label": "2006–2010 · Evening"}, "CE-E6-112": {"name": "SHAHID NADEEM", "session": "2006-Evening", "label": "2006–2010 · Evening"}, "CE-E6-113": {"name": "UMAIR FURQAN", "session": "2006-Evening", "label": "2006–2010 · Evening"}, "CE-E6-114": {"name": "NAUMAN ASHRAF", "session": "2006-Evening", "label": "2006–2010 · Evening"}, "CE-E6-115": {"name": "WAQAS BUKHARI", "session": "2006-Evening", "label": "2006–2010 · Evening"}, "CE-E6-116": {"name": "SANA ULLAH", "session": "2006-Evening", "label": "2006–2010 · Evening"}, "CE-E6-117": {"name": "NAEEM YOUNIS", "session": "2006-Evening", "label": "2006–2010 · Evening"}, "CE-E6-118": {"name": "MASOOD HAIDER", "session": "2006-Evening", "label": "2006–2010 · Evening"}, "CE-E6-119": {"name": "MUHAMMAD ASIF KHAN", "session": "2006-Evening", "label": "2006–2010 · Evening"}, "CE-E6-120": {"name": "MOHSIN MOBEEN", "session": "2006-Evening", "label": "2006–2010 · Evening"}, "CE-E6-121": {"name": "FAHEEM RIAZ", "session": "2006-Evening", "label": "2006–2010 · Evening"}, "CE-E6-122": {"name": "FAHAD MIR", "session": "2006-Evening", "label": "2006–2010 · Evening"}, "CE-E6-123": {"name": "ADNAN REHMAT", "session": "2006-Evening", "label": "2006–2010 · Evening"}, "CE-E6-124": {"name": "YASIR AKRAM AWAN", "session": "2006-Evening", "label": "2006–2010 · Evening"}, "CE-E6-125": {"name": "SHAROOZ KHAN", "session": "2006-Evening", "label": "2006–2010 · Evening"}, "CE-E6-126": {"name": "RANA MUHAMMAD IMRAN", "session": "2006-Evening", "label": "2006–2010 · Evening"}, "CE-E6-127": {"name": "RIZWAN MALIK", "session": "2006-Evening", "label": "2006–2010 · Evening"}, "CE-E6-128": {"name": "UMER TAHIR MIR", "session": "2006-Evening", "label": "2006–2010 · Evening"}, "CE-E6-129": {"name": "MUHAMMAD NAEEM IQBAL", "session": "2006-Evening", "label": "2006–2010 · Evening"}, "CE-E6-130": {"name": "MUHAMMAD UMAIR DANISH", "session": "2006-Evening", "label": "2006–2010 · Evening"}, "CE-E6-131": {"name": "ABID ALI", "session": "2006-Evening", "label": "2006–2010 · Evening"}, "CE-E6-132": {"name": "FARHAN CHEEMA", "session": "2006-Evening", "label": "2006–2010 · Evening"}, "CE-E6-133": {"name": "MUHAMMAD ARSHAD", "session": "2006-Evening", "label": "2006–2010 · Evening"}, "CE-E6-134": {"name": "ZUBAIR SHAHID", "session": "2006-Evening", "label": "2006–2010 · Evening"}, "CE-E6-135": {"name": "WAQAR AHMED", "session": "2006-Evening", "label": "2006–2010 · Evening"}, "CE-E6-136": {"name": "AFFAN AHMAD", "session": "2006-Evening", "label": "2006–2010 · Evening"}, "CE-E6-137": {"name": "UMAIR SHOAIB", "session": "2006-Evening", "label": "2006–2010 · Evening"}, "CE-E6-138": {"name": "ARSALAN AWAN", "session": "2006-Evening", "label": "2006–2010 · Evening"}, "CE-E6-139": {"name": "MUHAMMAD IMRAN", "session": "2006-Evening", "label": "2006–2010 · Evening"}, "CE-E6-140": {"name": "ASIF IQBAL", "session": "2006-Evening", "label": "2006–2010 · Evening"}, "CE-E6-141": {"name": "HAKIM ALI HAIDER", "session": "2006-Evening", "label": "2006–2010 · Evening"}, "CE-E6-142": {"name": "GHULAM MURTAZA", "session": "2006-Evening", "label": "2006–2010 · Evening"}, "CE-E6-143": {"name": "ADNAN SALEEM", "session": "2006-Evening", "label": "2006–2010 · Evening"}, "CE-E6-144": {"name": "ASIF ALI SHAHZAD", "session": "2006-Evening", "label": "2006–2010 · Evening"}, "PG-E6-201": {"name": "MUHAMMAD ZAMAN", "session": "2006-Evening", "label": "2006–2010 · Evening"}, "PG-E6-202": {"name": "IMRAN NIAZ", "session": "2006-Evening", "label": "2006–2010 · Evening"}, "PG-E6-203": {"name": "SHAHID SAEED", "session": "2006-Evening", "label": "2006–2010 · Evening"}, "PG-E6-204": {"name": "KHURRAM JAVED", "session": "2006-Evening", "label": "2006–2010 · Evening"}, "PG-E6-205": {"name": "SAQIB RAZA", "session": "2006-Evening", "label": "2006–2010 · Evening"}, "PG-E6-206": {"name": "AAMIR KARIM", "session": "2006-Evening", "label": "2006–2010 · Evening"}, "PG-E6-207": {"name": "MUHAMMAD UMAR FAROOQ", "session": "2006-Evening", "label": "2006–2010 · Evening"}, "PG-E6-208": {"name": "ALI AHMAD", "session": "2006-Evening", "label": "2006–2010 · Evening"}, "PG-E6-209": {"name": "ABDUL BASIT", "session": "2006-Evening", "label": "2006–2010 · Evening"}, "PG-E6-210": {"name": "FARHAN RASOOL", "session": "2006-Evening", "label": "2006–2010 · Evening"}, "PG-E6-211": {"name": "NASEER AHMAD", "session": "2006-Evening", "label": "2006–2010 · Evening"}, "PG-E6-212": {"name": "MUHAMMAD USMAN", "session": "2006-Evening", "label": "2006–2010 · Evening"}, "PG-E6-213": {"name": "AQEEL MANSOOR CHISHTI", "session": "2006-Evening", "label": "2006–2010 · Evening"}, "PG-E6-214": {"name": "RIZWAN AHMED SHAH", "session": "2006-Evening", "label": "2006–2010 · Evening"}, "PG-E6-215": {"name": "MUAMMAD ZAIN", "session": "2006-Evening", "label": "2006–2010 · Evening"}, "PG-E6-216": {"name": "USMAN ANWAR DAR", "session": "2006-Evening", "label": "2006–2010 · Evening"}, "PG-E6-217": {"name": "OMER SHUJAT", "session": "2006-Evening", "label": "2006–2010 · Evening"}, "PG-E6-218": {"name": "IMRAN RAFIQUE", "session": "2006-Evening", "label": "2006–2010 · Evening"}, "PG-E6-219": {"name": "NAEEM BHATTI", "session": "2006-Evening", "label": "2006–2010 · Evening"}, "PG-E6-220": {"name": "ASIF SANI", "session": "2006-Evening", "label": "2006–2010 · Evening"}, "M09-10CE01": {"name": "KASHIF YASIN", "session": "2009-Morning", "label": "2009–2013 · Morning"}, "M09-10CE02": {"name": "SAJJAD HUSSAIN", "session": "2009-Morning", "label": "2009–2013 · Morning"}, "M09-10CE03": {"name": "ASIM GHAFOOR", "session": "2009-Morning", "label": "2009–2013 · Morning"}, "M09-10CE04": {"name": "ABDUL REHMAN", "session": "2009-Morning", "label": "2009–2013 · Morning"}, "M09-10CE05": {"name": "IMRAN SARWER", "session": "2009-Morning", "label": "2009–2013 · Morning"}, "M09-10CE06": {"name": "ADNAN ZUBAIR KHALID", "session": "2009-Morning", "label": "2009–2013 · Morning"}, "M09-10CE07": {"name": "MUHAMMAD SHAHID AMIN", "session": "2009-Morning", "label": "2009–2013 · Morning"}, "M09-10CE08": {"name": "WAQAS IQBAL", "session": "2009-Morning", "label": "2009–2013 · Morning"}, "M09-10CE09": {"name": "FAHID GHULAM RASOOL", "session": "2009-Morning", "label": "2009–2013 · Morning"}, "M09-10CE10": {"name": "NOMAN AHMAD", "session": "2009-Morning", "label": "2009–2013 · Morning"}, "M09-10CE11": {"name": "ARSALAN YASIN", "session": "2009-Morning", "label": "2009–2013 · Morning"}, "M09-10CE12": {"name": "MUHAMMAD WAQAS", "session": "2009-Morning", "label": "2009–2013 · Morning"}, "M09-10CE13": {"name": "SHEHROZE ALI", "session": "2009-Morning", "label": "2009–2013 · Morning"}, "M09-10CE14": {"name": "RAMEEZ ANWAR ANSARI", "session": "2009-Morning", "label": "2009–2013 · Morning"}, "M09-10CE15": {"name": "QAMMAR-U-DIN", "session": "2009-Morning", "label": "2009–2013 · Morning"}, "M09-10CE16": {"name": "SHABBIR RAZA ALI", "session": "2009-Morning", "label": "2009–2013 · Morning"}, "M09-10CE17": {"name": "BILAL HASSAN", "session": "2009-Morning", "label": "2009–2013 · Morning"}, "M09-10CE18": {"name": "SYED ALI MUSA KAZMI", "session": "2009-Morning", "label": "2009–2013 · Morning"}, "M09-10CE19": {"name": "ABUBAKAR SOHAIL", "session": "2009-Morning", "label": "2009–2013 · Morning"}, "M09-10CE20": {"name": "SOHAIB REHMAN", "session": "2009-Morning", "label": "2009–2013 · Morning"}, "M09-10CE21": {"name": "ABDUL SALAM", "session": "2009-Morning", "label": "2009–2013 · Morning"}, "M09-10CE22": {"name": "MUHAMMAD NADEEM", "session": "2009-Morning", "label": "2009–2013 · Morning"}, "M09-10CE23": {"name": "MUHAMMAD REHAN KHAN", "session": "2009-Morning", "label": "2009–2013 · Morning"}, "M09-10CE24": {"name": "AWAIS YOUNAS", "session": "2009-Morning", "label": "2009–2013 · Morning"}, "M09-10CE25": {"name": "UMAR SHEHZAD", "session": "2009-Morning", "label": "2009–2013 · Morning"}, "M09-10CE26": {"name": "MUHAMMAD USMAN LATIF", "session": "2009-Morning", "label": "2009–2013 · Morning"}, "M09-10CE27": {"name": "SUHAIL AHMED SHAH", "session": "2009-Morning", "label": "2009–2013 · Morning"}, "M09-10CE28": {"name": "MUHAMMAD AAMIR SHAHID", "session": "2009-Morning", "label": "2009–2013 · Morning"}, "M09-10CE29": {"name": "ADEEL SHAHZAD", "session": "2009-Morning", "label": "2009–2013 · Morning"}, "M09-10CE30": {"name": "MUHAMMAD AWAIS AKRAM", "session": "2009-Morning", "label": "2009–2013 · Morning"}, "M09-10CE31": {"name": "HAFIZ MUHAMMAD AWAIS", "session": "2009-Morning", "label": "2009–2013 · Morning"}, "M09-10CE32": {"name": "MUHAMMAD UMAR FAROOQ", "session": "2009-Morning", "label": "2009–2013 · Morning"}, "M09-10CE33": {"name": "ZAID KHALID", "session": "2009-Morning", "label": "2009–2013 · Morning"}, "M09-10CE34": {"name": "HAROON SAEED", "session": "2009-Morning", "label": "2009–2013 · Morning"}, "M09-10CE35": {"name": "MUHAMMAD USMAN TARIQ", "session": "2009-Morning", "label": "2009–2013 · Morning"}, "M09-10CE36": {"name": "SAJID JAMEEL JUT", "session": "2009-Morning", "label": "2009–2013 · Morning"}, "M09-10CE37": {"name": "MUHAMMAD SALEEM", "session": "2009-Morning", "label": "2009–2013 · Morning"}, "M09-10CE38": {"name": "SAMEE ULLAH", "session": "2009-Morning", "label": "2009–2013 · Morning"}, "M09-10CE39": {"name": "MUHAMMAD AMJAD MAJEED", "session": "2009-Morning", "label": "2009–2013 · Morning"}, "M09-10CE40": {"name": "NAZIM HASSAN RIZVI", "session": "2009-Morning", "label": "2009–2013 · Morning"}, "M09-10CE41": {"name": "SYED AHMAD WAQAS", "session": "2009-Morning", "label": "2009–2013 · Morning"}, "M09-10CE42": {"name": "HASSAN ABDUR REHMAN", "session": "2009-Morning", "label": "2009–2013 · Morning"}, "M09-10CE43": {"name": "ANEES UR REHMAN", "session": "2009-Morning", "label": "2009–2013 · Morning"}, "M09-10CE44": {"name": "ABID MEHMOOD", "session": "2009-Morning", "label": "2009–2013 · Morning"}, "M09-10CE45": {"name": "WAQAS AHMAD", "session": "2009-Morning", "label": "2009–2013 · Morning"}, "M09-10CE46": {"name": "USMAN NADEEM", "session": "2009-Morning", "label": "2009–2013 · Morning"}, "M09-10CE47": {"name": "MUHAMMAD WAQAR", "session": "2009-Morning", "label": "2009–2013 · Morning"}, "M09-10CE48": {"name": "ARIF JAN", "session": "2009-Morning", "label": "2009–2013 · Morning"}, "M09-10CE49": {"name": "NAYYER MEHMOOD", "session": "2009-Morning", "label": "2009–2013 · Morning"}, "M09-10CE50": {"name": "SIDRA ZAHOOR", "session": "2009-Morning", "label": "2009–2013 · Morning"}, "M09-10CE51": {"name": "QASIM ALI", "session": "2009-Morning", "label": "2009–2013 · Morning"}, "M09-10CE52": {"name": "MUHAMMAD ZAHID", "session": "2009-Morning", "label": "2009–2013 · Morning"}, "M09-10CE53": {"name": "JUNAID KHAN", "session": "2009-Morning", "label": "2009–2013 · Morning"}, "M09-10CE54": {"name": "TAUHID UL HAQ", "session": "2009-Morning", "label": "2009–2013 · Morning"}, "M09-10CE55": {"name": "QUYYUM FURQAN", "session": "2009-Morning", "label": "2009–2013 · Morning"}, "M09-10CE56": {"name": "EHTISHAM ALI", "session": "2009-Morning", "label": "2009–2013 · Morning"}, "M09-10PG01": {"name": "HAFIZ M. SAIF ULLAH SALEEM", "session": "2009-Morning", "label": "2009–2013 · Morning"}, "M09-10PG02": {"name": "MUHAMMAD AFRAZ", "session": "2009-Morning", "label": "2009–2013 · Morning"}, "M09-10PG03": {"name": "REHAN ASHRAF", "session": "2009-Morning", "label": "2009–2013 · Morning"}, "M09-10PG04": {"name": "AFTAB AHMED", "session": "2009-Morning", "label": "2009–2013 · Morning"}, "M09-10PG05": {"name": "AHMED RIAZ KHAN", "session": "2009-Morning", "label": "2009–2013 · Morning"}, "M09-10PG06": {"name": "MUHAMMAD ALEEM", "session": "2009-Morning", "label": "2009–2013 · Morning"}, "M09-10PG07": {"name": "ASMAT ULLAH QAISRANI", "session": "2009-Morning", "label": "2009–2013 · Morning"}, "M09-10PG08": {"name": "ADEEL HASNAIN", "session": "2009-Morning", "label": "2009–2013 · Morning"}, "M09-10PG09": {"name": "ILYAS RAZA", "session": "2009-Morning", "label": "2009–2013 · Morning"}, "M09-10PG10": {"name": "HAFIZ WAQAS WAQAR", "session": "2009-Morning", "label": "2009–2013 · Morning"}, "M09-10PG11": {"name": "HASSAN QADER", "session": "2009-Morning", "label": "2009–2013 · Morning"}, "M09-10PG12": {"name": "FARHAN AKHTAR", "session": "2009-Morning", "label": "2009–2013 · Morning"}, "M09-10PG13": {"name": "GHULAM MURTAZA", "session": "2009-Morning", "label": "2009–2013 · Morning"}, "M09-10PG14": {"name": "HAFIZ ASAD UR REHMAN", "session": "2009-Morning", "label": "2009–2013 · Morning"}, "M09-10PG15": {"name": "RIZWAN ASHRAF", "session": "2009-Morning", "label": "2009–2013 · Morning"}, "M09-10PG16": {"name": "ZUBAIR AHMED KHOKHAR", "session": "2009-Morning", "label": "2009–2013 · Morning"}, "M09-10PG17": {"name": "AHSAN JALEEL", "session": "2009-Morning", "label": "2009–2013 · Morning"}, "M09-10PG18": {"name": "MUHAMMAD AYYAZ AMJAD", "session": "2009-Morning", "label": "2009–2013 · Morning"}, "M09-10PG19": {"name": "MUHAMMAD HABIB SABIR", "session": "2009-Morning", "label": "2009–2013 · Morning"}, "M09-10PG20": {"name": "MUHAMMAD YOUSAF", "session": "2009-Morning", "label": "2009–2013 · Morning"}, "M09-10PG21": {"name": "MUHAMMAD MUNEEB SULTAN", "session": "2009-Morning", "label": "2009–2013 · Morning"}, "M09-10PG22": {"name": "MUHAMMAD SALMAN IJAZ", "session": "2009-Morning", "label": "2009–2013 · Morning"}, "M09-10PG23": {"name": "ALI AYUB", "session": "2009-Morning", "label": "2009–2013 · Morning"}, "E09-10CE01": {"name": "MUHAMMAD ARSLAN SARWAR", "session": "2009-Evening", "label": "2009–2013 · Evening"}, "E09-10CE02": {"name": "MUHAMMAD QASIM", "session": "2009-Evening", "label": "2009–2013 · Evening"}, "E09-10CE03": {"name": "MUHAMMAD UMAR", "session": "2009-Evening", "label": "2009–2013 · Evening"}, "E09-10CE04": {"name": "MUHAMMAD ADIL", "session": "2009-Evening", "label": "2009–2013 · Evening"}, "E09-10CE05": {"name": "MUHAMMAD ABU BAKAR NASIM", "session": "2009-Evening", "label": "2009–2013 · Evening"}, "E09-10CE06": {"name": "HAMZA AMJAD BUTT", "session": "2009-Evening", "label": "2009–2013 · Evening"}, "E09-10CE07": {"name": "MUHAMMAD ASIF", "session": "2009-Evening", "label": "2009–2013 · Evening"}, "E09-10CE08": {"name": "HAFIZ ATA MUHAY-UD DIN", "session": "2009-Evening", "label": "2009–2013 · Evening"}, "E09-10CE09": {"name": "—", "session": "2009-Evening", "label": "2009–2013 · Evening"}, "E09-10CE10": {"name": "MUHAMMAD IBRAHEEM SHAH", "session": "2009-Evening", "label": "2009–2013 · Evening"}, "E09-10CE11": {"name": "MUHAMMAD ANS RIAZ", "session": "2009-Evening", "label": "2009–2013 · Evening"}, "E09-10CE12": {"name": "MUHAMMAD HARIS", "session": "2009-Evening", "label": "2009–2013 · Evening"}, "E09-10CE13": {"name": "HAFIZ MUHAMMAD JUNAID KHAN", "session": "2009-Evening", "label": "2009–2013 · Evening"}, "E09-10CE14": {"name": "KAZAM HUSSAIN GURMANI", "session": "2009-Evening", "label": "2009–2013 · Evening"}, "E09-10CE15": {"name": "MUHAMMAD UMAIR FAROOQ", "session": "2009-Evening", "label": "2009–2013 · Evening"}, "E09-10CE16": {"name": "MUHAMMAD ARSHAD KHAN", "session": "2009-Evening", "label": "2009–2013 · Evening"}, "E09-10CE17": {"name": "MUHAMMAD WAQAS AJMAL", "session": "2009-Evening", "label": "2009–2013 · Evening"}, "E09-10CE18": {"name": "AIZA NASAR", "session": "2009-Evening", "label": "2009–2013 · Evening"}, "E09-10CE19": {"name": "RANA MUHAMMAD AQLEEM ULLAH", "session": "2009-Evening", "label": "2009–2013 · Evening"}, "E09-10CE20": {"name": "FAIZAN AHMED", "session": "2009-Evening", "label": "2009–2013 · Evening"}, "E09-10CE21": {"name": "ADIL ABBAS", "session": "2009-Evening", "label": "2009–2013 · Evening"}, "E09-10CE22": {"name": "MUHAMMAD IHSAN UL HAQ", "session": "2009-Evening", "label": "2009–2013 · Evening"}, "E09-10CE23": {"name": "SIBTAIN KHALID", "session": "2009-Evening", "label": "2009–2013 · Evening"}, "E09-10CE24": {"name": "MUHAMMAD UBAID HAROON", "session": "2009-Evening", "label": "2009–2013 · Evening"}, "E09-10CE25": {"name": "ALI WAQAS", "session": "2009-Evening", "label": "2009–2013 · Evening"}, "E09-10CE26": {"name": "SHAHZEB HASSAN", "session": "2009-Evening", "label": "2009–2013 · Evening"}, "E09-10CE27": {"name": "—", "session": "2009-Evening", "label": "2009–2013 · Evening"}, "E09-10CE28": {"name": "MUHAMMAD HASSAN SALEEM", "session": "2009-Evening", "label": "2009–2013 · Evening"}, "E09-10CE29": {"name": "WAHEED UR REHMAN", "session": "2009-Evening", "label": "2009–2013 · Evening"}, "E09-10CE30": {"name": "ANAS NADEEM", "session": "2009-Evening", "label": "2009–2013 · Evening"}, "E09-10CE31": {"name": "UMAIR MAHMOOD", "session": "2009-Evening", "label": "2009–2013 · Evening"}, "E09-10CE32": {"name": "SHAHID SARFRAZ", "session": "2009-Evening", "label": "2009–2013 · Evening"}, "E09-10CE33": {"name": "ZIAD AKRAM", "session": "2009-Evening", "label": "2009–2013 · Evening"}, "E09-10CE34": {"name": "HAFIZ USMAN SAEED", "session": "2009-Evening", "label": "2009–2013 · Evening"}, "E09-10CE35": {"name": "UMAR FAROOQ", "session": "2009-Evening", "label": "2009–2013 · Evening"}, "E09-10CE36": {"name": "ABID ALI", "session": "2009-Evening", "label": "2009–2013 · Evening"}, "E09-10CE37": {"name": "RASHID NAWAZ", "session": "2009-Evening", "label": "2009–2013 · Evening"}, "E09-10CE38": {"name": "MOHSIN EHSAN BAIG", "session": "2009-Evening", "label": "2009–2013 · Evening"}, "E09-10CE39": {"name": "MUHAMMAD NASIR", "session": "2009-Evening", "label": "2009–2013 · Evening"}, "E09-10CE40": {"name": "MUHAMMAD AZEEM SHAUKAT", "session": "2009-Evening", "label": "2009–2013 · Evening"}, "E09-10CE41": {"name": "ABU BAKAR EJAZ", "session": "2009-Evening", "label": "2009–2013 · Evening"}, "E09-10CE42": {"name": "UMAIR MAHMOOD BHATTI", "session": "2009-Evening", "label": "2009–2013 · Evening"}, "E09-10CE43": {"name": "MUHAMMAD IMRAN SAEED", "session": "2009-Evening", "label": "2009–2013 · Evening"}, "E09-10CE44": {"name": "HAFIZ ABUZAR AHSAN", "session": "2009-Evening", "label": "2009–2013 · Evening"}, "E09-10CE45": {"name": "M. MOHSIN ANWAR", "session": "2009-Evening", "label": "2009–2013 · Evening"}, "E09-10CE46": {"name": "SHUJA UR REHMAN", "session": "2009-Evening", "label": "2009–2013 · Evening"}, "E09-10CE47": {"name": "MUHAMMAD SABTAIN", "session": "2009-Evening", "label": "2009–2013 · Evening"}, "E09-10PG01": {"name": "HASSAN BIN WAHEED", "session": "2009-Evening", "label": "2009–2013 · Evening"}, "E09-10PG02": {"name": "MUHAMMAD SAJID QAMAR", "session": "2009-Evening", "label": "2009–2013 · Evening"}, "E09-10PG03": {"name": "MUHAMMAD KAMRAN HAIDER", "session": "2009-Evening", "label": "2009–2013 · Evening"}, "E09-10PG04": {"name": "SOHAIB MUSHTAQ", "session": "2009-Evening", "label": "2009–2013 · Evening"}, "E09-10PG05": {"name": "MUHAMMAD ASIM BABAR", "session": "2009-Evening", "label": "2009–2013 · Evening"}, "E09-10PG06": {"name": "YASHIB YOUSAF KAMRAN SAROIA", "session": "2009-Evening", "label": "2009–2013 · Evening"}, "E09-10PG07": {"name": "IRFAN YOUSAF", "session": "2009-Evening", "label": "2009–2013 · Evening"}, "E09-10PG08": {"name": "SYED ALI AQDUS SHAH", "session": "2009-Evening", "label": "2009–2013 · Evening"}, "E09-10PG09": {"name": "HAFIZ MUHAMMAD FAHAD ILYAS", "session": "2009-Evening", "label": "2009–2013 · Evening"}, "E09-10PG10": {"name": "MUHAMMAD JAWAD", "session": "2009-Evening", "label": "2009–2013 · Evening"}, "E09-10PG11": {"name": "AQSA HASSAN", "session": "2009-Evening", "label": "2009–2013 · Evening"}, "E09-10PG12": {"name": "MUHAMMAD ATIF ILYAS", "session": "2009-Evening", "label": "2009–2013 · Evening"}, "E09-10PG13": {"name": "SAIF UR REHMAN", "session": "2009-Evening", "label": "2009–2013 · Evening"}, "RP16-CE01": {"name": "MUHAMMAD QASIM RIAZ", "session": "2016-Morning", "label": "2016–2020 · Morning"}, "RP16-CE02": {"name": "ARBAB NOOR", "session": "2016-Morning", "label": "2016–2020 · Morning"}, "RP16-CE03": {"name": "ZILL E HUMA SALEEM", "session": "2016-Morning", "label": "2016–2020 · Morning"}, "RP16-CE04": {"name": "REEBAHA ASHRAF", "session": "2016-Morning", "label": "2016–2020 · Morning"}, "RP16-CE05": {"name": "HAMZA TAHIR", "session": "2016-Morning", "label": "2016–2020 · Morning"}, "RP16-CE06": {"name": "HAFIZ ABDUL REHMAN", "session": "2016-Morning", "label": "2016–2020 · Morning"}, "RP16-CE07": {"name": "HAMNA SHAHID", "session": "2016-Morning", "label": "2016–2020 · Morning"}, "RP16-CE08": {"name": "WANIA NOUREEN", "session": "2016-Morning", "label": "2016–2020 · Morning"}, "RP16-CE09": {"name": "FAISAL MEHMOOD", "session": "2016-Morning", "label": "2016–2020 · Morning"}, "RP16-CE10": {"name": "MUHAMMAD AHMAD NASEEM", "session": "2016-Morning", "label": "2016–2020 · Morning"}, "RP16-CE11": {"name": "MUHAMMAD ADNAN", "session": "2016-Morning", "label": "2016–2020 · Morning"}, "RP16-CE12": {"name": "HAFIZ MUHAMMAD HASSAN ABID", "session": "2016-Morning", "label": "2016–2020 · Morning"}, "RP16-CE13": {"name": "WAQAR AHMAD ALI", "session": "2016-Morning", "label": "2016–2020 · Morning"}, "RP16-CE14": {"name": "UMBREEN ZOHRA", "session": "2016-Morning", "label": "2016–2020 · Morning"}, "RP16-CE15": {"name": "EEMAN NAVEED", "session": "2016-Morning", "label": "2016–2020 · Morning"}, "RP16-CE16": {"name": "MUHAMMAD IMTIAZ", "session": "2016-Morning", "label": "2016–2020 · Morning"}, "RP16-CE17": {"name": "AHMAD SALEEM", "session": "2016-Morning", "label": "2016–2020 · Morning"}, "RP16-CE18": {"name": "MUHAMMAD MINHAJ QADRI", "session": "2016-Morning", "label": "2016–2020 · Morning"}, "RP16-CE19": {"name": "MUHAMAD EHSAN ELAHI", "session": "2016-Morning", "label": "2016–2020 · Morning"}, "RP16-CE20": {"name": "MUHAMMAD USAMA", "session": "2016-Morning", "label": "2016–2020 · Morning"}, "RP16-CE21": {"name": "AYESHA SHAHBAZ", "session": "2016-Morning", "label": "2016–2020 · Morning"}, "RP16-CE22": {"name": "AHSAN ALI", "session": "2016-Morning", "label": "2016–2020 · Morning"}, "RP16-CE23": {"name": "HAMZA BIN AZAM", "session": "2016-Morning", "label": "2016–2020 · Morning"}, "RP16-CE24": {"name": "MUHAMMAD AHMAD HASSAN", "session": "2016-Morning", "label": "2016–2020 · Morning"}, "RP16-CE25": {"name": "MUHAMMAD IQBAL", "session": "2016-Morning", "label": "2016–2020 · Morning"}, "RP16-CE26": {"name": "MUHAMMAD TALHA FAROOQ", "session": "2016-Morning", "label": "2016–2020 · Morning"}, "RP16-CE27": {"name": "MAHNOOR RIAZ", "session": "2016-Morning", "label": "2016–2020 · Morning"}, "RP16-CE28": {"name": "AMINA IQBAL", "session": "2016-Morning", "label": "2016–2020 · Morning"}, "RP16-CE29": {"name": "RANA BILAL HAKEEM", "session": "2016-Morning", "label": "2016–2020 · Morning"}, "RP16-CE30": {"name": "TALHA AHMAD", "session": "2016-Morning", "label": "2016–2020 · Morning"}, "RP16-CE31": {"name": "MUHAMMAD ASIF", "session": "2016-Morning", "label": "2016–2020 · Morning"}, "RP16-CE32": {"name": "SHAHZEB FAROOQ", "session": "2016-Morning", "label": "2016–2020 · Morning"}, "RP16-CE33": {"name": "MUHAMMAD USAMA", "session": "2016-Morning", "label": "2016–2020 · Morning"}, "RP16-CE34": {"name": "RAJA MUHAMMAD MURTAZA", "session": "2016-Morning", "label": "2016–2020 · Morning"}, "RP16-CE35": {"name": "ZAINAB DAWOOD", "session": "2016-Morning", "label": "2016–2020 · Morning"}, "RP16-CE36": {"name": "MUHAMMAD OLYAN", "session": "2016-Morning", "label": "2016–2020 · Morning"}, "RP16-CE37": {"name": "MUHAMMAD ALI ASHRAF", "session": "2016-Morning", "label": "2016–2020 · Morning"}, "RP16-CE38": {"name": "QURBAN ALI", "session": "2016-Morning", "label": "2016–2020 · Morning"}, "RP16-CE39": {"name": "SUNDAS ALI", "session": "2016-Morning", "label": "2016–2020 · Morning"}, "RP16-CE40": {"name": "SHAH FAISAL", "session": "2016-Morning", "label": "2016–2020 · Morning"}, "RP16-CE41": {"name": "MUHAMMAD ILYAS KHAN", "session": "2016-Morning", "label": "2016–2020 · Morning"}, "RP16-CE42": {"name": "DANIYAL", "session": "2016-Morning", "label": "2016–2020 · Morning"}, "RP16-CE43": {"name": "MUHAMMAD RIZWAN", "session": "2016-Morning", "label": "2016–2020 · Morning"}, "RP16-CE44": {"name": "HOSAM ELDEIN TARIQ OSMAN ADAM", "session": "2016-Morning", "label": "2016–2020 · Morning"}, "RP16-CE45": {"name": "ARSAL AFTAB KHAN", "session": "2016-Morning", "label": "2016–2020 · Morning"}, "RP16-PG01": {"name": "MUHAMMAD SALMAN", "session": "2016-Morning", "label": "2016–2020 · Morning"}, "RP16-PG02": {"name": "MUHAMMAD ABID", "session": "2016-Morning", "label": "2016–2020 · Morning"}, "RP16-PG03": {"name": "MIAN MUHAMMAD MAHAD NASIR", "session": "2016-Morning", "label": "2016–2020 · Morning"}, "RP16-PG04": {"name": "TABEDAR MUSTAFA", "session": "2016-Morning", "label": "2016–2020 · Morning"}, "RP16-PG05": {"name": "MUHAMMAD BILAL", "session": "2016-Morning", "label": "2016–2020 · Morning"}, "RP16-PG06": {"name": "MUHAMMAD SUFYAN BUTT", "session": "2016-Morning", "label": "2016–2020 · Morning"}, "RP16-PG07": {"name": "MUHAMMAD RIZWAN", "session": "2016-Morning", "label": "2016–2020 · Morning"}, "RP16-PG08": {"name": "MUHAMMAD ZAMAN", "session": "2016-Morning", "label": "2016–2020 · Morning"}, "RP16-PG09": {"name": "JAZAB YASEEN", "session": "2016-Morning", "label": "2016–2020 · Morning"}, "RP16-PG10": {"name": "MUZAMMIL AHMAD", "session": "2016-Morning", "label": "2016–2020 · Morning"}, "RP16-PG11": {"name": "BILAL ISLAM", "session": "2016-Morning", "label": "2016–2020 · Morning"}, "RP16-PG12": {"name": "MUHAMMAD KHURRAM NAWAZ", "session": "2016-Morning", "label": "2016–2020 · Morning"}, "RP16-PG13": {"name": "HAFIZ MUHAMMAD ESSA", "session": "2016-Morning", "label": "2016–2020 · Morning"}, "RP16-PG14": {"name": "MUHAMMAD FARHAN SHAHID", "session": "2016-Morning", "label": "2016–2020 · Morning"}, "RP16-PG15": {"name": "EHTISHAM ALI AZAD", "session": "2016-Morning", "label": "2016–2020 · Morning"}, "RP16-PG16": {"name": "WAJI UL HASSAN KIANI", "session": "2016-Morning", "label": "2016–2020 · Morning"}, "SSP16-CE01": {"name": "SUBIYAL MIRZA", "session": "2016-Evening", "label": "2016–2020 · Evening"}, "SSP16-CE02": {"name": "UMER BIN UBAID", "session": "2016-Evening", "label": "2016–2020 · Evening"}, "SSP16-CE03": {"name": "MAHNOOR SYED", "session": "2016-Evening", "label": "2016–2020 · Evening"}, "SSP16-CE04": {"name": "MUHAMMAD HUZAIFA", "session": "2016-Evening", "label": "2016–2020 · Evening"}, "SSP16-CE05": {"name": "MUHAMMAD AJMAL ROUF", "session": "2016-Evening", "label": "2016–2020 · Evening"}, "SSP16-CE06": {"name": "MUHAMMAD HUZAIFA SOHAIL", "session": "2016-Evening", "label": "2016–2020 · Evening"}, "SSP16-CE07": {"name": "MUHAMMAD TAHIR JUNAID", "session": "2016-Evening", "label": "2016–2020 · Evening"}, "SSP16-CE08": {"name": "AMEER HAMZA", "session": "2016-Evening", "label": "2016–2020 · Evening"}, "SSP16-CE09": {"name": "ARSLAN KHAN", "session": "2016-Evening", "label": "2016–2020 · Evening"}, "SSP16-CE10": {"name": "AYESHA ZULFIQAR", "session": "2016-Evening", "label": "2016–2020 · Evening"}, "SSP16-CE11": {"name": "URWA AQUEEL", "session": "2016-Evening", "label": "2016–2020 · Evening"}, "SSP16-CE12": {"name": "AHMED ALI", "session": "2016-Evening", "label": "2016–2020 · Evening"}, "SSP16-CE13": {"name": "UMER FAROOQ", "session": "2016-Evening", "label": "2016–2020 · Evening"}, "SSP16-CE14": {"name": "MISRA TAHIR", "session": "2016-Evening", "label": "2016–2020 · Evening"}, "SSP16-CE15": {"name": "SHABBIR AHMAD", "session": "2016-Evening", "label": "2016–2020 · Evening"}, "SSP16-CE16": {"name": "TALHA BIN SHAKEEL", "session": "2016-Evening", "label": "2016–2020 · Evening"}, "SSP16-CE17": {"name": "SIBGHAT ULLAH", "session": "2016-Evening", "label": "2016–2020 · Evening"}, "SSP16-CE18": {"name": "KIRAN ASGHER", "session": "2016-Evening", "label": "2016–2020 · Evening"}, "SSP16-CE19": {"name": "HAFIZ MUHAMMAD FARHAN YASIN", "session": "2016-Evening", "label": "2016–2020 · Evening"}, "SSP16-CE20": {"name": "HAMMAD KHALID", "session": "2016-Evening", "label": "2016–2020 · Evening"}, "SSP16-CE21": {"name": "HASIN KHALID", "session": "2016-Evening", "label": "2016–2020 · Evening"}, "SSP16-CE22": {"name": "HAFIZ MUHAMMAD HARIS", "session": "2016-Evening", "label": "2016–2020 · Evening"}, "SSP16-CE23": {"name": "SANA ARBAB", "session": "2016-Evening", "label": "2016–2020 · Evening"}, "SSP16-CE24": {"name": "MUHAMMAD TAHA KHAN", "session": "2016-Evening", "label": "2016–2020 · Evening"}, "SSP16-CE25": {"name": "SYED GHAZANFAR ALI", "session": "2016-Evening", "label": "2016–2020 · Evening"}, "SSP16-CE26": {"name": "SYED MUHAMMAD ALI BAQIR", "session": "2016-Evening", "label": "2016–2020 · Evening"}, "SSP16-CE27": {"name": "MUHAMMAD MUNEEB", "session": "2016-Evening", "label": "2016–2020 · Evening"}, "SSP16-CE28": {"name": "MUHAMMAD UMER", "session": "2016-Evening", "label": "2016–2020 · Evening"}, "SSP16-CE29": {"name": "KHALIL AHMAD", "session": "2016-Evening", "label": "2016–2020 · Evening"}, "SSP16-CE30": {"name": "MAKHDOOM JAWAD ULLAH", "session": "2016-Evening", "label": "2016–2020 · Evening"}, "SSP16-CE31": {"name": "SUFYAN AHMED", "session": "2016-Evening", "label": "2016–2020 · Evening"}, "SSP16-PG01": {"name": "MUDASSAR ARSHAD", "session": "2016-Evening", "label": "2016–2020 · Evening"}, "SSP16-PG02": {"name": "SADAQAT ALI", "session": "2016-Evening", "label": "2016–2020 · Evening"}, "SSP16-PG03": {"name": "ANS IRSHAD", "session": "2016-Evening", "label": "2016–2020 · Evening"}, "SSP16-PG04": {"name": "MUHAMMAD OSSAMA", "session": "2016-Evening", "label": "2016–2020 · Evening"}, "SSP16-PG05": {"name": "SYED MUHAMMAD HASSAN YOUSUF", "session": "2016-Evening", "label": "2016–2020 · Evening"}, "SSP16-PG06": {"name": "MUHAMMAD ANS BIN AQEEL", "session": "2016-Evening", "label": "2016–2020 · Evening"}, "SSP16-PG07": {"name": "SARDAR MUHAMMAD ASAD HAYAT", "session": "2016-Evening", "label": "2016–2020 · Evening"}, "SSP16-PG08": {"name": "ASFAR HUSSAIN KHAN", "session": "2016-Evening", "label": "2016–2020 · Evening"}, "SSP16-PG09": {"name": "ALI RASHID", "session": "2016-Evening", "label": "2016–2020 · Evening"}, "SSP16-PG10": {"name": "MOBEEN IRFAN", "session": "2016-Evening", "label": "2016–2020 · Evening"}, "SSP16-PG11": {"name": "MUNEEB UR REHMAN", "session": "2016-Evening", "label": "2016–2020 · Evening"}, "SSP16-PG12": {"name": "MUHAMMAD UMER RANA", "session": "2016-Evening", "label": "2016–2020 · Evening"}, "SSP16-PG13": {"name": "AMNA SAEED", "session": "2016-Evening", "label": "2016–2020 · Evening"}, "SSP16-PG14": {"name": "HASSAM QAISER", "session": "2016-Evening", "label": "2016–2020 · Evening"}, "SSP16-PG15": {"name": "RASHEED AHMAD", "session": "2016-Evening", "label": "2016–2020 · Evening"}};
+const urlRoll = new URLSearchParams(location.search).get("roll");
+let profileData   = null;
+let profileRoll   = null;   // actual Firestore doc ID
+let viewerRole    = "public";
+let viewerSession = null;
+let _currentPhotoUrl = null;
 
-let _selectedRoll = null, _selectedRollData = null;
-let _photoBase64 = null, _photoUrl = null;
-let _regUser = null;
+function tc(s) { return (s||"").split(" ").map(w=>w.charAt(0).toUpperCase()+w.slice(1).toLowerCase()).join(" "); }
+function set(id, val) { const el=document.getElementById(id); if(el) el.textContent=val||"—"; }
+function showErr(msg) {
+  document.getElementById("st-loading").style.display = "none";
+  document.getElementById("st-error").style.display   = "block";
+  document.getElementById("st-error-msg").textContent = msg;
+}
 
-// If already signed in, redirect
-onAuthStateChanged(auth, async user => {
-  if (!user) return;
-  if (!user.emailVerified) return;
-  const mapSnap = await getDoc(doc(db, "alumni_uid_map", user.uid));
-  if (mapSnap.exists()) {
-    const { roll } = mapSnap.data();
-    const pSnap = await getDoc(doc(db, "alumni", roll));
-    if (pSnap.exists()) {
-      const session = (pSnap.data().session || "").split("-")[0];
-      window.location.href = "/alumni/" + (session || "") + ".html";
-      return;
+// ── RENDER ────────────────────────────────────────────────────────────────
+function render(p) {
+  document.getElementById("st-loading").style.display = "none";
+  document.getElementById("st-profile").style.display = "block";
+  document.title = tc(p.name) + " — ICET Alumni";
+
+  // Field aliases: support old (job/company/photoBase64) and new (position/employer/photoUrl)
+  const _position = p.position || p.job || "";
+  const _employer  = p.employer  || p.company || "";
+  const _photo     = p.photoUrl  || p.photoBase64 || null;
+
+  // Session year (handle "2006-Morning" → "2006")
+  const sessionYear = (p.session || "").split("-")[0];
+  const sessionUrl  = `/alumni/${sessionYear}.html`;
+
+  // Nav + crumb
+  document.getElementById("crumb-link").href        = sessionUrl;
+  document.getElementById("crumb-link").textContent = `← Back to Session ${sessionYear}`;
+  document.getElementById("nav-back").href          = sessionUrl;
+  document.getElementById("nav-back").textContent   = `← Session ${sessionYear}`;
+
+  // Hero avatar
+  const av = document.getElementById("p-avatar");
+  const initials = (p.name||"?").split(" ").map(w=>w[0]).slice(0,2).join("").toUpperCase();
+  if (_photo) {
+    av.innerHTML = `<img src="${_photo}" alt="${p.name}">`;
+    _currentPhotoUrl = _photo;
+    document.getElementById("hero-badge").classList.add("show");
+  } else {
+    av.textContent = initials;
+    _currentPhotoUrl = null;
+  }
+
+  // Hero text
+  set("p-name", tc(p.name));
+  set("p-roll", p.roll);
+
+  // Hero badges
+  const badges = document.getElementById("hero-badges");
+  const shift  = p.shift || "";
+  badges.innerHTML =
+    `<span class="hero-badge gold">Session ${sessionYear}–${parseInt(sessionYear)+4}</span>` +
+    (shift ? `<span class="hero-badge">${shift}</span>` : "") +
+    (_position ? `<span class="hero-badge">💼 ${_position}</span>` : "") +
+    (p.city ? `<span class="hero-badge">📍 ${p.city}${p.country ? ", "+p.country : ""}</span>` : "");
+
+  // Sidebar quick info
+  set("lm-session",  `Session ${sessionYear}–${parseInt(sessionYear)+4}`);
+  set("lm-shift",    shift);
+  set("lm-location", [p.city, p.country].filter(Boolean).join(", ") || "—");
+  set("lm-position", _position || "—");
+  if (p.linkedin) {
+    document.getElementById("lm-linkedin-row").style.display = "flex";
+    document.getElementById("lm-linkedin-a").href = p.linkedin;
+  }
+
+  // Visibility
+  const canSeeFull    = ["same","self","admin"].includes(viewerRole);
+  const canSeePrivate = ["self","admin"].includes(viewerRole);
+
+  // Professional
+  set("v-position", _position || "Not provided");
+  if (canSeeFull) {
+    set("v-employer", _employer || "Not provided");
+    document.getElementById("i-employer").value = _employer || "";
+  } else {
+    document.getElementById("v-employer").innerHTML = '<span class="gated-msg">Visible to same-session members</span>';
+  }
+  document.getElementById("i-position").value = _position || "";
+
+  // Contact (same session+)
+  if (canSeeFull) {
+    document.getElementById("sec-contact").style.display = "block";
+    set("v-city",    p.city    || "Not provided");
+    set("v-country", p.country || "Not provided");
+    document.getElementById("i-city").value    = p.city    || "";
+    document.getElementById("i-country").value = p.country || "";
+    if (p.linkedin) {
+      document.getElementById("v-linkedin").innerHTML = `<a href="${p.linkedin}" target="_blank">${p.linkedin}</a>`;
+    } else {
+      set("v-linkedin", "Not provided");
+    }
+    document.getElementById("i-linkedin").value = p.linkedin || "";
+  }
+
+  // Private section — phone for self/admin, email for same session+
+  if (canSeeFull) {
+    document.getElementById("sec-private").style.display = "block";
+    // Email: visible to same-session + self + admin
+    document.getElementById("fi-email").style.display = "block";
+    set("v-email", p.email || "Not provided");
+    if (canSeePrivate) {
+      document.getElementById("email-note").textContent = "🔒 Only visible to you and admin";
+    } else {
+      document.getElementById("email-note").textContent = "Visible to same-session members";
     }
   }
-});
+  if (canSeePrivate) {
+    // Phone: self + admin only
+    document.getElementById("fi-phone").style.display = "block";
+    set("v-phone", p.phone || "Not provided");
+    document.getElementById("i-phone").value = p.phone || "";
+    document.getElementById("sec-private-sub").textContent = "Phone visible to you and admin · Email visible to session members";
+  }
 
-// ── TAB SWITCH ──────────────────────────────────────────────────────────────
-window.switchTab = function(tab) {
-  document.getElementById("panel-signin").classList.toggle("active", tab === "signin");
-  document.getElementById("panel-register").classList.toggle("active", tab === "register");
-  document.getElementById("tab-signin").classList.toggle("active", tab === "signin");
-  document.getElementById("tab-register").classList.toggle("active", tab === "register");
+  // Network info
+  set("v-roll",    p.roll);
+  set("v-shift",   shift);
+  set("v-session", `${sessionYear}–${parseInt(sessionYear)+4}`);
+  if (p.registeredAt?.seconds) {
+    set("v-since", new Date(p.registeredAt.seconds*1000).toLocaleDateString("en-GB",{month:"short",year:"numeric"}));
+  }
+
+  // Edit bar (self + admin)
+  if (canSeePrivate) {
+    document.getElementById("edit-bar").style.display   = "block";
+    document.getElementById("btn-edit").style.display   = "inline-flex";
+    document.getElementById("photo-card").style.display = "block";
+    document.getElementById("btn-change-photo").style.display = "block";
+  }
+
+  // Vis notice
+  const vn = document.getElementById("vis-notice");
+  if (viewerRole === "public") {
+    vn.style.display = "block";
+    vn.innerHTML = `<strong>Public View</strong><a href="/alumni/register.html">Join the network</a> to see full contact details.`;
+  } else if (viewerRole === "other") {
+    vn.style.display = "block";
+    vn.innerHTML = `<strong>Limited View</strong>Full details visible to Session ${sessionYear} members.`;
+  }
+}
+
+// ── EDIT / SAVE ───────────────────────────────────────────────────────────
+window.startEdit = function() {
+  ["sec-contact","sec-private"].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = "block";
+  });
+  document.querySelectorAll(".section-card").forEach(c => c.classList.add("editing"));
+  document.getElementById("btn-edit").style.display   = "none";
+  document.getElementById("btn-save").style.display   = "inline-flex";
+  document.getElementById("btn-cancel").style.display = "inline-flex";
+  document.getElementById("save-alert").className     = "save-alert";
 };
 
-// ── SIGN IN ──────────────────────────────────────────────────────────────────
-window.doSignIn = async function() {
-  const email = document.getElementById("si-email").value.trim();
-  const pwd   = document.getElementById("si-password").value;
-  const err   = el => { document.getElementById("si-err").textContent = el; document.getElementById("si-err").classList.add("show"); };
-  const ok    = el => { document.getElementById("si-ok").textContent = el; document.getElementById("si-ok").classList.add("show"); };
-  ["si-err","si-ok","si-info"].forEach(id => document.getElementById(id).classList.remove("show"));
-  if (!email || !pwd) { err("Please enter your email and password."); return; }
-  const btn = document.getElementById("si-btn"); btn.disabled = true; btn.textContent = "Signing in…";
+window.cancelEdit = function() {
+  document.querySelectorAll(".section-card").forEach(c => c.classList.remove("editing"));
+  document.getElementById("btn-edit").style.display   = "inline-flex";
+  document.getElementById("btn-save").style.display   = "none";
+  document.getElementById("btn-cancel").style.display = "none";
+  document.getElementById("i-position").value = profileData.position || profileData.job || "";
+  document.getElementById("i-employer").value  = profileData.employer  || profileData.company || "";
+  document.getElementById("i-city").value      = profileData.city      || "";
+  document.getElementById("i-country").value   = profileData.country   || "";
+  document.getElementById("i-linkedin").value  = profileData.linkedin  || "";
+  document.getElementById("i-phone").value     = profileData.phone     || "";
+};
+
+window.saveProfile = async function() {
+  const saveBtn = document.getElementById("btn-save");
+  const alertEl = document.getElementById("save-alert");
+  const showE   = msg => { alertEl.className = "save-alert sa-err show"; alertEl.textContent = msg; };
+  const updates = {
+    position: document.getElementById("i-position").value.trim(),
+    employer:  document.getElementById("i-employer").value.trim(),
+    city:      document.getElementById("i-city").value.trim(),
+    country:   document.getElementById("i-country").value.trim(),
+    linkedin:  document.getElementById("i-linkedin").value.trim(),
+    phone:     document.getElementById("i-phone").value.trim(),
+    updatedAt: serverTimestamp()
+  };
+  if (!updates.position) return showE("Current position cannot be empty.");
+  if (!updates.employer)  return showE("Employer cannot be empty.");
+  saveBtn.disabled = true; saveBtn.textContent = "Saving…";
   try {
-    const cred = await signInWithEmailAndPassword(auth, email, pwd);
-    if (!cred.user.emailVerified) {
-      await auth.signOut();
-      document.getElementById("si-info").textContent = "Please verify your email first. Check your inbox.";
-      document.getElementById("si-info").classList.add("show");
-      return;
+    await updateDoc(doc(db,"alumni", profileRoll || urlRoll), updates);
+    Object.assign(profileData, updates);
+    set("v-position", updates.position);
+    set("v-employer",  updates.employer);
+    set("v-city",      updates.city);
+    set("v-country",   updates.country);
+    set("v-phone",     updates.phone);
+    set("lm-position", updates.position);
+    set("lm-location", [updates.city, updates.country].filter(Boolean).join(", ") || "—");
+    if (updates.linkedin) {
+      document.getElementById("v-linkedin").innerHTML = `<a href="${updates.linkedin}" target="_blank">${updates.linkedin}</a>`;
+      document.getElementById("lm-linkedin-row").style.display = "flex";
+      document.getElementById("lm-linkedin-a").href = updates.linkedin;
+    } else {
+      set("v-linkedin", "Not provided");
     }
-    // Find their alumni profile
-    const mapSnap = await getDoc(doc(db, "alumni_uid_map", cred.user.uid));
-    if (mapSnap.exists()) {
-      const { roll } = mapSnap.data();
-      const pSnap = await getDoc(doc(db, "alumni", roll));
-      if (pSnap.exists()) {
-        const d = pSnap.data();
-        if (d.status === "pending") {
-          ok("✓ Signed in. Your profile is awaiting admin approval.");
-          return;
+    alertEl.className = "save-alert sa-ok show";
+    alertEl.textContent = "✓ Profile updated successfully!";
+    setTimeout(() => window.cancelEdit(), 1600);
+  } catch(e) { showE("Error: " + e.message); }
+  finally { saveBtn.disabled = false; saveBtn.textContent = "💾 Save Changes"; }
+};
+
+window.doSignOut = async function() { await signOut(auth); location.reload(); };
+
+// ── LOAD ──────────────────────────────────────────────────────────────────
+// Safety timeout — never stay stuck on loading
+const _loadTimeout = setTimeout(() => {
+  if (document.getElementById("st-loading").style.display !== "none") {
+    showErr("Loading timed out. Please check your connection and try again.");
+  }
+}, 8000);
+
+if (!urlRoll) {
+  showErr("No roll number in URL. Use ?roll=CE-M6-101");
+} else {
+  onAuthStateChanged(auth, async user => {
+    if (!user) {
+      viewerRole = "public";
+    } else if (user.uid === ADMIN) {
+      viewerRole = "admin";
+      document.getElementById("nav-user").textContent = "⭐ Admin";
+      document.getElementById("nav-signout-btn").style.display = "inline-block";
+    } else {
+      const mapSnap = await getDoc(doc(db,"alumni_uid_map", user.uid));
+      if (mapSnap.exists()) {
+        const { roll: vRoll } = mapSnap.data();
+        const vSnap = await getDoc(doc(db,"alumni", vRoll));
+        if (vSnap.exists() && vSnap.data().status === "approved") {
+          const vData = vSnap.data();
+          viewerSession = vData.session;
+          document.getElementById("nav-user").textContent = vData.name?.split(" ")[0] || "";
+          document.getElementById("nav-signout-btn").style.display = "inline-block";
+          viewerRole = (vRoll === urlRoll) ? "self" : "pending-check";
         }
-        const session = (d.session || "").split("-")[0];
-        window.location.href = "/alumni/" + session + ".html";
+      }
+    }
+
+    try {
+      console.log("[profile] Step 1 — urlRoll:", urlRoll, "viewerRole:", viewerRole);
+
+      // Try direct doc ID lookup first (new system: roll as doc ID)
+      let snap = await getDoc(doc(db,"alumni", urlRoll));
+      console.log("[profile] Step 2 — direct lookup exists:", snap.exists());
+
+      if (!snap.exists()) {
+        // Fallback: query by roll field (old system: UID as doc ID)
+        console.log("[profile] Step 3 — trying query by roll field");
+        const qSnap = await getDocs(query(collection(db,"alumni"), where("roll","==",urlRoll)));
+        console.log("[profile] Step 4 — query by roll field results:", qSnap.size);
+
+        if (!qSnap.empty) {
+          snap = qSnap.docs[0];
+        } else {
+          // Very old: rollNumber field
+          console.log("[profile] Step 5 — trying rollNumber field");
+          const qSnap2 = await getDocs(query(collection(db,"alumni"), where("rollNumber","==",urlRoll)));
+          console.log("[profile] Step 6 — query by rollNumber results:", qSnap2.size);
+          if (qSnap2.empty) {
+            showErr("Profile not found. Roll number: " + urlRoll);
+            return;
+          }
+          snap = qSnap2.docs[0];
+        }
+      }
+
+      profileData = snap.data();
+      profileRoll = snap.id;
+      console.log("[profile] Step 7 — profileData loaded, id:", profileRoll, "status:", profileData?.status);
+
+      if (!profileData) { showErr("Could not read profile data."); return; }
+
+      if (profileData.status !== "approved" && viewerRole !== "admin") {
+        showErr("Profile is pending admin approval. Status: " + profileData.status);
         return;
       }
+
+      if (viewerRole === "pending-check") {
+        viewerRole = ((viewerSession||"").split("-")[0] === (profileData.session||"").split("-")[0]) ? "same" : "other";
+      }
+
+      console.log("[profile] Step 8 — rendering, final viewerRole:", viewerRole);
+      clearTimeout(_loadTimeout);
+      render(profileData);
+
+    } catch(e) {
+      clearTimeout(_loadTimeout);
+      console.error("[profile] FATAL ERROR:", e);
+      showErr("Error: " + e.message + " (check browser console for details)");
     }
-    ok("✓ Signed in. No profile found — please register.");
-    setTimeout(() => switchTab("register"), 1500);
-  } catch(e) {
-    const codes = { "auth/user-not-found":"No account found with this email.", "auth/wrong-password":"Incorrect password.", "auth/invalid-credential":"Invalid email or password.", "auth/too-many-requests":"Too many attempts. Try again later." };
-    err(codes[e.code] || "Sign in failed: " + e.message);
-  } finally { btn.disabled = false; btn.textContent = "Sign In →"; }
-};
-
-// ── FORGOT PASSWORD ──────────────────────────────────────────────────────────
-window.showForgot = async function() {
-  const email = document.getElementById("si-email").value.trim();
-  if (!email) { document.getElementById("si-err").textContent = "Enter your email first."; document.getElementById("si-err").classList.add("show"); return; }
-  try {
-    await sendPasswordResetEmail(auth, email);
-    document.getElementById("si-info").textContent = "Password reset email sent to " + email;
-    document.getElementById("si-info").classList.add("show");
-    document.getElementById("si-err").classList.remove("show");
-  } catch(e) { document.getElementById("si-err").textContent = "Could not send reset email: " + e.message; document.getElementById("si-err").classList.add("show"); }
-};
-
-// ── STEPS ────────────────────────────────────────────────────────────────────
-window.goToStep = function(n) {
-  document.querySelectorAll(".step").forEach((el, i) => el.classList.toggle("active", i + 1 === n));
-};
-
-window.goStep2 = async function() {
-  const email = document.getElementById("r-email").value.trim();
-  const pwd   = document.getElementById("r-password").value;
-  const pwd2  = document.getElementById("r-password2").value;
-  const err   = msg => { document.getElementById("r1-err").textContent = msg; document.getElementById("r1-err").classList.add("show"); };
-  document.getElementById("r1-err").classList.remove("show");
-  if (!email) { err("Please enter your email address."); return; }
-  if (pwd.length < 8) { err("Password must be at least 8 characters."); return; }
-  if (pwd !== pwd2) { err("Passwords do not match."); return; }
-  goToStep(2);
-};
-
-window.goStep3 = async function() {
-  const roll     = document.getElementById("r-roll").value.trim().toUpperCase();
-  const session  = document.getElementById("r-session").value;
-  const position = document.getElementById("r-position").value.trim();
-  const employer = document.getElementById("r-employer").value.trim();
-  const city     = document.getElementById("r-city").value.trim();
-  const country  = document.getElementById("r-country").value.trim();
-  const phone    = document.getElementById("r-phone").value.trim();
-  const linkedin = document.getElementById("r-linkedin").value.trim();
-  const email    = document.getElementById("r-email").value.trim();
-  const pwd      = document.getElementById("r-password").value;
-
-  const err = msg => { document.getElementById("r2-err").textContent = msg; document.getElementById("r2-err").classList.add("show"); };
-  document.getElementById("r2-err").classList.remove("show");
-
-  if (!_selectedRoll || !session) { err("Please select your roll number from the list."); return; }
-  if (!position || !employer) { err("Please fill in your job title and employer."); return; }
-  if (!city) { err("Please enter your city."); return; }
-
-  const rollData = ALL_ROLLS[roll];
-  if (!rollData) { err("Invalid roll number. Please select from the suggestions."); return; }
-  const name = rollData.name;
-
-  const btn = document.getElementById("r2-btn"); btn.disabled = true; btn.textContent = "Submitting…";
-
-  try {
-    // Check if roll already taken
-    const rollCheck = await getDocs(query(collection(db, "alumni"), where("roll", "==", roll)));
-    if (!rollCheck.empty) { err("Roll number " + roll + " is already registered. Contact admin if this is an error."); btn.disabled = false; btn.textContent = "Submit Registration →"; return; }
-
-    // Create Firebase account
-    const cred = await createUserWithEmailAndPassword(auth, email, pwd);
-    _regUser = cred.user;
-    await sendEmailVerification(cred.user);
-
-    // Upload photo to Cloudinary if provided
-    if (_photoBase64) {
-      try {
-        const blob = await (await fetch(_photoBase64)).blob();
-        const fd = new FormData(); fd.append("file", blob, "avatar.jpg"); fd.append("upload_preset", "ranaadeem_blog");
-        const res = await fetch("https://api.cloudinary.com/v1_1/duetiv9rm/image/upload", { method:"POST", body:fd });
-        const data = await res.json();
-        if (data.secure_url) _photoUrl = data.secure_url;
-      } catch(pe) { console.warn("Photo upload failed", pe); }
-    }
-
-    // Save to Firestore
-    const profileData = {
-      name, roll, session,
-      shift: session.includes("Evening") ? "Evening" : "Morning",
-      email, phone, position, employer, city, country, linkedin,
-      photoUrl: _photoUrl || null,
-      status: cred.user.uid === ADMIN ? "approved" : "pending",
-      registeredAt: serverTimestamp(),
-      updatedAt: serverTimestamp(),
-    };
-    await setDoc(doc(db, "alumni", roll), profileData);
-    await setDoc(doc(db, "alumni_uid_map", cred.user.uid), { roll });
-
-    // Notify admin
-    fetch("/api/send-email", { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({ type:"new-submission", data:{ postTitle:"New alumni registration pending approval", authorName:name, authorEmail:email, postCategory:session } }) }).catch(() => {});
-
-    document.getElementById("verify-email").textContent = email;
-    goToStep(3);
-  } catch(e) {
-    const codes = { "auth/email-already-in-use":"An account with this email already exists. Please sign in instead.", "auth/invalid-email":"Invalid email address." };
-    err(codes[e.code] || "Error: " + e.message);
-    btn.disabled = false; btn.textContent = "Submit Registration →";
-  }
-};
-
-// ── RESEND VERIFICATION ───────────────────────────────────────────────────────
-window.resendVerification = async function() {
-  try { if (auth.currentUser) await sendEmailVerification(auth.currentUser); alert("Verification email resent!"); }
-  catch(e) { alert("Could not resend: " + e.message); }
-};
-
-// ── ROLL TYPEAHEAD ────────────────────────────────────────────────────────────
-window.rollTypeahead = function(val) {
-  const q = val.trim().toUpperCase();
-  const sugg = document.getElementById("roll-suggestions");
-  const hint = document.getElementById("roll-hint");
-  _selectedRoll = null; _selectedRollData = null;
-  if (q.length < 3) { sugg.style.display = "none"; hint.textContent = ""; return; }
-  const matches = Object.entries(ALL_ROLLS).filter(([r]) => r.startsWith(q) || r.includes(q)).slice(0, 8);
-  if (!matches.length) { sugg.style.display = "none"; if (q.length >= 6) hint.innerHTML = "<span style='color:var(--red);">✗ Not found</span>"; return; }
-  sugg.innerHTML = "";
-  matches.forEach(([roll, data]) => {
-    const item = document.createElement("div"); item.className = "sugg-item";
-    item.innerHTML = "<strong>" + roll + "</strong> &nbsp;<span>" + data.name + " · " + data.label + "</span>";
-    item.addEventListener("click", () => selectRoll(roll, data));
-    sugg.appendChild(item);
   });
-  sugg.style.display = "block"; hint.textContent = "";
+}
+
+// ── PHOTO LIGHTBOX ────────────────────────────────────────────────────────
+window.openPhotoLb = function() {
+  if (!_currentPhotoUrl) return;
+  document.getElementById("photo-lb-img").src = _currentPhotoUrl;
+  document.getElementById("photo-lb").classList.add("open");
 };
-
-function selectRoll(roll, data) {
-  _selectedRoll = roll; _selectedRollData = data;
-  document.getElementById("r-roll").value = roll;
-  document.getElementById("roll-suggestions").style.display = "none";
-  document.getElementById("r-session").value = data.session;
-  document.getElementById("r-session-display").value = data.label;
-  document.getElementById("r-name-display").textContent = data.name;
-  document.getElementById("roll-hint").innerHTML = "<span style='color:var(--green);'>✓ Verified: " + data.name + "</span>";
-}
-document.addEventListener("click", e => { if (!e.target.closest("#roll-group")) document.getElementById("roll-suggestions").style.display = "none"; });
-
-// ── CITY TYPEAHEAD ────────────────────────────────────────────────────────────
-let _cityTimer = null;
-window.cityTypeahead = function(val) {
-  const input = val.trim();
-  const sugg = document.getElementById("city-suggestions");
-  document.getElementById("r-city").value = "";
-  document.getElementById("r-country").value = "";
-  document.getElementById("city-hint").textContent = "";
-  clearTimeout(_cityTimer);
-  if (input.length < 3) { sugg.style.display = "none"; return; }
-  _cityTimer = setTimeout(async () => {
-    try {
-      const res = await fetch("https://geocoding-api.open-meteo.com/v1/search?name=" + encodeURIComponent(input) + "&count=10&language=en&format=json", { signal: AbortSignal.timeout(6000) });
-      const data = await res.json(); const results = data.results || [];
-      const seen = new Set(), cities = [];
-      for (const r of results) {
-        const city = (r.name || "").trim(), country = (r.country || "").trim();
-        if (!city || !country) continue;
-        const key = city + "|" + country; if (seen.has(key)) continue; seen.add(key);
-        const state = r.admin1 || ""; cities.push({ city, country, state });
-        if (cities.length >= 7) break;
-      }
-      sugg.innerHTML = "";
-      if (!cities.length) {
-        const d = document.createElement("div"); d.className = "sugg-item"; d.style.color = "var(--muted)";
-        d.textContent = "No cities found. "; const s = document.createElement("span");
-        s.style.cssText = "color:var(--gold);cursor:pointer;font-weight:600;"; s.textContent = "Use typed value";
-        s.addEventListener("click", useManualCity); d.appendChild(s); sugg.appendChild(d);
-      } else {
-        cities.forEach(c => {
-          const display = c.state ? c.city + ", " + c.state + ", " + c.country : c.city + ", " + c.country;
-          const d = document.createElement("div"); d.className = "sugg-item";
-          d.textContent = "📍 " + display;
-          d.addEventListener("click", () => selectCity(c.city, c.country, display));
-          sugg.appendChild(d);
-        });
-      }
-      sugg.style.display = "block";
-    } catch(e) { sugg.style.display = "none"; }
-  }, 400);
+window.closeLb = function(e) {
+  if (e.target === document.getElementById("photo-lb"))
+    document.getElementById("photo-lb").classList.remove("open");
 };
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape") document.getElementById("photo-lb").classList.remove("open");
+});
 
-function selectCity(city, country, display) {
-  document.getElementById("r-city-input").value = display;
-  document.getElementById("r-city").value = city;
-  document.getElementById("r-country").value = country;
-  document.getElementById("city-hint").innerHTML = "<span style='color:var(--green);'>✓ " + city + ", " + country + "</span>";
-  document.getElementById("city-suggestions").style.display = "none";
-}
-function useManualCity() {
-  const raw = document.getElementById("r-city-input").value.trim();
-  const parts = raw.split(",").map(s => s.trim());
-  const city = parts[0] || raw, country = parts.length > 1 ? parts[parts.length-1] : "";
-  document.getElementById("r-city").value = city;
-  document.getElementById("r-country").value = country;
-  document.getElementById("city-hint").innerHTML = "<span style='color:var(--green);'>✓ " + city + (country ? ", " + country : "") + "</span>";
-  document.getElementById("city-suggestions").style.display = "none";
-}
-document.addEventListener("click", e => { if (!e.target.closest("#city-group")) document.getElementById("city-suggestions").style.display = "none"; });
-
-// ── PHOTO UPLOAD ──────────────────────────────────────────────────────────────
-window.handlePhoto = function(input) {
+// ── PHOTO EDIT ────────────────────────────────────────────────────────────
+window.handlePhotoEdit = async function(input) {
   const file = input.files[0]; if (!file) return;
-  if (file.size > 3 * 1024 * 1024) { alert("Photo must be under 3MB."); return; }
+  const status = document.getElementById("photo-edit-status");
+  const av     = document.getElementById("p-avatar");
+  if (file.size > 3*1024*1024) { status.textContent = "Max 3MB."; return; }
+  status.textContent = "Uploading…";
   const reader = new FileReader();
-  reader.onload = e => {
+  reader.onload = async e => {
     const img = new Image();
-    img.onload = () => {
+    img.onload = async () => {
       const canvas = document.createElement("canvas");
-      const MAX = 600; let w = img.width, h = img.height;
-      if (w > MAX) { h = Math.round(h * MAX / w); w = MAX; }
-      if (h > MAX) { w = Math.round(w * MAX / h); h = MAX; }
-      canvas.width = w; canvas.height = h;
-      canvas.getContext("2d").drawImage(img, 0, 0, w, h);
-      _photoBase64 = canvas.toDataURL("image/jpeg", .85);
-      const c = document.getElementById("photo-circle");
-      c.innerHTML = "<img src='" + _photoBase64 + "' style='width:100%;height:100%;object-fit:cover;'>";
+      const MAX = 600; let w=img.width, h=img.height;
+      if (w>MAX) { h=Math.round(h*MAX/w); w=MAX; }
+      if (h>MAX) { w=Math.round(w*MAX/h); h=MAX; }
+      canvas.width=w; canvas.height=h;
+      canvas.getContext("2d").drawImage(img,0,0,w,h);
+      const resized = canvas.toDataURL("image/jpeg",.85);
+      av.innerHTML = `<img src="${resized}" alt="photo">`;
+      try {
+        const blob = await (await fetch(resized)).blob();
+        const fd = new FormData();
+        fd.append("file", blob, "avatar.jpg");
+        fd.append("upload_preset","ranaadeem_blog");
+        const res  = await fetch("https://api.cloudinary.com/v1_1/duetiv9rm/image/upload",{method:"POST",body:fd});
+        const data = await res.json();
+        if (!data.secure_url) throw new Error("Upload failed");
+        await updateDoc(doc(db,"alumni", profileRoll||urlRoll),{photoUrl:data.secure_url, updatedAt:serverTimestamp()});
+        _currentPhotoUrl = data.secure_url;
+        profileData.photoUrl = data.secure_url;
+        status.textContent = "Photo updated ✓";
+        document.getElementById("hero-badge").classList.add("show");
+        setTimeout(()=>status.textContent="",3000);
+      } catch(err) { status.textContent = "Upload failed. Try again."; }
     };
     img.src = e.target.result;
   };
   reader.readAsDataURL(file);
 };
-
-// Allow pressing Enter to submit
-document.getElementById("si-password").addEventListener("keydown", e => { if (e.key === "Enter") doSignIn(); });
 </script>
 </body>
 </html>
