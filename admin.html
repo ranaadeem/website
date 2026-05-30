@@ -781,7 +781,7 @@ async function loadRegs() {
 window.approveReg=async function(roll,email,name,session,btn){
   btn.disabled=true; btn.textContent="Approving\u2026";
   try {
-    await updateDoc(doc(db,"alumni",roll),{status:"approved",approvedAt:serverTimestamp(),approvedBy:ADMIN_UID});
+    await updateDoc(doc(db,"alumni",roll),{status:"approved",emailVerified:true,approvedAt:serverTimestamp(),approvedBy:ADMIN_UID});
     fetch("/api/send-email",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({type:"alumni-approved",to:email,toName:name,data:{roll,session}})}).catch(()=>{});
     document.getElementById("reg-"+roll)?.remove();
     toast(name+" approved \u2713 \u2014 email sent");

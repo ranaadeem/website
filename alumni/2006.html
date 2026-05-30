@@ -494,7 +494,7 @@ window.handleGateSignIn = async function() {
       const _mapCheck = await getDoc(doc(db, 'alumni_uid_map', cred.user.uid));
       if (_mapCheck.exists()) {
         const _profCheck = await getDoc(doc(db, 'alumni', _mapCheck.data().roll));
-        if (_profCheck.exists() && _profCheck.data().emailVerified === false) {
+        if (_profCheck.exists() && _profCheck.data().emailVerified === false && _profCheck.data().status !== 'approved') {
           await signOut(auth);
           showGateAlert('Please verify your email — enter the 6-digit code that was sent to you during registration.');
           return;
