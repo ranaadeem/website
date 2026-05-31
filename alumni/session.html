@@ -45,6 +45,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
 
 /* BANNER */
 .alumni-banner-wrap{width:100%;height:280px;background:url('/alumni-header.png') center center / 100% auto no-repeat;background-color:var(--navy);position:relative;overflow:hidden;border-bottom:3px solid var(--gold);margin:0;padding:0;}
+.alumni-banner-img{display:none;width:100%;height:auto;}
 .session-title-bar{width:100%;background:var(--navy);padding:0.9rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.5rem;margin:0;}
 .session-title-bar h1{font-family:"Playfair Display",serif;font-size:1.9rem;color:white;margin:0;}
 .session-title-bar h1 span{color:var(--gold);}
@@ -115,7 +116,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
 
 @media(max-width:1024px){.main-grid{grid-template-columns:1fr;}}
 @media(max-width:900px){.stats-bar{grid-template-columns:repeat(2,1fr);}}
-@media(max-width:768px){.member-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:768px){.member-grid{grid-template-columns:repeat(2,1fr);}.alumni-banner-wrap{height:auto;background:none!important;}.alumni-banner-img{display:block;}}
 @media(max-width:480px){.member-grid{grid-template-columns:1fr;}.stats-bar{grid-template-columns:repeat(2,1fr);}}
 </style>
 </head>
@@ -212,7 +213,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
 </div>
 
 <!-- BANNER -->
-<div class="alumni-banner-wrap"></div>
+<div class="alumni-banner-wrap"><img src="/alumni-header.png" alt="Alumni header" class="alumni-banner-img"></div>
 <div class="session-title-bar">
   <div>
     <h1>Session <span id="page-year-label" style="color:var(--gold);"></span></h1>

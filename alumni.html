@@ -45,6 +45,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
 .toast.show{opacity:1;transform:translateY(0);}
 .page{display:none;}.page.active{display:block;}
 .landing-hero{height:320px;display:flex;align-items:center;background:var(--navy);background-size:cover;background-position:center;position:relative;overflow:hidden;}
+.landing-hero-img{display:none;}
 .hero-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(10,20,60,0.9) 0%,rgba(10,20,60,0.5) 60%,rgba(10,20,60,0.3) 100%);pointer-events:none;}
 .hero-content{position:relative;z-index:1;width:100%;max-width:860px;margin:0 auto;padding:0 2rem;text-align:center;}
 .hero-tag{font-size:10px;font-weight:500;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);border:1px solid rgba(201,168,76,0.4);padding:3px 11px;border-radius:20px;display:inline-block;margin-bottom:0.75rem;}
@@ -57,9 +58,10 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
 .stats-strip{background:white;border-bottom:1px solid var(--border);padding:1.25rem 2rem;}
 .stats-inner{max-width:1100px;margin:0 auto;display:flex;justify-content:center;gap:4rem;flex-wrap:wrap;}
 @media(max-width:768px){
-  .landing-hero{height:260px;width:100%;left:0;}
-  .hero-content{padding:0 1.25rem;}
-  .landing-hero p{font-size:13px;}
+  .landing-hero{height:auto;background:none!important;background-color:var(--navy)!important;width:100%;left:0;}
+  .landing-hero-img{display:block;width:100%;height:auto;}
+  .hero-content{padding:0 1.25rem;position:absolute;top:50%;left:0;right:0;transform:translateY(-50%);}
+  .landing-hero p{display:none;}
   .hero-btn-primary,.hero-btn-secondary{padding:10px 20px;font-size:13px;}
   .stats-inner{gap:1.5rem;}
   .sessions-layout{grid-template-columns:1fr;}
@@ -177,6 +179,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
 <div class="toast" id="toast"></div>
 <div class="page active" id="page-landing">
   <div class="landing-hero" id="landing-hero">
+    <img src="/alumni-header.png" alt="Alumni header" class="landing-hero-img">
     <div class="hero-overlay"></div>
     <div class="hero-content">
       
