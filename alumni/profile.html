@@ -27,7 +27,11 @@
       border-bottom: 1px solid rgba(201,168,76,.3);
     }
     .nav-inner { max-width: 1000px; margin: 0 auto; padding: 0 1.5rem; display: flex; align-items: center; justify-content: space-between; height: 100%; }
-    .nav-logo { font-family: "Playfair Display", serif; color: var(--gold); font-size: 1rem; text-decoration: none; letter-spacing: .03em; }
+    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .nav-logo-agr { font-family: Georgia, serif; font-size: 22px; font-weight: 700; color: var(--gold); letter-spacing: 2px; border: 2px solid var(--gold); padding: 2px 8px; border-radius: 4px; }
+    .nav-logo-text { display: flex; flex-direction: column; gap: 1px; }
+    .nav-logo-name { font-size: 14px; color: rgba(255,255,255,0.9); font-weight: 500; }
+    .nav-logo-sub { font-size: 11px; color: rgba(255,255,255,0.55); letter-spacing: 0.02em; }
     .nav-right { display: flex; align-items: center; gap: 1rem; }
     .nav-back { color: rgba(255,255,255,.6); font-size: 12px; text-decoration: none; border-bottom: 1px solid rgba(201,168,76,.3); padding-bottom: 1px; transition: color .2s; }
     .nav-back:hover { color: var(--gold); }
@@ -290,7 +294,13 @@
 
 <nav id="main-nav">
   <div class="nav-inner">
-    <a class="nav-logo" href="/alumni.html">ICET Chemical Engineering Alumni</a>
+    <a class="nav-logo" href="/">
+      <span class="nav-logo-agr">AGR</span>
+      <span class="nav-logo-text">
+        <span class="nav-logo-name">Dr. Adeem Ghaffar Rana</span>
+        <span class="nav-logo-sub">Catalysis Research Scientist</span>
+      </span>
+    </a>
     <div class="nav-right">
       <span id="nav-user" class="nav-user"></span>
       <button class="nav-signout" id="nav-signout-btn" onclick="doSignOut()">Sign Out</button>
