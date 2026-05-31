@@ -114,7 +114,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
 .footer{background:var(--navy);color:rgba(255,255,255,0.6);text-align:center;padding:1.5rem;font-size:13px;margin-top:3rem;}
 .footer a{color:var(--gold);text-decoration:none;}
 
-@media(max-width:1024px){.main-grid{grid-template-columns:1fr;}}
+@media(max-width:1024px){.main-grid{grid-template-columns:minmax(0,1fr);}.main-grid>div{min-width:0;overflow:hidden;}}
 @media(max-width:900px){.stats-bar{grid-template-columns:repeat(2,1fr);}}
 @media(max-width:768px){
   .alumni-banner-wrap{height:auto;background:none!important;}
@@ -314,7 +314,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
 
       <!-- Gallery -->
       <div id="gallery-section" style="margin-bottom:1.5rem;">
-        <div style="overflow:hidden;border-radius:10px;background:#1a1a2e;min-height:170px;display:flex;align-items:center;justify-content:center;margin-bottom:0.6rem;">
+        <div style="overflow:hidden;border-radius:10px;background:#1a1a2e;min-height:170px;display:flex;align-items:center;justify-content:center;margin-bottom:0.6rem;width:100%;">
           <div id="photo-strip" style="display:flex;gap:8px;padding:8px;transition:none;will-change:transform;"></div>
           <div id="gallery-empty" style="display:none;text-align:center;padding:2rem;color:rgba(255,255,255,0.5);">
             <div style="font-size:1.8rem;margin-bottom:0.4rem;">📸</div>
