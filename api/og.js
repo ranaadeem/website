@@ -31,6 +31,9 @@ export default async function handler(req, res) {
   const postUrl = id
     ? 'https://ranaadeem.de/blog/post.html?id=' + id
     : 'https://ranaadeem.de/blog.html';
+  const shareUrl = id
+    ? 'https://ranaadeem.de/api/og?id=' + id
+    : 'https://ranaadeem.de/blog.html';
 
   if (!id) {
     return res.redirect(302, '/blog.html');
@@ -108,13 +111,13 @@ export default async function handler(req, res) {
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:type" content="image/jpeg">
-<meta property="og:url" content="${postUrl}">
+<meta property="og:url" content="${shareUrl}">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="${safeTitle}">
 <meta name="twitter:description" content="${safeDesc}">
 <meta name="twitter:image" content="${safeImage}">
 <meta name="twitter:site" content="@ranaadeem">
-<link rel="canonical" href="${postUrl}">
+<link rel="canonical" href="${shareUrl}">
 </head>
 <body>
 <h1>${safeTitle}</h1>
