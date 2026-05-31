@@ -113,14 +113,28 @@ body{ font-family:"DM Sans",sans-serif; background:var(--cream); color:var(--tex
 .tl-place{ font-size:13px; color:var(--white); font-weight:500; margin-bottom:3px; }
 .tl-sub{ font-size:11px; color:rgba(255,255,255,0.45); }
 
+/* KEYWORD PILLS */
+.keyword-row{ display:flex; flex-wrap:wrap; gap:0.5rem; margin-top:1.25rem; }
+.keyword-pill{ display:inline-flex; align-items:center; gap:5px; font-size:12px; font-weight:500; color:rgba(255,255,255,0.85); background:rgba(255,255,255,0.08); border:1px solid rgba(201,168,76,0.4); border-radius:20px; padding:5px 13px; letter-spacing:0.02em; transition:all 0.2s; }
+.keyword-pill:hover{ background:rgba(201,168,76,0.15); border-color:var(--gold); color:var(--gold); }
+.keyword-dot{ width:6px; height:6px; border-radius:50%; background:var(--gold); opacity:0.7; flex-shrink:0; }
+
 /* PUBLICATIONS */
-.pub-card{ background:var(--white); border:1px solid var(--border); border-left:4px solid var(--gold); border-radius:8px; padding:1.25rem 1.5rem; margin-bottom:1rem; transition:box-shadow 0.2s; color:var(--text); }
-.pub-card:hover{ box-shadow:0 4px 20px rgba(0,0,0,0.07); }
-.pub-title{ font-size:14px; font-weight:500; color:var(--navy); margin-bottom:5px; line-height:1.5; }
-.pub-meta{ font-size:12px; color:var(--muted); }
-.pub-year{ display:inline-block; background:#f3f4f6; color:var(--muted); font-size:11px; padding:2px 8px; border-radius:4px; margin-left:8px; }
-.view-all-link{ font-size:13px; color:var(--gold); text-decoration:none; font-weight:500; }
-.view-all-link:hover{ text-decoration:underline; }
+.pub-list{ display:flex; flex-direction:column; gap:1rem; }
+.pub-card{ background:var(--white); border:1px solid var(--border); border-radius:12px; padding:1.5rem; transition:all 0.25s; color:var(--text); text-decoration:none; display:block; position:relative; overflow:hidden; }
+.pub-card::before{ content:""; position:absolute; left:0; top:0; bottom:0; width:4px; background:linear-gradient(180deg, var(--gold), #b8960a); border-radius:0; }
+.pub-card:hover{ box-shadow:0 8px 30px rgba(26,58,138,0.10); transform:translateY(-2px); border-color:rgba(201,168,76,0.4); }
+.pub-title{ font-size:14.5px; font-weight:600; color:var(--navy); line-height:1.55; margin-bottom:0.6rem; }
+.pub-authors{ font-size:12px; color:var(--muted); margin-bottom:0.75rem; line-height:1.4; }
+.pub-authors strong{ color:var(--navy); }
+.pub-footer{ display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap; }
+.pub-journal{ display:inline-flex; align-items:center; gap:5px; background:rgba(26,58,138,0.07); color:var(--navy); font-size:11.5px; font-weight:600; padding:4px 10px; border-radius:6px; border:1px solid rgba(26,58,138,0.12); }
+.pub-journal-icon{ font-size:10px; opacity:0.7; }
+.pub-year{ display:inline-block; background:#f3f4f6; color:var(--muted); font-size:11px; font-weight:500; padding:4px 10px; border-radius:6px; }
+.pub-doi{ margin-left:auto; font-size:11px; color:var(--gold); font-weight:500; display:flex; align-items:center; gap:3px; }
+.pub-doi::after{ content:"↗"; font-size:10px; }
+.view-all-link{ display:inline-flex; align-items:center; gap:6px; margin-top:0.5rem; font-size:13px; color:var(--gold); text-decoration:none; font-weight:500; padding:8px 16px; border:1.5px solid rgba(201,168,76,0.4); border-radius:20px; transition:all 0.2s; }
+.view-all-link:hover{ background:rgba(201,168,76,0.08); border-color:var(--gold); }
 
 /* FEEDS */
 .feeds-grid{ display:grid; grid-template-columns:1fr 1fr; gap:2rem; margin-bottom:1rem; }
@@ -288,6 +302,15 @@ body{ font-family:"DM Sans",sans-serif; background:var(--cream); color:var(--tex
       <span class="hero-tag">Postdoctoral Researcher · Freiberg, Germany</span>
       <h1>Catalysis for Sustainable Fuels and Clean Energy</h1>
       <p class="hero-desc">Research Scientist specializing in heterogeneous catalysis, sustainable aviation fuels, methanol-to-olefins conversion, photocatalysis, and reaction engineering. Currently conducting research at TU Bergakademie Freiberg, Germany.</p>
+      <div class="keyword-row">
+        <span class="keyword-pill"><span class="keyword-dot"></span>MTO Chemistry</span>
+        <span class="keyword-pill"><span class="keyword-dot"></span>SAF Production</span>
+        <span class="keyword-pill"><span class="keyword-dot"></span>Zeolite Catalysts</span>
+        <span class="keyword-pill"><span class="keyword-dot"></span>Heterogeneous Catalysis</span>
+        <span class="keyword-pill"><span class="keyword-dot"></span>Photocatalysis</span>
+        <span class="keyword-pill"><span class="keyword-dot"></span>Carbon Nitride</span>
+        <span class="keyword-pill"><span class="keyword-dot"></span>Reaction Engineering</span>
+      </div>
       <div class="hero-btns">
         <a href="#research" class="btn-primary" onclick="document.getElementById('research').scrollIntoView({behavior:'smooth'});return false;">Explore My Work ↓</a>
         <a href="https://scholar.google.com/citations?user=pUQ4nFsAAAAJ" target="_blank" class="btn-outline">Google Scholar →</a>
@@ -445,23 +468,36 @@ body{ font-family:"DM Sans",sans-serif; background:var(--cream); color:var(--tex
     <span class="section-tag">Research Output</span>
     <h2 class="section-title">Selected Publications</h2>
     <p class="section-sub">A selection of peer-reviewed work. Full list available on Google Scholar.</p>
-    <a href="https://doi.org/10.1016/j.fuel.2025.136280" target="_blank" class="pub-card" style="display:block;text-decoration:none;cursor:pointer;">
-      <div class="pub-title">Advances and Challenges in Photocatalytic Water Splitting: Recent Developments and Trends<span class="pub-year">2026</span></div>
-      <div class="pub-meta">Anwar, S.; Aslam, Z.; <strong>Rana, A.G.</strong> et al. · <em>Fuel</em>, 404, p. 136280</div>
-      <div style="font-size:11px;color:var(--gold);margin-top:5px;">doi.org/10.1016/j.fuel.2025.136280 ↗</div>
-    </a>
-    <a href="https://doi.org/10.1016/j.cej.2024.156948" target="_blank" class="pub-card" style="display:block;text-decoration:none;cursor:pointer;">
-      <div class="pub-title">Enhanced Gas-Phase Pollutant Removal Using Pt Nanoparticle-Modified Exfoliated Carbon Nitride Photocatalysts Under UV and Visible Light<span class="pub-year">2024</span></div>
-      <div class="pub-meta">Mateos, M.J.; Hou, H.; <strong>Rana, A.G.</strong> et al. · <em>Chemical Engineering Journal</em>, 500, p. 156948</div>
-      <div style="font-size:11px;color:var(--gold);margin-top:5px;">doi.org/10.1016/j.cej.2024.156948 ↗</div>
-    </a>
-    <a href="https://doi.org/10.3390/nano12224006" target="_blank" class="pub-card" style="display:block;text-decoration:none;cursor:pointer;">
-      <div class="pub-title">Influence of Cocatalysts (Ni, Co, Cu) and Synthesis Method on Photocatalytic Activity of Exfoliated g-C₃N₄ for Hydrogen Production<span class="pub-year">2022</span></div>
-      <div class="pub-meta"><strong>Rana, A.G.</strong>; Schwarze, M.; Tasbihi, M. et al. · <em>Nanomaterials</em>, 12(22), p. 4006</div>
-      <div style="font-size:11px;color:var(--gold);margin-top:5px;">doi.org/10.3390/nano12224006 ↗</div>
-    </a>
-    <br>
-    <a href="https://scholar.google.com/citations?user=pUQ4nFsAAAAJ" target="_blank" class="view-all-link">View all publications on Google Scholar →</a>
+    <div class="pub-list">
+      <a href="https://doi.org/10.1016/j.fuel.2025.136280" target="_blank" class="pub-card">
+        <div class="pub-title">Advances and Challenges in Photocatalytic Water Splitting: Recent Developments and Trends</div>
+        <div class="pub-authors">Anwar, S.; Aslam, Z.; <strong>Rana, A.G.</strong> et al.</div>
+        <div class="pub-footer">
+          <span class="pub-journal"><span class="pub-journal-icon">📄</span>Fuel</span>
+          <span class="pub-year">2026</span>
+          <span class="pub-doi">doi.org/10.1016/j.fuel.2025.136280</span>
+        </div>
+      </a>
+      <a href="https://doi.org/10.1016/j.cej.2024.156948" target="_blank" class="pub-card">
+        <div class="pub-title">Enhanced Gas-Phase Pollutant Removal Using Pt Nanoparticle-Modified Exfoliated Carbon Nitride Photocatalysts Under UV and Visible Light</div>
+        <div class="pub-authors">Mateos, M.J.; Hou, H.; <strong>Rana, A.G.</strong> et al.</div>
+        <div class="pub-footer">
+          <span class="pub-journal"><span class="pub-journal-icon">📄</span>Chemical Engineering Journal</span>
+          <span class="pub-year">2024</span>
+          <span class="pub-doi">doi.org/10.1016/j.cej.2024.156948</span>
+        </div>
+      </a>
+      <a href="https://doi.org/10.3390/nano12224006" target="_blank" class="pub-card">
+        <div class="pub-title">Influence of Cocatalysts (Ni, Co, Cu) and Synthesis Method on Photocatalytic Activity of Exfoliated g-C₃N₄ for Hydrogen Production</div>
+        <div class="pub-authors"><strong>Rana, A.G.</strong>; Schwarze, M.; Tasbihi, M. et al.</div>
+        <div class="pub-footer">
+          <span class="pub-journal"><span class="pub-journal-icon">📄</span>Nanomaterials</span>
+          <span class="pub-year">2022</span>
+          <span class="pub-doi">doi.org/10.3390/nano12224006</span>
+        </div>
+      </a>
+    </div>
+    <a href="https://scholar.google.com/citations?user=pUQ4nFsAAAAJ" target="_blank" class="view-all-link">View all on Google Scholar →</a>
   </div>
 </section>
 
