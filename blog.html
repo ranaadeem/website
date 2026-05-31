@@ -54,10 +54,15 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
 .page-header h1{font-family:"Playfair Display",serif;font-size:clamp(1.8rem,4vw,2.6rem);color:white;line-height:1.2;margin-bottom:0.5rem;}
 .page-header h1 span{color:var(--gold);}
 .header-sub{font-size:14px;color:rgba(255,255,255,0.7);line-height:1.6;max-width:500px;}
+.page-header-img{display:none;}
 @media(max-width:768px){
-  .page-header{height:240px;width:100%;position:relative;left:auto;}
-  .page-header-inner{padding:1.5rem 1.25rem;}
-  .header-sub{font-size:13px;}
+  .page-header{height:auto;background:none;background-color:var(--navy);overflow:hidden;}
+  .page-header-img{display:block;width:100%;height:auto;}
+  .page-header::before{content:'';position:absolute;inset:0;background:rgba(8,15,50,0.72);}
+  .page-header-inner{position:absolute;inset:0;padding:1rem 1.25rem;justify-content:center;align-items:center;}
+  .page-header h1{font-size:1.4rem;}
+  .header-sub{font-size:12px;max-width:100%;}
+  .page-header-quote{display:none!important;}
   .blog-main-wrap{padding:1.5rem 1rem 3rem;}
 }
 /* BLOG */
@@ -195,11 +200,12 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
 <div class="toast" id="toast"></div>
 
 <div class="page-header">
+  <img src="/blog-header.jpg" alt="Blog header" class="page-header-img">
   <div class="page-header-inner">
     <span class="page-tag">Writing & Ideas</span>
     <h1>The <span>Lab Notebook</span></h1>
     <p class="header-sub">Research, academic life, navigating Germany as a Pakistani researcher, and anything else worth writing about.</p>
-    <div style="margin-top:1.5rem;padding:0.75rem 1.25rem;border-left:3px solid var(--gold);background:rgba(201,168,76,0.08);border-radius:0 6px 6px 0;max-width:440px;">
+    <div class="page-header-quote" style="margin-top:1.5rem;padding:0.75rem 1.25rem;border-left:3px solid var(--gold);background:rgba(201,168,76,0.08);border-radius:0 6px 6px 0;max-width:440px;">
       <p style="font-size:13px;font-style:italic;color:rgba(255,255,255,0.8);line-height:1.6;margin:0;">"Writing is thinking. To write well is to think clearly."</p>
       <p style="font-size:11px;color:var(--gold);margin-top:4px;font-weight:600;margin-bottom:0;">— David McCullough</p>
     </div>
