@@ -115,7 +115,6 @@ export default async function handler(req, res) {
 <meta name="twitter:image" content="${safeImage}">
 <meta name="twitter:site" content="@ranaadeem">
 <link rel="canonical" href="${postUrl}">
-<meta http-equiv="refresh" content="0;url=${postUrl}">
 </head>
 <body>
 <h1>${safeTitle}</h1>
