@@ -452,6 +452,12 @@
           </div>
           <div class="sc-body">
             <div class="info-grid">
+              <div class="info-item" id="fi-dob" style="display:none">
+                <div class="il">Date of Birth</div>
+                <div class="iv" id="v-dob">—</div>
+                <input class="edit-inp" id="i-dob" type="date" />
+                <div class="private-note">🔒 Year is private — only month &amp; day shown to batchmates</div>
+              </div>
               <div class="info-item" id="fi-phone" style="display:none">
                 <div class="il">Phone Number</div>
                 <div class="iv" id="v-phone">—</div>
@@ -544,7 +550,7 @@ function render(p) {
 
   // Session year (handle "2006-Morning" → "2006")
   const sessionYear = (p.session || "").split("-")[0];
-  const sessionUrl  = `/alumni/${sessionYear}.html`;
+  const sessionUrl  = `/alumni/session.html?year=${sessionYear}`;
 
   // Nav + crumb
   document.getElementById("crumb-link").href        = sessionUrl;
@@ -625,11 +631,27 @@ function render(p) {
     document.getElementById("email-note").textContent = "Visible to you and your session fellows";
   }
   if (canSeePrivate) {
-    // Phone: self + admin only
+    // Phone + DOB: self + admin only
     document.getElementById("fi-phone").style.display = "block";
     set("v-phone", p.phone || "Not provided");
     document.getElementById("i-phone").value = p.phone || "";
-    document.getElementById("sec-private-sub").textContent = "Phone visible to you and admin · Email visible to session members";
+    // DOB: show formatted (day month only for display, full date in edit input)
+    document.getElementById("fi-dob").style.display = "block";
+    if (p.dob) {
+      const parts = p.dob.split("-");
+      const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+      const dobDisplay = parts.length === 3
+        ? `${parseInt(parts[2])} ${months[parseInt(parts[1])-1]} (year private)`
+        : p.dob;
+      set("v-dob", dobDisplay);
+      document.getElementById("i-dob").value = p.dob;
+    } else {
+      set("v-dob", "Not set");
+      document.getElementById("i-dob").value = "";
+    }
+    // Set max to today
+    document.getElementById("i-dob").max = new Date().toISOString().split("T")[0];
+    document.getElementById("sec-private-sub").textContent = "Phone &amp; DOB visible to you and admin · Email visible to session members";
   }
 
   // Network info
@@ -683,6 +705,7 @@ window.cancelEdit = function() {
   document.getElementById("i-country").value   = profileData.country   || "";
   document.getElementById("i-linkedin").value  = profileData.linkedin  || "";
   document.getElementById("i-phone").value     = profileData.phone     || "";
+  document.getElementById("i-dob").value       = profileData.dob       || "";
 };
 
 window.saveProfile = async function() {
@@ -696,6 +719,7 @@ window.saveProfile = async function() {
     country:   document.getElementById("i-country").value.trim(),
     linkedin:  document.getElementById("i-linkedin").value.trim(),
     phone:     document.getElementById("i-phone").value.trim(),
+    dob:       document.getElementById("i-dob").value.trim(),
     updatedAt: serverTimestamp()
   };
   if (!updates.position) return showE("Current position cannot be empty.");
@@ -709,6 +733,11 @@ window.saveProfile = async function() {
     set("v-city",      updates.city);
     set("v-country",   updates.country);
     set("v-phone",     updates.phone);
+    if (updates.dob) {
+      const parts = updates.dob.split("-");
+      const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+      set("v-dob", parts.length === 3 ? `${parseInt(parts[2])} ${months[parseInt(parts[1])-1]} (year private)` : updates.dob);
+    }
     set("lm-position", updates.position);
     set("lm-location", [updates.city, updates.country].filter(Boolean).join(", ") || "—");
     if (updates.linkedin) {
