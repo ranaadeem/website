@@ -25,7 +25,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
 .nav-cta:hover{background:var(--gold-light);}
 .nav-hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:4px;}
 .nav-hamburger span{display:block;width:24px;height:2px;background:var(--gold);border-radius:2px;}
-@media(max-width:768px){.nav-logo-text{display:none;}.nav-hamburger{display:flex;}.nav-links{display:none;position:absolute;top:64px;left:0;right:0;background:var(--navy);flex-direction:column;padding:1rem;border-bottom:2px solid var(--gold);}.nav-links.open{display:flex;}.nav-link{width:100%;padding:12px 16px;}.nav-cta{width:100%;text-align:center;margin-left:0;margin-top:0.5rem;}}
+@media(max-width:768px){.nav-logo-text{display:flex;} .nav-logo-name{font-size:11px;} .nav-logo-sub{font-size:9px;}.nav-hamburger{display:flex;}.nav-links{display:none;position:absolute;top:64px;left:0;right:0;background:var(--navy);flex-direction:column;padding:1rem;border-bottom:2px solid var(--gold);}.nav-links.open{display:flex;}.nav-link{width:100%;padding:12px 16px;}.nav-cta{width:100%;text-align:center;margin-left:0;margin-top:0.5rem;}}
 
 /* PAGE HEADER */
 /* ── ABOUT HEADER: Three-column journey — full width ── */
@@ -79,9 +79,17 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
   }
   .header-tag-strip-left { display: flex; flex-direction: column; gap: 3px; }
   @media(max-width:640px) {
-    .journey-cols { grid-template-columns: 1fr; height: auto; }
-    .journey-col { height: 200px; }
-    .header-tag-strip { flex-direction: column; align-items: flex-start; gap: 4px; }
+    .journey-cols { grid-template-columns: 1fr 1fr 1fr; height: auto; }
+    .journey-col { height: 140px; padding: 0.75rem; }
+    .journey-col-title { font-size: 0.8rem; }
+    .journey-col-sub { font-size: 10px; }
+    .header-tag-strip { flex-direction: column; align-items: flex-start; gap: 8px; }
+    .header-tag-strip-flags { display: flex; align-items: center; gap: 6px; flex-wrap: nowrap; width: 100%; justify-content: space-between; }
+    .header-tag-strip-flags .flag-item { min-width: unset; flex: 1; text-align: center; }
+    .header-tag-strip-flags .flag-item .flag-emoji { font-size: 22px !important; }
+    .header-tag-strip-flags .flag-item .flag-name { font-size: 11px !important; }
+    .header-tag-strip-flags .flag-item .flag-sub { font-size: 9px !important; }
+    .header-tag-strip-flags .flag-arrow { font-size: 14px !important; flex-shrink: 0; }
   }
 
   .page-header .page-tag { border-color: rgba(139,105,60,0.4); color: #8b693c; display: inline-block; margin-bottom: 1rem; }
@@ -114,7 +122,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
 .nav-cta:hover{background:var(--gold-light);}
 .nav-hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:4px;}
 .nav-hamburger span{display:block;width:24px;height:2px;background:var(--gold);border-radius:2px;}
-@media(max-width:768px){.nav-logo-text{display:none;}.nav-hamburger{display:flex;}.nav-links{display:none;position:absolute;top:64px;left:0;right:0;background:var(--navy);flex-direction:column;padding:1rem;border-bottom:2px solid var(--gold);}.nav-links.open{display:flex;}.nav-link{width:100%;padding:12px 16px;}.nav-cta{width:100%;text-align:center;margin-left:0;margin-top:0.5rem;}}
+@media(max-width:768px){.nav-logo-text{display:flex;} .nav-logo-name{font-size:11px;} .nav-logo-sub{font-size:9px;}.nav-hamburger{display:flex;}.nav-links{display:none;position:absolute;top:64px;left:0;right:0;background:var(--navy);flex-direction:column;padding:1rem;border-bottom:2px solid var(--gold);}.nav-links.open{display:flex;}.nav-link{width:100%;padding:12px 16px;}.nav-cta{width:100%;text-align:center;margin-left:0;margin-top:0.5rem;}}
 
 /* PAGE HEADER */
 /* ── ABOUT HEADER: Journey/Geographic theme ── */
@@ -393,23 +401,23 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
         <h1 style="font-family:'Playfair Display',serif;font-size:clamp(1.3rem,2.5vw,1.8rem);font-weight:700;color:#1a3a8a;">Dr. Adeem Ghaffar Rana</h1>
         <p>Research Scientist · Catalysis &amp; Sustainable Fuels · TU Bergakademie Freiberg, Germany</p>
       </div>
-      <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
-        <div style="text-align:center;min-width:80px;">
-          <div style="font-size:30px;line-height:1.2;">🇵🇰</div>
-          <div style="font-size:15px;font-weight:700;color:#1a3a8a;margin-top:3px;">Pakistan</div>
-          <div style="font-size:12px;color:#6b7280;margin-top:1px;">Lahore · PU</div>
+      <div class="header-tag-strip-flags" style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+        <div class="flag-item" style="text-align:center;min-width:80px;">
+          <div class="flag-emoji" style="font-size:30px;line-height:1.2;">🇵🇰</div>
+          <div class="flag-name" style="font-size:15px;font-weight:700;color:#1a3a8a;margin-top:3px;">Pakistan</div>
+          <div class="flag-sub" style="font-size:12px;color:#6b7280;margin-top:1px;">Lahore · PU</div>
         </div>
-        <span style="font-size:22px;color:#c9a84c;font-weight:300;">→</span>
-        <div style="text-align:center;min-width:90px;">
-          <div style="font-size:30px;line-height:1.2;">🇸🇦</div>
-          <div style="font-size:15px;font-weight:700;color:#1a3a8a;margin-top:3px;">Saudi Arabia</div>
-          <div style="font-size:12px;color:#6b7280;margin-top:1px;">Dhahran · KFUPM</div>
+        <span class="flag-arrow" style="font-size:22px;color:#c9a84c;font-weight:300;">→</span>
+        <div class="flag-item" style="text-align:center;min-width:90px;">
+          <div class="flag-emoji" style="font-size:30px;line-height:1.2;">🇸🇦</div>
+          <div class="flag-name" style="font-size:15px;font-weight:700;color:#1a3a8a;margin-top:3px;">Saudi Arabia</div>
+          <div class="flag-sub" style="font-size:12px;color:#6b7280;margin-top:1px;">Dhahran · KFUPM</div>
         </div>
-        <span style="font-size:22px;color:#c9a84c;font-weight:300;">→</span>
-        <div style="text-align:center;min-width:80px;">
-          <div style="font-size:30px;line-height:1.2;">🇩🇪</div>
-          <div style="font-size:15px;font-weight:700;color:#1a3a8a;margin-top:3px;">Germany</div>
-          <div style="font-size:12px;color:#6b7280;margin-top:1px;">Munich · Freiberg</div>
+        <span class="flag-arrow" style="font-size:22px;color:#c9a84c;font-weight:300;">→</span>
+        <div class="flag-item" style="text-align:center;min-width:80px;">
+          <div class="flag-emoji" style="font-size:30px;line-height:1.2;">🇩🇪</div>
+          <div class="flag-name" style="font-size:15px;font-weight:700;color:#1a3a8a;margin-top:3px;">Germany</div>
+          <div class="flag-sub" style="font-size:12px;color:#6b7280;margin-top:1px;">Munich · Freiberg</div>
         </div>
       </div>
     </div>

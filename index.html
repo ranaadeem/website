@@ -28,7 +28,7 @@ body{ font-family:"DM Sans",sans-serif; background:var(--cream); color:var(--tex
 .nav-hamburger{ display:none; flex-direction:column; gap:5px; background:none; border:none; cursor:pointer; padding:4px; }
 .nav-hamburger span{ display:block; width:24px; height:2px; background:var(--gold); border-radius:2px; }
 @media(max-width:768px){
-  .nav-logo-text{display:none;} .nav-hamburger{display:flex;}
+  .nav-logo-text{display:flex;} .nav-logo-name{font-size:11px;} .nav-logo-sub{font-size:9px;} .nav-hamburger{display:flex;}
   .nav-links{display:none;position:absolute;top:64px;left:0;right:0;background:var(--navy);flex-direction:column;padding:1rem;border-bottom:2px solid var(--gold);}
   .nav-links.open{display:flex;} .nav-link{width:100%;padding:12px 16px;}
   .nav-cta{width:100%;text-align:center;margin-left:0;margin-top:0.5rem;}
@@ -240,6 +240,7 @@ body{ font-family:"DM Sans",sans-serif; background:var(--cream); color:var(--tex
   #lightbox-img{max-width:90vw;max-height:90vh;border-radius:6px;box-shadow:0 8px 40px rgba(0,0,0,0.5);}
   #lightbox-close{position:absolute;top:1.5rem;right:2rem;color:white;font-size:2rem;cursor:pointer;background:none;border:none;line-height:1;}
 @media(max-width:640px){#contact .grid-two{grid-template-columns:1fr!important;}#contact .grid-four{grid-template-columns:1fr 1fr!important;}}
+@media(max-width:768px){#contact [style*="grid-template-columns:1fr 1fr"]{grid-template-columns:1fr!important;}}
 </style>
 
   <!-- Open Graph / Social sharing -->
