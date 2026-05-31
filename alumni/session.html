@@ -116,8 +116,30 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
 
 @media(max-width:1024px){.main-grid{grid-template-columns:1fr;}}
 @media(max-width:900px){.stats-bar{grid-template-columns:repeat(2,1fr);}}
-@media(max-width:768px){.member-grid{grid-template-columns:repeat(2,1fr);}.alumni-banner-wrap{height:auto;background:none!important;}.alumni-banner-img{display:block;}}
-@media(max-width:480px){.member-grid{grid-template-columns:1fr;}.stats-bar{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:768px){
+  .alumni-banner-wrap{height:auto;background:none!important;}
+  .alumni-banner-img{display:block;}
+  .session-title-bar{padding:0.75rem 1rem;flex-direction:column;align-items:flex-start;}
+  .session-title-bar h1{font-size:1.3rem;}
+  .page-wrap{padding:1rem;}
+  .stats-bar{grid-template-columns:repeat(2,1fr);gap:0.6rem;margin-bottom:1.25rem;}
+  .stat-box{padding:0.75rem 0.5rem;}
+  .stat-num{font-size:1.2rem;}
+  .member-grid{grid-template-columns:repeat(2,1fr);gap:0.5rem;}
+  .member-card{padding:0.75rem 0.5rem;}
+  .member-avatar{width:44px;height:44px;}
+  .member-name{font-size:11px;}
+  .member-roll,.member-detail{font-size:10px;}
+  /* Tabs — scrollable row */
+  #tab-directory,#tab-noticeboard,#tab-announcements{padding:6px 10px;font-size:12px;}
+  .filter-bar{gap:0.4rem;}
+  .search-box{min-width:100%;width:100%;}
+  /* Notice board & announcements inline grids → single column */
+  .noticeboard-inner,.announcements-inner{grid-template-columns:1fr!important;display:block!important;}
+  #notice-post-form,#ann-post-form{position:static!important;margin-top:1.25rem;}
+  /* Gallery */
+  #gallery-section{margin-bottom:1rem;}
+}
 </style>
 </head>
 <body>
@@ -331,7 +353,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
 
       <!-- NOTICE BOARD TAB -->
       <div id="tab-content-noticeboard" style="display:none;">
-        <div style="display:grid;grid-template-columns:1fr 280px;gap:1.5rem;align-items:start;">
+        <div class="noticeboard-inner" style="display:grid;grid-template-columns:1fr 280px;gap:1.5rem;align-items:start;">
           <div>
             <div style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:1rem;">Recent Posts</div>
             <div id="notices-container"><div style="text-align:center;padding:2rem;color:var(--muted);font-size:13px;">Loading...</div></div>
@@ -350,7 +372,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
 
       <!-- ANNOUNCEMENTS TAB -->
       <div id="tab-content-announcements" style="display:none;">
-        <div style="display:grid;grid-template-columns:1fr 280px;gap:1.5rem;align-items:start;">
+        <div class="announcements-inner" style="display:grid;grid-template-columns:1fr 280px;gap:1.5rem;align-items:start;">
           <div>
             <div style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:1rem;">Recent Announcements</div>
             <div id="announcements-container"><div style="text-align:center;padding:2rem;color:var(--muted);font-size:13px;">Loading...</div></div>
@@ -1209,6 +1231,15 @@ if (!SD || !SD.active) {
 } // end active session block
 </script>
 
+<!-- Mobile inline-grid fix -->
+<script>
+if (window.innerWidth <= 768) {
+  document.querySelectorAll('.noticeboard-inner, .announcements-inner').forEach(function(el) {
+    el.style.display = 'block';
+    el.style.gridTemplateColumns = 'unset';
+  });
+}
+</script>
 <!-- Nav hamburger (non-module, safe to run immediately) -->
 <script>
 document.getElementById('nav-hamburger').addEventListener('click', function() {
