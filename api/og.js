@@ -51,12 +51,31 @@ export default async function handler(req, res) {
           (post.content || '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 220);
         if (rawDesc && rawDesc.length > 10) description = rawDesc;
 
-        // Cover image — must be a Cloudinary https URL
+        // Cover image: Cloudinary https URL (preferred)
         if (post.coverImage && post.coverImage.startsWith('https://')) {
           image = post.coverImage;
           // Transform for proper 1200×630 OG dimensions
           if (image.includes('cloudinary.com/') && image.includes('/upload/')) {
             image = image.replace('/upload/', '/upload/c_fill,w_1200,h_630,f_jpg,q_auto/');
+          }
+        }
+        // Fallback: base64 image stored directly — upload to Cloudinary now
+        else if (post.coverImage && post.coverImage.startsWith('data:image')) {
+          try {
+            const formData = new FormData();
+            const blob = await (await fetch(post.coverImage)).blob();
+            formData.append('file', blob, 'cover.jpg');
+            formData.append('upload_preset', 'ranaadeem_blog');
+            const r = await fetch('https://api.cloudinary.com/v1_1/duetiv9rm/image/upload', { method: 'POST', body: formData });
+            const d = await r.json();
+            if (d.secure_url) {
+              image = d.secure_url.replace('/upload/', '/upload/c_fill,w_1200,h_630,f_jpg,q_auto/');
+              // Also save the Cloudinary URL back to Firestore so future requests don't re-upload
+              const { updateDoc } = await import('firebase/firestore');
+              await updateDoc(doc(db, 'posts', id), { coverImage: d.secure_url }).catch(() => {});
+            }
+          } catch (e) {
+            console.error('Base64 upload error:', e.message);
           }
         }
       }

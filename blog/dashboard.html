@@ -235,6 +235,24 @@ let authorDocId = null;
 let coverBase64 = "";
 let profilePhotoBase64 = "";
 
+// ── Cloudinary upload ──
+const CL_CLOUD = "duetiv9rm";
+const CL_PRESET = "ranaadeem_blog";
+async function uploadToCloudinary(base64) {
+  if (!base64 || !base64.startsWith("data:")) return base64;
+  try {
+    const blob = await (await fetch(base64)).blob();
+    const fd = new FormData();
+    fd.append("file", blob, "cover.jpg");
+    fd.append("upload_preset", CL_PRESET);
+    const res = await fetch("https://api.cloudinary.com/v1_1/" + CL_CLOUD + "/image/upload", { method: "POST", body: fd });
+    const data = await res.json();
+    return data.secure_url || base64;
+  } catch (e) {
+    return base64;
+  }
+}
+
 // ── Auth state ──
 auth.onAuthStateChanged(async function(user) {
   if (!user) {
