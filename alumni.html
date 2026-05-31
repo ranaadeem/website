@@ -248,7 +248,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
         <div class="session-dept">Chemical Eng &middot; ICET &middot; PU</div>
         <div style="margin-top:0.4rem;font-size:10px;color:#9ca3af;">Opening soon</div>
       </div>
-      <div class="session-card" id="card-2006" data-year="2006" onclick="window.location.href='/alumni/2006.html'" style="cursor:pointer;">
+      <div class="session-card" id="card-2006" data-year="2006" onclick="window.location.href='/alumni/session.html?year=2006'" style="cursor:pointer;">
         <div style="display:flex;justify-content:space-between;align-items:flex-start;">
           <div class="session-year">2006–2010</div>
           <span class="active-badge">&#9679; Active</span>
@@ -272,7 +272,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
         <div class="session-dept">Chemical Eng &middot; ICET &middot; PU</div>
         <div style="margin-top:0.4rem;font-size:10px;color:#9ca3af;">Opening soon</div>
       </div>
-      <div class="session-card" id="card-2009" data-year="2009" onclick="window.location.href='/alumni/2009.html'" style="cursor:pointer;">
+      <div class="session-card" id="card-2009" data-year="2009" onclick="window.location.href='/alumni/session.html?year=2009'" style="cursor:pointer;">
         <div style="display:flex;justify-content:space-between;align-items:flex-start;">
           <div class="session-year">2009–2013</div>
           <span class="active-badge">&#9679; Active</span>
@@ -328,7 +328,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
         <div class="session-dept">Chemical Eng &middot; ICET &middot; PU</div>
         <div style="margin-top:0.4rem;font-size:10px;color:#9ca3af;">Opening soon</div>
       </div>
-      <div class="session-card" id="card-2016" data-year="2016" onclick="window.location.href='/alumni/2016.html'" style="cursor:pointer;">
+      <div class="session-card" id="card-2016" data-year="2016" onclick="window.location.href='/alumni/session.html?year=2016'" style="cursor:pointer;">
         <div style="display:flex;justify-content:space-between;align-items:flex-start;">
           <div class="session-year">2016–2020</div>
           <span class="active-badge">&#9679; Active</span>
@@ -531,7 +531,7 @@ onAuthStateChanged(auth, async (user) => {
     } catch(_e) {}
     if (currentUserProfile?.status === 'approved' && document.querySelector('.page.active')?.id === 'page-login') {
       const session = currentUserProfile.session?.split('-')[0];
-      window.location.href = '/alumni/' + session + '.html';
+      window.location.href = '/alumni/session.html?year=' + session;
     }
   }
 });
@@ -549,7 +549,7 @@ function buildNav(user) {
   const nm=document.createElement('span'); nm.style.cssText='font-size:13px;color:rgba(255,255,255,0.8);'; nm.textContent=(user.displayName||'').split(' ')[0]; wrap.appendChild(nm);
   if (currentUserProfile) {
     const session = currentUserProfile.session?.split('-')[0];
-    const sb=document.createElement('a'); sb.href='/alumni/'+session+'.html';
+    const sb=document.createElement('a'); sb.href='/alumni/session.html?year='+session;
     sb.style.cssText='background:rgba(201,168,76,0.2);color:var(--gold);border:1px solid rgba(201,168,76,0.4);padding:5px 12px;border-radius:6px;font-size:12px;font-weight:600;text-decoration:none;';
     sb.textContent='My Session'; wrap.appendChild(sb);
   }
@@ -562,7 +562,7 @@ function buildNav(user) {
 document.getElementById('btn-join')?.addEventListener('click', () => {
   if (currentUser && currentUserProfile) {
     const session = currentUserProfile.session?.split('-')[0];
-    window.location.href = '/alumni/' + session + '.html';
+    window.location.href = '/alumni/session.html?year=' + session;
   } else {
     window.location.href = '/alumni/register.html';
   }
@@ -675,7 +675,7 @@ async function submitProfile() {
       fetch('/api/send-email',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({type:'new-submission',data:{postTitle:'New alumni registration pending approval',authorName:name,authorEmail:email,postCategory:session}})}).catch(()=>{});
     } else {
       suc.textContent='✅ Profile saved!';suc.style.display='block';btn.textContent='Saved ✓';
-      setTimeout(()=>window.location.href='/alumni/'+session.split('-')[0]+'.html',1200);
+      setTimeout(()=>window.location.href='/alumni/session.html?year='+session.split('-')[0],1200);
     }
   }catch(e){err.textContent='Error: '+e.message;err.style.display='block';btn.disabled=false;btn.textContent='Save Profile & Join Network';}
 }
@@ -723,7 +723,7 @@ document.getElementById('global-search-input').addEventListener('input',function
       const info=document.createElement('div');info.style.cssText='flex:1;min-width:0;';
       info.innerHTML='<div style="font-size:13px;font-weight:600;color:var(--navy);">'+a.name+'</div><div style="font-size:10px;color:var(--gold);font-weight:600;margin:1px 0;">'+a.session+'</div><div style="font-size:10px;color:var(--muted);">📍 '+(a.city||'')+', '+(a.country||'')+'</div>'+(showJob&&a.job?'<div style="font-size:10px;color:var(--text);">'+a.job+'</div>':'');
       card.appendChild(av);card.appendChild(info);
-      card.addEventListener('click',()=>window.location.href='/alumni/'+a.session.split('-')[0]+'.html');
+      card.addEventListener('click',()=>window.location.href='/alumni/session.html?year='+a.session.split('-')[0]);
       container.appendChild(card);
     });
     }catch(e){hint.textContent='Search unavailable. Try again.';console.error(e);}
