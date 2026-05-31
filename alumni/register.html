@@ -1384,7 +1384,7 @@
         const profSnap = await getDoc(doc(db, 'alumni', mapSnap.data().roll));
         const profile  = profSnap.data();
         if (profile.status === 'pending') { alertEl.className = 'alert alert-info show'; alertEl.textContent = "Your registration is under review. You'll be notified once approved."; await signOut(auth); return; }
-        window.location.href = `/alumni/${profile.session}.html`;
+        window.location.href = `/alumni/session.html?year=${(profile.session||'').split('-')[0]}`;
       } catch(err) {
         let msg = 'Sign in failed. Please check your credentials.';
         if (['auth/user-not-found','auth/wrong-password','auth/invalid-credential'].includes(err.code)) msg = 'Email or password is incorrect.';
@@ -1424,7 +1424,7 @@
       if (!mapSnap.exists()) return;
       const profSnap = await getDoc(doc(db, 'alumni', mapSnap.data().roll));
       if (!profSnap.exists()) return;
-      if (profSnap.data().status === 'approved') window.location.href = `/alumni/${profSnap.data().session}.html`;
+      if (profSnap.data().status === 'approved') window.location.href = `/alumni/session.html?year=${(profSnap.data().session||'').split('-')[0]}`;
     });
 
     document.getElementById('signin-password').addEventListener('keydown', e => { if (e.key === 'Enter') window.handleSignIn(); });
