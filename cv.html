@@ -37,20 +37,6 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
 /* CV HEADER */
 .cv-header{background:linear-gradient(135deg,var(--navy) 0%,#2048a8 100%);padding:2.5rem 2rem;color:white;}
 .cv-header-inner{max-width:900px;margin:0 auto;display:flex;gap:2rem;align-items:center;flex-wrap:wrap;}
-@media(max-width:768px){
-  .cv-header{padding:1.5rem 1.25rem;}
-  .cv-header-inner{gap:1rem;}
-  .cv-photo{width:70px;height:70px;}
-  .cv-header-text h1{font-size:1.4rem;}
-  .cv-header-text .subtitle{font-size:13px;}
-  .cv-body{padding:1.5rem 1rem 3rem;}
-  .cv-entry{display:block;}
-  .cv-entry-period{display:inline-block;margin-bottom:6px;}
-  .cv-skills-grid{grid-template-columns:1fr 1fr;}
-  .cv-download-row{padding:0.75rem 0 0;flex-direction:column;}
-  .cv-dl-btn{width:100%;justify-content:center;}
-  .cv-contact-row{gap:0.5rem;}
-}
 .cv-photo{width:100px;height:100px;border-radius:50%;border:3px solid var(--gold);object-fit:cover;object-position:center top;flex-shrink:0;}
 .cv-header-text h1{font-family:"Playfair Display",serif;font-size:1.9rem;margin-bottom:4px;}
 .cv-header-text .subtitle{font-size:15px;color:rgba(255,255,255,0.8);margin-bottom:0.75rem;}
@@ -106,6 +92,21 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
     .nav-dropdown-item{padding:8px 12px;color:rgba(255,255,255,0.7);}
   }
   }
+
+@media(max-width:768px){
+  .cv-header{padding:1.5rem 1.25rem;}
+  .cv-header-inner{gap:1rem;}
+  .cv-photo{width:70px;height:70px;}
+  .cv-header-text h1{font-size:1.4rem;}
+  .cv-header-text .subtitle{font-size:13px;}
+  .cv-body{padding:1.5rem 1rem 3rem;}
+  .cv-entry{display:block;}
+  .cv-entry-period{display:inline-block;margin-bottom:6px;}
+  .cv-skills-grid{grid-template-columns:1fr 1fr;}
+  .cv-download-row{padding:0.75rem 0 0;flex-direction:column;}
+  .cv-dl-btn{width:100%;justify-content:center;}
+  .cv-contact-row{gap:0.5rem;}
+}
 
 </style>
 </head>
