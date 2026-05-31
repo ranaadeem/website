@@ -100,8 +100,8 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
   .cv-header-text h1{font-size:1.4rem;}
   .cv-header-text .subtitle{font-size:13px;}
   .cv-body{padding:1.5rem 1rem 3rem;}
-  .cv-entry{display:block;}
-  .cv-entry-period{display:inline-block;margin-bottom:6px;}
+  .cv-entry{display:flex!important;flex-direction:column!important;gap:0!important;}
+  .cv-entry-period{order:-1;align-self:flex-end;margin-bottom:4px;background:rgba(201,168,76,0.12);padding:2px 10px;border-radius:20px;}
   .cv-skills-grid{grid-template-columns:1fr 1fr;}
   .cv-download-row{padding:0.75rem 0 0;flex-direction:column;}
   .cv-dl-btn{width:100%;justify-content:center;}
