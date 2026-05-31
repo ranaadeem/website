@@ -1,8 +1,26 @@
 // OG tag server-side renderer for blog posts
-// Uses Firestore REST API (no service account needed — public read access)
-// Social crawlers hit /api/og?id=POST_ID → get proper meta tags → redirect to post
+// Uses Firebase JS SDK (same as browser frontend — works with existing Firestore rules)
+// Social crawlers hit /api/og?id=POST_ID → get proper OG meta tags → redirect to post
 
-const PROJECT_ID = 'icet-alumni';
+import { initializeApp, getApps } from 'firebase/app';
+import { getFirestore, doc, getDoc } from 'firebase/firestore';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAgUl22Cln6QtY3-HIvI6lE8Zu7n9OblbI",
+  authDomain: "icet-alumni.firebaseapp.com",
+  projectId: "icet-alumni",
+  storageBucket: "icet-alumni.firebasestorage.app",
+  messagingSenderId: "707390888790",
+  appId: "1:707390888790:web:57e6be62e4d11e22c214f7"
+};
+
+let app;
+if (!getApps().length) {
+  app = initializeApp(firebaseConfig);
+} else {
+  app = getApps()[0];
+}
+const db = getFirestore(app);
 
 export default async function handler(req, res) {
   const id = req.query.id;
@@ -19,31 +37,24 @@ export default async function handler(req, res) {
   }
 
   try {
-    const url = `https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/databases/(default)/documents/posts/${encodeURIComponent(id)}`;
-    const response = await fetch(url);
+    const snap = await getDoc(doc(db, 'posts', id));
 
-    if (response.ok) {
-      const data = await response.json();
-      const fields = data.fields || {};
+    if (snap.exists()) {
+      const post = snap.data();
 
       // Only serve published posts
-      const status = fields.status?.stringValue;
-      if (status === 'published' || status === 'Published') {
-        if (fields.title?.stringValue) {
-          title = fields.title.stringValue;
-        }
+      if (post.status === 'published') {
+        if (post.title) title = post.title;
 
-        // Description: subtitle or first 200 chars of content
-        const subtitle = fields.subtitle?.stringValue || '';
-        const content = fields.content?.stringValue || '';
-        const rawDesc = subtitle || content.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 200);
-        if (rawDesc.length > 10) description = rawDesc;
+        // Description: subtitle or first 220 chars of stripped content
+        const rawDesc = post.subtitle ||
+          (post.content || '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 220);
+        if (rawDesc && rawDesc.length > 10) description = rawDesc;
 
-        // Cover image — must be an https Cloudinary URL
-        const cover = fields.coverImage?.stringValue || '';
-        if (cover.startsWith('https://')) {
-          image = cover;
-          // Transform Cloudinary URL for optimal 1200×630 OG dimensions
+        // Cover image — must be a Cloudinary https URL
+        if (post.coverImage && post.coverImage.startsWith('https://')) {
+          image = post.coverImage;
+          // Transform for proper 1200×630 OG dimensions
           if (image.includes('cloudinary.com/') && image.includes('/upload/')) {
             image = image.replace('/upload/', '/upload/c_fill,w_1200,h_630,f_jpg,q_auto/');
           }
@@ -51,15 +62,17 @@ export default async function handler(req, res) {
       }
     }
   } catch (e) {
-    // Fallback to defaults on any error
     console.error('OG fetch error:', e.message);
+    // Falls back to site defaults — harmless
   }
 
-  const safeTitle = title.replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-  const safeDesc = description.replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  const safe = s => String(s).replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  const safeTitle = safe(title);
+  const safeDesc = safe(description);
   const safeImage = image.replace(/"/g, '%22');
 
   res.setHeader('Content-Type', 'text/html; charset=utf-8');
+  // Cache 5 min on CDN so crawlers are fast, but not stale too long
   res.setHeader('Cache-Control', 'public, max-age=300, stale-while-revalidate=60');
   res.status(200).send(`<!DOCTYPE html>
 <html lang="en">
