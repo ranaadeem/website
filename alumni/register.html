@@ -722,7 +722,7 @@
       const isSignin = tab === 'signin';
       document.getElementById('signin-panel').style.display    = isSignin ? 'block' : 'none';
       document.getElementById('register-card').style.display   = isSignin ? 'none'  : 'block';
-      document.getElementById('register-footer-link').style.display = isSignin ? 'none' : 'block';
+      const rfl = document.getElementById('register-footer-link'); if (rfl) rfl.style.display = isSignin ? 'none' : 'block';
       document.getElementById('tab-btn-signin').style.background   = isSignin ? 'var(--navy)' : '#fff';
       document.getElementById('tab-btn-signin').style.color        = isSignin ? 'var(--gold)'  : 'var(--mid)';
       document.getElementById('tab-btn-register').style.background = isSignin ? '#fff' : 'var(--navy)';
