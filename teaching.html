@@ -46,6 +46,12 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
 .page-header h1{font-family:"Playfair Display",serif;font-size:clamp(1.8rem,4vw,2.8rem);color:white;line-height:1.2;margin-bottom:0.5rem;}
 .page-header h1 span{color:var(--gold);}
 .header-sub{font-size:15px;color:rgba(255,255,255,0.75);line-height:1.6;max-width:520px;}
+@media(max-width:768px){
+  .page-header{height:auto;min-height:220px;}
+  .page-header-inner{position:relative;padding:2rem 1.25rem;max-width:100%;}
+  .header-sub{font-size:13px;}
+  .main-wrap{padding:1.5rem 1rem;}
+}
 
 /* MAIN */
 .main-wrap{max-width:1100px;margin:0 auto;padding:3rem 2rem;display:grid;grid-template-columns:1fr 320px;gap:3rem;align-items:start;}

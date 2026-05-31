@@ -54,6 +54,12 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
 .page-header h1{font-family:"Playfair Display",serif;font-size:clamp(1.8rem,4vw,2.6rem);color:white;line-height:1.2;margin-bottom:0.5rem;}
 .page-header h1 span{color:var(--gold);}
 .header-sub{font-size:14px;color:rgba(255,255,255,0.7);line-height:1.6;max-width:500px;}
+@media(max-width:768px){
+  .page-header{height:auto;min-height:200px;}
+  .page-header-inner{position:relative;padding:2rem 1.25rem;}
+  .header-sub{font-size:13px;}
+  .blog-main-wrap{padding:1.5rem 1rem 3rem;}
+}
 /* BLOG */
 .blog-wrap{} @media(max-width:900px){.blog-wrap{grid-template-columns:1fr!important;} .blog-wrap aside{display:none;}}
 .blog-toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:2rem;flex-wrap:wrap;gap:1rem;}
