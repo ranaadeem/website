@@ -38,7 +38,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
 .nav-dropdown-item{display:block;padding:9px 16px;color:rgba(255,255,255,0.85);text-decoration:none;font-size:13px;border-radius:6px;transition:all 0.15s;white-space:nowrap;}
 .nav-dropdown-item:hover{background:rgba(201,168,76,0.15);color:var(--gold);}
 @media(max-width:768px){
-  .nav-logo-name{display:none;}.nav-hamburger{display:flex;}
+  .nav-logo-text{display:none;}.nav-hamburger{display:flex;}
   .nav-links{display:none;position:absolute;top:64px;left:0;right:0;background:var(--navy);flex-direction:column;padding:1rem;border-bottom:2px solid var(--gold);z-index:999;}
   .nav-links.open{display:flex;}.nav-link{width:100%;padding:12px 16px;}
   .nav-cta{width:100%;text-align:center;margin-left:0;margin-top:0.5rem;}
@@ -160,7 +160,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
 
 <nav id="main-nav">
   <div class="nav-inner">
-    <a href="/" class="nav-logo"><span class="nav-logo-agr">AGR</span><span class="nav-logo-name">Dr. Adeem Ghaffar Rana</span></a>
+    <a href="/" class="nav-logo"><span class="nav-logo-agr">AGR</span><span class="nav-logo-text"><span class="nav-logo-name">Dr. Adeem Ghaffar Rana</span><span class="nav-logo-sub">Catalysis Research Scientist</span></span></a>
     <button class="nav-hamburger" id="nav-hamburger"><span></span><span></span><span></span></button>
     <ul class="nav-links" id="nav-links">
       <li><a href="/" class="nav-link">Home</a></li>
