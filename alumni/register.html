@@ -608,6 +608,12 @@
         </div>
 
         <div class="form-row">
+          <label>Date of Birth <span class="req">*</span></label>
+          <input type="date" id="dob" max="" style="width:100%;" />
+          <div style="font-size:0.78rem;color:var(--mid);margin-top:5px;">🔒 Year is kept private — only month &amp; day shown to batchmates for birthday wishes</div>
+        </div>
+
+        <div class="form-row">
           <label>Phone Number <span class="req">*</span></label>
           <input type="tel" id="phone" placeholder="+92 300 1234567" />
           <div style="font-size:0.78rem;color:var(--mid);margin-top:5px;">🔒 Visible to you and admin only</div>
@@ -1256,6 +1262,7 @@
       const position = document.getElementById('position').value.trim();
       const employer = document.getElementById('employer').value.trim();
       const phone    = document.getElementById('phone').value.trim();
+      const dob      = document.getElementById('dob').value.trim();
       const linkedin = document.getElementById('linkedin').value.trim();
       const email    = document.getElementById('email').value.trim().toLowerCase();
       const pw       = document.getElementById('password').value;
@@ -1275,6 +1282,7 @@
         }
       }
       if (!window._photoUrl) return showErr('Please upload a profile photo.');
+      if (!dob)      return showErr('Please enter your date of birth.');
       if (!position) return showErr('Please enter your current position / job title.');
       if (!phone)    return showErr('Please enter your phone number.');
       if (!email)    return showErr('Please enter your email address.');
@@ -1295,7 +1303,7 @@
         await setDoc(doc(db, 'alumni', roll), {
           uid: cred.user.uid,
           roll, name, session, shift,
-          city, country, position, employer, phone, linkedin,
+          city, country, position, employer, phone, dob, linkedin,
           email, photoUrl: window._photoUrl || '',
           status: 'pending', emailVerified: false,
           verifyCode, registeredAt: serverTimestamp()
@@ -1542,6 +1550,10 @@
       },400);
     });
     document.addEventListener('click', e => { if(!e.target.closest('#city-input')&&!e.target.closest('#city-suggestions')) document.getElementById('city-suggestions').style.display='none'; });
+
+    // Set DOB max to today (no future dates)
+    const dobInput = document.getElementById('dob');
+    if (dobInput) dobInput.max = new Date().toISOString().split('T')[0];
     window.useManualCity = function() {
       const raw=document.getElementById('city-input').value.trim(), parts=raw.split(',').map(s=>s.trim());
       const city=parts[0]||raw, country=parts.length>1?parts[parts.length-1]:'';
