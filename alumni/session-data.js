@@ -9,6 +9,7 @@ export const SESSION_DATA = {
   '2006': {
     label: 'Session 2006–2010',
     total: 187, morning: 124, evening: 63,
+    whatsapp: '',   // paste group invite link here when available
     active: true,
     members: [
       {"roll":"CE-M6-101","name":"ABDUL WAHAB KHAN","shift":"Morning"},
@@ -204,6 +205,7 @@ export const SESSION_DATA = {
   '2009': {
     label: 'Session 2009–2013',
     total: 139, morning: 79, evening: 60,
+    whatsapp: '',   // paste group invite link here when available
     active: true,
     members: [
       {"roll":"M09-10CE01","name":"KASHIF YASIN","shift":"Morning"},
@@ -351,6 +353,7 @@ export const SESSION_DATA = {
   '2016': {
     label: 'Session 2016–2020',
     total: 107, morning: 61, evening: 46,
+    whatsapp: '',   // paste group invite link here when available
     active: true,
     members: [
       {"roll":"RP16-CE01","name":"MUHAMMAD QASIM RIAZ","shift":"Morning"},
