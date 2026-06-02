@@ -442,7 +442,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
         <div class="sidebar-card-body" id="country-list"><div style="color:var(--muted);font-size:12px;text-align:center;">Waiting for members</div></div>
       </div>
       <div class="sidebar-card">
-        <div class="sidebar-card-header">💼 Industries</div>
+        <div class="sidebar-card-header">💼 Top Employers</div>
         <div class="sidebar-card-body" id="industry-list"><div style="color:var(--muted);font-size:12px;text-align:center;">Waiting for members</div></div>
       </div>
       <div class="sidebar-card">
@@ -888,7 +888,7 @@ if (!SD || !SD.active) {
         if (sessionYear !== YEAR) return;
         registeredMap[a.roll] = a;
         if (a.country)  countries[a.country]    = (countries[a.country]  || 0) + 1;
-        if (a.industry) industries[a.industry]  = (industries[a.industry] || 0) + 1;
+        if (a.employer || a.company) { const emp = a.employer || a.company; industries[emp] = (industries[emp] || 0) + 1; }
       });
 
       // Use filtered count, not total snap.size
