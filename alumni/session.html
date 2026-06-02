@@ -1570,14 +1570,25 @@ async function loadAlumni() {
   return alumniCache;
 }
 
-function buildContext(alumni) {
-  return alumni.map(a => {
-    if (a.registered) {
-      return `- ${a.name} (${a.roll}, Session ${a.session}) [REGISTERED]${a.employer ? ', works at ' + a.employer : ''}${a.title ? ' as ' + a.title : ''}${a.city ? ', lives in ' + a.city : ''}${a.country && a.country !== a.city ? ', ' + a.country : ''}`;
-    } else {
-      return `- ${a.name} (${a.roll}, Session ${a.session}) [NOT REGISTERED]`;
-    }
-  }).join('\n');
+function buildContext(alumni, question) {
+  const q = (question || '').toLowerCase();
+  const registered = alumni.filter(a => a.registered);
+  const unregistered = alumni.filter(a => !a.registered);
+
+  // Only include unregistered alumni whose name words appear in the question
+  const matchedUnregistered = unregistered.filter(a =>
+    a.name.toLowerCase().split(' ').some(w => w.length > 3 && q.includes(w))
+  );
+
+  const lines = [];
+  registered.forEach(a => {
+    lines.push(`- ${a.name} (${a.roll}, Session ${a.session}) [REGISTERED]${a.employer ? ', works at ' + a.employer : ''}${a.title ? ' as ' + a.title : ''}${a.city ? ', lives in ' + a.city : ''}${a.country && a.country !== a.city ? ', ' + a.country : ''}`);
+  });
+  matchedUnregistered.forEach(a => {
+    lines.push(`- ${a.name} (${a.roll}, Session ${a.session}) [NOT REGISTERED]`);
+  });
+
+  return lines.join('\n');
 }
 
 window.toggleAIChat = function() {
@@ -1614,7 +1625,7 @@ window.sendAIMsg = async function() {
 
   try {
     const alumni = await loadAlumni();
-    const context = buildContext(alumni);
+    const context = buildContext(alumni, question);
 
     const registered = alumni.filter(a => a.registered).length;
     const systemPrompt = `You are a helpful assistant for the ICET (Institute of Chemical Engineering & Technology) Punjab University alumni network.
