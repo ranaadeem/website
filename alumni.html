@@ -839,8 +839,7 @@ document.addEventListener('click',function(e){if(!e.target.closest('.nav-dropdow
 import { getFirestore, collection, getDocs, query, where } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js';
 import { getApp } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js';
 
-const GROQ_KEY = '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';
-const GROQ_URL = 'https://api.groq.com/openai/v1/chat/completions';
+const GROQ_URL = 'https://groq-proxy.ranaadeem.workers.dev';
 const db = getFirestore(getApp());
 let alumniCache = null;
 
@@ -896,7 +895,7 @@ Alumni Data:
 ${context}`;
     const res = await fetch(GROQ_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${GROQ_KEY}` },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         model: 'llama-3.1-8b-instant',
         messages: [
