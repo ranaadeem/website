@@ -1513,7 +1513,7 @@ import { getFirestore, collection, getDocs, query, where } from 'https://www.gst
 import { getApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 
 const GEMINI_KEY = 'AQ.Ab8RN6LP2d8noBg6MzFxEnRF91wDFzJ6OIJ5a7ZbRu2fhF68-Q';
-const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${GEMINI_KEY}`;
+const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_KEY}`;
 
 const db = getFirestore(getApp());
 let alumniCache = null;
