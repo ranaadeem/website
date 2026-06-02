@@ -63,7 +63,32 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
 
 /* MEMBER GRID */
 .member-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0.75rem;min-width:0;}
-.member-card{background:white;border:1px solid var(--border);border-radius:12px;padding:1rem;text-align:center;transition:box-shadow 0.2s;}
+.member-card{background:white;border:1px solid var(--border);border-radius:12px;padding:1rem;text-align:center;transition:box-shadow 0.2s;position:relative;}
+.report-flag{position:absolute;top:6px;right:7px;background:none;border:none;font-size:13px;cursor:pointer;opacity:0;transition:opacity .2s;padding:2px 4px;border-radius:4px;line-height:1;color:#9ca3af;}
+.member-card:hover .report-flag{opacity:1;}
+.report-flag:hover{color:#dc2626;background:#fef2f2;}
+/* Report modal */
+.report-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:3000;align-items:center;justify-content:center;padding:1rem;}
+.report-overlay.open{display:flex;}
+.report-modal{background:white;border-radius:14px;width:100%;max-width:440px;box-shadow:0 20px 60px rgba(0,0,0,.25);overflow:hidden;}
+.report-modal-head{background:var(--navy);padding:.9rem 1.1rem;display:flex;align-items:center;justify-content:space-between;}
+.report-modal-head h3{font-size:14px;font-weight:700;color:var(--gold-light);margin:0;}
+.report-modal-close{background:none;border:none;color:rgba(255,255,255,.6);font-size:1.1rem;cursor:pointer;padding:2px 6px;}
+.report-modal-close:hover{color:white;}
+.report-modal-body{padding:1.1rem;}
+.report-modal-body p{font-size:12.5px;color:#6b7280;margin-bottom:.85rem;line-height:1.55;}
+.report-field{margin-bottom:.75rem;}
+.report-field label{display:block;font-size:11px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;}
+.report-field input,.report-field textarea{width:100%;border:1.5px solid #e5e7eb;border-radius:7px;padding:8px 11px;font-family:inherit;font-size:13px;outline:none;resize:vertical;transition:border-color .2s;}
+.report-field input:focus,.report-field textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,168,76,.12);}
+.report-field textarea{min-height:90px;}
+.report-modal-foot{display:flex;gap:8px;justify-content:flex-end;padding:.85rem 1.1rem;border-top:1px solid #e5e7eb;}
+.btn-report-cancel{background:white;border:1.5px solid #e5e7eb;color:#6b7280;padding:7px 16px;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;}
+.btn-report-submit{background:var(--navy);color:white;border:none;padding:7px 18px;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;}
+.btn-report-submit:disabled{opacity:.5;cursor:not-allowed;}
+.report-success{text-align:center;padding:1.5rem 1.1rem;display:none;}
+.report-success .rs-icon{font-size:2.5rem;margin-bottom:.5rem;}
+.report-success p{font-size:13px;color:#6b7280;line-height:1.55;}
 .member-card:hover{box-shadow:0 4px 16px rgba(0,0,0,0.08);}
 .member-card.unregistered{opacity:0.72;}
 .member-card.birthday-today{border:2px solid var(--gold);background:linear-gradient(135deg,#fffbf0,#fff9e6);}
@@ -921,7 +946,8 @@ if (!SD || !SD.active) {
         ${reg?.employer  ? `<div class="member-detail">🏢 ${reg.employer}</div>`  : (reg?.company ? `<div class="member-detail">🏢 ${reg.company}</div>` : '')}
         ${reg?.country   ? `<div class="member-detail">📍 ${reg.city ? reg.city+', ' : ''}${reg.country}</div>` : ''}
         ${dobHtml}
-        ${reg ? '<div style="font-size:10px;color:var(--navy);margin-top:5px;font-weight:600;">View Profile →</div>' : '<div style="font-size:10px;color:var(--muted);margin-top:4px;">Not registered yet</div>'}`;
+        ${reg ? '<div style="font-size:10px;color:var(--navy);margin-top:5px;font-weight:600;">View Profile →</div>' : '<div style="font-size:10px;color:var(--muted);margin-top:4px;">Not registered yet</div>'}
+        <button class="report-flag" title="Report an issue" onclick="event.stopPropagation();openReportModal('${m.roll}','${(reg?.name||m.name).replace(/'/g,"\\'")}')">⚑</button>`;
 
       if (reg) {
         el.style.cursor = 'pointer';
@@ -930,6 +956,42 @@ if (!SD || !SD.active) {
       grid.appendChild(el);
     });
   }
+
+  // ── Report Issue ─────────────────────────────────────────────────────────
+  window.openReportModal = function(roll, name) {
+    document.getElementById('rp-roll').value  = roll  || '';
+    document.getElementById('rp-name').value  = name  || '';
+    document.getElementById('rp-issue').value = '';
+    document.getElementById('rp-alert').textContent = '';
+    document.getElementById('report-form-wrap').style.display = 'block';
+    document.getElementById('report-success').style.display   = 'none';
+    document.getElementById('report-overlay').classList.add('open');
+  };
+  window.closeReportModal = function() {
+    document.getElementById('report-overlay').classList.remove('open');
+  };
+  window.submitReport = async function() {
+    const issue = document.getElementById('rp-issue').value.trim();
+    const alertEl = document.getElementById('rp-alert');
+    if (!issue) { alertEl.textContent = 'Please describe the issue.'; return; }
+    const btn = document.getElementById('rp-submit-btn');
+    btn.disabled = true; btn.textContent = 'Submitting…';
+    try {
+      await addDoc(collection(db, 'reports'), {
+        roll:       document.getElementById('rp-roll').value,
+        name:       document.getElementById('rp-name').value,
+        issue,
+        page:       'session',
+        session:    YEAR,
+        status:     'pending',
+        reportedAt: serverTimestamp()
+      });
+      document.getElementById('report-form-wrap').style.display = 'none';
+      document.getElementById('report-success').style.display   = 'block';
+      setTimeout(() => window.closeReportModal(), 2500);
+    } catch(e) { alertEl.textContent = 'Error submitting. Please try again.'; }
+    finally { btn.disabled = false; btn.textContent = 'Submit Report'; }
+  };
 
   window.setFilter = function(f, btn) {
     activeFilter = f;
@@ -1294,5 +1356,41 @@ document.addEventListener('click', function(e) {
   if (!e.target.closest('.nav-dropdown')) document.querySelectorAll('.nav-dropdown').forEach(d => d.classList.remove('open'));
 });
 </script>
+
+<!-- Report Issue Modal -->
+<div class="report-overlay" id="report-overlay" onclick="if(event.target===this)closeReportModal()">
+  <div class="report-modal">
+    <div class="report-modal-head">
+      <h3>⚑ Report an Issue</h3>
+      <button class="report-modal-close" onclick="closeReportModal()">✕</button>
+    </div>
+    <div id="report-form-wrap">
+      <div class="report-modal-body">
+        <p>Something wrong with this member's info? Let us know — the admin will review and fix it.</p>
+        <div class="report-field">
+          <label>Roll Number</label>
+          <input type="text" id="rp-roll" readonly style="background:#f8f7f4;cursor:not-allowed;">
+        </div>
+        <div class="report-field">
+          <label>Name on Record</label>
+          <input type="text" id="rp-name" readonly style="background:#f8f7f4;cursor:not-allowed;">
+        </div>
+        <div class="report-field">
+          <label>Describe the issue <span style="color:#dc2626">*</span></label>
+          <textarea id="rp-issue" placeholder="e.g. My name is spelled wrong, correct name is Muhammad Haris"></textarea>
+        </div>
+        <div id="rp-alert" style="font-size:12px;color:#dc2626;min-height:16px;"></div>
+      </div>
+      <div class="report-modal-foot">
+        <button class="btn-report-cancel" onclick="closeReportModal()">Cancel</button>
+        <button class="btn-report-submit" id="rp-submit-btn" onclick="submitReport()">Submit Report</button>
+      </div>
+    </div>
+    <div class="report-success" id="report-success">
+      <div class="rs-icon">✅</div>
+      <p><strong>Report submitted!</strong><br>The admin will review and fix it shortly.</p>
+    </div>
+  </div>
+</div>
 </body>
 </html>

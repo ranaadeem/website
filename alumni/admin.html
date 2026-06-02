@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Panel — ICET Alumni</title>
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy: #1a3a8a; --navy-deep: #0f2260;
+      --gold: #c9a84c; --gold-light: #e8d5a3;
+      --cream: #faf8f4; --white: #fff;
+      --text: #1a1a2e; --muted: #6b7280; --border: #e5e7eb;
+      --green: #059669; --red: #dc2626;
+    }
+    body { font-family: "DM Sans", sans-serif; background: var(--cream); color: var(--text); min-height: 100vh; }
+
+    /* NAV */
+    #main-nav { position: fixed; top: 0; left: 0; right: 0; z-index: 200; height: 60px; background: rgba(15,34,96,.95); backdrop-filter: blur(14px); border-bottom: 1px solid rgba(201,168,76,.3); }
+    .nav-inner { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; display: flex; align-items: center; justify-content: space-between; height: 100%; }
+    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .nav-logo-agr { font-family: Georgia, serif; font-size: 22px; font-weight: 700; color: var(--gold); letter-spacing: 2px; border: 2px solid var(--gold); padding: 2px 8px; border-radius: 4px; }
+    .nav-logo-text { display: flex; flex-direction: column; gap: 1px; }
+    .nav-logo-name { font-size: 14px; color: rgba(255,255,255,0.9); font-weight: 500; }
+    .nav-logo-sub { font-size: 11px; color: rgba(255,255,255,0.55); }
+    .nav-right { display: flex; align-items: center; gap: 1rem; }
+    .nav-badge { font-size: 11px; font-weight: 700; color: var(--gold); background: rgba(201,168,76,.15); border: 1px solid rgba(201,168,76,.3); padding: 3px 10px; border-radius: 20px; }
+    .nav-signout { background: none; border: 1px solid rgba(255,255,255,.2); color: rgba(255,255,255,.55); padding: 4px 12px; border-radius: 20px; font-size: 11px; cursor: pointer; font-family: inherit; transition: all .2s; }
+    .nav-signout:hover { border-color: var(--gold); color: var(--gold); }
+
+    /* PAGE */
+    .page { max-width: 1100px; margin: 0 auto; padding: 80px 1.5rem 4rem; }
+
+    /* ACCESS GATE */
+    .gate { text-align: center; padding: 8rem 2rem; }
+    .gate .g-icon { font-size: 3rem; margin-bottom: 1rem; }
+    .gate h2 { font-size: 1.4rem; color: var(--navy); margin-bottom: .5rem; }
+    .gate p { color: var(--muted); font-size: .9rem; }
+
+    /* HEADER */
+    .admin-header { margin-bottom: 1.75rem; }
+    .admin-header h1 { font-size: 1.5rem; font-weight: 700; color: var(--navy); }
+    .admin-header p { font-size: 13px; color: var(--muted); margin-top: 3px; }
+
+    /* TABS */
+    .tabs { display: flex; gap: 0; border-bottom: 2px solid var(--border); margin-bottom: 1.5rem; }
+    .tab { padding: 10px 22px; font-size: 13px; font-weight: 600; cursor: pointer; border: none; background: none; font-family: inherit; color: var(--muted); border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all .2s; display: flex; align-items: center; gap: 7px; }
+    .tab.active { color: var(--navy); border-bottom-color: var(--navy); }
+    .tab-count { background: var(--border); color: var(--muted); font-size: 11px; font-weight: 700; padding: 1px 7px; border-radius: 20px; }
+    .tab.active .tab-count { background: var(--navy); color: white; }
+    .tab-count.red { background: #fee2e2; color: var(--red); }
+    .tab.active .tab-count.red { background: var(--red); color: white; }
+
+    /* REPORT CARDS */
+    .report-list { display: flex; flex-direction: column; gap: .85rem; }
+    .report-card { background: white; border: 1px solid var(--border); border-radius: 12px; padding: 1.1rem 1.25rem; box-shadow: 0 2px 8px rgba(0,0,0,.04); display: grid; grid-template-columns: 1fr auto; gap: .75rem; align-items: start; }
+    .report-card.done { opacity: .6; }
+    .report-meta { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: .5rem; }
+    .meta-roll { font-size: 12px; font-weight: 700; color: var(--navy); background: rgba(26,58,138,.08); padding: 3px 10px; border-radius: 20px; }
+    .meta-name { font-size: 12px; font-weight: 600; color: var(--text); }
+    .meta-page { font-size: 11px; color: var(--muted); background: #f3f4f6; padding: 2px 8px; border-radius: 10px; }
+    .meta-date { font-size: 11px; color: var(--muted); }
+    .report-issue { font-size: 13.5px; color: var(--text); line-height: 1.55; background: #fafafa; border: 1px solid var(--border); border-radius: 8px; padding: .6rem .85rem; }
+    .report-actions { display: flex; flex-direction: column; gap: .5rem; align-items: flex-end; flex-shrink: 0; }
+    .btn-done { background: var(--green); color: white; border: none; padding: 7px 16px; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; font-family: inherit; white-space: nowrap; transition: background .2s; }
+    .btn-done:hover { background: #047857; }
+    .btn-done:disabled { opacity: .5; cursor: not-allowed; }
+    .btn-reopen { background: white; color: var(--muted); border: 1.5px solid var(--border); padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: inherit; transition: all .2s; }
+    .btn-reopen:hover { border-color: var(--navy); color: var(--navy); }
+    .done-badge { font-size: 11px; color: var(--green); font-weight: 700; background: #f0fdf4; border: 1px solid #86efac; padding: 3px 10px; border-radius: 20px; }
+    .btn-profile-link { font-size: 11px; color: var(--navy); text-decoration: none; border-bottom: 1px solid rgba(201,168,76,.5); }
+    .btn-profile-link:hover { color: var(--gold); }
+
+    /* EMPTY STATE */
+    .empty-state { text-align: center; padding: 4rem 2rem; color: var(--muted); }
+    .empty-state .e-icon { font-size: 2.5rem; margin-bottom: .75rem; }
+    .empty-state p { font-size: 14px; }
+
+    /* LOADING */
+    .loading { text-align: center; padding: 3rem; color: var(--muted); font-size: 14px; }
+  </style>
+</head>
+<body>
+
+<nav id="main-nav">
+  <div class="nav-inner">
+    <a class="nav-logo" href="/">
+      <span class="nav-logo-agr">AGR</span>
+      <span class="nav-logo-text">
+        <span class="nav-logo-name">Dr. Adeem Ghaffar Rana</span>
+        <span class="nav-logo-sub">Alumni Admin Panel</span>
+      </span>
+    </a>
+    <div class="nav-right">
+      <span class="nav-badge">⭐ Admin</span>
+      <button class="nav-signout" id="nav-signout-btn" onclick="doSignOut()">Sign Out</button>
+    </div>
+  </div>
+</nav>
+
+<!-- Access denied -->
+<div class="gate" id="gate-denied" style="display:none">
+  <div class="g-icon">🔒</div>
+  <h2>Access Denied</h2>
+  <p>This page is only accessible to the site admin.</p>
+</div>
+
+<!-- Not logged in -->
+<div class="gate" id="gate-login" style="display:none">
+  <div class="g-icon">🔑</div>
+  <h2>Admin Login Required</h2>
+  <p>Please sign in with the admin account to access this panel.</p>
+</div>
+
+<!-- Loading -->
+<div class="gate" id="gate-loading">
+  <div class="g-icon">⏳</div>
+  <h2>Loading…</h2>
+</div>
+
+<!-- Main panel -->
+<div class="page" id="panel" style="display:none">
+  <div class="admin-header">
+    <h1>📋 Issue Reports</h1>
+    <p>Reports submitted by alumni about incorrect profile information.</p>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" id="tab-pending" onclick="switchTab('pending')">
+      Pending <span class="tab-count red" id="count-pending">0</span>
+    </button>
+    <button class="tab" id="tab-done" onclick="switchTab('done')">
+      Done <span class="tab-count" id="count-done">0</span>
+    </button>
+  </div>
+
+  <div id="list-pending" class="report-list">
+    <div class="loading">Loading reports…</div>
+  </div>
+  <div id="list-done" class="report-list" style="display:none">
+    <div class="loading">Loading reports…</div>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore, collection, getDocs, doc, updateDoc, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const app  = initializeApp({ apiKey:"AIzaSyAgUl22Cln6QtY3-HIvI6lE8Zu7n9OblbI", authDomain:"icet-alumni.firebaseapp.com", projectId:"icet-alumni" });
+const auth = getAuth(app);
+const db   = getFirestore(app);
+const ADMIN = "eOAyXx3uQzMPJItS8aPLvHgWTQv1";
+
+let allReports = [];
+
+function show(id) {
+  ['gate-denied','gate-login','gate-loading','panel'].forEach(i => {
+    document.getElementById(i).style.display = (i === id) ? (id === 'panel' ? 'block' : 'flex') : 'none';
+  });
+  if (id === 'gate-denied' || id === 'gate-login') {
+    document.getElementById(id).style.display = 'block';
+  }
+}
+
+window.doSignOut = async function() { await signOut(auth); location.href = '/alumni.html'; };
+
+window.switchTab = function(tab) {
+  document.getElementById('tab-pending').classList.toggle('active', tab === 'pending');
+  document.getElementById('tab-done').classList.toggle('active', tab === 'done');
+  document.getElementById('list-pending').style.display = tab === 'pending' ? 'flex' : 'none';
+  document.getElementById('list-done').style.display    = tab === 'done'    ? 'flex' : 'none';
+};
+
+function formatDate(ts) {
+  if (!ts) return '—';
+  const d = ts.toDate ? ts.toDate() : new Date(ts);
+  return d.toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' }) + ' ' +
+         d.toLocaleTimeString('en-GB', { hour:'2-digit', minute:'2-digit' });
+}
+
+function renderReports() {
+  const pending = allReports.filter(r => r.status === 'pending');
+  const done    = allReports.filter(r => r.status === 'done');
+
+  document.getElementById('count-pending').textContent = pending.length;
+  document.getElementById('count-done').textContent    = done.length;
+
+  renderList('list-pending', pending, false);
+  renderList('list-done',    done,    true);
+}
+
+function renderList(containerId, reports, isDone) {
+  const el = document.getElementById(containerId);
+  if (!reports.length) {
+    el.innerHTML = `<div class="empty-state"><div class="e-icon">${isDone ? '✅' : '🎉'}</div><p>${isDone ? 'No completed reports yet.' : 'No pending reports — all clear!'}</p></div>`;
+    return;
+  }
+  el.innerHTML = reports.map(r => `
+    <div class="report-card${isDone ? ' done' : ''}" id="card-${r.id}">
+      <div>
+        <div class="report-meta">
+          <span class="meta-roll">${r.roll || '—'}</span>
+          <span class="meta-name">${r.name || '—'}</span>
+          <span class="meta-page">from: ${r.page || '?'} page${r.session ? ' · Session '+r.session : ''}</span>
+          <span class="meta-date">${formatDate(r.reportedAt)}</span>
+        </div>
+        <div class="report-issue">${escHtml(r.issue || '')}</div>
+        ${r.roll ? `<div style="margin-top:.5rem;"><a class="btn-profile-link" href="/alumni/profile.html?roll=${r.roll}" target="_blank">View profile →</a></div>` : ''}
+      </div>
+      <div class="report-actions">
+        ${isDone
+          ? `<span class="done-badge">✓ Done</span>
+             <button class="btn-reopen" onclick="markStatus('${r.id}','pending')">Reopen</button>`
+          : `<button class="btn-done" id="btn-${r.id}" onclick="markStatus('${r.id}','done')">✓ Mark Done</button>`
+        }
+      </div>
+    </div>
+  `).join('');
+}
+
+function escHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+window.markStatus = async function(id, newStatus) {
+  const btn = document.getElementById('btn-' + id);
+  if (btn) { btn.disabled = true; btn.textContent = '…'; }
+  try {
+    await updateDoc(doc(db, 'reports', id), { status: newStatus, updatedAt: serverTimestamp() });
+    const r = allReports.find(x => x.id === id);
+    if (r) r.status = newStatus;
+    renderReports();
+    // Stay on pending tab if marking done, switch to pending if reopening
+    if (newStatus === 'done') window.switchTab('pending');
+    else window.switchTab('pending');
+  } catch(e) {
+    if (btn) { btn.disabled = false; btn.textContent = '✓ Mark Done'; }
+    alert('Error: ' + e.message);
+  }
+};
+
+async function loadReports() {
+  try {
+    const snap = await getDocs(query(collection(db, 'reports'), orderBy('reportedAt', 'desc')));
+    allReports = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    renderReports();
+  } catch(e) {
+    document.getElementById('list-pending').innerHTML = `<div class="loading" style="color:#dc2626;">Error loading reports: ${e.message}</div>`;
+  }
+}
+
+onAuthStateChanged(auth, user => {
+  if (!user) { show('gate-login'); return; }
+  if (user.uid !== ADMIN) { show('gate-denied'); return; }
+  show('panel');
+  loadReports();
+});
+</script>
+</body>
+</html>

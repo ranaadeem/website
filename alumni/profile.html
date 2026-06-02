@@ -277,6 +277,30 @@
     .crumb { display: inline-flex; align-items: center; gap: 6px; color: var(--navy); font-size: 13px; font-weight: 600; text-decoration: none; padding-bottom: 2px; border-bottom: 1px solid var(--gold); margin-bottom: 1.5rem; transition: color .2s; }
     .crumb:hover { color: var(--gold); }
 
+    /* ── REPORT MODAL ── */
+    .report-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:3000;align-items:center;justify-content:center;padding:1rem;}
+    .report-overlay.open{display:flex;animation:lbIn .2s ease;}
+    .report-modal{background:white;border-radius:14px;width:100%;max-width:440px;box-shadow:0 20px 60px rgba(0,0,0,.25);overflow:hidden;}
+    .report-modal-head{background:var(--navy);padding:.9rem 1.1rem;display:flex;align-items:center;justify-content:space-between;}
+    .report-modal-head h3{font-size:14px;font-weight:700;color:var(--gold-light);margin:0;}
+    .report-modal-close{background:none;border:none;color:rgba(255,255,255,.6);font-size:1.1rem;cursor:pointer;line-height:1;padding:2px 6px;}
+    .report-modal-close:hover{color:white;}
+    .report-modal-body{padding:1.1rem;}
+    .report-modal-body p{font-size:12.5px;color:var(--muted);margin-bottom:.85rem;line-height:1.55;}
+    .report-field{margin-bottom:.75rem;}
+    .report-field label{display:block;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;}
+    .report-field input,.report-field textarea{width:100%;border:1.5px solid var(--border);border-radius:7px;padding:8px 11px;font-family:inherit;font-size:13px;color:var(--text);outline:none;resize:vertical;transition:border-color .2s;}
+    .report-field input:focus,.report-field textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,168,76,.12);}
+    .report-field textarea{min-height:90px;}
+    .report-modal-foot{display:flex;gap:8px;justify-content:flex-end;padding:.85rem 1.1rem;border-top:1px solid var(--border);}
+    .btn-report-cancel{background:white;border:1.5px solid var(--border);color:var(--muted);padding:7px 16px;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;}
+    .btn-report-submit{background:var(--navy);color:white;border:none;padding:7px 18px;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:background .2s;}
+    .btn-report-submit:hover{background:var(--navy-deep);}
+    .btn-report-submit:disabled{opacity:.5;cursor:not-allowed;}
+    .report-success{text-align:center;padding:1.5rem 1.1rem;display:none;}
+    .report-success .rs-icon{font-size:2.5rem;margin-bottom:.5rem;}
+    .report-success p{font-size:13px;color:var(--muted);line-height:1.55;}
+
     /* Animations */
     @keyframes fadeIn { from { opacity:0; transform: translateY(12px); } to { opacity:1; transform: translateY(0); } }
 
@@ -387,6 +411,11 @@
             </div>
           </div>
           <div class="vis-notice" id="vis-notice"></div>
+        </div>
+
+        <!-- Report Issue -->
+        <div style="text-align:center;padding:.25rem 0;">
+          <button onclick="openReportModal()" style="background:none;border:none;color:var(--muted);font-size:12px;cursor:pointer;font-family:inherit;text-decoration:underline;text-underline-offset:3px;padding:4px 8px;transition:color .2s;" onmouseover="this.style.color='#dc2626'" onmouseout="this.style.color='var(--muted)'">⚑ Report an issue with this profile</button>
         </div>
 
         <!-- Change photo (own/admin only) -->
@@ -516,6 +545,42 @@
   </div><!-- /page -->
 </div><!-- /st-profile -->
 
+<!-- Report Issue Modal -->
+<div class="report-overlay" id="report-overlay" onclick="if(event.target===this)closeReportModal()">
+  <div class="report-modal">
+    <div class="report-modal-head">
+      <h3>⚑ Report an Issue</h3>
+      <button class="report-modal-close" onclick="closeReportModal()">✕</button>
+    </div>
+    <div id="report-form-wrap">
+      <div class="report-modal-body">
+        <p>Something wrong with this profile? Let us know — the admin will review and fix it.</p>
+        <div class="report-field">
+          <label>Roll Number</label>
+          <input type="text" id="rp-roll" readonly style="background:#f8f7f4;cursor:not-allowed;">
+        </div>
+        <div class="report-field">
+          <label>Name on Profile</label>
+          <input type="text" id="rp-name" readonly style="background:#f8f7f4;cursor:not-allowed;">
+        </div>
+        <div class="report-field">
+          <label>Describe the issue <span style="color:#dc2626">*</span></label>
+          <textarea id="rp-issue" placeholder="e.g. My name is spelled wrong, correct name is Muhammad Haris"></textarea>
+        </div>
+        <div id="rp-alert" style="font-size:12px;color:#dc2626;min-height:16px;"></div>
+      </div>
+      <div class="report-modal-foot">
+        <button class="btn-report-cancel" onclick="closeReportModal()">Cancel</button>
+        <button class="btn-report-submit" id="rp-submit-btn" onclick="submitReport()">Submit Report</button>
+      </div>
+    </div>
+    <div class="report-success" id="report-success">
+      <div class="rs-icon">✅</div>
+      <p><strong>Report submitted!</strong><br>The admin will review and fix it shortly.</p>
+    </div>
+  </div>
+</div>
+
 <!-- Photo lightbox -->
 <div class="photo-lb" id="photo-lb" onclick="closeLb(event)">
   <button class="lb-close" onclick="document.getElementById('photo-lb').classList.remove('open')">✕</button>
@@ -525,7 +590,7 @@
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { getFirestore, doc, getDoc, getDocs, updateDoc, collection, query, where, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getFirestore, doc, getDoc, getDocs, updateDoc, addDoc, collection, query, where, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const app   = initializeApp({ apiKey:"AIzaSyAgUl22Cln6QtY3-HIvI6lE8Zu7n9OblbI", authDomain:"icet-alumni.firebaseapp.com", projectId:"icet-alumni" });
 const auth  = getAuth(app);
@@ -853,6 +918,41 @@ if (!urlRoll) {
     }
   });
 }
+
+// ── REPORT ISSUE ─────────────────────────────────────────────────────────
+window.openReportModal = function() {
+  document.getElementById('rp-roll').value  = profileData?.roll  || urlRoll || '';
+  document.getElementById('rp-name').value  = profileData?.name  || '';
+  document.getElementById('rp-issue').value = '';
+  document.getElementById('rp-alert').textContent = '';
+  document.getElementById('report-form-wrap').style.display = 'block';
+  document.getElementById('report-success').style.display   = 'none';
+  document.getElementById('report-overlay').classList.add('open');
+};
+window.closeReportModal = function() {
+  document.getElementById('report-overlay').classList.remove('open');
+};
+window.submitReport = async function() {
+  const issue = document.getElementById('rp-issue').value.trim();
+  const alert = document.getElementById('rp-alert');
+  if (!issue) { alert.textContent = 'Please describe the issue.'; return; }
+  const btn = document.getElementById('rp-submit-btn');
+  btn.disabled = true; btn.textContent = 'Submitting…';
+  try {
+    await addDoc(collection(db,'reports'), {
+      roll:        profileData?.roll || urlRoll,
+      name:        profileData?.name || '',
+      issue,
+      page:        'profile',
+      status:      'pending',
+      reportedAt:  serverTimestamp()
+    });
+    document.getElementById('report-form-wrap').style.display = 'none';
+    document.getElementById('report-success').style.display   = 'block';
+    setTimeout(() => window.closeReportModal(), 2500);
+  } catch(e) { alert.textContent = 'Error submitting. Please try again.'; }
+  finally { btn.disabled = false; btn.textContent = 'Submit Report'; }
+};
 
 // ── PHOTO LIGHTBOX ────────────────────────────────────────────────────────
 window.openPhotoLb = function() {
