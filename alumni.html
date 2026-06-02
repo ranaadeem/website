@@ -806,7 +806,7 @@ document.addEventListener('click',function(e){if(!e.target.closest('.nav-dropdow
 </style>
 
 <button id="ai-chat-btn" onclick="toggleAIChat()">
-  <span class="ai-btn-dot"></span> 🧠 Alumni Genius
+  <span class="ai-btn-dot"></span> 🎓 Ask Rana Sb!
 </button>
 
 <div id="ai-chat-panel">
@@ -814,14 +814,14 @@ document.addEventListener('click',function(e){if(!e.target.closest('.nav-dropdow
     <div class="ai-panel-head-left">
       <div class="ai-panel-head-avatar">🤖</div>
       <div class="ai-panel-head-text">
-        <h4>Alumni AI Assistant</h4>
-        <p>Powered by Llama AI · ICET CE Network</p>
+        <h4>Ask Rana Sb!</h4>
+        <p>ICET Alumni Network · Powered by AI</p>
       </div>
     </div>
     <button class="ai-panel-close" onclick="toggleAIChat()">✕</button>
   </div>
   <div class="ai-messages" id="ai-messages">
-    <div class="ai-msg bot">👋 Hi! I can answer questions about ICET CE alumni. Try asking about employers, cities, sessions, or professions!</div>
+    <div class="ai-msg bot">👋 Assalam o Alaikum! Ask me anything about ICET alumni — employers, cities, sessions, or professions!</div>
   </div>
   <div class="ai-suggestions" id="ai-suggestions">
     <button class="ai-sug-btn" onclick="askSuggestion(this)">Anyone at Aramco?</button>
@@ -888,7 +888,7 @@ window.sendAIMsg = async function() {
     const systemPrompt = `You are a helpful assistant for the ICET (Institute of Chemical Engineering & Technology) Punjab University CE (Chemical Engineering) alumni network.
 Answer questions based ONLY on the alumni data provided below. Be concise and friendly.
 If someone asks about a specific employer, city, country, or profession — search the data and list the matching alumni with their name, roll number, and relevant detail.
-If no alumni match, say so politely. Do NOT make up data. Only use what's in the list.
+If no alumni match or you don't have enough information to answer, say so politely and suggest the user email Dr. Adeem Ghaffar Rana at ranaadeem@hotmail.com for further help. Do NOT make up data. Only use what's in the list.
 Total approved alumni: ${alumni.length}
 
 Alumni Data:
