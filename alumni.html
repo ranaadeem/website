@@ -709,7 +709,7 @@ async function loadGlobalStats() {
     const s9=snap.docs.filter(d=>d.data().session?.includes('2009')).length;
     const s16=snap.docs.filter(d=>d.data().session?.includes('2016')).length;
     s('sess-2006-card',s6||'0');s('sess-2009-card',s9||'0');s('sess-2016-card',s16||'0');
-    recentAlumni.sort((a,b)=>(b.registeredAt||'').localeCompare(a.registeredAt||''));
+    recentAlumni.sort((a,b)=>{const ta=a.registeredAt?.toMillis?a.registeredAt.toMillis():(a.registeredAt||0);const tb=b.registeredAt?.toMillis?b.registeredAt.toMillis():(b.registeredAt||0);return tb-ta;});
     const recentEl=document.getElementById('sb-recent');
     if(recentEl&&recentAlumni.length){recentEl.innerHTML='';recentAlumni.slice(0,3).forEach(a=>{const div=document.createElement('div');div.style.cssText='display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid #f3f4f6;';const av=document.createElement('div');av.style.cssText='width:28px;height:28px;border-radius:50%;background:var(--navy);border:1.5px solid var(--gold);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:var(--gold);overflow:hidden;flex-shrink:0;';const photoSrc=a.photoUrl||a.photoBase64||'';if(photoSrc){const img=document.createElement('img');img.src=photoSrc;img.style.cssText='width:100%;height:100%;object-fit:cover;border-radius:50%;';av.appendChild(img);}else{av.textContent=a.name.split(' ').map(w=>w[0]).slice(0,2).join('');}const info=document.createElement('div');info.innerHTML='<div style="font-size:11px;font-weight:600;color:var(--navy);">'+a.name+'</div><div style="font-size:10px;color:var(--muted);">'+a.session+'</div>';div.appendChild(av);div.appendChild(info);recentEl.appendChild(div);});}
   }catch(e){console.error(e);}

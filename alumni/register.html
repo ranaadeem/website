@@ -834,7 +834,7 @@
       {roll:'CE-M6-149',name:'ABDUL REHMAN',session:'2006',shift:'Morning'},
       {roll:'CE-M6-150',name:'IBRAHIM SAEED',session:'2006',shift:'Morning'},
       {roll:'CE-M6-151',name:'MUHAMMA ARIF KHAN',session:'2006',shift:'Morning'},
-      {roll:'CE-M6-152',name:'HARIS SHAJAR',session:'2006',shift:'Morning'},
+      {roll:'CE-M6-152',name:'MUHAMMAD HARIS',session:'2006',shift:'Morning'},
       {roll:'CE-M6-153',name:'IMRAN KHAN',session:'2006',shift:'Morning'},
       {roll:'CE-M6-154',name:'NOUMAN AHMAD',session:'2006',shift:'Morning'},
       {roll:'CE-M6-155',name:'IMRAN KHAN',session:'2006',shift:'Morning'},
@@ -1315,6 +1315,7 @@
         }
       }
       if (!window._photoUrl) return showErr('Please upload a profile photo.');
+      if (!city || !country) return showErr('Please select your city of residence from the suggestions list.');
       if (!dob)      return showErr('Please enter your date of birth.');
       if (!position) return showErr('Please enter your current position / job title.');
       if (!phone)    return showErr('Please enter your phone number.');
