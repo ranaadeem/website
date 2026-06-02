@@ -1511,6 +1511,7 @@ document.addEventListener('click', function(e) {
 <script type="module">
 import { getFirestore, collection, getDocs, query, where } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 import { getApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { SESSION_DATA } from '/alumni/session-data.js';
 
 const GROQ_URL = 'https://groq-proxy.ranaadeem.workers.dev';
 
@@ -1519,26 +1520,55 @@ let alumniCache = null;
 
 async function loadAlumni() {
   if (alumniCache) return alumniCache;
+
+  // 1. Load registered alumni from Firestore
   const snap = await getDocs(query(collection(db, 'alumni'), where('status', '==', 'approved')));
-  alumniCache = snap.docs.map(d => {
+  const registered = {};
+  snap.docs.forEach(d => {
     const a = d.data();
-    return {
+    registered[d.id] = {
       name: a.name || '',
       roll: d.id,
       session: a.session || '',
       employer: a.employer || a.company || '',
       title: a.title || a.jobTitle || '',
       city: a.city || '',
-      country: a.country || ''
+      country: a.country || '',
+      registered: true
     };
   });
+
+  // 2. Build full list from session-data.js and merge
+  const full = [];
+  for (const [year, data] of Object.entries(SESSION_DATA)) {
+    if (!data.active || !data.members?.length) continue;
+    for (const m of data.members) {
+      if (registered[m.roll]) {
+        full.push(registered[m.roll]);
+      } else {
+        full.push({
+          name: m.name,
+          roll: m.roll,
+          session: year + '-' + m.shift,
+          employer: '', title: '', city: '', country: '',
+          registered: false
+        });
+      }
+    }
+  }
+
+  alumniCache = full;
   return alumniCache;
 }
 
 function buildContext(alumni) {
-  return alumni.map(a =>
-    `- ${a.name} (${a.roll}, ${a.session})${a.employer ? ', works at ' + a.employer : ''}${a.title ? ' as ' + a.title : ''}${a.city ? ', lives in ' + a.city : ''}${a.country && a.country !== a.city ? ', ' + a.country : ''}`
-  ).join('\n');
+  return alumni.map(a => {
+    if (a.registered) {
+      return `- ${a.name} (${a.roll}, Session ${a.session}) [REGISTERED]${a.employer ? ', works at ' + a.employer : ''}${a.title ? ' as ' + a.title : ''}${a.city ? ', lives in ' + a.city : ''}${a.country && a.country !== a.city ? ', ' + a.country : ''}`;
+    } else {
+      return `- ${a.name} (${a.roll}, Session ${a.session}) [NOT REGISTERED]`;
+    }
+  }).join('\n');
 }
 
 window.toggleAIChat = function() {
@@ -1577,12 +1607,15 @@ window.sendAIMsg = async function() {
     const alumni = await loadAlumni();
     const context = buildContext(alumni);
 
-    const systemPrompt = `You are a helpful assistant for the ICET (Institute of Chemical Engineering & Technology) Punjab University CE (Chemical Engineering) alumni network.
-Answer questions based ONLY on the alumni data provided below. Be concise and friendly.
-If someone asks about a specific employer, city, country, or profession — search the data and list the matching alumni with their name, roll number, and relevant detail.
-If no alumni match or you don't have enough information to answer, say so politely and suggest the user email Dr. Adeem Ghaffar Rana at ranaadeem@hotmail.com for further help.
+    const registered = alumni.filter(a => a.registered).length;
+    const systemPrompt = `You are a helpful assistant for the ICET (Institute of Chemical Engineering & Technology) Punjab University alumni network.
+The data below includes ALL students in the network. Each entry is either [REGISTERED] (they joined the portal and shared their details) or [NOT REGISTERED] (they are in the class list but haven't joined yet).
+Be concise and friendly. When listing people, clearly mention if they are registered or not.
+For unregistered alumni, encourage them to register at ranaadeem.de/alumni/register.html
+If someone asks about employer, city, or profession — only registered alumni have that info.
+If you don't have enough information to answer, suggest emailing Dr. Adeem Ghaffar Rana at ranaadeem@hotmail.com
 Do NOT make up data. Only use what's in the list.
-Total approved alumni in this network: ${alumni.length}
+Total students in network: ${alumni.length} (${registered} registered, ${alumni.length - registered} not yet registered)
 
 Alumni Data:
 ${context}`;
