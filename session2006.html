@@ -1095,6 +1095,7 @@ const db = getFirestore(app);
 async function loadFirebaseStats() {
   try {
     const snap = await getDocs(query(collection(db,'alumni'),
+      where('status','==','approved'),
       where('session','in',['2006-Morning','2006-Evening'])
     ));
     let total=0; const countries=new Set();
