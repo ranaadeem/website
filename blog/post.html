@@ -305,6 +305,12 @@ async function loadPost() {
     renderPost(currentPost);
     loadComments();
     loadSidebar(currentPost);
+    // Increment view count (once per session per post)
+    const pvKey = 'pv_post_' + id;
+    if (!sessionStorage.getItem(pvKey)) {
+      sessionStorage.setItem(pvKey, '1');
+      updateDoc(doc(db,'posts',id), { views: increment(1) }).catch(()=>{});
+    }
   } catch(e) {
     document.getElementById('post-area').innerHTML='<div class="loading-state"><p>Error loading post.</p></div>';
   }
@@ -340,6 +346,7 @@ function renderPost(p) {
       ${date?`<span>·</span><span>${date}</span>`:''}
       <span>·</span><span>⏱ ${readMin} min read</span>
       <span>·</span><span>${words} words</span>
+      ${p.views?`<span>·</span><span>👁 ${Number(p.views).toLocaleString()} views</span>`:''}
     </div>
     ${p.authorBio?`<p class="post-author-bio">${p.authorBio}</p>`:''}
     <div class="post-action-bar" id="post-action-bar">

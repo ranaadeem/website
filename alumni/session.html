@@ -529,6 +529,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
 
 <footer class="footer">
   <p>&copy; 2026 Dr. Adeem Ghaffar Rana · <a href="/">ranaadeem.de</a> · <a href="/impressum.html">Impressum</a></p>
+  <p style="margin-top:4px;font-size:11px;opacity:0.6;"><span class="pv-counter"></span></p>
 </footer>
 
 <script type="module">
@@ -540,8 +541,8 @@ import {
   sendPasswordResetEmail
 } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 import {
-  getFirestore, collection, addDoc, getDocs, doc, getDoc,
-  updateDoc, deleteDoc, query, where, serverTimestamp
+  getFirestore, collection, addDoc, getDocs, doc, getDoc, setDoc,
+  updateDoc, deleteDoc, query, where, serverTimestamp, increment
 } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 import { SESSION_DATA } from '/alumni/session-data.js';
 
@@ -556,6 +557,23 @@ const app = initializeApp({
 });
 const db   = getFirestore(app);
 const auth = getAuth(app);
+
+// ── Page view counter ─────────────────────────────────────────────────────
+(async () => {
+  try {
+    const pvId = 'alumni__session';
+    if (!sessionStorage.getItem('pv__' + pvId)) {
+      sessionStorage.setItem('pv__' + pvId, '1');
+      await setDoc(doc(db,'pageViews', pvId), { path: location.pathname + location.search, views: increment(1) }, { merge:true });
+    }
+    const { onSnapshot } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+    onSnapshot(doc(db,'pageViews', pvId), snap => {
+      const v = snap.data()?.views;
+      document.querySelectorAll('.pv-counter').forEach(el => el.textContent = '👁 ' + Number(v).toLocaleString() + ' views');
+    }, ()=>{});
+  } catch(e) {}
+})();
+
 const ADMIN     = 'eOAyXx3uQzMPJItS8aPLvHgWTQv1';
 const CL_CLOUD  = 'duetiv9rm', CL_PRESET = 'ranaadeem_blog';
 

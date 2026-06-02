@@ -417,6 +417,7 @@
         <div style="text-align:center;padding:.25rem 0;">
           <button onclick="openReportModal()" style="background:none;border:none;color:var(--muted);font-size:12px;cursor:pointer;font-family:inherit;text-decoration:underline;text-underline-offset:3px;padding:4px 8px;transition:color .2s;" onmouseover="this.style.color='#dc2626'" onmouseout="this.style.color='var(--muted)'">⚑ Report an issue with this profile</button>
         </div>
+        <div style="text-align:center;padding:.1rem 0 .4rem;"><span class="pv-counter" style="font-size:11px;color:var(--muted);opacity:0.7;"></span></div>
 
         <!-- Change photo (own/admin only) -->
         <div class="s-card" id="photo-card" style="display:none">
@@ -590,12 +591,29 @@
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { getFirestore, doc, getDoc, getDocs, updateDoc, addDoc, collection, query, where, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getFirestore, doc, getDoc, getDocs, updateDoc, addDoc, setDoc, collection, query, where, serverTimestamp, increment } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const app   = initializeApp({ apiKey:"AIzaSyAgUl22Cln6QtY3-HIvI6lE8Zu7n9OblbI", authDomain:"icet-alumni.firebaseapp.com", projectId:"icet-alumni" });
 const auth  = getAuth(app);
 const db    = getFirestore(app);
 const ADMIN = "eOAyXx3uQzMPJItS8aPLvHgWTQv1";
+
+// ── Page view counter ─────────────────────────────────────────────────────
+(async () => {
+  try {
+    const roll = new URLSearchParams(location.search).get('roll') || 'unknown';
+    const pvId = 'profile__' + roll.replace(/[^a-zA-Z0-9-]/g,'_');
+    if (!sessionStorage.getItem('pv__' + pvId)) {
+      sessionStorage.setItem('pv__' + pvId, '1');
+      await setDoc(doc(db,'pageViews', pvId), { path: '/alumni/profile.html', roll, views: increment(1) }, { merge:true });
+    }
+    const { onSnapshot } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+    onSnapshot(doc(db,'pageViews', pvId), snap => {
+      const v = snap.data()?.views;
+      document.querySelectorAll('.pv-counter').forEach(el => el.textContent = '👁 ' + Number(v).toLocaleString() + ' views');
+    }, ()=>{});
+  } catch(e) {}
+})();
 
 const urlRoll = new URLSearchParams(location.search).get("roll");
 let profileData   = null;

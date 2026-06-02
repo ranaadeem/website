@@ -478,12 +478,28 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js';
 import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js';
-import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, query, where, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js';
+import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, setDoc, query, where, serverTimestamp, increment } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js';
 
 const app = initializeApp({apiKey:"AIzaSyAgUl22Cln6QtY3-HIvI6lE8Zu7n9OblbI",authDomain:"icet-alumni.firebaseapp.com",projectId:"icet-alumni",storageBucket:"icet-alumni.firebasestorage.app",messagingSenderId:"707390888790",appId:"1:707390888790:web:57e6be62e4d11e22c214f7"});
 const ADMIN_UID = 'eOAyXx3uQzMPJItS8aPLvHgWTQv1';
 const auth = getAuth(app);
 const db = getFirestore(app);
+
+// ── Page view counter ─────────────────────────────────────────────────────
+(async () => {
+  try {
+    if (!sessionStorage.getItem('pv__blog')) {
+      sessionStorage.setItem('pv__blog', '1');
+      await setDoc(doc(db,'pageViews','blog'), { path:'/blog.html', views: increment(1) }, { merge:true });
+    }
+    const { onSnapshot } = await import('https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js');
+    onSnapshot(doc(db,'pageViews','blog'), snap => {
+      const v = snap.data()?.views;
+      document.querySelectorAll('.pv-counter').forEach(el => el.textContent = '👁 ' + Number(v).toLocaleString() + ' views');
+    }, ()=>{});
+  } catch(e) {}
+})();
+
 const provider = new GoogleAuthProvider();
 let currentUser = null;
 let allPosts = [];
@@ -618,6 +634,7 @@ function renderPostCard(p) {
         <span class="post-card-author">${p.authorName||'Dr. Adeem Ghaffar Rana'}</span>
         ${date?`<span>·</span><span>${date}</span>`:''}
         ${p.likes?`<span>·</span><span>❤️ ${p.likes}</span>`:''}
+        ${p.views?`<span>·</span><span>👁 ${Number(p.views).toLocaleString()}</span>`:''}
       </div>
     </div>`;
   // Admin edit button
@@ -1020,6 +1037,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')document.getElementB
 
 <footer style="background:#1a3a8a;color:rgba(255,255,255,0.5);text-align:center;padding:1.75rem 2rem;font-size:12px;">
   <p>&copy; 2026 Dr. Adeem Ghaffar Rana · <a href="/" style="color:#c9a84c;text-decoration:none;">ranaadeem.de</a> · <a href="/impressum.html" style="color:#c9a84c;text-decoration:none;">Impressum</a></p>
+  <p style="margin-top:4px;font-size:11px;opacity:0.6;"><span class="pv-counter"></span></p>
 </footer>
 </body>
 </html>
