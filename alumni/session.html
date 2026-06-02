@@ -1511,7 +1511,15 @@ document.addEventListener('click', function(e) {
 <script type="module">
 import { getFirestore, collection, getDocs, query, where } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 import { getApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-import { SESSION_DATA } from '/alumni/session-data.js';
+
+// Load SESSION_DATA dynamically
+let SESSION_DATA = null;
+async function getSessionData() {
+  if (SESSION_DATA) return SESSION_DATA;
+  const mod = await import('/alumni/session-data.js');
+  SESSION_DATA = mod.SESSION_DATA;
+  return SESSION_DATA;
+}
 
 const GROQ_URL = 'https://groq-proxy.ranaadeem.workers.dev';
 
@@ -1539,8 +1547,9 @@ async function loadAlumni() {
   });
 
   // 2. Build full list from session-data.js and merge
+  const sd = await getSessionData();
   const full = [];
-  for (const [year, data] of Object.entries(SESSION_DATA)) {
+  for (const [year, data] of Object.entries(sd)) {
     if (!data.active || !data.members?.length) continue;
     for (const m of data.members) {
       if (registered[m.roll]) {
@@ -1636,7 +1645,7 @@ ${context}`;
 
     const data = await res.json();
     if (!res.ok) throw new Error(data?.error?.message || 'API error ' + res.status);
-    const reply = data?.choices?.[0]?.message?.content || 'Sorry, I could not get a response. Please try again.';
+    const reply = data?.choices?.[0]?.message?.content || ('Error: ' + JSON.stringify(data?.error || data));
 
     document.getElementById(typingId)?.remove();
     // Convert **bold** markdown and newlines
