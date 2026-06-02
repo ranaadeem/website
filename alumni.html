@@ -194,9 +194,11 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
       <div class="stat-item"><span class="stat-num">23</span><div class="stat-lbl">Batches in Network</div></div>
       <div class="stat-item"><span class="stat-num">3</span><div class="stat-lbl">Active Sessions</div></div>
     </div>
-    <div style="max-width:600px;margin:1rem auto 0;position:relative;">
-      <input id="global-search-input" type="text" placeholder="Search alumni by name, city or country..." style="width:100%;padding:10px 16px 10px 42px;border:1.5px solid var(--border);border-radius:10px;font-size:14px;font-family:inherit;outline:none;background:white;box-shadow:0 2px 8px rgba(0,0,0,0.06);">
-      <svg style="position:absolute;left:14px;top:50%;transform:translateY(-50%);pointer-events:none;" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <div style="max-width:600px;margin:1rem auto 0;">
+      <div style="display:flex;align-items:center;background:white;border:1.5px solid var(--border);border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.06);padding:0 14px;gap:10px;">
+        <svg style="flex-shrink:0;pointer-events:none;" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input id="global-search-input" type="text" placeholder="Search alumni by name, city or country..." style="flex:1;padding:10px 0;border:none;font-size:14px;font-family:inherit;outline:none;background:transparent;">
+      </div>
       <div id="global-search-hint" style="font-size:11px;color:var(--muted);text-align:center;margin-top:5px;">Sign in to search registered alumni</div>
     </div>
   </div>

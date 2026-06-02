@@ -870,7 +870,7 @@ if (!SD || !SD.active) {
   }
 
   // ── Member grid ───────────────────────────────────────────────────────────
-  function renderGrid() {
+  window.renderGrid = function renderGrid() {
     const grid   = document.getElementById('member-grid');
     const search = (document.getElementById('search-box')?.value || '').toLowerCase();
     const today  = new Date();
