@@ -63,7 +63,7 @@ export const SESSION_DATA = {
       {"roll":"CE-M6-149","name":"ABDUL REHMAN","shift":"Morning"},
       {"roll":"CE-M6-150","name":"IBRAHIM SAEED","shift":"Morning"},
       {"roll":"CE-M6-151","name":"MUHAMMA ARIF KHAN","shift":"Morning"},
-      {"roll":"CE-M6-152","name":"HARIS SHAJAR","shift":"Morning"},
+      {"roll":"CE-M6-152","name":"MUHAMMAD HARIS","shift":"Morning"},
       {"roll":"CE-M6-153","name":"IMRAN KHAN","shift":"Morning"},
       {"roll":"CE-M6-154","name":"NOUMAN AHMAD","shift":"Morning"},
       {"roll":"CE-M6-155","name":"IMRAN KHAN","shift":"Morning"},
