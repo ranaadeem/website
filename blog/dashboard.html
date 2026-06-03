@@ -279,12 +279,14 @@ auth.onAuthStateChanged(async function(user) {
       authorDocId = snap.docs[0].id;
       authorDoc = snap.docs[0].data();
       showDashboard();
-    } else if (!user.emailVerified) {
-      // New blog registration that hasn't verified email yet
-      showError("login-error", "Please verify your email first. Check your inbox.");
-      await auth.signOut();
     } else {
-      showError("login-error", "No author profile found. Please register first.");
+      // No author profile — could be alumni or unverified new signup
+      if (!user.emailVerified) {
+        // Might be a new blog signup that hasn't verified yet — sign out and prompt
+        showError("login-error", "No author profile found. <a href='/blog/register.html' style='color:var(--navy);font-weight:700;'>Create your author profile →</a><br><small style='color:#6b7280;'>If you just registered, please verify your email first.</small>");
+      } else {
+        showError("login-error", "No author profile found. <a href='/blog/register.html' style='color:var(--navy);font-weight:700;'>Create your author profile →</a>");
+      }
       await auth.signOut();
     }
   } catch(e) { showToast("Error: " + e.message); }
