@@ -208,196 +208,12 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
   <div class="sessions-section">
     <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:1rem;flex-wrap:wrap;gap:0.5rem;">
       <div><span class="section-tag">Choose Your Batch</span><h2 class="section-title" style="margin-bottom:0;">Sessions &amp; Batches</h2></div>
-      <div style="font-size:12px;color:var(--muted);">23 batches &middot; <span style="color:var(--green);font-weight:600;">3 active</span></div>
+      <div style="font-size:12px;color:var(--muted);"><span id="hdr-total-sessions">17</span> active batches &middot; <span id="hdr-active-count" style="color:var(--green);font-weight:600;">17 active</span></div>
     </div>
     <div class="sessions-layout">
       <div>
-        <input class="session-search" id="session-search" placeholder="Search batch year — e.g. 2006 or 2009...">
+        <input class="session-search" id="session-search" placeholder="Search batch year — e.g. 2005 or 2009...">
         <div class="sessions-grid" id="sessions-grid">
-      <div class="session-card coming-soon" data-year="2000">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
-          <div class="session-year">2000&ndash;2004</div>
-          <span class="cs-badge">Soon</span>
-        </div>
-        <div class="session-dept">Chemical Eng &middot; ICET &middot; PU</div>
-        <div style="margin-top:0.4rem;font-size:10px;color:#9ca3af;">Opening soon</div>
-      </div>
-      <div class="session-card coming-soon" data-year="2001">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
-          <div class="session-year">2001&ndash;2005</div>
-          <span class="cs-badge">Soon</span>
-        </div>
-        <div class="session-dept">Chemical Eng &middot; ICET &middot; PU</div>
-        <div style="margin-top:0.4rem;font-size:10px;color:#9ca3af;">Opening soon</div>
-      </div>
-      <div class="session-card coming-soon" data-year="2002">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
-          <div class="session-year">2002&ndash;2006</div>
-          <span class="cs-badge">Soon</span>
-        </div>
-        <div class="session-dept">Chemical Eng &middot; ICET &middot; PU</div>
-        <div style="margin-top:0.4rem;font-size:10px;color:#9ca3af;">Opening soon</div>
-      </div>
-      <div class="session-card coming-soon" data-year="2003">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
-          <div class="session-year">2003&ndash;2007</div>
-          <span class="cs-badge">Soon</span>
-        </div>
-        <div class="session-dept">Chemical Eng &middot; ICET &middot; PU</div>
-        <div style="margin-top:0.4rem;font-size:10px;color:#9ca3af;">Opening soon</div>
-      </div>
-      <div class="session-card coming-soon" data-year="2004">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
-          <div class="session-year">2004&ndash;2008</div>
-          <span class="cs-badge">Soon</span>
-        </div>
-        <div class="session-dept">Chemical Eng &middot; ICET &middot; PU</div>
-        <div style="margin-top:0.4rem;font-size:10px;color:#9ca3af;">Opening soon</div>
-      </div>
-      <div class="session-card coming-soon" data-year="2005">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
-          <div class="session-year">2005&ndash;2009</div>
-          <span class="cs-badge">Soon</span>
-        </div>
-        <div class="session-dept">Chemical Eng &middot; ICET &middot; PU</div>
-        <div style="margin-top:0.4rem;font-size:10px;color:#9ca3af;">Opening soon</div>
-      </div>
-      <div class="session-card" id="card-2005" data-year="2005" onclick="window.location.href='/alumni/session.html?year=2005'" style="cursor:pointer;">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
-          <div class="session-year">2005–2009</div>
-          <span class="active-badge">&#9679; Active</span>
-        </div>
-        <div class="session-dept">Chemical Eng &middot; ICET &middot; PU</div>
-        <div style="margin-top:0.4rem;"><span class="sess-stat-num" id="sess-2005-card">&ndash;</span><span class="sess-stat-lbl">registered</span></div>
-      </div>
-      <div class="session-card coming-soon" data-year="2007">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
-          <div class="session-year">2007&ndash;2011</div>
-          <span class="cs-badge">Soon</span>
-        </div>
-        <div class="session-dept">Chemical Eng &middot; ICET &middot; PU</div>
-        <div style="margin-top:0.4rem;font-size:10px;color:#9ca3af;">Opening soon</div>
-      </div>
-      <div class="session-card coming-soon" data-year="2008">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
-          <div class="session-year">2008&ndash;2012</div>
-          <span class="cs-badge">Soon</span>
-        </div>
-        <div class="session-dept">Chemical Eng &middot; ICET &middot; PU</div>
-        <div style="margin-top:0.4rem;font-size:10px;color:#9ca3af;">Opening soon</div>
-      </div>
-      <div class="session-card" id="card-2009" data-year="2009" onclick="window.location.href='/alumni/session.html?year=2009'" style="cursor:pointer;">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
-          <div class="session-year">2009–2013</div>
-          <span class="active-badge">&#9679; Active</span>
-        </div>
-        <div class="session-dept">Chemical Eng &middot; ICET &middot; PU</div>
-        <div style="margin-top:0.4rem;"><span class="sess-stat-num" id="sess-2009-card">&ndash;</span><span class="sess-stat-lbl">registered</span></div>
-      </div>
-      <div class="session-card coming-soon" data-year="2010">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
-          <div class="session-year">2010&ndash;2014</div>
-          <span class="cs-badge">Soon</span>
-        </div>
-        <div class="session-dept">Chemical Eng &middot; ICET &middot; PU</div>
-        <div style="margin-top:0.4rem;font-size:10px;color:#9ca3af;">Opening soon</div>
-      </div>
-      <div class="session-card coming-soon" data-year="2011">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
-          <div class="session-year">2011&ndash;2015</div>
-          <span class="cs-badge">Soon</span>
-        </div>
-        <div class="session-dept">Chemical Eng &middot; ICET &middot; PU</div>
-        <div style="margin-top:0.4rem;font-size:10px;color:#9ca3af;">Opening soon</div>
-      </div>
-      <div class="session-card coming-soon" data-year="2012">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
-          <div class="session-year">2012&ndash;2016</div>
-          <span class="cs-badge">Soon</span>
-        </div>
-        <div class="session-dept">Chemical Eng &middot; ICET &middot; PU</div>
-        <div style="margin-top:0.4rem;font-size:10px;color:#9ca3af;">Opening soon</div>
-      </div>
-      <div class="session-card coming-soon" data-year="2013">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
-          <div class="session-year">2013&ndash;2017</div>
-          <span class="cs-badge">Soon</span>
-        </div>
-        <div class="session-dept">Chemical Eng &middot; ICET &middot; PU</div>
-        <div style="margin-top:0.4rem;font-size:10px;color:#9ca3af;">Opening soon</div>
-      </div>
-      <div class="session-card coming-soon" data-year="2014">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
-          <div class="session-year">2014&ndash;2018</div>
-          <span class="cs-badge">Soon</span>
-        </div>
-        <div class="session-dept">Chemical Eng &middot; ICET &middot; PU</div>
-        <div style="margin-top:0.4rem;font-size:10px;color:#9ca3af;">Opening soon</div>
-      </div>
-      <div class="session-card coming-soon" data-year="2015">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
-          <div class="session-year">2015&ndash;2019</div>
-          <span class="cs-badge">Soon</span>
-        </div>
-        <div class="session-dept">Chemical Eng &middot; ICET &middot; PU</div>
-        <div style="margin-top:0.4rem;font-size:10px;color:#9ca3af;">Opening soon</div>
-      </div>
-      <div class="session-card" id="card-2016" data-year="2016" onclick="window.location.href='/alumni/session.html?year=2016'" style="cursor:pointer;">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
-          <div class="session-year">2016–2020</div>
-          <span class="active-badge">&#9679; Active</span>
-        </div>
-        <div class="session-dept">Chemical Eng &middot; ICET &middot; PU</div>
-        <div style="margin-top:0.4rem;"><span class="sess-stat-num" id="sess-2016-card">&ndash;</span><span class="sess-stat-lbl">registered</span></div>
-      </div>
-      <div class="session-card coming-soon" data-year="2017">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
-          <div class="session-year">2017&ndash;2021</div>
-          <span class="cs-badge">Soon</span>
-        </div>
-        <div class="session-dept">Chemical Eng &middot; ICET &middot; PU</div>
-        <div style="margin-top:0.4rem;font-size:10px;color:#9ca3af;">Opening soon</div>
-      </div>
-      <div class="session-card coming-soon" data-year="2018">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
-          <div class="session-year">2018&ndash;2022</div>
-          <span class="cs-badge">Soon</span>
-        </div>
-        <div class="session-dept">Chemical Eng &middot; ICET &middot; PU</div>
-        <div style="margin-top:0.4rem;font-size:10px;color:#9ca3af;">Opening soon</div>
-      </div>
-      <div class="session-card coming-soon" data-year="2019">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
-          <div class="session-year">2019&ndash;2023</div>
-          <span class="cs-badge">Soon</span>
-        </div>
-        <div class="session-dept">Chemical Eng &middot; ICET &middot; PU</div>
-        <div style="margin-top:0.4rem;font-size:10px;color:#9ca3af;">Opening soon</div>
-      </div>
-      <div class="session-card coming-soon" data-year="2020">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
-          <div class="session-year">2020&ndash;2024</div>
-          <span class="cs-badge">Soon</span>
-        </div>
-        <div class="session-dept">Chemical Eng &middot; ICET &middot; PU</div>
-        <div style="margin-top:0.4rem;font-size:10px;color:#9ca3af;">Opening soon</div>
-      </div>
-      <div class="session-card coming-soon" data-year="2021">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
-          <div class="session-year">2021&ndash;2025</div>
-          <span class="cs-badge">Soon</span>
-        </div>
-        <div class="session-dept">Chemical Eng &middot; ICET &middot; PU</div>
-        <div style="margin-top:0.4rem;font-size:10px;color:#9ca3af;">Opening soon</div>
-      </div>
-      <div class="session-card coming-soon" data-year="2022">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
-          <div class="session-year">2022&ndash;2026</div>
-          <span class="cs-badge">Soon</span>
-        </div>
-        <div class="session-dept">Chemical Eng &middot; ICET &middot; PU</div>
-        <div style="margin-top:0.4rem;font-size:10px;color:#9ca3af;">Opening soon</div>
-      </div>
 
         </div>
         <div id="no-batch-found" style="display:none;text-align:center;padding:2rem;color:var(--muted);font-size:13px;">No batches found.</div>
@@ -408,9 +224,9 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
           <div class="stat-card-body">
             <div class="stat-row"><span class="stat-row-label">Total Registered</span><span class="stat-row-val" id="sb-total">&ndash;</span></div>
             <div class="stat-row"><span class="stat-row-label">Countries</span><span class="stat-row-val" id="sb-countries">&ndash;</span></div>
-            <div class="stat-row"><span class="stat-row-label">Active Sessions</span><span class="stat-row-val">3</span></div>
-            <div class="stat-row"><span class="stat-row-label">Total Batches</span><span class="stat-row-val">23</span></div>
-            <div class="stat-row"><span class="stat-row-label">Network Since</span><span class="stat-row-val">2006</span></div>
+            <div class="stat-row"><span class="stat-row-label">Active Sessions</span><span class="stat-row-val" id="sb-active-sess">17</span></div>
+            <div class="stat-row"><span class="stat-row-label">Total Batches</span><span class="stat-row-val">21+</span></div>
+            <div class="stat-row"><span class="stat-row-label">Network Since</span><span class="stat-row-val">2005</span></div>
           </div>
         </div>
         <div class="stat-card">
@@ -721,10 +537,16 @@ async function loadGlobalStats() {
     const s=(id,val)=>{const el=document.getElementById(id);if(el)el.textContent=val;};
     s('stat-total',total);s('stat-countries',countries.size);s('sb-total',total);s('sb-countries',countries.size);
     s('sb-germany',germanyCount||'–');s('sb-gulf',gulfCount||'–');s('sb-pakistan',pakistanCount||'–');s('sb-top-country',topCountry?topCountry[0]:'–');
-    const s6=snap.docs.filter(d=>d.data().session?.includes('2005')).length;
-    const s9=snap.docs.filter(d=>d.data().session?.includes('2009')).length;
-    const s16=snap.docs.filter(d=>d.data().session?.includes('2016')).length;
-    s('sess-2005-card',s6||'0');s('sess-2009-card',s9||'0');s('sess-2016-card',s16||'0');
+    // Count registered per session and update cards
+    const sessCounts = {};
+    snap.docs.forEach(d => {
+      const yr = (d.data().session||'').split('-')[0];
+      if (yr) sessCounts[yr] = (sessCounts[yr]||0) + 1;
+    });
+    Object.entries(sessCounts).forEach(([yr, cnt]) => {
+      const el = document.getElementById('sess-'+yr+'-card');
+      if (el) el.textContent = cnt;
+    });
     recentAlumni.sort((a,b)=>{const ta=a.registeredAt?.toMillis?a.registeredAt.toMillis():(a.registeredAt||0);const tb=b.registeredAt?.toMillis?b.registeredAt.toMillis():(b.registeredAt||0);return tb-ta;});
     const recentEl=document.getElementById('sb-recent');
     if(recentEl&&recentAlumni.length){recentEl.innerHTML='';recentAlumni.slice(0,3).forEach(a=>{const div=document.createElement('div');div.style.cssText='display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid #f3f4f6;';const av=document.createElement('div');av.style.cssText='width:28px;height:28px;border-radius:50%;background:var(--navy);border:1.5px solid var(--gold);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:var(--gold);overflow:hidden;flex-shrink:0;';const photoSrc=a.photoUrl||a.photoBase64||'';if(photoSrc){const img=document.createElement('img');img.src=photoSrc;img.style.cssText='width:100%;height:100%;object-fit:cover;border-radius:50%;';av.appendChild(img);}else{av.textContent=a.name.split(' ').map(w=>w[0]).slice(0,2).join('');}const info=document.createElement('div');info.innerHTML='<div style="font-size:11px;font-weight:600;color:var(--navy);">'+a.name+'</div><div style="font-size:10px;color:var(--muted);">'+a.session+'</div>';div.appendChild(av);div.appendChild(info);recentEl.appendChild(div);});}
@@ -850,6 +672,50 @@ async function getSessionData() {
 const GROQ_URL = 'https://groq-proxy.ranaadeem.workers.dev';
 const db = getFirestore(getApp());
 let alumniCache = null;
+
+// ── Generate session cards dynamically ────────────────────────────────────
+(async () => {
+  const sd = await getSessionData();
+  const grid = document.getElementById('sessions-grid');
+  if (!grid) return;
+  grid.innerHTML = '';
+  let activeCount = 0;
+  for (const [year, data] of Object.entries(sd)) {
+    const div = document.createElement('div');
+    if (data.active) {
+      activeCount++;
+      div.className = 'session-card';
+      div.id = 'card-' + year;
+      div.dataset.year = year;
+      div.style.cursor = 'pointer';
+      div.onclick = () => window.location.href = '/alumni/session.html?year=' + year;
+      div.innerHTML = `
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+          <div class="session-year">${data.label.replace('Session ','')}</div>
+          <span class="active-badge">&#9679; Active</span>
+        </div>
+        <div class="session-dept">Chemical Eng &middot; ICET &middot; PU</div>
+        <div style="margin-top:0.4rem;"><span class="sess-stat-num" id="sess-${year}-card">0</span><span class="sess-stat-lbl"> registered</span></div>`;
+    } else {
+      div.className = 'session-card coming-soon';
+      div.dataset.year = year;
+      div.innerHTML = `
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+          <div class="session-year">${data.label.replace('Session ','')}</div>
+          <span class="cs-badge">Soon</span>
+        </div>
+        <div class="session-dept">Chemical Eng &middot; ICET &middot; PU</div>
+        <div style="margin-top:0.4rem;font-size:10px;color:#9ca3af;">Opening soon</div>`;
+    }
+    grid.appendChild(div);
+  }
+  const hdr = document.getElementById('hdr-active-count');
+  if (hdr) hdr.textContent = activeCount + ' active';
+  const hdr2 = document.getElementById('hdr-total-sessions');
+  if (hdr2) hdr2.textContent = activeCount;
+  const sb = document.getElementById('sb-active-sess');
+  if (sb) sb.textContent = activeCount;
+})();
 
 async function loadAlumni() {
   if (alumniCache) return alumniCache;
