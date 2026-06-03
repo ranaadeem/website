@@ -191,8 +191,8 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
     <div class="stats-inner">
       <div class="stat-item"><span class="stat-num" id="stat-total">&ndash;</span><div class="stat-lbl">Alumni Registered</div></div>
       <div class="stat-item"><span class="stat-num" id="stat-countries">&ndash;</span><div class="stat-lbl">Countries</div></div>
-      <div class="stat-item"><span class="stat-num">23</span><div class="stat-lbl">Batches in Network</div></div>
-      <div class="stat-item"><span class="stat-num">3</span><div class="stat-lbl">Active Sessions</div></div>
+      <div class="stat-item"><span class="stat-num" id="stat-batches">&ndash;</span><div class="stat-lbl">Batches in Network</div></div>
+      <div class="stat-item"><span class="stat-num" id="stat-active-sess">&ndash;</span><div class="stat-lbl">Active Sessions</div></div>
     </div>
     <div style="max-width:600px;margin:1rem auto 0;">
       <div style="display:flex;align-items:center;background:white;border:1.5px solid var(--border);border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.06);padding:0 14px;gap:10px;">
@@ -529,6 +529,15 @@ async function submitProfile() {
 
 async function loadGlobalStats() {
   try{
+    // Populate batch/session counts from SESSION_DATA
+    const { SESSION_DATA } = await import('/alumni/session-data.js');
+    const allYears = Object.keys(SESSION_DATA).length;
+    const activeYears = Object.values(SESSION_DATA).filter(d=>d.active).length;
+    const s2=(id,val)=>{const el=document.getElementById(id);if(el)el.textContent=val;};
+    s2('stat-batches', allYears);
+    s2('stat-active-sess', activeYears);
+    s2('sb-active-sess', activeYears);
+
     const snap=await getDocs(query(collection(db,'alumni'),where('status','==','approved')));
     let total=0;const countries=new Set(),countryCount={};
     const gulf=['Saudi Arabia','UAE','Qatar','Kuwait','Bahrain','Oman'];
