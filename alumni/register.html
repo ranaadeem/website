@@ -817,7 +817,7 @@
       matches.forEach(r => {
         const div = document.createElement('div');
         div.className = 'roll-option';
-        const dept = r.roll.includes('PG') ? 'Polymer' : r.roll.includes('EE') ? 'Energy' : r.roll.includes('BC') ? 'Biochem' : 'Chemical';
+        const dept = r.roll.includes('PG') ? 'Petroleum' : r.roll.includes('EE') ? 'Energy' : r.roll.includes('BC') ? 'Biochem' : 'Chemical';
         div.innerHTML = `<strong>${r.roll}</strong> — ${dept} · ${r.shift} · Session ${r.session}`;
         div.addEventListener('click', () => {
           rollInput.value = r.roll;
