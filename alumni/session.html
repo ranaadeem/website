@@ -657,10 +657,15 @@ if (!SD || !SD.active) {
       .filter(([, d]) => d.active)
       .map(([y]) => y)
       .sort();
-    el.innerHTML = activeYears.map(y => {
+    // Show current session + up to 4 others (5 total)
+    const others = activeYears.filter(y => y !== YEAR);
+    const nearby = others.slice(0, 4);
+    const toShow = activeYears.includes(YEAR) ? [YEAR, ...nearby] : nearby.slice(0, 5);
+    const hasMore = activeYears.length > toShow.length;
+    el.innerHTML = toShow.map(y => {
       const isCurrent = y === YEAR;
       return `<a href="/alumni/session.html?year=${y}" style="display:block;padding:6px 0;font-size:13px;color:var(--navy);text-decoration:none;border-bottom:1px solid var(--border);${isCurrent ? 'font-weight:700;' : ''}">${SESSION_DATA[y].label}${isCurrent ? ' ←' : ''}</a>`;
-    }).join('');
+    }).join('') + (hasMore ? `<a href="/alumni.html" style="display:block;padding:6px 0;font-size:12px;color:var(--gold);text-decoration:none;font-weight:600;">View all sessions →</a>` : '');
   }
   buildSessionsSidebar();
 
@@ -920,10 +925,10 @@ if (!SD || !SD.active) {
       const cl = document.getElementById('country-list');
       const il = document.getElementById('industry-list');
       cl.innerHTML = Object.keys(countries).length
-        ? Object.entries(countries).sort((a,b)=>b[1]-a[1]).map(([c,n])=>`<div style="display:flex;justify-content:space-between;padding:4px 0;font-size:12px;border-bottom:1px solid var(--border);"><span>${c}</span><span style="color:var(--gold);font-weight:600;">${n}</span></div>`).join('')
+        ? Object.entries(countries).sort((a,b)=>b[1]-a[1]).slice(0,5).map(([c,n])=>`<div style="display:flex;justify-content:space-between;padding:4px 0;font-size:12px;border-bottom:1px solid var(--border);"><span>${c}</span><span style="color:var(--gold);font-weight:600;">${n}</span></div>`).join('')
         : '<div style="color:var(--muted);font-size:12px;text-align:center;">No data yet</div>';
       il.innerHTML = Object.keys(industries).length
-        ? Object.entries(industries).sort((a,b)=>b[1]-a[1]).map(([i,n])=>`<div style="display:flex;justify-content:space-between;padding:4px 0;font-size:12px;border-bottom:1px solid var(--border);"><span>${i}</span><span style="color:var(--gold);font-weight:600;">${n}</span></div>`).join('')
+        ? Object.entries(industries).sort((a,b)=>b[1]-a[1]).slice(0,5).map(([i,n])=>`<div style="display:flex;justify-content:space-between;padding:4px 0;font-size:12px;border-bottom:1px solid var(--border);"><span>${i}</span><span style="color:var(--gold);font-weight:600;">${n}</span></div>`).join('')
         : '<div style="color:var(--muted);font-size:12px;text-align:center;">No data yet</div>';
 
       renderGrid();
