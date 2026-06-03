@@ -57,6 +57,9 @@ nav{background:var(--navy);border-bottom:2px solid var(--gold);padding:0 1.5rem;
     </div>
     <div class="error-box" id="reg-error"></div>
     <div class="success-box" id="reg-success"></div>
+    <div id="already-signed-in-note" style="display:none;background:#eff6ff;border:1px solid #bfdbfe;color:#1e40af;padding:10px 14px;border-radius:6px;font-size:13px;margin-bottom:1rem;">
+      ✅ You're already signed in with your alumni account. Just fill in your author details below — no new password needed.
+    </div>
     <div class="form-row">
       <div class="form-group">
         <label>Full Name <span class="req">*</span></label>
@@ -72,15 +75,17 @@ nav{background:var(--navy);border-bottom:2px solid var(--gold);padding:0 1.5rem;
       <label>Email Address <span class="req">*</span></label>
       <input type="email" id="reg-email" placeholder="jane@example.com">
     </div>
-    <div class="form-group">
-      <label>Password <span class="req">*</span></label>
-      <input type="password" id="reg-password" placeholder="Minimum 8 characters" oninput="checkStrength(this.value)">
-      <div class="strength-bar"><div class="strength-fill" id="strength-fill"></div></div>
-      <div class="hint" id="strength-hint"></div>
-    </div>
-    <div class="form-group">
-      <label>Confirm Password <span class="req">*</span></label>
-      <input type="password" id="reg-confirm" placeholder="Repeat password">
+    <div id="pw-section">
+      <div class="form-group">
+        <label>Password <span class="req">*</span></label>
+        <input type="password" id="reg-password" placeholder="Minimum 8 characters" oninput="checkStrength(this.value)">
+        <div class="strength-bar"><div class="strength-fill" id="strength-fill"></div></div>
+        <div class="hint" id="strength-hint"></div>
+      </div>
+      <div class="form-group">
+        <label>Confirm Password <span class="req">*</span></label>
+        <input type="password" id="reg-confirm" placeholder="Repeat password">
+      </div>
     </div>
     <div class="form-group">
       <label>One-line Bio</label>
@@ -99,13 +104,29 @@ nav{background:var(--navy);border-bottom:2px solid var(--gold);padding:0 1.5rem;
 
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js';
-import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js';
+import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js';
 import { getFirestore, collection, addDoc, getDocs, query, where, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js';
 
 const app = initializeApp({apiKey:"AIzaSyAgUl22Cln6QtY3-HIvI6lE8Zu7n9OblbI",authDomain:"icet-alumni.firebaseapp.com",projectId:"icet-alumni",storageBucket:"icet-alumni.firebasestorage.app",messagingSenderId:"707390888790",appId:"1:707390888790:web:57e6be62e4d11e22c214f7"});
 const auth = getAuth(app);
 const db = getFirestore(app);
 let photoBase64 = '';
+let existingUser = null; // set if alumni is already signed in
+
+// Detect if already signed in (e.g. alumni portal user)
+onAuthStateChanged(auth, user => {
+  existingUser = user || null;
+  if (user) {
+    // Pre-fill email and hide password fields — they already have an account
+    const emailEl = document.getElementById('reg-email');
+    emailEl.value = user.email || '';
+    emailEl.readOnly = true;
+    emailEl.style.background = '#f3f4f6';
+    emailEl.title = 'Using your existing account email';
+    document.getElementById('pw-section').style.display = 'none';
+    document.getElementById('already-signed-in-note').style.display = 'block';
+  }
+});
 
 document.getElementById('reg-photo').addEventListener('change', function(e) {
   const file = e.target.files[0]; if (!file) return;
@@ -172,41 +193,64 @@ window.register = async function() {
   const suc = document.getElementById('reg-success');
   err.style.display='none'; suc.style.display='none';
 
-  if (!name||!username||!email||!password) { err.textContent='All required fields must be filled.'; err.style.display='block'; return; }
+  if (!name||!username) { err.textContent='Name and username are required.'; err.style.display='block'; return; }
   if (username.length < 3) { err.textContent='Username must be at least 3 characters.'; err.style.display='block'; return; }
-  if (password.length < 8) { err.textContent='Password must be at least 8 characters.'; err.style.display='block'; return; }
-  if (password !== confirm) { err.textContent='Passwords do not match.'; err.style.display='block'; return; }
+
+  // If NOT already signed in, validate email + password
+  if (!existingUser) {
+    if (!email||!password) { err.textContent='All required fields must be filled.'; err.style.display='block'; return; }
+    if (password.length < 8) { err.textContent='Password must be at least 8 characters.'; err.style.display='block'; return; }
+    if (password !== confirm) { err.textContent='Passwords do not match.'; err.style.display='block'; return; }
+  }
 
   const btn = document.getElementById('reg-btn');
   btn.disabled=true; btn.textContent='Creating account...';
 
   try {
-    // Check username uniqueness + reserved
+    // Check username reserved / duplicate
     if (['ranaadeem','admin','moderator'].includes(username)) {
       err.textContent='This username is not available.'; err.style.display='block'; btn.disabled=false; btn.textContent='Create Account →'; return;
     }
     const existing = await getDocs(query(collection(db,'authors'), where('username','==',username)));
     if (!existing.empty) { err.textContent='This username is already taken. Please choose another.'; err.style.display='block'; btn.disabled=false; btn.textContent='Create Account →'; return; }
 
-    // Create Firebase Auth account
-    const cred = await createUserWithEmailAndPassword(auth, email, password);
-    await sendEmailVerification(cred.user);
+    let uid, userEmail;
+
+    if (existingUser) {
+      // Already signed in (alumni user) — reuse their account
+      uid = existingUser.uid;
+      userEmail = existingUser.email;
+    } else {
+      // New user — create Firebase Auth account
+      const cred = await createUserWithEmailAndPassword(auth, email, password);
+      await sendEmailVerification(cred.user);
+      uid = cred.user.uid;
+      userEmail = email;
+    }
+
+    // Check if this uid already has an author profile
+    const authorSnap = await getDocs(query(collection(db,'authors'), where('uid','==',uid)));
+    if (!authorSnap.empty) {
+      err.textContent='An author profile already exists for this account.'; err.style.display='block';
+      btn.disabled=false; btn.textContent='Create Account →'; return;
+    }
 
     // Save author profile to Firestore
     await addDoc(collection(db,'authors'), {
-      uid: cred.user.uid,
-      name, username, email, bio,
+      uid, name, username, email: userEmail, bio,
       photoBase64: photoBase64,
       registeredAt: serverTimestamp()
     });
 
-    suc.innerHTML = '✅ Account created! <strong>Please check your email and click the verification link</strong> before signing in. Check your spam folder if you don\'t see it.';
+    suc.innerHTML = existingUser
+      ? '✅ Author profile created! Redirecting to dashboard...'
+      : '✅ Account created! <strong>Please check your email and click the verification link</strong> before signing in. Check your spam folder if you don\'t see it.';
     suc.style.display='block';
     btn.textContent='Account Created ✓';
-    setTimeout(()=>window.location.href='/blog/dashboard.html', 4000);
+    setTimeout(()=>window.location.href='/blog/dashboard.html', 3000);
   } catch(e) {
     let msg = e.message;
-    if (e.code==='auth/email-already-in-use') msg='This email is already registered.';
+    if (e.code==='auth/email-already-in-use') msg='This email is already registered. Sign in instead.';
     if (e.code==='auth/invalid-email') msg='Please enter a valid email address.';
     if (e.code==='auth/weak-password') msg='Password is too weak.';
     err.textContent=msg; err.style.display='block';
