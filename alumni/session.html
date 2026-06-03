@@ -1542,6 +1542,7 @@ async function loadAlumni() {
       title: a.title || a.jobTitle || '',
       city: a.city || '',
       country: a.country || '',
+      jobVisibility: a.jobVisibility || 'session',
       registered: true
     };
   });
@@ -1582,7 +1583,11 @@ function buildContext(alumni, question) {
 
   const lines = [];
   registered.forEach(a => {
-    lines.push(`- ${a.name} (${a.roll}, Session ${a.session}) [REGISTERED]${a.employer ? ', works at ' + a.employer : ''}${a.title ? ' as ' + a.title : ''}${a.city ? ', lives in ' + a.city : ''}${a.country && a.country !== a.city ? ', ' + a.country : ''}`);
+    const isPublic = a.jobVisibility === 'public';
+    const details = isPublic
+      ? `${a.employer ? ', works at ' + a.employer : ''}${a.title ? ' as ' + a.title : ''}${a.city ? ', lives in ' + a.city : ''}${a.country && a.country !== a.city ? ', ' + a.country : ''}`
+      : ' [profile details private]';
+    lines.push(`- ${a.name} (${a.roll}, Session ${a.session}) [REGISTERED]${details}`);
   });
   matchedUnregistered.forEach(a => {
     lines.push(`- ${a.name} (${a.roll}, Session ${a.session}) [NOT REGISTERED]`);
@@ -1609,6 +1614,16 @@ window.sendAIMsg = async function() {
   const input = document.getElementById('ai-input');
   const question = input.value.trim();
   if (!question) return;
+
+  if (!currentUser) {
+    const msgs = document.getElementById('ai-messages');
+    msgs.innerHTML += `<div class="ai-msg user">${question}</div>`;
+    msgs.innerHTML += `<div class="ai-msg bot">🔒 Please sign in to use Ask Rana Sb! <br><br><a href="/alumni/register.html" style="display:inline-block;margin-top:4px;background:#1a3a8a;color:#c9a84c;padding:6px 14px;border-radius:6px;font-size:12px;font-weight:700;text-decoration:none;">Sign In / Register →</a></div>`;
+    msgs.scrollTop = msgs.scrollHeight;
+    input.value = '';
+    return;
+  }
+
   input.value = '';
   document.getElementById('ai-suggestions').style.display = 'none';
 
