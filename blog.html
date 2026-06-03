@@ -564,10 +564,6 @@ async function loadPosts() {
   const grid = document.getElementById('posts-grid');
   try {
     const snap = await getDocs(query(collection(db,'posts'), where('status','==','published')));
-    if (snap.empty) {
-      grid.innerHTML = '<div class="empty-state"><div class="empty-state-icon">✍️</div><p style="color:var(--muted);">No posts yet. Check back soon.</p></div>';
-      return;
-    }
     allPosts = [];
     snap.forEach(d => allPosts.push({id:d.id,...d.data()}));
     allPosts.sort((a,b)=>(b.publishedAt?.seconds||0)-(a.publishedAt?.seconds||0));
@@ -583,13 +579,78 @@ async function loadPosts() {
       if (authWrap) authWrap.style.display = 'flex';
       if (authEl) authEl.innerHTML = authors.map(a=>`<button class="filter-chip" onclick="setFilter('author','${a}',this)">${a}</button>`).join('');
     }
-    renderFilteredPosts();
+    if (allPosts.length === 0) {
+      grid.innerHTML = '<div class="empty-state"><div class="empty-state-icon">✍️</div><p style="color:var(--muted);">No posts yet. Check back soon.</p></div>';
+    } else {
+      renderFilteredPosts();
+    }
+
+    // Admin: also inject pending posts at the top of the feed
+    if (currentUser && currentUser.uid === ADMIN_UID) {
+      await injectPendingIntoFeed();
+    }
   } catch(e) {
     grid.innerHTML = '<div class="loading">Error loading posts: '+e.message+'</div>';
     console.error('loadPosts error:', e);
   }
 }
 loadPosts();
+
+async function injectPendingIntoFeed() {
+  try {
+    const snap = await getDocs(query(collection(db,'posts'), where('status','==','pending')));
+    if (snap.empty) return;
+    const grid = document.getElementById('posts-grid');
+    const pending = [];
+    snap.forEach(d => pending.push({id:d.id,...d.data()}));
+    pending.sort((a,b)=>(b.submittedAt?.seconds||0)-(a.submittedAt?.seconds||0));
+    const wrapper = document.createElement('div');
+    wrapper.id = 'pending-feed-section';
+    wrapper.style.cssText = 'grid-column:1/-1;margin-bottom:1.5rem;';
+    wrapper.innerHTML = `<div style="font-size:12px;font-weight:700;color:#b45309;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.75rem;padding:8px 14px;background:#fef9c3;border-radius:6px;border:1px solid #fde68a;">📬 ${pending.length} Pending Submission${pending.length>1?'s':''} — awaiting your approval</div>`;
+    pending.forEach(p => {
+      const date = p.submittedAt?.seconds ? new Date(p.submittedAt.seconds*1000).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}) : 'Just now';
+      const preview = (p.content||'').replace(/<[^>]+>/g,' ').slice(0,100);
+      const card = document.createElement('div');
+      card.id = 'pending-feed-' + p.id;
+      card.style.cssText = 'background:#fffbeb;border:2px dashed #fde68a;border-radius:10px;padding:1.25rem;margin-bottom:0.75rem;display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;';
+      card.innerHTML = `
+        <div style="flex:1;min-width:0;">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+            <span style="font-size:11px;font-weight:700;color:#b45309;background:#fef3c7;padding:2px 8px;border-radius:10px;">⏳ Submitted for Approval</span>
+            <span style="font-size:11px;color:var(--muted);">${date}</span>
+          </div>
+          <div style="font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;color:var(--navy);margin-bottom:2px;">${p.title||'Untitled'}</div>
+          <div style="font-size:12px;color:var(--muted);margin-bottom:4px;">By ${p.authorName||'Unknown'} · ${p.category||'Uncategorized'}</div>
+          <div style="font-size:13px;color:#4b5563;line-height:1.5;">${preview}${preview.length>=100?'…':''}</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px;flex-shrink:0;">
+          <button onclick="approvePost('${p.id}',this)" style="background:#059669;color:white;border:none;padding:7px 14px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap;">✅ Approve</button>
+          <button onclick="deletePendingFromFeed('${p.id}',this)" style="background:white;color:#dc2626;border:1.5px solid #dc2626;padding:6px 14px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap;">🗑 Delete</button>
+        </div>`;
+      wrapper.appendChild(card);
+    });
+    grid.insertAdjacentElement('afterbegin', wrapper);
+  } catch(e) { console.warn('Could not load pending posts for feed:', e); }
+}
+
+window.deletePendingFromFeed = async function(id, btn) {
+  if (!confirm('Delete this submission permanently?')) return;
+  try {
+    await deleteDoc(doc(db,'posts',id));
+    document.getElementById('pending-feed-'+id)?.remove();
+    // Also remove from pending tab list if loaded
+    document.querySelector(`[data-pending-id="${id}"]`)?.closest('.pending-item')?.remove();
+    showToast('Submission deleted.');
+    // Update heading count
+    const section = document.getElementById('pending-feed-section');
+    if (section) {
+      const remaining = section.querySelectorAll('[id^="pending-feed-"]').length;
+      if (remaining === 0) { section.remove(); }
+      else { section.querySelector('div:first-child').innerHTML = `📬 ${remaining} Pending Submission${remaining>1?'s':''} — awaiting your approval`; }
+    }
+  } catch(e) { showToast('Error: '+e.message); }
+};
 
 window.setFilter = function(type, val, btn) {
   activeFilters[type] = val;
@@ -826,8 +887,18 @@ window.approvePost = async function(id, btn) {
   btn.disabled=true; btn.textContent='Approving...';
   try {
     await updateDoc(doc(db,'posts',id),{status:'published',publishedAt:serverTimestamp()});
-    btn.closest('.pending-item').remove();
-    showToast('Post approved ✓'); loadPosts();
+    // Remove from pending tab list
+    btn.closest('.pending-item')?.remove();
+    // Remove from inline feed card
+    document.getElementById('pending-feed-'+id)?.remove();
+    // Update or remove the pending section heading
+    const section = document.getElementById('pending-feed-section');
+    if (section) {
+      const remaining = section.querySelectorAll('[id^="pending-feed-"]').length;
+      if (remaining === 0) { section.remove(); }
+      else { section.querySelector('div:first-child').textContent = `📬 ${remaining} Pending Submission${remaining>1?'s':''} — awaiting your approval`; }
+    }
+    showToast('Post approved and published ✓'); loadPosts();
   } catch(e) { showToast('Error: '+e.message); btn.disabled=false; btn.textContent='✅ Approve'; }
 };
 
