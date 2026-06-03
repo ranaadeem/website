@@ -920,16 +920,18 @@
     Object.entries(countryCounts).forEach(([country, count]) => {
       const coords = countryCoords[country];
       if (!coords) return;
-      const size = Math.max(16, Math.min(40, 16 + count * 4));
+      const flag = countryFlags[country] || '📍';
       const pin = document.createElement('div');
-      pin.style.cssText = `position:absolute;left:${coords.x}%;top:${coords.y}%;transform:translate(-50%,-50%);z-index:10;cursor:pointer;`;
+      pin.style.cssText = `position:absolute;left:${coords.x}%;top:${coords.y}%;transform:translate(-50%,-50%);z-index:10;cursor:pointer;pointer-events:all;`;
       pin.innerHTML = `
-        <div style="position:relative;" title="${country}: ${count} alumni">
-          <div style="width:${size}px;height:${size}px;background:#c9a84c;border:2px solid white;border-radius:50%;box-shadow:0 2px 8px rgba(0,0,0,0.3);display:flex;align-items:center;justify-content:center;font-size:${Math.max(9,size/2.5)}px;font-weight:700;color:white;animation:pulse 2s infinite;">
-            ${count}
+        <div style="position:relative;display:flex;flex-direction:column;align-items:center;" title="${country}: ${count} alumni">
+          <div style="display:flex;align-items:center;gap:3px;background:rgba(15,31,61,0.85);border:1.5px solid #c9a84c;border-radius:20px;padding:3px 7px;box-shadow:0 2px 8px rgba(0,0,0,0.35);white-space:nowrap;animation:pulse 2s infinite;">
+            <span style="font-size:14px;line-height:1;">${flag}</span>
+            <span style="font-size:11px;font-weight:700;color:#c9a84c;">${count}</span>
           </div>
-          <div style="position:absolute;bottom:${size+4}px;left:50%;transform:translateX(-50%);background:rgba(15,31,61,0.9);color:white;font-size:10px;padding:3px 7px;border-radius:4px;white-space:nowrap;display:none;" class="pin-tooltip">
-            ${countryFlags[country]||''} ${country}: ${count}
+          <div style="width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-top:6px solid #c9a84c;margin-top:-1px;"></div>
+          <div style="position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:rgba(15,31,61,0.95);color:white;font-size:10px;padding:3px 8px;border-radius:4px;white-space:nowrap;display:none;border:1px solid #c9a84c;" class="pin-tooltip">
+            ${flag} ${country}: ${count} alumni
           </div>
         </div>`;
       pin.addEventListener('mouseenter', () => { pin.querySelector('.pin-tooltip').style.display = 'block'; });
