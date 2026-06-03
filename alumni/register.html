@@ -1080,13 +1080,27 @@
     }
 
     function norm(s) { return s.toUpperCase().replace(/[^A-Z\s]/g,' ').replace(/\s+/g,' ').trim(); }
+    function levenshtein(a, b) {
+      const dp = Array.from({length:a.length+1}, (_,i) => [i, ...Array(b.length).fill(0)]);
+      for (let j=0;j<=b.length;j++) dp[0][j]=j;
+      for (let i=1;i<=a.length;i++) for (let j=1;j<=b.length;j++)
+        dp[i][j] = a[i-1]===b[j-1] ? dp[i-1][j-1] : 1+Math.min(dp[i-1][j],dp[i][j-1],dp[i-1][j-1]);
+      return dp[a.length][b.length];
+    }
+    function fuzzyMatch(word, officialWords) {
+      // exact match
+      if (officialWords.includes(word)) return true;
+      // close spelling (1-2 edit distance for longer words, 1 for shorter)
+      const maxDist = word.length <= 5 ? 1 : 2;
+      return officialWords.some(ow => levenshtein(word, ow) <= maxDist);
+    }
     function validateName(typed, officialRaw) {
       if (!officialRaw) return { pass: true, skip: true };
       const t = norm(typed), o = norm(officialRaw);
       if (!t) return { pass: false, reason: 'empty' };
       const tW = t.split(' ').filter(Boolean), oW = o.split(' ').filter(Boolean);
       if (tW.length < 2) return { pass: false, reason: 'short', msg: 'Please enter at least your first and last name.' };
-      const unmatched = tW.filter(w => !oW.includes(w));
+      const unmatched = tW.filter(w => !fuzzyMatch(w, oW));
       if (unmatched.length === 0) {
         const official = officialRaw.trim().split(' ').map(w => w.charAt(0).toUpperCase()+w.slice(1).toLowerCase()).join(' ');
         return { pass: true, official };
