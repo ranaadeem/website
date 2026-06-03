@@ -365,6 +365,7 @@ loadGlobalStats();
 
 onAuthStateChanged(auth, async (user) => {
   currentUser = user;
+  window.__authUser = user;  // expose for chatbot module
   buildNav(user);
   if (user) {
     // Look up profile via uid_map (alumni docs use roll as ID, not uid)
@@ -777,7 +778,7 @@ window.sendAIMsg = async function() {
   const sendBtn = document.getElementById('ai-send');
 
   // Auth check
-  if (!currentUser) {
+  if (!window.__authUser) {
     input.value = '';
     msgs.innerHTML += `<div class="ai-msg user">${question}</div>`;
     msgs.innerHTML += `<div class="ai-msg bot">🔒 Please sign in to use Ask Rana Sb! <br><br><a href="/alumni/register.html" style="display:inline-block;margin-top:4px;background:#1a3a8a;color:#c9a84c;padding:6px 14px;border-radius:6px;font-size:12px;font-weight:700;text-decoration:none;">Sign In / Register →</a></div>`;
