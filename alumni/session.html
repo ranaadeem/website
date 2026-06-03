@@ -429,12 +429,12 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
     <!-- Sidebar -->
     <div class="sidebar">
 
-      <!-- Memory Page — Session 2006 only -->
+      <!-- Memory Page — Session 2005 only -->
       <div class="sidebar-card" id="memory-page-card" style="display:none;background:linear-gradient(135deg,#f0f4ff,#e8eeff);border-color:#b8c8f0;">
         <div class="sidebar-card-header" style="background:linear-gradient(135deg,var(--navy),#2048a8);">📸 Session Memory Page</div>
         <div class="sidebar-card-body">
-          <p style="font-size:12px;color:#1a2a6a;line-height:1.7;margin-bottom:0.85rem;">A dedicated memory page for Session 2006–2010 — batch photos, statistics, and a look back at the years at ICET.</p>
-          <a href="/session2006.html" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:7px;background:var(--navy);color:var(--gold);padding:10px 14px;border-radius:8px;text-decoration:none;font-size:13px;font-weight:700;">
+          <p style="font-size:12px;color:#1a2a6a;line-height:1.7;margin-bottom:0.85rem;">A dedicated memory page for Session 2005–2009 — batch photos, statistics, and a look back at the years at ICET.</p>
+          <a href="/session2005.html" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:7px;background:var(--navy);color:var(--gold);padding:10px 14px;border-radius:8px;text-decoration:none;font-size:13px;font-weight:700;">
             📸 Open Memory Page →
           </a>
         </div>
@@ -591,7 +591,7 @@ const ADMIN     = 'eOAyXx3uQzMPJItS8aPLvHgWTQv1';
 const CL_CLOUD  = 'duetiv9rm', CL_PRESET = 'ranaadeem_blog';
 
 // ── Session setup ─────────────────────────────────────────────────────────────
-const YEAR = new URLSearchParams(location.search).get('year') || '2006';
+const YEAR = new URLSearchParams(location.search).get('year') || '2005';
 const SD   = SESSION_DATA[YEAR];
 
 // Page title & year label
@@ -599,8 +599,8 @@ const yearLabel = document.getElementById('page-year-label');
 if (yearLabel) yearLabel.textContent = SD ? SD.label.replace('Session ','') : YEAR + '–' + (parseInt(YEAR)+4);
 document.title = (SD ? SD.label : 'Session '+YEAR) + ' — Chemical Engineering Alumni · ICET';
 
-// Memory Page — show only for Session 2006
-if (YEAR === '2006') {
+// Memory Page — show only for Session 2005
+if (YEAR === '2005') {
   const memCard = document.getElementById('memory-page-card');
   if (memCard) memCard.style.display = 'block';
 }
@@ -1500,7 +1500,7 @@ document.addEventListener('click', function(e) {
     <button class="ai-sug-btn" onclick="askSuggestion(this)">Anyone at Aramco?</button>
     <button class="ai-sug-btn" onclick="askSuggestion(this)">Alumni in Germany?</button>
     <button class="ai-sug-btn" onclick="askSuggestion(this)">Who are software engineers?</button>
-    <button class="ai-sug-btn" onclick="askSuggestion(this)">Session 2006 alumni?</button>
+    <button class="ai-sug-btn" onclick="askSuggestion(this)">Session 2005 alumni?</button>
   </div>
   <div class="ai-input-row">
     <input id="ai-input" type="text" placeholder="Ask about alumni…" onkeydown="if(event.key==='Enter')sendAIMsg()">
