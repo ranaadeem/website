@@ -271,19 +271,18 @@ auth.onAuthStateChanged(async function(user) {
     showDashboard();
     return;
   }
-  // Email verification check
-  if (!user.emailVerified) {
-    showError("login-error", "Please verify your email first. Check your inbox.");
-    await auth.signOut();
-    return;
-  }
   // Load author profile
   try {
     const snap = await db.collection("authors").where("uid","==",user.uid).get();
     if (!snap.empty) {
+      // Has an author profile — allow in (covers alumni users who verified via alumni portal)
       authorDocId = snap.docs[0].id;
       authorDoc = snap.docs[0].data();
       showDashboard();
+    } else if (!user.emailVerified) {
+      // New blog registration that hasn't verified email yet
+      showError("login-error", "Please verify your email first. Check your inbox.");
+      await auth.signOut();
     } else {
       showError("login-error", "No author profile found. Please register first.");
       await auth.signOut();
