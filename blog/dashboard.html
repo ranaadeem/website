@@ -192,6 +192,25 @@ nav{background:var(--navy);border-bottom:2px solid var(--gold);padding:0 1.5rem;
         <div style="background:white;border:1px solid var(--border);border-radius:8px;padding:1.5rem;min-height:200px;font-size:15px;line-height:1.85;" id="w-preview-content"></div>
       </div>
     </div>
+    <!-- SEO fields -->
+    <details style="margin-top:1rem;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+      <summary style="padding:10px 14px;cursor:pointer;font-size:13px;font-weight:600;color:var(--navy);background:#f9f7f3;user-select:none;">🔍 SEO Settings <span style="font-size:11px;font-weight:400;color:var(--muted);">(optional — helps Google find your post)</span></summary>
+      <div style="padding:14px;display:flex;flex-direction:column;gap:10px;">
+        <div class="form-group" style="margin:0;">
+          <label style="font-size:11px;">SEO Title <span style="font-weight:400;color:var(--muted);">(shown in Google results — max 60 chars)</span></label>
+          <input type="text" id="w-seo-title" placeholder="Leave blank to use the post title" maxlength="60" style="font-size:13px;"
+            oninput="document.getElementById('seo-title-count').textContent=this.value.length+'/60'">
+          <div style="font-size:11px;color:var(--muted);text-align:right;margin-top:2px;"><span id="seo-title-count">0/60</span></div>
+        </div>
+        <div class="form-group" style="margin:0;">
+          <label style="font-size:11px;">Meta Description <span style="font-weight:400;color:var(--muted);">(shown under title in Google — max 155 chars)</span></label>
+          <textarea id="w-seo-desc" placeholder="Leave blank to use the subtitle or first paragraph" maxlength="155" rows="3"
+            style="width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:7px;font-size:13px;font-family:inherit;resize:vertical;outline:none;"
+            oninput="document.getElementById('seo-desc-count').textContent=this.value.length+'/155'"></textarea>
+          <div style="font-size:11px;color:var(--muted);text-align:right;margin-top:2px;"><span id="seo-desc-count">0/155</span></div>
+        </div>
+      </div>
+    </details>
     <button class="submit-btn" onclick="submitPost()">📬 Submit for Review</button>
     <p style="font-size:12px;color:var(--muted);margin-top:0.5rem;text-align:center;">Your post will be reviewed before publishing.</p>
   </div>
@@ -404,6 +423,8 @@ function submitPost() {
     subtitle: document.getElementById("w-subtitle").value.trim(),
     category: category,
     tags: document.getElementById("w-tags").value.trim(),
+    seoTitle: document.getElementById("w-seo-title").value.trim(),
+    seoDesc: document.getElementById("w-seo-desc").value.trim(),
     content: content,
     coverImage: coverUrl,
     authorName: authorDoc.name,
@@ -434,6 +455,10 @@ function submitPost() {
     document.getElementById("w-title").value = "";
     document.getElementById("w-subtitle").value = "";
     document.getElementById("w-tags").value = "";
+    document.getElementById("w-seo-title").value = "";
+    document.getElementById("w-seo-desc").value = "";
+    document.getElementById("seo-title-count").textContent = "0/60";
+    document.getElementById("seo-desc-count").textContent = "0/155";
     document.getElementById("w-editor").innerHTML = "";
     coverBase64 = "";
     document.getElementById("w-cover-preview").style.display = "none";

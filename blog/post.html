@@ -317,16 +317,58 @@ async function loadPost() {
 }
 
 function renderPost(p) {
-  document.title = p.title + ' — Dr. Adeem Ghaffar Rana';
+  // SEO: prefer explicit seoTitle/seoDesc, fall back to post content
+  const seoTitle = p.seoTitle || p.title;
+  const seoDesc  = p.seoDesc  || p.subtitle || p.content.replace(/<[^>]+>/g,' ').slice(0,155).trim();
+  const ogImg    = p.coverImage || 'https://ranaadeem.de/og-banner.jpg';
+  const postUrl  = 'https://ranaadeem.de/blog/post.html?id=' + currentPostId;
+  const pubDate  = p.publishedAt ? new Date(p.publishedAt.seconds*1000).toISOString() : new Date().toISOString();
+  const words    = p.content.replace(/<[^>]+>/g,' ').split(/\s+/).filter(Boolean).length;
+
+  document.title = seoTitle + ' — Dr. Adeem Ghaffar Rana';
+
   // Update OG/Twitter meta dynamically
-  const ogImg = p.coverImage || 'https://ranaadeem.de/og-banner.jpg';
-  const desc = p.subtitle || p.content.replace(/<[^>]+>/g,' ').slice(0,150).trim();
-  document.getElementById('og-title')?.setAttribute('content', p.title);
-  document.getElementById('og-description')?.setAttribute('content', desc);
+  document.getElementById('og-title')?.setAttribute('content', seoTitle);
+  document.getElementById('og-description')?.setAttribute('content', seoDesc);
   document.getElementById('og-image')?.setAttribute('content', ogImg);
-  document.getElementById('tw-title')?.setAttribute('content', p.title);
+  document.getElementById('tw-title')?.setAttribute('content', seoTitle);
   document.getElementById('tw-image')?.setAttribute('content', ogImg);
-  document.getElementById('tw-description')?.setAttribute('content', desc);
+  document.getElementById('tw-description')?.setAttribute('content', seoDesc);
+
+  // Canonical URL
+  let canonical = document.getElementById('post-canonical');
+  if (!canonical) { canonical = document.createElement('link'); canonical.id='post-canonical'; canonical.rel='canonical'; document.head.appendChild(canonical); }
+  canonical.href = postUrl;
+
+  // JSON-LD BlogPosting schema
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": seoTitle,
+    "description": seoDesc,
+    "image": ogImg,
+    "url": postUrl,
+    "datePublished": pubDate,
+    "dateModified": pubDate,
+    "wordCount": words,
+    "keywords": p.tags || '',
+    "articleSection": p.category || '',
+    "author": {
+      "@type": "Person",
+      "name": p.authorName || 'Dr. Adeem Ghaffar Rana',
+      "url": "https://ranaadeem.de/"
+    },
+    "publisher": {
+      "@type": "Person",
+      "name": "Dr. Adeem Ghaffar Rana",
+      "url": "https://ranaadeem.de/",
+      "logo": { "@type": "ImageObject", "url": "https://ranaadeem.de/favicon.png" }
+    },
+    "mainEntityOfPage": { "@type": "WebPage", "@id": postUrl }
+  };
+  let ldScript = document.getElementById('post-jsonld');
+  if (!ldScript) { ldScript = document.createElement('script'); ldScript.id='post-jsonld'; ldScript.type='application/ld+json'; document.head.appendChild(ldScript); }
+  ldScript.textContent = JSON.stringify(jsonLd);
   const date = p.publishedAt ? new Date(p.publishedAt.seconds*1000).toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'}) : '';
   const tags = (p.tags||'').split(',').map(t=>t.trim()).filter(Boolean);
   const tagsHtml = tags.map(t=>`<span class="post-tag">${t}</span>`).join('');
