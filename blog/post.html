@@ -372,7 +372,6 @@ function renderPost(p) {
   const date = p.publishedAt ? new Date(p.publishedAt.seconds*1000).toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'}) : '';
   const tags = (p.tags||'').split(',').map(t=>t.trim()).filter(Boolean);
   const tagsHtml = tags.map(t=>`<span class="post-tag">${t}</span>`).join('');
-  const words = p.content.replace(/<[^>]+>/g,' ').split(/\s+/).filter(Boolean).length;
   const readMin = Math.max(1, Math.ceil(words/200));
   const isAdmin = currentUser && currentUser.uid === ADMIN_UID;
   const liked = localStorage.getItem('liked_'+currentPostId);
