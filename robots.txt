@@ -1,0 +1,18 @@
+User-agent: *
+Allow: /
+
+# Private / auth-only pages — no indexing needed
+Disallow: /admin.html
+Disallow: /alumni/admin.html
+Disallow: /blog/dashboard.html
+Disallow: /blog/register.html
+Disallow: /alumni/register.html
+Disallow: /alumni/profile.html
+Disallow: /login-gate-snippet.html
+
+# Dynamic pages (content loaded via JS/Firestore — no static content to index)
+Disallow: /alumni/session.html
+Disallow: /blog/post.html
+Disallow: /blog/author.html
+
+Sitemap: https://ranaadeem.de/sitemap.xml
