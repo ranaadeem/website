@@ -1,15 +1,3 @@
 {
-  "version": 2,
-  "rewrites": [
-    {
-      "source": "/:path*",
-      "destination": "/alumni/:path*",
-      "has": [{ "type": "host", "value": "alumni.ranaadeem.de" }]
-    },
-    {
-      "source": "/:path*",
-      "destination": "/blog/:path*",
-      "has": [{ "type": "host", "value": "blog.ranaadeem.de" }]
-    }
-  ]
+  "version": 2
 }
