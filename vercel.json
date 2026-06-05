@@ -1,0 +1,14 @@
+{
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/blog/$1",
+      "has": [{ "type": "host", "value": "blog.ranaadeem.de" }]
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/alumni/$1",
+      "has": [{ "type": "host", "value": "alumni.ranaadeem.de" }]
+    }
+  ]
+}
