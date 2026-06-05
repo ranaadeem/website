@@ -192,6 +192,27 @@ nav{background:var(--navy);border-bottom:2px solid var(--gold);padding:0 1.5rem;
         <div style="background:white;border:1px solid var(--border);border-radius:8px;padding:1.5rem;min-height:200px;font-size:15px;line-height:1.85;" id="w-preview-content"></div>
       </div>
     </div>
+    <!-- Series fields -->
+    <details style="margin-top:1rem;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+      <summary style="padding:10px 14px;cursor:pointer;font-size:13px;font-weight:600;color:var(--navy);background:#f9f7f3;user-select:none;">📚 Series <span style="font-size:11px;font-weight:400;color:var(--muted);">(optional — link posts into a series)</span></summary>
+      <div style="padding:14px;display:flex;flex-direction:column;gap:10px;">
+        <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;">
+          <input type="checkbox" id="w-is-series" onchange="toggleSeriesFields(this.checked)" style="accent-color:var(--navy);width:15px;height:15px;">
+          This post is part of a series
+        </label>
+        <div id="w-series-fields" style="display:none;display:flex;flex-direction:column;gap:10px;">
+          <div class="form-group" style="margin:0;">
+            <label style="font-size:11px;">Series Name <span style="color:var(--red);">*</span></label>
+            <input type="text" id="w-series-name" placeholder="e.g. Life in a German Lab" style="font-size:13px;">
+          </div>
+          <div class="form-group" style="margin:0;">
+            <label style="font-size:11px;">Episode Number <span style="color:var(--red);">*</span></label>
+            <input type="number" id="w-series-ep" placeholder="1" min="1" style="font-size:13px;width:100px;">
+          </div>
+        </div>
+      </div>
+    </details>
+
     <!-- SEO fields -->
     <details style="margin-top:1rem;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
       <summary style="padding:10px 14px;cursor:pointer;font-size:13px;font-weight:600;color:var(--navy);background:#f9f7f3;user-select:none;">🔍 SEO Settings <span style="font-size:11px;font-weight:400;color:var(--muted);">(optional — helps Google find your post)</span></summary>
@@ -366,6 +387,10 @@ function showDashboard() {
 }
 
 // ── Sign in ──
+window.toggleSeriesFields = function(checked) {
+  document.getElementById('w-series-fields').style.display = checked ? 'flex' : 'none';
+};
+
 function signIn() {
   var email = document.getElementById("login-email").value.trim();
   var password = document.getElementById("login-password").value;
@@ -425,6 +450,8 @@ function submitPost() {
     tags: document.getElementById("w-tags").value.trim(),
     seoTitle: document.getElementById("w-seo-title").value.trim(),
     seoDesc: document.getElementById("w-seo-desc").value.trim(),
+    seriesName: document.getElementById("w-is-series").checked ? document.getElementById("w-series-name").value.trim() : '',
+    seriesEpisode: document.getElementById("w-is-series").checked ? (parseInt(document.getElementById("w-series-ep").value)||1) : 0,
     content: content,
     coverImage: coverUrl,
     authorName: authorDoc.name,
@@ -459,6 +486,10 @@ function submitPost() {
     document.getElementById("w-seo-desc").value = "";
     document.getElementById("seo-title-count").textContent = "0/60";
     document.getElementById("seo-desc-count").textContent = "0/155";
+    document.getElementById("w-is-series").checked = false;
+    document.getElementById("w-series-name").value = "";
+    document.getElementById("w-series-ep").value = "";
+    document.getElementById("w-series-fields").style.display = "none";
     document.getElementById("w-editor").innerHTML = "";
     coverBase64 = "";
     document.getElementById("w-cover-preview").style.display = "none";

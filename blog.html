@@ -686,7 +686,47 @@ function renderFilteredPosts() {
     return;
   }
   grid.innerHTML = '';
-  filtered.forEach(p => renderPostCard(p));
+
+  // Group series together; standalone posts render normally
+  const seriesMap = {}; // seriesName -> [posts sorted by episode]
+  const standalone = [];
+  filtered.forEach(p => {
+    if (p.seriesName && p.seriesEpisode) {
+      if (!seriesMap[p.seriesName]) seriesMap[p.seriesName] = [];
+      seriesMap[p.seriesName].push(p);
+    } else {
+      standalone.push(p);
+    }
+  });
+  // Sort each series by episode
+  Object.values(seriesMap).forEach(eps => eps.sort((a,b)=>a.seriesEpisode-b.seriesEpisode));
+
+  // Interleave: insert series banners at the position of their latest post
+  const rendered = new Set();
+  filtered.forEach(p => {
+    if (rendered.has(p.id)) return;
+    if (p.seriesName && p.seriesEpisode && seriesMap[p.seriesName]) {
+      const eps = seriesMap[p.seriesName];
+      // Only render the series block once (on first encounter)
+      renderSeriesBlock(eps);
+      eps.forEach(e => rendered.add(e.id));
+    } else {
+      renderPostCard(p);
+      rendered.add(p.id);
+    }
+  });
+}
+
+function renderSeriesBlock(episodes) {
+  const grid = document.getElementById('posts-grid');
+  const s = episodes[0];
+  // Series banner — full width
+  const banner = document.createElement('div');
+  banner.style.cssText = 'grid-column:1/-1;background:linear-gradient(135deg,#1a3a8a,#2048a8);border-radius:12px;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:-0.5rem;';
+  banner.innerHTML = `<div><div style="font-size:10px;font-weight:700;color:#c9a84c;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:2px;">📚 Series</div><div style="font-size:16px;font-weight:700;color:white;">${s.seriesName}</div></div><div style="font-size:12px;color:rgba(255,255,255,0.7);">${episodes.length} Part${episodes.length>1?'s':''} · By ${s.authorName||'Dr. Adeem Ghaffar Rana'}</div>`;
+  grid.appendChild(banner);
+  // Render each episode card
+  episodes.forEach(p => renderPostCard(p));
 }
 
 function renderPostCard(p) {
@@ -701,6 +741,7 @@ function renderPostCard(p) {
   card.innerHTML = `
     ${p.coverImage?`<img class="post-card-img" src="${p.coverImage}" alt="${p.title}">`:`<div class="post-card-img-placeholder">📝</div>`}
     <div class="post-card-body">
+      ${p.seriesName && p.seriesEpisode ? `<div style="font-size:10px;font-weight:700;color:#1e40af;background:#eff6ff;border:1px solid #bfdbfe;padding:2px 8px;border-radius:10px;display:inline-block;margin-bottom:5px;">Part ${p.seriesEpisode}</div>` : ''}
       ${p.category?`<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--gold);margin-bottom:4px;">${p.category}</div>`:''}
       ${tagsHtml?`<div class="post-card-tags">${tagsHtml}</div>`:''}
       <div class="post-card-title">${p.title}</div>
@@ -959,6 +1000,15 @@ async function loadManage() {
             <div><label style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:3px;">Subtitle</label>
             <input id="ie-s-${p.id}" value="${(p.subtitle||'').replace(/"/g,'&quot;')}" style="width:100%;padding:7px 10px;border:1px solid var(--border);border-radius:5px;font-size:13px;font-family:inherit;outline:none;"></div>
           </div>
+          <div style="border-top:1px solid var(--border);padding-top:0.75rem;margin-bottom:0.75rem;">
+            <div style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;margin-bottom:6px;">📚 Series (optional)</div>
+            <div style="display:grid;grid-template-columns:1fr auto;gap:0.75rem;align-items:end;">
+              <div><label style="font-size:11px;color:var(--muted);display:block;margin-bottom:3px;">Series Name</label>
+              <input id="ie-sn-${p.id}" value="${(p.seriesName||'').replace(/"/g,'&quot;')}" placeholder="e.g. Life in a German Lab" style="width:100%;padding:7px 10px;border:1px solid var(--border);border-radius:5px;font-size:13px;font-family:inherit;outline:none;"></div>
+              <div><label style="font-size:11px;color:var(--muted);display:block;margin-bottom:3px;">Episode</label>
+              <input id="ie-se-${p.id}" type="number" min="1" value="${p.seriesEpisode||''}" placeholder="1" style="width:70px;padding:7px 10px;border:1px solid var(--border);border-radius:5px;font-size:13px;font-family:inherit;outline:none;"></div>
+            </div>
+          </div>
           <div style="display:flex;gap:0.5rem;justify-content:flex-end;">
             <button onclick="saveInlineEdit('${p.id}')" style="background:var(--gold);color:var(--navy);border:none;padding:7px 16px;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">💾 Save</button>
             <button onclick="document.getElementById('ie-${p.id}').style.display='none'" style="background:white;color:var(--muted);border:1px solid var(--border);padding:7px 16px;border-radius:6px;font-size:13px;cursor:pointer;font-family:inherit;">Cancel</button>
@@ -971,11 +1021,13 @@ async function loadManage() {
 
 window.toggleInlineEdit = id => { const el=document.getElementById('ie-'+id); if(el) el.style.display=el.style.display==='none'?'block':'none'; };
 window.saveInlineEdit = async function(id) {
-  const title=document.getElementById('ie-t-'+id)?.value.trim();
-  const subtitle=document.getElementById('ie-s-'+id)?.value.trim();
+  const title    = document.getElementById('ie-t-'+id)?.value.trim();
+  const subtitle = document.getElementById('ie-s-'+id)?.value.trim();
+  const seriesName    = document.getElementById('ie-sn-'+id)?.value.trim();
+  const seriesEpisode = parseInt(document.getElementById('ie-se-'+id)?.value)||0;
   if(!title){showToast('Title cannot be empty.');return;}
   try{
-    await updateDoc(doc(db,'posts',id),{title,subtitle});
+    await updateDoc(doc(db,'posts',id),{title, subtitle, seriesName: seriesName||'', seriesEpisode});
     showToast('Updated ✓');
     document.getElementById('ie-'+id).style.display='none';
     document.querySelector(`#mp-${id} [style*="font-weight:600"]`).textContent=title;
