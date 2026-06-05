@@ -191,8 +191,8 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
           <li><a href="/cv.html" class="nav-dropdown-item">📋 CV</a></li>
         </ul>
       </li>
-      <li><a href="/blog.html" class="nav-link">Blog</a></li>
-      <li><a href="/alumni.html" class="nav-link active">Alumni Portal</a></li>
+      <li><a href="/blog/" class="nav-link">Blog</a></li>
+      <li><a href="/alumni/" class="nav-link active">Alumni Portal</a></li>
       <li><a href="/photography.html" class="nav-link" title="Photography" style="font-size:18px;padding:6px 10px;">📷</a></li>
       <li><a href="mailto:ranaadeem@hotmail.com" class="nav-cta">Contact</a></li>
     </ul>
@@ -274,7 +274,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
       <div style="font-size:3rem;margin-bottom:1rem;">🎓</div>
       <h2 id="cs-title" style="font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--navy);margin-bottom:.75rem;"></h2>
       <p style="font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:1.75rem;">This session page is coming soon. Data is being collected from the department.</p>
-      <a href="/alumni.html" style="display:inline-block;background:var(--navy);color:var(--gold);padding:10px 24px;border-radius:8px;font-size:14px;font-weight:600;text-decoration:none;">← Back to Alumni Portal</a>
+      <a href="/alumni/" style="display:inline-block;background:var(--navy);color:var(--gold);padding:10px 24px;border-radius:8px;font-size:14px;font-weight:600;text-decoration:none;">← Back to Alumni Portal</a>
     </div>
   </div>
 </div>
@@ -732,7 +732,7 @@ if (!SD || !SD.active) {
     el.innerHTML = toShow.map(y => {
       const isCurrent = y === YEAR;
       return `<a href="/alumni/session.html?year=${y}" style="display:block;padding:6px 0;font-size:13px;color:var(--navy);text-decoration:none;border-bottom:1px solid var(--border);${isCurrent ? 'font-weight:700;' : ''}">${SESSION_DATA[y].label}${isCurrent ? ' ←' : ''}</a>`;
-    }).join('') + (hasMore ? `<a href="/alumni.html" style="display:block;padding:6px 0;font-size:12px;color:var(--gold);text-decoration:none;font-weight:600;">View all sessions →</a>` : '');
+    }).join('') + (hasMore ? `<a href="/alumni/" style="display:block;padding:6px 0;font-size:12px;color:var(--gold);text-decoration:none;font-weight:600;">View all sessions →</a>` : '');
   }
   buildSessionsSidebar();
 

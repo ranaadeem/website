@@ -2,22 +2,12 @@
   "version": 2,
   "rewrites": [
     {
-      "source": "/",
-      "destination": "/alumni.html",
-      "has": [{ "type": "host", "value": "alumni.ranaadeem.de" }]
-    },
-    {
-      "source": "/:path+",
+      "source": "/:path*",
       "destination": "/alumni/:path*",
       "has": [{ "type": "host", "value": "alumni.ranaadeem.de" }]
     },
     {
-      "source": "/",
-      "destination": "/blog.html",
-      "has": [{ "type": "host", "value": "blog.ranaadeem.de" }]
-    },
-    {
-      "source": "/:path+",
+      "source": "/:path*",
       "destination": "/blog/:path*",
       "has": [{ "type": "host", "value": "blog.ranaadeem.de" }]
     }
