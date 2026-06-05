@@ -215,6 +215,10 @@ hr.post-divider{border:none;border-top:1px solid var(--border);margin:0 0 2rem;}
       <div class="form-group"><label>Tags</label><input type="text" id="edit-tags"></div>
       <div class="form-group"><label>Category</label><input type="text" id="edit-category"></div>
     </div>
+    <div class="form-row">
+      <div class="form-group"><label>Series Name <span style="font-size:11px;font-weight:400;color:var(--muted);">(optional)</span></label><input type="text" id="edit-series-name" placeholder="e.g. Life in a German Lab"></div>
+      <div class="form-group"><label>Episode # <span style="font-size:11px;font-weight:400;color:var(--muted);">(leave 0 for standalone)</span></label><input type="number" id="edit-series-ep" min="0" placeholder="0" style="width:100%;"></div>
+    </div>
     <div class="form-group"><label>Cover Image (leave blank to keep existing)</label><input type="file" id="edit-cover" accept="image/*"></div>
     <div class="form-group">
       <label>Content</label>
@@ -673,6 +677,8 @@ window.openEditModal = function(){
   document.getElementById('edit-subtitle').value=currentPost.subtitle||'';
   document.getElementById('edit-tags').value=currentPost.tags||'';
   document.getElementById('edit-category').value=currentPost.category||'';
+  document.getElementById('edit-series-name').value=currentPost.seriesName||'';
+  document.getElementById('edit-series-ep').value=currentPost.seriesEpisode||0;
   document.getElementById('edit-editor').innerHTML=currentPost.content||'';
   editCoverBase64=currentPost.coverImage||'';
   document.getElementById('edit-modal').classList.add('active');
@@ -696,7 +702,7 @@ window.saveEdit = async function(){
   const btn=document.querySelector('#edit-modal .submit-btn');
   btn.disabled=true;btn.textContent='Saving...';
   try{
-    const updates={title,subtitle:document.getElementById('edit-subtitle').value.trim(),tags:document.getElementById('edit-tags').value.trim(),category:document.getElementById('edit-category').value.trim(),content:document.getElementById('edit-editor').innerHTML,updatedAt:serverTimestamp()};
+    const updates={title,subtitle:document.getElementById('edit-subtitle').value.trim(),tags:document.getElementById('edit-tags').value.trim(),category:document.getElementById('edit-category').value.trim(),seriesName:document.getElementById('edit-series-name').value.trim(),seriesEpisode:parseInt(document.getElementById('edit-series-ep').value)||0,content:document.getElementById('edit-editor').innerHTML,updatedAt:serverTimestamp()};
     if(editCoverBase64) updates.coverImage=editCoverBase64;
     await updateDoc(doc(db,'posts',currentPostId),updates);
     suc.textContent='✅ Post updated!';suc.style.display='block';
