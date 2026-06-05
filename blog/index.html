@@ -736,7 +736,7 @@ function renderPostCard(p) {
   card.innerHTML = `
     ${p.coverImage?`<img class="post-card-img" src="${p.coverImage}" alt="${p.title}">`:`<div class="post-card-img-placeholder">📝</div>`}
     <div class="post-card-body">
-      ${p.seriesName && p.seriesEpisode ? `<div style="font-size:10px;font-weight:700;color:#1e40af;background:#eff6ff;border:1px solid #bfdbfe;padding:2px 8px;border-radius:10px;display:inline-block;margin-bottom:5px;">Part ${p.seriesEpisode}</div>` : ''}
+      ${p.seriesName && p.seriesEpisode ? `<div style="font-size:10px;font-weight:700;color:#1e40af;background:#eff6ff;border:1px solid #bfdbfe;padding:2px 8px;border-radius:10px;display:inline-block;margin-bottom:5px;">Chapter ${p.seriesEpisode}</div>` : ''}
       ${p.category?`<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--gold);margin-bottom:4px;">${p.category}</div>`:''}
       ${tagsHtml?`<div class="post-card-tags">${tagsHtml}</div>`:''}
       <div class="post-card-title">${p.title}</div>
