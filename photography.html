@@ -152,6 +152,41 @@ body{font-family:"DM Sans",sans-serif;background:#0a0a0a;color:white;}
 .upload-progress-bar{height:100%;background:var(--gold);width:0%;transition:width 0.3s;border-radius:4px;}
 .upload-status{font-size:13px;color:rgba(255,255,255,0.6);margin-top:0.5rem;text-align:center;}
 
+/* ALBUMS SECTION */
+.albums-section{max-width:1100px;margin:1.5rem auto 0;padding:0 1rem;}
+.albums-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:8px;}
+.albums-header-left{display:flex;align-items:center;gap:10px;}
+.albums-header h2{font-family:"Playfair Display",serif;font-size:1.15rem;color:white;margin:0;}
+.btn-new-album{background:var(--gold);color:#1a1a2e;border:none;padding:7px 16px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;display:none;align-items:center;gap:6px;}
+.btn-new-album.visible{display:inline-flex;}
+.albums-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin-bottom:0.5rem;}
+.album-card{background:#1a1f2e;border:1px solid rgba(255,255,255,0.08);border-radius:10px;overflow:hidden;cursor:pointer;transition:transform 0.2s,border-color 0.2s;}
+.album-card:hover{transform:translateY(-2px);border-color:var(--gold);}
+.album-cover{width:100%;aspect-ratio:1;object-fit:cover;display:block;background:#0f1117;}
+.album-cover-empty{width:100%;aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:2rem;background:#0f1117;}
+.album-info{padding:8px 10px;}
+.album-name{font-size:13px;font-weight:600;color:white;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.album-footer{display:flex;justify-content:space-between;align-items:center;}
+.album-count{font-size:11px;color:rgba(255,255,255,0.4);}
+.album-del-btn{background:none;border:none;color:rgba(255,255,255,0.25);cursor:pointer;font-size:13px;padding:0;line-height:1;}
+.album-del-btn:hover{color:#dc2626;}
+.album-back-btn{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);color:rgba(255,255,255,0.7);padding:6px 13px;border-radius:8px;font-size:13px;cursor:pointer;font-family:inherit;display:none;align-items:center;gap:6px;}
+.album-back-btn.visible{display:inline-flex;}
+.current-album-title{font-family:"Playfair Display",serif;font-size:1.1rem;color:var(--gold);}
+.albums-empty{font-size:13px;color:rgba(255,255,255,0.3);padding:0.5rem 0 1rem;}
+
+/* FILE LIST (multi-upload modal) */
+.file-list{display:flex;flex-direction:column;gap:8px;margin-top:0.75rem;max-height:320px;overflow-y:auto;padding-right:2px;}
+.file-row{display:flex;gap:10px;align-items:flex-start;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:8px;}
+.file-thumb{width:58px;height:58px;object-fit:cover;border-radius:6px;flex-shrink:0;}
+.file-fields{flex:1;display:flex;flex-direction:column;gap:5px;min-width:0;}
+.file-fields input,.file-fields select{font-size:12px;padding:5px 9px;}
+.file-remove{background:none;border:none;color:rgba(255,255,255,0.25);cursor:pointer;font-size:15px;align-self:flex-start;padding:2px;line-height:1;flex-shrink:0;}
+.file-remove:hover{color:#dc2626;}
+.stamp-settings{margin-top:10px;padding:10px 12px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:8px;}
+.stamp-settings-hdr{display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap;}
+.stamp-settings-hdr span{font-size:12px;color:rgba(255,255,255,0.5);font-weight:500;}
+
 /* FOOTER */
 .footer{background:#0a0a0a;color:rgba(255,255,255,0.4);text-align:center;padding:2rem;font-size:12px;border-top:1px solid rgba(255,255,255,0.06);}
 .footer a{color:var(--gold);text-decoration:none;}
@@ -205,6 +240,19 @@ body{font-family:"DM Sans",sans-serif;background:#0a0a0a;color:white;}
   <button class="filter-btn" data-cat="other">🌍 Other</button>
 </div>
 
+<!-- Albums section -->
+<div class="albums-section" id="albums-section" style="display:none;">
+  <div class="albums-header" id="albums-header">
+    <div class="albums-header-left">
+      <button class="album-back-btn" id="album-back-btn">← All Photos</button>
+      <h2 id="albums-heading">Albums</h2>
+      <span class="current-album-title" id="current-album-title" style="display:none;"></span>
+    </div>
+    <button class="btn-new-album" id="btn-new-album">＋ New Album</button>
+  </div>
+  <div class="albums-grid" id="albums-grid"></div>
+</div>
+
 <!-- Gallery -->
 <div class="gallery-grid" id="gallery-grid">
   <div class="gallery-loading">Loading photos…</div>
@@ -226,39 +274,24 @@ body{font-family:"DM Sans",sans-serif;background:#0a0a0a;color:white;}
 
 <!-- Upload modal -->
 <div class="modal-overlay hidden" id="upload-modal">
-  <div class="modal">
-    <h3>📷 Upload Photo</h3>
+  <div class="modal" style="max-width:540px;">
+    <h3>📷 Upload Photos</h3>
 
-    <label>Photo</label>
     <div class="drop-zone" id="drop-zone">
       <div style="font-size:2rem;">📷</div>
-      <p>Click to select or drag & drop</p>
-      <input type="file" id="file-input" accept="image/*" style="display:none;">
-    </div>
-    <div class="preview-wrap" id="preview-wrap" style="display:none;">
-      <img id="preview-img" src="" alt="Preview">
+      <p>Click to select or drag & drop — multiple files OK</p>
+      <input type="file" id="file-input" accept="image/*" multiple style="display:none;">
     </div>
 
-    <div id="stamp-preview-wrap" style="display:none;margin-top:10px;">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
-        <span style="font-size:12px;color:var(--muted);font-weight:500;">Stamp theme (auto-detected):</span>
+    <div class="file-list" id="file-list" style="display:none;"></div>
+
+    <div class="stamp-settings" id="stamp-settings" style="display:none;">
+      <div class="stamp-settings-hdr">
+        <span>Stamp theme (applies to all):</span>
         <button id="stamp-toggle" style="font-size:12px;padding:4px 12px;border-radius:20px;border:1.5px solid var(--gold);background:var(--navy);color:var(--gold);cursor:pointer;font-weight:600;">🔵 Blue</button>
       </div>
       <canvas id="stamp-preview-canvas" style="border-radius:8px;max-width:100%;display:block;"></canvas>
     </div>
-
-    <label>Caption</label>
-    <input type="text" id="upload-caption" placeholder="e.g. Sunrise over Freiberg">
-
-    <label>Category</label>
-    <select id="upload-category">
-      <option value="germany">🇩🇪 Germany</option>
-      <option value="pakistan">🇵🇰 Pakistan</option>
-      <option value="lab">⚗️ Lab Life</option>
-      <option value="travel">✈️ Travels</option>
-      <option value="conference">🏛️ Conference</option>
-      <option value="other">🌍 Other</option>
-    </select>
 
     <div class="upload-progress" id="upload-progress">
       <div class="upload-progress-bar" id="upload-progress-bar"></div>
@@ -272,6 +305,22 @@ body{font-family:"DM Sans",sans-serif;background:#0a0a0a;color:white;}
   </div>
 </div>
 
+<!-- New Album modal -->
+<div class="modal-overlay hidden" id="album-modal">
+  <div class="modal" style="max-width:380px;">
+    <h3>📁 New Album</h3>
+    <label>Album Name</label>
+    <input type="text" id="album-name-input" placeholder="e.g. Black Forest Hike">
+    <label>Description <span style="opacity:0.4;font-weight:400;text-transform:none;">(optional)</span></label>
+    <input type="text" id="album-desc-input" placeholder="A short description">
+    <div class="upload-status" id="album-status"></div>
+    <div class="modal-btns">
+      <button class="btn-cancel" id="album-modal-cancel">Cancel</button>
+      <button class="btn-upload" id="album-create-btn">Create Album</button>
+    </div>
+  </div>
+</div>
+
 <footer class="footer">
   <p>&copy; 2026 Dr. Adeem Ghaffar Rana · <a href="/">ranaadeem.de</a> · <a href="/impressum.html">Impressum</a> · <a href="https://instagram.com/adeemghaffarrana" target="_blank">@adeemghaffarrana</a></p>
 </footer>
@@ -279,7 +328,7 @@ body{font-family:"DM Sans",sans-serif;background:#0a0a0a;color:white;}
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query, orderBy, serverTimestamp }
+import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query, orderBy, serverTimestamp, updateDoc }
   from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject }
   from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
@@ -293,10 +342,12 @@ const ADMIN = "eOAyXx3uQzMPJItS8aPLvHgWTQv1";
 const CATEGORY_LABELS = { germany:'🇩🇪 Germany', pakistan:'🇵🇰 Pakistan', lab:'⚗️ Lab Life', travel:'✈️ Travels', conference:'🏛️ Conference', other:'🌍 Other' };
 
 let allPhotos = [];
+let allAlbums = [];
 let currentFilter = 'all';
+let currentAlbumId = null;
 let currentLbIndex = 0;
 let isAdmin = false;
-let selectedFile = null;
+let selectedFiles = []; // [{file, objUrl, caption, albumId, category}]
 
 // ── AUTH ──────────────────────────────────────────────────────────
 onAuthStateChanged(auth, user => {
@@ -304,6 +355,7 @@ onAuthStateChanged(auth, user => {
   if (isAdmin) {
     document.getElementById('admin-upload-btn').classList.add('visible');
     document.getElementById('gallery-grid').classList.add('admin-mode');
+    document.getElementById('btn-new-album').classList.add('visible');
   }
 });
 
@@ -815,17 +867,155 @@ async function loadPhotos() {
     const snap = await getDocs(q);
     allPhotos = snap.docs.map(d => ({ id: d.id, ...d.data() }));
     renderGallery();
+    renderAlbums(); // refresh photo counts
   } catch(e) {
     grid.innerHTML = `<div class="gallery-empty"><div class="e-icon">📷</div><p>Gallery loading failed. Please try again.</p></div>`;
   }
 }
 
+async function loadAlbums() {
+  try {
+    const q = query(collection(db, 'albums'), orderBy('createdAt', 'desc'));
+    const snap = await getDocs(q);
+    allAlbums = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    renderAlbums();
+  } catch(e) { console.warn('Albums load failed', e); }
+}
+
+function renderAlbums() {
+  const section = document.getElementById('albums-section');
+  const grid = document.getElementById('albums-grid');
+  if (!allAlbums.length && !isAdmin) { section.style.display = 'none'; return; }
+  section.style.display = 'block';
+  if (currentAlbumId) { grid.style.display = 'none'; return; }
+  grid.style.display = 'grid';
+
+  const counts = {};
+  allAlbums.forEach(a => { counts[a.id] = 0; });
+  allPhotos.forEach(p => { if (p.albumId && counts[p.albumId] !== undefined) counts[p.albumId]++; });
+
+  if (!allAlbums.length) {
+    grid.innerHTML = '<p class="albums-empty">No albums yet.</p>';
+    return;
+  }
+
+  grid.innerHTML = allAlbums.map(a => `
+    <div class="album-card" data-id="${a.id}">
+      ${a.coverUrl
+        ? `<img class="album-cover" src="${a.coverUrl}" alt="${a.name}" loading="lazy">`
+        : `<div class="album-cover-empty">📁</div>`}
+      <div class="album-info">
+        <div class="album-name">${a.name}</div>
+        <div class="album-footer">
+          <span class="album-count">${counts[a.id]||0} photo${(counts[a.id]||0)!==1?'s':''}</span>
+          ${isAdmin ? `<button class="album-del-btn" data-id="${a.id}">🗑</button>` : ''}
+        </div>
+      </div>
+    </div>
+  `).join('');
+
+  grid.querySelectorAll('.album-card').forEach(card => {
+    card.addEventListener('click', e => {
+      if (e.target.classList.contains('album-del-btn')) return;
+      openAlbum(card.dataset.id);
+    });
+  });
+  grid.querySelectorAll('.album-del-btn').forEach(btn => {
+    btn.addEventListener('click', e => { e.stopPropagation(); confirmDeleteAlbum(btn.dataset.id); });
+  });
+}
+
+function openAlbum(albumId) {
+  currentAlbumId = albumId;
+  const album = allAlbums.find(a => a.id === albumId);
+  document.getElementById('albums-grid').style.display = 'none';
+  document.getElementById('albums-heading').style.display = 'none';
+  document.getElementById('btn-new-album').style.display = 'none';
+  document.getElementById('album-back-btn').classList.add('visible');
+  const titleEl = document.getElementById('current-album-title');
+  titleEl.textContent = album ? album.name : '';
+  titleEl.style.display = 'inline';
+  renderGallery();
+}
+
+document.getElementById('album-back-btn').onclick = () => {
+  currentAlbumId = null;
+  document.getElementById('albums-grid').style.display = 'grid';
+  document.getElementById('albums-heading').style.display = '';
+  if (isAdmin) document.getElementById('btn-new-album').style.display = '';
+  document.getElementById('album-back-btn').classList.remove('visible');
+  document.getElementById('current-album-title').style.display = 'none';
+  renderGallery();
+};
+
+async function maybeSetAlbumCover(albumId, url, storagePath) {
+  const album = allAlbums.find(a => a.id === albumId);
+  if (album && !album.coverUrl) {
+    await updateDoc(doc(db, 'albums', albumId), { coverUrl: url, coverStoragePath: storagePath });
+    album.coverUrl = url; album.coverStoragePath = storagePath;
+    renderAlbums();
+  }
+}
+
+async function refreshAlbumCover(albumId) {
+  const photos = allPhotos.filter(p => p.albumId === albumId);
+  const data = photos.length > 0
+    ? { coverUrl: photos[0].url, coverStoragePath: photos[0].storagePath || '' }
+    : { coverUrl: '', coverStoragePath: '' };
+  await updateDoc(doc(db, 'albums', albumId), data);
+  const album = allAlbums.find(a => a.id === albumId);
+  if (album) Object.assign(album, data);
+  renderAlbums();
+}
+
+async function confirmDeleteAlbum(id) {
+  if (!isAdmin) return;
+  const album = allAlbums.find(a => a.id === id);
+  const count = allPhotos.filter(p => p.albumId === id).length;
+  const msg = count > 0
+    ? `Delete album "${album?.name}"? The ${count} photo${count>1?'s':''} will stay in the gallery but won't be in any album.`
+    : `Delete album "${album?.name}"?`;
+  if (!confirm(msg)) return;
+  try {
+    await deleteDoc(doc(db, 'albums', id));
+    allAlbums = allAlbums.filter(a => a.id !== id);
+    if (currentAlbumId === id) document.getElementById('album-back-btn').click();
+    renderAlbums();
+  } catch(e) { alert('Delete failed: ' + e.message); }
+}
+
+// ── NEW ALBUM MODAL ───────────────────────────────────────────────
+document.getElementById('btn-new-album').onclick = () => {
+  document.getElementById('album-name-input').value = '';
+  document.getElementById('album-desc-input').value = '';
+  document.getElementById('album-status').textContent = '';
+  document.getElementById('album-modal').classList.remove('hidden');
+};
+document.getElementById('album-modal-cancel').onclick = () => document.getElementById('album-modal').classList.add('hidden');
+document.getElementById('album-create-btn').onclick = async () => {
+  const name = document.getElementById('album-name-input').value.trim();
+  if (!name) { document.getElementById('album-status').textContent = 'Please enter a name.'; return; }
+  const btn = document.getElementById('album-create-btn');
+  btn.disabled = true; btn.textContent = 'Creating…';
+  try {
+    const desc = document.getElementById('album-desc-input').value.trim();
+    const newRef = await addDoc(collection(db, 'albums'), { name, description: desc, coverUrl: '', coverStoragePath: '', createdAt: serverTimestamp() });
+    allAlbums.unshift({ id: newRef.id, name, description: desc, coverUrl: '', coverStoragePath: '' });
+    renderAlbums();
+    document.getElementById('album-modal').classList.add('hidden');
+  } catch(e) { document.getElementById('album-status').textContent = '❌ ' + e.message; }
+  btn.disabled = false; btn.textContent = 'Create Album';
+};
+
 function renderGallery() {
   const grid = document.getElementById('gallery-grid');
-  const filtered = currentFilter === 'all' ? allPhotos : allPhotos.filter(p => p.category === currentFilter);
+  let filtered = allPhotos;
+  if (currentAlbumId) filtered = filtered.filter(p => p.albumId === currentAlbumId);
+  if (currentFilter !== 'all') filtered = filtered.filter(p => p.category === currentFilter);
 
   if (!filtered.length) {
-    grid.innerHTML = `<div class="gallery-empty"><div class="e-icon">📷</div><p>${currentFilter === 'all' ? 'No photos yet — check back soon!' : 'No photos in this category yet.'}</p></div>`;
+    const msg = currentAlbumId ? 'No photos in this album yet.' : (currentFilter === 'all' ? 'No photos yet — check back soon!' : 'No photos in this category yet.');
+    grid.innerHTML = `<div class="gallery-empty"><div class="e-icon">📷</div><p>${msg}</p></div>`;
     return;
   }
 
@@ -836,11 +1026,10 @@ function renderGallery() {
         <div class="overlay-cat">${CATEGORY_LABELS[p.category] || p.category}</div>
         ${p.caption ? `<div class="overlay-caption">${p.caption}</div>` : ''}
       </div>
-      <button class="admin-del-btn" title="Delete photo" onclick="deletePhoto(event,'${p.id}','${p.storagePath || ''}')">🗑</button>
+      <button class="admin-del-btn" title="Delete photo" onclick="deletePhoto(event,'${p.id}','${p.storagePath||''}','${p.albumId||''}')">🗑</button>
     </div>
   `).join('');
 
-  // Click to open lightbox
   grid.querySelectorAll('.gallery-item').forEach(item => {
     item.addEventListener('click', e => {
       if (e.target.classList.contains('admin-del-btn')) return;
@@ -897,20 +1086,23 @@ document.querySelectorAll('.filter-btn').forEach(btn => {
 // ── UPLOAD MODAL ──────────────────────────────────────────────────
 document.getElementById('admin-upload-btn').onclick = () => document.getElementById('upload-modal').classList.remove('hidden');
 document.getElementById('modal-cancel').onclick = closeModal;
+
 function closeModal() {
   document.getElementById('upload-modal').classList.add('hidden');
   document.getElementById('file-input').value = '';
-  document.getElementById('preview-wrap').style.display = 'none';
-  document.getElementById('stamp-preview-wrap').style.display = 'none';
-  previewImgEl = null;
-  stampPos = null;
-  _interactionBound = false;
-  document.getElementById('upload-caption').value = '';
+  document.getElementById('file-list').style.display = 'none';
+  document.getElementById('file-list').innerHTML = '';
+  document.getElementById('stamp-settings').style.display = 'none';
   document.getElementById('upload-status').textContent = '';
   document.getElementById('upload-progress').style.display = 'none';
   document.getElementById('upload-progress-bar').style.width = '0%';
-  document.getElementById('modal-upload').disabled = true;
-  selectedFile = null;
+  const uploadBtn = document.getElementById('modal-upload');
+  uploadBtn.disabled = true; uploadBtn.textContent = 'Upload';
+  selectedFiles.forEach(e => URL.revokeObjectURL(e.objUrl));
+  selectedFiles = [];
+  previewImgEl = null; stampPos = null; _interactionBound = false;
+  chosenTheme = 'blue';
+  document.getElementById('stamp-toggle').textContent = '🔵 Blue';
 }
 
 // File selection
@@ -919,110 +1111,154 @@ const fileInput = document.getElementById('file-input');
 dropZone.onclick = () => fileInput.click();
 dropZone.ondragover = e => { e.preventDefault(); dropZone.classList.add('drag-over'); };
 dropZone.ondragleave = () => dropZone.classList.remove('drag-over');
-dropZone.ondrop = e => { e.preventDefault(); dropZone.classList.remove('drag-over'); handleFile(e.dataTransfer.files[0]); };
-fileInput.onchange = () => handleFile(fileInput.files[0]);
+dropZone.ondrop = e => { e.preventDefault(); dropZone.classList.remove('drag-over'); addFiles(e.dataTransfer.files); };
+fileInput.onchange = () => { addFiles(fileInput.files); fileInput.value = ''; };
 
 // Stamp theme toggle
 document.getElementById('stamp-toggle').onclick = () => {
   chosenTheme = chosenTheme === 'blue' ? 'white' : 'blue';
   document.getElementById('stamp-toggle').textContent = chosenTheme === 'blue' ? '🔵 Blue' : '⚪ White';
-  renderStampPreview();
+  redrawPreview();
 };
 
-function handleFile(file) {
-  if (!file || !file.type.startsWith('image/')) return;
-  selectedFile = file;
-  stampPos = null;          // reset position for new image
-  _interactionBound = false;
-  const url = URL.createObjectURL(file);
-  document.getElementById('preview-img').src = url;
-  document.getElementById('preview-wrap').style.display = 'block';
-  document.getElementById('modal-upload').disabled = false;
+function addFiles(fileList) {
+  const imgs = Array.from(fileList).filter(f => f.type.startsWith('image/'));
+  imgs.forEach(file => selectedFiles.push({ file, objUrl: URL.createObjectURL(file), caption: '', albumId: currentAlbumId || '', category: 'other' }));
+  renderFileList();
 
-  // Load image, detect theme, render stamp preview
-  const img = new Image();
-  img.onload = () => {
-    // Draw to an offscreen canvas so we can sample pixels
-    const offscreen = document.createElement('canvas');
-    offscreen.width  = img.width;
-    offscreen.height = img.height;
-    offscreen.getContext('2d').drawImage(img, 0, 0);
-
-    chosenTheme = detectTheme(offscreen);
-    previewImgEl = img;
-
-    const toggle = document.getElementById('stamp-toggle');
-    toggle.textContent = chosenTheme === 'blue' ? '🔵 Blue' : '⚪ White';
-    document.getElementById('stamp-preview-wrap').style.display = 'block';
-
-    // Wait for sketch to load if needed, then render
-    if (sketchImg.complete) {
-      renderStampPreview();
-    } else {
-      sketchImg.onload = renderStampPreview;
-    }
-  };
-  img.src = url;
+  // Set up stamp preview from first file if not already done
+  if (!previewImgEl && selectedFiles.length > 0) {
+    const entry = selectedFiles[0];
+    const img = new Image();
+    img.onload = () => {
+      const offscreen = document.createElement('canvas');
+      offscreen.width = img.width; offscreen.height = img.height;
+      offscreen.getContext('2d').drawImage(img, 0, 0);
+      chosenTheme = detectTheme(offscreen);
+      previewImgEl = img;
+      document.getElementById('stamp-toggle').textContent = chosenTheme === 'blue' ? '🔵 Blue' : '⚪ White';
+      document.getElementById('stamp-settings').style.display = 'block';
+      stampPos = null; _interactionBound = false;
+      if (sketchImg.complete) renderStampPreview(); else sketchImg.onload = renderStampPreview;
+    };
+    img.src = entry.objUrl;
+  }
 }
 
-// Upload
+function albumOptionsHTML() {
+  return allAlbums.map(a => `<option value="${a.id}">${a.name}</option>`).join('');
+}
+
+function renderFileList() {
+  const list = document.getElementById('file-list');
+  if (!selectedFiles.length) {
+    list.style.display = 'none';
+    document.getElementById('modal-upload').disabled = true;
+    document.getElementById('modal-upload').textContent = 'Upload';
+    return;
+  }
+  list.style.display = 'flex';
+  const uploadBtn = document.getElementById('modal-upload');
+  uploadBtn.disabled = false;
+  uploadBtn.textContent = `Upload ${selectedFiles.length} photo${selectedFiles.length > 1 ? 's' : ''}`;
+
+  list.innerHTML = selectedFiles.map((e, i) => `
+    <div class="file-row">
+      <img class="file-thumb" src="${e.objUrl}" alt="">
+      <div class="file-fields">
+        <input type="text" placeholder="Caption" value="${e.caption.replace(/"/g,'&quot;')}" data-field="caption" data-i="${i}">
+        <select data-field="albumId" data-i="${i}">
+          <option value="">No album</option>
+          ${albumOptionsHTML()}
+        </select>
+        <select data-field="category" data-i="${i}">
+          <option value="germany">🇩🇪 Germany</option>
+          <option value="pakistan">🇵🇰 Pakistan</option>
+          <option value="lab">⚗️ Lab Life</option>
+          <option value="travel">✈️ Travels</option>
+          <option value="conference">🏛️ Conference</option>
+          <option value="other">🌍 Other</option>
+        </select>
+      </div>
+      <button class="file-remove" data-i="${i}">✕</button>
+    </div>
+  `).join('');
+
+  // Restore saved values
+  list.querySelectorAll('[data-field]').forEach(el => {
+    el.value = selectedFiles[parseInt(el.dataset.i)][el.dataset.field] || '';
+  });
+
+  // Change listeners
+  list.querySelectorAll('input[data-field]').forEach(el => el.addEventListener('input', () => { selectedFiles[parseInt(el.dataset.i)][el.dataset.field] = el.value; }));
+  list.querySelectorAll('select[data-field]').forEach(el => el.addEventListener('change', () => { selectedFiles[parseInt(el.dataset.i)][el.dataset.field] = el.value; }));
+  list.querySelectorAll('.file-remove').forEach(btn => btn.addEventListener('click', () => removeFile(parseInt(btn.dataset.i))));
+}
+
+function removeFile(index) {
+  URL.revokeObjectURL(selectedFiles[index].objUrl);
+  const wasFirst = index === 0;
+  selectedFiles.splice(index, 1);
+  if (wasFirst) { previewImgEl = null; stampPos = null; _interactionBound = false; document.getElementById('stamp-settings').style.display = 'none'; }
+  renderFileList();
+  // Re-init stamp preview if we removed the first file and others remain
+  if (wasFirst && selectedFiles.length > 0 && !previewImgEl) {
+    const img = new Image();
+    img.onload = () => { previewImgEl = img; document.getElementById('stamp-settings').style.display = 'block'; if (sketchImg.complete) renderStampPreview(); else sketchImg.onload = renderStampPreview; };
+    img.src = selectedFiles[0].objUrl;
+  }
+}
+
+// Upload all
 document.getElementById('modal-upload').onclick = async () => {
-  if (!selectedFile || !isAdmin) return;
+  if (!selectedFiles.length || !isAdmin) return;
   const btn = document.getElementById('modal-upload');
   const status = document.getElementById('upload-status');
   const progress = document.getElementById('upload-progress');
   const bar = document.getElementById('upload-progress-bar');
+  btn.disabled = true; progress.style.display = 'block';
+  const total = selectedFiles.length;
+  let done = 0; const errors = [];
 
-  btn.disabled = true;
-  btn.textContent = 'Processing…';
-  status.textContent = 'Applying watermark…';
-  progress.style.display = 'block';
-  bar.style.width = '20%';
+  for (const entry of [...selectedFiles]) {
+    try {
+      status.textContent = `Processing ${done + 1} of ${total}…`;
+      bar.style.width = `${Math.round((done / total) * 88)}%`;
+      const watermarked = await applyWatermark(entry.file, chosenTheme);
+      const fileName = `photos/${Date.now()}_${entry.file.name.replace(/[^a-zA-Z0-9.]/g, '_')}`;
+      const storageRef = ref(storage, fileName);
+      await uploadBytes(storageRef, watermarked, { contentType: 'image/jpeg' });
+      const url = await getDownloadURL(storageRef);
+      const photoData = { url, caption: entry.caption, category: entry.category, storagePath: fileName, uploadedAt: serverTimestamp() };
+      if (entry.albumId) photoData.albumId = entry.albumId;
+      await addDoc(collection(db, 'photos'), photoData);
+      if (entry.albumId) await maybeSetAlbumCover(entry.albumId, url, fileName);
+      done++;
+    } catch(e) { errors.push(entry.file.name); done++; }
+  }
 
-  try {
-    // Apply watermark
-    const watermarked = await applyWatermark(selectedFile, chosenTheme);
-    bar.style.width = '50%';
-    status.textContent = 'Uploading…';
-
-    // Upload to Firebase Storage
-    const fileName = `photos/${Date.now()}_${selectedFile.name.replace(/[^a-zA-Z0-9.]/g, '_')}`;
-    const storageRef = ref(storage, fileName);
-    await uploadBytes(storageRef, watermarked, { contentType: 'image/jpeg' });
-    bar.style.width = '80%';
-
-    const url = await getDownloadURL(storageRef);
-    bar.style.width = '90%';
-
-    // Save to Firestore
-    const caption  = document.getElementById('upload-caption').value.trim();
-    const category = document.getElementById('upload-category').value;
-    await addDoc(collection(db, 'photos'), { url, caption, category, storagePath: fileName, uploadedAt: serverTimestamp() });
-
-    bar.style.width = '100%';
-    status.textContent = '✅ Uploaded successfully!';
+  bar.style.width = '100%';
+  if (errors.length) {
+    status.textContent = `⚠️ ${done - errors.length}/${total} uploaded. Failed: ${errors.join(', ')}`;
+    btn.textContent = 'Close'; btn.disabled = false;
+    btn.onclick = closeModal;
+  } else {
+    status.textContent = `✅ ${total} photo${total > 1 ? 's' : ''} uploaded!`;
     btn.textContent = 'Done!';
-
-    // Reload gallery
     await loadPhotos();
-    setTimeout(closeModal, 1200);
-
-  } catch(e) {
-    console.error(e);
-    status.textContent = '❌ Upload failed: ' + e.message;
-    btn.disabled = false;
-    btn.textContent = 'Upload';
+    setTimeout(closeModal, 1300);
   }
 };
 
 // ── DELETE ────────────────────────────────────────────────────────
-window.deletePhoto = async (e, id, storagePath) => {
+window.deletePhoto = async (e, id, storagePath, albumId) => {
   e.stopPropagation();
   if (!isAdmin || !confirm('Delete this photo?')) return;
   try {
     await deleteDoc(doc(db, 'photos', id));
     if (storagePath) await deleteObject(ref(storage, storagePath)).catch(() => {});
     await loadPhotos();
+    if (albumId) await refreshAlbumCover(albumId);
   } catch(err) { alert('Delete failed: ' + err.message); }
 };
 
@@ -1040,6 +1276,7 @@ document.addEventListener('click', e => {
 });
 
 // ── INIT ──────────────────────────────────────────────────────────
+loadAlbums();
 loadPhotos();
 </script>
 </body>
