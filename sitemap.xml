@@ -35,14 +35,14 @@
 
   <!-- Blog -->
   <url>
-    <loc>https://ranaadeem.de/blog.html</loc>
+    <loc>https://ranaadeem.de/blog/</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <!-- Alumni portal -->
   <url>
-    <loc>https://ranaadeem.de/alumni.html</loc>
+    <loc>https://ranaadeem.de/alumni/</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
