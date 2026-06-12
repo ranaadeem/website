@@ -239,6 +239,14 @@ body{font-family:"DM Sans",sans-serif;background:#0a0a0a;color:white;}
       <img id="preview-img" src="" alt="Preview">
     </div>
 
+    <div id="stamp-preview-wrap" style="display:none;margin-top:10px;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+        <span style="font-size:12px;color:var(--muted);font-weight:500;">Stamp theme (auto-detected):</span>
+        <button id="stamp-toggle" style="font-size:12px;padding:4px 12px;border-radius:20px;border:1.5px solid var(--gold);background:var(--navy);color:var(--gold);cursor:pointer;font-weight:600;">🔵 Blue</button>
+      </div>
+      <canvas id="stamp-preview-canvas" style="border-radius:8px;max-width:100%;display:block;"></canvas>
+    </div>
+
     <label>Caption</label>
     <input type="text" id="upload-caption" placeholder="e.g. Sunrise over Freiberg">
 
@@ -299,8 +307,191 @@ onAuthStateChanged(auth, user => {
   }
 });
 
+// ── SKETCH IMAGE (preload once) ───────────────────────────────────
+const sketchImg = new Image();
+sketchImg.src = 'agr-sketch.png';
+
+// ── DRAW STAMP onto an existing ctx at (cx,cy) with radius R ─────
+function drawStamp(ctx, cx, cy, R, theme) {
+  const isBlue = theme !== 'white';
+  const T = isBlue ? {
+    fill:'#1a3a8a', ring:'#c9a84c', arcTop:'#ffffff',
+    arcBot:'#c9a84c', agr:'#c9a84c', cap:'#c9a84c',
+    diamond:'#c9a84c', blend:'multiply',
+  } : {
+    fill:'#ffffff', ring:'#1a3a8a', arcTop:'#1a3a8a',
+    arcBot:'#c9a84c', agr:'#1a3a8a', cap:'#c9a84c',
+    diamond:'#1a3a8a', blend:'normal',
+  };
+
+  const outerR = R;
+  const innerR = Math.round(R * 0.73);
+  const textR  = Math.round(R * 0.835);
+  const arcFs  = Math.max(Math.round(R * 0.148), 10);
+  const agrFs  = Math.round(R * 0.46);
+  const lw     = Math.max(2, Math.round(R * 0.046));
+  const lw2    = Math.max(1, Math.round(lw * 0.42));
+
+  ctx.save();
+
+  // Circle fill
+  ctx.fillStyle = T.fill;
+  ctx.beginPath(); ctx.arc(cx, cy, outerR, 0, Math.PI * 2); ctx.fill();
+
+  // Outer ring
+  ctx.strokeStyle = T.ring; ctx.lineWidth = lw;
+  ctx.beginPath(); ctx.arc(cx, cy, outerR - lw / 2, 0, Math.PI * 2); ctx.stroke();
+
+  // Inner ring
+  ctx.lineWidth = lw2; ctx.strokeStyle = T.ring;
+  ctx.beginPath(); ctx.arc(cx, cy, innerR, 0, Math.PI * 2); ctx.stroke();
+
+  // Curved text helper
+  function arcText(text, radius, centerAngle, totalArc, flip, color) {
+    const chars = flip ? text.split('').reverse() : text.split('');
+    const n     = chars.length;
+    const step  = totalArc / Math.max(n - 1, 1);
+    const start = centerAngle - totalArc / 2;
+    ctx.save();
+    ctx.fillStyle = color;
+    ctx.font = `${arcFs}px Georgia, serif`;
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    chars.forEach((ch, i) => {
+      const angle = start + i * step;
+      ctx.save();
+      ctx.translate(cx, cy); ctx.rotate(angle);
+      ctx.translate(0, -radius);
+      if (flip) ctx.rotate(Math.PI);
+      ctx.fillText(ch, 0, 0);
+      ctx.restore();
+    });
+    ctx.restore();
+  }
+
+  arcText('ADEEM GHAFFAR RANA', textR, 0, Math.PI * 0.97, false, T.arcTop);
+  arcText('PHOTOGRAPHY', textR, Math.PI, Math.PI * 0.78, true, T.arcBot);
+
+  // Sketch
+  const sketchSize = Math.round(R * 1.30);
+  const sketchX    = cx - sketchSize / 2;
+  const sketchY    = cy - R * 0.76;
+  ctx.save();
+  ctx.beginPath(); ctx.arc(cx, cy, innerR - lw2, 0, Math.PI * 2); ctx.clip();
+  ctx.globalCompositeOperation = T.blend;
+  ctx.drawImage(sketchImg, sketchX, sketchY, sketchSize, sketchSize);
+  ctx.restore();
+
+  // AGR
+  const agrCy      = cy + R * 0.52;
+  const agrFsSmall = Math.round(agrFs * 0.52);
+  const agrFont    = `bold italic ${agrFsSmall}px 'Palatino Linotype', Palatino, 'Book Antiqua', Georgia, serif`;
+
+  ctx.font = agrFont;
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  const agrTotalW = ctx.measureText('AGR').width;
+  const aW        = ctx.measureText('A').width;
+  const aCx       = cx - agrTotalW / 2 + aW / 2;
+  const aTopY     = agrCy - agrFsSmall * 0.52;
+
+  // Graduation cap on peak of A, tilted left
+  const capW   = aW * 0.90;
+  const capBrd = Math.max(2, agrFsSmall * 0.11);
+  const capBdy = agrFsSmall * 0.16;
+  const bodyW  = capW * 0.60;
+  const tilt   = -Math.PI / 10;
+  const capAnchorX = aCx;
+  const capAnchorY = aTopY + agrFsSmall * 0.04;
+
+  ctx.save();
+  ctx.fillStyle = T.cap; ctx.strokeStyle = T.cap;
+  ctx.translate(capAnchorX, capAnchorY);
+  ctx.rotate(tilt);
+  ctx.fillRect(-bodyW / 2, -capBdy, bodyW, capBdy);
+  ctx.fillRect(-capW / 2, -capBdy - capBrd, capW, capBrd);
+  const tasLen = agrFsSmall * 0.28;
+  ctx.lineWidth = Math.max(1, agrFsSmall * 0.04);
+  ctx.beginPath();
+  ctx.moveTo(-capW / 2, -capBdy - capBrd / 2);
+  ctx.lineTo(-capW / 2 - tasLen * 0.3, -capBdy - capBrd / 2 + tasLen);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.arc(-capW / 2 - tasLen * 0.3, -capBdy - capBrd / 2 + tasLen + Math.max(1.5, agrFsSmall * 0.05),
+    Math.max(1.5, agrFsSmall * 0.05), 0, Math.PI * 2);
+  ctx.fill();
+  ctx.restore();
+
+  // AGR text
+  ctx.fillStyle = T.agr;
+  ctx.font = agrFont;
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillText('AGR', cx, agrCy);
+
+  // Diamond separators
+  const dmSz    = Math.round(R * 0.058);
+  const dmAngle = Math.PI * 0.5475;
+  [dmAngle, -dmAngle].forEach(a => {
+    const dx = cx + textR * Math.sin(a);
+    const dy = cy - textR * Math.cos(a);
+    ctx.save();
+    ctx.fillStyle = T.diamond;
+    ctx.translate(dx, dy); ctx.rotate(Math.PI / 4);
+    ctx.fillRect(-dmSz / 2, -dmSz / 2, dmSz, dmSz);
+    ctx.restore();
+  });
+
+  ctx.restore();
+}
+
+// ── AUTO-DETECT THEME from top-left corner pixels ─────────────────
+function detectTheme(canvas) {
+  const ctx = canvas.getContext('2d');
+  const minD  = Math.min(canvas.width, canvas.height);
+  const R     = Math.round(minD * 0.095);
+  const margin = Math.round(R * 0.6);
+  const sampleW = (margin + R * 2) * 1.2;
+  const sampleH = sampleW;
+  const clampW  = Math.min(sampleW, canvas.width);
+  const clampH  = Math.min(sampleH, canvas.height);
+
+  let data;
+  try { data = ctx.getImageData(0, 0, clampW, clampH).data; }
+  catch(e) { return 'blue'; }
+
+  let totalLum = 0, count = 0;
+  for (let i = 0; i < data.length; i += 16) {
+    const r = data[i], g = data[i+1], b = data[i+2];
+    totalLum += 0.299*r + 0.587*g + 0.114*b;
+    count++;
+  }
+  const avgLum = count ? totalLum / count : 128;
+  // Dark background → white stamp reads better; bright → blue stamp
+  return avgLum < 110 ? 'white' : 'blue';
+}
+
+// ── STAMP PREVIEW in modal ────────────────────────────────────────
+let chosenTheme = 'blue';
+let previewImgEl = null;  // loaded Image for preview rendering
+
+function renderStampPreview() {
+  if (!previewImgEl) return;
+  const cvs = document.getElementById('stamp-preview-canvas');
+  const maxW = 360;
+  const scale = Math.min(1, maxW / previewImgEl.width);
+  cvs.width  = Math.round(previewImgEl.width * scale);
+  cvs.height = Math.round(previewImgEl.height * scale);
+  const ctx = cvs.getContext('2d');
+  ctx.drawImage(previewImgEl, 0, 0, cvs.width, cvs.height);
+
+  const minD  = Math.min(cvs.width, cvs.height);
+  const R     = Math.round(minD * 0.095);
+  const margin = Math.round(R * 0.6);
+  const cx = margin + R;
+  const cy = margin + R;
+  drawStamp(ctx, cx, cy, R, chosenTheme);
+}
+
 // ── WATERMARK ────────────────────────────────────────────────────
-function applyWatermark(file) {
+function applyWatermark(file, theme) {
   return new Promise(resolve => {
     const img = new Image();
     const objUrl = URL.createObjectURL(file);
@@ -313,89 +504,13 @@ function applyWatermark(file) {
       // Draw original image
       ctx.drawImage(img, 0, 0);
 
-      // ══════════════════════════════════════════════════════════
-      // ── TOP-LEFT CIRCULAR STAMP (fully opaque, navy+gold) ──
-      // ══════════════════════════════════════════════════════════
-      (function() {
-        const minD  = Math.min(canvas.width, canvas.height);
-        const R     = Math.round(minD * 0.095);
-        const margin = Math.round(R * 0.6);
-        const scx   = margin + R;
-        const scy   = margin + R;
-        const textR = Math.round(R * 0.80);
-        const arcFs = Math.max(Math.round(R * 0.165), 10);
-        const agrFs = Math.round(R * 0.48);
-        const lw    = Math.max(2, Math.round(R * 0.045));
-        const lw2   = Math.max(1, Math.round(lw * 0.45));
-
-        ctx.save();
-        ctx.globalAlpha = 1;
-
-        // Navy filled circle
-        ctx.fillStyle = '#1a3a8a';
-        ctx.beginPath(); ctx.arc(scx, scy, R, 0, Math.PI * 2); ctx.fill();
-
-        // Gold outer border
-        ctx.strokeStyle = '#c9a84c';
-        ctx.lineWidth = lw;
-        ctx.beginPath(); ctx.arc(scx, scy, R - lw / 2, 0, Math.PI * 2); ctx.stroke();
-
-        // Inner gold ring
-        ctx.lineWidth = lw2;
-        ctx.beginPath(); ctx.arc(scx, scy, R * 0.76, 0, Math.PI * 2); ctx.stroke();
-
-        // Thin gold horizontal rule between AGR and arcs
-        const ruleHalf = R * 0.28;
-        ctx.lineWidth = lw2;
-        ctx.beginPath(); ctx.moveTo(scx - ruleHalf, scy - R * 0.22); ctx.lineTo(scx + ruleHalf, scy - R * 0.22); ctx.stroke();
-        ctx.beginPath(); ctx.moveTo(scx - ruleHalf, scy + R * 0.22); ctx.lineTo(scx + ruleHalf, scy + R * 0.22); ctx.stroke();
-
-        // AGR centre in gold
-        ctx.fillStyle = '#c9a84c';
-        ctx.font = `bold ${agrFs}px Georgia, serif`;
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText('AGR', scx, scy);
-
-        // ── Curved text ──
-        function arcText(text, radius, startAngle, totalArc, flip, color) {
-          const chars = text.split('');
-          const step  = totalArc / Math.max(chars.length - 1, 1);
-          ctx.fillStyle = color;
-          ctx.font = `${arcFs}px Georgia, serif`;
-          ctx.textAlign = 'center';
-          ctx.textBaseline = 'middle';
-          chars.forEach((ch, i) => {
-            const angle = startAngle + i * step;
-            ctx.save();
-            ctx.translate(scx, scy);
-            ctx.rotate(angle);
-            if (flip) { ctx.translate(0, radius); ctx.rotate(Math.PI); }
-            else       { ctx.translate(0, -radius); }
-            ctx.fillText(ch, 0, 0);
-            ctx.restore();
-          });
-        }
-
-        // Top arc — white "ADEEM GHAFFAR RANA" — 148°
-        arcText('ADEEM GHAFFAR RANA', textR, -Math.PI / 2 - Math.PI * 0.41, Math.PI * 0.82, false, '#ffffff');
-
-        // Bottom arc — gold "PHOTOGRAPHY" — 116°
-        arcText('PHOTOGRAPHY', textR, Math.PI / 2 - Math.PI * 0.29, Math.PI * 0.58, true, '#c9a84c');
-
-        // Gold diamond decorators at 3 & 9 o'clock
-        const dmSz = Math.round(R * 0.07);
-        [scx - R * 0.695, scx + R * 0.695].forEach(dx => {
-          ctx.save();
-          ctx.fillStyle = '#c9a84c';
-          ctx.translate(dx, scy);
-          ctx.rotate(Math.PI / 4);
-          ctx.fillRect(-dmSz / 2, -dmSz / 2, dmSz, dmSz);
-          ctx.restore();
-        });
-
-        ctx.restore();
-      })();
+      // ── TOP-LEFT CIRCULAR STAMP ──────────────────────────────
+      const minD   = Math.min(canvas.width, canvas.height);
+      const R      = Math.round(minD * 0.095);
+      const margin = Math.round(R * 0.6);
+      const cx     = margin + R;
+      const cy     = margin + R;
+      drawStamp(ctx, cx, cy, R, theme);
 
       // ══════════════════════════════════════════════════════════
       // ── BOTTOM BAR ─────────────────────────────────────────
@@ -666,6 +781,8 @@ function closeModal() {
   document.getElementById('upload-modal').classList.add('hidden');
   document.getElementById('file-input').value = '';
   document.getElementById('preview-wrap').style.display = 'none';
+  document.getElementById('stamp-preview-wrap').style.display = 'none';
+  previewImgEl = null;
   document.getElementById('upload-caption').value = '';
   document.getElementById('upload-status').textContent = '';
   document.getElementById('upload-progress').style.display = 'none';
@@ -683,16 +800,45 @@ dropZone.ondragleave = () => dropZone.classList.remove('drag-over');
 dropZone.ondrop = e => { e.preventDefault(); dropZone.classList.remove('drag-over'); handleFile(e.dataTransfer.files[0]); };
 fileInput.onchange = () => handleFile(fileInput.files[0]);
 
+// Stamp theme toggle
+document.getElementById('stamp-toggle').onclick = () => {
+  chosenTheme = chosenTheme === 'blue' ? 'white' : 'blue';
+  document.getElementById('stamp-toggle').textContent = chosenTheme === 'blue' ? '🔵 Blue' : '⚪ White';
+  renderStampPreview();
+};
+
 function handleFile(file) {
   if (!file || !file.type.startsWith('image/')) return;
   selectedFile = file;
-  const reader = new FileReader();
-  reader.onload = e => {
-    document.getElementById('preview-img').src = e.target.result;
-    document.getElementById('preview-wrap').style.display = 'block';
-    document.getElementById('modal-upload').disabled = false;
+  const url = URL.createObjectURL(file);
+  document.getElementById('preview-img').src = url;
+  document.getElementById('preview-wrap').style.display = 'block';
+  document.getElementById('modal-upload').disabled = false;
+
+  // Load image, detect theme, render stamp preview
+  const img = new Image();
+  img.onload = () => {
+    // Draw to an offscreen canvas so we can sample pixels
+    const offscreen = document.createElement('canvas');
+    offscreen.width  = img.width;
+    offscreen.height = img.height;
+    offscreen.getContext('2d').drawImage(img, 0, 0);
+
+    chosenTheme = detectTheme(offscreen);
+    previewImgEl = img;
+
+    const toggle = document.getElementById('stamp-toggle');
+    toggle.textContent = chosenTheme === 'blue' ? '🔵 Blue' : '⚪ White';
+    document.getElementById('stamp-preview-wrap').style.display = 'block';
+
+    // Wait for sketch to load if needed, then render
+    if (sketchImg.complete) {
+      renderStampPreview();
+    } else {
+      sketchImg.onload = renderStampPreview;
+    }
   };
-  reader.readAsDataURL(file);
+  img.src = url;
 }
 
 // Upload
@@ -711,7 +857,7 @@ document.getElementById('modal-upload').onclick = async () => {
 
   try {
     // Apply watermark
-    const watermarked = await applyWatermark(selectedFile);
+    const watermarked = await applyWatermark(selectedFile, chosenTheme);
     bar.style.width = '50%';
     status.textContent = 'Uploading…';
 

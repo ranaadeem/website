@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Stamp Preview — Blue vs White</title>
+<style>
+  body { background: #888; display: flex; gap: 40px; flex-wrap: wrap; padding: 40px; justify-content: center; align-items: flex-start; }
+  div { text-align: center; }
+  canvas { display: block; border-radius: 50%; box-shadow: 0 4px 20px rgba(0,0,0,0.4); }
+  p { color: white; font-family: sans-serif; margin: 8px 0 0; font-size: 14px; font-weight: 600; }
+</style>
+</head>
+<body>
+<script>
+// ─────────────────────────────────────────────────────────────
+// drawStamp(canvasId, R, sketchImg, theme)
+//   theme: 'blue' | 'white'
+// ─────────────────────────────────────────────────────────────
+function drawStamp(canvasId, R, sketchImg, theme) {
+  const canvas = document.getElementById(canvasId);
+  const pad = 10;
+  canvas.width  = R * 2 + pad * 2;
+  canvas.height = R * 2 + pad * 2;
+  const ctx = canvas.getContext('2d');
+  const cx = canvas.width  / 2;
+  const cy = canvas.height / 2;
+
+  // ── Theme colours ──
+  const isBlue = theme !== 'white';
+  const T = isBlue ? {
+    fill:       '#1a3a8a',   // circle background
+    ring:       '#c9a84c',   // outer ring & inner ring
+    arcTop:     '#ffffff',   // ADEEM GHAFFAR RANA
+    arcBot:     '#c9a84c',   // PHOTOGRAPHY
+    agr:        '#c9a84c',   // AGR text
+    cap:        '#c9a84c',   // graduation cap
+    diamond:    '#c9a84c',   // diamond separators
+    blend:      'multiply',  // sketch blend mode
+  } : {
+    fill:       '#ffffff',
+    ring:       '#1a3a8a',
+    arcTop:     '#1a3a8a',
+    arcBot:     '#c9a84c',
+    agr:        '#1a3a8a',
+    cap:        '#c9a84c',
+    diamond:    '#1a3a8a',
+    blend:      'normal',    // sketch drawn normally on white
+  };
+
+  // ── Measurements ──
+  const outerR = R;
+  const innerR = Math.round(R * 0.73);
+  const textR  = Math.round(R * 0.835);
+  const arcFs  = Math.max(Math.round(R * 0.148), 10);
+  const agrFs  = Math.round(R * 0.46);
+  const lw     = Math.max(2, Math.round(R * 0.046));
+  const lw2    = Math.max(1, Math.round(lw * 0.42));
+
+  // ── Circle fill ──
+  ctx.fillStyle = T.fill;
+  ctx.beginPath(); ctx.arc(cx, cy, outerR, 0, Math.PI * 2); ctx.fill();
+
+  // ── Outer ring ──
+  ctx.strokeStyle = T.ring;
+  ctx.lineWidth = lw;
+  ctx.beginPath(); ctx.arc(cx, cy, outerR - lw / 2, 0, Math.PI * 2); ctx.stroke();
+
+  // ── Inner ring ──
+  ctx.lineWidth = lw2;
+  ctx.strokeStyle = T.ring;
+  ctx.beginPath(); ctx.arc(cx, cy, innerR, 0, Math.PI * 2); ctx.stroke();
+
+  // ── Curved text helper ──
+  function arcText(text, radius, centerAngle, totalArc, flip, color) {
+    const chars = flip ? text.split('').reverse() : text.split('');
+    const n     = chars.length;
+    const step  = totalArc / Math.max(n - 1, 1);
+    const start = centerAngle - totalArc / 2;
+    ctx.save();
+    ctx.fillStyle    = color;
+    ctx.font         = `${arcFs}px Georgia, serif`;
+    ctx.textAlign    = 'center';
+    ctx.textBaseline = 'middle';
+    chars.forEach((ch, i) => {
+      const angle = start + i * step;
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.rotate(angle);
+      ctx.translate(0, -radius);
+      if (flip) ctx.rotate(Math.PI);
+      ctx.fillText(ch, 0, 0);
+      ctx.restore();
+    });
+    ctx.restore();
+  }
+
+  arcText('ADEEM GHAFFAR RANA', textR, 0, Math.PI * 0.97, false, T.arcTop);
+  arcText('PHOTOGRAPHY', textR, Math.PI, Math.PI * 0.78, true, T.arcBot);
+
+  // ── Sketch ──
+  const sketchSize = Math.round(R * 1.30);
+  const sketchX    = cx - sketchSize / 2;
+  const sketchY    = cy - R * 0.76;
+
+  ctx.save();
+  ctx.beginPath(); ctx.arc(cx, cy, innerR - lw2, 0, Math.PI * 2); ctx.clip();
+  ctx.globalCompositeOperation = T.blend;
+  ctx.drawImage(sketchImg, sketchX, sketchY, sketchSize, sketchSize);
+  ctx.restore();
+
+  // ── AGR ──
+  const agrCy      = cy + R * 0.52;
+  const agrFsSmall = Math.round(agrFs * 0.52);
+  const agrFont    = `bold italic ${agrFsSmall}px 'Palatino Linotype', Palatino, 'Book Antiqua', Georgia, serif`;
+
+  ctx.font = agrFont;
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+
+  const agrTotalW = ctx.measureText('AGR').width;
+  const aW        = ctx.measureText('A').width;
+  const aCx       = cx - agrTotalW / 2 + aW / 2;
+  const aTopY     = agrCy - agrFsSmall * 0.52;
+
+  // ── Graduation cap on peak of A, tilted left ──
+  const capW  = aW * 0.90;
+  const capBrd = Math.max(2, agrFsSmall * 0.11);
+  const capBdy = agrFsSmall * 0.16;
+  const bodyW  = capW * 0.60;
+  const tilt   = -Math.PI / 10;          // negative = tilt left
+  const capAnchorX = aCx;
+  const capAnchorY = aTopY + agrFsSmall * 0.04;
+
+  ctx.save();
+  ctx.fillStyle = T.cap; ctx.strokeStyle = T.cap;
+  ctx.translate(capAnchorX, capAnchorY);
+  ctx.rotate(tilt);
+  ctx.fillRect(-bodyW / 2, -capBdy, bodyW, capBdy);
+  ctx.fillRect(-capW / 2, -capBdy - capBrd, capW, capBrd);
+  const tasLen = agrFsSmall * 0.28;
+  ctx.lineWidth = Math.max(1, agrFsSmall * 0.04);
+  ctx.beginPath();
+  ctx.moveTo(-capW / 2, -capBdy - capBrd / 2);
+  ctx.lineTo(-capW / 2 - tasLen * 0.3, -capBdy - capBrd / 2 + tasLen);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.arc(-capW / 2 - tasLen * 0.3, -capBdy - capBrd / 2 + tasLen + Math.max(1.5, agrFsSmall * 0.05),
+    Math.max(1.5, agrFsSmall * 0.05), 0, Math.PI * 2);
+  ctx.fill();
+  ctx.restore();
+
+  // AGR text
+  ctx.fillStyle = T.agr;
+  ctx.font = agrFont;
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillText('AGR', cx, agrCy);
+
+  // ── Diamond separators ──
+  const dmSz    = Math.round(R * 0.058);
+  const dmAngle = Math.PI * 0.5475;
+  [dmAngle, -dmAngle].forEach(a => {
+    const dx = cx + textR * Math.sin(a);
+    const dy = cy - textR * Math.cos(a);
+    ctx.save();
+    ctx.fillStyle = T.diamond;
+    ctx.translate(dx, dy);
+    ctx.rotate(Math.PI / 4);
+    ctx.fillRect(-dmSz / 2, -dmSz / 2, dmSz, dmSz);
+    ctx.restore();
+  });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const img = new Image();
+  img.src = 'agr-sketch.png';
+  img.onload = () => {
+    drawStamp('blue200', 200, img, 'blue');
+    drawStamp('white200', 200, img, 'white');
+  };
+});
+</script>
+
+<div><canvas id="blue200"></canvas><p>🔵 Blue Theme</p></div>
+<div><canvas id="white200"></canvas><p>⚪ White Theme</p></div>
+</body>
+</html>
