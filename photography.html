@@ -470,24 +470,139 @@ function detectTheme(canvas) {
 
 // ── STAMP PREVIEW in modal ────────────────────────────────────────
 let chosenTheme = 'blue';
-let previewImgEl = null;  // loaded Image for preview rendering
+let previewImgEl = null;
+let stampPos = null;      // {x, y, r} in preview-canvas px
+let _interactionBound = false;
 
 function renderStampPreview() {
   if (!previewImgEl) return;
   const cvs = document.getElementById('stamp-preview-canvas');
   const maxW = 360;
   const scale = Math.min(1, maxW / previewImgEl.width);
-  cvs.width  = Math.round(previewImgEl.width * scale);
+  cvs.width  = Math.round(previewImgEl.width  * scale);
   cvs.height = Math.round(previewImgEl.height * scale);
+
+  // Init stamp position only on first render of this image
+  if (!stampPos) {
+    const minD   = Math.min(cvs.width, cvs.height);
+    const R      = Math.round(minD * 0.095);
+    const margin = Math.round(R * 0.6);
+    stampPos = { x: margin + R, y: margin + R, r: R };
+  }
+
+  redrawPreview();
+
+  if (!_interactionBound) {
+    _interactionBound = true;
+    setupStampInteraction(cvs);
+  }
+}
+
+// Re-draws image + stamp + handles without resizing the canvas
+function redrawPreview() {
+  if (!previewImgEl || !stampPos) return;
+  const cvs = document.getElementById('stamp-preview-canvas');
   const ctx = cvs.getContext('2d');
   ctx.drawImage(previewImgEl, 0, 0, cvs.width, cvs.height);
+  drawStamp(ctx, stampPos.x, stampPos.y, stampPos.r, chosenTheme);
 
-  const minD  = Math.min(cvs.width, cvs.height);
-  const R     = Math.round(minD * 0.095);
-  const margin = Math.round(R * 0.6);
-  const cx = margin + R;
-  const cy = margin + R;
-  drawStamp(ctx, cx, cy, R, chosenTheme);
+  // Dashed interaction ring
+  ctx.save();
+  ctx.strokeStyle = 'rgba(255,255,255,0.55)';
+  ctx.lineWidth = 1.5;
+  ctx.setLineDash([4, 4]);
+  ctx.beginPath();
+  ctx.arc(stampPos.x, stampPos.y, stampPos.r + 4, 0, Math.PI * 2);
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Resize handle at bottom-right (135° = SE)
+  const hx = stampPos.x + stampPos.r * 0.707;
+  const hy = stampPos.y + stampPos.r * 0.707;
+  ctx.fillStyle = 'rgba(255,255,255,0.92)';
+  ctx.strokeStyle = 'rgba(0,0,0,0.45)';
+  ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.arc(hx, hy, 6, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+  ctx.restore();
+}
+
+function setupStampInteraction(cvs) {
+  const HANDLE_HIT = 10; // px radius for resize handle hit-test
+  let mode = null;       // 'drag' | 'resize'
+  let startX, startY, startStamp;
+
+  function getCanvasPos(e) {
+    const rect = cvs.getBoundingClientRect();
+    const src  = e.touches ? e.touches[0] : e;
+    return {
+      x: (src.clientX - rect.left) * (cvs.width  / rect.width),
+      y: (src.clientY - rect.top)  * (cvs.height / rect.height),
+    };
+  }
+
+  function onDown(e) {
+    if (!stampPos) return;
+    e.preventDefault();
+    const p  = getCanvasPos(e);
+    const hx = stampPos.x + stampPos.r * 0.707;
+    const hy = stampPos.y + stampPos.r * 0.707;
+    const distHandle = Math.hypot(p.x - hx, p.y - hy);
+    const distCenter = Math.hypot(p.x - stampPos.x, p.y - stampPos.y);
+
+    if (distHandle <= HANDLE_HIT) {
+      mode = 'resize';
+    } else if (distCenter <= stampPos.r) {
+      mode = 'drag';
+    } else { return; }
+
+    startX = p.x; startY = p.y;
+    startStamp = { ...stampPos };
+  }
+
+  function onMove(e) {
+    if (!mode) return;
+    e.preventDefault();
+    const p  = getCanvasPos(e);
+    const dx = p.x - startX;
+    const dy = p.y - startY;
+
+    if (mode === 'drag') {
+      stampPos.x = Math.max(startStamp.r, Math.min(cvs.width  - startStamp.r, startStamp.x + dx));
+      stampPos.y = Math.max(startStamp.r, Math.min(cvs.height - startStamp.r, startStamp.y + dy));
+    } else if (mode === 'resize') {
+      // Distance from stamp centre to current pointer → new radius
+      const dist = Math.hypot(p.x - stampPos.x, p.y - stampPos.y);
+      const minR = 20, maxR = Math.min(cvs.width, cvs.height) * 0.45;
+      stampPos.r = Math.max(minR, Math.min(maxR, dist / 0.707));
+    }
+    redrawPreview();
+  }
+
+  function onUp() { mode = null; }
+
+  // Update cursor
+  cvs.addEventListener('mousemove', e => {
+    if (mode) return;
+    if (!stampPos) return;
+    const p  = getCanvasPos(e);
+    const hx = stampPos.x + stampPos.r * 0.707;
+    const hy = stampPos.y + stampPos.r * 0.707;
+    if (Math.hypot(p.x - hx, p.y - hy) <= HANDLE_HIT) {
+      cvs.style.cursor = 'se-resize';
+    } else if (Math.hypot(p.x - stampPos.x, p.y - stampPos.y) <= stampPos.r) {
+      cvs.style.cursor = 'grab';
+    } else {
+      cvs.style.cursor = 'default';
+    }
+  });
+
+  cvs.addEventListener('mousedown',  onDown);
+  cvs.addEventListener('mousemove',  onMove);
+  cvs.addEventListener('mouseup',    onUp);
+  cvs.addEventListener('mouseleave', onUp);
+  cvs.addEventListener('touchstart', onDown, { passive: false });
+  cvs.addEventListener('touchmove',  onMove, { passive: false });
+  cvs.addEventListener('touchend',   onUp);
 }
 
 // ── WATERMARK ────────────────────────────────────────────────────
@@ -504,13 +619,18 @@ function applyWatermark(file, theme) {
       // Draw original image
       ctx.drawImage(img, 0, 0);
 
-      // ── TOP-LEFT CIRCULAR STAMP ──────────────────────────────
-      const minD   = Math.min(canvas.width, canvas.height);
-      const R      = Math.round(minD * 0.095);
-      const margin = Math.round(R * 0.6);
-      const cx     = margin + R;
-      const cy     = margin + R;
-      drawStamp(ctx, cx, cy, R, theme);
+      // ── CIRCULAR STAMP (position/size from interactive preview) ──
+      const previewCvs = document.getElementById('stamp-preview-canvas');
+      const scaleX = img.width  / previewCvs.width;
+      const scaleY = img.height / previewCvs.height;
+      const avgScale = (scaleX + scaleY) / 2;
+      const sp = stampPos || (() => {
+        const minD = Math.min(canvas.width, canvas.height);
+        const R = Math.round(minD * 0.095);
+        const margin = Math.round(R * 0.6);
+        return { x: margin + R, y: margin + R, r: R };
+      })();
+      drawStamp(ctx, Math.round(sp.x * scaleX), Math.round(sp.y * scaleY), Math.round(sp.r * avgScale), theme);
 
       // ══════════════════════════════════════════════════════════
       // ── BOTTOM BAR ─────────────────────────────────────────
@@ -783,6 +903,8 @@ function closeModal() {
   document.getElementById('preview-wrap').style.display = 'none';
   document.getElementById('stamp-preview-wrap').style.display = 'none';
   previewImgEl = null;
+  stampPos = null;
+  _interactionBound = false;
   document.getElementById('upload-caption').value = '';
   document.getElementById('upload-status').textContent = '';
   document.getElementById('upload-progress').style.display = 'none';
@@ -810,6 +932,8 @@ document.getElementById('stamp-toggle').onclick = () => {
 function handleFile(file) {
   if (!file || !file.type.startsWith('image/')) return;
   selectedFile = file;
+  stampPos = null;          // reset position for new image
+  _interactionBound = false;
   const url = URL.createObjectURL(file);
   document.getElementById('preview-img').src = url;
   document.getElementById('preview-wrap').style.display = 'block';
