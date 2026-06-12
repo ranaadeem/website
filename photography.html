@@ -313,27 +313,74 @@ function applyWatermark(file) {
       // Draw original image
       ctx.drawImage(img, 0, 0);
 
-      // ── Diagonal center watermark ──
-      ctx.save();
-      ctx.translate(canvas.width / 2, canvas.height / 2);
-      ctx.rotate(-Math.PI / 5.5); // ~-33°
+      // ── Circular stamp watermark (center) ──
+      (function() {
+        const cx   = canvas.width  / 2;
+        const cy   = canvas.height / 2;
+        const minD = Math.min(canvas.width, canvas.height);
+        const R    = Math.round(minD * 0.14);          // outer circle radius
+        const textR = Math.round(R * 0.87);            // arc text radius
+        const arcFs = Math.max(Math.round(R * 0.19), 11);
+        const agrFs = Math.round(R * 0.54);
+        const lw    = Math.max(1, Math.round(R * 0.028));
 
-      const fs = Math.round(Math.min(canvas.width, canvas.height) * 0.032);
-      ctx.font = `bold ${fs}px Arial, sans-serif`;
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
+        ctx.save();
 
-      // Dark shadow for readability on light backgrounds
-      ctx.globalAlpha = 0.22;
-      ctx.lineWidth = fs * 0.12;
-      ctx.strokeStyle = 'rgba(0,0,0,0.6)';
-      ctx.strokeText('@adeemghaffarrana', 0, 0);
+        // Outer circle
+        ctx.globalAlpha = 0.22;
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = lw;
+        ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2); ctx.stroke();
 
-      // White text
-      ctx.globalAlpha = 0.20;
-      ctx.fillStyle = '#ffffff';
-      ctx.fillText('@adeemghaffarrana', 0, 0);
-      ctx.restore();
+        // Inner decorative circle
+        ctx.globalAlpha = 0.13;
+        ctx.beginPath(); ctx.arc(cx, cy, R * 0.82, 0, Math.PI * 2); ctx.stroke();
+
+        // AGR centre
+        ctx.globalAlpha = 0.24;
+        ctx.fillStyle = '#ffffff';
+        ctx.font = `bold ${agrFs}px Georgia, serif`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('AGR', cx, cy);
+
+        // Curved text helper
+        function arcText(text, radius, startAngle, totalArc, flip) {
+          const chars = text.split('');
+          const step  = totalArc / Math.max(chars.length - 1, 1);
+          ctx.font = `${arcFs}px Georgia, serif`;
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          chars.forEach((ch, i) => {
+            const angle = startAngle + i * step;
+            ctx.save();
+            ctx.translate(cx, cy);
+            ctx.rotate(angle);
+            if (flip) { ctx.translate(0, radius);  ctx.rotate(Math.PI); }
+            else       { ctx.translate(0, -radius); }
+            ctx.fillText(ch, 0, 0);
+            ctx.restore();
+          });
+        }
+
+        ctx.globalAlpha = 0.22;
+        ctx.fillStyle = '#ffffff';
+
+        // Top arc — "ADEEM GHAFFAR RANA"
+        arcText('ADEEM GHAFFAR RANA', textR, -Math.PI / 2 - Math.PI * 0.46, Math.PI * 0.92, false);
+
+        // Bottom arc — "PHOTOGRAPHY"
+        arcText('PHOTOGRAPHY', textR, Math.PI / 2 - Math.PI * 0.33, Math.PI * 0.66, true);
+
+        // Side dashes at 9 and 3 o'clock
+        ctx.globalAlpha = 0.20;
+        ctx.lineWidth = lw;
+        [[cx - R * 0.76, cx - R * 0.65], [cx + R * 0.65, cx + R * 0.76]].forEach(([x1, x2]) => {
+          ctx.beginPath(); ctx.moveTo(x1, cy); ctx.lineTo(x2, cy); ctx.stroke();
+        });
+
+        ctx.restore();
+      })();
 
       // ── Bottom bar: [AGR] IG @adeem  FB @Dr.AGRana  X @ranaadeem  🌐 ranaadeem.de ──
       ctx.save();
@@ -345,9 +392,9 @@ function applyWatermark(file) {
       const gap    = Math.round(tfs * 0.55);                // gap between icon and text
       const sep    = Math.round(tfs * 1.8);                 // separator gap between items
 
-      // Navy background
-      ctx.globalAlpha = 0.88;
-      ctx.fillStyle = '#1a3a8a';
+      // Dark charcoal background (visible on all photo colors)
+      ctx.globalAlpha = 0.84;
+      ctx.fillStyle = '#141414';
       ctx.fillRect(0, barY, canvas.width, barH);
 
       // Gold top border line
@@ -434,13 +481,8 @@ function applyWatermark(file) {
       cx2 += iconSz + gap;
       cx2 = drawText(cx2, '@Dr.AGRana') + sep;
 
-      // ── X / Twitter ──
-      drawIcon(cx2, 'X', '#000000');
-      cx2 += iconSz + gap;
-      cx2 = drawText(cx2, '@ranaadeem') + sep;
-
       // ── Website ──
-      drawIcon(cx2, '🌐', '#2d6a4f');
+      drawIcon(cx2, 'w', '#2d6a4f');
       cx2 += iconSz + gap;
       drawText(cx2, 'ranaadeem.de');
 
