@@ -42,8 +42,10 @@
   a { color: var(--gold); }
 }
 *{box-sizing:border-box;margin:0;padding:0;}
-html{overflow-x:hidden;background:var(--text);}
-body{font-family:"DM Sans",sans-serif;background:var(--text);color:white;}
+html{overflow-x:hidden;background:#0a0a0a;}
+body{font-family:"DM Sans",sans-serif;background:#0a0a0a;color:white;}
+
+/* NAV */
 #main-nav{position:sticky;top:0;z-index:1000;background:var(--navy);border-bottom:2px solid var(--gold);box-shadow:0 2px 20px rgba(0,0,0,0.3);}
 .nav-inner{max-width:1100px;margin:0 auto;padding:0 1.5rem;display:flex;align-items:center;justify-content:space-between;height:64px;}
 .nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0;}
@@ -56,69 +58,103 @@ body{font-family:"DM Sans",sans-serif;background:var(--text);color:white;}
 .nav-hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:4px;}
 .nav-hamburger span{display:block;width:24px;height:2px;background:var(--gold);border-radius:2px;}
 .nav-dropdown{position:relative;}
-.nav-dropdown-menu{display:none;position:absolute;top:calc(100% - 2px);left:50%;transform:translateX(-50%);background:var(--navy);border:1px solid rgba(201,168,76,0.25);border-radius:10px;padding:0.4rem;min-width:180px;list-style:none;box-shadow:0 8px 30px rgba(0,0,0,0.35);z-index:2000;}
-.nav-dropdown-menu::after { content:""; position:absolute; top:-10px; left:0; right:0; height:10px; }
-  .nav-dropdown:hover .nav-dropdown-menu,.nav-dropdown.open .nav-dropdown-menu{display:block;}
-.nav-dropdown-item{display:block;padding:8px 14px;color:rgba(255,255,255,0.8);text-decoration:none;font-size:13px;border-radius:6px;transition:all 0.15s;white-space:nowrap;}
-.nav-dropdown-item:hover{background:rgba(201,168,76,0.12);color:var(--gold);}
-@media(max-width:768px){.nav-logo-text{display:flex;} .nav-logo-name{font-size:11px;} .nav-logo-sub{font-size:9px;}.nav-hamburger{display:flex;}.nav-links{display:none;position:absolute;top:64px;left:0;right:0;background:var(--navy);flex-direction:column;padding:1rem;border-bottom:2px solid var(--gold);}.nav-links.open{display:flex;}.nav-link{width:100%;padding:12px 16px;}.nav-cta{width:100%;text-align:center;margin-left:0;margin-top:0.5rem;}.nav-dropdown-menu{position:static;transform:none;box-shadow:none;border:none;background:rgba(255,255,255,0.05);padding:0 0 0 1rem;}.nav-dropdown:hover .nav-dropdown-menu{display:none;}.nav-dropdown.open .nav-dropdown-menu{display:block;}}
+.nav-dropdown>.nav-link::after{content:' ▾';font-size:9px;opacity:0.7;}
+.nav-dropdown-menu{display:none;position:absolute;top:calc(100% + 4px);left:50%;transform:translateX(-50%);background:#1a3a8a;border:1px solid rgba(201,168,76,0.25);border-radius:10px;padding:0.5rem;min-width:180px;list-style:none;box-shadow:0 8px 20px rgba(0,0,0,0.3);z-index:2000;}
+.nav-dropdown:hover .nav-dropdown-menu,.nav-dropdown.open .nav-dropdown-menu{display:block;}
+.nav-dropdown-item{display:block;padding:9px 16px;color:rgba(255,255,255,0.85);text-decoration:none;font-size:13px;border-radius:6px;white-space:nowrap;}
+.nav-dropdown-item:hover{background:rgba(201,168,76,0.15);color:var(--gold);}
+@media(max-width:768px){
+  .nav-logo-sub{display:none;}
+  .nav-hamburger{display:flex;}
+  .nav-links{display:none;position:absolute;top:64px;left:0;right:0;background:#1a3a8a;flex-direction:column;padding:1rem;border-bottom:2px solid var(--gold);z-index:999;}
+  .nav-links.open{display:flex;}
+  .nav-link{width:100%;padding:12px 16px;}
+  .nav-cta{width:100%;text-align:center;margin-left:0;margin-top:0.5rem;}
+  .nav-dropdown-menu{position:static;transform:none;box-shadow:none;border:none;background:rgba(255,255,255,0.05);padding:0 0 0 1rem;}
+  .nav-dropdown:hover .nav-dropdown-menu{display:none;}
+  .nav-dropdown.open .nav-dropdown-menu{display:block;}
+}
 
 /* PAGE HEADER */
 .page-header{background:linear-gradient(135deg,#0a0a0a 0%,#1a1a2e 100%);padding:3.5rem 2rem 3rem;text-align:center;border-bottom:2px solid var(--gold);}
 .page-header h1{font-family:"Playfair Display",serif;font-size:clamp(2rem,5vw,3rem);color:white;margin-bottom:0.5rem;}
 .page-header h1 span{color:var(--gold);}
 .page-header p{font-size:15px;color:rgba(255,255,255,0.6);max-width:500px;margin:0 auto 1.5rem;line-height:1.7;}
-@media(max-width:768px){
-  .page-header{padding:2rem 1.25rem 1.75rem;}
-  .page-header p{font-size:13px;}
-}
+@media(max-width:768px){.page-header{padding:2rem 1.25rem 1.75rem;}.page-header p{font-size:13px;}}
 .instagram-btn{display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,#f58529,#dd2a7b,#8134af);color:white;padding:11px 24px;border-radius:30px;text-decoration:none;font-size:14px;font-weight:600;transition:opacity 0.2s;}
 .instagram-btn:hover{opacity:0.9;}
 
-/* COMING SOON */
-.coming-soon{max-width:700px;margin:4rem auto;padding:0 2rem;text-align:center;}
-.cs-icon{font-size:4rem;margin-bottom:1.5rem;}
-.cs-title{font-family:"Playfair Display",serif;font-size:1.6rem;color:var(--gold);margin-bottom:1rem;}
-.cs-text{font-size:14px;color:rgba(255,255,255,0.6);line-height:1.8;margin-bottom:2rem;}
-.cs-categories{display:flex;flex-wrap:wrap;gap:0.75rem;justify-content:center;margin-bottom:2.5rem;}
-.cs-cat{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:10px 18px;font-size:13px;color:rgba(255,255,255,0.7);}
-.cs-cat span{font-size:18px;display:block;margin-bottom:4px;}
+/* FILTER TABS */
+.filter-bar{display:flex;gap:0.5rem;flex-wrap:wrap;justify-content:center;padding:1.5rem 1.5rem 0.5rem;max-width:900px;margin:0 auto;}
+.filter-btn{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);color:rgba(255,255,255,0.65);padding:7px 16px;border-radius:20px;font-size:13px;cursor:pointer;font-family:inherit;transition:all 0.2s;}
+.filter-btn:hover{border-color:var(--gold);color:var(--gold);}
+.filter-btn.active{background:var(--gold);border-color:var(--gold);color:#1a1a2e;font-weight:600;}
 
-/* PLACEHOLDER GRID */
-.photo-placeholder-grid{max-width:1000px;margin:0 auto 4rem;padding:0 2rem;display:grid;grid-template-columns:repeat(3,1fr);gap:4px;}
-@media(max-width:600px){.photo-placeholder-grid{grid-template-columns:repeat(2,1fr);}}
-.photo-placeholder{aspect-ratio:1;background:rgba(255,255,255,0.04);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;color:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.05);}
+/* GALLERY GRID */
+.gallery-grid{max-width:1100px;margin:1.5rem auto 2rem;padding:0 1rem;columns:3;column-gap:8px;}
+@media(max-width:900px){.gallery-grid{columns:2;}}
+@media(max-width:500px){.gallery-grid{columns:1;}}
+.gallery-item{break-inside:avoid;margin-bottom:8px;position:relative;cursor:pointer;overflow:hidden;border-radius:6px;background:#111;}
+.gallery-item img{width:100%;display:block;transition:transform 0.3s;border-radius:6px;}
+.gallery-item:hover img{transform:scale(1.03);}
+.gallery-item .overlay{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,0.75));padding:0.75rem;opacity:0;transition:opacity 0.25s;border-radius:0 0 6px 6px;}
+.gallery-item:hover .overlay{opacity:1;}
+.overlay-caption{font-size:13px;color:white;line-height:1.4;}
+.overlay-cat{font-size:11px;color:var(--gold);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:2px;}
+.admin-del-btn{position:absolute;top:8px;right:8px;background:rgba(220,38,38,0.85);color:white;border:none;border-radius:50%;width:28px;height:28px;font-size:14px;cursor:pointer;display:none;align-items:center;justify-content:center;line-height:1;transition:background 0.2s;}
+.admin-del-btn:hover{background:#dc2626;}
+.admin-mode .admin-del-btn{display:flex;}
 
+/* EMPTY STATE */
+.gallery-empty{text-align:center;padding:5rem 2rem;color:rgba(255,255,255,0.4);}
+.gallery-empty .e-icon{font-size:3rem;margin-bottom:1rem;}
+.gallery-loading{text-align:center;padding:4rem;color:rgba(255,255,255,0.4);font-size:14px;}
+
+/* LIGHTBOX */
+.lightbox{position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:9000;display:flex;align-items:center;justify-content:center;padding:1rem;}
+.lightbox.hidden{display:none;}
+.lb-inner{position:relative;max-width:90vw;max-height:90vh;display:flex;flex-direction:column;align-items:center;}
+.lb-img{max-width:100%;max-height:80vh;object-fit:contain;border-radius:6px;}
+.lb-caption{color:rgba(255,255,255,0.75);font-size:13px;margin-top:0.75rem;text-align:center;}
+.lb-close{position:absolute;top:-40px;right:0;background:none;border:none;color:white;font-size:28px;cursor:pointer;line-height:1;opacity:0.7;}
+.lb-close:hover{opacity:1;}
+.lb-nav{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.1);border:none;color:white;width:44px;height:44px;border-radius:50%;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background 0.2s;}
+.lb-nav:hover{background:rgba(255,255,255,0.25);}
+.lb-prev{left:-56px;}
+.lb-next{right:-56px;}
+@media(max-width:600px){.lb-prev{left:-44px;}.lb-next{right:-44px;}.lb-nav{width:36px;height:36px;font-size:16px;}}
+
+/* ADMIN UPLOAD BUTTON */
+.admin-upload-btn{position:fixed;bottom:2rem;right:2rem;background:var(--gold);color:#1a1a2e;border:none;border-radius:50%;width:56px;height:56px;font-size:26px;cursor:pointer;box-shadow:0 4px 20px rgba(0,0,0,0.4);z-index:500;display:none;align-items:center;justify-content:center;transition:transform 0.2s;}
+.admin-upload-btn:hover{transform:scale(1.1);}
+.admin-upload-btn.visible{display:flex;}
+
+/* UPLOAD MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:8000;display:flex;align-items:center;justify-content:center;padding:1rem;}
+.modal-overlay.hidden{display:none;}
+.modal{background:#1a1f2e;border:1px solid rgba(201,168,76,0.3);border-radius:16px;padding:2rem;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;}
+.modal h3{font-family:"Playfair Display",serif;color:var(--gold);margin-bottom:1.25rem;font-size:1.3rem;}
+.modal label{display:block;font-size:12px;font-weight:600;color:rgba(255,255,255,0.6);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:6px;margin-top:1rem;}
+.modal input,.modal select,.modal textarea{width:100%;background:#0f1117;border:1.5px solid rgba(255,255,255,0.1);border-radius:8px;padding:10px 14px;color:white;font-family:inherit;font-size:14px;outline:none;transition:border-color 0.2s;}
+.modal input:focus,.modal select:focus,.modal textarea:focus{border-color:var(--gold);}
+.modal select option{background:#1a1f2e;}
+.drop-zone{border:2px dashed rgba(255,255,255,0.15);border-radius:10px;padding:2rem;text-align:center;cursor:pointer;transition:border-color 0.2s;margin-top:0.5rem;}
+.drop-zone:hover,.drop-zone.drag-over{border-color:var(--gold);}
+.drop-zone p{color:rgba(255,255,255,0.5);font-size:13px;margin-top:0.5rem;}
+.preview-wrap{position:relative;margin-top:1rem;}
+.preview-wrap img{width:100%;border-radius:8px;max-height:250px;object-fit:cover;}
+.modal-btns{display:flex;gap:0.75rem;margin-top:1.5rem;}
+.btn-upload{background:var(--gold);color:#1a1a2e;border:none;padding:11px 24px;border-radius:8px;font-weight:700;font-size:14px;cursor:pointer;flex:1;font-family:inherit;transition:background 0.2s;}
+.btn-upload:hover{background:#b8960a;}
+.btn-upload:disabled{opacity:0.5;cursor:not-allowed;}
+.btn-cancel{background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.1);padding:11px 20px;border-radius:8px;font-size:14px;cursor:pointer;font-family:inherit;}
+.upload-progress{margin-top:1rem;background:rgba(255,255,255,0.07);border-radius:4px;height:6px;overflow:hidden;display:none;}
+.upload-progress-bar{height:100%;background:var(--gold);width:0%;transition:width 0.3s;border-radius:4px;}
+.upload-status{font-size:13px;color:rgba(255,255,255,0.6);margin-top:0.5rem;text-align:center;}
+
+/* FOOTER */
 .footer{background:#0a0a0a;color:rgba(255,255,255,0.4);text-align:center;padding:2rem;font-size:12px;border-top:1px solid rgba(255,255,255,0.06);}
 .footer a{color:var(--gold);text-decoration:none;}
-
-  /* ── DROPDOWN NAV ── */
-  .nav-dropdown{position:relative;}
-  .nav-dropdown > .nav-link::after{content:' ▾';font-size:9px;opacity:0.7;}
-  .nav-dropdown-menu{
-    display:none;position:absolute;top: calc(100% - 2px);left:50%;
-    transform:translateX(-50%);background:var(--navy);
-    border:1px solid rgba(201,168,76,0.25);border-top:none;
-    border-radius:0 0 10px 10px;padding:0.5rem;
-    min-width:180px;list-style:none;
-    box-shadow:0 8px 20px rgba(0,0,0,0.3);z-index:2000;
-  }
-  /* Invisible bridge prevents gap from closing dropdown */
-  .nav-dropdown::before{content:'';position:absolute;top:calc(100% - 4px);left:0;right:0;height:8px;background:transparent;z-index:1999;}
-  .nav-dropdown:hover .nav-dropdown-menu,
-  .nav-dropdown.open .nav-dropdown-menu{display:block;}
-  .nav-dropdown-item{display:block;padding:9px 16px;color:rgba(255,255,255,0.85);text-decoration:none;font-size:13px;border-radius:6px;transition:all 0.15s;white-space:nowrap;}
-  .nav-dropdown-item:hover{background:rgba(201,168,76,0.15);color:var(--gold);}
-  .nav-dropdown-trigger{cursor:pointer;}
-  @media(max-width:768px){
-    .nav-dropdown::before{display:none;}
-    .nav-dropdown-menu{position:static;transform:none;box-shadow:none;border:none;border-radius:6px;background:rgba(255,255,255,0.05);padding:0 0 0 1rem;margin:0;}
-    .nav-dropdown:hover .nav-dropdown-menu{display:none;}
-    .nav-dropdown.open .nav-dropdown-menu{display:block;}
-    .nav-dropdown-item{padding:8px 12px;color:rgba(255,255,255,0.7);}
-  }
-  }
-
 </style>
 </head>
 <body>
@@ -129,9 +165,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--text);color:white;}
       <span class="nav-logo-agr">AGR</span>
       <span class="nav-logo-text"><span class="nav-logo-name">Dr. Adeem Ghaffar Rana</span><span class="nav-logo-sub">Catalysis Research Scientist</span></span>
     </a>
-    <button class="nav-hamburger" id="nav-hamburger" aria-label="Menu">
-      <span></span><span></span><span></span>
-    </button>
+    <button class="nav-hamburger" id="nav-hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
     <ul class="nav-links" id="nav-links">
       <li><a href="/" class="nav-link">Home</a></li>
       <li><a href="/about.html" class="nav-link">About</a></li>
@@ -145,7 +179,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--text);color:white;}
       </li>
       <li><a href="/blog/" class="nav-link">Blog</a></li>
       <li><a href="/alumni/" class="nav-link">Alumni Portal</a></li>
-      <li><a href="/photography.html" class="nav-link" title="Photography" style="font-size:18px;padding:6px 10px;">📷</a></li>
+      <li><a href="/photography.html" class="nav-link active" title="Photography" style="font-size:18px;padding:6px 10px;">📷</a></li>
       <li><a href="mailto:ranaadeem@hotmail.com" class="nav-cta">Contact</a></li>
     </ul>
   </div>
@@ -153,75 +187,398 @@ body{font-family:"DM Sans",sans-serif;background:var(--text);color:white;}
 
 <div class="page-header">
   <h1>Through the <span>Lens</span></h1>
-  <p>Travels between Pakistan and Germany, life in the lab, and moments in between. Follow along on Instagram for the latest.</p>
+  <p>Travels between Pakistan and Germany, life in the lab, and moments in between.</p>
   <a href="https://instagram.com/adeemghaffarrana" target="_blank" class="instagram-btn">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
     @adeemghaffarrana
   </a>
 </div>
 
-<div class="coming-soon">
-  <div class="cs-icon">📷</div>
-  <div class="cs-title">Gallery Coming Soon</div>
-  <div class="cs-text">I'm curating a selection of photos from travels, conferences, and everyday moments. In the meantime, follow me on Instagram for the latest updates.</div>
-
-  <div class="cs-categories">
-    <div class="cs-cat"><span>🇩🇪</span>Germany & Freiberg</div>
-    <div class="cs-cat"><span>🇵🇰</span>Pakistan & Lahore</div>
-    <div class="cs-cat"><span>⚗️</span>Lab Life</div>
-    <div class="cs-cat"><span>✈️</span>Travels</div>
-    <div class="cs-cat"><span>🏛️</span>Conferences</div>
-    <div class="cs-cat"><span>🌍</span>Europe</div>
-  </div>
-
-  <a href="https://instagram.com/adeemghaffarrana" target="_blank" class="instagram-btn">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
-    View on Instagram
-  </a>
+<!-- Filter bar -->
+<div class="filter-bar" id="filter-bar">
+  <button class="filter-btn active" data-cat="all">All</button>
+  <button class="filter-btn" data-cat="germany">🇩🇪 Germany</button>
+  <button class="filter-btn" data-cat="pakistan">🇵🇰 Pakistan</button>
+  <button class="filter-btn" data-cat="lab">⚗️ Lab Life</button>
+  <button class="filter-btn" data-cat="travel">✈️ Travels</button>
+  <button class="filter-btn" data-cat="conference">🏛️ Conference</button>
+  <button class="filter-btn" data-cat="other">🌍 Other</button>
 </div>
 
-<!-- Placeholder grid -->
-<div class="photo-placeholder-grid">
-  <div class="photo-placeholder">📷</div>
-  <div class="photo-placeholder">🏔️</div>
-  <div class="photo-placeholder">⚗️</div>
-  <div class="photo-placeholder">🌍</div>
-  <div class="photo-placeholder">🕌</div>
-  <div class="photo-placeholder">🇩🇪</div>
-  <div class="photo-placeholder">🌅</div>
-  <div class="photo-placeholder">🎓</div>
-  <div class="photo-placeholder">📸</div>
+<!-- Gallery -->
+<div class="gallery-grid" id="gallery-grid">
+  <div class="gallery-loading">Loading photos…</div>
+</div>
+
+<!-- Lightbox -->
+<div class="lightbox hidden" id="lightbox">
+  <div class="lb-inner">
+    <button class="lb-close" id="lb-close">✕</button>
+    <button class="lb-nav lb-prev" id="lb-prev">‹</button>
+    <img class="lb-img" id="lb-img" src="" alt="">
+    <button class="lb-nav lb-next" id="lb-next">›</button>
+    <div class="lb-caption" id="lb-caption"></div>
+  </div>
+</div>
+
+<!-- Admin upload button -->
+<button class="admin-upload-btn" id="admin-upload-btn" title="Upload photo">+</button>
+
+<!-- Upload modal -->
+<div class="modal-overlay hidden" id="upload-modal">
+  <div class="modal">
+    <h3>📷 Upload Photo</h3>
+
+    <label>Photo</label>
+    <div class="drop-zone" id="drop-zone">
+      <div style="font-size:2rem;">📷</div>
+      <p>Click to select or drag & drop</p>
+      <input type="file" id="file-input" accept="image/*" style="display:none;">
+    </div>
+    <div class="preview-wrap" id="preview-wrap" style="display:none;">
+      <img id="preview-img" src="" alt="Preview">
+    </div>
+
+    <label>Caption</label>
+    <input type="text" id="upload-caption" placeholder="e.g. Sunrise over Freiberg">
+
+    <label>Category</label>
+    <select id="upload-category">
+      <option value="germany">🇩🇪 Germany</option>
+      <option value="pakistan">🇵🇰 Pakistan</option>
+      <option value="lab">⚗️ Lab Life</option>
+      <option value="travel">✈️ Travels</option>
+      <option value="conference">🏛️ Conference</option>
+      <option value="other">🌍 Other</option>
+    </select>
+
+    <div class="upload-progress" id="upload-progress">
+      <div class="upload-progress-bar" id="upload-progress-bar"></div>
+    </div>
+    <div class="upload-status" id="upload-status"></div>
+
+    <div class="modal-btns">
+      <button class="btn-cancel" id="modal-cancel">Cancel</button>
+      <button class="btn-upload" id="modal-upload" disabled>Upload</button>
+    </div>
+  </div>
 </div>
 
 <footer class="footer">
   <p>&copy; 2026 Dr. Adeem Ghaffar Rana · <a href="/">ranaadeem.de</a> · <a href="/impressum.html">Impressum</a> · <a href="https://instagram.com/adeemghaffarrana" target="_blank">@adeemghaffarrana</a></p>
-  <p style="margin-top:4px;font-size:11px;opacity:0.6;"><span class="pv-counter"></span></p>
 </footer>
-<script type="module" src="/js/pageviews.js"></script>
 
-<script>
-document.getElementById('nav-hamburger').addEventListener('click', function() {
-  document.getElementById('nav-links').classList.toggle('open');
-});
-// Mobile: tap dropdown trigger to toggle submenu
-document.querySelectorAll('.nav-dropdown-trigger').forEach(function(trigger) {
-  trigger.addEventListener('click', function(e) {
-    if (window.innerWidth <= 768) {
-      e.preventDefault();
-      this.closest('.nav-dropdown').classList.toggle('open');
-    }
-    // Desktop: allow normal navigation (href works)
-  });
-});
-// Close on outside click
-document.addEventListener('click', function(e) {
-  if (!e.target.closest('.nav-dropdown')) {
-    document.querySelectorAll('.nav-dropdown').forEach(d => d.classList.remove('open'));
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query, orderBy, serverTimestamp }
+  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject }
+  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
+
+const app  = initializeApp({ apiKey:"AIzaSyAgUl22Cln6QtY3-HIvI6lE8Zu7n9OblbI", authDomain:"icet-alumni.firebaseapp.com", projectId:"icet-alumni", storageBucket:"icet-alumni.appspot.com" });
+const auth = getAuth(app);
+const db   = getFirestore(app);
+const storage = getStorage(app);
+const ADMIN = "eOAyXx3uQzMPJItS8aPLvHgWTQv1";
+
+const CATEGORY_LABELS = { germany:'🇩🇪 Germany', pakistan:'🇵🇰 Pakistan', lab:'⚗️ Lab Life', travel:'✈️ Travels', conference:'🏛️ Conference', other:'🌍 Other' };
+
+let allPhotos = [];
+let currentFilter = 'all';
+let currentLbIndex = 0;
+let isAdmin = false;
+let selectedFile = null;
+
+// ── AUTH ──────────────────────────────────────────────────────────
+onAuthStateChanged(auth, user => {
+  isAdmin = user && user.uid === ADMIN;
+  if (isAdmin) {
+    document.getElementById('admin-upload-btn').classList.add('visible');
+    document.getElementById('gallery-grid').classList.add('admin-mode');
   }
 });
-</script>
-<script>
-(function(){var k={};document.addEventListener("keydown",function(e){k[e.key.toLowerCase()]=true;if(k.a&&k.g&&k.r){window.location.href="/admin.html";}});document.addEventListener("keyup",function(e){delete k[e.key.toLowerCase()];});})();
+
+// ── WATERMARK ────────────────────────────────────────────────────
+function applyWatermark(file) {
+  return new Promise(resolve => {
+    const img = new Image();
+    const objUrl = URL.createObjectURL(file);
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      canvas.width  = img.width;
+      canvas.height = img.height;
+      const ctx = canvas.getContext('2d');
+
+      // Draw original image
+      ctx.drawImage(img, 0, 0);
+
+      // ── Diagonal center watermark ──
+      ctx.save();
+      ctx.translate(canvas.width / 2, canvas.height / 2);
+      ctx.rotate(-Math.PI / 5.5); // ~-33°
+
+      const fs = Math.round(Math.min(canvas.width, canvas.height) * 0.055);
+      ctx.font = `bold ${fs}px Arial, sans-serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+
+      // Dark shadow for readability on light backgrounds
+      ctx.globalAlpha = 0.3;
+      ctx.lineWidth = fs * 0.14;
+      ctx.strokeStyle = 'rgba(0,0,0,0.6)';
+      ctx.strokeText('@adeemghaffarrana', 0, 0);
+
+      // White text
+      ctx.globalAlpha = 0.28;
+      ctx.fillStyle = '#ffffff';
+      ctx.fillText('@adeemghaffarrana', 0, 0);
+      ctx.restore();
+
+      // ── Corner badge (bottom-right) ──
+      ctx.save();
+      const badgeText = '@adeemghaffarrana  ·  ranaadeem.de';
+      const bfs = Math.max(Math.round(canvas.width * 0.018), 14);
+      ctx.font = `500 ${bfs}px Arial, sans-serif`;
+      const tw  = ctx.measureText(badgeText).width;
+      const pad = bfs * 0.75;
+      const bw  = tw + pad * 2;
+      const bh  = bfs * 2.2;
+      const bx  = canvas.width  - bw - 20;
+      const by  = canvas.height - bh - 20;
+      const r   = bfs * 0.35;
+
+      // Rounded rect background
+      ctx.globalAlpha = 0.6;
+      ctx.fillStyle = '#000000';
+      ctx.beginPath();
+      ctx.moveTo(bx + r, by);
+      ctx.lineTo(bx + bw - r, by);
+      ctx.quadraticCurveTo(bx + bw, by, bx + bw, by + r);
+      ctx.lineTo(bx + bw, by + bh - r);
+      ctx.quadraticCurveTo(bx + bw, by + bh, bx + bw - r, by + bh);
+      ctx.lineTo(bx + r, by + bh);
+      ctx.quadraticCurveTo(bx, by + bh, bx, by + bh - r);
+      ctx.lineTo(bx, by + r);
+      ctx.quadraticCurveTo(bx, by, bx + r, by);
+      ctx.closePath();
+      ctx.fill();
+
+      // Badge text
+      ctx.globalAlpha = 0.92;
+      ctx.fillStyle = '#ffffff';
+      ctx.font = `500 ${bfs}px Arial, sans-serif`;
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(badgeText, bx + pad, by + bh / 2);
+      ctx.restore();
+
+      URL.revokeObjectURL(objUrl);
+      canvas.toBlob(resolve, 'image/jpeg', 0.92);
+    };
+    img.src = objUrl;
+  });
+}
+
+// ── LOAD PHOTOS ───────────────────────────────────────────────────
+async function loadPhotos() {
+  const grid = document.getElementById('gallery-grid');
+  try {
+    const q = query(collection(db, 'photos'), orderBy('uploadedAt', 'desc'));
+    const snap = await getDocs(q);
+    allPhotos = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    renderGallery();
+  } catch(e) {
+    grid.innerHTML = `<div class="gallery-empty"><div class="e-icon">📷</div><p>Gallery loading failed. Please try again.</p></div>`;
+  }
+}
+
+function renderGallery() {
+  const grid = document.getElementById('gallery-grid');
+  const filtered = currentFilter === 'all' ? allPhotos : allPhotos.filter(p => p.category === currentFilter);
+
+  if (!filtered.length) {
+    grid.innerHTML = `<div class="gallery-empty"><div class="e-icon">📷</div><p>${currentFilter === 'all' ? 'No photos yet — check back soon!' : 'No photos in this category yet.'}</p></div>`;
+    return;
+  }
+
+  grid.innerHTML = filtered.map((p, i) => `
+    <div class="gallery-item" data-index="${i}" data-id="${p.id}" data-storage="${p.storagePath || ''}">
+      <img src="${p.url}" alt="${p.caption || ''}" loading="lazy">
+      <div class="overlay">
+        <div class="overlay-cat">${CATEGORY_LABELS[p.category] || p.category}</div>
+        ${p.caption ? `<div class="overlay-caption">${p.caption}</div>` : ''}
+      </div>
+      <button class="admin-del-btn" title="Delete photo" onclick="deletePhoto(event,'${p.id}','${p.storagePath || ''}')">🗑</button>
+    </div>
+  `).join('');
+
+  // Click to open lightbox
+  grid.querySelectorAll('.gallery-item').forEach(item => {
+    item.addEventListener('click', e => {
+      if (e.target.classList.contains('admin-del-btn')) return;
+      openLightbox(parseInt(item.dataset.index), filtered);
+    });
+  });
+}
+
+// ── LIGHTBOX ──────────────────────────────────────────────────────
+let lbPhotos = [];
+function openLightbox(index, photos) {
+  lbPhotos = photos;
+  currentLbIndex = index;
+  showLbPhoto();
+  document.getElementById('lightbox').classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+}
+function showLbPhoto() {
+  const p = lbPhotos[currentLbIndex];
+  document.getElementById('lb-img').src = p.url;
+  document.getElementById('lb-caption').textContent = p.caption || '';
+  document.getElementById('lb-prev').style.opacity = currentLbIndex > 0 ? '1' : '0.2';
+  document.getElementById('lb-next').style.opacity = currentLbIndex < lbPhotos.length - 1 ? '1' : '0.2';
+}
+document.getElementById('lb-close').onclick = () => {
+  document.getElementById('lightbox').classList.add('hidden');
+  document.body.style.overflow = '';
+};
+document.getElementById('lb-prev').onclick = () => { if (currentLbIndex > 0) { currentLbIndex--; showLbPhoto(); } };
+document.getElementById('lb-next').onclick = () => { if (currentLbIndex < lbPhotos.length - 1) { currentLbIndex++; showLbPhoto(); } };
+document.getElementById('lightbox').addEventListener('click', e => {
+  if (e.target === document.getElementById('lightbox')) {
+    document.getElementById('lightbox').classList.add('hidden');
+    document.body.style.overflow = '';
+  }
+});
+document.addEventListener('keydown', e => {
+  if (document.getElementById('lightbox').classList.contains('hidden')) return;
+  if (e.key === 'ArrowLeft') document.getElementById('lb-prev').click();
+  if (e.key === 'ArrowRight') document.getElementById('lb-next').click();
+  if (e.key === 'Escape') document.getElementById('lb-close').click();
+});
+
+// ── FILTER ────────────────────────────────────────────────────────
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentFilter = btn.dataset.cat;
+    renderGallery();
+  });
+});
+
+// ── UPLOAD MODAL ──────────────────────────────────────────────────
+document.getElementById('admin-upload-btn').onclick = () => document.getElementById('upload-modal').classList.remove('hidden');
+document.getElementById('modal-cancel').onclick = closeModal;
+function closeModal() {
+  document.getElementById('upload-modal').classList.add('hidden');
+  document.getElementById('file-input').value = '';
+  document.getElementById('preview-wrap').style.display = 'none';
+  document.getElementById('upload-caption').value = '';
+  document.getElementById('upload-status').textContent = '';
+  document.getElementById('upload-progress').style.display = 'none';
+  document.getElementById('upload-progress-bar').style.width = '0%';
+  document.getElementById('modal-upload').disabled = true;
+  selectedFile = null;
+}
+
+// File selection
+const dropZone = document.getElementById('drop-zone');
+const fileInput = document.getElementById('file-input');
+dropZone.onclick = () => fileInput.click();
+dropZone.ondragover = e => { e.preventDefault(); dropZone.classList.add('drag-over'); };
+dropZone.ondragleave = () => dropZone.classList.remove('drag-over');
+dropZone.ondrop = e => { e.preventDefault(); dropZone.classList.remove('drag-over'); handleFile(e.dataTransfer.files[0]); };
+fileInput.onchange = () => handleFile(fileInput.files[0]);
+
+function handleFile(file) {
+  if (!file || !file.type.startsWith('image/')) return;
+  selectedFile = file;
+  const reader = new FileReader();
+  reader.onload = e => {
+    document.getElementById('preview-img').src = e.target.result;
+    document.getElementById('preview-wrap').style.display = 'block';
+    document.getElementById('modal-upload').disabled = false;
+  };
+  reader.readAsDataURL(file);
+}
+
+// Upload
+document.getElementById('modal-upload').onclick = async () => {
+  if (!selectedFile || !isAdmin) return;
+  const btn = document.getElementById('modal-upload');
+  const status = document.getElementById('upload-status');
+  const progress = document.getElementById('upload-progress');
+  const bar = document.getElementById('upload-progress-bar');
+
+  btn.disabled = true;
+  btn.textContent = 'Processing…';
+  status.textContent = 'Applying watermark…';
+  progress.style.display = 'block';
+  bar.style.width = '20%';
+
+  try {
+    // Apply watermark
+    const watermarked = await applyWatermark(selectedFile);
+    bar.style.width = '50%';
+    status.textContent = 'Uploading…';
+
+    // Upload to Firebase Storage
+    const fileName = `photos/${Date.now()}_${selectedFile.name.replace(/[^a-zA-Z0-9.]/g, '_')}`;
+    const storageRef = ref(storage, fileName);
+    await uploadBytes(storageRef, watermarked, { contentType: 'image/jpeg' });
+    bar.style.width = '80%';
+
+    const url = await getDownloadURL(storageRef);
+    bar.style.width = '90%';
+
+    // Save to Firestore
+    const caption  = document.getElementById('upload-caption').value.trim();
+    const category = document.getElementById('upload-category').value;
+    await addDoc(collection(db, 'photos'), { url, caption, category, storagePath: fileName, uploadedAt: serverTimestamp() });
+
+    bar.style.width = '100%';
+    status.textContent = '✅ Uploaded successfully!';
+    btn.textContent = 'Done!';
+
+    // Reload gallery
+    await loadPhotos();
+    setTimeout(closeModal, 1200);
+
+  } catch(e) {
+    console.error(e);
+    status.textContent = '❌ Upload failed: ' + e.message;
+    btn.disabled = false;
+    btn.textContent = 'Upload';
+  }
+};
+
+// ── DELETE ────────────────────────────────────────────────────────
+window.deletePhoto = async (e, id, storagePath) => {
+  e.stopPropagation();
+  if (!isAdmin || !confirm('Delete this photo?')) return;
+  try {
+    await deleteDoc(doc(db, 'photos', id));
+    if (storagePath) await deleteObject(ref(storage, storagePath)).catch(() => {});
+    await loadPhotos();
+  } catch(err) { alert('Delete failed: ' + err.message); }
+};
+
+// ── NAV ───────────────────────────────────────────────────────────
+document.getElementById('nav-hamburger').addEventListener('click', () => {
+  document.getElementById('nav-links').classList.toggle('open');
+});
+document.querySelectorAll('.nav-dropdown-trigger').forEach(t => {
+  t.addEventListener('click', e => {
+    if (window.innerWidth <= 768) { e.preventDefault(); t.closest('.nav-dropdown').classList.toggle('open'); }
+  });
+});
+document.addEventListener('click', e => {
+  if (!e.target.closest('.nav-dropdown')) document.querySelectorAll('.nav-dropdown').forEach(d => d.classList.remove('open'));
+});
+
+// ── INIT ──────────────────────────────────────────────────────────
+loadPhotos();
 </script>
 </body>
 </html>
