@@ -313,180 +313,257 @@ function applyWatermark(file) {
       // Draw original image
       ctx.drawImage(img, 0, 0);
 
-      // ── Circular stamp watermark (center) ──
+      // ══════════════════════════════════════════════════════════
+      // ── TOP-LEFT CIRCULAR STAMP (fully opaque, navy+gold) ──
+      // ══════════════════════════════════════════════════════════
       (function() {
-        const cx   = canvas.width  / 2;
-        const cy   = canvas.height / 2;
-        const minD = Math.min(canvas.width, canvas.height);
-        const R    = Math.round(minD * 0.14);          // outer circle radius
-        const textR = Math.round(R * 0.87);            // arc text radius
-        const arcFs = Math.max(Math.round(R * 0.19), 11);
-        const agrFs = Math.round(R * 0.54);
-        const lw    = Math.max(1, Math.round(R * 0.028));
+        const minD  = Math.min(canvas.width, canvas.height);
+        const R     = Math.round(minD * 0.095);
+        const margin = Math.round(R * 0.6);
+        const scx   = margin + R;
+        const scy   = margin + R;
+        const textR = Math.round(R * 0.80);
+        const arcFs = Math.max(Math.round(R * 0.165), 10);
+        const agrFs = Math.round(R * 0.48);
+        const lw    = Math.max(2, Math.round(R * 0.045));
+        const lw2   = Math.max(1, Math.round(lw * 0.45));
 
         ctx.save();
+        ctx.globalAlpha = 1;
 
-        // Outer circle
-        ctx.globalAlpha = 0.22;
-        ctx.strokeStyle = '#ffffff';
+        // Navy filled circle
+        ctx.fillStyle = '#1a3a8a';
+        ctx.beginPath(); ctx.arc(scx, scy, R, 0, Math.PI * 2); ctx.fill();
+
+        // Gold outer border
+        ctx.strokeStyle = '#c9a84c';
         ctx.lineWidth = lw;
-        ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2); ctx.stroke();
+        ctx.beginPath(); ctx.arc(scx, scy, R - lw / 2, 0, Math.PI * 2); ctx.stroke();
 
-        // Inner decorative circle
-        ctx.globalAlpha = 0.13;
-        ctx.beginPath(); ctx.arc(cx, cy, R * 0.82, 0, Math.PI * 2); ctx.stroke();
+        // Inner gold ring
+        ctx.lineWidth = lw2;
+        ctx.beginPath(); ctx.arc(scx, scy, R * 0.76, 0, Math.PI * 2); ctx.stroke();
 
-        // AGR centre
-        ctx.globalAlpha = 0.24;
-        ctx.fillStyle = '#ffffff';
+        // Thin gold horizontal rule between AGR and arcs
+        const ruleHalf = R * 0.28;
+        ctx.lineWidth = lw2;
+        ctx.beginPath(); ctx.moveTo(scx - ruleHalf, scy - R * 0.22); ctx.lineTo(scx + ruleHalf, scy - R * 0.22); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(scx - ruleHalf, scy + R * 0.22); ctx.lineTo(scx + ruleHalf, scy + R * 0.22); ctx.stroke();
+
+        // AGR centre in gold
+        ctx.fillStyle = '#c9a84c';
         ctx.font = `bold ${agrFs}px Georgia, serif`;
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillText('AGR', cx, cy);
+        ctx.fillText('AGR', scx, scy);
 
-        // Curved text helper
-        function arcText(text, radius, startAngle, totalArc, flip) {
+        // ── Curved text ──
+        function arcText(text, radius, startAngle, totalArc, flip, color) {
           const chars = text.split('');
           const step  = totalArc / Math.max(chars.length - 1, 1);
+          ctx.fillStyle = color;
           ctx.font = `${arcFs}px Georgia, serif`;
           ctx.textAlign = 'center';
           ctx.textBaseline = 'middle';
           chars.forEach((ch, i) => {
             const angle = startAngle + i * step;
             ctx.save();
-            ctx.translate(cx, cy);
+            ctx.translate(scx, scy);
             ctx.rotate(angle);
-            if (flip) { ctx.translate(0, radius);  ctx.rotate(Math.PI); }
+            if (flip) { ctx.translate(0, radius); ctx.rotate(Math.PI); }
             else       { ctx.translate(0, -radius); }
             ctx.fillText(ch, 0, 0);
             ctx.restore();
           });
         }
 
-        ctx.globalAlpha = 0.22;
-        ctx.fillStyle = '#ffffff';
+        // Top arc — white "ADEEM GHAFFAR RANA" — 148°
+        arcText('ADEEM GHAFFAR RANA', textR, -Math.PI / 2 - Math.PI * 0.41, Math.PI * 0.82, false, '#ffffff');
 
-        // Top arc — "ADEEM GHAFFAR RANA"
-        arcText('ADEEM GHAFFAR RANA', textR, -Math.PI / 2 - Math.PI * 0.46, Math.PI * 0.92, false);
+        // Bottom arc — gold "PHOTOGRAPHY" — 116°
+        arcText('PHOTOGRAPHY', textR, Math.PI / 2 - Math.PI * 0.29, Math.PI * 0.58, true, '#c9a84c');
 
-        // Bottom arc — "PHOTOGRAPHY"
-        arcText('PHOTOGRAPHY', textR, Math.PI / 2 - Math.PI * 0.33, Math.PI * 0.66, true);
-
-        // Side dashes at 9 and 3 o'clock
-        ctx.globalAlpha = 0.20;
-        ctx.lineWidth = lw;
-        [[cx - R * 0.76, cx - R * 0.65], [cx + R * 0.65, cx + R * 0.76]].forEach(([x1, x2]) => {
-          ctx.beginPath(); ctx.moveTo(x1, cy); ctx.lineTo(x2, cy); ctx.stroke();
+        // Gold diamond decorators at 3 & 9 o'clock
+        const dmSz = Math.round(R * 0.07);
+        [scx - R * 0.695, scx + R * 0.695].forEach(dx => {
+          ctx.save();
+          ctx.fillStyle = '#c9a84c';
+          ctx.translate(dx, scy);
+          ctx.rotate(Math.PI / 4);
+          ctx.fillRect(-dmSz / 2, -dmSz / 2, dmSz, dmSz);
+          ctx.restore();
         });
 
         ctx.restore();
       })();
 
-      // ── Bottom bar: [AGR] IG @adeem  FB @Dr.AGRana  X @ranaadeem  🌐 ranaadeem.de ──
-      ctx.save();
-      const barH   = Math.max(Math.round(canvas.height * 0.052), 32);
-      const barY   = canvas.height - barH;
-      const tfs    = Math.max(Math.round(barH * 0.48), 13); // text font size
-      const iconSz = Math.round(tfs * 1.1);                 // icon circle size
-      const pad    = Math.round(barH * 0.55);               // left/right padding
-      const gap    = Math.round(tfs * 0.55);                // gap between icon and text
-      const sep    = Math.round(tfs * 1.8);                 // separator gap between items
-
-      // Dark charcoal background (visible on all photo colors)
-      ctx.globalAlpha = 0.84;
-      ctx.fillStyle = '#141414';
-      ctx.fillRect(0, barY, canvas.width, barH);
-
-      // Gold top border line
-      ctx.globalAlpha = 1;
-      ctx.fillStyle = '#c9a84c';
-      ctx.fillRect(0, barY, canvas.width, Math.max(2, Math.round(barH * 0.055)));
-
-      const cy = barY + barH / 2; // vertical centre of bar
-
-      // Helper: draw a small circle icon with letter
-      function drawIcon(x, letter, color) {
+      // ══════════════════════════════════════════════════════════
+      // ── BOTTOM BAR ─────────────────────────────────────────
+      // ══════════════════════════════════════════════════════════
+      (function() {
         ctx.save();
+        const barH  = Math.max(Math.round(canvas.height * 0.056), 34);
+        const barY  = canvas.height - barH;
+        const tfs   = Math.max(Math.round(barH * 0.44), 12);
+        const iconR = Math.round(tfs * 0.58);   // icon circle radius
+        const pad   = Math.round(barH * 0.60);
+        const gap   = Math.round(tfs * 0.50);
+        const sep   = Math.round(tfs * 1.6);
+        const bcy   = barY + barH / 2;
+
+        // Dark gradient background
+        const grad = ctx.createLinearGradient(0, barY, 0, canvas.height);
+        grad.addColorStop(0, 'rgba(10,10,18,0.92)');
+        grad.addColorStop(1, 'rgba(20,20,35,0.96)');
         ctx.globalAlpha = 1;
-        ctx.fillStyle = color;
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, barY, canvas.width, barH);
+
+        // Gold top border
+        ctx.fillStyle = '#c9a84c';
+        ctx.fillRect(0, barY, canvas.width, Math.max(2, Math.round(barH * 0.05)));
+
+        // Subtle gold bottom border
+        ctx.globalAlpha = 0.3;
+        ctx.fillStyle = '#c9a84c';
+        ctx.fillRect(0, canvas.height - Math.max(1, Math.round(barH * 0.025)), canvas.width, Math.max(1, Math.round(barH * 0.025)));
+        ctx.globalAlpha = 1;
+
+        // ── Icon drawers ──
+        function filledCircleIcon(x, color, drawFn) {
+          ctx.save();
+          ctx.fillStyle = color;
+          ctx.beginPath(); ctx.arc(x + iconR, bcy, iconR, 0, Math.PI * 2); ctx.fill();
+          ctx.fillStyle = '#ffffff';
+          drawFn(x + iconR, bcy, iconR);
+          ctx.restore();
+          return x + iconR * 2;
+        }
+
+        function iconText(cx, cy, r, txt) {
+          ctx.font = `bold ${Math.round(r * 1.15)}px Arial, sans-serif`;
+          ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+          ctx.fillText(txt, cx, cy);
+        }
+
+        function drawGlobe(cx, cy, r) {
+          const gr = Math.round(r * 0.72);
+          ctx.lineWidth = Math.max(1, Math.round(r * 0.18));
+          ctx.strokeStyle = '#ffffff';
+          // outer circle
+          ctx.beginPath(); ctx.arc(cx, cy, gr, 0, Math.PI * 2); ctx.stroke();
+          // equator
+          ctx.beginPath(); ctx.moveTo(cx - gr, cy); ctx.lineTo(cx + gr, cy); ctx.stroke();
+          // meridian
+          ctx.beginPath(); ctx.moveTo(cx, cy - gr); ctx.lineTo(cx, cy + gr); ctx.stroke();
+          // left oval
+          ctx.beginPath(); ctx.ellipse(cx, cy, gr * 0.42, gr, 0, 0, Math.PI * 2); ctx.stroke();
+        }
+
+        function drawIG(cx, cy, r) {
+          const s = Math.round(r * 0.72);
+          const rc = Math.round(s * 0.32);
+          ctx.lineWidth = Math.max(1, Math.round(r * 0.2));
+          ctx.strokeStyle = '#ffffff';
+          // rounded square
+          ctx.beginPath();
+          ctx.moveTo(cx - s + rc, cy - s); ctx.lineTo(cx + s - rc, cy - s);
+          ctx.quadraticCurveTo(cx + s, cy - s, cx + s, cy - s + rc);
+          ctx.lineTo(cx + s, cy + s - rc);
+          ctx.quadraticCurveTo(cx + s, cy + s, cx + s - rc, cy + s);
+          ctx.lineTo(cx - s + rc, cy + s);
+          ctx.quadraticCurveTo(cx - s, cy + s, cx - s, cy + s - rc);
+          ctx.lineTo(cx - s, cy - s + rc);
+          ctx.quadraticCurveTo(cx - s, cy - s, cx - s + rc, cy - s);
+          ctx.closePath(); ctx.stroke();
+          // inner circle
+          ctx.beginPath(); ctx.arc(cx, cy, s * 0.48, 0, Math.PI * 2); ctx.stroke();
+          // dot top-right
+          ctx.fillStyle = '#ffffff';
+          ctx.beginPath(); ctx.arc(cx + s * 0.55, cy - s * 0.55, Math.max(1, Math.round(r * 0.15)), 0, Math.PI * 2); ctx.fill();
+        }
+
+        // ── Label helper ──
+        function label(x, text) {
+          ctx.fillStyle = '#e8d89a';
+          ctx.font = `500 ${tfs}px Arial, sans-serif`;
+          ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+          ctx.fillText(text, x, bcy);
+          return x + ctx.measureText(text).width;
+        }
+
+        // ── Gold separator dot ──
+        function dot(x) {
+          ctx.fillStyle = '#c9a84c';
+          ctx.globalAlpha = 0.5;
+          ctx.beginPath(); ctx.arc(x, bcy, Math.max(2, Math.round(tfs * 0.16)), 0, Math.PI * 2); ctx.fill();
+          ctx.globalAlpha = 1;
+          return x;
+        }
+
+        // ── AGR pill ──
+        const pillW = Math.round(tfs * 3.0);
+        const pillH = Math.round(barH * 0.68);
+        const pillX = pad;
+        const pillY = bcy - pillH / 2;
+        const pillR = Math.round(pillH * 0.22);
+
+        // Navy fill + gold border
+        ctx.fillStyle = '#1a3a8a';
         ctx.beginPath();
-        ctx.arc(x + iconSz / 2, cy, iconSz / 2, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.fillStyle = '#ffffff';
-        ctx.font = `bold ${Math.round(iconSz * 0.62)}px Arial, sans-serif`;
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText(letter, x + iconSz / 2, cy);
+        ctx.moveTo(pillX + pillR, pillY);
+        ctx.lineTo(pillX + pillW - pillR, pillY);
+        ctx.quadraticCurveTo(pillX + pillW, pillY, pillX + pillW, pillY + pillR);
+        ctx.lineTo(pillX + pillW, pillY + pillH - pillR);
+        ctx.quadraticCurveTo(pillX + pillW, pillY + pillH, pillX + pillW - pillR, pillY + pillH);
+        ctx.lineTo(pillX + pillR, pillY + pillH);
+        ctx.quadraticCurveTo(pillX, pillY + pillH, pillX, pillY + pillH - pillR);
+        ctx.lineTo(pillX, pillY + pillR);
+        ctx.quadraticCurveTo(pillX, pillY, pillX + pillR, pillY);
+        ctx.closePath(); ctx.fill();
+
+        ctx.strokeStyle = '#c9a84c';
+        ctx.lineWidth = Math.max(1, Math.round(pillH * 0.06));
+        ctx.beginPath();
+        ctx.moveTo(pillX + pillR, pillY);
+        ctx.lineTo(pillX + pillW - pillR, pillY);
+        ctx.quadraticCurveTo(pillX + pillW, pillY, pillX + pillW, pillY + pillR);
+        ctx.lineTo(pillX + pillW, pillY + pillH - pillR);
+        ctx.quadraticCurveTo(pillX + pillW, pillY + pillH, pillX + pillW - pillR, pillY + pillH);
+        ctx.lineTo(pillX + pillR, pillY + pillH);
+        ctx.quadraticCurveTo(pillX, pillY + pillH, pillX, pillY + pillH - pillR);
+        ctx.lineTo(pillX, pillY + pillR);
+        ctx.quadraticCurveTo(pillX, pillY, pillX + pillR, pillY);
+        ctx.closePath(); ctx.stroke();
+
+        ctx.fillStyle = '#c9a84c';
+        ctx.font = `bold ${Math.round(pillH * 0.55)}px Georgia, serif`;
+        ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        ctx.fillText('AGR', pillX + pillW / 2, bcy);
+
+        // ── Items ──
+        let x = pillX + pillW + sep;
+        dot(x); x += sep * 0.85;
+
+        // Instagram
+        const igEnd = filledCircleIcon(x, '#c13584', drawIG);
+        x = igEnd + gap;
+        x = label(x, '@adeemghaffarrana') + sep;
+        dot(x); x += sep * 0.85;
+
+        // Facebook
+        const fbEnd = filledCircleIcon(x, '#1877f2', (cx,cy,r) => iconText(cx, cy+Math.round(r*0.05), r, 'f'));
+        x = fbEnd + gap;
+        x = label(x, '@Dr.AGRana') + sep;
+        dot(x); x += sep * 0.85;
+
+        // Website
+        const wEnd = filledCircleIcon(x, '#0f5c3a', drawGlobe);
+        x = wEnd + gap;
+        label(x, 'ranaadeem.de');
+
         ctx.restore();
-      }
-
-      // Helper: draw handle text, returns right edge x
-      function drawText(x, text) {
-        ctx.save();
-        ctx.globalAlpha = 1;
-        ctx.fillStyle = '#e8d89a';
-        ctx.font = `500 ${tfs}px Arial, sans-serif`;
-        ctx.textAlign = 'left';
-        ctx.textBaseline = 'middle';
-        ctx.fillText(text, x, cy);
-        const w = ctx.measureText(text).width;
-        ctx.restore();
-        return x + w;
-      }
-
-      // ── AGR logo box ──
-      const agrBoxW = Math.round(tfs * 3.2);
-      const agrBoxH = Math.round(barH * 0.72);
-      const agrBoxX = pad;
-      const agrBoxY = cy - agrBoxH / 2;
-      const agrR    = Math.round(agrBoxH * 0.15);
-
-      ctx.globalAlpha = 1;
-      ctx.fillStyle = '#c9a84c';
-      ctx.beginPath();
-      ctx.moveTo(agrBoxX + agrR, agrBoxY);
-      ctx.lineTo(agrBoxX + agrBoxW - agrR, agrBoxY);
-      ctx.quadraticCurveTo(agrBoxX + agrBoxW, agrBoxY, agrBoxX + agrBoxW, agrBoxY + agrR);
-      ctx.lineTo(agrBoxX + agrBoxW, agrBoxY + agrBoxH - agrR);
-      ctx.quadraticCurveTo(agrBoxX + agrBoxW, agrBoxY + agrBoxH, agrBoxX + agrBoxW - agrR, agrBoxY + agrBoxH);
-      ctx.lineTo(agrBoxX + agrR, agrBoxY + agrBoxH);
-      ctx.quadraticCurveTo(agrBoxX, agrBoxY + agrBoxH, agrBoxX, agrBoxY + agrBoxH - agrR);
-      ctx.lineTo(agrBoxX, agrBoxY + agrR);
-      ctx.quadraticCurveTo(agrBoxX, agrBoxY, agrBoxX + agrR, agrBoxY);
-      ctx.closePath();
-      ctx.fill();
-
-      ctx.fillStyle = '#1a3a8a';
-      ctx.font = `bold ${Math.round(agrBoxH * 0.58)}px Georgia, serif`;
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillText('AGR', agrBoxX + agrBoxW / 2, cy);
-
-      // ── Separator dot ──
-      let cx2 = agrBoxX + agrBoxW + sep;
-      ctx.globalAlpha = 0.4;
-      ctx.fillStyle = '#c9a84c';
-      ctx.beginPath();
-      ctx.arc(cx2, cy, Math.round(tfs * 0.18), 0, Math.PI * 2);
-      ctx.fill();
-      cx2 += sep * 0.8;
-
-      // ── Instagram ──
-      drawIcon(cx2, 'IG', '#e1306c');
-      cx2 += iconSz + gap;
-      cx2 = drawText(cx2, '@adeemghaffarrana') + sep;
-
-      // ── Facebook ──
-      drawIcon(cx2, 'f', '#1877f2');
-      cx2 += iconSz + gap;
-      cx2 = drawText(cx2, '@Dr.AGRana') + sep;
-
-      // ── Website ──
-      drawIcon(cx2, 'w', '#2d6a4f');
-      cx2 += iconSz + gap;
-      drawText(cx2, 'ranaadeem.de');
-
-      ctx.restore();
+      })();
 
       URL.revokeObjectURL(objUrl);
       canvas.toBlob(resolve, 'image/jpeg', 0.92);
