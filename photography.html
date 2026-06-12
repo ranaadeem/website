@@ -276,7 +276,7 @@ import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query, order
 import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject }
   from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
 
-const app  = initializeApp({ apiKey:"AIzaSyAgUl22Cln6QtY3-HIvI6lE8Zu7n9OblbI", authDomain:"icet-alumni.firebaseapp.com", projectId:"icet-alumni", storageBucket:"icet-alumni.appspot.com" });
+const app  = initializeApp({ apiKey:"AIzaSyAgUl22Cln6QtY3-HIvI6lE8Zu7n9OblbI", authDomain:"icet-alumni.firebaseapp.com", projectId:"icet-alumni", storageBucket:"icet-alumni.firebasestorage.app" });
 const auth = getAuth(app);
 const db   = getFirestore(app);
 const storage = getStorage(app);
