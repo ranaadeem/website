@@ -335,38 +335,115 @@ function applyWatermark(file) {
       ctx.fillText('@adeemghaffarrana', 0, 0);
       ctx.restore();
 
-      // ── AGR logo badge (bottom-right) ──
+      // ── Bottom bar: [AGR] IG @adeem  FB @Dr.AGRana  X @ranaadeem  🌐 ranaadeem.de ──
       ctx.save();
-      const logoSize = Math.max(Math.round(Math.min(canvas.width, canvas.height) * 0.085), 48);
-      const margin   = Math.round(logoSize * 0.35);
-      const lx = canvas.width  - logoSize - margin;
-      const ly = canvas.height - logoSize - margin;
-      const lr = Math.round(logoSize * 0.12); // corner radius
+      const barH   = Math.max(Math.round(canvas.height * 0.052), 32);
+      const barY   = canvas.height - barH;
+      const tfs    = Math.max(Math.round(barH * 0.48), 13); // text font size
+      const iconSz = Math.round(tfs * 1.1);                 // icon circle size
+      const pad    = Math.round(barH * 0.55);               // left/right padding
+      const gap    = Math.round(tfs * 0.55);                // gap between icon and text
+      const sep    = Math.round(tfs * 1.8);                 // separator gap between items
 
-      // Gold square background
-      ctx.globalAlpha = 0.82;
+      // Navy background
+      ctx.globalAlpha = 0.88;
+      ctx.fillStyle = '#1a3a8a';
+      ctx.fillRect(0, barY, canvas.width, barH);
+
+      // Gold top border line
+      ctx.globalAlpha = 1;
+      ctx.fillStyle = '#c9a84c';
+      ctx.fillRect(0, barY, canvas.width, Math.max(2, Math.round(barH * 0.055)));
+
+      const cy = barY + barH / 2; // vertical centre of bar
+
+      // Helper: draw a small circle icon with letter
+      function drawIcon(x, letter, color) {
+        ctx.save();
+        ctx.globalAlpha = 1;
+        ctx.fillStyle = color;
+        ctx.beginPath();
+        ctx.arc(x + iconSz / 2, cy, iconSz / 2, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = '#ffffff';
+        ctx.font = `bold ${Math.round(iconSz * 0.62)}px Arial, sans-serif`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(letter, x + iconSz / 2, cy);
+        ctx.restore();
+      }
+
+      // Helper: draw handle text, returns right edge x
+      function drawText(x, text) {
+        ctx.save();
+        ctx.globalAlpha = 1;
+        ctx.fillStyle = '#e8d89a';
+        ctx.font = `500 ${tfs}px Arial, sans-serif`;
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(text, x, cy);
+        const w = ctx.measureText(text).width;
+        ctx.restore();
+        return x + w;
+      }
+
+      // ── AGR logo box ──
+      const agrBoxW = Math.round(tfs * 3.2);
+      const agrBoxH = Math.round(barH * 0.72);
+      const agrBoxX = pad;
+      const agrBoxY = cy - agrBoxH / 2;
+      const agrR    = Math.round(agrBoxH * 0.15);
+
+      ctx.globalAlpha = 1;
       ctx.fillStyle = '#c9a84c';
       ctx.beginPath();
-      ctx.moveTo(lx + lr, ly);
-      ctx.lineTo(lx + logoSize - lr, ly);
-      ctx.quadraticCurveTo(lx + logoSize, ly, lx + logoSize, ly + lr);
-      ctx.lineTo(lx + logoSize, ly + logoSize - lr);
-      ctx.quadraticCurveTo(lx + logoSize, ly + logoSize, lx + logoSize - lr, ly + logoSize);
-      ctx.lineTo(lx + lr, ly + logoSize);
-      ctx.quadraticCurveTo(lx, ly + logoSize, lx, ly + logoSize - lr);
-      ctx.lineTo(lx, ly + lr);
-      ctx.quadraticCurveTo(lx, ly, lx + lr, ly);
+      ctx.moveTo(agrBoxX + agrR, agrBoxY);
+      ctx.lineTo(agrBoxX + agrBoxW - agrR, agrBoxY);
+      ctx.quadraticCurveTo(agrBoxX + agrBoxW, agrBoxY, agrBoxX + agrBoxW, agrBoxY + agrR);
+      ctx.lineTo(agrBoxX + agrBoxW, agrBoxY + agrBoxH - agrR);
+      ctx.quadraticCurveTo(agrBoxX + agrBoxW, agrBoxY + agrBoxH, agrBoxX + agrBoxW - agrR, agrBoxY + agrBoxH);
+      ctx.lineTo(agrBoxX + agrR, agrBoxY + agrBoxH);
+      ctx.quadraticCurveTo(agrBoxX, agrBoxY + agrBoxH, agrBoxX, agrBoxY + agrBoxH - agrR);
+      ctx.lineTo(agrBoxX, agrBoxY + agrR);
+      ctx.quadraticCurveTo(agrBoxX, agrBoxY, agrBoxX + agrR, agrBoxY);
       ctx.closePath();
       ctx.fill();
 
-      // AGR text
-      const afs = Math.round(logoSize * 0.52);
-      ctx.globalAlpha = 0.95;
-      ctx.fillStyle = '#ffffff';
-      ctx.font = `bold ${afs}px Georgia, serif`;
+      ctx.fillStyle = '#1a3a8a';
+      ctx.font = `bold ${Math.round(agrBoxH * 0.58)}px Georgia, serif`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.fillText('AGR', lx + logoSize / 2, ly + logoSize / 2);
+      ctx.fillText('AGR', agrBoxX + agrBoxW / 2, cy);
+
+      // ── Separator dot ──
+      let cx2 = agrBoxX + agrBoxW + sep;
+      ctx.globalAlpha = 0.4;
+      ctx.fillStyle = '#c9a84c';
+      ctx.beginPath();
+      ctx.arc(cx2, cy, Math.round(tfs * 0.18), 0, Math.PI * 2);
+      ctx.fill();
+      cx2 += sep * 0.8;
+
+      // ── Instagram ──
+      drawIcon(cx2, 'IG', '#e1306c');
+      cx2 += iconSz + gap;
+      cx2 = drawText(cx2, '@adeemghaffarrana') + sep;
+
+      // ── Facebook ──
+      drawIcon(cx2, 'f', '#1877f2');
+      cx2 += iconSz + gap;
+      cx2 = drawText(cx2, '@Dr.AGRana') + sep;
+
+      // ── X / Twitter ──
+      drawIcon(cx2, 'X', '#000000');
+      cx2 += iconSz + gap;
+      cx2 = drawText(cx2, '@ranaadeem') + sep;
+
+      // ── Website ──
+      drawIcon(cx2, '🌐', '#2d6a4f');
+      cx2 += iconSz + gap;
+      drawText(cx2, 'ranaadeem.de');
+
       ctx.restore();
 
       URL.revokeObjectURL(objUrl);
