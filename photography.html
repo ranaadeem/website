@@ -318,59 +318,55 @@ function applyWatermark(file) {
       ctx.translate(canvas.width / 2, canvas.height / 2);
       ctx.rotate(-Math.PI / 5.5); // ~-33°
 
-      const fs = Math.round(Math.min(canvas.width, canvas.height) * 0.055);
+      const fs = Math.round(Math.min(canvas.width, canvas.height) * 0.032);
       ctx.font = `bold ${fs}px Arial, sans-serif`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
 
       // Dark shadow for readability on light backgrounds
-      ctx.globalAlpha = 0.3;
-      ctx.lineWidth = fs * 0.14;
+      ctx.globalAlpha = 0.22;
+      ctx.lineWidth = fs * 0.12;
       ctx.strokeStyle = 'rgba(0,0,0,0.6)';
       ctx.strokeText('@adeemghaffarrana', 0, 0);
 
       // White text
-      ctx.globalAlpha = 0.28;
+      ctx.globalAlpha = 0.20;
       ctx.fillStyle = '#ffffff';
       ctx.fillText('@adeemghaffarrana', 0, 0);
       ctx.restore();
 
-      // ── Corner badge (bottom-right) ──
+      // ── AGR logo badge (bottom-right) ──
       ctx.save();
-      const badgeText = '@adeemghaffarrana  ·  ranaadeem.de';
-      const bfs = Math.max(Math.round(canvas.width * 0.018), 14);
-      ctx.font = `500 ${bfs}px Arial, sans-serif`;
-      const tw  = ctx.measureText(badgeText).width;
-      const pad = bfs * 0.75;
-      const bw  = tw + pad * 2;
-      const bh  = bfs * 2.2;
-      const bx  = canvas.width  - bw - 20;
-      const by  = canvas.height - bh - 20;
-      const r   = bfs * 0.35;
+      const logoSize = Math.max(Math.round(Math.min(canvas.width, canvas.height) * 0.085), 48);
+      const margin   = Math.round(logoSize * 0.35);
+      const lx = canvas.width  - logoSize - margin;
+      const ly = canvas.height - logoSize - margin;
+      const lr = Math.round(logoSize * 0.12); // corner radius
 
-      // Rounded rect background
-      ctx.globalAlpha = 0.6;
-      ctx.fillStyle = '#000000';
+      // Gold square background
+      ctx.globalAlpha = 0.82;
+      ctx.fillStyle = '#c9a84c';
       ctx.beginPath();
-      ctx.moveTo(bx + r, by);
-      ctx.lineTo(bx + bw - r, by);
-      ctx.quadraticCurveTo(bx + bw, by, bx + bw, by + r);
-      ctx.lineTo(bx + bw, by + bh - r);
-      ctx.quadraticCurveTo(bx + bw, by + bh, bx + bw - r, by + bh);
-      ctx.lineTo(bx + r, by + bh);
-      ctx.quadraticCurveTo(bx, by + bh, bx, by + bh - r);
-      ctx.lineTo(bx, by + r);
-      ctx.quadraticCurveTo(bx, by, bx + r, by);
+      ctx.moveTo(lx + lr, ly);
+      ctx.lineTo(lx + logoSize - lr, ly);
+      ctx.quadraticCurveTo(lx + logoSize, ly, lx + logoSize, ly + lr);
+      ctx.lineTo(lx + logoSize, ly + logoSize - lr);
+      ctx.quadraticCurveTo(lx + logoSize, ly + logoSize, lx + logoSize - lr, ly + logoSize);
+      ctx.lineTo(lx + lr, ly + logoSize);
+      ctx.quadraticCurveTo(lx, ly + logoSize, lx, ly + logoSize - lr);
+      ctx.lineTo(lx, ly + lr);
+      ctx.quadraticCurveTo(lx, ly, lx + lr, ly);
       ctx.closePath();
       ctx.fill();
 
-      // Badge text
-      ctx.globalAlpha = 0.92;
+      // AGR text
+      const afs = Math.round(logoSize * 0.52);
+      ctx.globalAlpha = 0.95;
       ctx.fillStyle = '#ffffff';
-      ctx.font = `500 ${bfs}px Arial, sans-serif`;
-      ctx.textAlign = 'left';
+      ctx.font = `bold ${afs}px Georgia, serif`;
+      ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.fillText(badgeText, bx + pad, by + bh / 2);
+      ctx.fillText('AGR', lx + logoSize / 2, ly + logoSize / 2);
       ctx.restore();
 
       URL.revokeObjectURL(objUrl);
