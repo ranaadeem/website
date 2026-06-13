@@ -2,10 +2,10 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "website",
+      "name": "stamp-preview",
       "runtimeExecutable": "python3",
-      "runtimeArgs": ["-m", "http.server", "3456", "--directory", "/Users/adeemghaffarrana/website"],
-      "port": 3456
+      "runtimeArgs": ["-m", "http.server", "4321"],
+      "port": 4321
     }
   ]
 }
