@@ -133,6 +133,46 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
 .sidebar-card-header{background:var(--navy);padding:0.75rem 1rem;font-size:13px;font-weight:600;color:white;}
 .sidebar-card-body{padding:1rem;}
 
+/* ── THE ICET WALL ───────────────────────────────────────────── */
+.wall-card{background:white;border:1px solid var(--border);border-radius:12px;padding:1rem;margin-bottom:0.85rem;transition:box-shadow 0.2s;}
+.wall-card:hover{box-shadow:0 2px 12px rgba(0,0,0,0.07);}
+.wall-card.official{border-left:3px solid var(--gold);background:linear-gradient(to right,#fffbf0,white);}
+.wall-card-header{display:flex;align-items:center;gap:10px;margin-bottom:0.6rem;}
+.wall-avatar{width:36px;height:36px;border-radius:50%;background:var(--navy);border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--gold);flex-shrink:0;}
+.wall-avatar.official-av{background:linear-gradient(135deg,var(--navy),#2048a8);border-color:var(--gold);}
+.wall-author{font-size:13px;font-weight:600;color:var(--navy);}
+.wall-meta{font-size:11px;color:#9ca3af;}
+.wall-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;text-transform:uppercase;letter-spacing:0.04em;}
+.wall-badge.official{background:#fef3c7;color:#92400e;}
+.wall-badge.community{background:#eff6ff;color:#1e40af;}
+.wall-text{font-size:14px;color:var(--text);line-height:1.7;white-space:pre-wrap;margin-bottom:0.75rem;}
+.wall-reactions{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:0.6rem;}
+.reaction-btn{display:flex;align-items:center;gap:4px;background:#f3f4f6;border:1.5px solid transparent;border-radius:20px;padding:4px 10px;font-size:12px;cursor:pointer;font-family:inherit;transition:all 0.15s;color:#374151;}
+.reaction-btn:hover{background:#e5e7eb;}
+.reaction-btn.active{background:#eff6ff;border-color:#93c5fd;color:#1d4ed8;font-weight:600;}
+.reaction-count{font-weight:600;}
+.wall-footer{display:flex;align-items:center;gap:12px;border-top:1px solid var(--border);padding-top:0.6rem;margin-top:0.25rem;}
+.wall-comment-toggle{background:none;border:none;font-size:12px;color:#6b7280;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:4px;padding:0;}
+.wall-comment-toggle:hover{color:var(--navy);}
+.wall-comments{margin-top:0.75rem;padding-top:0.6rem;border-top:1px solid var(--border);}
+.comment-item{display:flex;gap:8px;margin-bottom:0.6rem;align-items:flex-start;}
+.comment-avatar{width:26px;height:26px;border-radius:50%;background:var(--navy);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:var(--gold);flex-shrink:0;}
+.comment-bubble{background:#f3f4f6;border-radius:0 10px 10px 10px;padding:6px 10px;flex:1;}
+.comment-name{font-size:11px;font-weight:600;color:var(--navy);margin-bottom:2px;}
+.comment-text{font-size:12px;color:var(--text);line-height:1.5;}
+.comment-form{display:flex;gap:6px;margin-top:0.5rem;}
+.comment-input{flex:1;padding:6px 10px;border:1px solid var(--border);border-radius:20px;font-size:12px;font-family:inherit;outline:none;}
+.comment-input:focus{border-color:var(--navy);}
+.comment-send{background:var(--navy);color:white;border:none;border-radius:20px;padding:6px 14px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap;}
+.wall-filter-bar{display:flex;gap:6px;margin-bottom:1rem;}
+.wall-filter-btn{background:#f3f4f6;border:1.5px solid transparent;border-radius:20px;padding:5px 14px;font-size:12px;font-weight:500;cursor:pointer;font-family:inherit;color:#374151;transition:all 0.15s;}
+.wall-filter-btn.active{background:var(--navy);color:white;border-color:var(--navy);}
+.wall-pin-btn{background:none;border:none;font-size:12px;cursor:pointer;padding:0;color:#9ca3af;margin-left:auto;}
+.wall-pin-btn:hover{color:var(--gold);}
+.wall-del-btn{background:none;border:none;font-size:12px;cursor:pointer;padding:0;color:#9ca3af;}
+.wall-del-btn:hover{color:#dc2626;}
+.wall-pinned-badge{font-size:10px;color:var(--gold);font-weight:700;margin-left:4px;}
+
 /* CTA */
 .cta-banner{background:linear-gradient(135deg,var(--navy),#2048a8);border-radius:12px;padding:1.25rem;text-align:center;margin-top:2rem;}
 
@@ -176,12 +216,12 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
   .member-name{font-size:11px;}
   .member-roll,.member-detail{font-size:10px;}
   /* Tabs — scrollable row */
-  #tab-directory,#tab-noticeboard,#tab-announcements{padding:6px 10px;font-size:12px;}
+  #tab-directory,#tab-noticeboard,#tab-announcements,#tab-wall{padding:6px 10px;font-size:12px;}
   .filter-bar{gap:0.4rem;}
   .search-box{min-width:100%;width:100%;}
-  /* Notice board & announcements inline grids → single column */
-  .noticeboard-inner,.announcements-inner{grid-template-columns:1fr!important;display:block!important;}
-  #notice-post-form,#ann-post-form{position:static!important;margin-top:1.25rem;}
+  /* Wall inline grid → single column */
+  .wall-inner{grid-template-columns:1fr!important;display:block!important;}
+  #wall-post-form{position:static!important;margin-top:1.25rem;}
   /* Gallery */
   #gallery-section{margin-bottom:1rem;}
 }
@@ -303,7 +343,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
   <div style="background:white;border:1px solid var(--border);border-radius:14px;padding:2.5rem;text-align:center;box-shadow:0 4px 24px rgba(0,0,0,0.08);">
     <div style="font-size:3rem;margin-bottom:1rem;">🎓</div>
     <h2 id="gate-session-title" style="font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--navy);margin-bottom:0.5rem;"></h2>
-    <p id="gate-message" style="font-size:14px;color:var(--muted);margin-bottom:1.5rem;line-height:1.6;">The alumni directory, notice board, and announcements are for registered members only.</p>
+    <p id="gate-message" style="font-size:14px;color:var(--muted);margin-bottom:1.5rem;line-height:1.6;">The alumni directory and The ICET Wall are for registered members only.</p>
 
     <!-- Sign-in form -->
     <div id="gate-signin-panel">
@@ -373,8 +413,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
       <!-- Tabs -->
       <div style="display:flex;gap:4px;background:white;border:1px solid var(--border);border-radius:8px;padding:4px;margin-bottom:1.5rem;width:fit-content;">
         <button id="tab-directory" onclick="switchTab('directory')" style="padding:7px 16px;border-radius:5px;font-size:13px;font-weight:500;cursor:pointer;border:none;background:var(--navy);color:white;font-family:inherit;">&#128101; Directory</button>
-        <button id="tab-noticeboard" onclick="switchTab('noticeboard')" style="padding:7px 16px;border-radius:5px;font-size:13px;font-weight:500;cursor:pointer;border:none;background:transparent;color:#6b7280;font-family:inherit;">&#128204; Notice Board</button>
-        <button id="tab-announcements" onclick="switchTab('announcements')" style="padding:7px 16px;border-radius:5px;font-size:13px;font-weight:500;cursor:pointer;border:none;background:transparent;color:#6b7280;font-family:inherit;">&#128226; Announcements</button>
+        <button id="tab-wall" onclick="switchTab('wall')" style="padding:7px 16px;border-radius:5px;font-size:13px;font-weight:500;cursor:pointer;border:none;background:transparent;color:#6b7280;font-family:inherit;">🧱 The ICET Wall</button>
       </div>
 
       <!-- DIRECTORY TAB -->
@@ -391,44 +430,34 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
         </div>
       </div>
 
-      <!-- NOTICE BOARD TAB -->
-      <div id="tab-content-noticeboard" style="display:none;">
-        <div class="noticeboard-inner" style="display:grid;grid-template-columns:1fr 280px;gap:1.5rem;align-items:start;">
+      <!-- THE ICET WALL TAB -->
+      <div id="tab-content-wall" style="display:none;">
+        <div class="wall-inner" style="display:grid;grid-template-columns:1fr 280px;gap:1.5rem;align-items:start;">
+          <!-- Feed -->
           <div>
-            <div style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:1rem;">Recent Posts</div>
-            <div id="notices-container"><div style="text-align:center;padding:2rem;color:var(--muted);font-size:13px;">Loading...</div></div>
-          </div>
-          <div id="notice-post-form" style="background:white;border:1px solid var(--border);border-radius:12px;padding:1.25rem;position:sticky;top:80px;">
-            <div style="font-size:14px;font-weight:600;color:var(--navy);margin-bottom:4px;">📌 Post to Notice Board</div>
-            <div style="font-size:12px;color:var(--muted);margin-bottom:0.75rem;line-height:1.5;">Share a message. Appears after admin approval.</div>
-            <textarea id="notice-text" rows="4" placeholder="What's on your mind?" maxlength="500" style="width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:inherit;outline:none;resize:vertical;margin-bottom:6px;box-sizing:border-box;"></textarea>
-            <div style="display:flex;justify-content:space-between;align-items:center;">
-              <span style="font-size:11px;color:#9ca3af;" id="notice-char">0/500</span>
-              <button id="btn-post-notice" style="background:var(--gold);color:var(--navy);border:none;padding:8px 16px;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">Post →</button>
+            <div class="wall-filter-bar">
+              <button class="wall-filter-btn active" data-wf="all" onclick="setWallFilter('all',this)">All</button>
+              <button class="wall-filter-btn" data-wf="official" onclick="setWallFilter('official',this)">📌 Official</button>
+              <button class="wall-filter-btn" data-wf="community" onclick="setWallFilter('community',this)">💬 Community</button>
             </div>
+            <div id="wall-container"><div style="text-align:center;padding:2rem;color:var(--muted);font-size:13px;">Loading…</div></div>
           </div>
-        </div>
-      </div>
-
-      <!-- ANNOUNCEMENTS TAB -->
-      <div id="tab-content-announcements" style="display:none;">
-        <div class="announcements-inner" style="display:grid;grid-template-columns:1fr 280px;gap:1.5rem;align-items:start;">
-          <div>
-            <div style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:1rem;">Recent Announcements</div>
-            <div id="announcements-container"><div style="text-align:center;padding:2rem;color:var(--muted);font-size:13px;">Loading...</div></div>
-          </div>
-          <div id="ann-post-form" style="background:white;border:1px solid var(--border);border-radius:12px;padding:1.25rem;position:sticky;top:80px;">
-            <div style="font-size:14px;font-weight:600;color:var(--navy);margin-bottom:4px;">📢 Submit Announcement</div>
-            <div style="font-size:12px;color:var(--muted);margin-bottom:0.75rem;">New job, award, news? Appears after approval.</div>
-            <select id="ann-type" style="width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:inherit;outline:none;margin-bottom:6px;box-sizing:border-box;">
-              <option value="job">Job Change / New Position</option>
-              <option value="achievement">Achievement / Award</option>
-              <option value="news">News / Update</option>
-              <option value="other">Other</option>
-            </select>
-            <input type="text" id="ann-title" placeholder="Headline *" style="width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:inherit;outline:none;margin-bottom:6px;box-sizing:border-box;">
-            <textarea id="ann-body" rows="3" placeholder="Details (optional)" style="width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:inherit;outline:none;resize:vertical;margin-bottom:6px;box-sizing:border-box;"></textarea>
-            <button id="btn-post-ann" style="width:100%;padding:9px;background:var(--gold);color:var(--navy);border:none;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">Submit for Approval →</button>
+          <!-- Post form -->
+          <div id="wall-post-form" style="background:white;border:1px solid var(--border);border-radius:12px;padding:1.25rem;position:sticky;top:80px;">
+            <div style="font-size:14px;font-weight:600;color:var(--navy);margin-bottom:4px;">🧱 Post to The Wall</div>
+            <div style="font-size:12px;color:var(--muted);margin-bottom:0.75rem;line-height:1.5;">Share news, questions, or anything with your batch.</div>
+            <!-- Admin-only: post type selector -->
+            <div id="wall-type-wrap" style="display:none;margin-bottom:6px;">
+              <select id="wall-type" style="width:100%;padding:7px 10px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:inherit;outline:none;box-sizing:border-box;">
+                <option value="community">💬 Community post</option>
+                <option value="official">📌 Official announcement</option>
+              </select>
+            </div>
+            <textarea id="wall-text" rows="4" placeholder="What's on your mind?" maxlength="600" style="width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:inherit;outline:none;resize:vertical;margin-bottom:6px;box-sizing:border-box;"></textarea>
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <span style="font-size:11px;color:#9ca3af;" id="wall-char">0/600</span>
+              <button id="btn-post-wall" style="background:var(--gold);color:var(--navy);border:none;padding:8px 16px;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">Post →</button>
+            </div>
           </div>
         </div>
       </div>
@@ -588,7 +617,7 @@ import {
 } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 import {
   getFirestore, collection, addDoc, getDocs, doc, getDoc, setDoc,
-  updateDoc, deleteDoc, query, where, serverTimestamp, increment
+  updateDoc, deleteDoc, query, where, orderBy, serverTimestamp, increment, arrayUnion, arrayRemove
 } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 import { SESSION_DATA } from '/alumni/session-data.js';
 
@@ -896,7 +925,7 @@ if (!SD || !SD.active) {
       isSameSession  = true;   // admin has full access everywhere
       buildSessionNav(user);
       loadRegistered(); loadGallery(); loadPendingPhotos();
-      loadPendingRegistrations(); loadNoticeBoard(); loadAnnouncements();
+      loadPendingRegistrations(); loadWall();
       applySessionAccess();
       return;
     }
@@ -936,7 +965,7 @@ if (!SD || !SD.active) {
     gate.style.display    = 'none';
     content.style.display = 'block';
     buildSessionNav(user);
-    loadRegistered(); loadGallery(); loadPendingPhotos(); loadNoticeBoard(); loadAnnouncements();
+    loadRegistered(); loadGallery(); loadPendingPhotos(); loadWall();
     if (currentProfile.role === 'moderator') loadPendingRegistrations();
     applySessionAccess();
   });
@@ -972,18 +1001,14 @@ if (!SD || !SD.active) {
     const shareBtn = document.querySelector('button[onclick*="upload-modal"]');
     if (shareBtn) shareBtn.style.display = 'none';
 
-    // Hide notice post form
-    const noticeForm = document.getElementById('notice-post-form');
-    if (noticeForm) noticeForm.style.display = 'none';
+    // Hide Wall post form for cross-session visitors
+    const wallForm = document.getElementById('wall-post-form');
+    if (wallForm) wallForm.style.display = 'none';
 
-    // Hide announcement post form
-    const annForm = document.getElementById('ann-post-form');
-    if (annForm) annForm.style.display = 'none';
-
-    // Show a read-only banner inside the notice/announcement tabs
+    // Show a read-only banner on the Wall
     const readOnlyMsg = `<div style="background:#eff6ff;border:1px solid #93c5fd;border-radius:8px;padding:10px 14px;font-size:13px;color:#1e3a5f;margin-bottom:1rem;">👀 You're viewing as a guest from another session — read-only access.</div>`;
-    const noticesContainer = document.getElementById('notices-container');
-    if (noticesContainer) noticesContainer.insertAdjacentHTML('beforebegin', readOnlyMsg);
+    const wallContainer = document.getElementById('wall-container');
+    if (wallContainer) wallContainer.insertAdjacentHTML('beforebegin', readOnlyMsg);
   }
 
   // ── Load registered members ───────────────────────────────────────────────
@@ -1381,64 +1406,235 @@ if (!SD || !SD.active) {
 
   loadPendingWALinks();
 
-  // ── Notice Board ──────────────────────────────────────────────────────────
-  async function loadNoticeBoard() {
-    const container = document.getElementById('notices-container');
-    if (!container) return;
-    try {
-      const snap = await getDocs(query(collection(db,'notices'), where('session','==',YEAR), where('approved','==',true)));
-      const items = []; snap.forEach(d => items.push({id:d.id,...d.data()}));
-      items.sort((a,b) => (b.createdAt?.seconds||0) - (a.createdAt?.seconds||0));
-      if (!items.length) { container.innerHTML = '<div style="text-align:center;padding:2rem;color:var(--muted);font-size:13px;">No posts yet. Be the first!</div>'; return; }
-      container.innerHTML = '';
-      items.forEach(n => {
-        const date = n.createdAt ? new Date(n.createdAt.seconds*1000).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}) : '';
-        const init = (n.authorName||'?').split(' ').map(w=>w[0]).slice(0,2).join('');
-        const card = document.createElement('div');
-        card.style.cssText = 'background:white;border:1px solid var(--border);border-radius:10px;padding:1rem;margin-bottom:0.75rem;';
-        card.innerHTML = `<div style="display:flex;align-items:center;gap:10px;margin-bottom:0.5rem;">
-          <div style="width:36px;height:36px;border-radius:50%;background:var(--navy);border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--gold);flex-shrink:0;">${init}</div>
-          <div><div style="font-size:13px;font-weight:600;color:var(--navy);">${n.authorName}</div><div style="font-size:11px;color:#9ca3af;">${date}</div></div>
-          ${currentUser?.uid === ADMIN ? `<button onclick="deleteNotice('${n.id}',this)" style="margin-left:auto;background:none;border:none;color:#dc2626;cursor:pointer;font-size:12px;">🗑</button>` : ''}
-        </div><div style="font-size:14px;color:var(--text);line-height:1.65;">${n.text}</div>`;
-        container.appendChild(card);
-      });
-    } catch(e) { console.error(e); }
-  }
+  // ── THE ICET WALL ─────────────────────────────────────────────────────────
+  let wallPosts = [];
+  let wallFilter = 'all';
 
-  window.deleteNotice = async function(id, btn) {
-    if (!confirm('Delete this post?')) return;
-    try { await deleteDoc(doc(db,'notices',id)); btn.closest('div[style]').remove(); toast('Deleted.'); } catch(e) { alert(e.message); }
+  window.setWallFilter = function(f, btn) {
+    wallFilter = f;
+    document.querySelectorAll('.wall-filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderWall();
   };
 
-  // ── Announcements ─────────────────────────────────────────────────────────
-  async function loadAnnouncements() {
-    const container = document.getElementById('announcements-container');
+  async function loadWall() {
+    const container = document.getElementById('wall-container');
     if (!container) return;
     try {
-      const snap = await getDocs(query(collection(db,'announcements'), where('session','==',YEAR), where('approved','==',true)));
-      const items = []; snap.forEach(d => items.push({id:d.id,...d.data()}));
-      items.sort((a,b) => (b.createdAt?.seconds||0) - (a.createdAt?.seconds||0));
-      if (!items.length) { container.innerHTML = '<div style="text-align:center;padding:2rem;color:var(--muted);font-size:13px;">No announcements yet.</div>'; return; }
-      const tl = {job:'Job Update',achievement:'Achievement',news:'News',other:'Update'};
-      const tc = {job:'background:#eff6ff;color:#1d4ed8',achievement:'background:#f0fdf4;color:#166534',news:'background:#fff7ed;color:#9a3412',other:'background:#f3f4f6;color:#6b7280'};
-      container.innerHTML = '';
-      items.forEach(a => {
-        const date = a.createdAt ? new Date(a.createdAt.seconds*1000).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}) : '';
-        const card = document.createElement('div');
-        card.style.cssText = 'background:white;border:1px solid var(--border);border-radius:10px;padding:1rem;margin-bottom:0.75rem;';
-        card.innerHTML = `<span style="font-size:11px;font-weight:600;padding:3px 10px;border-radius:12px;display:inline-block;margin-bottom:6px;${tc[a.type]||tc.other}">${tl[a.type]||'Update'}</span>
-          <div style="font-size:14px;font-weight:600;color:var(--navy);margin-bottom:4px;">${a.title}</div>
-          ${a.body ? `<div style="font-size:13px;color:#6b7280;line-height:1.6;">${a.body}</div>` : ''}
-          <div style="font-size:11px;color:#9ca3af;margin-top:6px;">By ${a.authorName} &middot; ${date}</div>`;
-        container.appendChild(card);
+      const snap = await getDocs(query(collection(db,'wall'), where('session','==',YEAR)));
+      wallPosts = [];
+      snap.forEach(d => wallPosts.push({id:d.id,...d.data()}));
+      wallPosts.sort((a,b) => {
+        if (a.pinned && !b.pinned) return -1;
+        if (!a.pinned && b.pinned) return 1;
+        return (b.createdAt?.seconds||0) - (a.createdAt?.seconds||0);
       });
-    } catch(e) { console.error(e); }
+      renderWall();
+    } catch(e) { console.error(e); container.innerHTML = '<div style="text-align:center;padding:2rem;color:var(--muted);font-size:13px;">Could not load The Wall.</div>'; }
   }
+
+  function timeAgo(ts) {
+    if (!ts) return '';
+    const diff = Math.floor((Date.now() - ts.seconds*1000) / 1000);
+    if (diff < 60) return 'just now';
+    if (diff < 3600) return Math.floor(diff/60)+'m ago';
+    if (diff < 86400) return Math.floor(diff/3600)+'h ago';
+    return new Date(ts.seconds*1000).toLocaleDateString('en-GB',{day:'numeric',month:'short'});
+  }
+
+  const REACTIONS = [{key:'love',emoji:'❤️',label:'Love'},{key:'agree',emoji:'👍',label:'Agree'},{key:'celebrate',emoji:'🎉',label:'Celebrate'},{key:'wow',emoji:'😮',label:'Wow'}];
+
+  function renderWall() {
+    const container = document.getElementById('wall-container');
+    if (!container) return;
+    const filtered = wallFilter === 'all' ? wallPosts : wallPosts.filter(p => p.type === wallFilter);
+    if (!filtered.length) {
+      container.innerHTML = `<div style="text-align:center;padding:2rem;color:var(--muted);font-size:13px;">${wallFilter === 'all' ? 'The Wall is quiet — be the first to post!' : 'No posts here yet.'}</div>`;
+      return;
+    }
+    container.innerHTML = '';
+    filtered.forEach(post => container.appendChild(buildWallCard(post)));
+  }
+
+  function buildWallCard(post) {
+    const isOfficial = post.type === 'official';
+    const isAdmin    = currentUser?.uid === ADMIN;
+    const uid        = currentUser?.uid;
+    const init       = (post.authorName||'?').split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase();
+
+    const card = document.createElement('div');
+    card.className = 'wall-card' + (isOfficial ? ' official' : '');
+    card.dataset.id = post.id;
+
+    // Reaction counts & user state
+    const userReactions = {};
+    REACTIONS.forEach(r => { userReactions[r.key] = (post.reactions?.[r.key]||[]).includes(uid); });
+    const reactionHTML = REACTIONS.map(r => {
+      const count = (post.reactions?.[r.key]||[]).length;
+      const active = userReactions[r.key] ? ' active' : '';
+      return `<button class="reaction-btn${active}" data-post="${post.id}" data-rkey="${r.key}" onclick="toggleReaction('${post.id}','${r.key}',this)">
+        ${r.emoji} <span class="reaction-count">${count||''}</span>
+      </button>`;
+    }).join('');
+
+    const commentCount = post.commentCount || 0;
+    const adminTools = isAdmin ? `
+      <button class="wall-pin-btn" onclick="togglePin('${post.id}',${!!post.pinned},this)" title="${post.pinned?'Unpin':'Pin'}">
+        ${post.pinned ? '📌 Pinned' : '📌'}
+      </button>
+      <button class="wall-del-btn" onclick="deleteWallPost('${post.id}',this)" title="Delete">🗑</button>` : '';
+
+    card.innerHTML = `
+      <div class="wall-card-header">
+        <div class="wall-avatar${isOfficial?' official-av':''}">${init}</div>
+        <div style="flex:1;min-width:0;">
+          <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+            <span class="wall-author">${post.authorName}</span>
+            <span class="wall-badge ${isOfficial?'official':'community'}">${isOfficial?'📌 Official':'💬 Community'}</span>
+            ${post.pinned ? '<span class="wall-pinned-badge">· Pinned</span>' : ''}
+          </div>
+          <div class="wall-meta">${timeAgo(post.createdAt)}</div>
+        </div>
+        ${adminTools}
+      </div>
+      <div class="wall-text">${escHtml(post.text)}</div>
+      <div class="wall-reactions">${reactionHTML}</div>
+      <div class="wall-footer">
+        <button class="wall-comment-toggle" onclick="toggleComments('${post.id}',this)">
+          💬 <span class="comment-count-label">${commentCount ? commentCount+' comment'+(commentCount>1?'s':'') : 'Comment'}</span>
+        </button>
+      </div>
+      <div class="wall-comments" id="comments-${post.id}" style="display:none;"></div>
+    `;
+    return card;
+  }
+
+  function escHtml(s) {
+    return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  window.toggleReaction = async function(postId, rkey, btn) {
+    if (!currentUser) { toast('Sign in to react.'); return; }
+    const uid = currentUser.uid;
+    const ref2 = doc(db,'wall',postId);
+    const field = `reactions.${rkey}`;
+    const post = wallPosts.find(p => p.id === postId);
+    if (!post) return;
+    const arr = post.reactions?.[rkey] || [];
+    const hasIt = arr.includes(uid);
+    try {
+      await updateDoc(ref2, { [field]: hasIt ? arrayRemove(uid) : arrayUnion(uid) });
+      if (!post.reactions) post.reactions = {};
+      if (hasIt) post.reactions[rkey] = arr.filter(u => u !== uid);
+      else { post.reactions[rkey] = [...arr, uid]; }
+      // Update button
+      const card = document.querySelector(`.wall-card[data-id="${postId}"]`);
+      if (card) {
+        const newCount = post.reactions[rkey].length;
+        btn.className = 'reaction-btn' + ((!hasIt) ? ' active' : '');
+        btn.querySelector('.reaction-count').textContent = newCount || '';
+      }
+    } catch(e) { toast('Error: '+e.message); }
+  };
+
+  window.toggleComments = async function(postId, btn) {
+    const box = document.getElementById('comments-'+postId);
+    if (!box) return;
+    if (box.style.display !== 'none') { box.style.display = 'none'; return; }
+    box.style.display = 'block';
+    if (box.dataset.loaded) return;
+    box.dataset.loaded = '1';
+    box.innerHTML = '<div style="font-size:12px;color:var(--muted);padding:4px 0;">Loading…</div>';
+    try {
+      const snap = await getDocs(query(collection(db,'wall',postId,'comments'), orderBy('createdAt','asc')));
+      const comments = []; snap.forEach(d => comments.push({id:d.id,...d.data()}));
+      renderComments(postId, comments, box);
+    } catch(e) { box.innerHTML = '<div style="font-size:12px;color:#dc2626;">Could not load comments.</div>'; }
+  };
+
+  function renderComments(postId, comments, box) {
+    const canPost = currentUser && (isSameSession || currentUser.uid === ADMIN);
+    box.innerHTML = '';
+    if (comments.length) {
+      comments.forEach(c => {
+        const init = (c.authorName||'?').split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase();
+        const item = document.createElement('div');
+        item.className = 'comment-item';
+        item.innerHTML = `<div class="comment-avatar">${init}</div>
+          <div class="comment-bubble">
+            <div class="comment-name">${escHtml(c.authorName)}</div>
+            <div class="comment-text">${escHtml(c.text)}</div>
+          </div>`;
+        box.appendChild(item);
+      });
+    } else {
+      box.insertAdjacentHTML('beforeend','<div style="font-size:12px;color:var(--muted);margin-bottom:6px;">No comments yet.</div>');
+    }
+    if (canPost) {
+      const form = document.createElement('div');
+      form.className = 'comment-form';
+      form.innerHTML = `<input class="comment-input" placeholder="Write a comment…" maxlength="300" id="cinput-${postId}">
+        <button class="comment-send" onclick="postComment('${postId}')">Send</button>`;
+      box.appendChild(form);
+    }
+  }
+
+  window.postComment = async function(postId) {
+    if (!currentUser || !currentProfile) return;
+    const input = document.getElementById('cinput-'+postId);
+    const text = input?.value.trim();
+    if (!text) return;
+    input.disabled = true;
+    try {
+      await addDoc(collection(db,'wall',postId,'comments'), {
+        text, authorUid: currentUser.uid, authorName: currentProfile.name, createdAt: serverTimestamp()
+      });
+      // Increment comment count on post
+      await updateDoc(doc(db,'wall',postId), { commentCount: increment(1) });
+      const post = wallPosts.find(p => p.id === postId);
+      if (post) post.commentCount = (post.commentCount||0)+1;
+      // Re-render comments
+      const box = document.getElementById('comments-'+postId);
+      delete box.dataset.loaded;
+      box.style.display = 'none';
+      await toggleComments(postId, null);
+      // Update comment count label in card
+      const label = document.querySelector(`.wall-card[data-id="${postId}"] .comment-count-label`);
+      const cnt = post?.commentCount||1;
+      if (label) label.textContent = cnt+' comment'+(cnt>1?'s':'');
+    } catch(e) { toast('Error: '+e.message); input.disabled = false; }
+  };
+
+  window.togglePin = async function(postId, isPinned, btn) {
+    if (!currentUser || currentUser.uid !== ADMIN) return;
+    try {
+      await updateDoc(doc(db,'wall',postId), { pinned: !isPinned });
+      const post = wallPosts.find(p => p.id === postId);
+      if (post) post.pinned = !isPinned;
+      wallPosts.sort((a,b) => {
+        if (a.pinned && !b.pinned) return -1;
+        if (!a.pinned && b.pinned) return 1;
+        return (b.createdAt?.seconds||0) - (a.createdAt?.seconds||0);
+      });
+      renderWall();
+      toast(isPinned ? 'Unpinned.' : 'Pinned to top.');
+    } catch(e) { toast('Error: '+e.message); }
+  };
+
+  window.deleteWallPost = async function(postId, btn) {
+    if (!currentUser || currentUser.uid !== ADMIN) return;
+    if (!confirm('Delete this post?')) return;
+    try {
+      await deleteDoc(doc(db,'wall',postId));
+      wallPosts = wallPosts.filter(p => p.id !== postId);
+      renderWall();
+      toast('Deleted.');
+    } catch(e) { alert(e.message); }
+  };
 
   // ── Tabs ──────────────────────────────────────────────────────────────────
   window.switchTab = function(tab) {
-    ['directory','noticeboard','announcements'].forEach(t => {
+    ['directory','wall'].forEach(t => {
       const content = document.getElementById('tab-content-'+t);
       const btn     = document.getElementById('tab-'+t);
       if (content) content.style.display = t === tab ? 'block' : 'none';
@@ -1446,40 +1642,40 @@ if (!SD || !SD.active) {
     });
   };
 
-  document.getElementById('notice-text')?.addEventListener('input', function() {
-    document.getElementById('notice-char').textContent = this.value.length + '/500';
+  // Wall post form
+  document.getElementById('wall-text')?.addEventListener('input', function() {
+    document.getElementById('wall-char').textContent = this.value.length+'/600';
   });
 
-  document.getElementById('btn-post-notice')?.addEventListener('click', async () => {
+  // Show post-type selector only for admin
+  if (currentUser?.uid === ADMIN) {
+    const tw = document.getElementById('wall-type-wrap');
+    if (tw) tw.style.display = 'block';
+  }
+
+  document.getElementById('btn-post-wall')?.addEventListener('click', async () => {
     if (!currentUser || !currentProfile) return;
-    const text = document.getElementById('notice-text').value.trim();
+    const text = document.getElementById('wall-text').value.trim();
     if (!text) { toast('Please write something.'); return; }
+    const type = (currentUser.uid === ADMIN && document.getElementById('wall-type')?.value) || 'community';
+    const btn2 = document.getElementById('btn-post-wall');
+    btn2.disabled = true; btn2.textContent = 'Posting…';
     try {
-      await addDoc(collection(db,'notices'), {
-        text, session:YEAR, approved: false,
-        authorUid: currentUser.uid, authorName: currentProfile.name, createdAt: serverTimestamp()
+      const ref2 = await addDoc(collection(db,'wall'), {
+        text, type, session: YEAR, pinned: false,
+        authorUid: currentUser.uid, authorName: currentProfile.name,
+        reactions: { love:[], agree:[], celebrate:[], wow:[] },
+        commentCount: 0, createdAt: serverTimestamp()
       });
-      document.getElementById('notice-text').value = '';
-      document.getElementById('notice-char').textContent = '0/500';
-      toast('Posted! Visible once approved.');
+      document.getElementById('wall-text').value = '';
+      document.getElementById('wall-char').textContent = '0/600';
+      wallPosts.unshift({ id: ref2.id, text, type, session:YEAR, pinned:false,
+        authorUid:currentUser.uid, authorName:currentProfile.name,
+        reactions:{love:[],agree:[],celebrate:[],wow:[]}, commentCount:0 });
+      renderWall();
+      toast('Posted!');
     } catch(e) { toast('Error: '+e.message); }
-  });
-
-  document.getElementById('btn-post-ann')?.addEventListener('click', async () => {
-    if (!currentUser || !currentProfile) return;
-    const type  = document.getElementById('ann-type').value;
-    const title = document.getElementById('ann-title').value.trim();
-    const body  = document.getElementById('ann-body').value.trim();
-    if (!title) { toast('Please add a headline.'); return; }
-    try {
-      await addDoc(collection(db,'announcements'), {
-        type, title, body, session:YEAR, approved: false,
-        authorUid: currentUser.uid, authorName: currentProfile.name, createdAt: serverTimestamp()
-      });
-      document.getElementById('ann-title').value = '';
-      document.getElementById('ann-body').value = '';
-      toast('Submitted for approval!');
-    } catch(e) { toast('Error: '+e.message); }
+    btn2.disabled = false; btn2.textContent = 'Post →';
   });
 
   // ── Reports ───────────────────────────────────────────────────────────────
@@ -1516,7 +1712,7 @@ if (!SD || !SD.active) {
 <!-- Mobile inline-grid fix -->
 <script>
 if (window.innerWidth <= 768) {
-  document.querySelectorAll('.noticeboard-inner, .announcements-inner').forEach(function(el) {
+  document.querySelectorAll('.wall-inner').forEach(function(el) {
     el.style.display = 'block';
     el.style.gridTemplateColumns = 'unset';
   });
