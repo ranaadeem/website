@@ -101,20 +101,6 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
     max-width: 1000px;
     margin: 0 auto;
   }
-  /* Flag strip — 3 cols matching the journey images */
-  .header-flag-strip {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    background: #fff;
-    border-bottom: 3px solid var(--gold);
-    width: 100%;
-  }
-  .header-flag-col {
-    text-align: center;
-    padding: 0.65rem 0.5rem;
-    border-right: 1px solid #e5e7eb;
-  }
-  .header-flag-col:last-child { border-right: none; }
   @media(max-width:640px) {
     .journey-cols { grid-template-columns: 1fr 1fr 1fr; height: auto; }
     .journey-col { height: 130px; padding: 0.6rem; }
@@ -122,10 +108,6 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
     .journey-col-sub { font-size: 9px; }
     .journey-col-year { font-size: 9px; }
     .header-name-strip { padding: 0.75rem 1rem; }
-    .header-flag-col { padding: 0.5rem 0.25rem; }
-    .header-flag-col .flag-emoji { font-size: 20px !important; }
-    .header-flag-col .flag-name { font-size: 11px !important; }
-    .header-flag-col .flag-sub { font-size: 10px !important; }
   }
 
   .page-header .page-tag { border-color: rgba(139,105,60,0.4); color: #8b693c; display: inline-block; margin-bottom: 1rem; }
@@ -425,30 +407,35 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
 
     </div><!-- /journey-cols -->
 
-    <!-- Name strip — left-aligned with bio text -->
+    <!-- Combined name + flags strip -->
     <div class="header-name-strip">
       <div class="header-name-inner">
-        <h1 style="font-family:'Playfair Display',serif;font-size:clamp(1.2rem,2.5vw,1.75rem);font-weight:700;color:#1a3a8a;line-height:1.2;">Dr. Adeem Ghaffar Rana</h1>
-        <p style="font-size:13px;color:#6b7280;margin-top:3px;">Research Scientist · Catalysis &amp; Sustainable Fuels · TU Bergakademie Freiberg, Germany</p>
-      </div>
-    </div>
-
-    <!-- Flag strip — each flag aligned under its column image -->
-    <div class="header-flag-strip">
-      <div class="header-flag-col">
-        <div class="flag-emoji" style="font-size:26px;line-height:1.2;">🇵🇰</div>
-        <div class="flag-name" style="font-size:13px;font-weight:700;color:#1a3a8a;margin-top:3px;">Pakistan</div>
-        <div class="flag-sub" style="font-size:11px;color:#6b7280;margin-top:1px;">Lahore · PU</div>
-      </div>
-      <div class="header-flag-col">
-        <div class="flag-emoji" style="font-size:26px;line-height:1.2;">🇸🇦</div>
-        <div class="flag-name" style="font-size:13px;font-weight:700;color:#1a3a8a;margin-top:3px;">Saudi Arabia</div>
-        <div class="flag-sub" style="font-size:11px;color:#6b7280;margin-top:1px;">Dhahran · KFUPM</div>
-      </div>
-      <div class="header-flag-col">
-        <div class="flag-emoji" style="font-size:26px;line-height:1.2;">🇩🇪</div>
-        <div class="flag-name" style="font-size:13px;font-weight:700;color:#1a3a8a;margin-top:3px;">Germany</div>
-        <div class="flag-sub" style="font-size:11px;color:#6b7280;margin-top:1px;">Munich · Freiberg</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:1.5rem;flex-wrap:wrap;">
+          <div>
+            <h1 style="font-family:'Playfair Display',serif;font-size:clamp(1.2rem,2.5vw,1.75rem);font-weight:700;color:#1a3a8a;line-height:1.2;">Dr. Adeem Ghaffar Rana</h1>
+            <p style="font-size:13px;color:#6b7280;margin-top:3px;">Research Scientist · Catalysis &amp; Sustainable Fuels</p>
+            <p style="font-size:12px;color:#6b7280;margin-top:1px;">TU Bergakademie Freiberg, Germany</p>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;flex-shrink:0;">
+            <div style="text-align:center;">
+              <div style="font-size:26px;line-height:1.2;">🇵🇰</div>
+              <div style="font-size:12px;font-weight:700;color:#1a3a8a;margin-top:2px;">Pakistan</div>
+              <div style="font-size:11px;color:#6b7280;">Lahore · PU</div>
+            </div>
+            <span style="font-size:18px;color:#c9a84c;">→</span>
+            <div style="text-align:center;">
+              <div style="font-size:26px;line-height:1.2;">🇸🇦</div>
+              <div style="font-size:12px;font-weight:700;color:#1a3a8a;margin-top:2px;">Saudi Arabia</div>
+              <div style="font-size:11px;color:#6b7280;">Dhahran · KFUPM</div>
+            </div>
+            <span style="font-size:18px;color:#c9a84c;">→</span>
+            <div style="text-align:center;">
+              <div style="font-size:26px;line-height:1.2;">🇩🇪</div>
+              <div style="font-size:12px;font-weight:700;color:#1a3a8a;margin-top:2px;">Germany</div>
+              <div style="font-size:11px;color:#6b7280;">Munich · Freiberg</div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
