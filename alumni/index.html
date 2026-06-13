@@ -772,24 +772,95 @@ async function loadAlumni() {
   return alumniCache;
 }
 
+// ── Name matching helpers ─────────────────────────────────────────
+function normStr(s) {
+  return (s||'').toLowerCase().replace(/[^a-z\s]/g,'').trim();
+}
+
+function levenshtein(a, b) {
+  const m = a.length, n = b.length;
+  const dp = Array.from({length:m+1}, (_,i) => Array.from({length:n+1}, (_,j) => j===0?i:(i===0?j:0)));
+  for (let i=1;i<=m;i++) for (let j=1;j<=n;j++)
+    dp[i][j] = a[i-1]===b[j-1] ? dp[i-1][j-1] : 1+Math.min(dp[i-1][j-1],dp[i-1][j],dp[i][j-1]);
+  return dp[m][n];
+}
+
+function fuzzyToken(token, word) {
+  if (token===word) return true;
+  if (token.length<3) return false;
+  const maxDist = token.length<=5 ? 1 : token.length<=8 ? 2 : 3;
+  return levenshtein(token, word) <= maxDist;
+}
+
+function nameMatchScore(alumniName, queryTokens) {
+  // Returns true if ALL query tokens match some part of the name
+  const parts = normStr(alumniName).split(/\s+/).filter(Boolean);
+  return queryTokens.every(qt => parts.some(p => fuzzyToken(qt, p)));
+}
+
+const STOP_WORDS = new Set([
+  'is','are','there','any','a','an','the','in','this','at','session',
+  'registered','can','you','find','show','me','who','what','where','from',
+  'alumni','member','tell','about','hi','hello','hey','please','i','want',
+  'to','know','if','does','do','has','have','and','or','of','for','with',
+  'by','my','your','their','how','many','all','list','get','give'
+]);
+
+const DETAIL_KEYWORDS = [
+  'country','where','work','job','company','employer','city','how many',
+  'count','list all','registered','engineer','doctor','profession',
+  'lives','based','located','total','session','shift','morning','evening'
+];
+
 function buildContext(alumni, question) {
-  const q = (question || '').toLowerCase();
-  const registered = alumni.filter(a => a.registered);
-  const unregistered = alumni.filter(a => !a.registered);
-  const matchedUnregistered = unregistered.filter(a =>
-    a.name.toLowerCase().split(' ').some(w => w.length > 3 && q.includes(w))
-  );
+  const q = normStr(question);
+
+  // Detect detail/stats query → send all registered
+  const isDetailQuery = DETAIL_KEYWORDS.some(k => q.includes(k));
+
+  // Extract name tokens (strip stop words and short filler)
+  const queryTokens = q.split(/\s+/)
+    .map(w => w.replace(/[^a-z]/g,''))
+    .filter(w => w.length > 1 && !STOP_WORDS.has(w));
+
   const lines = [];
-  registered.forEach(a => {
+
+  function formatRegistered(a) {
     const isPublic = a.jobVisibility === 'public';
     const details = isPublic
-      ? `${a.employer?', works at '+a.employer:''}${a.title?' as '+a.title:''}${a.city?', lives in '+a.city:''}${a.country&&a.country!==a.city?', '+a.country:''}`
-      : ' [profile details private]';
-    lines.push(`- ${a.name} (${a.roll}, Session ${a.session}) [REGISTERED]${details}`);
-  });
-  matchedUnregistered.forEach(a => {
-    lines.push(`- ${a.name} (${a.roll}, Session ${a.session}) [NOT REGISTERED]`);
-  });
+      ? [
+          a.employer ? 'works at '+a.employer : '',
+          a.title    ? 'as '+a.title : '',
+          a.city     ? 'lives in '+a.city : '',
+          a.country && a.country !== a.city ? a.country : ''
+        ].filter(Boolean).join(', ')
+      : '[profile details private]';
+    return `- ${a.name} (Roll: ${a.roll}, Session ${a.session}) [REGISTERED]${details ? ', '+details : ''}`;
+  }
+
+  if (isDetailQuery || queryTokens.length === 0) {
+    // General / stats / detail query → only registered alumni
+    alumni.filter(a => a.registered).forEach(a => lines.push(formatRegistered(a)));
+
+  } else {
+    // Name query — pre-filter by name tokens
+    // Single token → partial: any alumni whose name contains that token
+    // Multiple tokens → full-name: ALL tokens must match same person
+    const matched = alumni.filter(a => nameMatchScore(a.name, queryTokens));
+
+    if (!matched.length) {
+      lines.push('NO_MATCH'); // sentinel so LLM knows nothing was found
+    } else {
+      matched.forEach(a => {
+        if (a.registered) {
+          lines.push(formatRegistered(a));
+        } else {
+          lines.push(`- ${a.name} (Roll: ${a.roll}, Session ${a.session}) [NOT REGISTERED — not yet on portal]`);
+        }
+      });
+    }
+  }
+
   return lines.join('\n');
 }
 
@@ -830,18 +901,24 @@ window.sendAIMsg = async function() {
     const alumni = await loadAlumni();
     const context = buildContext(alumni, question);
     const registered = alumni.filter(a => a.registered).length;
-    const systemPrompt = `You are Ask Rana Sb!, a friendly assistant for the ICET (Institute of Chemical Engineering & Technology) Punjab University alumni network.
-The data below includes students in the network. Each entry is either [REGISTERED] (joined the portal) or [NOT REGISTERED] (in the class list but hasn't joined yet).
+    const systemPrompt = `You are "Ask Rana Sb!", a friendly assistant for the ICET (Institute of Chemical Engineering & Technology) Punjab University alumni network.
 
-IMPORTANT RULES:
-- For greetings or vague messages (like "hi", "hey", "hello", "how are you"), respond warmly and briefly — tell them what you can help with (e.g. finding alumni by name, session, employer, or city). Do NOT list alumni names.
-- Only list specific alumni when the user asks about a specific person, employer, city, or session.
-- When listing people, limit to the most relevant matches (max 10). Do not dump the full list.
-- If someone asks about employer, city, or profession — only registered alumni have that info; others show [profile details private].
-- Do NOT make up data. Only use what's in the Alumni Data below.
-- If you don't have enough info, suggest emailing Dr. Adeem Ghaffar Rana at ranaadeem@hotmail.com
-- For unregistered alumni, encourage them to join at ranaadeem.de/alumni/register.html
-Total students in network: ${alumni.length} (${registered} registered, ${alumni.length - registered} not yet registered)
+MATCHING RULES (already applied to the data below — follow strictly):
+- The Alumni Data below is PRE-FILTERED for this query. Only report what is in it.
+- If the data contains NO_MATCH, tell the user no one was found with that name and suggest checking spelling.
+- For single-name queries (e.g. "Saqib"): the data shows ALL alumni with that first or last name — list them all.
+- For full-name queries (e.g. "Saqib Javed"): the data shows only exact+fuzzy matches — do NOT broaden to all Saqibs or all Javeds.
+- For country/job/city/stats queries: only [REGISTERED] alumni have those details. Never guess details for [NOT REGISTERED] members.
+- [NOT REGISTERED] members exist in the class list but haven't joined the portal yet — only their name and roll are known.
+
+RESPONSE RULES:
+- Greetings ("hi", "hello", "how are you") → respond warmly, say what you can help with. Do NOT list names.
+- Do NOT make up any data. Only use what's in Alumni Data below.
+- Keep responses concise. Max 10 people when listing.
+- For unregistered alumni, encourage them to join: ranaadeem.de/alumni/register.html
+- If you can't help, suggest emailing Dr. Adeem Ghaffar Rana at ranaadeem@hotmail.com
+
+Network: ${alumni.length} total (${registered} registered, ${alumni.length - registered} not yet joined)
 
 Alumni Data:
 ${context}`;
