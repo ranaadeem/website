@@ -63,7 +63,7 @@ body{ font-family:"DM Sans",sans-serif; background:var(--cream); color:var(--tex
 .hero-tag{ display:inline-block; font-size:11px; font-weight:500; letter-spacing:0.15em; text-transform:uppercase; color:var(--gold); border:1px solid rgba(201,168,76,0.4); padding:5px 14px; border-radius:20px; margin-bottom:1.5rem; }
 .hero h1{ font-family:"Playfair Display",serif; font-size:clamp(2.2rem,5vw,3.4rem); font-weight:700; color:var(--white); line-height:1.15; margin-bottom:1.25rem; }
 .hero h1 span{ color:var(--gold); }
-.hero-desc{ font-size:16px; color:rgba(255,255,255,0.72); line-height:1.75; margin-bottom:2rem; font-weight:300; max-width:520px; }
+.hero-desc{ font-size:16px; color:rgba(255,255,255,0.72); line-height:1.75; margin-bottom:2rem; font-weight:300; max-width:520px; text-align:justify; }
 .hero-btns{ display:flex; gap:12px; flex-wrap:wrap; }
 .btn-primary{ background:var(--gold); color:var(--navy); padding:11px 26px; border-radius:6px; font-size:14px; font-weight:500; text-decoration:none; transition:all 0.2s; display:inline-block; }
 .btn-primary:hover{ background:var(--gold-light); transform:translateY(-1px); }
@@ -97,7 +97,7 @@ body{ font-family:"DM Sans",sans-serif; background:var(--cream); color:var(--tex
 .section-inner{ max-width:960px; margin:0 auto; }
 .section-tag{ font-size:11px; font-weight:500; letter-spacing:0.15em; text-transform:uppercase; color:var(--gold); display:block; margin-bottom:0.4rem; }
 .section-title{ font-family:"Playfair Display",serif; font-size:clamp(1.6rem,3vw,2.2rem); color:var(--navy); margin-bottom:0.75rem; }
-.section-sub{ font-size:15px; color:var(--muted); margin-bottom:2.5rem; max-width:560px; line-height:1.7; }
+.section-sub{ font-size:15px; color:var(--muted); margin-bottom:2.5rem; max-width:560px; line-height:1.7; text-align:justify; }
 
 /* RESEARCH CARDS */
 .research-grid{ display:grid; grid-template-columns:1fr; gap:1rem; }
@@ -120,7 +120,7 @@ body{ font-family:"DM Sans",sans-serif; background:var(--cream); color:var(--tex
 .research-card:hover::before{ transform:scaleX(1); }
 .card-icon{ font-size:20px; margin-right:8px; display:inline; vertical-align:middle; }
 .card-title{ font-family:"Playfair Display",serif; font-size:15px; color:var(--navy); margin-bottom:0.5rem; display:inline; vertical-align:middle; }
-.card-text{ font-size:13px; color:var(--muted); line-height:1.65; }
+.card-text{ font-size:13px; color:var(--muted); line-height:1.65; text-align:justify; }
 .card-tag{ display:inline-block; margin-top:0.75rem; font-size:11px; color:var(--gold); background:rgba(201,168,76,0.1); padding:3px 9px; border-radius:4px; font-weight:500; }
 
 /* JOURNEY */
@@ -172,7 +172,7 @@ body{ font-family:"DM Sans",sans-serif; background:var(--cream); color:var(--tex
 /* CONTACT STRIP */
 .contact-strip{ background:var(--gold); padding:3rem 2rem; text-align:center; }
 .contact-strip h3{ font-family:"Playfair Display",serif; font-size:22px; color:var(--navy); margin-bottom:0.5rem; }
-.contact-strip p{ font-size:14px; color:rgba(15,31,61,0.7); margin-bottom:1.5rem; }
+.contact-strip p{ font-size:14px; color:rgba(15,31,61,0.7); margin-bottom:1.5rem; text-align:justify; max-width:520px; margin-left:auto; margin-right:auto; }
 .contact-row{ display:flex; align-items:center; justify-content:center; gap:1.5rem; flex-wrap:wrap; }
 .contact-email-btn{ background:var(--navy); color:var(--white); padding:11px 28px; border-radius:6px; text-decoration:none; font-size:14px; font-weight:500; transition:opacity 0.2s; }
 .contact-email-btn:hover{ opacity:0.85; }
@@ -186,6 +186,7 @@ body{ font-family:"DM Sans",sans-serif; background:var(--cream); color:var(--tex
 
 @media(max-width:768px){
   .hero-inner{grid-template-columns:1fr;}
+  .hero{padding:1.25rem 1.25rem;}
   .hero-photo-card{display:block;max-width:320px;margin:0 auto;}
   .research-grid{grid-template-columns:1fr;}
   .timeline{grid-template-columns:1fr 1fr;}
@@ -193,6 +194,14 @@ body{ font-family:"DM Sans",sans-serif; background:var(--cream); color:var(--tex
   .strip-divider{display:none;}
   .contact-row{flex-direction:column;}
   .contact-social-group{flex-wrap:wrap;justify-content:center;}
+  .section{padding:2.5rem 1.25rem;}
+  .stats-strip{padding:1rem 1.25rem;}
+  .journey-section{padding:2.5rem 1.25rem;}
+}
+@media(max-width:480px){
+  .timeline{grid-template-columns:1fr 1fr;}
+  .timeline-item:not(:last-child)::after{display:none;}
+  .hero h1{font-size:1.8rem;}
 }
 
 /* DROPDOWN NAV */
@@ -560,7 +569,7 @@ body{ font-family:"DM Sans",sans-serif; background:var(--cream); color:var(--tex
     <div style="margin-bottom:1.5rem;">
       <span style="font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);font-weight:600;">Get In Touch</span>
       <h2 style="font-family:'Playfair Display',serif;font-size:clamp(1.6rem,3vw,2.2rem);color:white;margin:0.3rem 0 0.5rem;font-weight:700;">Let's Talk.</h2>
-      <p style="color:rgba(255,255,255,0.55);font-size:14px;max-width:520px;line-height:1.7;">If you have a question related to my field, a research idea to discuss, or simply want to reach out — I am just a message away.</p>
+      <p style="color:rgba(255,255,255,0.55);font-size:14px;max-width:520px;line-height:1.7;">If you have a question related to my field, a research idea to discuss, or simply want to reach out, I am just a message away.</p>
     </div>
 
     <!-- Card Grid -->
