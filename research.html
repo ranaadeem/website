@@ -379,6 +379,18 @@ nav{background:var(--navy);border-bottom:2px solid var(--gold);position:sticky;t
   }
   }
 
+  /* ── YEAR TABS ── */
+  .pub-year-tabs{display:flex;flex-wrap:wrap;gap:0.5rem;margin-bottom:1.5rem;}
+  .pub-year-tab{background:none;border:1.5px solid var(--border);color:var(--muted);padding:7px 18px;border-radius:20px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:all 0.2s;}
+  .pub-year-tab:hover{border-color:var(--navy);color:var(--navy);}
+  .pub-year-tab.active{background:var(--navy);border-color:var(--navy);color:#fff;}
+  @media(prefers-color-scheme:dark){
+    .pub-year-tab.active{background:var(--navy);color:#1a1d2e;}
+    .pub-year-tab:hover{border-color:var(--navy);color:var(--navy);}
+  }
+  .pub-year-panel{display:none;}
+  .pub-year-panel.active{display:block;}
+
 </style>
 
   <!-- Open Graph / Social sharing -->
@@ -551,7 +563,29 @@ nav{background:var(--navy);border-bottom:2px solid var(--gold);position:sticky;t
       <span class="section-label">Research Output</span>
       <h2 class="section-title">Selected Publications</h2>
 
-      <div class="pub-section" id="pubs-list">
+      <!-- Year tabs -->
+      <div class="pub-year-tabs">
+        <button class="pub-year-tab active" onclick="switchPubYear('2026',this)">2026</button>
+        <button class="pub-year-tab" onclick="switchPubYear('2024',this)">2024</button>
+        <button class="pub-year-tab" onclick="switchPubYear('2022',this)">2022</button>
+        <button class="pub-year-tab" onclick="switchPubYear('2021',this)">2021</button>
+        <button class="pub-year-tab" onclick="switchPubYear('2018',this)">2018</button>
+        <button class="pub-year-tab" onclick="switchPubYear('2017',this)">2017</button>
+        <button class="pub-year-tab" onclick="switchPubYear('2016',this)">2016</button>
+      </div>
+
+      <!-- 2026 -->
+      <div class="pub-section pub-year-panel active" id="pub-year-2026">
+
+        <div class="pub-item" style="cursor:default;">
+          <div class="pub-year-badge">2026</div>
+          <div class="pub-body">
+            <div class="pub-number">J.13</div>
+            <div class="pub-title">Nickel and Platinum Modified Exfoliated Carbon Nitride as Photo-Thermal Catalysts for CO₂ Hydrogenation</div>
+            <div class="pub-authors"><strong>Rana, A.G.</strong> et al.</div>
+            <div class="pub-journal"><em>Dalton Transactions</em> · 2026 <span style="color:var(--muted);font-size:11px;font-weight:500;">· DOI pending</span></div>
+          </div>
+        </div>
 
         <a href="https://doi.org/10.1016/j.fuel.2025.136280" target="_blank" class="pub-item" style="display:block;text-decoration:none;cursor:pointer;">
           <div class="pub-year-badge">2026</div>
@@ -563,6 +597,11 @@ nav{background:var(--navy);border-bottom:2px solid var(--gold);position:sticky;t
           </div>
         </a>
 
+      </div><!-- /2026 -->
+
+      <!-- 2024 -->
+      <div class="pub-section pub-year-panel" id="pub-year-2024">
+
         <a href="https://doi.org/10.1016/j.cej.2024.156948" target="_blank" class="pub-item" style="display:block;text-decoration:none;cursor:pointer;">
           <div class="pub-year-badge">2024</div>
           <div class="pub-body">
@@ -572,6 +611,11 @@ nav{background:var(--navy);border-bottom:2px solid var(--gold);position:sticky;t
             <div class="pub-journal"><em>Chemical Engineering Journal</em> · 500, p. 156948</div>
           </div>
         </a>
+
+      </div><!-- /2024 -->
+
+      <!-- 2022 -->
+      <div class="pub-section pub-year-panel" id="pub-year-2022">
 
         <a href="https://doi.org/10.3390/nano12224006" target="_blank" class="pub-item" style="display:block;text-decoration:none;cursor:pointer;">
           <div class="pub-year-badge">2022</div>
@@ -603,6 +647,11 @@ nav{background:var(--navy);border-bottom:2px solid var(--gold);position:sticky;t
           </div>
         </a>
 
+      </div><!-- /2022 -->
+
+      <!-- 2021 -->
+      <div class="pub-section pub-year-panel" id="pub-year-2021">
+
         <a href="https://doi.org/10.3390/catal11080898" target="_blank" class="pub-item" style="display:block;text-decoration:none;cursor:pointer;">
           <div class="pub-year-badge">2021</div>
           <div class="pub-body">
@@ -613,12 +662,6 @@ nav{background:var(--navy);border-bottom:2px solid var(--gold);position:sticky;t
           </div>
         </a>
 
-      </div><!-- /pubs-list visible -->
-
-      <!-- Hidden earlier publications (J.1–J.6) -->
-      <div id="pubs-hidden" style="display:none;">
-        <div class="pub-section">
-
         <a href="https://doi.org/10.3390/catal11060662" target="_blank" class="pub-item" style="display:block;text-decoration:none;cursor:pointer;">
           <div class="pub-year-badge">2021</div>
           <div class="pub-body">
@@ -628,6 +671,11 @@ nav{background:var(--navy);border-bottom:2px solid var(--gold);position:sticky;t
             <div class="pub-journal"><em>Catalysts</em> · 11(6), p. 662 <span class="pub-oa">Open Access</span></div>
           </div>
         </a>
+
+      </div><!-- /2021 -->
+
+      <!-- 2018 -->
+      <div class="pub-section pub-year-panel" id="pub-year-2018">
 
         <a href="https://doi.org/10.1007/s13738-018-1457-1" target="_blank" class="pub-item" style="display:block;text-decoration:none;cursor:pointer;">
           <div class="pub-year-badge">2018</div>
@@ -649,6 +697,11 @@ nav{background:var(--navy);border-bottom:2px solid var(--gold);position:sticky;t
           </div>
         </a>
 
+      </div><!-- /2018 -->
+
+      <!-- 2017 -->
+      <div class="pub-section pub-year-panel" id="pub-year-2017">
+
         <a href="https://doi.org/10.1080/09593330.2016.1217940" target="_blank" class="pub-item" style="display:block;text-decoration:none;cursor:pointer;">
           <div class="pub-year-badge">2017</div>
           <div class="pub-body">
@@ -658,6 +711,11 @@ nav{background:var(--navy);border-bottom:2px solid var(--gold);position:sticky;t
             <div class="pub-journal"><em>Environmental Technology</em> · 38(9), pp. 1085–1092</div>
           </div>
         </a>
+
+      </div><!-- /2017 -->
+
+      <!-- 2016 -->
+      <div class="pub-section pub-year-panel" id="pub-year-2016">
 
         <a href="https://doi.org/10.1016/j.jece.2016.05.019" target="_blank" class="pub-item" style="display:block;text-decoration:none;cursor:pointer;">
           <div class="pub-year-badge">2016</div>
@@ -679,16 +737,16 @@ nav{background:var(--navy);border-bottom:2px solid var(--gold);position:sticky;t
           </div>
         </a>
 
-        </div>
-      </div><!-- /pubs-hidden -->
+      </div><!-- /2016 -->
 
-      <!-- Toggle button -->
-      <div style="text-align:center;margin:1.5rem 0 2rem;">
-        <button id="pub-toggle-btn" onclick="(function(){var h=document.getElementById('pubs-hidden'),b=document.getElementById('pub-toggle-btn');if(h.style.display==='none'){h.style.display='block';b.textContent='Show Fewer Publications ▴';}else{h.style.display='none';b.textContent='Show 6 Earlier Publications ▾';}})()"
-          style="background:none;border:1.5px solid var(--navy);color:var(--navy);padding:10px 28px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:all 0.2s;">
-          Show 6 Earlier Publications ▾
-        </button>
-      </div>
+      <script>
+      function switchPubYear(year, btn) {
+        document.querySelectorAll('.pub-year-panel').forEach(function(p){ p.classList.remove('active'); });
+        document.querySelectorAll('.pub-year-tab').forEach(function(b){ b.classList.remove('active'); });
+        document.getElementById('pub-year-' + year).classList.add('active');
+        btn.classList.add('active');
+      }
+      </script>
 
       <span class="section-label">Conferences &amp; Presentations</span>
       <h2 class="section-title">Conference Activity</h2>
