@@ -1430,7 +1430,28 @@ if (!SD || !SD.active) {
         return (b.createdAt?.seconds||0) - (a.createdAt?.seconds||0);
       });
       renderWall();
+      updateWallBadge();
     } catch(e) { console.error(e); container.innerHTML = '<div style="text-align:center;padding:2rem;color:var(--muted);font-size:13px;">Could not load The Wall.</div>'; }
+  }
+
+  const WALL_VISIT_KEY = `lastWallVisit_${YEAR}`;
+
+  function updateWallBadge() {
+    // Only show badge if the Wall tab is not currently active
+    if (document.getElementById('tab-content-wall')?.style.display !== 'none') return;
+    const lastVisit = parseInt(localStorage.getItem(WALL_VISIT_KEY) || '0', 10);
+    const newCount = wallPosts.filter(p => (p.createdAt?.seconds || 0) * 1000 > lastVisit).length;
+    const btn = document.getElementById('tab-wall');
+    if (!btn) return;
+    // Remove existing badge
+    btn.querySelector('.wall-notif-badge')?.remove();
+    if (newCount > 0) {
+      const badge = document.createElement('span');
+      badge.className = 'wall-notif-badge';
+      badge.textContent = newCount > 99 ? '99+' : newCount;
+      badge.style.cssText = 'display:inline-flex;align-items:center;justify-content:center;background:#dc2626;color:white;font-size:10px;font-weight:700;border-radius:10px;padding:1px 5px;margin-left:5px;line-height:1.4;min-width:16px;';
+      btn.appendChild(badge);
+    }
   }
 
   function timeAgo(ts) {
@@ -1640,6 +1661,12 @@ if (!SD || !SD.active) {
       if (content) content.style.display = t === tab ? 'block' : 'none';
       if (btn) { btn.style.background = t === tab ? 'var(--navy)' : 'transparent'; btn.style.color = t === tab ? 'white' : '#6b7280'; }
     });
+    if (tab === 'wall') {
+      // Mark wall as seen — save current time, clear badge
+      localStorage.setItem(WALL_VISIT_KEY, Date.now().toString());
+      const btn = document.getElementById('tab-wall');
+      btn?.querySelector('.wall-notif-badge')?.remove();
+    }
   };
 
   // Wall post form
