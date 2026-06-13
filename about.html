@@ -90,27 +90,42 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
   .col-saudi { background: linear-gradient(145deg, #c47c1a 0%, #8b4e08 100%); }
   .col-germany { background: linear-gradient(145deg, #1a4a8a 0%, #0d3d7a 100%); }
   .journey-col[style*="background-image"] { background-size: cover; background-position: center; }
-  .header-tag-strip {
+  /* Name strip — aligns with bio text */
+  .header-name-strip {
     background: #ffffff;
-    padding: 0.75rem 2rem;
-    display: flex; align-items: center; justify-content: space-between;
+    padding: 0.8rem 2rem;
     border-bottom: 1px solid #e5e7eb;
-    gap: 1rem;
     width: 100%;
   }
-  .header-tag-strip-left { display: flex; flex-direction: column; gap: 3px; }
+  .header-name-inner {
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+  /* Flag strip — 3 cols matching the journey images */
+  .header-flag-strip {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    background: #fff;
+    border-bottom: 3px solid var(--gold);
+    width: 100%;
+  }
+  .header-flag-col {
+    text-align: center;
+    padding: 0.65rem 0.5rem;
+    border-right: 1px solid #e5e7eb;
+  }
+  .header-flag-col:last-child { border-right: none; }
   @media(max-width:640px) {
     .journey-cols { grid-template-columns: 1fr 1fr 1fr; height: auto; }
-    .journey-col { height: 140px; padding: 0.75rem; }
-    .journey-col-title { font-size: 0.8rem; }
-    .journey-col-sub { font-size: 10px; }
-    .header-tag-strip { flex-direction: column; align-items: flex-start; gap: 8px; }
-    .header-tag-strip-flags { display: flex !important; align-items: center; gap: 4px !important; flex-wrap: nowrap !important; width: 100%; justify-content: space-between; }
-    .header-tag-strip-flags .flag-item { min-width: 0 !important; flex: 1; text-align: center; }
-    .header-tag-strip-flags .flag-item .flag-emoji { font-size: 20px !important; }
-    .header-tag-strip-flags .flag-item .flag-name { font-size: 10px !important; }
-    .header-tag-strip-flags .flag-item .flag-sub { display: none !important; }
-    .header-tag-strip-flags .flag-arrow { font-size: 12px !important; flex-shrink: 0; padding: 0 2px; }
+    .journey-col { height: 130px; padding: 0.6rem; }
+    .journey-col-title { font-size: 0.75rem; }
+    .journey-col-sub { font-size: 9px; }
+    .journey-col-year { font-size: 9px; }
+    .header-name-strip { padding: 0.75rem 1rem; }
+    .header-flag-col { padding: 0.5rem 0.25rem; }
+    .header-flag-col .flag-emoji { font-size: 20px !important; }
+    .header-flag-col .flag-name { font-size: 11px !important; }
+    .header-flag-col .flag-sub { font-size: 10px !important; }
   }
 
   .page-header .page-tag { border-color: rgba(139,105,60,0.4); color: #8b693c; display: inline-block; margin-bottom: 1rem; }
@@ -410,30 +425,30 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
 
     </div><!-- /journey-cols -->
 
-    <!-- Title strip below the three images -->
-    <div class="header-tag-strip">
-      <div class="header-tag-strip-left">
-        <h1 style="font-family:'Playfair Display',serif;font-size:clamp(1.3rem,2.5vw,1.8rem);font-weight:700;color:#1a3a8a;">Dr. Adeem Ghaffar Rana</h1>
-        <p>Research Scientist · Catalysis &amp; Sustainable Fuels · TU Bergakademie Freiberg, Germany</p>
+    <!-- Name strip — left-aligned with bio text -->
+    <div class="header-name-strip">
+      <div class="header-name-inner">
+        <h1 style="font-family:'Playfair Display',serif;font-size:clamp(1.2rem,2.5vw,1.75rem);font-weight:700;color:#1a3a8a;line-height:1.2;">Dr. Adeem Ghaffar Rana</h1>
+        <p style="font-size:13px;color:#6b7280;margin-top:3px;">Research Scientist · Catalysis &amp; Sustainable Fuels · TU Bergakademie Freiberg, Germany</p>
       </div>
-      <div class="header-tag-strip-flags" style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
-        <div class="flag-item" style="text-align:center;min-width:80px;">
-          <div class="flag-emoji" style="font-size:30px;line-height:1.2;">🇵🇰</div>
-          <div class="flag-name" style="font-size:15px;font-weight:700;color:#1a3a8a;margin-top:3px;">Pakistan</div>
-          <div class="flag-sub" style="font-size:12px;color:#6b7280;margin-top:1px;">Lahore · PU</div>
-        </div>
-        <span class="flag-arrow" style="font-size:22px;color:#c9a84c;font-weight:300;">→</span>
-        <div class="flag-item" style="text-align:center;min-width:90px;">
-          <div class="flag-emoji" style="font-size:30px;line-height:1.2;">🇸🇦</div>
-          <div class="flag-name" style="font-size:15px;font-weight:700;color:#1a3a8a;margin-top:3px;">Saudi Arabia</div>
-          <div class="flag-sub" style="font-size:12px;color:#6b7280;margin-top:1px;">Dhahran · KFUPM</div>
-        </div>
-        <span class="flag-arrow" style="font-size:22px;color:#c9a84c;font-weight:300;">→</span>
-        <div class="flag-item" style="text-align:center;min-width:80px;">
-          <div class="flag-emoji" style="font-size:30px;line-height:1.2;">🇩🇪</div>
-          <div class="flag-name" style="font-size:15px;font-weight:700;color:#1a3a8a;margin-top:3px;">Germany</div>
-          <div class="flag-sub" style="font-size:12px;color:#6b7280;margin-top:1px;">Munich · Freiberg</div>
-        </div>
+    </div>
+
+    <!-- Flag strip — each flag aligned under its column image -->
+    <div class="header-flag-strip">
+      <div class="header-flag-col">
+        <div class="flag-emoji" style="font-size:26px;line-height:1.2;">🇵🇰</div>
+        <div class="flag-name" style="font-size:13px;font-weight:700;color:#1a3a8a;margin-top:3px;">Pakistan</div>
+        <div class="flag-sub" style="font-size:11px;color:#6b7280;margin-top:1px;">Lahore · PU</div>
+      </div>
+      <div class="header-flag-col">
+        <div class="flag-emoji" style="font-size:26px;line-height:1.2;">🇸🇦</div>
+        <div class="flag-name" style="font-size:13px;font-weight:700;color:#1a3a8a;margin-top:3px;">Saudi Arabia</div>
+        <div class="flag-sub" style="font-size:11px;color:#6b7280;margin-top:1px;">Dhahran · KFUPM</div>
+      </div>
+      <div class="header-flag-col">
+        <div class="flag-emoji" style="font-size:26px;line-height:1.2;">🇩🇪</div>
+        <div class="flag-name" style="font-size:13px;font-weight:700;color:#1a3a8a;margin-top:3px;">Germany</div>
+        <div class="flag-sub" style="font-size:11px;color:#6b7280;margin-top:1px;">Munich · Freiberg</div>
       </div>
     </div>
 
@@ -441,7 +456,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
 </div>
 
 <!-- ABOUT CONTENT: Bio + Quick Facts -->
-<div style="background:var(--cream);padding:3rem 2rem 1rem;">
+<div style="background:var(--cream);padding:3rem 2rem 1rem;" class="about-bio-section">
   <div class="about-bio-grid" style="max-width:1000px;margin:0 auto;display:grid;grid-template-columns:1fr 320px;gap:3rem;align-items:start;">
 
     <div>
@@ -495,7 +510,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
 </div>
 
 <!-- Experience & Research Focus -->
-<div style="background:white;border-top:1px solid var(--border);padding:3rem 2rem 4rem;">
+<div style="background:white;border-top:1px solid var(--border);padding:3rem 2rem 4rem;" class="about-exp-section">
   <div class="about-exp-grid" style="max-width:1000px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:3rem;">
 
     <div>
@@ -550,8 +565,12 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
 
 <style>
 @media(max-width:900px){
-  .about-bio-grid{grid-template-columns:1fr!important;}
-  .about-exp-grid{grid-template-columns:1fr!important;}
+  .about-bio-grid{grid-template-columns:1fr!important;gap:2rem!important;}
+  .about-exp-grid{grid-template-columns:1fr!important;gap:2rem!important;}
+}
+@media(max-width:640px){
+  .about-bio-section{padding:2rem 1rem 1rem!important;}
+  .about-exp-section{padding:2rem 1rem 3rem!important;}
 }
 </style>
 
