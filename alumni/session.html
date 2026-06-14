@@ -5,6 +5,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Alumni — ICET Punjab University</title>
 <link rel="icon" type="image/png" href="/favicon.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ICET Chemical Engineering Alumni">
+<meta property="og:url" content="https://ranaadeem.de/alumni/">
+<meta property="og:title" content="ICET Chemical Engineering Alumni Portal">
+<meta property="og:description" content="Connect with Chemical Engineering alumni from ICET, University of the Punjab. Register your profile and network with your batch.">
+<meta property="og:image" content="https://ranaadeem.de/alumni-header.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="ICET Chemical Engineering Alumni Portal">
+<meta name="twitter:description" content="Connect with Chemical Engineering alumni from ICET, University of the Punjab. Register your profile and network with your batch.">
+<meta name="twitter:image" content="https://ranaadeem.de/alumni-header.png">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 :root{--navy:#1a3a8a;--gold:#c9a84c;--cream:#faf8f4;--text:#1a1a2e;--muted:#6b7280;--border:#e5e7eb;}
@@ -1348,7 +1360,39 @@ if (!SD || !SD.active) {
   }
 
   window.approveRegistration = async function(roll) {
-    try { await updateDoc(doc(db,'alumni',roll), {status:'approved', approvedAt: serverTimestamp()}); toast('Approved ✓'); location.reload(); } catch(e) { alert('Error: '+e.message); }
+    try {
+      // Fetch alumni data before approving (to get name + email for notification)
+      const alumniSnap = await getDoc(doc(db, 'alumni', roll));
+      const alumniData = alumniSnap.exists() ? alumniSnap.data() : {};
+
+      // Mark as approved in Firestore
+      await updateDoc(doc(db,'alumni',roll), {status:'approved', approvedAt: serverTimestamp()});
+
+      // Send approval email via EmailJS
+      if (alumniData.email) {
+        try {
+          await emailjs.send(
+            'YOUR_EMAILJS_SERVICE_ID',   // ← replace with your EmailJS Service ID
+            'YOUR_EMAILJS_TEMPLATE_ID',  // ← replace with your EmailJS Template ID
+            {
+              to_name:     alumniData.name || 'Alumni',
+              to_email:    alumniData.email,
+              session_year: alumniData.session || YEAR,
+              profile_link: `https://ranaadeem.de/alumni/profile.html?roll=${roll}`,
+              session_link: `https://ranaadeem.de/alumni/`
+            }
+          );
+          toast('Approved ✓ · Email sent');
+        } catch(emailErr) {
+          console.warn('Email failed:', emailErr);
+          toast('Approved ✓ (email failed)');
+        }
+      } else {
+        toast('Approved ✓ (no email on file)');
+      }
+
+      location.reload();
+    } catch(e) { alert('Error: '+e.message); }
   };
   window.rejectRegistration = async function(roll) {
     if (!confirm('Reject and delete this registration?')) return;
@@ -2061,5 +2105,11 @@ ${context}`;
 </script>
 
 <script defer src="https://va.vercel-scripts.com/v1/script.js"></script>
+<!-- EmailJS SDK — for approval notification emails -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>
+  // Replace with your EmailJS Public Key from https://dashboard.emailjs.com/admin/account
+  emailjs.init('YOUR_EMAILJS_PUBLIC_KEY');
+</script>
 </body>
 </html>
