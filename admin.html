@@ -887,12 +887,34 @@ window.removeMod=async function(roll,name,btn){
 // ── Add Manually ───────────────────────────────────────────────────────────
 function getRollInfo(roll){
   roll=roll.trim().toUpperCase();
-  if(/^(CE|PG|EE|BC)-M6-/.test(roll))return{session:"2006",shift:"Morning"};
-  if(/^(CE|PG)-E6-/.test(roll))return{session:"2006",shift:"Evening"};
-  if(/^M09-/.test(roll))return{session:"2009",shift:"Morning"};
-  if(/^E09-/.test(roll))return{session:"2009",shift:"Evening"};
+  if(/^(CE|EE|BC|PG)-M6-/.test(roll))return{session:"2005",shift:"Morning"};
+  if(/^(CE|PG)-E6-/.test(roll))return{session:"2005",shift:"Evening"};
+  if(/^M07-/.test(roll))return{session:"2006",shift:"Morning"};
+  if(/^E07-/.test(roll))return{session:"2006",shift:"Evening"};
+  if(/^PG-M06-/.test(roll))return{session:"2006",shift:"Morning"};
+  if(/^PG-E06-/.test(roll))return{session:"2006",shift:"Evening"};
+  if(/^M08-/.test(roll))return{session:"2007",shift:"Morning"};
+  if(/^E08-/.test(roll))return{session:"2007",shift:"Evening"};
+  if(/^M09-CE/.test(roll))return{session:"2008",shift:"Morning"};
+  if(/^E09-CE/.test(roll))return{session:"2008",shift:"Evening"};
+  if(/^M09-10/.test(roll))return{session:"2009",shift:"Morning"};
+  if(/^E09-10/.test(roll))return{session:"2009",shift:"Evening"};
+  if(/^CE-M10-/.test(roll)||/^PG-M10-/.test(roll))return{session:"2010",shift:"Morning"};
+  if(/^CE-E10-/.test(roll)||/^PG-E10-/.test(roll))return{session:"2010",shift:"Evening"};
+  if(/^M11-/.test(roll))return{session:"2011",shift:"Morning"};
+  if(/^E11-/.test(roll))return{session:"2011",shift:"Evening"};
+  if(/^M12-/.test(roll))return{session:"2012",shift:"Morning"};
+  if(/^E12-/.test(roll))return{session:"2012",shift:"Evening"};
+  if(/^M13-/.test(roll))return{session:"2013",shift:"Morning"};
+  if(/^E13-/.test(roll))return{session:"2013",shift:"Evening"};
+  if(/^RP14-/.test(roll))return{session:"2014",shift:"Morning"};
+  if(/^RP15-/.test(roll))return{session:"2015",shift:"Morning"};
   if(/^RP16-/.test(roll))return{session:"2016",shift:"Morning"};
-  if(/^SSP16-/.test(roll))return{session:"2016",shift:"Evening"};
+  if(/^RP17-/.test(roll))return{session:"2017",shift:"Morning"};
+  if(/^RP18-/.test(roll))return{session:"2018",shift:"Morning"};
+  if(/^RP19-/.test(roll))return{session:"2019",shift:"Morning"};
+  if(/^RP20-/.test(roll))return{session:"2020",shift:"Morning"};
+  if(/^RP21-/.test(roll))return{session:"2021",shift:"Morning"};
   return null;
 }
 window.manualAutoFill=function(){

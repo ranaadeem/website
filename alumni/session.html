@@ -1263,18 +1263,29 @@ if (!SD || !SD.active) {
     const employer = document.getElementById('am-employer').value.trim();
     const notes    = document.getElementById('am-notes').value.trim();
     if (!_amSelectedStatus) { alertEl.textContent = 'Please select a status.'; return; }
-    // Detect session + shift from roll
+    // Detect session + shift from roll prefix (source of truth: session-data.js)
     const rollInfo = (r => {
-      if (/^(CE|PG|EE|BC)-M6-/.test(r)) return {session:'2006',shift:'Morning'};
-      if (/^(CE|PG)-E6-/.test(r))        return {session:'2006',shift:'Evening'};
-      if (/^M09-/.test(r))               return {session:'2009',shift:'Morning'};
-      if (/^E09-/.test(r))               return {session:'2009',shift:'Evening'};
-      if (/^RP16-/.test(r))              return {session:'2016',shift:'Morning'};
-      if (/^SSP16-/.test(r))             return {session:'2016',shift:'Evening'};
-      if (/^CE-M5-/.test(r))             return {session:'2005',shift:'Morning'};
-      if (/^CE-E5-/.test(r))             return {session:'2005',shift:'Evening'};
-      if (/^CE-M7-/.test(r))             return {session:'2007',shift:'Morning'};
-      if (/^CE-E7-/.test(r))             return {session:'2007',shift:'Evening'};
+      if (/^(CE|EE|BC|PG)-M6-/i.test(r))  return {session:'2005',shift:'Morning'};
+      if (/^(CE|PG)-E6-/i.test(r))         return {session:'2005',shift:'Evening'};
+      if (/^M07-/i.test(r))                return {session:'2006',shift:'Morning'};
+      if (/^E07-/i.test(r))                return {session:'2006',shift:'Evening'};
+      if (/^PG-M06-/i.test(r))             return {session:'2006',shift:'Morning'};
+      if (/^PG-E06-/i.test(r))             return {session:'2006',shift:'Evening'};
+      if (/^[ME]08-/i.test(r))             return {session:'2007',shift: r.startsWith('M')||r.startsWith('m') ? 'Morning' : 'Evening'};
+      if (/^[ME]09-CE/i.test(r))           return {session:'2008',shift: r.startsWith('M')||r.startsWith('m') ? 'Morning' : 'Evening'};
+      if (/^[ME]09-10/i.test(r))           return {session:'2009',shift: r.startsWith('M')||r.startsWith('m') ? 'Morning' : 'Evening'};
+      if (/^(CE|PG)-(M|E)10-/i.test(r))   return {session:'2010',shift: r.includes('-M10-') ? 'Morning' : 'Evening'};
+      if (/^[ME]11-/i.test(r))             return {session:'2011',shift: r.startsWith('M')||r.startsWith('m') ? 'Morning' : 'Evening'};
+      if (/^[ME]12-/i.test(r))             return {session:'2012',shift: r.startsWith('M')||r.startsWith('m') ? 'Morning' : 'Evening'};
+      if (/^[ME]13-/i.test(r))             return {session:'2013',shift: r.startsWith('M')||r.startsWith('m') ? 'Morning' : 'Evening'};
+      if (/^RP14-/i.test(r))               return {session:'2014',shift:'Morning'};
+      if (/^RP15-/i.test(r))               return {session:'2015',shift:'Morning'};
+      if (/^RP16-/i.test(r))               return {session:'2016',shift:'Morning'};
+      if (/^RP17-/i.test(r))               return {session:'2017',shift:'Morning'};
+      if (/^RP18-/i.test(r))               return {session:'2018',shift:'Morning'};
+      if (/^RP19-/i.test(r))               return {session:'2019',shift:'Morning'};
+      if (/^RP20-/i.test(r))               return {session:'2020',shift:'Morning'};
+      if (/^RP21-/i.test(r))               return {session:'2021',shift:'Morning'};
       return {session: YEAR, shift:'Morning'};
     })(roll);
     btn.disabled = true; btn.textContent = 'Adding…';
