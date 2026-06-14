@@ -566,7 +566,7 @@ async function loadGlobalStats() {
     let total=0;const countries=new Set(),countryCount={};
     const gulf=['Saudi Arabia','UAE','Qatar','Kuwait','Bahrain','Oman'];
     let gulfCount=0,germanyCount=0,pakistanCount=0;let recentAlumni=[];
-    snap.forEach(d=>{const a=d.data();total++;if(a.country){countries.add(a.country);countryCount[a.country]=(countryCount[a.country]||0)+1;}if(gulf.includes(a.country))gulfCount++;if(a.country==='Germany')germanyCount++;if(a.country==='Pakistan')pakistanCount++;recentAlumni.push(a);});
+    snap.forEach(d=>{const a=d.data();total++;if(a.country){countries.add(a.country);countryCount[a.country]=(countryCount[a.country]||0)+1;}if(gulf.includes(a.country))gulfCount++;if(a.country==='Germany')germanyCount++;if(a.country==='Pakistan')pakistanCount++;if(!a.addedByAdmin)recentAlumni.push(a);});
     const topCountry=Object.entries(countryCount).sort((a,b)=>b[1]-a[1])[0];
     const s=(id,val)=>{const el=document.getElementById(id);if(el)el.textContent=val;};
     s('stat-total',total);s('stat-countries',countries.size);s('sb-total',total);s('sb-countries',countries.size);

@@ -155,6 +155,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
 .am-btn-submit:disabled{opacity:.5;cursor:not-allowed;}
 .am-alert{font-size:12px;color:#dc2626;min-height:16px;margin-bottom:.5rem;}
 .member-card.birthday-today{border:2px solid var(--gold);background:linear-gradient(135deg,#fffbf0,#fff9e6);}
+.member-card.member-deceased{border:1px solid #d1d5db;background:linear-gradient(135deg,#f9fafb,#f3f4f6);opacity:0.85;}
 .member-avatar{width:52px;height:52px;border-radius:50%;background:var(--navy);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--gold);font-size:0.9rem;margin:0 auto 0.5rem;overflow:hidden;border:2px solid var(--gold);}
 .member-avatar img{width:100%;height:100%;object-fit:cover;}
 .member-name{font-size:12px;font-weight:600;color:var(--navy);line-height:1.3;margin-bottom:2px;}
@@ -1086,7 +1087,8 @@ if (!SD || !SD.active) {
       const ini       = m.name.split(' ').map(w => w[0]).slice(0,2).join('').toUpperCase();
       const birthday  = reg?.dob && isBirthday(reg.dob);
       const el        = document.createElement('div');
-      el.className    = 'member-card' + (reg ? '' : ' unregistered') + (birthday ? ' birthday-today' : '');
+      const isDeceased = reg?.memberStatus === 'deceased';
+      el.className    = 'member-card' + (reg ? '' : ' unregistered') + (birthday ? ' birthday-today' : '') + (isDeceased ? ' member-deceased' : '');
 
       const photoSrc  = reg?.photoUrl || reg?.photoBase64 || '';
       const photoHtml = photoSrc
@@ -1104,7 +1106,8 @@ if (!SD || !SD.active) {
       }
 
       el.innerHTML = `
-        <div class="member-avatar">${photoHtml}</div>
+        <div class="member-avatar"${isDeceased ? ' style="opacity:0.75;filter:grayscale(0.4);"' : ''}>${photoHtml}</div>
+        ${isDeceased ? '<div style="font-size:11px;color:#6b7280;font-weight:600;margin-bottom:2px;">🕊️ In Memoriam</div>' : ''}
         ${birthday ? '<div style="font-size:11px;color:var(--gold);font-weight:700;margin-bottom:2px;">🎂 Birthday today!</div>' : ''}
         <div class="member-name">${reg?.name || m.name}</div>
         <div class="member-roll">${m.roll}</div>
@@ -1113,11 +1116,13 @@ if (!SD || !SD.active) {
         ${reg?.employer  ? `<div class="member-detail">🏢 ${reg.employer}</div>`  : (reg?.company ? `<div class="member-detail">🏢 ${reg.company}</div>` : '')}
         ${reg?.country   ? `<div class="member-detail">📍 ${reg.city ? reg.city+', ' : ''}${reg.country}</div>` : ''}
         ${dobHtml}
-        ${reg ? '<div style="font-size:10px;color:var(--navy);margin-top:5px;font-weight:600;">View Profile →</div>' : '<div style="font-size:10px;color:var(--muted);margin-top:4px;">Not registered yet</div>'}
+        ${reg && !isDeceased ? '<div style="font-size:10px;color:var(--navy);margin-top:5px;font-weight:600;">View Profile →</div>' : ''}
+        ${isDeceased ? '<div style="font-size:10px;color:#6b7280;margin-top:4px;font-style:italic;">In our memories</div>' : ''}
         ${!reg && currentUser?.uid === ADMIN ? `<button class="btn-add-manually" onclick="event.stopPropagation();openAddManually('${m.roll}','${m.name.replace(/'/g,"\\'")}')" style="display:block;">➕ Add Manually</button>` : ''}
+        ${!reg && !isDeceased ? '<div style="font-size:10px;color:var(--muted);margin-top:4px;">Not registered yet</div>' : ''}
         <button class="report-flag" title="Report an issue" onclick="event.stopPropagation();openReportModal('${m.roll}','${(reg?.name||m.name).replace(/'/g,"\\'")}')">⚑</button>`;
 
-      if (reg) {
+      if (reg && !isDeceased) {
         el.style.cursor = 'pointer';
         el.addEventListener('click', () => window.location.href = '/alumni/profile.html?roll=' + m.roll);
       }
