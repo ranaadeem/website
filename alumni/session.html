@@ -424,6 +424,15 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
     <div id="birthday-list" style="font-size:13px;color:var(--text);line-height:1.8;"></div>
   </div>
 
+  <!-- Death Anniversary Banner -->
+  <div id="memorial-banner" style="display:none;background:linear-gradient(135deg,#1a2a3a,#0f2260);border:1px solid rgba(201,168,76,0.4);border-radius:12px;padding:1.1rem 1.5rem;margin-bottom:1.5rem;">
+    <div style="font-size:0.95rem;font-weight:700;color:#e8d5a3;margin-bottom:0.5rem;">🕊️ Death Anniversary — <span id="memorial-names"></span></div>
+    <div style="font-size:13px;color:rgba(255,255,255,0.82);line-height:1.75;">
+      Today marks the death anniversary of our batchmate(s). Please recite <strong style="color:#e8d5a3;">Surah Al-Fatiha</strong> and the three <strong style="color:#e8d5a3;">Quls</strong> for the forgiveness of their soul(s).<br>
+      <span style="font-family:serif;font-size:14px;color:#c9a84c;letter-spacing:0.03em;">اللهم اغفر لهم وارحمهم وعافهم واعف عنهم</span>
+    </div>
+  </div>
+
   <!-- Stats -->
   <div class="stats-bar">
     <div class="stat-box"><div class="stat-num" id="stat-total">—</div><div class="stat-lbl">Total Graduates</div></div>
@@ -849,6 +858,35 @@ if (!SD || !SD.active) {
     list.innerHTML = bdays.map(n => `<span style="display:inline-block;background:white;border:1px solid var(--gold);border-radius:20px;padding:3px 12px;margin:2px;font-weight:600;">🎂 ${n}</span>`).join('');
   }
 
+  function renderMemorialAnniversaries() {
+    const banner = document.getElementById('memorial-banner');
+    const namesEl = document.getElementById('memorial-names');
+    if (!banner || !namesEl) return;
+    const today = new Date();
+    const matches = [];
+    for (const [roll, a] of Object.entries(registeredMap)) {
+      if (a.memberStatus === 'deceased' && a.dod) {
+        const parts = a.dod.split('-');
+        if (parts.length === 3 &&
+            parseInt(parts[1]) === today.getMonth() + 1 &&
+            parseInt(parts[2]) === today.getDate()) {
+          matches.push(a.name || roll);
+        }
+      }
+    }
+    if (!matches.length) { banner.style.display = 'none'; return; }
+    banner.style.display = 'block';
+    namesEl.textContent = matches.join(' & ');
+  }
+
+  function formatDod(dod) {
+    if (!dod) return '';
+    const parts = dod.split('-');
+    if (parts.length !== 3) return dod;
+    const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    return `${parseInt(parts[2])} ${months[parseInt(parts[1])-1]} ${parts[0]}`;
+  }
+
   // ── Birthday notification toggle ──────────────────────────────────────────
   async function toggleBirthdayNotify() {
     if (!currentUser || !currentRoll) return;
@@ -1059,6 +1097,7 @@ if (!SD || !SD.active) {
 
       renderGrid();
       renderBirthdays();
+      renderMemorialAnniversaries();
     } catch(e) { console.error(e); renderGrid(); }
   }
 
@@ -1117,8 +1156,9 @@ if (!SD || !SD.active) {
         ${reg?.country   ? `<div class="member-detail">📍 ${reg.city ? reg.city+', ' : ''}${reg.country}</div>` : ''}
         ${dobHtml}
         ${reg && !isDeceased ? '<div style="font-size:10px;color:var(--navy);margin-top:5px;font-weight:600;">View Profile →</div>' : ''}
-        ${isDeceased ? '<div style="font-size:10px;color:#6b7280;margin-top:4px;font-style:italic;">In our memories</div>' : ''}
+        ${isDeceased && reg?.dod ? `<div style="font-size:10px;color:#6b7280;margin-top:4px;">🕊️ ${formatDod(reg.dod)}</div>` : (isDeceased ? '<div style="font-size:10px;color:#6b7280;margin-top:4px;">🕊️ Deceased</div>' : '')}
         ${!reg && currentUser?.uid === ADMIN ? `<button class="btn-add-manually" onclick="event.stopPropagation();openAddManually('${m.roll}','${m.name.replace(/'/g,"\\'")}')" style="display:block;">➕ Add Manually</button>` : ''}
+        ${isDeceased && currentUser?.uid === ADMIN ? `<button class="btn-add-manually" onclick="event.stopPropagation();openEditMemorial('${m.roll}')" style="display:block;margin-top:5px;background:#4b5563;">✏️ Edit Memorial</button>` : ''}
         ${!reg && !isDeceased ? '<div style="font-size:10px;color:var(--muted);margin-top:4px;">Not registered yet</div>' : ''}
         <button class="report-flag" title="Report an issue" onclick="event.stopPropagation();openReportModal('${m.roll}','${(reg?.name||m.name).replace(/'/g,"\\'")}')">⚑</button>`;
 
@@ -1173,32 +1213,63 @@ if (!SD || !SD.active) {
     renderGrid();
   };
 
-  // ── Add Manually (Admin) ─────────────────────────────────────────────────
+  // ── Add Manually / Edit Memorial (Admin) ─────────────────────────────────
   let _amPhotoUrl = null;
   let _amSelectedStatus = null;
+  let _amEditRoll = null;   // null = add new, string = edit existing
 
-  window.openAddManually = function(roll, name) {
+  function _resetAmModal(name, roll) {
     _amPhotoUrl = null;
     _amSelectedStatus = null;
-    document.getElementById('am-name').value    = name;
-    document.getElementById('am-roll').value    = roll;
-    document.getElementById('am-city').value    = '';
-    document.getElementById('am-country').value = '';
-    document.getElementById('am-position').value= '';
-    document.getElementById('am-employer').value= '';
-    document.getElementById('am-notes').value   = '';
+    document.getElementById('am-name').value     = name;
+    document.getElementById('am-roll').value     = roll;
+    document.getElementById('am-city').value     = '';
+    document.getElementById('am-country').value  = '';
+    document.getElementById('am-position').value = '';
+    document.getElementById('am-employer').value = '';
+    document.getElementById('am-notes').value    = '';
+    document.getElementById('am-dod').value      = '';
+    document.getElementById('am-dod-wrap').style.display = 'none';
     document.getElementById('am-alert').textContent = '';
     document.getElementById('am-photo-status').textContent = '';
-    // Reset photo preview to initials
     const ini = name.split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase();
     document.getElementById('am-photo-preview').innerHTML = `<span id="am-photo-initials">${ini}</span>`;
     document.getElementById('am-photo-preview').style.background = 'var(--navy)';
-    // Reset status pills
     ['active','deceased','lost'].forEach(s => {
       document.getElementById('pill-'+s).className = 'am-status-pill';
     });
+    document.getElementById('am-dod').max = new Date().toISOString().split('T')[0];
     document.getElementById('am-submit-btn').disabled = false;
+  }
+
+  window.openAddManually = function(roll, name) {
+    _amEditRoll = null;
+    _resetAmModal(name, roll);
+    document.querySelector('.am-head h3').textContent = '➕ Add to Alumni Network';
     document.getElementById('am-submit-btn').textContent = 'Add to Network';
+    document.getElementById('am-overlay').classList.add('open');
+  };
+
+  window.openEditMemorial = function(roll) {
+    const a = registeredMap[roll];
+    if (!a) return;
+    _amEditRoll = roll;
+    _resetAmModal(a.name || '', roll);
+    document.querySelector('.am-head h3').textContent = '✏️ Edit Memorial Profile';
+    document.getElementById('am-submit-btn').textContent = 'Save Changes';
+    // Pre-fill existing data
+    document.getElementById('am-city').value     = a.city     || '';
+    document.getElementById('am-country').value  = a.country  || '';
+    document.getElementById('am-position').value = a.position || '';
+    document.getElementById('am-employer').value = a.employer || '';
+    document.getElementById('am-notes').value    = a.adminNotes || '';
+    document.getElementById('am-dod').value      = a.dod || '';
+    if (a.photoUrl) {
+      _amPhotoUrl = a.photoUrl;
+      document.getElementById('am-photo-preview').innerHTML = `<img src="${a.photoUrl}" alt="photo">`;
+    }
+    // Pre-select status
+    if (a.memberStatus) selectAmStatus(a.memberStatus);
     document.getElementById('am-overlay').classList.add('open');
   };
 
@@ -1211,6 +1282,8 @@ if (!SD || !SD.active) {
     ['active','deceased','lost'].forEach(s => {
       document.getElementById('pill-'+s).className = 'am-status-pill' + (s===status ? ' selected-'+s : '');
     });
+    // Show DOD field only for deceased
+    document.getElementById('am-dod-wrap').style.display = status === 'deceased' ? 'block' : 'none';
     // Auto-fill city for deceased
     if (status === 'deceased' && !document.getElementById('am-city').value) {
       document.getElementById('am-city').value   = 'Heaven';
@@ -1262,6 +1335,7 @@ if (!SD || !SD.active) {
     const position = document.getElementById('am-position').value.trim();
     const employer = document.getElementById('am-employer').value.trim();
     const notes    = document.getElementById('am-notes').value.trim();
+    const dod      = document.getElementById('am-dod').value.trim();
     if (!_amSelectedStatus) { alertEl.textContent = 'Please select a status.'; return; }
     // Detect session + shift from roll prefix (source of truth: session-data.js)
     const rollInfo = (r => {
@@ -1293,6 +1367,25 @@ if (!SD || !SD.active) {
       // Check if roll already exists
       const existing = await getDoc(doc(db, 'alumni', roll));
       if (existing.exists()) { alertEl.textContent = 'This roll number is already registered.'; btn.disabled=false; btn.textContent='Add to Network'; return; }
+      if (_amEditRoll) {
+        // Edit existing memorial
+        const updates = {
+          city:        city     || '',
+          country:     country  || '',
+          position:    position || '',
+          employer:    employer || '',
+          memberStatus: _amSelectedStatus,
+          adminNotes:  notes    || '',
+          dod:         dod      || '',
+          updatedAt:   serverTimestamp(),
+        };
+        if (_amPhotoUrl) updates.photoUrl = _amPhotoUrl;
+        await updateDoc(doc(db, 'alumni', _amEditRoll), updates);
+        closeAddManually();
+        await loadRegistered();
+        toast('✓ Memorial profile updated');
+        return;
+      }
       const profileDoc = {
         name, roll,
         session:   rollInfo.session,
@@ -1302,9 +1395,10 @@ if (!SD || !SD.active) {
         position:  position|| '',
         employer:  employer|| '',
         status:    'approved',
-        memberStatus: _amSelectedStatus,   // 'active' | 'deceased' | 'lost'
+        memberStatus: _amSelectedStatus,
         addedByAdmin: true,
         adminNotes:   notes || '',
+        dod:          dod   || '',
         registeredAt: serverTimestamp(),
         approvedAt:   serverTimestamp(),
       };
@@ -1313,7 +1407,6 @@ if (!SD || !SD.active) {
       closeAddManually();
       // Reload from Firestore so card gets real data
       await loadRegistered();
-      renderGrid();
       toast('✓ ' + name + ' added to the network');
     } catch(e) { alertEl.textContent = 'Error: ' + e.message; btn.disabled=false; btn.textContent='Add to Network'; }
   };
@@ -2036,6 +2129,12 @@ document.addEventListener('click', function(e) {
           <button class="am-status-pill" id="pill-deceased"  onclick="selectAmStatus('deceased')">🕊️ Deceased</button>
           <button class="am-status-pill" id="pill-lost"      onclick="selectAmStatus('lost')">📵 Lost Contact</button>
         </div>
+      </div>
+
+      <!-- Date of Death (deceased only) -->
+      <div class="am-field" id="am-dod-wrap" style="display:none;">
+        <label>Date of Death</label>
+        <input type="date" id="am-dod" max="">
       </div>
 
       <!-- Optional fields -->
