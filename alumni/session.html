@@ -1368,20 +1368,24 @@ if (!SD || !SD.active) {
       // Mark as approved in Firestore
       await updateDoc(doc(db,'alumni',roll), {status:'approved', approvedAt: serverTimestamp()});
 
-      // Send approval email via EmailJS
+      // Send approval email via existing /api/send-email (Resend)
       if (alumniData.email) {
         try {
-          await emailjs.send(
-            'YOUR_EMAILJS_SERVICE_ID',   // ← replace with your EmailJS Service ID
-            'YOUR_EMAILJS_TEMPLATE_ID',  // ← replace with your EmailJS Template ID
-            {
-              to_name:     alumniData.name || 'Alumni',
-              to_email:    alumniData.email,
-              session_year: alumniData.session || YEAR,
-              profile_link: `https://ranaadeem.de/alumni/profile.html?roll=${roll}`,
-              session_link: `https://ranaadeem.de/alumni/`
-            }
-          );
+          await fetch('/api/send-email', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              type: 'alumni-approved',
+              to: alumniData.email,
+              toName: alumniData.name || 'Alumni',
+              data: {
+                session: alumniData.session || YEAR,
+                roll: roll,
+                profileLink: `https://ranaadeem.de/alumni/profile.html?roll=${roll}`,
+                sessionLink: `https://ranaadeem.de/alumni/`
+              }
+            })
+          });
           toast('Approved ✓ · Email sent');
         } catch(emailErr) {
           console.warn('Email failed:', emailErr);
@@ -2105,11 +2109,5 @@ ${context}`;
 </script>
 
 <script defer src="https://va.vercel-scripts.com/v1/script.js"></script>
-<!-- EmailJS SDK — for approval notification emails -->
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-<script>
-  // Replace with your EmailJS Public Key from https://dashboard.emailjs.com/admin/account
-  emailjs.init('YOUR_EMAILJS_PUBLIC_KEY');
-</script>
 </body>
 </html>

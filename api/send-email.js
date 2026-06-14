@@ -118,16 +118,23 @@ export default async function handler(req, res) {
     );
 
   } else if (type === 'alumni-approved') {
-    subject = 'Your ICET Alumni profile has been approved!';
+    subject = 'Your ICET Alumni profile has been approved! ✓';
     html = wrap(
       `<h1 style="font-family:Georgia,serif;color:#c9a84c;margin:0;font-size:1.3rem;">ICET Alumni Network</h1>
        <p style="color:rgba(255,255,255,0.65);margin:4px 0 0;font-size:12px;">Institute of Chemical Engineering &amp; Technology · University of the Punjab, Lahore</p>`,
       `<h2 style="font-family:Georgia,serif;color:#1a3a8a;margin-bottom:0.5rem;font-size:1.2rem;">Welcome to the network! ✓</h2>
        <p style="color:#374151;line-height:1.7;margin-bottom:0.75rem;">Hi ${toName || 'there'},</p>
-       <p style="color:#374151;line-height:1.7;margin-bottom:1rem;">Your ICET Alumni profile has been <strong style="color:#059669;">approved</strong>. You now have full access to your session directory, notice board, and announcements.</p>
+       <p style="color:#374151;line-height:1.7;margin-bottom:1rem;">Your ICET Alumni profile has been <strong style="color:#059669;">approved</strong>. You now have full access to your session directory, The ICET Wall, and your batchmates' profiles.</p>
        ${highlight(`<p style="color:#1a3a8a;font-weight:600;margin:0 0 4px;">Session ${data.session || ''}</p>
-         <p style="color:#6b7280;font-size:13px;margin:0;">Roll: ${data.roll || ''}</p>`)}
-       ${btn('Go to My Session Page →', `https://ranaadeem.de/alumni/${data.session || '2006'}.html`)}
+         <p style="color:#6b7280;font-size:13px;margin:0;">Roll No: ${data.roll || ''}</p>`)}
+       <p style="color:#374151;line-height:1.7;margin-bottom:0.5rem;margin-top:1rem;">You can now:</p>
+       <table style="width:100%;border-collapse:collapse;">
+         <tr><td style="padding:6px 0;font-size:14px;color:#374151;">👤 View &amp; edit your profile</td>
+             <td style="padding:6px 0;text-align:right;"><a href="${data.profileLink}" style="color:#1a3a8a;font-weight:600;font-size:13px;">Open profile →</a></td></tr>
+         <tr><td style="padding:6px 0;font-size:14px;color:#374151;">🎓 See your session fellows</td>
+             <td style="padding:6px 0;text-align:right;"><a href="${data.sessionLink}" style="color:#1a3a8a;font-weight:600;font-size:13px;">Open session →</a></td></tr>
+       </table>
+       ${btn('Go to Alumni Portal →', data.sessionLink || 'https://ranaadeem.de/alumni/')}
        ${footer('ICET Chemical Engineering Alumni Network', 'https://ranaadeem.de/alumni/')}`
     );
 
