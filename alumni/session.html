@@ -186,7 +186,6 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
 .wall-pinned-badge{font-size:10px;color:var(--gold);font-weight:700;margin-left:4px;}
 
 /* CTA */
-.cta-banner{background:linear-gradient(135deg,var(--navy),#2048a8);border-radius:12px;padding:1.25rem;text-align:center;margin-top:2rem;}
 
 /* GALLERY */
 .gallery-photo{height:155px;width:auto;min-width:200px;max-width:280px;border-radius:8px;object-fit:cover;cursor:pointer;flex-shrink:0;border:2px solid transparent;transition:transform 0.2s,border-color 0.2s;}
@@ -474,10 +473,6 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
         </div>
       </div>
 
-      <div class="cta-banner">
-        <p style="color:rgba(255,255,255,0.8);font-size:14px;margin-bottom:0.75rem;">Are you from <span id="cta-label"></span>? Register to add your photo, job title, and location.</p>
-        <a id="cta-register-link" href="/alumni/register.html" style="display:inline-block;background:var(--gold);color:var(--navy);padding:8px 22px;border-radius:8px;font-size:13px;font-weight:700;text-decoration:none;">Register Now →</a>
-      </div>
 
     </div>
 
@@ -496,16 +491,6 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
       </div>
 
       <div class="sidebar-card">
-        <div class="sidebar-card-header">📊 Session Info</div>
-        <div class="sidebar-card-body">
-          <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--border);font-size:13px;"><span style="color:var(--muted);">Session</span><span style="font-weight:700;color:var(--navy);" id="sidebar-session-label"></span></div>
-          <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--border);font-size:13px;"><span style="color:var(--muted);">Total</span><span style="font-weight:700;color:var(--navy);" id="sidebar-total"></span></div>
-          <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--border);font-size:13px;"><span style="color:var(--muted);">Morning</span><span style="font-weight:700;color:var(--navy);" id="sdm4"></span></div>
-          <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--border);font-size:13px;"><span style="color:var(--muted);">Evening</span><span style="font-weight:700;color:var(--navy);" id="sde4"></span></div>
-          <div style="display:flex;justify-content:space-between;padding:5px 0;font-size:13px;"><span style="color:var(--muted);">Registered</span><span style="font-weight:700;color:var(--gold);" id="sidebar-reg">—</span></div>
-        </div>
-      </div>
-      <div class="sidebar-card">
         <div class="sidebar-card-header">🌍 Countries</div>
         <div class="sidebar-card-body" id="country-list"><div style="color:var(--muted);font-size:12px;text-align:center;">Waiting for members</div></div>
       </div>
@@ -517,13 +502,6 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
         <div class="sidebar-card-header">🔗 Other Sessions</div>
         <div class="sidebar-card-body" id="sessions-sidebar-inner">
           <div style="color:var(--muted);font-size:12px;text-align:center;">Loading…</div>
-        </div>
-      </div>
-      <div class="sidebar-card">
-        <div class="sidebar-card-header">📬 Join the Network</div>
-        <div class="sidebar-card-body">
-          <p style="font-size:12px;color:var(--muted);margin-bottom:0.75rem;">Register to connect with your batchmates.</p>
-          <a id="sidebar-register-link" href="/alumni/register.html" style="display:block;text-align:center;background:var(--navy);color:var(--gold);padding:9px 14px;border-radius:8px;text-decoration:none;font-size:13px;font-weight:600;">Register Now →</a>
         </div>
       </div>
       <!-- WhatsApp Group -->
@@ -761,17 +739,9 @@ if (!SD || !SD.active) {
   document.getElementById('chip-evening').textContent    = SD.evening;
   document.getElementById('stat-total').textContent      = SD.total;
   document.getElementById('stat-morning-evening').textContent = SD.morning + '/' + SD.evening;
-  document.getElementById('sidebar-session-label').textContent = SD.label;
-  document.getElementById('sidebar-total').textContent   = SD.total;
-  document.getElementById('sdm4').textContent            = SD.morning;
-  document.getElementById('sde4').textContent            = SD.evening;
-  document.getElementById('cta-label').textContent       = SD.label;
-
   // Register links — set correct session param
   const regUrl = '/alumni/register.html?session=' + YEAR;
   document.getElementById('gate-register-link').href   = regUrl;
-  document.getElementById('cta-register-link').href    = regUrl;
-  document.getElementById('sidebar-register-link').href = regUrl;
 
   // Gate session title
   document.getElementById('gate-session-title').textContent = SD.label;
@@ -1042,7 +1012,6 @@ if (!SD || !SD.active) {
       // Use filtered count, not total snap.size
       const n = Object.keys(registeredMap).length;
       document.getElementById('stat-registered').textContent = n;
-      document.getElementById('sidebar-reg').textContent    = n;
       document.getElementById('reg-count').textContent      = '(' + n + ')';
       document.getElementById('stat-countries').textContent = Object.keys(countries).length || 0;
 
