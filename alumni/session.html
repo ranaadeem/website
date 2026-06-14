@@ -1300,15 +1300,10 @@ if (!SD || !SD.active) {
       if (_amPhotoUrl) profileDoc.photoUrl = _amPhotoUrl;
       await setDoc(doc(db, 'alumni', roll), profileDoc);
       closeAddManually();
-      // Refresh the grid
-      registeredMap[roll] = profileDoc;
+      // Reload from Firestore so card gets real data
+      await loadRegistered();
       renderGrid();
-      // Show toast
-      const t = document.createElement('div');
-      t.style.cssText = 'position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);background:#1a3a8a;color:white;padding:10px 20px;border-radius:8px;font-size:13px;font-weight:600;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,.3);';
-      t.textContent = '✓ ' + name + ' added to the network';
-      document.body.appendChild(t);
-      setTimeout(() => t.remove(), 3000);
+      toast('✓ ' + name + ' added to the network');
     } catch(e) { alertEl.textContent = 'Error: ' + e.message; btn.disabled=false; btn.textContent='Add to Network'; }
   };
 
