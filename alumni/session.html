@@ -122,6 +122,38 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
 .report-success p{font-size:13px;color:#6b7280;line-height:1.55;}
 .member-card:hover{box-shadow:0 4px 16px rgba(0,0,0,0.08);}
 .member-card.unregistered{opacity:0.72;}
+/* Add Manually button on card */
+.btn-add-manually{display:none;margin-top:7px;width:100%;background:var(--navy);color:var(--gold);border:none;border-radius:6px;padding:5px 0;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;letter-spacing:.02em;transition:background .2s;}
+.btn-add-manually:hover{background:#0f2260;}
+/* Add Manually modal */
+.am-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:4000;align-items:center;justify-content:center;padding:1rem;}
+.am-overlay.open{display:flex;}
+.am-modal{background:white;border-radius:14px;width:100%;max-width:500px;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.3);}
+.am-head{background:var(--navy);padding:.9rem 1.1rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:1;}
+.am-head h3{font-size:14px;font-weight:700;color:#e8d5a3;margin:0;}
+.am-close{background:none;border:none;color:rgba(255,255,255,.6);font-size:1.1rem;cursor:pointer;padding:2px 6px;}
+.am-close:hover{color:white;}
+.am-body{padding:1.1rem;}
+.am-field{margin-bottom:.85rem;}
+.am-field label{display:block;font-size:11px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;}
+.am-field input,.am-field select,.am-field textarea{width:100%;border:1.5px solid #e5e7eb;border-radius:7px;padding:8px 11px;font-family:inherit;font-size:13px;color:#1a1a2e;outline:none;transition:border-color .2s;background:white;}
+.am-field input:focus,.am-field select:focus,.am-field textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,168,76,.12);}
+.am-field input[readonly]{background:#f8f7f4;cursor:not-allowed;color:#6b7280;}
+.am-field textarea{min-height:70px;resize:vertical;}
+.am-row2{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;}
+.am-photo-preview{width:72px;height:72px;border-radius:50%;border:2px solid var(--gold);background:var(--navy);display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:1.3rem;font-weight:700;margin:0 auto .75rem;overflow:hidden;cursor:pointer;}
+.am-photo-preview img{width:100%;height:100%;object-fit:cover;}
+.am-status-pills{display:flex;gap:.5rem;flex-wrap:wrap;}
+.am-status-pill{flex:1;min-width:80px;padding:8px 6px;border-radius:8px;border:2px solid #e5e7eb;background:white;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;text-align:center;transition:all .2s;color:#6b7280;}
+.am-status-pill.selected-active{border-color:#059669;background:#f0fdf4;color:#059669;}
+.am-status-pill.selected-deceased{border-color:#6b7280;background:#f9fafb;color:#374151;}
+.am-status-pill.selected-lost{border-color:#d97706;background:#fffbeb;color:#92400e;}
+.am-foot{display:flex;gap:8px;justify-content:flex-end;padding:.85rem 1.1rem;border-top:1px solid #e5e7eb;position:sticky;bottom:0;background:white;}
+.am-btn-cancel{background:white;border:1.5px solid #e5e7eb;color:#6b7280;padding:7px 16px;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;}
+.am-btn-submit{background:var(--navy);color:white;border:none;padding:7px 20px;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:background .2s;}
+.am-btn-submit:hover{background:#0f2260;}
+.am-btn-submit:disabled{opacity:.5;cursor:not-allowed;}
+.am-alert{font-size:12px;color:#dc2626;min-height:16px;margin-bottom:.5rem;}
 .member-card.birthday-today{border:2px solid var(--gold);background:linear-gradient(135deg,#fffbf0,#fff9e6);}
 .member-avatar{width:52px;height:52px;border-radius:50%;background:var(--navy);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--gold);font-size:0.9rem;margin:0 auto 0.5rem;overflow:hidden;border:2px solid var(--gold);}
 .member-avatar img{width:100%;height:100%;object-fit:cover;}
@@ -1082,6 +1114,7 @@ if (!SD || !SD.active) {
         ${reg?.country   ? `<div class="member-detail">📍 ${reg.city ? reg.city+', ' : ''}${reg.country}</div>` : ''}
         ${dobHtml}
         ${reg ? '<div style="font-size:10px;color:var(--navy);margin-top:5px;font-weight:600;">View Profile →</div>' : '<div style="font-size:10px;color:var(--muted);margin-top:4px;">Not registered yet</div>'}
+        ${!reg && currentUser?.uid === ADMIN ? `<button class="btn-add-manually" onclick="event.stopPropagation();openAddManually('${m.roll}','${m.name.replace(/'/g,"\\'")}')" style="display:block;">➕ Add Manually</button>` : ''}
         <button class="report-flag" title="Report an issue" onclick="event.stopPropagation();openReportModal('${m.roll}','${(reg?.name||m.name).replace(/'/g,"\\'")}')">⚑</button>`;
 
       if (reg) {
@@ -1133,6 +1166,145 @@ if (!SD || !SD.active) {
     document.querySelectorAll('.filter-chip').forEach(t => t.classList.remove('active'));
     btn.classList.add('active');
     renderGrid();
+  };
+
+  // ── Add Manually (Admin) ─────────────────────────────────────────────────
+  let _amPhotoUrl = null;
+  let _amSelectedStatus = null;
+
+  window.openAddManually = function(roll, name) {
+    _amPhotoUrl = null;
+    _amSelectedStatus = null;
+    document.getElementById('am-name').value    = name;
+    document.getElementById('am-roll').value    = roll;
+    document.getElementById('am-city').value    = '';
+    document.getElementById('am-country').value = '';
+    document.getElementById('am-position').value= '';
+    document.getElementById('am-employer').value= '';
+    document.getElementById('am-notes').value   = '';
+    document.getElementById('am-alert').textContent = '';
+    document.getElementById('am-photo-status').textContent = '';
+    // Reset photo preview to initials
+    const ini = name.split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase();
+    document.getElementById('am-photo-preview').innerHTML = `<span id="am-photo-initials">${ini}</span>`;
+    document.getElementById('am-photo-preview').style.background = 'var(--navy)';
+    // Reset status pills
+    ['active','deceased','lost'].forEach(s => {
+      document.getElementById('pill-'+s).className = 'am-status-pill';
+    });
+    document.getElementById('am-submit-btn').disabled = false;
+    document.getElementById('am-submit-btn').textContent = 'Add to Network';
+    document.getElementById('am-overlay').classList.add('open');
+  };
+
+  window.closeAddManually = function() {
+    document.getElementById('am-overlay').classList.remove('open');
+  };
+
+  window.selectAmStatus = function(status) {
+    _amSelectedStatus = status;
+    ['active','deceased','lost'].forEach(s => {
+      document.getElementById('pill-'+s).className = 'am-status-pill' + (s===status ? ' selected-'+s : '');
+    });
+    // Auto-fill city for deceased
+    if (status === 'deceased' && !document.getElementById('am-city').value) {
+      document.getElementById('am-city').value   = 'Heaven';
+      document.getElementById('am-country').value= '';
+    }
+  };
+
+  window.handleAmPhoto = async function(input) {
+    const file = input.files[0]; if (!file) return;
+    const statusEl = document.getElementById('am-photo-status');
+    statusEl.textContent = 'Uploading…';
+    try {
+      const reader = new FileReader();
+      reader.onload = async e => {
+        const base64 = e.target.result;
+        // Show preview immediately
+        document.getElementById('am-photo-preview').innerHTML = `<img src="${base64}" alt="preview">`;
+        // Upload to Cloudinary
+        try {
+          const fd = new FormData();
+          fd.append('file', base64);
+          fd.append('upload_preset', CL_PRESET);
+          const cd = await (await fetch('https://api.cloudinary.com/v1_1/'+CL_CLOUD+'/image/upload',{method:'POST',body:fd})).json();
+          if (cd.secure_url) {
+            _amPhotoUrl = cd.secure_url;
+            statusEl.textContent = '✓ Photo uploaded';
+            statusEl.style.color = '#059669';
+          } else {
+            statusEl.textContent = 'Upload failed — will save without photo';
+            statusEl.style.color = '#dc2626';
+          }
+        } catch(e) {
+          statusEl.textContent = 'Upload error — will save without photo';
+          statusEl.style.color = '#dc2626';
+        }
+      };
+      reader.readAsDataURL(file);
+    } catch(e) { statusEl.textContent = 'Error reading file'; }
+  };
+
+  window.submitAddManually = async function() {
+    const alertEl = document.getElementById('am-alert');
+    const btn     = document.getElementById('am-submit-btn');
+    alertEl.textContent = '';
+    const roll     = document.getElementById('am-roll').value.trim();
+    const name     = document.getElementById('am-name').value.trim();
+    const city     = document.getElementById('am-city').value.trim();
+    const country  = document.getElementById('am-country').value.trim();
+    const position = document.getElementById('am-position').value.trim();
+    const employer = document.getElementById('am-employer').value.trim();
+    const notes    = document.getElementById('am-notes').value.trim();
+    if (!_amSelectedStatus) { alertEl.textContent = 'Please select a status.'; return; }
+    // Detect session + shift from roll
+    const rollInfo = (r => {
+      if (/^(CE|PG|EE|BC)-M6-/.test(r)) return {session:'2006',shift:'Morning'};
+      if (/^(CE|PG)-E6-/.test(r))        return {session:'2006',shift:'Evening'};
+      if (/^M09-/.test(r))               return {session:'2009',shift:'Morning'};
+      if (/^E09-/.test(r))               return {session:'2009',shift:'Evening'};
+      if (/^RP16-/.test(r))              return {session:'2016',shift:'Morning'};
+      if (/^SSP16-/.test(r))             return {session:'2016',shift:'Evening'};
+      if (/^CE-M5-/.test(r))             return {session:'2005',shift:'Morning'};
+      if (/^CE-E5-/.test(r))             return {session:'2005',shift:'Evening'};
+      if (/^CE-M7-/.test(r))             return {session:'2007',shift:'Morning'};
+      if (/^CE-E7-/.test(r))             return {session:'2007',shift:'Evening'};
+      return {session: YEAR, shift:'Morning'};
+    })(roll);
+    btn.disabled = true; btn.textContent = 'Adding…';
+    try {
+      // Check if roll already exists
+      const existing = await getDoc(doc(db, 'alumni', roll));
+      if (existing.exists()) { alertEl.textContent = 'This roll number is already registered.'; btn.disabled=false; btn.textContent='Add to Network'; return; }
+      const profileDoc = {
+        name, roll,
+        session:   rollInfo.session,
+        shift:     rollInfo.shift,
+        city:      city    || '',
+        country:   country || '',
+        position:  position|| '',
+        employer:  employer|| '',
+        status:    'approved',
+        memberStatus: _amSelectedStatus,   // 'active' | 'deceased' | 'lost'
+        addedByAdmin: true,
+        adminNotes:   notes || '',
+        registeredAt: serverTimestamp(),
+        approvedAt:   serverTimestamp(),
+      };
+      if (_amPhotoUrl) profileDoc.photoUrl = _amPhotoUrl;
+      await setDoc(doc(db, 'alumni', roll), profileDoc);
+      closeAddManually();
+      // Refresh the grid
+      registeredMap[roll] = profileDoc;
+      renderGrid();
+      // Show toast
+      const t = document.createElement('div');
+      t.style.cssText = 'position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);background:#1a3a8a;color:white;padding:10px 20px;border-radius:8px;font-size:13px;font-weight:600;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,.3);';
+      t.textContent = '✓ ' + name + ' added to the network';
+      document.body.appendChild(t);
+      setTimeout(() => t.remove(), 3000);
+    } catch(e) { alertEl.textContent = 'Error: ' + e.message; btn.disabled=false; btn.textContent='Add to Network'; }
   };
 
   // ── Gallery ───────────────────────────────────────────────────────────────
@@ -1809,6 +1981,81 @@ document.addEventListener('click', function(e) {
     <div class="report-success" id="report-success">
       <div class="rs-icon">✅</div>
       <p><strong>Report submitted!</strong><br>The admin will review and fix it shortly.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     ADD MANUALLY MODAL (Admin only)
+════════════════════════════════════════════════ -->
+<div class="am-overlay" id="am-overlay" onclick="if(event.target===this)closeAddManually()">
+  <div class="am-modal">
+    <div class="am-head">
+      <h3>➕ Add to Alumni Network</h3>
+      <button class="am-close" onclick="closeAddManually()">✕</button>
+    </div>
+    <div class="am-body">
+      <!-- Photo -->
+      <div style="text-align:center;margin-bottom:1rem;">
+        <div class="am-photo-preview" id="am-photo-preview" onclick="document.getElementById('am-photo-file').click()">
+          <span id="am-photo-initials">?</span>
+        </div>
+        <input type="file" id="am-photo-file" accept="image/*" style="display:none" onchange="handleAmPhoto(this)">
+        <button onclick="document.getElementById('am-photo-file').click()" style="background:none;border:none;color:var(--navy);font-size:12px;font-weight:600;cursor:pointer;text-decoration:underline;text-underline-offset:3px;">📷 Upload Photo</button>
+        <div id="am-photo-status" style="font-size:11px;color:#6b7280;margin-top:3px;min-height:15px;"></div>
+      </div>
+
+      <!-- Name & Roll (read-only) -->
+      <div class="am-row2">
+        <div class="am-field">
+          <label>Full Name</label>
+          <input type="text" id="am-name" readonly>
+        </div>
+        <div class="am-field">
+          <label>Roll Number</label>
+          <input type="text" id="am-roll" readonly>
+        </div>
+      </div>
+
+      <!-- Status -->
+      <div class="am-field">
+        <label>Status <span style="color:#dc2626">*</span></label>
+        <div class="am-status-pills">
+          <button class="am-status-pill" id="pill-active"    onclick="selectAmStatus('active')">✅ Active</button>
+          <button class="am-status-pill" id="pill-deceased"  onclick="selectAmStatus('deceased')">🕊️ Deceased</button>
+          <button class="am-status-pill" id="pill-lost"      onclick="selectAmStatus('lost')">📵 Lost Contact</button>
+        </div>
+      </div>
+
+      <!-- Optional fields -->
+      <div class="am-row2">
+        <div class="am-field">
+          <label>City</label>
+          <input type="text" id="am-city" placeholder="e.g. Lahore">
+        </div>
+        <div class="am-field">
+          <label>Country</label>
+          <input type="text" id="am-country" placeholder="e.g. Pakistan">
+        </div>
+      </div>
+      <div class="am-field">
+        <label>Position / Job Title</label>
+        <input type="text" id="am-position" placeholder="e.g. Chemical Engineer">
+      </div>
+      <div class="am-field">
+        <label>Employer / Organization</label>
+        <input type="text" id="am-employer" placeholder="e.g. PARCO">
+      </div>
+      <div class="am-field">
+        <label>Notes (admin only, not shown on profile)</label>
+        <textarea id="am-notes" placeholder="e.g. Passed away in 2019. Info provided by family."></textarea>
+      </div>
+
+      <div class="am-alert" id="am-alert"></div>
+    </div>
+    <div class="am-foot">
+      <button class="am-btn-cancel" onclick="closeAddManually()">Cancel</button>
+      <button class="am-btn-submit" id="am-submit-btn" onclick="submitAddManually()">Add to Network</button>
     </div>
   </div>
 </div>
