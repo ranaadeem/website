@@ -320,6 +320,30 @@
     .report-success .rs-icon{font-size:2.5rem;margin-bottom:.5rem;}
     .report-success p{font-size:13px;color:var(--muted);line-height:1.55;}
 
+    /* ── CONTACT REQUEST MODAL ── */
+    .cr-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:3000;align-items:center;justify-content:center;padding:1rem;}
+    .cr-overlay.open{display:flex;animation:lbIn .2s ease;}
+    .cr-modal{background:white;border-radius:14px;width:100%;max-width:460px;box-shadow:0 20px 60px rgba(0,0,0,.25);overflow:hidden;}
+    .cr-modal-head{background:var(--navy);padding:.9rem 1.1rem;display:flex;align-items:center;justify-content:space-between;}
+    .cr-modal-head h3{font-size:14px;font-weight:700;color:var(--gold-light);margin:0;}
+    .cr-modal-close{background:none;border:none;color:rgba(255,255,255,.6);font-size:1.1rem;cursor:pointer;line-height:1;padding:2px 6px;}
+    .cr-modal-close:hover{color:white;}
+    .cr-modal-body{padding:1.1rem;}
+    .cr-modal-body p{font-size:12.5px;color:var(--muted);margin-bottom:.85rem;line-height:1.55;}
+    .cr-field{margin-bottom:.75rem;}
+    .cr-field label{display:block;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;}
+    .cr-field input,.cr-field textarea{width:100%;border:1.5px solid var(--border);border-radius:7px;padding:8px 11px;font-family:inherit;font-size:13px;color:var(--text);outline:none;resize:vertical;transition:border-color .2s;}
+    .cr-field input:focus,.cr-field textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,168,76,.12);}
+    .cr-field textarea{min-height:90px;}
+    .cr-modal-foot{display:flex;gap:8px;justify-content:flex-end;padding:.85rem 1.1rem;border-top:1px solid var(--border);}
+    .btn-cr-cancel{background:white;border:1.5px solid var(--border);color:var(--muted);padding:7px 16px;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;}
+    .btn-cr-submit{background:var(--navy);color:white;border:none;padding:7px 18px;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:background .2s;}
+    .btn-cr-submit:hover{background:var(--navy-deep);}
+    .btn-cr-submit:disabled{opacity:.5;cursor:not-allowed;}
+    .cr-success{text-align:center;padding:1.5rem 1.1rem;display:none;}
+    .cr-success .rs-icon{font-size:2.5rem;margin-bottom:.5rem;}
+    .cr-success p{font-size:13px;color:var(--muted);line-height:1.55;}
+
     /* Animations */
     @keyframes fadeIn { from { opacity:0; transform: translateY(12px); } to { opacity:1; transform: translateY(0); } }
 
@@ -430,6 +454,11 @@
             </div>
           </div>
           <div class="vis-notice" id="vis-notice"></div>
+        </div>
+
+        <!-- Request Contact (shown for "other" session viewers) -->
+        <div id="btn-request-contact" style="display:none;text-align:center;padding:.25rem 0;">
+          <button onclick="openContactModal()" style="background:var(--navy);color:white;border:none;border-radius:8px;padding:9px 20px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;width:100%;transition:background .2s;" onmouseover="this.style.background='var(--navy-deep)'" onmouseout="this.style.background='var(--navy)'">📩 Request Contact</button>
         </div>
 
         <!-- Report Issue -->
@@ -601,6 +630,46 @@
   </div>
 </div>
 
+<!-- Contact Request Modal -->
+<div class="cr-overlay" id="cr-overlay" onclick="if(event.target===this)closeContactModal()">
+  <div class="cr-modal">
+    <div class="cr-modal-head">
+      <h3>📩 Request Contact</h3>
+      <button class="cr-modal-close" onclick="closeContactModal()">✕</button>
+    </div>
+    <div id="cr-form-wrap">
+      <div class="cr-modal-body">
+        <p>Send a contact request to <strong id="cr-target-name">this alumnus</strong>. They'll receive your message and contact details by email, and can choose to respond directly.</p>
+        <div class="cr-field">
+          <label>Your Name</label>
+          <input type="text" id="cr-from-name" placeholder="Your full name" />
+        </div>
+        <div class="cr-field">
+          <label>Your Email <span style="color:#dc2626">*</span></label>
+          <input type="email" id="cr-from-email" placeholder="your@email.com" />
+        </div>
+        <div class="cr-field">
+          <label>Your Phone (optional)</label>
+          <input type="tel" id="cr-from-phone" placeholder="+92 300 1234567" />
+        </div>
+        <div class="cr-field">
+          <label>Message <span style="color:#dc2626">*</span></label>
+          <textarea id="cr-message" placeholder="e.g. Hi, I'm also based in Freiberg and came across your profile. I'd love to connect!"></textarea>
+        </div>
+        <div id="cr-alert" style="font-size:12px;color:#dc2626;min-height:16px;"></div>
+      </div>
+      <div class="cr-modal-foot">
+        <button class="btn-cr-cancel" onclick="closeContactModal()">Cancel</button>
+        <button class="btn-cr-submit" id="cr-submit-btn" onclick="submitContactRequest()">Send Request</button>
+      </div>
+    </div>
+    <div class="cr-success" id="cr-success">
+      <div class="rs-icon">✅</div>
+      <p><strong>Request sent!</strong><br>Your message and contact details have been forwarded. They'll reach out if they'd like to connect.</p>
+    </div>
+  </div>
+</div>
+
 <!-- Photo lightbox -->
 <div class="photo-lb" id="photo-lb" onclick="closeLb(event)">
   <button class="lb-close" onclick="document.getElementById('photo-lb').classList.remove('open')">✕</button>
@@ -639,6 +708,7 @@ let profileData   = null;
 let profileRoll   = null;   // actual Firestore doc ID
 let viewerRole    = "public";
 let viewerSession = null;
+let viewerData    = null;
 let _currentPhotoUrl = null;
 
 function tc(s) { return (s||"").split(" ").map(w=>w.charAt(0).toUpperCase()+w.slice(1).toLowerCase()).join(" "); }
@@ -790,6 +860,8 @@ function render(p) {
   } else if (viewerRole === "other") {
     vn.style.display = "block";
     vn.innerHTML = `<strong>Limited View</strong>Full details visible to Session ${sessionYear} members.`;
+    // Show "Request Contact" button
+    document.getElementById("btn-request-contact").style.display = "block";
   }
 }
 
@@ -894,6 +966,7 @@ if (!urlRoll) {
         if (vSnap.exists() && vSnap.data().status === "approved") {
           const vData = vSnap.data();
           viewerSession = vData.session;
+          viewerData    = vData;
           document.getElementById("nav-user").textContent = vData.name?.split(" ")[0] || "";
           document.getElementById("nav-signout-btn").style.display = "inline-block";
           viewerRole = (vRoll === urlRoll) ? "self" : "pending-check";
@@ -989,6 +1062,62 @@ window.submitReport = async function() {
     setTimeout(() => window.closeReportModal(), 2500);
   } catch(e) { alert.textContent = 'Error submitting. Please try again.'; }
   finally { btn.disabled = false; btn.textContent = 'Submit Report'; }
+};
+
+// ── CONTACT REQUEST ───────────────────────────────────────────────────────
+window.openContactModal = function() {
+  // Pre-fill with viewer's own info
+  document.getElementById('cr-from-name').value  = viewerData?.name  || '';
+  document.getElementById('cr-from-email').value = viewerData?.email || '';
+  document.getElementById('cr-from-phone').value = viewerData?.phone || '';
+  document.getElementById('cr-message').value    = '';
+  document.getElementById('cr-alert').textContent = '';
+  document.getElementById('cr-target-name').textContent = profileData?.name ? profileData.name.split(' ')[0] : 'this alumnus';
+  document.getElementById('cr-form-wrap').style.display = 'block';
+  document.getElementById('cr-success').style.display   = 'none';
+  document.getElementById('cr-overlay').classList.add('open');
+};
+window.closeContactModal = function() {
+  document.getElementById('cr-overlay').classList.remove('open');
+};
+window.submitContactRequest = async function() {
+  const fromName  = document.getElementById('cr-from-name').value.trim();
+  const fromEmail = document.getElementById('cr-from-email').value.trim();
+  const fromPhone = document.getElementById('cr-from-phone').value.trim();
+  const message   = document.getElementById('cr-message').value.trim();
+  const alertEl   = document.getElementById('cr-alert');
+  if (!fromEmail) { alertEl.textContent = 'Please enter your email address.'; return; }
+  if (!message)   { alertEl.textContent = 'Please write a message.'; return; }
+  const btn = document.getElementById('cr-submit-btn');
+  btn.disabled = true; btn.textContent = 'Sending…';
+  try {
+    await fetch('/api/send-email', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        type: 'contact-request',
+        to:   profileData.email,
+        toName: profileData.name || 'Alumni',
+        data: {
+          fromName:  fromName  || 'An ICET Alumnus',
+          fromEmail,
+          fromPhone: fromPhone || 'Not provided',
+          message,
+          targetName:    profileData.name    || '',
+          targetRoll:    profileData.roll    || urlRoll,
+          targetSession: (profileData.session || '').split('-')[0],
+          profileLink:   `https://ranaadeem.de/alumni/profile.html?roll=${urlRoll}`
+        }
+      })
+    });
+    document.getElementById('cr-form-wrap').style.display = 'none';
+    document.getElementById('cr-success').style.display   = 'block';
+    setTimeout(() => window.closeContactModal(), 3000);
+  } catch(e) {
+    alertEl.textContent = 'Error sending request. Please try again.';
+  } finally {
+    btn.disabled = false; btn.textContent = 'Send Request';
+  }
 };
 
 // ── PHOTO LIGHTBOX ────────────────────────────────────────────────────────

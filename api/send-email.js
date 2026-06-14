@@ -170,6 +170,25 @@ export default async function handler(req, res) {
        ${footer('ICET Alumni Admin', 'https://ranaadeem.de/alumni/admin.html')}`
     );
 
+  } else if (type === 'contact-request') {
+    subject = `Contact request from ${data.fromName || 'an ICET Alumnus'}`;
+    html = wrap(
+      `<h1 style="font-family:Georgia,serif;color:#c9a84c;margin:0;font-size:1.3rem;">ICET Alumni Network</h1>
+       <p style="color:rgba(255,255,255,0.65);margin:4px 0 0;font-size:12px;">Someone wants to connect with you</p>`,
+      `<h2 style="font-family:Georgia,serif;color:#1a3a8a;margin-bottom:0.5rem;font-size:1.2rem;">📩 Contact Request</h2>
+       <p style="color:#374151;line-height:1.7;margin-bottom:0.75rem;">Hi ${toName || 'there'},</p>
+       <p style="color:#374151;line-height:1.7;margin-bottom:1rem;">A fellow ICET alumnus found your profile and would like to connect. Their message and contact details are below — you can reply directly to their email if you'd like to share your details.</p>
+       ${highlight(`<p style="color:#1a3a8a;font-weight:700;margin:0 0 8px;font-size:14px;">Message</p>
+         <p style="color:#374151;line-height:1.6;margin:0;font-style:italic;">"${data.message}"</p>`)}
+       <table style="width:100%;border-collapse:collapse;font-size:14px;margin:1rem 0;">
+         <tr><td style="padding:6px 0;color:#6b7280;width:100px;vertical-align:top;">From</td><td style="padding:6px 0;color:#1a1a2e;font-weight:600;">${data.fromName || 'Not provided'}</td></tr>
+         <tr><td style="padding:6px 0;color:#6b7280;vertical-align:top;">Email</td><td style="padding:6px 0;color:#1a1a2e;"><a href="mailto:${data.fromEmail}" style="color:#1a3a8a;">${data.fromEmail}</a></td></tr>
+         <tr><td style="padding:6px 0;color:#6b7280;vertical-align:top;">Phone</td><td style="padding:6px 0;color:#1a1a2e;">${data.fromPhone || 'Not provided'}</td></tr>
+       </table>
+       <p style="color:#6b7280;font-size:12px;line-height:1.6;">This request was sent to your profile at <a href="${data.profileLink}" style="color:#1a3a8a;">${(data.profileLink||'').replace('https://','')}</a>. To reply, simply respond directly to ${data.fromEmail} — your email address is <strong>not shared</strong> automatically.</p>
+       ${footer('ICET Chemical Engineering Alumni Network', 'https://ranaadeem.de/alumni/')}`
+    );
+
   } else {
     return res.status(400).json({ error: 'Unknown email type' });
   }
@@ -181,7 +200,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const isAlumniEmail = ['alumni-verify','alumni-approved','alumni-pending','alumni-registration-notify'].includes(type);
+    const isAlumniEmail = ['alumni-verify','alumni-approved','alumni-pending','alumni-registration-notify','contact-request'].includes(type);
     const fromName = isAlumniEmail ? 'ICET Alumni Network' : 'The Lab Notebook';
 
     const response = await fetch('https://api.resend.com/emails', {
