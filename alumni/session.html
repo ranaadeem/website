@@ -1365,8 +1365,6 @@ if (!SD || !SD.active) {
     btn.disabled = true; btn.textContent = 'Adding…';
     try {
       // Check if roll already exists
-      const existing = await getDoc(doc(db, 'alumni', roll));
-      if (existing.exists()) { alertEl.textContent = 'This roll number is already registered.'; btn.disabled=false; btn.textContent='Add to Network'; return; }
       if (_amEditRoll) {
         // Edit existing memorial
         const updates = {
@@ -1386,6 +1384,8 @@ if (!SD || !SD.active) {
         toast('✓ Memorial profile updated');
         return;
       }
+      const existing = await getDoc(doc(db, 'alumni', roll));
+      if (existing.exists()) { alertEl.textContent = 'This roll number is already registered.'; btn.disabled=false; btn.textContent='Add to Network'; return; }
       const profileDoc = {
         name, roll,
         session:   rollInfo.session,
