@@ -364,16 +364,12 @@
       <div class="tabs">
         <button class="tab-btn active" id="atab-regs-btn"    onclick="switchAlumniTab('regs')">📋 Registrations <span class="badge" id="badge-regs">0</span></button>
         <button class="tab-btn"        id="atab-photos-btn"  onclick="switchAlumniTab('photos')">📸 Photos <span class="badge" id="badge-photos">0</span></button>
-        <button class="tab-btn"        id="atab-notices-btn" onclick="switchAlumniTab('notices')">📌 Notices <span class="badge" id="badge-notices">0</span></button>
-        <button class="tab-btn"        id="atab-anns-btn"    onclick="switchAlumniTab('anns')">📢 Announcements <span class="badge" id="badge-anns">0</span></button>
         <button class="tab-btn"        id="atab-members-btn" onclick="switchAlumniTab('members')">👥 Members</button>
         <button class="tab-btn"        id="atab-manual-btn"  onclick="switchAlumniTab('manual')">➕ Add Manually</button>
       </div>
 
       <div class="tab-panel active" id="atab-regs"><div id="regs-list"><div class="loading">Loading…</div></div></div>
       <div class="tab-panel"        id="atab-photos"><div id="photos-list"><div class="loading">Loading…</div></div></div>
-      <div class="tab-panel"        id="atab-notices"><div id="notices-list"><div class="loading">Loading…</div></div></div>
-      <div class="tab-panel"        id="atab-anns"><div id="anns-list"><div class="loading">Loading…</div></div></div>
 
       <!-- Members -->
       <div class="tab-panel" id="atab-members">
@@ -575,24 +571,23 @@ window.switchBlogTab = function(tab) {
 
 window.switchAlumniTab = function(tab) {
   currentAlumniTab = tab;
-  ["regs","photos","notices","anns","members","manual"].forEach(t => {
+  ["regs","photos","members","manual"].forEach(t => {
     document.getElementById("atab-"+t)?.classList.toggle("active", t===tab);
     document.getElementById("atab-"+t+"-btn")?.classList.toggle("active", t===tab);
   });
+  if (tab === "members") loadMembers();
 };
 
 // ── Stats ──────────────────────────────────────────────────────────────────
 async function loadStats() {
   // Use allSettled so one failing query never blocks the others
   const safe = q => getDocs(q).catch(()=>({size:0,empty:true,forEach:()=>{}}));
-  const [pp,pr,ph,pub,mem,pn,pa] = await Promise.all([
+  const [pp,pr,ph,pub,mem] = await Promise.all([
     safe(query(collection(db,"posts"),         where("status","==","pending"))),
     safe(query(collection(db,"alumni"),        where("status","==","pending"))),
     safe(query(collection(db,"session_photos"),where("status","==","pending"))),
     safe(query(collection(db,"posts"),         where("status","==","published"))),
     safe(query(collection(db,"alumni"),        where("status","==","approved"))),
-    safe(query(collection(db,"notices"),       where("approved","==",false))),
-    safe(query(collection(db,"announcements"), where("approved","==",false))),
   ]);
   document.getElementById("stat-pending-posts").textContent  = pp.size;
   document.getElementById("stat-pending-regs").textContent   = pr.size;
@@ -602,14 +597,12 @@ async function loadStats() {
   document.getElementById("badge-pending").textContent       = pp.size;
   document.getElementById("badge-regs").textContent          = pr.size;
   document.getElementById("badge-photos").textContent        = ph.size;
-  document.getElementById("badge-notices").textContent       = pn.size;
-  document.getElementById("badge-anns").textContent          = pa.size;
   document.getElementById("sbadge-blog").textContent         = pp.size   || "0";
   document.getElementById("sbadge-alumni").textContent       = (pr.size + ph.size) || "0";
   // Load all lists independently
-  loadRegs(); loadPhotos(); loadNotices(); loadAnns();
+  loadRegs(); loadPhotos();
   // Auto-switch to alumni section if pending alumni items and no pending blog posts
-  const alumniTotal = pr.size + ph.size + pn.size + pa.size;
+  const alumniTotal = pr.size + ph.size;
   if (alumniTotal > 0 && pp.size === 0) switchSection('alumni');
 }
 
@@ -835,41 +828,6 @@ async function loadPhotos() {
 }
 window.approvePhoto=async function(id,btn){btn.disabled=true;btn.textContent="\u2026";try{await updateDoc(doc(db,"session_photos",id),{status:"approved"});document.getElementById("photo-"+id)?.remove();toast("Photo approved \u2713");loadStats();}catch(e){toast("Error: "+e.message);btn.disabled=false;btn.textContent="\u2705 Approve";}};
 window.rejectPhoto=async function(id,btn){const ok=await confirm("Delete photo?","Permanently deleted.");if(!ok)return;btn.disabled=true;try{await deleteDoc(doc(db,"session_photos",id));document.getElementById("photo-"+id)?.remove();toast("Photo deleted.");loadStats();}catch(e){toast("Error: "+e.message);btn.disabled=false;}};
-
-async function loadNotices() {
-  const list=document.getElementById("notices-list"); if(!list)return;
-  try {
-    const snap=await getDocs(query(collection(db,"notices"),where("approved","==",false)));
-    if(snap.empty){list.innerHTML=emptyHtml("\u{1F4CC}","No pending notices");return;}
-    const items=[]; snap.forEach(d=>items.push({id:d.id,...d.data()}));
-    list.innerHTML="";
-    items.forEach(n=>{
-      const card=document.createElement("div"); card.className="item-card text-card"; card.id="notice-"+n.id;
-      card.innerHTML=`<div><div class="item-meta">By <strong>${n.authorName||"Unknown"}</strong> \u00b7 Session ${n.session||""}</div><div class="item-preview">${n.text||""}</div></div><div class="actions"><button class="btn btn-approve" onclick="approveNotice('${n.id}',this)">\u2705 Approve</button><button class="btn btn-reject" onclick="deleteNotice('${n.id}',this)">\u{1F5D1} Delete</button></div>`;
-      list.appendChild(card);
-    });
-  } catch(e){list.innerHTML=`<div class="empty"><p style="color:var(--red)">Error: ${e.message}</p></div>`;}
-}
-window.approveNotice=async function(id,btn){btn.disabled=true;btn.textContent="\u2026";try{await updateDoc(doc(db,"notices",id),{approved:true});document.getElementById("notice-"+id)?.remove();toast("Notice approved \u2713");const b=document.getElementById("badge-notices");b.textContent=Math.max(0,parseInt(b.textContent)-1);}catch(e){toast("Error: "+e.message);btn.disabled=false;btn.textContent="\u2705 Approve";}};
-window.deleteNotice=async function(id,btn){const ok=await confirm("Delete notice?","Permanently deleted.");if(!ok)return;btn.disabled=true;try{await deleteDoc(doc(db,"notices",id));document.getElementById("notice-"+id)?.remove();toast("Deleted.");}catch(e){toast("Error: "+e.message);btn.disabled=false;}};
-
-async function loadAnns() {
-  const list=document.getElementById("anns-list"); if(!list)return;
-  try {
-    const snap=await getDocs(query(collection(db,"announcements"),where("approved","==",false)));
-    if(snap.empty){list.innerHTML=emptyHtml("\u{1F4E2}","No pending announcements");return;}
-    const items=[]; snap.forEach(d=>items.push({id:d.id,...d.data()}));
-    list.innerHTML="";
-    items.forEach(a=>{
-      const card=document.createElement("div"); card.className="item-card text-card"; card.id="ann-"+a.id;
-      const typeLbl={job:"Job Update",achievement:"Achievement",news:"News",other:"Update"}[a.type]||"Update";
-      card.innerHTML=`<div><div class="item-meta" style="margin-bottom:4px;"><span style="background:#eff6ff;color:#1d4ed8;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;">${typeLbl}</span> \u00b7 By <strong>${a.authorName||"Unknown"}</strong> \u00b7 Session ${a.session||""}</div><div class="item-name">${a.title||""}</div>${a.body?`<div class="item-preview">${a.body}</div>`:""}</div><div class="actions"><button class="btn btn-approve" onclick="approveAnn('${a.id}',this)">\u2705 Approve</button><button class="btn btn-reject" onclick="deleteAnn('${a.id}',this)">\u{1F5D1} Delete</button></div>`;
-      list.appendChild(card);
-    });
-  } catch(e){list.innerHTML=`<div class="empty"><p style="color:var(--red)">Error: ${e.message}</p></div>`;}
-}
-window.approveAnn=async function(id,btn){btn.disabled=true;btn.textContent="\u2026";try{await updateDoc(doc(db,"announcements",id),{approved:true});document.getElementById("ann-"+id)?.remove();toast("Announcement approved \u2713");const b=document.getElementById("badge-anns");b.textContent=Math.max(0,parseInt(b.textContent)-1);}catch(e){toast("Error: "+e.message);btn.disabled=false;btn.textContent="\u2705 Approve";}};
-window.deleteAnn=async function(id,btn){const ok=await confirm("Delete announcement?","Permanently deleted.");if(!ok)return;btn.disabled=true;try{await deleteDoc(doc(db,"announcements",id));document.getElementById("ann-"+id)?.remove();toast("Deleted.");}catch(e){toast("Error: "+e.message);btn.disabled=false;}};
 
 async function loadMembers() {
   try {
