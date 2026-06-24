@@ -1128,39 +1128,24 @@ if (!SD || !SD.active) {
     filtered.forEach(m => {
       const reg       = registeredMap[m.roll];
       const ini       = m.name.split(' ').map(w => w[0]).slice(0,2).join('').toUpperCase();
-      const birthday  = reg?.dob && isBirthday(reg.dob);
-      const isSelf    = currentUser?.uid === reg?.uid;
-      const isAdmin   = currentUser?.uid === ADMIN;
       const el        = document.createElement('div');
       const isDeceased = reg?.memberStatus === 'deceased';
-      el.className    = 'member-card' + (reg ? '' : ' unregistered') + (birthday && (isSelf || isAdmin) ? ' birthday-today' : '') + (isDeceased ? ' member-deceased' : '');
+      el.className    = 'member-card' + (reg ? '' : ' unregistered') + (isDeceased ? ' member-deceased' : '');
 
       const photoSrc  = reg?.photoUrl || reg?.photoBase64 || '';
       const photoHtml = photoSrc
         ? `<img src="${photoSrc}" alt="${m.name}" style="width:100%;height:100%;object-fit:cover;">`
         : ini;
 
-      // DOB only visible to self and admin
-      let dobHtml = '';
-      if (reg?.dob && (isSelf || isAdmin)) {
-        const parts = reg.dob.split('-');
-        if (parts.length === 3) {
-          const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-          dobHtml = `<div class="member-detail">🎂 ${parseInt(parts[2])} ${months[parseInt(parts[1])-1]}</div>`;
-        }
-      }
-
       el.innerHTML = `
         <div class="member-avatar"${isDeceased ? ' style="opacity:0.75;filter:grayscale(0.4);"' : ''}>${photoHtml}</div>
         ${isDeceased ? '<div style="font-size:11px;color:#6b7280;font-weight:600;margin-bottom:2px;">🕊️ In Memoriam</div>' : ''}
-        ${birthday && (isSelf || isAdmin) ? '<div style="font-size:11px;color:var(--gold);font-weight:700;margin-bottom:2px;">🎂 Birthday today!</div>' : ''}
         <div class="member-name">${reg?.name || m.name}</div>
         <div class="member-roll">${m.roll}</div>
         <span class="shift-badge shift-${m.shift.toLowerCase()}">${m.shift}</span>
         ${reg?.position  ? `<div class="member-detail">💼 ${reg.position}</div>`  : (reg?.jobTitle ? `<div class="member-detail">💼 ${reg.jobTitle}</div>` : '')}
         ${reg?.employer  ? `<div class="member-detail">🏢 ${reg.employer}</div>`  : (reg?.company ? `<div class="member-detail">🏢 ${reg.company}</div>` : '')}
         ${(reg?.city || reg?.country) ? `<div class="member-detail">📍 ${[reg.city, reg.country].filter(Boolean).join(', ')}</div>` : ''}
-        ${dobHtml}
         ${reg && !isDeceased ? '<div style="font-size:10px;color:var(--navy);margin-top:5px;font-weight:600;">View Profile →</div>' : ''}
         ${isDeceased && reg?.dod ? `<div style="font-size:10px;color:#6b7280;margin-top:4px;">🕊️ ${formatDod(reg.dod)}</div>` : (isDeceased ? '<div style="font-size:10px;color:#6b7280;margin-top:4px;">🕊️ Deceased</div>' : '')}
         ${!reg && currentUser?.uid === ADMIN ? `<button class="btn-add-manually" onclick="event.stopPropagation();openAddManually('${m.roll}','${m.name.replace(/'/g,"\\'")}')" style="display:block;">➕ Add Manually</button>` : ''}
