@@ -544,7 +544,7 @@
                 <div class="il">Date of Birth</div>
                 <div class="iv" id="v-dob">—</div>
                 <input class="edit-inp" id="i-dob" type="date" />
-                <div class="private-note">🔒 Year is private — only month &amp; day shown to batchmates</div>
+                <div class="private-note">🔒 Only visible to you and admin</div>
               </div>
               <div class="info-item" id="fi-phone" style="display:none">
                 <div class="il">Phone Number</div>
@@ -817,13 +817,13 @@ function render(p) {
     document.getElementById("fi-phone").style.display = "block";
     set("v-phone", p.phone || "Not provided");
     document.getElementById("i-phone").value = p.phone || "";
-    // DOB: show formatted (day month only for display, full date in edit input)
+    // DOB: show full date to self/admin
     document.getElementById("fi-dob").style.display = "block";
     if (p.dob) {
       const parts = p.dob.split("-");
       const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
       const dobDisplay = parts.length === 3
-        ? `${parseInt(parts[2])} ${months[parseInt(parts[1])-1]} (year private)`
+        ? `${parseInt(parts[2])} ${months[parseInt(parts[1])-1]} ${parts[0]}`
         : p.dob;
       set("v-dob", dobDisplay);
       document.getElementById("i-dob").value = p.dob;
@@ -920,7 +920,7 @@ window.saveProfile = async function() {
     if (updates.dob) {
       const parts = updates.dob.split("-");
       const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-      set("v-dob", parts.length === 3 ? `${parseInt(parts[2])} ${months[parseInt(parts[1])-1]} (year private)` : updates.dob);
+      set("v-dob", parts.length === 3 ? `${parseInt(parts[2])} ${months[parseInt(parts[1])-1]} ${parts[0]}` : updates.dob);
     }
     set("lm-position", updates.position);
     set("lm-location", [updates.city, updates.country].filter(Boolean).join(", ") || "—");
