@@ -187,9 +187,52 @@ a { color: var(--color-primary-dark); }
 }
 
 /* Sections */
-.section { padding: 72px 0; }
+.section {
+  position: relative;
+  padding: 72px 0;
+  background-size: cover;
+  background-position: center;
+  background-attachment: scroll;
+}
 
-.section:nth-of-type(even) { background: var(--color-bg-alt); }
+.section:nth-of-type(even) { background-color: var(--color-bg-alt); }
+
+.section > .container,
+.section > .container.contact-inner {
+  position: relative;
+  z-index: 1;
+}
+
+.about {
+  background-image:
+    linear-gradient(180deg, rgba(253, 251, 250, 0.88) 0%, rgba(246, 239, 242, 0.92) 100%),
+    url('https://images.unsplash.com/photo-1559757148-5c350d0d3c56?auto=format&fit=crop&w=1600&q=80');
+}
+
+.services {
+  background-image:
+    linear-gradient(180deg, rgba(253, 251, 250, 0.88) 0%, rgba(253, 251, 250, 0.92) 100%),
+    url('https://images.unsplash.com/photo-1631815588090-d4bfec5b1ccb?auto=format&fit=crop&w=1600&q=80');
+}
+
+.experience {
+  background-image:
+    linear-gradient(180deg, rgba(246, 239, 242, 0.9) 0%, rgba(246, 239, 242, 0.94) 100%),
+    url('https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&w=1600&q=80');
+}
+
+.contact {
+  background-image:
+    linear-gradient(180deg, rgba(253, 251, 250, 0.85) 0%, rgba(253, 251, 250, 0.92) 100%),
+    url('https://images.unsplash.com/photo-1584515933487-779824d29309?auto=format&fit=crop&w=1600&q=80');
+}
+
+.contact-inner {
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 16px;
+  padding: 40px;
+  backdrop-filter: blur(2px);
+}
 
 .lead {
   font-size: 1.1rem;
@@ -199,6 +242,10 @@ a { color: var(--color-primary-dark); }
 
 .about .lead {
   text-align: justify;
+  background: rgba(255, 255, 255, 0.72);
+  padding: 20px 24px;
+  border-radius: 12px;
+  backdrop-filter: blur(2px);
 }
 
 /* About */
@@ -246,7 +293,11 @@ a { color: var(--color-primary-dark); }
 
 .timeline li {
   position: relative;
-  padding: 0 0 32px 28px;
+  padding: 14px 18px 14px 28px;
+  margin-bottom: 14px;
+  background: rgba(255, 255, 255, 0.75);
+  border-radius: 10px;
+  backdrop-filter: blur(2px);
 }
 
 .timeline li::before {
