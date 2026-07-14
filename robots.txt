@@ -12,7 +12,6 @@ Disallow: /login-gate-snippet.html
 
 # Dynamic pages (content loaded via JS/Firestore — no static content to index)
 Disallow: /alumni/session.html
-Disallow: /blog/post.html
 Disallow: /blog/author.html
 
 Sitemap: https://ranaadeem.de/sitemap.xml
