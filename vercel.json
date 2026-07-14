@@ -1,3 +1,9 @@
 {
-  "version": 2
+  "version": 2,
+  "rewrites": [
+    {
+      "source": "/blog/post.html",
+      "destination": "/api/og-post"
+    }
+  ]
 }
