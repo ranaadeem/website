@@ -753,7 +753,7 @@ async function loadAuthors() {
       const el=document.createElement("div");
       el.style.cssText="background:#f8f7f4;border:1px solid var(--border);border-radius:10px;padding:1rem;margin-bottom:.75rem;display:flex;align-items:center;gap:1rem;flex-wrap:wrap;";
       el.innerHTML=`<div style="width:40px;height:40px;border-radius:50%;background:var(--navy);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--gold);font-size:13px;overflow:hidden;flex-shrink:0;">${a.photoBase64?`<img src="${a.photoBase64}" style="width:100%;height:100%;object-fit:cover;">`:ini(a.name)}</div>
-        <div style="flex:1;min-width:150px;"><div style="font-weight:600;color:var(--navy);font-size:14px;">${a.name}</div><div style="font-size:12px;color:var(--muted);">@${a.username} \u00b7 ${a.email} \u00b7 Joined ${date}</div></div>
+        <div style="flex:1;min-width:0;overflow:hidden;"><div style="font-weight:600;color:var(--navy);font-size:14px;">${a.name}</div><div style="font-size:12px;color:var(--muted);word-break:break-all;">@${a.username} \u00b7 ${a.email} \u00b7 Joined ${date}</div></div>
         <div style="display:flex;gap:6px;">
           <a href="/blog/author.html?u=${a.username}" target="_blank" class="btn" style="background:#f3f4f6;color:var(--text);border:1px solid var(--border);text-decoration:none;">\u{1F441} Profile</a>
           <button class="btn btn-reject" onclick="adminDeleteAuthor('${a.id}',this)">\u{1F5D1} Delete</button>
