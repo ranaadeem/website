@@ -45,13 +45,21 @@
 
     /* ── NAV ── */
     #main-nav { position:sticky; top:0; z-index:200; background:var(--navy); border-bottom:2px solid var(--gold); }
-    .nav-inner { max-width:1200px; margin:0 auto; padding:0 1.5rem; display:flex; align-items:center; justify-content:space-between; height:60px; }
-    .nav-logo { font-family:"Playfair Display",serif; color:var(--gold); font-size:1.05rem; text-decoration:none; letter-spacing:.03em; }
-    .nav-logo span { font-size:11px; color:rgba(255,255,255,.5); margin-left:8px; font-family:"DM Sans",sans-serif; font-weight:300; letter-spacing:0; }
-    .nav-right { display:flex; align-items:center; gap:1rem; }
-    .nav-user { font-size:12px; color:rgba(255,255,255,.8); font-weight:500; }
-    .nav-btn { background:none; border:1px solid rgba(255,255,255,.25); color:rgba(255,255,255,.65); padding:5px 14px; border-radius:20px; font-size:12px; cursor:pointer; font-family:inherit; transition:all .2s; text-decoration:none; display:inline-block; }
+    .nav-inner { max-width:1100px; margin:0 auto; padding:0 1.5rem; display:flex; align-items:center; justify-content:space-between; height:64px; }
+    .nav-logo { display:flex; align-items:center; gap:10px; text-decoration:none; flex-shrink:0; }
+    .nav-logo-agr { font-family:Georgia,serif; font-size:22px; font-weight:700; color:var(--gold); letter-spacing:2px; border:2px solid var(--gold); padding:2px 8px; border-radius:4px; }
+    .nav-logo-text { display:flex; flex-direction:column; gap:1px; }
+    .nav-logo-name { font-size:14px; color:rgba(255,255,255,0.9); font-weight:500; }
+    .nav-logo-sub { font-size:11px; color:rgba(255,255,255,0.55); letter-spacing:0.02em; }
+    .nav-right { display:flex; align-items:center; gap:0.5rem; }
+    .nav-btn { background:none; border:1px solid rgba(255,255,255,.25); color:rgba(255,255,255,.65); padding:6px 14px; border-radius:6px; font-size:13px; cursor:pointer; font-family:inherit; transition:all .2s; text-decoration:none; display:inline-block; white-space:nowrap; }
     .nav-btn:hover { border-color:var(--gold); color:var(--gold); }
+    .nav-user { font-size:12px; color:rgba(255,255,255,.8); font-weight:500; }
+    @media(max-width:768px){
+      .nav-logo-name{font-size:11px;} .nav-logo-sub{font-size:9px;}
+      .nav-btn{padding:5px 10px;font-size:11px;}
+      .nav-user{display:none;}
+    }
 
     /* ── SIGN IN ── */
     .signin-wrap { max-width:420px; margin:5rem auto; padding:0 1.5rem; }
@@ -201,11 +209,17 @@
 
 <nav id="main-nav">
   <div class="nav-inner">
-    <a href="/" class="nav-logo">AGR <span>Dr. Adeem Ghaffar Rana</span></a>
+    <a href="/" class="nav-logo">
+      <span class="nav-logo-agr">AGR</span>
+      <span class="nav-logo-text">
+        <span class="nav-logo-name">Dr. Adeem Ghaffar Rana</span>
+        <span class="nav-logo-sub">Admin Panel</span>
+      </span>
+    </a>
     <div class="nav-right">
       <span class="nav-user" id="nav-user"></span>
       <a href="/blog/" class="nav-btn">Blog</a>
-      <a href="/alumni/" class="nav-btn">Alumni Portal</a>
+      <a href="/alumni/" class="nav-btn">Alumni</a>
       <button class="nav-btn" id="btn-signout" onclick="doSignOut()" style="display:none">Sign Out</button>
     </div>
   </div>
