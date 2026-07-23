@@ -184,8 +184,9 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
 #admin-panel.active{display:block;}
 .admin-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid var(--border);}
 .admin-header h2{font-family:"Playfair Display",serif;font-size:1.3rem;color:var(--navy);}
-.admin-tabs{display:flex;gap:4px;background:#f3f4f6;border-radius:8px;padding:4px;margin-bottom:1.5rem;width:fit-content;}
-.admin-tab{padding:8px 18px;border-radius:5px;font-size:13px;font-weight:500;cursor:pointer;border:none;background:transparent;color:var(--muted);font-family:inherit;transition:all 0.2s;}
+.admin-tabs{display:flex;gap:4px;background:#f3f4f6;border-radius:8px;padding:4px;margin-bottom:1.5rem;overflow-x:auto;flex-wrap:nowrap;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.admin-tabs::-webkit-scrollbar{display:none;}
+.admin-tab{padding:8px 18px;border-radius:5px;font-size:13px;font-weight:500;cursor:pointer;border:none;background:transparent;color:var(--muted);font-family:inherit;transition:all 0.2s;white-space:nowrap;flex-shrink:0;}
 .admin-tab.active{background:var(--navy);color:white;}
 .pending-item{background:#f8f7f4;border:1px solid var(--border);border-radius:10px;padding:1.25rem;margin-bottom:0.75rem;}
 .pending-item-title{font-weight:600;color:var(--navy);margin-bottom:4px;}
