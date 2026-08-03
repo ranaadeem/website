@@ -5,8 +5,56 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dresdner Stadtbiene — Naturbelassener Honig aus Dresden</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<!--
+  SEO — noindex stays ON while this lives as a private preview on
+  ranaadeem.de. Everything else below (meta tags, structured data, canonical)
+  is prepared and ready to go — the ONLY thing to change when this moves to
+  dresdner-stadtbiene.de is: (1) remove the noindex line, (2) update the
+  canonical/og:url/JSON-LD "url" fields below to the real domain.
+-->
 <meta name="robots" content="noindex, nofollow">
-<meta name="description" content="Dresdner Stadtbiene — naturbelassener Honig aus Dresden und Umgebung. Solidarische Imkerei, Wabenhonig und Honig im Glas.">
+<meta name="description" content="Dresdner Stadtbiene — naturbelassener Honig aus Dresden und Umgebung. Solidarische Imkerei, Wabenhonig und Honig im Glas, versandfertig aus Dresden.">
+<link rel="canonical" href="https://ranaadeem.de/stadtbiene.html">
+
+<meta property="og:type" content="website">
+<meta property="og:locale" content="de_DE">
+<meta property="og:site_name" content="Dresdner Stadtbiene">
+<meta property="og:title" content="Dresdner Stadtbiene — Naturbelassener Honig aus Dresden">
+<meta property="og:description" content="Naturbelassener Honig aus Dresden und Umgebung — solidarische Imkerei, Wabenhonig und Honig im Glas.">
+<meta property="og:image" content="https://ranaadeem.de/stadtbiene-img/honig-im-glas.jpg">
+<meta property="og:url" content="https://ranaadeem.de/stadtbiene.html">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Dresdner Stadtbiene — Naturbelassener Honig aus Dresden">
+<meta name="twitter:description" content="Naturbelassener Honig aus Dresden und Umgebung — solidarische Imkerei, Wabenhonig und Honig im Glas.">
+<meta name="twitter:image" content="https://ranaadeem.de/stadtbiene-img/honig-im-glas.jpg">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "name": "Dresdner Stadtbiene",
+  "description": "Naturbelassener Honig aus Dresden und Umgebung. Solidarische Imkerei, Wabenhonig und Honig im Glas.",
+  "url": "https://ranaadeem.de/stadtbiene.html",
+  "image": "https://ranaadeem.de/stadtbiene-img/hero.jpg",
+  "email": "info@dresdner-stadtbiene.de",
+  "areaServed": { "@type": "City", "name": "Dresden" },
+  "address": { "@type": "PostalAddress", "addressLocality": "Dresden", "addressCountry": "DE" },
+  "makesOffer": [
+    {
+      "@type": "Offer",
+      "price": "5.00",
+      "priceCurrency": "EUR",
+      "itemOffered": { "@type": "Product", "name": "Honig im Glas 250 g", "description": "Früh- oder Sommertrachthonig, 250-Gramm-Glas" }
+    },
+    {
+      "@type": "Offer",
+      "price": "7.00",
+      "priceCurrency": "EUR",
+      "itemOffered": { "@type": "Product", "name": "Honig im Glas 500 g", "description": "Früh- oder Sommertrachthonig, 500-Gramm-Glas" }
+    }
+  ]
+}
+</script>
 
 <!--
   PAYMENT INTEGRATION — DUMMY / SANDBOX MODE
@@ -32,9 +80,11 @@
      and is required for real transactions. Currently this demo creates
      and captures the PayPal order entirely in the browser, which is
      fine for a sandbox demo but not for production.
+  PayPal and Google Pay SDKs are NOT loaded here in <head> on purpose — for
+  page-speed/SEO (Core Web Vitals), they're lazy-loaded via IntersectionObserver
+  only once the visitor scrolls near the order section (see loadPaymentSdks()
+  near the end of the page script), instead of blocking every page load.
 -->
-<script src="https://www.paypal.com/sdk/js?client-id=test&currency=EUR&components=buttons&intent=capture"></script>
-<script src="https://pay.google.com/gp/p/js/pay.js" async></script>
 
 <style>
 :root{--navy:#1a3a8a;--gold:#c9a84c;--gold-light:#e8d5a3;--cream:#faf8f4;--white:#fff;--text:#1a1a2e;--muted:#6b7280;--border:#e5e7eb;}
@@ -268,21 +318,21 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
     <p class="section-sub" data-i18n="produkte_sub">Drei Wege, den Honig der Dresdner Stadtbiene zu genießen — vom fertigen Glas bis zur eigenen Mitgliedschaft in der Imkerei.</p>
     <div class="offer-grid">
       <div class="offer-card">
-        <div class="offer-media"><img src="/stadtbiene-img/solidarische-imkerei.jpg" alt="Solidarische Imkerei"></div>
+        <div class="offer-media"><img src="/stadtbiene-img/solidarische-imkerei.jpg" alt="Solidarische Imkerei bei der Dresdner Stadtbiene – gemeinsam Honig ernten in Dresden" loading="lazy"></div>
         <div class="offer-body">
           <h3 data-i18n="offer1_title">Solidarische Imkerei</h3>
           <p data-i18n="offer1_desc">Für Leute, die Lust haben zu erfahren, wie der Honig ins Glas kommt, und solidarisch die Risiken und Erträge der Bienenwirtschaft teilen wollen.</p>
         </div>
       </div>
       <div class="offer-card">
-        <div class="offer-media"><img src="/stadtbiene-img/wabenhonig.jpg" alt="Wabenhonig"></div>
+        <div class="offer-media"><img src="/stadtbiene-img/wabenhonig.jpg" alt="Wabenhonig der Dresdner Stadtbiene – frische Naturwaben aus Dresden" loading="lazy"></div>
         <div class="offer-body">
           <h3 data-i18n="offer2_title">Wabenhonig</h3>
           <p data-i18n="offer2_desc">Der Wabenhonig wird im Mai/Juni von den Bienen gesammelt und eingelagert. Bei rechtzeitiger Bestellung kann ich sicherstellen, dass der Vorrat ausreichend groß ist.</p>
         </div>
       </div>
       <div class="offer-card">
-        <div class="offer-media"><img src="/stadtbiene-img/honig-im-glas.jpg" alt="Honig im Glas"></div>
+        <div class="offer-media"><img src="/stadtbiene-img/honig-im-glas.jpg" alt="Honig im Glas von der Dresdner Stadtbiene – 250g und 500g Gläser aus Dresden" loading="lazy"></div>
         <div class="offer-body">
           <h3 data-i18n="offer3_title">Honig im Glas</h3>
           <p data-i18n="offer3_desc">Früh- oder Sommertrachthonig, erhältlich im 250- und 500-Gramm-Glas. Bei Bestellung einer Kiste von 12 Gläsern liefere ich im Dresdner Stadtgebiet aus.</p>
@@ -725,6 +775,45 @@ function renderPaymentButtons() {
     } catch (e) { console.error('Google Pay failed to init (dummy sandbox mode):', e); }
   }
 }
+
+/* ── LAZY-LOAD PAYMENT SDKS (performance / Core Web Vitals) ──────────
+   PayPal + Google Pay SDKs are ~heavy third-party scripts. Rather than
+   blocking every page load with them, they're only fetched once the
+   visitor scrolls near the order section. renderPaymentButtons() is
+   safe to call before they've loaded (it just no-ops), and gets called
+   again once each SDK finishes loading. */
+function loadScriptOnce(src) {
+  return new Promise(function(resolve, reject) {
+    if ([...document.scripts].some(function(s) { return s.src === src; })) { resolve(); return; }
+    const s = document.createElement('script');
+    s.src = src;
+    s.onload = function() { resolve(); };
+    s.onerror = function() { reject(new Error('Failed to load ' + src)); };
+    document.head.appendChild(s);
+  });
+}
+
+let paymentSdksTriggered = false;
+function loadPaymentSdks() {
+  if (paymentSdksTriggered) return;
+  paymentSdksTriggered = true;
+  loadScriptOnce('https://www.paypal.com/sdk/js?client-id=test&currency=EUR&components=buttons&intent=capture')
+    .then(renderPaymentButtons)
+    .catch(function(e) { console.error('PayPal SDK failed to load (sandbox demo):', e); });
+  loadScriptOnce('https://pay.google.com/gp/p/js/pay.js')
+    .then(renderPaymentButtons)
+    .catch(function(e) { console.error('Google Pay SDK failed to load (sandbox demo):', e); });
+}
+
+const orderSectionObserver = new IntersectionObserver(function(entries) {
+  entries.forEach(function(entry) {
+    if (entry.isIntersecting) {
+      loadPaymentSdks();
+      orderSectionObserver.disconnect();
+    }
+  });
+}, { rootMargin: '400px 0px' });
+orderSectionObserver.observe(document.getElementById('bestellen'));
 
 renderSummary();
 </script>
