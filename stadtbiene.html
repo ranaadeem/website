@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dresdner Stadtbiene — Naturbelassener Honig aus Dresden</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="Dresdner Stadtbiene — naturbelassener Honig aus Dresden und Umgebung. Solidarische Imkerei, Wabenhonig und Honig im Glas.">
+<style>
+:root{--navy:#1a3a8a;--gold:#c9a84c;--gold-light:#e8d5a3;--cream:#faf8f4;--white:#fff;--text:#1a1a2e;--muted:#6b7280;--border:#e5e7eb;}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{overflow-x:hidden;}
+body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);overflow-x:hidden;width:100%;}
+
+/* PREVIEW BANNER */
+.preview-banner{background:#111;color:rgba(255,255,255,0.7);text-align:center;font-size:12px;padding:8px 16px;letter-spacing:0.02em;}
+.preview-banner strong{color:var(--gold);}
+
+/* HERO */
+.hero{position:relative;min-height:78vh;display:flex;align-items:center;background:linear-gradient(135deg,rgba(10,15,30,0.72),rgba(26,58,138,0.55)),url('/stadtbiene-img/hero.jpg') center/cover no-repeat;}
+.hero-inner{max-width:900px;margin:0 auto;padding:2rem;text-align:center;}
+.hero-tag{display:inline-block;font-size:11px;font-weight:500;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);border:1px solid rgba(201,168,76,0.5);padding:5px 16px;border-radius:20px;margin-bottom:1.5rem;}
+.hero h1{font-family:"Playfair Display",serif;font-size:clamp(2.4rem,6vw,4rem);font-weight:700;color:white;line-height:1.15;margin-bottom:1rem;}
+.hero h1 span{color:var(--gold);}
+.hero p{font-size:17px;color:rgba(255,255,255,0.85);line-height:1.7;max-width:520px;margin:0 auto 2rem;font-weight:300;}
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;}
+.btn-primary{background:var(--gold);color:var(--navy);padding:12px 28px;border-radius:6px;font-size:14px;font-weight:600;text-decoration:none;transition:all 0.2s;display:inline-block;}
+.btn-primary:hover{background:var(--gold-light);transform:translateY(-1px);}
+.btn-outline{border:1px solid rgba(255,255,255,0.4);color:white;padding:12px 28px;border-radius:6px;font-size:14px;text-decoration:none;transition:all 0.2s;display:inline-block;}
+.btn-outline:hover{border-color:var(--gold);color:var(--gold);}
+
+/* SECTIONS */
+.section{padding:4.5rem 2rem;}
+.section-inner{max-width:1000px;margin:0 auto;}
+.section-tag{font-size:11px;font-weight:500;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:0.4rem;text-align:center;}
+.section-title{font-family:"Playfair Display",serif;font-size:clamp(1.7rem,3.5vw,2.4rem);color:var(--navy);margin-bottom:0.75rem;text-align:center;}
+.section-sub{font-size:15px;color:var(--muted);margin:0 auto 3rem;max-width:600px;line-height:1.7;text-align:center;}
+
+/* OFFER CARDS */
+.offer-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;}
+.offer-card{background:var(--white);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:all 0.25s;}
+.offer-card:hover{box-shadow:0 12px 34px rgba(0,0,0,0.1);transform:translateY(-3px);}
+.offer-media{aspect-ratio:4/3;overflow:hidden;}
+.offer-media img{width:100%;height:100%;object-fit:cover;display:block;}
+.offer-body{padding:1.25rem 1.4rem 1.5rem;}
+.offer-body h3{font-family:"Playfair Display",serif;font-size:17px;color:var(--navy);margin-bottom:0.6rem;}
+.offer-body p{font-size:13.5px;color:var(--muted);line-height:1.65;}
+.offer-price{display:inline-block;margin-top:0.9rem;font-size:12px;color:var(--gold);background:rgba(201,168,76,0.1);padding:4px 11px;border-radius:5px;font-weight:600;}
+
+/* TWO-COL "DAS STECKT IM GLAS" */
+.glas-section{background:var(--navy);}
+.glas-section .section-tag{color:var(--gold);}
+.glas-section .section-title{color:white;}
+.glas-grid{display:grid;grid-template-columns:1fr 1fr;gap:2rem;}
+.glas-card{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:12px;padding:1.75rem;}
+.glas-card h3{font-family:"Playfair Display",serif;font-size:16px;color:var(--gold);margin-bottom:0.75rem;}
+.glas-card p{font-size:14px;color:rgba(255,255,255,0.75);line-height:1.75;}
+
+/* SOLIDARISCHE IMKEREI */
+.solawi-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;}
+.solawi-card{background:var(--white);border:1px solid var(--border);border-left:4px solid var(--gold);border-radius:10px;padding:1.5rem 1.75rem;}
+.solawi-card h3{font-family:"Playfair Display",serif;font-size:16px;color:var(--navy);margin-bottom:0.75rem;}
+.solawi-card p{font-size:14px;color:var(--muted);line-height:1.75;}
+.solawi-facts{margin-top:4rem;background:var(--cream);border:1px solid var(--border);border-radius:14px;padding:2rem 2.25rem;}
+.solawi-facts h4{font-family:"Playfair Display",serif;font-size:15px;color:var(--navy);margin-bottom:1.1rem;}
+.facts-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;}
+.fact-box{text-align:center;background:var(--white);border:1px solid var(--border);border-radius:10px;padding:1rem 0.5rem;}
+.fact-num{font-family:"Playfair Display",serif;font-size:20px;color:var(--gold);font-weight:700;display:block;}
+.fact-lbl{font-size:11px;color:var(--muted);margin-top:3px;}
+
+/* CONTACT */
+.contact-strip{background:var(--gold);padding:3.5rem 2rem;text-align:center;}
+.contact-strip h3{font-family:"Playfair Display",serif;font-size:24px;color:var(--navy);margin-bottom:0.5rem;}
+.contact-strip p{font-size:14px;color:rgba(15,31,61,0.75);margin-bottom:1.75rem;max-width:480px;margin-left:auto;margin-right:auto;}
+.contact-email-btn{background:var(--navy);color:var(--white);padding:12px 30px;border-radius:6px;text-decoration:none;font-size:14px;font-weight:500;transition:opacity 0.2s;display:inline-block;}
+.contact-email-btn:hover{opacity:0.85;}
+
+.footer{background:#0a0a0a;color:rgba(255,255,255,0.4);text-align:center;padding:2rem;font-size:12px;}
+.footer a{color:var(--gold);text-decoration:none;}
+
+@media(max-width:768px){
+  .offer-grid{grid-template-columns:1fr;}
+  .glas-grid{grid-template-columns:1fr;}
+  .solawi-grid{grid-template-columns:1fr;}
+  .facts-grid{grid-template-columns:1fr 1fr;}
+}
+</style>
+</head>
+<body>
+
+<div class="preview-banner">🐝 <strong>Vorschau</strong> — neuer Entwurf für dresdner-stadtbiene.de, noch nicht live</div>
+
+<section class="hero">
+  <div class="hero-inner">
+    <span class="hero-tag">Dresden &amp; Umgebung</span>
+    <h1>Dresdner <span>Stadtbiene</span></h1>
+    <p>Naturbelassener Honig aus Dresden und Umgebung — von einer Standimkerei, die auf Zuckerfütterung verzichtet und ihre Bienen mit eigenem Honig überwintert.</p>
+    <div class="hero-btns">
+      <a href="#produkte" class="btn-primary">Angebote ansehen ↓</a>
+      <a href="#kontakt" class="btn-outline">Kontakt aufnehmen →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ANGEBOTE -->
+<section class="section" id="produkte">
+  <div class="section-inner">
+    <span class="section-tag">Angebote</span>
+    <h2 class="section-title">Honig direkt vom Imker</h2>
+    <p class="section-sub">Drei Wege, den Honig der Dresdner Stadtbiene zu genießen — vom fertigen Glas bis zur eigenen Mitgliedschaft in der Imkerei.</p>
+    <div class="offer-grid">
+      <div class="offer-card">
+        <div class="offer-media"><img src="/stadtbiene-img/solidarische-imkerei.jpg" alt="Solidarische Imkerei"></div>
+        <div class="offer-body">
+          <h3>Solidarische Imkerei</h3>
+          <p>Für Leute, die Lust haben zu erfahren, wie der Honig ins Glas kommt, und solidarisch die Risiken und Erträge der Bienenwirtschaft teilen wollen.</p>
+        </div>
+      </div>
+      <div class="offer-card">
+        <div class="offer-media"><img src="/stadtbiene-img/wabenhonig.jpg" alt="Wabenhonig"></div>
+        <div class="offer-body">
+          <h3>Wabenhonig</h3>
+          <p>Der Wabenhonig wird im Mai/Juni von den Bienen gesammelt und eingelagert. Bei rechtzeitiger Bestellung kann ich sicherstellen, dass der Vorrat ausreichend groß ist.</p>
+        </div>
+      </div>
+      <div class="offer-card">
+        <div class="offer-media"><img src="/stadtbiene-img/honig-im-glas.jpg" alt="Honig im Glas"></div>
+        <div class="offer-body">
+          <h3>Honig im Glas</h3>
+          <p>Früh- oder Sommertrachthonig, erhältlich im 250- und 500-Gramm-Glas. Bei Bestellung einer Kiste von 12 Gläsern liefere ich im Dresdner Stadtgebiet aus.</p>
+          <span class="offer-price">250 g — 5 € · 500 g — 7 €</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DAS STECKT IM GLAS -->
+<section class="section glas-section">
+  <div class="section-inner">
+    <span class="section-tag">Philosophie</span>
+    <h2 class="section-title">Das steckt im Glas</h2>
+    <p class="section-sub" style="color:rgba(255,255,255,0.6);">Umwelt- und klimafreundliche Imkerei, ohne Kompromisse bei den Bienen.</p>
+    <div class="glas-grid">
+      <div class="glas-card">
+        <h3>Auf eigenem Honig überwinterte Bienen</h3>
+        <p>Mit dem Anspruch, den Betrieb der Imkerei umwelt- und klimafreundlich zu gestalten, verzichte ich auf das Zufüttern von Zucker. Die Raffination von Zucker ist sehr energieaufwändig, und der Anbau von Zuckerrüben und Zuckerrohr beansprucht Agrarfläche, welche anderweitig genutzt werden kann. Deshalb lasse ich den Bienen ihren Teil Honig, um gut über den Winter zu kommen.</p>
+      </div>
+      <div class="glas-card">
+        <h3>Honig von einer Standimkerei</h3>
+        <p>Ich betreibe eine Standimkerei, das heißt die Völker verbleiben das gesamte Jahr über an einem Standort. Gegenüber einer Wanderimkerei, bei der temporär die Standorte der Völker gewechselt werden, spart dies viel Transportaufwand und somit Energie — vorausgesetzt, der Standort bietet den Bienen ganzjährig ein gutes Trachtangebot.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SOLIDARISCHE IMKEREI -->
+<section class="section" style="background:var(--white);border-top:1px solid var(--border);">
+  <div class="section-inner">
+    <span class="section-tag">Mitmachen</span>
+    <h2 class="section-title">Solidarische Imkerei</h2>
+    <p class="section-sub">Wie solidarische Landwirtschaft funktioniert — und was das für die Imkerei bedeutet.</p>
+    <div class="solawi-grid">
+      <div class="solawi-card">
+        <h3>Solidarische Landwirtschaft</h3>
+        <p>Durch den Erwerb von Anteilen am Ertrag eines landwirtschaftlichen Betriebes sichern die Käufer dem Landwirt die Abnahme seiner Produkte und somit sein wirtschaftliches Auskommen zu. Außerdem wird das Risiko einer Missernte durch schlechtes Wetter oder Krankheits- und Schädlingsbefall auf viele Schultern verteilt. Im Gegenzug gibt es Produkte aus der Region, von denen bekannt ist, wie sie hergestellt wurden und unter welchen Bedingungen die Menschen dort arbeiten.</p>
+      </div>
+      <div class="solawi-card">
+        <h3>Solidarische Imkerei</h3>
+        <p>Die solidarische Imkerei will ich so gestalten, dass der durchschnittliche Ertrag eines Volkes von ca. 30 kg Honig pro Jahr auf zehn Anteile — jeweils rund 3 kg — verteilt wird. Da im Vorfeld nicht bekannt ist, wie viel Honig die Bienen tatsächlich sammeln, gibt es in schlechten Jahren vielleicht nur 2,5 kg, in guten Jahren bis zu 3,5 kg pro Anteil. Verteilt wird der Honig nach der Ernte im Juni bzw. Juli, mit der Möglichkeit, gemeinsam in die Völker zu schauen.</p>
+      </div>
+    </div>
+
+    <div class="solawi-facts">
+      <h4>Ein Anteil auf einen Blick</h4>
+      <div class="facts-grid">
+        <div class="fact-box"><span class="fact-num">45 €</span><div class="fact-lbl">pro Anteil</div></div>
+        <div class="fact-box"><span class="fact-num">~3 kg</span><div class="fact-lbl">Honig im Schnitt</div></div>
+        <div class="fact-box"><span class="fact-num">3 €</span><div class="fact-lbl">Pfand fürs Glas</div></div>
+        <div class="fact-box"><span class="fact-num">Jun/Jul</span><div class="fact-lbl">Ausgabe nach Ernte</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- KONTAKT -->
+<section class="contact-strip" id="kontakt">
+  <h3>Fragen oder Honig bestellen?</h3>
+  <p>Für Fragen, Honigbestellungen und bei Interesse an der solidarischen Imkerei — einfach eine E-Mail schreiben.</p>
+  <a href="mailto:info@dresdner-stadtbiene.de" class="contact-email-btn">info@dresdner-stadtbiene.de</a>
+</section>
+
+<footer class="footer">
+  <p>&copy; 2026 Dresdner Stadtbiene · Entwurf in Vorbereitung für <a href="https://dresdner-stadtbiene.de" target="_blank">dresdner-stadtbiene.de</a></p>
+</footer>
+
+</body>
+</html>
