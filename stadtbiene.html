@@ -7,6 +7,35 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="Dresdner Stadtbiene — naturbelassener Honig aus Dresden und Umgebung. Solidarische Imkerei, Wabenhonig und Honig im Glas.">
+
+<!--
+  PAYMENT INTEGRATION — DUMMY / SANDBOX MODE
+  ───────────────────────────────────────────
+  PayPal SDK is loaded below with client-id=test — PayPal's public sandbox
+  placeholder. It renders working PayPal + Card buttons that simulate
+  checkout with fake money, no real account needed. Google Pay is
+  configured with environment:'TEST', which uses Google's test merchant
+  and returns a fake payment token — also no real account needed.
+
+  TO GO LIVE with real payments, once the beekeeper has his own accounts:
+  1. PayPal: replace client-id=test in the <script src="https://www.paypal.com/sdk/js?...">
+     tag below with his real PayPal Client ID (from developer.paypal.com,
+     after creating a PayPal Business account — free, a few minutes).
+     Card payments work automatically through the same PayPal button
+     once the account is verified (no separate card processor needed).
+  2. Google Pay: change PAYPAL_CONFIG.googlePayEnvironment from 'TEST' to
+     'PRODUCTION' and set a real merchantId (from pay.google.com/business
+     console) once he's linked Google Pay to his PayPal Business account.
+  3. For real orders, move order creation/capture server-side (a small
+     Vercel function under /api, similar to send-email.js) instead of
+     the client-side-only flow used here — this prevents price tampering
+     and is required for real transactions. Currently this demo creates
+     and captures the PayPal order entirely in the browser, which is
+     fine for a sandbox demo but not for production.
+-->
+<script src="https://www.paypal.com/sdk/js?client-id=test&currency=EUR&components=buttons&intent=capture"></script>
+<script src="https://pay.google.com/gp/p/js/pay.js" async></script>
+
 <style>
 :root{--navy:#1a3a8a;--gold:#c9a84c;--gold-light:#e8d5a3;--cream:#faf8f4;--white:#fff;--text:#1a1a2e;--muted:#6b7280;--border:#e5e7eb;}
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -14,8 +43,11 @@ html{overflow-x:hidden;}
 body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);overflow-x:hidden;width:100%;}
 
 /* PREVIEW BANNER */
-.preview-banner{background:#111;color:rgba(255,255,255,0.7);text-align:center;font-size:12px;padding:8px 16px;letter-spacing:0.02em;}
+.preview-banner{background:#111;color:rgba(255,255,255,0.7);text-align:center;font-size:12px;padding:8px 16px;letter-spacing:0.02em;display:flex;align-items:center;justify-content:center;gap:1rem;flex-wrap:wrap;}
 .preview-banner strong{color:var(--gold);}
+.lang-toggle{display:inline-flex;border:1px solid rgba(255,255,255,0.25);border-radius:20px;overflow:hidden;}
+.lang-btn{background:transparent;border:none;color:rgba(255,255,255,0.55);font-size:11px;font-weight:600;padding:4px 12px;cursor:pointer;letter-spacing:0.05em;transition:all 0.15s;}
+.lang-btn.active{background:var(--gold);color:var(--navy);}
 
 /* HERO */
 .hero{position:relative;min-height:78vh;display:flex;align-items:center;background:linear-gradient(135deg,rgba(10,15,30,0.72),rgba(26,58,138,0.55)),url('/stadtbiene-img/hero.jpg') center/cover no-repeat;}
@@ -25,7 +57,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
 .hero h1 span{color:var(--gold);}
 .hero p{font-size:17px;color:rgba(255,255,255,0.85);line-height:1.7;max-width:520px;margin:0 auto 2rem;font-weight:300;}
 .hero-btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;}
-.btn-primary{background:var(--gold);color:var(--navy);padding:12px 28px;border-radius:6px;font-size:14px;font-weight:600;text-decoration:none;transition:all 0.2s;display:inline-block;}
+.btn-primary{background:var(--gold);color:var(--navy);padding:12px 28px;border-radius:6px;font-size:14px;font-weight:600;text-decoration:none;transition:all 0.2s;display:inline-block;border:none;cursor:pointer;}
 .btn-primary:hover{background:var(--gold-light);transform:translateY(-1px);}
 .btn-outline{border:1px solid rgba(255,255,255,0.4);color:white;padding:12px 28px;border-radius:6px;font-size:14px;text-decoration:none;transition:all 0.2s;display:inline-block;}
 .btn-outline:hover{border-color:var(--gold);color:var(--gold);}
@@ -69,6 +101,56 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
 .fact-num{font-family:"Playfair Display",serif;font-size:20px;color:var(--gold);font-weight:700;display:block;}
 .fact-lbl{font-size:11px;color:var(--muted);margin-top:3px;}
 
+/* ORDER / CHECKOUT */
+.order-section{background:var(--white);border-top:1px solid var(--border);}
+.test-banner{max-width:700px;margin:0 auto 2.5rem;background:rgba(201,168,76,0.12);border:1px solid rgba(201,168,76,0.4);border-radius:10px;padding:0.9rem 1.25rem;text-align:center;font-size:13px;color:#8b6914;font-weight:500;}
+.checkout-grid{display:grid;grid-template-columns:1.1fr 0.9fr;gap:2.5rem;align-items:start;}
+.checkout-block{background:var(--cream);border:1px solid var(--border);border-radius:14px;padding:1.75rem;}
+.checkout-block + .checkout-block{margin-top:1.5rem;}
+.checkout-block h3{font-family:"Playfair Display",serif;font-size:16px;color:var(--navy);margin-bottom:1.1rem;}
+
+.product-row{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:0.9rem 0;border-bottom:1px solid var(--border);}
+.product-row:last-child{border-bottom:none;}
+.product-info h4{font-size:14px;color:var(--text);margin-bottom:2px;}
+.product-info span{font-size:12px;color:var(--muted);}
+.qty-stepper{display:flex;align-items:center;gap:10px;background:var(--white);border:1px solid var(--border);border-radius:8px;padding:4px;}
+.qty-btn{width:26px;height:26px;border-radius:6px;border:none;background:var(--cream);color:var(--navy);font-size:15px;font-weight:600;cursor:pointer;}
+.qty-btn:hover{background:var(--gold);color:white;}
+.qty-val{font-size:14px;font-weight:600;min-width:16px;text-align:center;}
+
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:0.9rem;margin-bottom:0.9rem;}
+.form-field{display:flex;flex-direction:column;gap:5px;}
+.form-field.full{grid-column:1 / -1;}
+.form-field label{font-size:12px;color:var(--muted);font-weight:500;}
+.form-field input,.form-field textarea{font-family:"DM Sans",sans-serif;font-size:14px;padding:10px 12px;border:1px solid var(--border);border-radius:8px;background:var(--white);color:var(--text);}
+.form-field input:focus,.form-field textarea:focus{outline:none;border-color:var(--gold);}
+.form-field textarea{resize:vertical;min-height:70px;}
+
+.summary-line{display:flex;justify-content:space-between;font-size:13.5px;color:var(--muted);padding:6px 0;}
+.summary-line.total{font-size:16px;font-weight:700;color:var(--navy);border-top:1px solid var(--border);margin-top:6px;padding-top:12px;}
+.summary-empty{font-size:13px;color:var(--muted);font-style:italic;padding:0.5rem 0;}
+
+.pay-locked-msg{font-size:13px;color:var(--muted);font-style:italic;padding:0.75rem;background:var(--white);border:1px dashed var(--border);border-radius:8px;text-align:center;}
+.pay-methods{display:none;flex-direction:column;gap:0.9rem;}
+.pay-methods.unlocked{display:flex;}
+.pay-method-block{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:0.9rem;}
+.pay-method-label{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.6rem;}
+#googlepay-button-container{min-height:44px;}
+.pay-divider{text-align:center;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;position:relative;margin:0.25rem 0;}
+
+.form-error{display:none;background:rgba(220,38,38,0.08);color:#991b1b;border:1px solid rgba(220,38,38,0.2);border-radius:8px;padding:10px 14px;font-size:13px;margin-top:1rem;}
+.form-error.show{display:block;}
+
+/* CONFIRMATION OVERLAY */
+#order-confirm-overlay{display:none;position:fixed;inset:0;background:rgba(10,10,20,0.75);z-index:9999;align-items:center;justify-content:center;padding:1.5rem;}
+#order-confirm-overlay.show{display:flex;}
+.confirm-card{background:var(--white);border-radius:16px;max-width:440px;width:100%;padding:2.25rem 2rem;text-align:center;}
+.confirm-card .icon{font-size:2.75rem;margin-bottom:1rem;}
+.confirm-card h3{font-family:"Playfair Display",serif;font-size:22px;color:var(--navy);margin-bottom:0.5rem;}
+.confirm-order-num{display:inline-block;background:var(--cream);border:1px dashed var(--gold);border-radius:8px;padding:8px 18px;font-family:monospace;font-size:15px;color:var(--navy);font-weight:700;margin:1rem 0;letter-spacing:0.05em;}
+.confirm-card p{font-size:13.5px;color:var(--muted);line-height:1.7;margin-bottom:1.5rem;}
+.confirm-card .test-note{font-size:11.5px;color:#8b6914;background:rgba(201,168,76,0.12);border-radius:8px;padding:8px 12px;margin-bottom:1.5rem;}
+
 /* CONTACT */
 .contact-strip{background:var(--gold);padding:3.5rem 2rem;text-align:center;}
 .contact-strip h3{font-family:"Playfair Display",serif;font-size:24px;color:var(--navy);margin-bottom:0.5rem;}
@@ -84,21 +166,29 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
   .glas-grid{grid-template-columns:1fr;}
   .solawi-grid{grid-template-columns:1fr;}
   .facts-grid{grid-template-columns:1fr 1fr;}
+  .checkout-grid{grid-template-columns:1fr;}
+  .form-row{grid-template-columns:1fr;}
 }
 </style>
 </head>
 <body>
 
-<div class="preview-banner">🐝 <strong>Vorschau</strong> — neuer Entwurf für dresdner-stadtbiene.de, noch nicht live</div>
+<div class="preview-banner">
+  <span>🐝 <strong data-i18n="banner_preview">Vorschau</strong> <span data-i18n="banner_preview_rest">— neuer Entwurf für dresdner-stadtbiene.de, noch nicht live</span></span>
+  <div class="lang-toggle">
+    <button class="lang-btn active" id="lang-de" onclick="setLang('de')">DE</button>
+    <button class="lang-btn" id="lang-en" onclick="setLang('en')">EN</button>
+  </div>
+</div>
 
 <section class="hero">
   <div class="hero-inner">
-    <span class="hero-tag">Dresden &amp; Umgebung</span>
+    <span class="hero-tag" data-i18n="hero_tag">Dresden & Umgebung</span>
     <h1>Dresdner <span>Stadtbiene</span></h1>
-    <p>Naturbelassener Honig aus Dresden und Umgebung — von einer Standimkerei, die auf Zuckerfütterung verzichtet und ihre Bienen mit eigenem Honig überwintert.</p>
+    <p data-i18n="hero_desc">Naturbelassener Honig aus Dresden und Umgebung — von einer Standimkerei, die auf Zuckerfütterung verzichtet und ihre Bienen mit eigenem Honig überwintert.</p>
     <div class="hero-btns">
-      <a href="#produkte" class="btn-primary">Angebote ansehen ↓</a>
-      <a href="#kontakt" class="btn-outline">Kontakt aufnehmen →</a>
+      <a href="#bestellen" class="btn-primary" data-i18n="hero_btn_order">Jetzt bestellen →</a>
+      <a href="#produkte" class="btn-outline" data-i18n="hero_btn_offers">Angebote ansehen ↓</a>
     </div>
   </div>
 </section>
@@ -106,29 +196,29 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
 <!-- ANGEBOTE -->
 <section class="section" id="produkte">
   <div class="section-inner">
-    <span class="section-tag">Angebote</span>
-    <h2 class="section-title">Honig direkt vom Imker</h2>
-    <p class="section-sub">Drei Wege, den Honig der Dresdner Stadtbiene zu genießen — vom fertigen Glas bis zur eigenen Mitgliedschaft in der Imkerei.</p>
+    <span class="section-tag" data-i18n="produkte_tag">Angebote</span>
+    <h2 class="section-title" data-i18n="produkte_title">Honig direkt vom Imker</h2>
+    <p class="section-sub" data-i18n="produkte_sub">Drei Wege, den Honig der Dresdner Stadtbiene zu genießen — vom fertigen Glas bis zur eigenen Mitgliedschaft in der Imkerei.</p>
     <div class="offer-grid">
       <div class="offer-card">
         <div class="offer-media"><img src="/stadtbiene-img/solidarische-imkerei.jpg" alt="Solidarische Imkerei"></div>
         <div class="offer-body">
-          <h3>Solidarische Imkerei</h3>
-          <p>Für Leute, die Lust haben zu erfahren, wie der Honig ins Glas kommt, und solidarisch die Risiken und Erträge der Bienenwirtschaft teilen wollen.</p>
+          <h3 data-i18n="offer1_title">Solidarische Imkerei</h3>
+          <p data-i18n="offer1_desc">Für Leute, die Lust haben zu erfahren, wie der Honig ins Glas kommt, und solidarisch die Risiken und Erträge der Bienenwirtschaft teilen wollen.</p>
         </div>
       </div>
       <div class="offer-card">
         <div class="offer-media"><img src="/stadtbiene-img/wabenhonig.jpg" alt="Wabenhonig"></div>
         <div class="offer-body">
-          <h3>Wabenhonig</h3>
-          <p>Der Wabenhonig wird im Mai/Juni von den Bienen gesammelt und eingelagert. Bei rechtzeitiger Bestellung kann ich sicherstellen, dass der Vorrat ausreichend groß ist.</p>
+          <h3 data-i18n="offer2_title">Wabenhonig</h3>
+          <p data-i18n="offer2_desc">Der Wabenhonig wird im Mai/Juni von den Bienen gesammelt und eingelagert. Bei rechtzeitiger Bestellung kann ich sicherstellen, dass der Vorrat ausreichend groß ist.</p>
         </div>
       </div>
       <div class="offer-card">
         <div class="offer-media"><img src="/stadtbiene-img/honig-im-glas.jpg" alt="Honig im Glas"></div>
         <div class="offer-body">
-          <h3>Honig im Glas</h3>
-          <p>Früh- oder Sommertrachthonig, erhältlich im 250- und 500-Gramm-Glas. Bei Bestellung einer Kiste von 12 Gläsern liefere ich im Dresdner Stadtgebiet aus.</p>
+          <h3 data-i18n="offer3_title">Honig im Glas</h3>
+          <p data-i18n="offer3_desc">Früh- oder Sommertrachthonig, erhältlich im 250- und 500-Gramm-Glas. Bei Bestellung einer Kiste von 12 Gläsern liefere ich im Dresdner Stadtgebiet aus.</p>
           <span class="offer-price">250 g — 5 € · 500 g — 7 €</span>
         </div>
       </div>
@@ -139,17 +229,17 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
 <!-- DAS STECKT IM GLAS -->
 <section class="section glas-section">
   <div class="section-inner">
-    <span class="section-tag">Philosophie</span>
-    <h2 class="section-title">Das steckt im Glas</h2>
-    <p class="section-sub" style="color:rgba(255,255,255,0.6);">Umwelt- und klimafreundliche Imkerei, ohne Kompromisse bei den Bienen.</p>
+    <span class="section-tag" data-i18n="glas_tag">Philosophie</span>
+    <h2 class="section-title" data-i18n="glas_title">Das steckt im Glas</h2>
+    <p class="section-sub" style="color:rgba(255,255,255,0.6);" data-i18n="glas_sub">Umwelt- und klimafreundliche Imkerei, ohne Kompromisse bei den Bienen.</p>
     <div class="glas-grid">
       <div class="glas-card">
-        <h3>Auf eigenem Honig überwinterte Bienen</h3>
-        <p>Mit dem Anspruch, den Betrieb der Imkerei umwelt- und klimafreundlich zu gestalten, verzichte ich auf das Zufüttern von Zucker. Die Raffination von Zucker ist sehr energieaufwändig, und der Anbau von Zuckerrüben und Zuckerrohr beansprucht Agrarfläche, welche anderweitig genutzt werden kann. Deshalb lasse ich den Bienen ihren Teil Honig, um gut über den Winter zu kommen.</p>
+        <h3 data-i18n="glas1_title">Auf eigenem Honig überwinterte Bienen</h3>
+        <p data-i18n="glas1_desc">Mit dem Anspruch, den Betrieb der Imkerei umwelt- und klimafreundlich zu gestalten, verzichte ich auf das Zufüttern von Zucker. Die Raffination von Zucker ist sehr energieaufwändig, und der Anbau von Zuckerrüben und Zuckerrohr beansprucht Agrarfläche, welche anderweitig genutzt werden kann. Deshalb lasse ich den Bienen ihren Teil Honig, um gut über den Winter zu kommen.</p>
       </div>
       <div class="glas-card">
-        <h3>Honig von einer Standimkerei</h3>
-        <p>Ich betreibe eine Standimkerei, das heißt die Völker verbleiben das gesamte Jahr über an einem Standort. Gegenüber einer Wanderimkerei, bei der temporär die Standorte der Völker gewechselt werden, spart dies viel Transportaufwand und somit Energie — vorausgesetzt, der Standort bietet den Bienen ganzjährig ein gutes Trachtangebot.</p>
+        <h3 data-i18n="glas2_title">Honig von einer Standimkerei</h3>
+        <p data-i18n="glas2_desc">Ich betreibe eine Standimkerei, das heißt die Völker verbleiben das gesamte Jahr über an einem Standort. Gegenüber einer Wanderimkerei, bei der temporär die Standorte der Völker gewechselt werden, spart dies viel Transportaufwand und somit Energie — vorausgesetzt, der Standort bietet den Bienen ganzjährig ein gutes Trachtangebot.</p>
       </div>
     </div>
   </div>
@@ -158,27 +248,146 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
 <!-- SOLIDARISCHE IMKEREI -->
 <section class="section" style="background:var(--white);border-top:1px solid var(--border);">
   <div class="section-inner">
-    <span class="section-tag">Mitmachen</span>
-    <h2 class="section-title">Solidarische Imkerei</h2>
-    <p class="section-sub">Wie solidarische Landwirtschaft funktioniert — und was das für die Imkerei bedeutet.</p>
+    <span class="section-tag" data-i18n="solawi_tag">Mitmachen</span>
+    <h2 class="section-title" data-i18n="solawi_title">Solidarische Imkerei</h2>
+    <p class="section-sub" data-i18n="solawi_sub">Wie solidarische Landwirtschaft funktioniert — und was das für die Imkerei bedeutet.</p>
     <div class="solawi-grid">
       <div class="solawi-card">
-        <h3>Solidarische Landwirtschaft</h3>
-        <p>Durch den Erwerb von Anteilen am Ertrag eines landwirtschaftlichen Betriebes sichern die Käufer dem Landwirt die Abnahme seiner Produkte und somit sein wirtschaftliches Auskommen zu. Außerdem wird das Risiko einer Missernte durch schlechtes Wetter oder Krankheits- und Schädlingsbefall auf viele Schultern verteilt. Im Gegenzug gibt es Produkte aus der Region, von denen bekannt ist, wie sie hergestellt wurden und unter welchen Bedingungen die Menschen dort arbeiten.</p>
+        <h3 data-i18n="solawi1_title">Solidarische Landwirtschaft</h3>
+        <p data-i18n="solawi1_desc">Durch den Erwerb von Anteilen am Ertrag eines landwirtschaftlichen Betriebes sichern die Käufer dem Landwirt die Abnahme seiner Produkte und somit sein wirtschaftliches Auskommen zu. Außerdem wird das Risiko einer Missernte durch schlechtes Wetter oder Krankheits- und Schädlingsbefall auf viele Schultern verteilt. Im Gegenzug gibt es Produkte aus der Region, von denen bekannt ist, wie sie hergestellt wurden und unter welchen Bedingungen die Menschen dort arbeiten.</p>
       </div>
       <div class="solawi-card">
-        <h3>Solidarische Imkerei</h3>
-        <p>Die solidarische Imkerei will ich so gestalten, dass der durchschnittliche Ertrag eines Volkes von ca. 30 kg Honig pro Jahr auf zehn Anteile — jeweils rund 3 kg — verteilt wird. Da im Vorfeld nicht bekannt ist, wie viel Honig die Bienen tatsächlich sammeln, gibt es in schlechten Jahren vielleicht nur 2,5 kg, in guten Jahren bis zu 3,5 kg pro Anteil. Verteilt wird der Honig nach der Ernte im Juni bzw. Juli, mit der Möglichkeit, gemeinsam in die Völker zu schauen.</p>
+        <h3 data-i18n="solawi2_title">Solidarische Imkerei</h3>
+        <p data-i18n="solawi2_desc">Die solidarische Imkerei will ich so gestalten, dass der durchschnittliche Ertrag eines Volkes von ca. 30 kg Honig pro Jahr auf zehn Anteile — jeweils rund 3 kg — verteilt wird. Da im Vorfeld nicht bekannt ist, wie viel Honig die Bienen tatsächlich sammeln, gibt es in schlechten Jahren vielleicht nur 2,5 kg, in guten Jahren bis zu 3,5 kg pro Anteil. Verteilt wird der Honig nach der Ernte im Juni bzw. Juli, mit der Möglichkeit, gemeinsam in die Völker zu schauen.</p>
       </div>
     </div>
 
     <div class="solawi-facts">
-      <h4>Ein Anteil auf einen Blick</h4>
+      <h4 data-i18n="facts_title">Ein Anteil auf einen Blick</h4>
       <div class="facts-grid">
-        <div class="fact-box"><span class="fact-num">45 €</span><div class="fact-lbl">pro Anteil</div></div>
-        <div class="fact-box"><span class="fact-num">~3 kg</span><div class="fact-lbl">Honig im Schnitt</div></div>
-        <div class="fact-box"><span class="fact-num">3 €</span><div class="fact-lbl">Pfand fürs Glas</div></div>
-        <div class="fact-box"><span class="fact-num">Jun/Jul</span><div class="fact-lbl">Ausgabe nach Ernte</div></div>
+        <div class="fact-box"><span class="fact-num">45 €</span><div class="fact-lbl" data-i18n="fact1_lbl">pro Anteil</div></div>
+        <div class="fact-box"><span class="fact-num">~3 kg</span><div class="fact-lbl" data-i18n="fact2_lbl">Honig im Schnitt</div></div>
+        <div class="fact-box"><span class="fact-num">3 €</span><div class="fact-lbl" data-i18n="fact3_lbl">Pfand fürs Glas</div></div>
+        <div class="fact-box"><span class="fact-num">Jun/Jul</span><div class="fact-lbl" data-i18n="fact4_lbl">Ausgabe nach Ernte</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BESTELLEN / CHECKOUT -->
+<section class="section order-section" id="bestellen">
+  <div class="section-inner">
+    <span class="section-tag" data-i18n="order_tag">Bestellen</span>
+    <h2 class="section-title" data-i18n="order_title">Jetzt Honig bestellen</h2>
+    <p class="section-sub" data-i18n="order_sub">Gläser wählen, Lieferadresse eingeben, sicher online bezahlen.</p>
+
+    <div class="test-banner" data-i18n="order_test_banner">🧪 Testmodus — dies ist eine Demo. Zahlungen laufen über Sandbox-Konten, es wird kein echtes Geld abgebucht.</div>
+
+    <div class="checkout-grid">
+      <!-- LEFT: products + address -->
+      <div>
+        <div class="checkout-block">
+          <h3 data-i18n="order_products_h">Produkte</h3>
+          <div class="product-row">
+            <div class="product-info">
+              <h4 data-i18n="product_250_name">250 g Glas</h4>
+              <span>5,00 €</span>
+            </div>
+            <div class="qty-stepper">
+              <button class="qty-btn" onclick="changeQty('p250',-1)">−</button>
+              <span class="qty-val" id="qty-p250">0</span>
+              <button class="qty-btn" onclick="changeQty('p250',1)">+</button>
+            </div>
+          </div>
+          <div class="product-row">
+            <div class="product-info">
+              <h4 data-i18n="product_500_name">500 g Glas</h4>
+              <span>7,00 €</span>
+            </div>
+            <div class="qty-stepper">
+              <button class="qty-btn" onclick="changeQty('p500',-1)">−</button>
+              <span class="qty-val" id="qty-p500">0</span>
+              <button class="qty-btn" onclick="changeQty('p500',1)">+</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="checkout-block">
+          <h3 data-i18n="order_address_h">Lieferadresse</h3>
+          <div class="form-row">
+            <div class="form-field">
+              <label data-i18n="field_name">Name</label>
+              <input type="text" id="f-name" autocomplete="name">
+            </div>
+            <div class="form-field">
+              <label data-i18n="field_email">E-Mail</label>
+              <input type="email" id="f-email" autocomplete="email">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-field full">
+              <label data-i18n="field_street">Straße und Hausnummer</label>
+              <input type="text" id="f-street" autocomplete="street-address">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-field">
+              <label data-i18n="field_zip">PLZ</label>
+              <input type="text" id="f-zip" autocomplete="postal-code">
+            </div>
+            <div class="form-field">
+              <label data-i18n="field_city">Stadt</label>
+              <input type="text" id="f-city" autocomplete="address-level2">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-field">
+              <label data-i18n="field_country">Land</label>
+              <input type="text" id="f-country" value="Deutschland" autocomplete="country-name">
+            </div>
+            <div class="form-field">
+              <label data-i18n="field_phone">Telefon (optional)</label>
+              <input type="tel" id="f-phone" autocomplete="tel">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-field full">
+              <label data-i18n="field_note">Anmerkung (optional)</label>
+              <textarea id="f-note"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: summary + payment -->
+      <div>
+        <div class="checkout-block">
+          <h3 data-i18n="order_summary_h">Zusammenfassung</h3>
+          <div id="summary-lines">
+            <div class="summary-empty" id="summary-empty-msg" data-i18n="summary_empty">Noch keine Produkte ausgewählt.</div>
+          </div>
+          <div class="summary-line total">
+            <span data-i18n="summary_total">Gesamt</span>
+            <span id="summary-total-val">0,00 €</span>
+          </div>
+        </div>
+
+        <div class="checkout-block">
+          <h3 data-i18n="order_payment_h">Zahlungsmethode</h3>
+          <div class="pay-locked-msg" id="pay-locked-msg" data-i18n="pay_locked">Bitte zuerst Produkte und Lieferadresse ausfüllen.</div>
+          <div class="pay-methods" id="pay-methods">
+            <div class="pay-method-block">
+              <div class="pay-method-label" data-i18n="pay_paypal_card_label">PayPal &amp; Kredit-/Debitkarte</div>
+              <div id="paypal-button-container"></div>
+            </div>
+            <div class="pay-divider" data-i18n="pay_or">oder</div>
+            <div class="pay-method-block">
+              <div class="pay-method-label">Google Pay</div>
+              <div id="googlepay-button-container"></div>
+            </div>
+          </div>
+          <div class="form-error" id="form-error" data-i18n="form_error">Bitte fülle alle Pflichtfelder aus und wähle mindestens ein Produkt.</div>
+        </div>
       </div>
     </div>
   </div>
@@ -186,14 +395,272 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
 
 <!-- KONTAKT -->
 <section class="contact-strip" id="kontakt">
-  <h3>Fragen oder Honig bestellen?</h3>
-  <p>Für Fragen, Honigbestellungen und bei Interesse an der solidarischen Imkerei — einfach eine E-Mail schreiben.</p>
+  <h3 data-i18n="contact_h">Fragen oder Honig bestellen?</h3>
+  <p data-i18n="contact_p">Für Fragen, Honigbestellungen und bei Interesse an der solidarischen Imkerei — einfach eine E-Mail schreiben.</p>
   <a href="mailto:info@dresdner-stadtbiene.de" class="contact-email-btn">info@dresdner-stadtbiene.de</a>
 </section>
 
 <footer class="footer">
-  <p>&copy; 2026 Dresdner Stadtbiene · Entwurf in Vorbereitung für <a href="https://dresdner-stadtbiene.de" target="_blank">dresdner-stadtbiene.de</a></p>
+  <p data-i18n="footer_text">© 2026 Dresdner Stadtbiene · Entwurf in Vorbereitung für <a href="https://dresdner-stadtbiene.de" target="_blank">dresdner-stadtbiene.de</a></p>
 </footer>
+
+<!-- ORDER CONFIRMATION OVERLAY -->
+<div id="order-confirm-overlay">
+  <div class="confirm-card">
+    <div class="icon">🎉</div>
+    <h3 data-i18n="confirm_h">Bestellung erfolgreich!</h3>
+    <div class="confirm-order-num" id="confirm-order-num">DSB-000000</div>
+    <p data-i18n="confirm_p">Vielen Dank für deine Bestellung! Der Imker meldet sich zur Abstimmung von Lieferung und Zahlung.</p>
+    <div class="test-note" data-i18n="confirm_test_note">🧪 Testbestellung im Demo-Modus — es wurde kein echtes Geld abgebucht.</div>
+    <button class="btn-primary" onclick="resetOrder()" data-i18n="confirm_new_order">Neue Bestellung</button>
+  </div>
+</div>
+
+<script>
+/* ── I18N ─────────────────────────────────────────────────────────── */
+const i18n = {
+  banner_preview: {de:"Vorschau", en:"Preview"},
+  banner_preview_rest: {de:"— neuer Entwurf für dresdner-stadtbiene.de, noch nicht live", en:"— new draft for dresdner-stadtbiene.de, not live yet"},
+  hero_tag: {de:"Dresden & Umgebung", en:"Dresden & Surrounding Area"},
+  hero_desc: {de:"Naturbelassener Honig aus Dresden und Umgebung — von einer Standimkerei, die auf Zuckerfütterung verzichtet und ihre Bienen mit eigenem Honig überwintert.", en:"Natural, raw honey from Dresden and the surrounding area — from a stationary apiary that skips sugar feeding and lets its bees winter on their own honey."},
+  hero_btn_order: {de:"Jetzt bestellen →", en:"Order Now →"},
+  hero_btn_offers: {de:"Angebote ansehen ↓", en:"See Offers ↓"},
+  produkte_tag: {de:"Angebote", en:"Offers"},
+  produkte_title: {de:"Honig direkt vom Imker", en:"Honey Straight From the Beekeeper"},
+  produkte_sub: {de:"Drei Wege, den Honig der Dresdner Stadtbiene zu genießen — vom fertigen Glas bis zur eigenen Mitgliedschaft in der Imkerei.", en:"Three ways to enjoy Dresdner Stadtbiene honey — from a ready-filled jar to your own share in the apiary."},
+  offer1_title: {de:"Solidarische Imkerei", en:"Community-Supported Beekeeping"},
+  offer1_desc: {de:"Für Leute, die Lust haben zu erfahren, wie der Honig ins Glas kommt, und solidarisch die Risiken und Erträge der Bienenwirtschaft teilen wollen.", en:"For people who want to see how honey gets into the jar, and who want to share the risks and rewards of beekeeping together."},
+  offer2_title: {de:"Wabenhonig", en:"Comb Honey"},
+  offer2_desc: {de:"Der Wabenhonig wird im Mai/Juni von den Bienen gesammelt und eingelagert. Bei rechtzeitiger Bestellung kann ich sicherstellen, dass der Vorrat ausreichend groß ist.", en:"Comb honey is gathered and stored by the bees in May/June. Order ahead of time and I can make sure there's enough in stock."},
+  offer3_title: {de:"Honig im Glas", en:"Jarred Honey"},
+  offer3_desc: {de:"Früh- oder Sommertrachthonig, erhältlich im 250- und 500-Gramm-Glas. Bei Bestellung einer Kiste von 12 Gläsern liefere ich im Dresdner Stadtgebiet aus.", en:"Spring or summer honey, available in 250g and 500g jars. Order a box of 12 jars and I'll deliver within the city of Dresden."},
+  glas_tag: {de:"Philosophie", en:"Philosophy"},
+  glas_title: {de:"Das steckt im Glas", en:"What's In the Jar"},
+  glas_sub: {de:"Umwelt- und klimafreundliche Imkerei, ohne Kompromisse bei den Bienen.", en:"Environmentally and climate-friendly beekeeping, with no compromises for the bees."},
+  glas1_title: {de:"Auf eigenem Honig überwinterte Bienen", en:"Bees Wintered On Their Own Honey"},
+  glas1_desc: {de:"Mit dem Anspruch, den Betrieb der Imkerei umwelt- und klimafreundlich zu gestalten, verzichte ich auf das Zufüttern von Zucker. Die Raffination von Zucker ist sehr energieaufwändig, und der Anbau von Zuckerrüben und Zuckerrohr beansprucht Agrarfläche, welche anderweitig genutzt werden kann. Deshalb lasse ich den Bienen ihren Teil Honig, um gut über den Winter zu kommen.", en:"With the goal of running the apiary in an environmentally and climate-friendly way, I don't feed the bees sugar. Refining sugar takes a lot of energy, and growing sugar beet or sugar cane uses farmland that could be used otherwise. So I leave the bees their share of honey to get them well through the winter."},
+  glas2_title: {de:"Honig von einer Standimkerei", en:"Honey From a Stationary Apiary"},
+  glas2_desc: {de:"Ich betreibe eine Standimkerei, das heißt die Völker verbleiben das gesamte Jahr über an einem Standort. Gegenüber einer Wanderimkerei, bei der temporär die Standorte der Völker gewechselt werden, spart dies viel Transportaufwand und somit Energie — vorausgesetzt, der Standort bietet den Bienen ganzjährig ein gutes Trachtangebot.", en:"I run a stationary apiary, meaning the colonies stay in one place all year round. Compared to migratory beekeeping, where colonies are moved between locations, this saves a lot of transport and therefore energy — provided the site offers the bees good forage year-round."},
+  solawi_tag: {de:"Mitmachen", en:"Get Involved"},
+  solawi_title: {de:"Solidarische Imkerei", en:"Community-Supported Beekeeping"},
+  solawi_sub: {de:"Wie solidarische Landwirtschaft funktioniert — und was das für die Imkerei bedeutet.", en:"How community-supported agriculture works — and what that means for the apiary."},
+  solawi1_title: {de:"Solidarische Landwirtschaft", en:"Community-Supported Agriculture"},
+  solawi1_desc: {de:"Durch den Erwerb von Anteilen am Ertrag eines landwirtschaftlichen Betriebes sichern die Käufer dem Landwirt die Abnahme seiner Produkte und somit sein wirtschaftliches Auskommen zu. Außerdem wird das Risiko einer Missernte durch schlechtes Wetter oder Krankheits- und Schädlingsbefall auf viele Schultern verteilt. Im Gegenzug gibt es Produkte aus der Region, von denen bekannt ist, wie sie hergestellt wurden und unter welchen Bedingungen die Menschen dort arbeiten.", en:"By buying a share in a farm's harvest, buyers guarantee the farmer that his products will be taken and his livelihood secured. It also spreads the risk of a poor harvest — bad weather, disease, or pests — across many shoulders. In return, you get regional products where it's clear how they were made and under what conditions the people producing them work."},
+  solawi2_title: {de:"Solidarische Imkerei", en:"Community-Supported Beekeeping"},
+  solawi2_desc: {de:"Die solidarische Imkerei will ich so gestalten, dass der durchschnittliche Ertrag eines Volkes von ca. 30 kg Honig pro Jahr auf zehn Anteile — jeweils rund 3 kg — verteilt wird. Da im Vorfeld nicht bekannt ist, wie viel Honig die Bienen tatsächlich sammeln, gibt es in schlechten Jahren vielleicht nur 2,5 kg, in guten Jahren bis zu 3,5 kg pro Anteil. Verteilt wird der Honig nach der Ernte im Juni bzw. Juli, mit der Möglichkeit, gemeinsam in die Völker zu schauen.", en:"I want to structure the community-supported beekeeping so that a colony's average yield of about 30 kg of honey per year is split across ten shares — around 3 kg each. Since it isn't known in advance how much honey the bees will actually collect, a share might mean only 2.5 kg in a poor year, or up to 3.5 kg in a good one. Honey is distributed after the harvest in June or July, with the chance to look into the colonies together."},
+  facts_title: {de:"Ein Anteil auf einen Blick", en:"A Share At a Glance"},
+  fact1_lbl: {de:"pro Anteil", en:"per share"},
+  fact2_lbl: {de:"Honig im Schnitt", en:"honey on average"},
+  fact3_lbl: {de:"Pfand fürs Glas", en:"jar deposit"},
+  fact4_lbl: {de:"Ausgabe nach Ernte", en:"distributed after harvest"},
+  order_tag: {de:"Bestellen", en:"Order"},
+  order_title: {de:"Jetzt Honig bestellen", en:"Order Honey Now"},
+  order_sub: {de:"Gläser wählen, Lieferadresse eingeben, sicher online bezahlen.", en:"Choose your jars, enter your delivery address, and pay securely online."},
+  order_test_banner: {de:"🧪 Testmodus — dies ist eine Demo. Zahlungen laufen über Sandbox-Konten, es wird kein echtes Geld abgebucht.", en:"🧪 Test mode — this is a demo. Payments run through sandbox accounts, no real money is charged."},
+  order_products_h: {de:"Produkte", en:"Products"},
+  product_250_name: {de:"250 g Glas", en:"250 g Jar"},
+  product_500_name: {de:"500 g Glas", en:"500 g Jar"},
+  order_address_h: {de:"Lieferadresse", en:"Delivery Address"},
+  field_name: {de:"Name", en:"Name"},
+  field_email: {de:"E-Mail", en:"Email"},
+  field_street: {de:"Straße und Hausnummer", en:"Street and House Number"},
+  field_zip: {de:"PLZ", en:"Postal Code"},
+  field_city: {de:"Stadt", en:"City"},
+  field_country: {de:"Land", en:"Country"},
+  field_phone: {de:"Telefon (optional)", en:"Phone (optional)"},
+  field_note: {de:"Anmerkung (optional)", en:"Note (optional)"},
+  order_summary_h: {de:"Zusammenfassung", en:"Summary"},
+  summary_empty: {de:"Noch keine Produkte ausgewählt.", en:"No products selected yet."},
+  summary_total: {de:"Gesamt", en:"Total"},
+  order_payment_h: {de:"Zahlungsmethode", en:"Payment Method"},
+  pay_locked: {de:"Bitte zuerst Produkte und Lieferadresse ausfüllen.", en:"Please fill in products and delivery address first."},
+  pay_paypal_card_label: {de:"PayPal & Kredit-/Debitkarte", en:"PayPal & Credit/Debit Card"},
+  pay_or: {de:"oder", en:"or"},
+  form_error: {de:"Bitte fülle alle Pflichtfelder aus und wähle mindestens ein Produkt.", en:"Please fill in all required fields and select at least one product."},
+  contact_h: {de:"Fragen oder Honig bestellen?", en:"Questions or Want to Order Honey?"},
+  contact_p: {de:"Für Fragen, Honigbestellungen und bei Interesse an der solidarischen Imkerei — einfach eine E-Mail schreiben.", en:"For questions, honey orders, or interest in the community-supported beekeeping — just send an email."},
+  footer_text: {de:'© 2026 Dresdner Stadtbiene · Entwurf in Vorbereitung für <a href="https://dresdner-stadtbiene.de" target="_blank">dresdner-stadtbiene.de</a>', en:'© 2026 Dresdner Stadtbiene · Draft in preparation for <a href="https://dresdner-stadtbiene.de" target="_blank">dresdner-stadtbiene.de</a>'},
+  confirm_h: {de:"Bestellung erfolgreich!", en:"Order placed successfully!"},
+  confirm_p: {de:"Vielen Dank für deine Bestellung! Der Imker meldet sich zur Abstimmung von Lieferung und Zahlung.", en:"Thank you for your order! The beekeeper will be in touch to arrange delivery and payment."},
+  confirm_test_note: {de:"🧪 Testbestellung im Demo-Modus — es wurde kein echtes Geld abgebucht.", en:"🧪 Test order in demo mode — no real money was charged."},
+  confirm_new_order: {de:"Neue Bestellung", en:"New Order"}
+};
+
+function setLang(lang) {
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const entry = i18n[el.dataset.i18n];
+    if (!entry) return;
+    if (el.dataset.i18n === 'footer_text') { el.innerHTML = entry[lang]; }
+    else { el.textContent = entry[lang]; }
+  });
+  document.documentElement.lang = lang;
+  document.getElementById('lang-de').classList.toggle('active', lang === 'de');
+  document.getElementById('lang-en').classList.toggle('active', lang === 'en');
+  try { localStorage.setItem('stadtbiene-lang', lang); } catch(e) {}
+}
+setLang((function(){ try { return localStorage.getItem('stadtbiene-lang') || 'de'; } catch(e) { return 'de'; } })());
+
+/* ── CART / CHECKOUT STATE ───────────────────────────────────────── */
+const PRICES = { p250: 5.00, p500: 7.00 };
+const PRODUCT_NAMES = { p250: 'product_250_name', p500: 'product_500_name' };
+const cart = { p250: 0, p500: 0 };
+let paypalButtonsRendered = false;
+let googlePayButtonRendered = false;
+
+function changeQty(id, delta) {
+  cart[id] = Math.max(0, cart[id] + delta);
+  document.getElementById('qty-' + id).textContent = cart[id];
+  renderSummary();
+  evaluatePaymentGate();
+}
+
+function cartTotal() {
+  return Object.keys(cart).reduce((sum, id) => sum + cart[id] * PRICES[id], 0);
+}
+
+function renderSummary() {
+  const lang = document.documentElement.lang || 'de';
+  const linesEl = document.getElementById('summary-lines');
+  const emptyMsg = document.getElementById('summary-empty-msg');
+  const items = Object.keys(cart).filter(id => cart[id] > 0);
+  linesEl.querySelectorAll('.summary-line:not(.total)').forEach(el => el.remove());
+  if (items.length === 0) {
+    emptyMsg.style.display = 'block';
+  } else {
+    emptyMsg.style.display = 'none';
+    items.forEach(id => {
+      const line = document.createElement('div');
+      line.className = 'summary-line';
+      const name = i18n[PRODUCT_NAMES[id]][lang];
+      const lineTotal = (cart[id] * PRICES[id]).toFixed(2).replace('.', ',');
+      line.innerHTML = `<span>${cart[id]} × ${name}</span><span>${lineTotal} €</span>`;
+      linesEl.insertBefore(line, emptyMsg);
+    });
+  }
+  document.getElementById('summary-total-val').textContent = cartTotal().toFixed(2).replace('.', ',') + ' €';
+}
+
+function addressFilled() {
+  const required = ['f-name', 'f-email', 'f-street', 'f-zip', 'f-city', 'f-country'];
+  return required.every(id => document.getElementById(id).value.trim().length > 0);
+}
+
+function evaluatePaymentGate() {
+  const ready = cartTotal() > 0 && addressFilled();
+  const lockedMsg = document.getElementById('pay-locked-msg');
+  const payMethods = document.getElementById('pay-methods');
+  if (ready) {
+    lockedMsg.style.display = 'none';
+    payMethods.classList.add('unlocked');
+    renderPaymentButtons();
+  } else {
+    lockedMsg.style.display = 'block';
+    payMethods.classList.remove('unlocked');
+  }
+}
+
+['f-name','f-email','f-street','f-zip','f-city','f-country','f-phone','f-note'].forEach(id => {
+  document.getElementById(id).addEventListener('input', evaluatePaymentGate);
+});
+
+function generateOrderNumber() {
+  const ts = Date.now().toString(36).toUpperCase();
+  const rand = Math.floor(100 + Math.random() * 900);
+  return `DSB-${ts}-${rand}`;
+}
+
+function showConfirmation() {
+  document.getElementById('confirm-order-num').textContent = generateOrderNumber();
+  document.getElementById('order-confirm-overlay').classList.add('show');
+}
+
+function resetOrder() {
+  document.getElementById('order-confirm-overlay').classList.remove('show');
+  cart.p250 = 0; cart.p500 = 0;
+  document.getElementById('qty-p250').textContent = '0';
+  document.getElementById('qty-p500').textContent = '0';
+  ['f-name','f-email','f-street','f-zip','f-city','f-phone','f-note'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('f-country').value = 'Deutschland';
+  renderSummary();
+  evaluatePaymentGate();
+  document.getElementById('bestellen').scrollIntoView({behavior:'smooth'});
+}
+
+/* ── PAYPAL (sandbox / dummy — see comment in <head>) ────────────── */
+function renderPaymentButtons() {
+  if (!paypalButtonsRendered && window.paypal) {
+    paypalButtonsRendered = true;
+    try {
+      paypal.Buttons({
+        style: { layout: 'vertical', color: 'gold', shape: 'rect', label: 'paypal' },
+        createOrder: function(data, actions) {
+          return actions.order.create({
+            purchase_units: [{ amount: { value: cartTotal().toFixed(2), currency_code: 'EUR' } }]
+          });
+        },
+        onApprove: function(data, actions) {
+          return actions.order.capture().then(function() {
+            showConfirmation();
+          });
+        },
+        onError: function(err) {
+          const errBox = document.getElementById('form-error');
+          errBox.classList.add('show');
+          console.error('PayPal sandbox error (dummy mode):', err);
+        }
+      }).render('#paypal-button-container');
+    } catch (e) { console.error('PayPal buttons failed to render (dummy sandbox mode):', e); }
+  }
+
+  if (!googlePayButtonRendered && window.google && google.payments) {
+    googlePayButtonRendered = true;
+    try {
+      const paymentsClient = new google.payments.api.PaymentsClient({ environment: 'TEST' });
+      const allowedPaymentMethods = [{
+        type: 'CARD',
+        parameters: {
+          allowedAuthMethods: ['PAN_ONLY', 'CRYPTOGRAM_3DS'],
+          allowedCardNetworks: ['MASTERCARD', 'VISA']
+        },
+        tokenizationSpecification: {
+          type: 'PAYMENT_GATEWAY',
+          parameters: { gateway: 'example', gatewayMerchantId: 'exampleGatewayMerchantId' }
+        }
+      }];
+      paymentsClient.isReadyToPay({ apiVersion: 2, apiVersionMinor: 0, allowedPaymentMethods })
+        .then(function(response) {
+          if (response.result) {
+            const button = paymentsClient.createButton({
+              buttonColor: 'black',
+              buttonType: 'pay',
+              onClick: function() {
+                const paymentDataRequest = {
+                  apiVersion: 2,
+                  apiVersionMinor: 0,
+                  allowedPaymentMethods,
+                  transactionInfo: {
+                    totalPriceStatus: 'FINAL',
+                    totalPrice: cartTotal().toFixed(2),
+                    currencyCode: 'EUR',
+                    countryCode: 'DE'
+                  },
+                  merchantInfo: { merchantId: '12345678901234567890', merchantName: 'Dresdner Stadtbiene (Test)' }
+                };
+                paymentsClient.loadPaymentData(paymentDataRequest)
+                  .then(function() { showConfirmation(); })
+                  .catch(function(err) { console.error('Google Pay test error (dummy mode):', err); });
+              }
+            });
+            document.getElementById('googlepay-button-container').appendChild(button);
+          }
+        })
+        .catch(function(err) { console.error('Google Pay not available in this browser/sandbox:', err); });
+    } catch (e) { console.error('Google Pay failed to init (dummy sandbox mode):', e); }
+  }
+}
+
+renderSummary();
+</script>
 
 </body>
 </html>
