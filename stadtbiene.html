@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dresdner Stadtbiene — Naturbelassener Honig aus Dresden</title>
+<link rel="icon" type="image/jpeg" href="/stadtbiene-img/logo.jpg">
+<link rel="apple-touch-icon" href="/stadtbiene-img/logo.jpg">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <!--
   SEO — noindex stays ON while this lives as a private preview on
@@ -21,12 +23,12 @@
 <meta property="og:site_name" content="Dresdner Stadtbiene">
 <meta property="og:title" content="Dresdner Stadtbiene — Naturbelassener Honig aus Dresden">
 <meta property="og:description" content="Naturbelassener Honig aus Dresden und Umgebung — solidarische Imkerei, Wabenhonig und Honig im Glas.">
-<meta property="og:image" content="https://ranaadeem.de/stadtbiene-img/honig-im-glas.jpg">
+<meta property="og:image" content="https://ranaadeem.de/stadtbiene-img/og-image.jpg">
 <meta property="og:url" content="https://ranaadeem.de/stadtbiene.html">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Dresdner Stadtbiene — Naturbelassener Honig aus Dresden">
 <meta name="twitter:description" content="Naturbelassener Honig aus Dresden und Umgebung — solidarische Imkerei, Wabenhonig und Honig im Glas.">
-<meta name="twitter:image" content="https://ranaadeem.de/stadtbiene-img/honig-im-glas.jpg">
+<meta name="twitter:image" content="https://ranaadeem.de/stadtbiene-img/og-image.jpg">
 
 <script type="application/ld+json">
 {
@@ -35,7 +37,7 @@
   "name": "Dresdner Stadtbiene",
   "description": "Naturbelassener Honig aus Dresden und Umgebung. Solidarische Imkerei, Wabenhonig und Honig im Glas.",
   "url": "https://ranaadeem.de/stadtbiene.html",
-  "image": "https://ranaadeem.de/stadtbiene-img/hero.jpg",
+  "image": "https://ranaadeem.de/stadtbiene-img/og-image.jpg",
   "email": "info@dresdner-stadtbiene.de",
   "areaServed": { "@type": "City", "name": "Dresden" },
   "address": { "@type": "PostalAddress", "addressLocality": "Dresden", "addressCountry": "DE" },
@@ -103,6 +105,8 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
 .hero{position:relative;min-height:78vh;display:flex;align-items:center;background:linear-gradient(135deg,rgba(10,15,30,0.72),rgba(26,58,138,0.55)),url('/stadtbiene-img/hero.jpg') center/cover no-repeat;}
 .hero-inner{max-width:900px;margin:0 auto;padding:2rem;text-align:center;}
 .hero-tag{display:inline-block;font-size:11px;font-weight:500;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);border:1px solid rgba(201,168,76,0.5);padding:5px 16px;border-radius:20px;margin-bottom:1.5rem;}
+.hero-logo{width:88px;height:88px;border-radius:50%;overflow:hidden;border:3px solid var(--gold);margin:0 auto 1.25rem;box-shadow:0 8px 24px rgba(0,0,0,0.35);}
+.hero-logo img{width:100%;height:100%;object-fit:cover;object-position:center 42%;transform:scale(1.6);}
 .hero h1{font-family:"Playfair Display",serif;font-size:clamp(2.4rem,6vw,4rem);font-weight:700;color:white;line-height:1.15;margin-bottom:1rem;}
 .hero h1 span{color:var(--gold);}
 .hero p{font-size:17px;color:rgba(255,255,255,0.85);line-height:1.7;max-width:520px;margin:0 auto 2rem;font-weight:300;}
@@ -306,6 +310,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);
 
 <section class="hero">
   <div class="hero-inner">
+    <div class="hero-logo"><img src="/stadtbiene-img/logo.jpg" alt="Dresdner Stadtbiene Logo"></div>
     <span class="hero-tag" data-i18n="hero_tag">Dresden & Umgebung</span>
     <h1>Dresdner <span>Stadtbiene</span></h1>
     <p data-i18n="hero_desc">Naturbelassener Honig aus Dresden und Umgebung — von einer Standimkerei, die auf Zuckerfütterung verzichtet und ihre Bienen mit eigenem Honig überwintert.</p>
